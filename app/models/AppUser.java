@@ -22,17 +22,16 @@ import javax.persistence.OneToOne;
 import com.avaje.ebean.Ebean;
 import com.avaje.ebean.SqlRow;
 
-import controllers.LoginController;
 import play.data.validation.Constraints.Email;
 import play.data.validation.Constraints.Required;
 import play.db.ebean.Model;
-import utils.ViewsCounter;
+import play.db.ebean.Model.Finder;
 import beans.AppUserBean;
 
 
 @SuppressWarnings("serial")
 @Entity
-public class AppUser extends BaseEntity implements ViewsCounter{
+public class AppUser extends BaseEntity  {
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO)
@@ -54,28 +53,21 @@ public class AppUser extends BaseEntity implements ViewsCounter{
 	@Required
 	public String password;
 
-	@Required
-	public String sapNo;
 
 	@Required
 	public Role role;
 
-	@OneToOne
-	public Location location;
+	@Required
+	public String gender;
 
-	@OneToOne
-	public UserPreference userPreference;
+	@Required
+	public Integer age;
 
-	@OneToMany(cascade = CascadeType.ALL)
-	public List<Notification> notificationList = new ArrayList<>();
-
-	@OneToOne
-	public CreditScore creditScore;
 
 
 	public static Model.Finder<Long, AppUser> find = new Finder<>(Long.class, AppUser.class);
 
-	public static Map<String, String> options() {
+	/*public static Map<String, String> options() {
 		final LinkedHashMap<String, String> vals = new LinkedHashMap<String, String>();
 		final AppUser user = LoginController.getLoggedInUser();
 		if(user.role.equals(Role.USER) || user.role.equals(Role.COORDINATOR)){
@@ -88,12 +80,8 @@ public class AppUser extends BaseEntity implements ViewsCounter{
 			vals.put(appUser.id + "", appUser.name);
 		}
 		return vals;
-	}
+	}*/
 
-	public static List<AppUser> filterByLocation(final Location location){
-		final List<AppUser> appUsers = AppUser.find.where().eq("location", location).findList();
-		return appUsers;
-	}
 
 	public AppUserBean toBean() {
 
@@ -102,10 +90,6 @@ public class AppUser extends BaseEntity implements ViewsCounter{
 
 		if (this.name != null) {
 			userBean.name = this.name;
-		}
-
-		if (this.designation != null) {
-			userBean.designation = this.designation;
 		}
 
 		if (this.username != null) {
@@ -120,42 +104,16 @@ public class AppUser extends BaseEntity implements ViewsCounter{
 			userBean.password = this.password;
 		}
 
-		if (this.sapNo != null) {
-			userBean.sapNo = this.sapNo;
+		if (this.gender != null) {
+			userBean.gender = this.gender;
 		}
 
-		if (this.role != null) {
-			userBean.role = this.role;
+		if (this.age != null) {
+			userBean.age = this.age;
 		}
 
-		if (this.sapNo != null) {
-			userBean.sapNo = this.sapNo;
-		}
-
-		if (this.location != null) {
-			userBean.location = this.location.id;
-		}
-
-		if (this.userPreference != null) {
-			userBean.userPreference = this.userPreference.id;
-		}
-
-		for (final Notification noti : this.notificationList) {
-			userBean.notificationList.add(noti.id);
-		}
-
-		if (this.creditScore != null) {
-			userBean.creditScore = this.creditScore.id;
-		}
 
 		return userBean;
 	}
 
-	@Override
-	public Long getViews() {
-		final String sqlsum1 = "select sum(views) as sum from kunit where author_id ="+this.id;
-		final SqlRow row1 = Ebean.createSqlQuery(sqlsum1).findUnique();
-		final Long view1=row1.getLong("sum");
-		return view1;
-	}
 }

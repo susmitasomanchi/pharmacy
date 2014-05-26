@@ -4,11 +4,11 @@ import java.util.LinkedHashMap;
 import java.util.Map;
 
 public enum Role {
-	ADMIN,KMPO,COORDINATOR,USER;
-	
+	DOCTOR,PATIENT,PHARMACIEST,SALESREP;
+
 	public static Map<String, String> options() {
-		LinkedHashMap<String, String> vals = new LinkedHashMap<String, String>();
-		for (Role val : Role.values()) {
+		final LinkedHashMap<String, String> vals = new LinkedHashMap<String, String>();
+		for (final Role val : Role.values()) {
 			vals.put(val.toString(), val.toString());
 		}
 		return vals;

@@ -8,15 +8,9 @@ PLEASE DO NOT MODIFY IT BY HAND
 package beans;
 
 import java.io.Serializable;
-import java.util.ArrayList;
-import java.util.List;
 
 import models.AppUser;
-import models.CreditScore;
-import models.Location;
-import models.Notification;
 import models.Role;
-import models.UserPreference;
 import play.data.validation.Constraints.Email;
 import play.data.validation.Constraints.Required;
 
@@ -29,10 +23,6 @@ public class AppUserBean implements Serializable {
 	@Required
 	public String name;
 
-
-
-	@Required
-	public String designation;
 
 
 
@@ -51,21 +41,15 @@ public class AppUserBean implements Serializable {
 
 
 
-	@Required
-	public String sapNo;
-
 
 	@Required
 	public Role role;
 
+	@Required
+	public String gender;
 
-	public Long location;
-
-	public Long userPreference;
-
-	public List<Long> notificationList = new ArrayList<>();
-
-	public Long creditScore;
+	@Required
+	public Integer age;
 
 	public AppUser toEntity(){
 
@@ -77,15 +61,10 @@ public class AppUserBean implements Serializable {
 		}
 
 
-		if(this.designation != null) {
-			appUser.designation= this.designation;
-		}
-
 
 		if(this.username != null) {
 			appUser.username= this.username;
 		}
-
 
 		if(this.email != null) {
 			appUser.email= this.email;
@@ -97,37 +76,27 @@ public class AppUserBean implements Serializable {
 		}
 
 
-		if(this.sapNo != null) {
-			appUser.sapNo= this.sapNo;
-		}
-
 
 		if(this.role != null) {
 			appUser.role= this.role;
 		}
 
 
-		if(this.location != null) {
-			appUser.location= Location.find.byId(this.location);
+		if(this.gender != null) {
+			appUser.gender= this.gender;
 		}
 
-
-		if(this.userPreference != null) {
-			appUser.userPreference= UserPreference.find.byId(this.userPreference);
+		if(this.age != null) {
+			appUser.age= this.age;
 		}
-
-
-		for (final Long nId : this.notificationList) {
-			appUser.notificationList.add(Notification.find.byId(nId));
-		}
-
-		if(this.creditScore != null) {
-			appUser.creditScore= CreditScore.find.byId(this.creditScore);
-		}
-
 		return appUser;
 
 	}
+
+
+
+
+
 
 }
 
