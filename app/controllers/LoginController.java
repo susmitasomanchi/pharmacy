@@ -63,8 +63,8 @@ public class LoginController extends Controller {
 	//@BasicAuth
 	public static Result processLogout() {
 		session().clear();
-		return ok("logout")
-				//return ok(views.html.index.render("logout successful"));
+		return ok("logout");
+		//return ok(views.html.index.render("logout successful"));
 	}
 
 	/*//Change Password
