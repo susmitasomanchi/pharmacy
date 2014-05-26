@@ -1,14 +1,13 @@
-/*package controllers;
+package controllers;
 
 import java.util.List;
 
 import models.AppUser;
-import models.Alert;
 import play.Logger;
 import play.data.Form;
 import play.mvc.Controller;
 import play.mvc.Result;
-import actions.BasicAuth;
+import utils.Constants;
 import beans.LoginBean;
 
 public class LoginController extends Controller {
@@ -17,8 +16,11 @@ public class LoginController extends Controller {
 
 	public static Result loginForm() {
 		if (LoginController.isLoggedIn()) {
-			return redirect(routes.UserActions.dashboard());
+			//return redirect(routes.UserActions.dashboard());
+			return ok("hii login");
 		} else {
+			//return ok("hii Not login");
+
 			return ok(views.html.loginForm.render(loginForm));
 		}
 	}
@@ -31,9 +33,8 @@ public class LoginController extends Controller {
 			final LoginBean loginBean = filledForm.get();
 			Logger.info(loginBean.toString());
 
-			final List<AppUser> user= AppUser.find.where().eq("username", loginBean.email).findList();
-			Logger.info("found users " + user.toString());
-			final List<AppUser> appUsers = AppUser.find.where().eq("username", loginBean.email)
+
+			final List<AppUser> appUsers = AppUser.find.where().eq("email", loginBean.email)
 					.eq("password", loginBean.password).findList();
 
 			Logger.info("found users " + appUsers.toString());
@@ -44,26 +45,29 @@ public class LoginController extends Controller {
 			} else if (appUsers.size() == 1) {
 				session().clear();
 				session(Constants.LOGGED_IN_USER_ID, appUsers.get(0).id + "");
-				return redirect(routes.UserActions.dashboard());
-
+				//return redirect(routes.UserActions.dashboard());
+				return ok("login successfull");
 			} else {
 				session().clear();
 				session(Constants.LOGGED_IN_USER_ID, appUsers.get(0).id + "");
 				Logger.info("more than one users exists with same email and passowrd");
-				return redirect(routes.UserActions.dashboard());
+				//return redirect(routes.UserActions.dashboard());
+				return ok("login successfull");
+
 			}
 
 		}
 
 	}
 
-	@BasicAuth
+	//@BasicAuth
 	public static Result processLogout() {
 		session().clear();
-		return ok(views.html.index.render("logout successful"));
+		return ok("logout");
+		//return ok(views.html.index.render("logout successful"));
 	}
 
-	//Change Password
+	/*//Change Password
 	@BasicAuth
 	public static Result changePasswordForm(){
 		return ok(views.html.mod.changePwdForm.render());
@@ -94,16 +98,15 @@ public class LoginController extends Controller {
 		final Long id = Long.parseLong(idStr);
 		final AppUser user = AppUser.find.byId(id);
 		return user;
-	}
+	}*/
 
 	public static Boolean isLoggedIn() {
 		return session(Constants.LOGGED_IN_USER_ID) == null ? false : true;
 	}
 
-	@BasicAuth
+	/*@BasicAuth
 	public static Result changePassword() {
 
 		return TODO;
-	}
+	}*/
 }
- */

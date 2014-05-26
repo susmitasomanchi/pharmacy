@@ -1,0 +1,39 @@
+@(dataForm:play.data.Form[beans.LoginBean])
+
+@import play.i18n._
+@import helper._
+@import helper.twitterBootstrap._
+
+@blank("Login"){
+
+
+@helper.form(action=routes.LoginController.processLogin()) {
+	
+	<div id="container">
+	@if(flash().get("alert") != null){
+  				<div class="alert @flash().get("alert").split("~")(0)">
+  					<big>@flash().get("alert").split("~")(1)</big>
+  				</div>
+  	}
+	<br>
+	<div class="panel panel-primary" >
+	<div class="panel-heading">
+	<h3 class="panel-title">Login</h3>
+	</div>
+	<div class="panel-body" style="padding:0px" >
+	<div style="padding-left:20px">
+	<br>
+			@helper.inputText(dataForm("email"),'_label->"Username")
+			@helper.inputPassword(dataForm("password"),'_label->"Password")
+			</div>
+			<div id="lower">
+						<input type="submit" class="submit" value="Login">
+	</div>
+	</div>
+	</div>
+			
+	</div>
+
+
+	}
+}
