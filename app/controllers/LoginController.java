@@ -3,12 +3,12 @@ package controllers;
 import java.util.List;
 
 import models.AppUser;
-import models.Alert;
+
 import play.Logger;
 import play.data.Form;
 import play.mvc.Controller;
 import play.mvc.Result;
-import actions.BasicAuth;
+
 import beans.LoginBean;
 
 public class LoginController extends Controller {

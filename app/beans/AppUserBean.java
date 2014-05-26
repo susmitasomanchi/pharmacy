@@ -12,11 +12,10 @@ import java.util.ArrayList;
 import java.util.List;
 
 import models.AppUser;
-import models.CreditScore;
-import models.Location;
-import models.Notification;
+
+
 import models.Role;
-import models.UserPreference;
+
 import play.data.validation.Constraints.Email;
 import play.data.validation.Constraints.Required;
 
@@ -107,23 +106,11 @@ public class AppUserBean implements Serializable {
 		}
 
 
-		if(this.location != null) {
-			appUser.location= Location.find.byId(this.location);
-		}
 
 
-		if(this.userPreference != null) {
-			appUser.userPreference= UserPreference.find.byId(this.userPreference);
-		}
 
 
-		for (final Long nId : this.notificationList) {
-			appUser.notificationList.add(Notification.find.byId(nId));
-		}
 
-		if(this.creditScore != null) {
-			appUser.creditScore= CreditScore.find.byId(this.creditScore);
-		}
 
 		return appUser;
 
