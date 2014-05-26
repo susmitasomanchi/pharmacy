@@ -1,10 +1,10 @@
-
-/*****
+/*
+ *//*****
 
 THIS IS AN AUTO GENERATED CODE
 PLEASE DO NOT MODIFY IT BY HAND
 
- *****/
+  *****//*
 package controllers;
 
 import java.util.ArrayList;
@@ -154,3 +154,4 @@ public class UserController extends Controller {
 
 }
 
+   */
