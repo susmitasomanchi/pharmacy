@@ -8,14 +8,9 @@ PLEASE DO NOT MODIFY IT BY HAND
 package beans;
 
 import java.io.Serializable;
-import java.util.ArrayList;
-import java.util.List;
 
 import models.AppUser;
-
-
 import models.Role;
-
 import play.data.validation.Constraints.Email;
 import play.data.validation.Constraints.Required;
 
@@ -28,10 +23,6 @@ public class AppUserBean implements Serializable {
 	@Required
 	public String name;
 
-
-
-	@Required
-	public String designation;
 
 
 
@@ -50,21 +41,15 @@ public class AppUserBean implements Serializable {
 
 
 
-	@Required
-	public String sapNo;
-
 
 	@Required
 	public Role role;
 
+	@Required
+	public String gender;
 
-	public Long location;
-
-	public Long userPreference;
-
-	public List<Long> notificationList = new ArrayList<>();
-
-	public Long creditScore;
+	@Required
+	public Integer age;
 
 	public AppUser toEntity(){
 
@@ -76,15 +61,10 @@ public class AppUserBean implements Serializable {
 		}
 
 
-		if(this.designation != null) {
-			appUser.designation= this.designation;
-		}
-
 
 		if(this.username != null) {
 			appUser.username= this.username;
 		}
-
 
 		if(this.email != null) {
 			appUser.email= this.email;
@@ -96,25 +76,27 @@ public class AppUserBean implements Serializable {
 		}
 
 
-		if(this.sapNo != null) {
-			appUser.sapNo= this.sapNo;
-		}
-
 
 		if(this.role != null) {
 			appUser.role= this.role;
 		}
 
 
+		if(this.gender != null) {
+			appUser.gender= this.gender;
+		}
 
-
-
-
-
-
+		if(this.age != null) {
+			appUser.age= this.age;
+		}
 		return appUser;
 
 	}
+
+
+
+
+
 
 }
 
