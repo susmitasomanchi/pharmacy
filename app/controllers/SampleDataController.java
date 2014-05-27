@@ -1,6 +1,6 @@
 package controllers;
 import java.util.List;
-import models.Role;
+
 import models.AppUser;
 import play.mvc.Controller;
 import play.mvc.Result;
@@ -23,7 +23,8 @@ public class SampleDataController extends Controller {
 		user.password = "123456";
 		user.save();
 
-		return ok("user created");
+		//return ok("user created");
+		return redirect(routes.LoginController.loginForm());
 
 	}
 

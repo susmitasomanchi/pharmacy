@@ -71,15 +71,11 @@ create sequence patients_seq;
 
 # --- !Downs
 
-SET REFERENTIAL_INTEGRITY FALSE;
+drop table if exists app_user cascade;
 
-drop table if exists app_user;
+drop table if exists doctor cascade;
 
-drop table if exists doctor;
-
-drop table if exists patients;
-
-SET REFERENTIAL_INTEGRITY TRUE;
+drop table if exists patients cascade;
 
 drop sequence if exists app_user_seq;
 
