@@ -54,10 +54,6 @@ public class AppUser extends BaseEntity  {
 	@Required
 	public Integer age;
 	
-	//@OneToMany(mappedBy="Appuser")
-	//public List<SalesRep> salesRep;
-
-
 
 	public static Model.Finder<Long, AppUser> find = new Finder<>(Long.class, AppUser.class);
 

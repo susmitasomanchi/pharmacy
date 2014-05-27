@@ -15,6 +15,7 @@ public class Application extends Controller {
 	
 	public static Form<SalesRepBean> salesRepForm=Form.form(SalesRepBean.class);
 
+
     public static Result index() {
         return ok(views.html.index.render("Your new application is ready."));
     }
