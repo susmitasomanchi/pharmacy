@@ -1,4 +1,4 @@
-package beans;
+/*package beans;
 
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -22,3 +22,4 @@ public class SalesRepBean extends AppUserBean{
 	    public int noOfDoctorVisit;
 
 }
+*/

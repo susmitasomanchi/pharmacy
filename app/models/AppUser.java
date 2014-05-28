@@ -12,12 +12,12 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.MappedSuperclass;
 import javax.persistence.OneToMany;
 
 import play.data.validation.Constraints.Email;
 import play.data.validation.Constraints.Required;
 import play.db.ebean.Model;
-import beans.AppUserBean;
 
 
 @SuppressWarnings("serial")
@@ -54,6 +54,8 @@ public class AppUser extends BaseEntity  {
 	@Required
 	public Integer age;
 	
+	
+
 
 	public static Model.Finder<Long, AppUser> find = new Finder<>(Long.class, AppUser.class);
 
@@ -73,7 +75,7 @@ public class AppUser extends BaseEntity  {
 	}*/
 
 
-	public AppUserBean toBean() {
+	/*public AppUserBean toBean() {
 
 		final AppUserBean userBean = new AppUserBean();
 		userBean.id = this.id;
@@ -104,6 +106,6 @@ public class AppUser extends BaseEntity  {
 
 
 		return userBean;
-	}
+	}*/
 
 }

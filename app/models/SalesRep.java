@@ -8,7 +8,7 @@ import javax.persistence.ManyToOne;
 
 @SuppressWarnings("serial")
 @Entity
-public class SalesRep extends BaseEntity{
+public class SalesRep extends AppUser{
 	
 	@Id
     @GeneratedValue(strategy=GenerationType.AUTO)
@@ -22,7 +22,6 @@ public class SalesRep extends BaseEntity{
     
     public int noOfDoctorsVisit;
     
-   // @ManyToOne
-    //public AppUser appuser;
+   
     
 }

@@ -1,11 +1,11 @@
-@* salesRep Template File *@
-@(dataForm: play.data.Form[SalesRep])
+@* diagnosticRep Template File *@
+@(dataForm: play.data.Form[DiagnosticRep])
 @import helper._
 @import helper.twitterBootstrap._
-@main("SalesRep form") {
-<h1>SalesRepresentator form</h1>
+@main("DiagnosticRep") {
+<h1>DiagnosticRepresentator form</h1>
 
-@helper.form(action=routes.Application.salesRepresentatorProccess()) {
+@helper.form(action=routes.Application.diagnosticRepProccess()) {
 	
 	@helper.inputText(dataForm("name"),'_label->"Name")
 	@helper.inputText(dataForm("designation"),'_label->"designation")
@@ -16,12 +16,9 @@
 	Male<input type="radio" name="gender" value="false">
 	Female<input type="radio" name="gender" value="false">
 	@helper.inputText(dataForm("age"),'_label->"Age")
-	@helper.inputText(dataForm("companyName"),'_label->"Company Name")
-	@helper.inputText(dataForm("regionAlloted"),'_label->"Region")
-	@helper.inputText(dataForm("typesOfMedecine"),'_label->"Types Of Medicine")
-	@helper.inputText(dataForm("noOfDoctorsVisit"),'_label->"No Of Doctors Visit")
+	@helper.inputText(dataForm("diagnosticType"),'_label->"Diagnostic Type")
 	
-	<input type="submit" value="Add saleRep">
+	<input type="submit" value="Add DiagnosticRep">
 	
 	
 	}
