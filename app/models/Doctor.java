@@ -47,5 +47,6 @@ public class Doctor extends AppUser {
 
 
 
+	public static Model.Finder<Long,Doctor> find = new Finder<>(Long.class, Doctor.class);
 
 }

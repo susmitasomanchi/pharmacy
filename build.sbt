@@ -15,6 +15,5 @@ libraryDependencies ++= Seq(
   "org.apache.commons" % "commons-email" % "1.3.2",
   "joda-time" % "joda-time" % "2.3"
 )     
-
-
+ 
 play.Project.playJavaSettings

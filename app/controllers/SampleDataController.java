@@ -1,5 +1,7 @@
 package controllers;
 import java.util.List;
+
+import models.Doctor;
 import models.Role;
 import models.AppUser;
 import play.mvc.Controller;
@@ -9,12 +11,12 @@ public class SampleDataController extends Controller {
 
 	public static Result populate() {
 
-		final AppUser admin = new AppUser();
-		admin.name = "Test Admin";
-		//admin.role = Role.ADMIN;
-		admin.email = "admin@mednet.com";
-		admin.password = "123456";
-		admin.save();
+		final Doctor doctor = new Doctor();
+		doctor.name = "Test Admin";
+		doctor.role = Role.DOCTOR;
+		doctor.email = "admin@mednet.com";
+		doctor.password = "123456";
+		doctor.save();
 
 		final AppUser user = new AppUser();
 		user.name = "Test User";

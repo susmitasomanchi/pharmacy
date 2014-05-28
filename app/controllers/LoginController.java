@@ -3,6 +3,9 @@ package controllers;
 import java.util.List;
 
 import models.AppUser;
+import models.Doctor;
+import models.Patient;
+import models.Pharmacist;
 import play.Logger;
 import play.data.Form;
 import play.mvc.Controller;
@@ -25,9 +28,6 @@ public class LoginController extends Controller {
 		}
 	}
 
-	public static  Result register(){
-		return TODO;
-	}
 
 	public static Result processLogin() {
 		final Form<LoginBean> filledForm = loginForm.bindFromRequest();
@@ -42,16 +42,22 @@ public class LoginController extends Controller {
 			Logger.info(loginBean.toString());
 
 
-			final List<AppUser> appUsers = AppUser.find.where().eq("email", loginBean.email)
+			final List<Doctor> doctors = Doctor.find.where().eq("email", loginBean.email).
+					eq("password", loginBean.password).findList();
+			final List<Patient> patients = Patient.find.where().eq("email", loginBean.email)
+					.eq("password", loginBean.password).findList();
+			final List<Pharmacist> pharmacists  = Pharmacist.find.where().eq("email", loginBean.email)
 					.eq("password", loginBean.password).findList();
 
-			Logger.info("found users " + appUsers.toString());
 
-			if (appUsers.size() <= 0) {
+			//Logger.info("found users " + appUsers.toString());
+			final List<AppUser> appUsers=whichUserLogging(doctors, patients, pharmacists);
+
+			if (doctors.size() <= 0 && patients.size() <= 0 && pharmacists.size() <= 0 ) {
 				// return invalid login/password
 				System.out.println("Errors3: "+filledForm.errors());
 				return badRequest(views.html.loginForm.render(filledForm));
-			} else if (appUsers.size() == 1) {
+			} else if (doctors.size() == 1 || doctors.size() == 1 || doctors.size() == 1) {
 				session().clear();
 				session(Constants.LOGGED_IN_USER_ID, appUsers.get(0).id + "");
 				//return redirect(routes.UserActions.dashboard());
@@ -76,6 +82,19 @@ public class LoginController extends Controller {
 		//return ok(views.html.index.render("logout successful"));
 	}
 
+	public static List whichUserLogging(final List doctors,final List patients,final List pharmacists) {
+		List user=null;
+		if(doctors.size()>=1){
+			user= doctors;
+		}
+		else if (patients.size()>=1) {
+			user= patients;
+		}
+		else {
+			user= pharmacists;
+		}
+		return user;
+	}
 	/*//Change Password
 	@BasicAuth
 	public static Result changePasswordForm(){
