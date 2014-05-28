@@ -8,6 +8,7 @@ import javax.persistence.OneToOne;
 
 import play.data.validation.Constraints.Required;
 import play.db.ebean.*;
+import play.db.ebean.Model.Finder;
 
 @Entity
 public class Doctor extends AppUser {
@@ -40,5 +41,6 @@ public class Doctor extends AppUser {
 	@Required
 	public String timings;
 
+	public static Model.Finder<Long,Doctor> find = new Finder<>(Long.class, Doctor.class);
 
 }

@@ -1,37 +1,32 @@
-/*
- *//*****
+
+/*****
 
 THIS IS AN AUTO GENERATED CODE
 PLEASE DO NOT MODIFY IT BY HAND
 
-  *****//*
+ *****/
 package controllers;
 
 import java.util.ArrayList;
 import java.util.List;
 
-import models.Alert;
 import models.AppUser;
-import models.KUnit;
-import models.Notification;
+import models.Pharmacist;
 import models.Role;
-import models.UserPreference;
 import play.Logger;
 import play.data.Form;
 import play.mvc.Controller;
 import play.mvc.Result;
-import actions.BasicAuth;
 import beans.AppUserBean;
-import beans.UserPreferenceBean;
 
-@BasicAuth
+//@BasicAuth
 public class UserController extends Controller {
 
-	public static Form<AppUserBean> form = Form.form(AppUserBean.class);
-	public static Form<UserPreferenceBean> prefForm = Form.form(UserPreferenceBean.class);
+	/*public static Form<Pharmacist> form = Form.form(Pharmacist.class);
+	//public static Form<UserPreferenceBean> prefForm = Form.form(UserPreferenceBean.class);
 
-	public static Result form() {
-		return ok(views.html.mod.userForm.render(form));
+	public static Result pharmaciestform() {
+		return ok(views.html.createPharmacy.render(form));
 	}
 
 	public static Result process() {
@@ -56,7 +51,7 @@ public class UserController extends Controller {
 		return redirect(routes.UserController.list());
 	}
 
-	public static Result list() {
+public static Result list() {
 		List<AppUser> userList = new ArrayList<AppUser>();
 		final AppUser appUser = LoginController.getLoggedInUser();
 		if(appUser.role == Role.COORDINATOR){
@@ -150,8 +145,7 @@ public class UserController extends Controller {
 			e.printStackTrace();
 			return ok("-1");
 		}
-	}
+	}	 */
 
 }
 
-   */

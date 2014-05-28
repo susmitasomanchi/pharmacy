@@ -6,7 +6,6 @@
 create table app_user (
   id                        bigint not null,
   name                      varchar(255),
-  designation               varchar(255),
   username                  varchar(255),
   email                     varchar(255),
   password                  varchar(255),
@@ -21,7 +20,6 @@ create table app_user (
 create table doctor (
   id                        bigint not null,
   name                      varchar(255),
-  designation               varchar(255),
   username                  varchar(255),
   email                     varchar(255),
   password                  varchar(255),
@@ -42,11 +40,10 @@ create table doctor (
   constraint pk_doctor primary key (id))
 ;
 
-create table patients (
+create table patient (
   id                        bigint not null,
   appointment_id            bigint not null,
   name                      varchar(255),
-  designation               varchar(255),
   username                  varchar(255),
   email                     varchar(255),
   password                  varchar(255),
@@ -57,33 +54,57 @@ create table patients (
   doctor_availability       varchar(255),
   is_urgent_patient         varchar(255),
   last_update               timestamp not null,
-  constraint ck_patients_role check (role in (0,1,2,3)))
+  constraint ck_patient_role check (role in (0,1,2,3)))
+;
+
+create table pharmacist (
+  id                        bigint not null,
+  name                      varchar(255),
+  username                  varchar(255),
+  email                     varchar(255),
+  password                  varchar(255),
+  role                      integer,
+  gender                    varchar(255),
+  age                       integer,
+  category                  varchar(255),
+  last_update               timestamp not null,
+  constraint ck_pharmacist_role check (role in (0,1,2,3)),
+  constraint pk_pharmacist primary key (id))
+;
+
+create table pharmacy (
+  name                      varchar(255),
+  address                   varchar(255))
 ;
 
 create sequence app_user_seq;
 
 create sequence doctor_seq;
 
-create sequence patients_seq;
+create sequence patient_seq;
+
+create sequence pharmacist_seq;
 
 
 
 
 # --- !Downs
 
-SET REFERENTIAL_INTEGRITY FALSE;
+drop table if exists app_user cascade;
 
-drop table if exists app_user;
+drop table if exists doctor cascade;
 
-drop table if exists doctor;
+drop table if exists patient cascade;
 
-drop table if exists patients;
+drop table if exists pharmacist cascade;
 
-SET REFERENTIAL_INTEGRITY TRUE;
+drop table if exists pharmacy cascade;
 
 drop sequence if exists app_user_seq;
 
 drop sequence if exists doctor_seq;
 
-drop sequence if exists patients_seq;
+drop sequence if exists patient_seq;
+
+drop sequence if exists pharmacist_seq;
 
