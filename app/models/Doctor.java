@@ -31,10 +31,8 @@ public class Doctor extends AppUser {
 	public Integer fees;
 
 
-	@OneToOne
 	public String clinicAddress;
 
-	@OneToOne
 	public String hospitalAddress;
 
 	@Required
