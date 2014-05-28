@@ -48,7 +48,8 @@ public class LoginController extends Controller {
 			//Logger.info("found users " + appUsers.toString());
 			final List<AppUser> appUsers=whichUserLogging(doctors, patients, pharmacists);
 
-			if (doctors.size() <= 0 && patients.size() <= 0 && pharmacists.size() <= 0 ) {
+			if (appUsers.size()<=0) {
+
 				// return invalid login/password
 				return badRequest(views.html.loginForm.render(filledForm));
 			} else if (doctors.size() == 1 || doctors.size() == 1 || doctors.size() == 1) {
@@ -72,8 +73,7 @@ public class LoginController extends Controller {
 	//@BasicAuth
 	public static Result processLogout() {
 		session().clear();
-		return ok("logout");
-		//return ok(views.html.index.render("logout successful"));
+		return ok(views.html.index.render("logout successful"));
 	}
 
 	public static List whichUserLogging(final List doctors,final List patients,final List pharmacists) {
