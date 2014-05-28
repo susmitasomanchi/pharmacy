@@ -25,12 +25,20 @@ public class LoginController extends Controller {
 		}
 	}
 
+	public static  Result register(){
+		return TODO;
+	}
+
 	public static Result processLogin() {
 		final Form<LoginBean> filledForm = loginForm.bindFromRequest();
+		System.out.println("Errors: "+filledForm.errors());
 		if (filledForm.hasErrors()) {
+			System.out.println("Errors1: "+filledForm.errors());
 			return badRequest(views.html.loginForm.render(filledForm));
 		} else {
+			System.out.println("Errors2: "+filledForm.errors());
 			final LoginBean loginBean = filledForm.get();
+
 			Logger.info(loginBean.toString());
 
 
@@ -41,6 +49,7 @@ public class LoginController extends Controller {
 
 			if (appUsers.size() <= 0) {
 				// return invalid login/password
+				System.out.println("Errors3: "+filledForm.errors());
 				return badRequest(views.html.loginForm.render(filledForm));
 			} else if (appUsers.size() == 1) {
 				session().clear();

@@ -1,0 +1,47 @@
+
+@*@(dataForm:play.data.Form[models.Pharmacy])*@
+
+@*******************************
+
+THIS IS AN AUTO GENERATED CODE
+PLEASE DO NOT MODIFY IT BY HAND
+
+********************************@
+@*
+@import play.i18n._
+
+@main("User Form"){
+	
+	<br>
+
+@helper.form(action=routes.UserController.process()) {
+
+
+			
+			@helper.inputText(dataForm("name"),'class -> "inputs",'_label->"Name")
+			
+			
+			@helper.inputText(dataForm("username"),'class -> "inputs",'_label->"Username")
+			
+			@helper.inputText(dataForm("email"),'class -> "inputs",'_label->"Email")
+			
+			@helper.inputPassword(dataForm("password"),'class -> "inputs",'_label->"Password")
+			
+			@helper.inputPassword(dataForm("gender"),'class -> "inputs",'_label->"Gender")
+						
+			@helper.inputPassword(dataForm("age"),'class -> "inputs",'_label->"Age")
+			
+				
+			@helper.select(dataForm("role"),options=helper.options(Role.options),'class -> "inputs chzn",'_label->"Role")
+				
+			}
+			
+			<br>
+			<input type="hidden" name="id" value='@dataForm("id").value' >
+			<input type="submit" class="btn btn-primary">
+
+
+	<br><br>
+	<br><br>
+}
+*@
