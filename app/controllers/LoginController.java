@@ -6,6 +6,7 @@ import models.AppUser;
 import models.Doctor;
 import models.Patient;
 import models.Pharmacist;
+import models.Role;
 import play.Logger;
 import play.data.Form;
 import play.mvc.Controller;
@@ -61,11 +62,14 @@ public class LoginController extends Controller {
 			} else if (doctors.size() == 1 || doctors.size() == 1 || doctors.size() == 1) {
 				session().clear();
 				session(Constants.LOGGED_IN_USER_ID, appUsers.get(0).id + "");
+				//session(arg0, arg1);
 				//return redirect(routes.UserActions.dashboard());
 				return ok("login successfull");
 			} else {
 				session().clear();
 				session(Constants.LOGGED_IN_USER_ID, appUsers.get(0).id + "");
+				session(Constants.LOGGED_IN_USER_ID, appUsers.get(0).role + "");
+
 				Logger.info("more than one users exists with same email and passowrd");
 				//return redirect(routes.UserActions.dashboard());
 				return ok("login successfull");
@@ -119,12 +123,22 @@ public class LoginController extends Controller {
 			return redirect(routes.LoginController.processChangePassword());
 		}
 
-	}
+	}*/
 
-	public static AppUser getLoggedInUser() {
+	/*public static AppUser getLoggedInUserId() {
 		final String idStr = session(Constants.LOGGED_IN_USER_ID);
+		final String idRole = session(Constants.LOGGED_IN_USER_ID);
+
 		final Long id = Long.parseLong(idStr);
+
+		if(idRole.equals(Role.PHARMACIST)){
+			Pharmacist pharmacist=Pharmacist.find.byId(id);
+			return pharmacist;
+		}
+
 		final AppUser user = AppUser.find.byId(id);
+
+
 		return user;
 	}*/
 
