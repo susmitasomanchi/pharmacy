@@ -22,18 +22,18 @@ public class DoctorController extends Controller {
 
 		if(filledForm.hasErrors()) {
 			Logger.info("bad request");
-
+			
 			return badRequest(views.html.createDoctor.render(filledForm));
 		}
 		else {
 			final Doctor doctor= filledForm.get();
 
 			if(doctor.id == null) {
-
+				
 				doctor.save();
 			}
 			else {
-
+				
 				doctor.update();
 			}
 		}

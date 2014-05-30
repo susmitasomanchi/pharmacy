@@ -31,12 +31,12 @@ public class LoginController extends Controller {
 
 	public static Result processLogin() {
 		final Form<LoginBean> filledForm = loginForm.bindFromRequest();
-
+		
 		if (filledForm.hasErrors()) {
-
+			
 			return badRequest(views.html.loginForm.render(filledForm));
 		} else {
-
+			
 			final LoginBean loginBean = filledForm.get();
 
 			Logger.info(loginBean.toString());
@@ -56,7 +56,7 @@ public class LoginController extends Controller {
 			if (appUsers.size()<=0) {
 
 				// return invalid login/password
-
+				
 				return badRequest(views.html.loginForm.render(filledForm));
 			} else if (doctors.size() == 1 || doctors.size() == 1 || doctors.size() == 1) {
 				session().clear();
