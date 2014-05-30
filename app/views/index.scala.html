@@ -54,7 +54,70 @@
   </div>
   </div>
   <hr>
-    
+  
+  <meta name="google-signin-clientid" content="404230636180-4qmlk57403u2985kjibgj3l37a0sdi54.apps.googleusercontent.com" />
+<meta name="google-signin-scope" content="https://www.googleapis.com/auth/plus.login" />
+<meta name="google-signin-requestvisibleactions" content="http://schemas.google.com/AddActivity" />
+<meta name="google-signin-cookiepolicy" content="single_host_origin" />
+<script type="text/javascript">
+ (function() {
+   var po = document.createElement('script');
+   po.type = 'text/javascript'; po.async = true;
+   po.src = 'https://apis.google.com/js/client:plusone.js?onload=render';
+   var s = document.getElementsByTagName('script')[0];
+   s.parentNode.insertBefore(po, s);
+ })();
+
+   /* Executed when the APIs finish loading */
+ function render() {
+	 
+   // Additional params including the callback, the rest of the params will
+   // come from the page-level configuration.
+   var additionalParams = {
+     'callback': signinCallback
+   };
+   function signinCallback(authResult) {
+	   if (authResult['status']['signed_in']) {
+		   
+	     // Update the app to reflect a signed in user
+	     // Hide the sign-in button now that the user is authorized, for example:
+	    // document.getElementById('signinButton').setAttribute('style', 'display: none');
+	   } else {
+	     // Update the app to reflect a signed out user
+	     // Possible error values:
+	     //   "user_signed_out" - User is signed-out
+	     //   "access_denied" - User denied access to your app
+	     //   "immediate_failed" - Could not automatically log in the user
+	     System.out.println("hello");
+	     console.log('Sign-in state: ' + authResult['error']);
+	   }
+	 }
+	    
+
+   // Attach a click listener to a button to trigger the flow.
+   var signinButton = document.getElementById('signinButton');
+   signinButton.addEventListener('click', function() {
+	   
+     gapi.auth.signIn(additionalParams); // Will use page level configuration
+     
+   });
+ }
+ 
+</script>
+
+    <span id="signinButton">
+  <span
+    class="g-signin"
+    data-callback="signinCallback"
+    data-clientid="404230636180-4qmlk57403u2985kjibgj3l37a0sdi54.apps.googleusercontent.com"
+    data-cookiepolicy="single_host_origin"
+    data-requestvisibleactions="http://schemas.google.com/AddActivity"
+    data-scope="https://www.googleapis.com/auth/plus.login">
+  </span>
+</span>
+
+
+
    
 
   </div>
@@ -63,4 +126,7 @@
   <div class="col-md-1">
   </div>
   </div>
+  
+  
+  
 }
