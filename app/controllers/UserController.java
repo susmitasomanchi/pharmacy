@@ -21,7 +21,7 @@ import beans.AppUserBean;
 
 //@BasicAuth
 public class UserController extends Controller {
-
+	//
 	/*public static Form<Pharmacist> form = Form.form(Pharmacist.class);
 	//public static Form<UserPreferenceBean> prefForm = Form.form(UserPreferenceBean.class);
 
