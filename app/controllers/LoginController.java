@@ -99,6 +99,7 @@ public class LoginController extends Controller {
 		}
 		return user;
 	}
+	//
 	/*//Change Password
 	@BasicAuth
 	public static Result changePasswordForm(){
