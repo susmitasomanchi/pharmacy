@@ -7,7 +7,6 @@ import play.Logger;
 import play.data.Form;
 import play.mvc.Controller;
 import play.mvc.Result;
-import beans.AppUserBean;
 
 public class PharmacistController extends Controller{
 
