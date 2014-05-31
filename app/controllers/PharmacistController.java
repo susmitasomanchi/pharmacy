@@ -1,13 +1,11 @@
 package controllers;
 
 
-import models.AppUser;
 import models.Pharmacist;
 import play.Logger;
 import play.data.Form;
 import play.mvc.Controller;
 import play.mvc.Result;
-import beans.AppUserBean;
 
 public class PharmacistController extends Controller{
 
@@ -27,16 +25,17 @@ public class PharmacistController extends Controller{
 			return badRequest(views.html.createPharmacist.render(filledForm));
 		}
 		else {
-			final Pharmacist pharmaciest= filledForm.get();
+			final Pharmacist pharmacist= filledForm.get();
 
-			if(pharmaciest.id == null) {
-				pharmaciest.save();
+			if(pharmacist.id == null) {
+				pharmacist.save();
 			}
 			else {
-				pharmaciest.update();
+				pharmacist.update();
 			}
 		}
-		return TODO;
+		return ok("User Created");
+		//return TODO;
 		//return redirect(routes.UserController.list());
 	}
 }

@@ -1,30 +1,27 @@
-/*package controllers;
+package controllers;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Comparator;
-import java.util.List;
-
-import models.Area;
-import models.Department;
-import models.KUStatus;
-import models.KUnit;
-import models.Lever;
-import models.Location;
+import models.Pharmacist;
 import models.Role;
-import models.AppUser;
 import play.mvc.Controller;
 import play.mvc.Result;
-import actions.BasicAuth;
 
-@BasicAuth
+//@BasicAuth
 public class UserActions extends Controller {
 
 	public static Result dashboard() {
 
-		final AppUser appUser = LoginController.getLoggedInUser();
+
+		final Long id=LoginController.getLoggedInUserId();
+		final Role role = LoginController.getLoggedInUserRole();
+		if(role.equals(Role.PHARMACIST)){
+			final Pharmacist pharmacist= Pharmacist.find.byId(id);
+			return ok("pharmaciest dashboard");
+
+		}
+		return TODO;
 
 
+		/*
 		final List<KUnit> myKuList = KUnit.find.where().eq("author", LoginController.getLoggedInUser()).eq("kuStatus", KUStatus.APPROVED).findList();
 		myKuList.addAll(KUnit.find.where().in("collaboratorList.id", LoginController.getLoggedInUser().id).eq("kuStatus", KUStatus.APPROVED).findList());
 		final List<KUnit> apprList = new ArrayList<KUnit>();
@@ -102,12 +99,12 @@ public class UserActions extends Controller {
 				deptList,
 				areaList,
 				leverList
-				));
+				));*/
+		/*}*/
+
 	}
 
-}
-
-class SortKUsByApprovedDate implements Comparator<KUnit>{
+	/*class SortKUsByApprovedDate implements Comparator<KUnit>{
 	@Override
 	public int compare(final KUnit ku1, final KUnit ku2) {
 		if((ku1.approvedAt == null) || (ku2.approvedAt == null)){
@@ -124,6 +121,5 @@ class SortKUsByRating implements Comparator<KUnit>{
 			return -1;
 		}
 		return ku2.averageRating.compareTo(ku1.averageRating);
-	}
+	}*/
 }
- */

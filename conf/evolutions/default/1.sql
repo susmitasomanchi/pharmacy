@@ -5,6 +5,7 @@
 
 create table app_user (
   id                        bigint not null,
+  pharmacist_id             bigint,
   name                      varchar(255),
   username                  varchar(255),
   email                     varchar(255),
@@ -28,6 +29,7 @@ create table appointment (
 
 create table doctor (
   id                        bigint not null,
+  pharmacist_id             bigint,
   name                      varchar(255),
   username                  varchar(255),
   email                     varchar(255),
@@ -52,6 +54,7 @@ create table doctor (
 
 create table patient (
   id                        bigint not null,
+  pharmacist_id             bigint,
   name                      varchar(255),
   username                  varchar(255),
   email                     varchar(255),
@@ -71,16 +74,7 @@ create table patient (
 
 create table pharmacist (
   id                        bigint not null,
-  name                      varchar(255),
-  username                  varchar(255),
-  email                     varchar(255),
-  password                  varchar(255),
-  role                      integer,
-  gender                    varchar(255),
-  age                       integer,
   category                  varchar(255),
-  last_update               timestamp not null,
-  constraint ck_pharmacist_role check (role in (0,1,2,3)),
   constraint pk_pharmacist primary key (id))
 ;
 
@@ -97,6 +91,12 @@ create sequence patient_seq;
 
 create sequence pharmacist_seq;
 
+alter table app_user add constraint fk_app_user_pharmacist_1 foreign key (pharmacist_id) references pharmacist (id);
+create index ix_app_user_pharmacist_1 on app_user (pharmacist_id);
+alter table doctor add constraint fk_doctor_pharmacist_2 foreign key (pharmacist_id) references pharmacist (id);
+create index ix_doctor_pharmacist_2 on doctor (pharmacist_id);
+alter table patient add constraint fk_patient_pharmacist_3 foreign key (pharmacist_id) references pharmacist (id);
+create index ix_patient_pharmacist_3 on patient (pharmacist_id);
 
 
 

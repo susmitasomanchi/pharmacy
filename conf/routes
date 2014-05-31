@@ -9,16 +9,16 @@ POST	/login/						controllers.LoginController.processLogin()
 GET		/logout/						controllers.LoginController.processLogout()
 GET		/userform/farmaciest/		controllers.PharmacistController.form() 
 POST	/userform/farmaciest/		controllers.PharmacistController.process() 
-GET		/userform/doctor/		controllers.DoctorController.form() 
-POST	/userform/doctor/		controllers.DoctorController.process() 
+GET		/userform/doctor/			controllers.DoctorController.form() 
+POST	/userform/doctor/			controllers.DoctorController.process() 
 
-GET		/userform/patient/		controllers.PatientController.form() 
-GET		/userform/patient/h/		controllers.PatientController.enterForm() 
+GET		/userform/patient/				controllers.PatientController.form() 
+GET		/userform/patient/h/			controllers.PatientController.enterForm() 
 
-POST	/userform/patient/		controllers.PatientController.process() 
+POST	/userform/patient/			controllers.PatientController.process() 
 
 GET     /sampledata/populate		controllers.SampleDataController.populate()
 
-
+GET     /dashboard/					controllers.UserActions.dashboard()
 # Map static resources from the /public folder to the /assets URL path
 GET     /assets/*file               controllers.Assets.at(path="/public", file)
