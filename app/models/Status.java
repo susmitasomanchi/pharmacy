@@ -1,16 +1,17 @@
 package models;
-
 import java.util.LinkedHashMap;
 import java.util.Map;
 
-public enum Role {
-	DOCTOR,PATIENT,PHARMACY,MR;
-
+public enum Status {
+	REQUEST,APPROVE,CANCEL;
+	
+	
 	public static Map<String, String> options() {
 		final LinkedHashMap<String, String> vals = new LinkedHashMap<String, String>();
-		for (final Role val : Role.values()) {
+		for (final Status val : Status.values()) {
 			vals.put(val.toString(), val.toString());
 		}
 		return vals;
 	}
+
 }

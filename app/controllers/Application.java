@@ -86,4 +86,11 @@ public class Application extends Controller {
     	
     	return ok("Diagnostic Representr information added");
     }
+    
+    
+    //home Page
+    
+    public static Result homePage(){
+    	return ok(views.html.home.render());
+    }
 }

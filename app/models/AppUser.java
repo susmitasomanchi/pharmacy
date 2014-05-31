@@ -6,14 +6,8 @@
  *****/
 package models;
 
-import java.util.List;
-
 import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.MappedSuperclass;
-import javax.persistence.OneToMany;
 
 import play.data.validation.Constraints.Email;
 import play.data.validation.Constraints.Required;
@@ -22,17 +16,16 @@ import play.db.ebean.Model;
 
 @SuppressWarnings("serial")
 @Entity
-public class AppUser extends BaseEntity  {
+
+public class AppUser extends BaseEntity{
 
 	@Id
-	@GeneratedValue(strategy = GenerationType.AUTO)
 	public Long id;
 
 	@Required
 	public String name;
 
-	@Required
-	public String designation;
+
 
 	@Required
 	public String username;

@@ -40,5 +40,13 @@ public class Doctor extends AppUser {
 	@Required
 	public String timings;
 
+	public String categoryOfDoctor;						// homeopathic or ayurvedic or etc.
+
+
+
+
+
+
+	public static Model.Finder<Long,Doctor> find = new Finder<>(Long.class, Doctor.class);
 
 }
