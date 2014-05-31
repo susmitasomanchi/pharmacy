@@ -17,10 +17,18 @@ create table app_user (
   constraint pk_app_user primary key (id))
 ;
 
+create table appointment (
+  date                      timestamp,
+  role                      integer,
+  appointment_status        integer,
+  last_update               timestamp not null,
+  constraint ck_appointment_role check (role in (0,1,2,3)),
+  constraint ck_appointment_appointment_status check (appointment_status in (0,1,2)))
+;
+
 create table diagnostic_rep (
   id                        bigint not null,
   name                      varchar(255),
-  designation               varchar(255),
   username                  varchar(255),
   email                     varchar(255),
   password                  varchar(255),
@@ -31,15 +39,6 @@ create table diagnostic_rep (
   last_update               timestamp not null,
   constraint ck_diagnostic_rep_role check (role in (0,1,2,3)),
   constraint pk_diagnostic_rep primary key (id))
-;
-
-create table appointment (
-  date                      timestamp,
-  role                      integer,
-  appointment_status        integer,
-  last_update               timestamp not null,
-  constraint ck_appointment_role check (role in (0,1,2,3)),
-  constraint ck_appointment_appointment_status check (appointment_status in (0,1,2)))
 ;
 
 create table doctor (
@@ -68,7 +67,6 @@ create table doctor (
 
 create table patient (
   id                        bigint not null,
-  appointment_id            bigint not null,
   name                      varchar(255),
   username                  varchar(255),
   email                     varchar(255),
@@ -76,11 +74,14 @@ create table patient (
   role                      integer,
   gender                    varchar(255),
   age                       integer,
+  picture                   bytea,
   disease                   varchar(255),
+  appointment_id            bigint,
   doctor_availability       varchar(255),
   is_urgent_patient         varchar(255),
   last_update               timestamp not null,
-  constraint ck_patient_role check (role in (0,1,2,3)))
+  constraint ck_patient_role check (role in (0,1,2,3)),
+  constraint pk_patient primary key (id))
 ;
 
 create table pharmacist (
@@ -106,7 +107,6 @@ create table pharmacy (
 create table sales_rep (
   id                        bigint not null,
   name                      varchar(255),
-  designation               varchar(255),
   username                  varchar(255),
   email                     varchar(255),
   password                  varchar(255),
@@ -132,31 +132,28 @@ create sequence patient_seq;
 
 create sequence pharmacist_seq;
 
-
-
-
 create sequence sales_rep_seq;
 
-# --- !Downs
 
-drop table if exists app_user cascade;
 
 
 # --- !Downs
 
 drop table if exists app_user cascade;
+
 drop table if exists appointment cascade;
 
 drop table if exists diagnostic_rep cascade;
-drop table if exists doctor cascade;
 
 drop table if exists doctor cascade;
 
-drop table if exists patients cascade;
+drop table if exists patient cascade;
+
 drop table if exists pharmacist cascade;
 
-drop table if exists sales_rep cascade;
 drop table if exists pharmacy cascade;
+
+drop table if exists sales_rep cascade;
 
 drop sequence if exists app_user_seq;
 

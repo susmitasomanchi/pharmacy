@@ -1,5 +1,4 @@
-@* createDoctor Template File *@
-@*@(dataForm:play.data.Form[models.Doctor])*@
+@(dataForm:play.data.Form[models.Doctor])
 
 @*******************************
 
@@ -7,14 +6,14 @@ THIS IS AN AUTO GENERATED CODE
 PLEASE DO NOT MODIFY IT BY HAND
 
 ********************************@
-@*
+
 @import play.i18n._
 
 @main("User Form"){
 	
 	<br>
-
-@helper.form(action=routes.UserController.process()) {
+<div class="container">
+@helper.form(action=routes.DoctorController.process(),'method -> "post") {
 
 
 			
@@ -54,16 +53,16 @@ PLEASE DO NOT MODIFY IT BY HAND
 			
 			@helper.inputText(dataForm("categoryOfDoctor"),'class -> "inputs",'_label->"Type of Doctor")
 			
+			<br>
+			<input type="hidden" name="id" value='@dataForm("id").value' >
+			<input type="submit" class="submit" value="Login">
 			
 				
 			}
 			
-			<br>
-			<input type="hidden" name="id" value='@dataForm("id").value' >
-			<input type="submit" class="btn btn-primary">
+			
 
 	
-	<br><br>
-	<br><br>
+	</div>
 }
-*@
+

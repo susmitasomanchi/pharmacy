@@ -6,6 +6,7 @@ import models.AppUser;
 import models.Doctor;
 import models.Patient;
 import models.Pharmacist;
+import models.Role;
 import play.Logger;
 import play.data.Form;
 import play.mvc.Controller;
@@ -31,12 +32,12 @@ public class LoginController extends Controller {
 
 	public static Result processLogin() {
 		final Form<LoginBean> filledForm = loginForm.bindFromRequest();
-		System.out.println("Errors: "+filledForm.errors());
+		
 		if (filledForm.hasErrors()) {
-			System.out.println("Errors1: "+filledForm.errors());
+			
 			return badRequest(views.html.loginForm.render(filledForm));
 		} else {
-			System.out.println("Errors2: "+filledForm.errors());
+			
 			final LoginBean loginBean = filledForm.get();
 
 			Logger.info(loginBean.toString());
@@ -53,18 +54,22 @@ public class LoginController extends Controller {
 			//Logger.info("found users " + appUsers.toString());
 			final List<AppUser> appUsers=whichUserLogging(doctors, patients, pharmacists);
 
-			if (doctors.size() <= 0 && patients.size() <= 0 && pharmacists.size() <= 0 ) {
+			if (appUsers.size()<=0) {
+
 				// return invalid login/password
-				System.out.println("Errors3: "+filledForm.errors());
+				
 				return badRequest(views.html.loginForm.render(filledForm));
 			} else if (doctors.size() == 1 || doctors.size() == 1 || doctors.size() == 1) {
 				session().clear();
 				session(Constants.LOGGED_IN_USER_ID, appUsers.get(0).id + "");
+				//session(arg0, arg1);
 				//return redirect(routes.UserActions.dashboard());
 				return ok("login successfull");
 			} else {
 				session().clear();
 				session(Constants.LOGGED_IN_USER_ID, appUsers.get(0).id + "");
+				session(Constants.LOGGED_IN_USER_ID, appUsers.get(0).role + "");
+
 				Logger.info("more than one users exists with same email and passowrd");
 				//return redirect(routes.UserActions.dashboard());
 				return ok("login successfull");
@@ -78,8 +83,7 @@ public class LoginController extends Controller {
 	//@BasicAuth
 	public static Result processLogout() {
 		session().clear();
-		return ok("logout");
-		//return ok(views.html.index.render("logout successful"));
+		return ok(views.html.index.render("logout successful"));
 	}
 
 	public static List whichUserLogging(final List doctors,final List patients,final List pharmacists) {
@@ -95,6 +99,7 @@ public class LoginController extends Controller {
 		}
 		return user;
 	}
+	//
 	/*//Change Password
 	@BasicAuth
 	public static Result changePasswordForm(){
@@ -119,12 +124,22 @@ public class LoginController extends Controller {
 			return redirect(routes.LoginController.processChangePassword());
 		}
 
-	}
+	}*/
 
-	public static AppUser getLoggedInUser() {
+	/*public static AppUser getLoggedInUserId() {
 		final String idStr = session(Constants.LOGGED_IN_USER_ID);
+		final String idRole = session(Constants.LOGGED_IN_USER_ID);
+
 		final Long id = Long.parseLong(idStr);
+
+		if(idRole.equals(Role.PHARMACIST)){
+			Pharmacist pharmacist=Pharmacist.find.byId(id);
+			return pharmacist;
+		}
+
 		final AppUser user = AppUser.find.byId(id);
+
+
 		return user;
 	}*/
 
@@ -137,4 +152,5 @@ public class LoginController extends Controller {
 
 		return TODO;
 	}*/
+	
 }

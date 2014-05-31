@@ -10,7 +10,6 @@ import javax.persistence.Entity;
 import javax.persistence.Id;
 
 import play.data.validation.Constraints.Email;
-import play.data.validation.Constraints.Required;
 import play.db.ebean.Model;
 
 
@@ -22,32 +21,31 @@ public class AppUser extends BaseEntity{
 	@Id
 	public Long id;
 
-	@Required
+
 	public String name;
 
 
 
-	@Required
 	public String username;
 
-	@Required
+
 	@Email
 	public String email;
 
-	@Required
+
 	public String password;
 
 
-	@Required
+
 	public Role role;
 
-	@Required
+
 	public String gender;
 
-	@Required
+
 	public Integer age;
-	
-	
+
+
 
 
 	public static Model.Finder<Long, AppUser> find = new Finder<>(Long.class, AppUser.class);
