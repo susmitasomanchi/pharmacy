@@ -42,7 +42,7 @@ public class AppUserBean implements Serializable {
 
 
 
-	@Required
+
 	public Role role;
 
 	@Required

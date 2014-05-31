@@ -52,7 +52,6 @@ create table doctor (
 
 create table patient (
   id                        bigint not null,
-  appointment_id            bigint not null,
   name                      varchar(255),
   username                  varchar(255),
   email                     varchar(255),
@@ -60,11 +59,14 @@ create table patient (
   role                      integer,
   gender                    varchar(255),
   age                       integer,
+  picture                   bytea,
   disease                   varchar(255),
+  appointment_id            bigint,
   doctor_availability       varchar(255),
   is_urgent_patient         varchar(255),
   last_update               timestamp not null,
-  constraint ck_patient_role check (role in (0,1,2,3)))
+  constraint ck_patient_role check (role in (0,1,2,3)),
+  constraint pk_patient primary key (id))
 ;
 
 create table pharmacist (
