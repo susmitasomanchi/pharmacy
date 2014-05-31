@@ -36,10 +36,7 @@ public class Patient extends AppUser {
 	public Long appointmentId;
 
 
-	public String doctorAvailability;
-
-
-	public String isUrgentPatient;
+	
 
 	public static Model.Finder<Long, Patient> find = new Finder<>(Long.class, Patient.class);
 

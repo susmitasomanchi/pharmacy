@@ -12,6 +12,8 @@ POST	/userform/farmaciest/		controllers.PharmacistController.process()
 GET		/userform/doctor/		controllers.DoctorController.form() 
 POST	/userform/doctor/		controllers.DoctorController.process() 
 
+
+
 GET		/userform/patient/		controllers.PatientController.form() 
 GET		/userform/patient/h/		controllers.PatientController.enterForm() 
 

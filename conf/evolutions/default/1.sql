@@ -62,8 +62,6 @@ create table patient (
   picture                   bytea,
   disease                   varchar(255),
   appointment_id            bigint,
-  doctor_availability       varchar(255),
-  is_urgent_patient         varchar(255),
   last_update               timestamp not null,
   constraint ck_patient_role check (role in (0,1,2,3)),
   constraint pk_patient primary key (id))
