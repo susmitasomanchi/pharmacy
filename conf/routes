@@ -3,29 +3,33 @@
 # ~~~~
 
 # Home page
-GET    /                       controllers.Application.index()
-GET    /salesRep/              controllers.Application.salesRepresentator()
-POST   /salesRepProccess/      controllers.Application.salesRepresentatorProccess()
-GET    /diagRep/               controllers.Application.diagnosticRep()
-POST   /diagRepProccess/       controllers.Application.diagnosticRepProccess()
-GET    /login/                 controllers.LoginController.loginForm()
-POST   /login/                 controllers.LoginController.processLogin()
-GET    /logout/                controllers.LoginController.processLogout()
-GET    /userform/farmaciest/   controllers.PharmacistController.form() 
-POST   /userform/farmaciest/   controllers.PharmacistController.process() 
-GET    /userform/doctor/       controllers.DoctorController.form() 
-POST   /userform/doctor/       controllers.DoctorController.process() 
-GET    /sampledata/populate    controllers.SampleDataController.populate()
-GET    /sampledata/cleanup     controllers.SampleDataController.cleanUp()
+GET    /                            controllers.Application.index()
+GET    /salesRep/                   controllers.Application.salesRepresentator()
+POST   /salesRepProccess/           controllers.Application.salesRepresentatorProccess()
+GET    /diagRep/                    controllers.Application.diagnosticRep()
+POST   /diagRepProccess/            controllers.Application.diagnosticRepProccess()
+GET    /login/                      controllers.LoginController.loginForm()
+POST   /login/                      controllers.LoginController.processLogin()
+GET    /logout/                     controllers.LoginController.processLogout()
+GET    /userform/farmaciest/        controllers.PharmacistController.form() 
+POST   /userform/farmaciest/        controllers.PharmacistController.process() 
+GET    /userform/doctor/            controllers.DoctorController.form() 
+POST   /userform/doctor/            controllers.DoctorController.process() 
+GET    /sampledata/populate         controllers.SampleDataController.populate()
+GET    /sampledata/cleanup          controllers.SampleDataController.cleanUp()
 
 
-GET    /userform/patient/      controllers.PatientController.form() 
-GET    /userform/patient/h/    controllers.PatientController.enterForm() 
+GET    /userform/patient/           controllers.PatientController.form() 
+GET    /userform/patient/h/         controllers.PatientController.enterForm() 
 
-POST   /userform/patient/      controllers.PatientController.process() 
+POST   /userform/patientproccess/   controllers.PatientController.process() 
 
-GET    /home/                  controllers.Application.homePage()
+GET    /home/                       controllers.Application.homePage()
 
+# doctor action
+GET    /doc-stuff                   controllers.DoctorController.docStuff()
 
+GET    /register                    controllers.RegistrationApp.register()
+POST   /register-proccess           controllers.RegistrationApp.registerProccess()
 # Map static resources from the /public folder to the /assets URL path
-GET    /assets/*file           controllers.Assets.at(path="/public", file)
+GET    /assets/*file                controllers.Assets.at(path="/public", file)

@@ -7,11 +7,11 @@ import javax.persistence.Id;
 import javax.persistence.OneToOne;
 
 import play.data.validation.Constraints.Required;
-import play.db.ebean.*;
+import play.db.ebean.Model;
 
 @SuppressWarnings("serial")
 @Entity
-public class Doctor extends AppUser {
+public class Doctor extends BaseEntity{
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO)
@@ -39,8 +39,10 @@ public class Doctor extends AppUser {
 	@Required
 	public String timings;
 
-	public String categoryOfDoctor;						// homeopathic or ayurvedic or etc.
+	public String categoryOfDoctor;	             // homeopathic or ayurvedic or etc.
 
+	@OneToOne
+	public RegisterAppUser regAppUsr;
 
 
 

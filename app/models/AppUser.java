@@ -15,7 +15,6 @@ import play.db.ebean.Model;
 
 @SuppressWarnings("serial")
 @Entity
-
 public class AppUser extends BaseEntity{
 
 	@Id

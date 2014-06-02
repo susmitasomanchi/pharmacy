@@ -16,22 +16,7 @@ PLEASE DO NOT MODIFY IT BY HAND
 @helper.form(action=routes.DoctorController.process(),'method -> "post") {
 
 
-			
-			@helper.inputText(dataForm("name"),'class -> "inputs",'_label->"Name")
-			
-			
-			@helper.inputText(dataForm("username"),'class -> "inputs",'_label->"Username")
-			
-			@helper.inputText(dataForm("email"),'class -> "inputs",'_label->"Email")
-			
-			@helper.inputPassword(dataForm("password"),'class -> "inputs",'_label->"Password")
-			
-			@helper.inputPassword(dataForm("gender"),'class -> "inputs",'_label->"Gender")
-						
-			@helper.inputPassword(dataForm("age"),'class -> "inputs",'_label->"Age")
-			
 				
-			@helper.select(dataForm("role"),options=helper.options(Role.options),'class -> "inputs chzn",'_label->"Role")
 			
 			@helper.inputText(dataForm("specialization"),'class -> "inputs",'_label->"Specialization")
 			
