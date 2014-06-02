@@ -13,7 +13,7 @@ import play.db.ebean.Model;
 import play.db.ebean.Model.Finder;
 
 @Entity
-public class Pharmacist extends AppUser{
+public class Pharmacist extends BaseEntity{
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO)
 	public Long id;

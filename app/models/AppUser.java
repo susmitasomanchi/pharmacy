@@ -20,6 +20,7 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Inheritance;
 import javax.persistence.InheritanceType;
+import javax.persistence.MappedSuperclass;
 import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 import javax.persistence.PrimaryKeyJoinColumn;
@@ -35,11 +36,12 @@ import beans.AppUserBean;
 
 
 @SuppressWarnings("serial")
+@MappedSuperclass
 @Entity
-
 public class AppUser extends BaseEntity{
 
 	@Id
+	@GeneratedValue(strategy=GenerationType.AUTO)
 	public Long id;
 
 
@@ -49,7 +51,7 @@ public class AppUser extends BaseEntity{
 
 	public String username;
 
-	
+
 	@Email
 	public String email;
 
@@ -63,7 +65,7 @@ public class AppUser extends BaseEntity{
 
 	public String gender;
 
-	
+
 	public Integer age;
 
 

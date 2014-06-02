@@ -20,7 +20,7 @@ import play.db.ebean.Model;
 import play.db.ebean.Model.Finder;
 
 @Entity
-public class Patient extends AppUser {
+public class Patient extends BaseEntity {
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO)
