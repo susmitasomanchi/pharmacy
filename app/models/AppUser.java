@@ -51,6 +51,6 @@ public class AppUser extends BaseEntity{
 	public static Model.Finder<Long, AppUser> find = new Finder<Long, AppUser>(Long.class, AppUser.class);
 
 
-
+	
 
 }

@@ -20,6 +20,7 @@ public class Appointment extends BaseEntity {
 	public Status appointmentStatus;
 
 
+	public static Finder<Long, Appointment> find = new Finder<>(Long.class, Appointment.class);
 
 
 

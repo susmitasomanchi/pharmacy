@@ -17,11 +17,33 @@ GET		/userform/patient/h/			controllers.PatientController.enterForm()
 
 POST	/userform/patient/			controllers.PatientController.process() 
 
-GET     /sampledata/populate		controllers.SampleDataController.populate()
+GET    /salesRep/              controllers.Application.salesRepresentator()
+POST   /salesRepProccess/      controllers.Application.salesRepresentatorProccess()
+GET    /diagRep/               controllers.Application.diagnosticRep()
+POST   /diagRepProccess/       controllers.Application.diagnosticRepProccess()
+GET    /login/                 controllers.LoginController.loginForm()
+POST   /login/                 controllers.LoginController.processLogin()
+GET    /logout/                controllers.LoginController.processLogout()
+GET    /userform/farmaciest/   controllers.PharmacistController.form() 
+POST   /userform/farmaciest/   controllers.PharmacistController.process() 
+GET    /userform/doctor/       controllers.DoctorController.form() 
+POST   /userform/doctor/       controllers.DoctorController.process() 
+GET    /sampledata/populate    controllers.SampleDataController.populate()
+GET    /sampledata/cleanup     controllers.SampleDataController.cleanUp()
 GET     /sampledata/temp		controllers.SampleDataController.temp()
+
+
+
+
+GET    /userform/patient/      controllers.PatientController.form() 
+GET    /userform/patient/h/    controllers.PatientController.enterForm() 
+
+POST   /userform/patient/      controllers.PatientController.process() 
+
+GET    /home/                  controllers.Application.homePage()
 
 GET  	/register/					controllers.RegisterController.register()
 POST    /register/   				controllers.RegisterController.registerProccess()
 GET     /dashboard/					controllers.UserActions.dashboard()
 # Map static resources from the /public folder to the /assets URL path
-GET     /assets/*file               controllers.Assets.at(path="/public", file)
+GET    /assets/*file           controllers.Assets.at(path="/public", file)
