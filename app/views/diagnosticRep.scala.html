@@ -1,0 +1,25 @@
+@* diagnosticRep Template File *@
+@(dataForm: play.data.Form[DiagnosticRep])
+@import helper._
+@import helper.twitterBootstrap._
+@main("DiagnosticRep") {
+<h1>DiagnosticRepresentator form</h1>
+
+@helper.form(action=routes.Application.diagnosticRepProccess()) {
+	
+	@helper.inputText(dataForm("name"),'_label->"Name")
+	@helper.inputText(dataForm("designation"),'_label->"designation")
+	@helper.inputText(dataForm("username"),'_label->"User Name")
+	@helper.inputText(dataForm("email"),'_label->"Email")
+	@helper.inputPassword(dataForm("password"),'_label->"PassWord")
+	@helper.inputText(dataForm("role"),'_label->"Role") 
+	Male<input type="radio" name="gender" value="false">
+	Female<input type="radio" name="gender" value="false">
+	@helper.inputText(dataForm("age"),'_label->"Age")
+	@helper.inputText(dataForm("diagnosticType"),'_label->"Diagnostic Type")
+	
+	<input type="submit" value="Add DiagnosticRep">
+	
+	
+	}
+	}

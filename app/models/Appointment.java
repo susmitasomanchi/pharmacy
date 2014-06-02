@@ -5,7 +5,6 @@ import java.util.Date;
 import javax.persistence.Entity;
 
 import play.data.validation.Constraints.Required;
-import play.db.ebean.*;
 
 @Entity
 public class Appointment extends BaseEntity {
@@ -20,6 +19,7 @@ public class Appointment extends BaseEntity {
 	public Status appointmentStatus;
 
 
+	public static Finder<Long, Appointment> find = new Finder<>(Long.class, Appointment.class);
 
 
 

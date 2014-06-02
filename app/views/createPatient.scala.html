@@ -49,18 +49,18 @@ PLEASE DO NOT MODIFY IT BY HAND
         </div>
         
         
-        
-        <li class="dropdown">
-            <a href="#" data-toggle="dropdown" class="dropdown-toggle">Admin <b class="caret"></b></a>
-            <ul class="dropdown-menu">
-                <li><a href="#">Action</a></li>
-                <li><a href="#">Another action</a></li>
-                <li class="divider"></li>
-                <li><a href="#">Settings</a></li>
-            </ul>
-        </li>
-        
-        
+      
+        <div class="control-group ">
+            <label class="control-label">Role</label>
+            <br>
+<select>
+  <option value="0">DOCTOR</option>
+  <option value="1">PATIENT</option>
+  <option value="2">PHARMACIST</option>
+  <option value="3">MR</option>
+</select>
+  
+</div></div>
         
         
          
@@ -72,7 +72,7 @@ PLEASE DO NOT MODIFY IT BY HAND
                     <input type="text" class="input-xlarge" id="email" name="email" placeholder="Email">
                 </div>
             </div>
-        </div>
+       
           <div class="control-group">
             <label class="control-label">Password</label>
             <div class="controls">
@@ -82,18 +82,21 @@ PLEASE DO NOT MODIFY IT BY HAND
                 </div>
             </div>
         </div>
-        <div class="control-group">
-            <label class="control-label">Gender</label>
-            <div class="controls">
- 
-                    <p><div id="gender" name="gender" class="btn-group" data-toggle="buttons-radio">
-                    <button type="button" class="btn btn-info">Male</button>
-                    <button type="button" class="btn btn-info">Female</button>
- 
-                  </div></p>
- 
-            </div>
-        </div>
+        
+        <div class="row">
+
+    <label for="gender" class="control-label input-group">Gender</label>
+    <div class="btn-group" data-toggle="buttons">
+        <label class="btn btn-default">
+            <input type="radio" name="gender" value="male">Male
+        </label>
+        <label class="btn btn-default">
+            <input type="radio" name="gender" value="female">Female
+        </label>
+        
+    </div>
+  </div>
+       
          <div class="control-group">
             <label class="control-label">Age</label>
             <div class="controls">
@@ -121,36 +124,17 @@ PLEASE DO NOT MODIFY IT BY HAND
                 </div>
             </div>
             
-             <div class="control-group">
-            <label class="control-label">Doctor Availability</label>
-            <div class="controls">
- 
-                    <p><div id="doctorAvailability" name="doctorAvailability" class="btn-group" data-toggle="buttons-radio">
-                    <button type="button" class="btn btn-info">Yes</button>
-                    <button type="button" class="btn btn-info">No</button>
- 
-                  </div></p>
- 			 
-             <div class="control-group">
-            <label class="control-label">Is Urgent Patient</label>
-            <div class="controls">
- 
-                    <p><div id="isUrgentPatient" name="isUrgentPatient" class="btn-group" data-toggle="buttons-radio">
-                    <button type="button" class="btn btn-info">Yes</button>
-                    <button type="button" class="btn btn-info">No</button>
- 
-                  </div></p>
-            </div>
-        </div>
+           
+
+           
         <input type="hidden" name="id" value='@dataForm("id").value' >
 			<input type="submit" class="submit" value="Login">
  
        
 
- 
+  </div>
 
       </form>
-
    </div>
 </div>
 	<br>

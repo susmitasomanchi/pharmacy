@@ -17,7 +17,6 @@ import play.Logger;
 import play.data.Form;
 import play.mvc.Controller;
 import play.mvc.Result;
-import beans.AppUserBean;
 
 //@BasicAuth
 public class UserController extends Controller {

@@ -9,6 +9,7 @@ import javax.persistence.OneToOne;
 import play.data.validation.Constraints.Required;
 import play.db.ebean.*;
 
+@SuppressWarnings("serial")
 @Entity
 public class Doctor extends BaseEntity {
 
