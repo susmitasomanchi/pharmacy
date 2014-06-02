@@ -4,12 +4,10 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.OneToOne;
 
 import play.data.validation.Constraints.Required;
 import play.db.ebean.Model;
 
-@SuppressWarnings("serial")
 @Entity
 public class Doctor extends BaseEntity{
 
@@ -48,6 +46,6 @@ public class Doctor extends BaseEntity{
 
 
 
-	public static Model.Finder<Long,Doctor> find = new Finder<>(Long.class, Doctor.class);
+	public static Model.Finder<Long,Doctor> find = new Finder<Long, Doctor>(Long.class, Doctor.class);
 
 }

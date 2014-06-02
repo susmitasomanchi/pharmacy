@@ -1,18 +1,8 @@
-@(dataForm:play.data.Form[beans.RegisterAppUserBean])
+@(dataForm:play.data.Form[models.AppUser])
+@import helper.twitterBootstrap._
 
-@*******************************
-
-THIS IS AN AUTO GENERATED CODE
-PLEASE DO NOT MODIFY IT BY HAND
-
-********************************@
-
-
-@main("Registration Form"){
-	
-	<br>
-<div class="container">
-@helper.form(action=routes.RegistrationApp.registerProccess(),'method -> "post") {
+@main("User Form"){
+@helper.form(action=routes.RegisterController.registerProccess(),'method -> "post") {
 
 
 			
@@ -29,15 +19,12 @@ PLEASE DO NOT MODIFY IT BY HAND
 						
 			@helper.inputPassword(dataForm("age"),'class -> "inputs",'_label->"Age")
 			
-				
-			
+		
 			<br>
 			<input type="hidden" name="id" value='@dataForm("id").value' >
-			<input type="submit" class="submit" value="submit">
+			<input type="submit" class="submit" value="Login">
 			
 				
 			}
 			
-	</div>
 }
-

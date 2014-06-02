@@ -1,17 +1,16 @@
 package models;
 
-
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Lob;
+import javax.persistence.OneToOne;
 
 import play.db.ebean.Model;
 
-@SuppressWarnings("serial")
 @Entity
-public class Patient extends AppUser {
+public class Patient extends Model{
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO)
@@ -20,6 +19,8 @@ public class Patient extends AppUser {
 	@Lob
 	public byte[] picture;
 
+	@OneToOne(mappedBy="patient")
+	public AppUser appUser;
 
 	public String disease;
 
@@ -32,6 +33,6 @@ public class Patient extends AppUser {
 
 	public String isUrgentPatient;
 
-	public static Model.Finder<Long, Patient> find = new Finder<>(Long.class, Patient.class);
+	public static Model.Finder<Long, Patient> find = new Finder<Long, Patient>(Long.class, Patient.class);
 
 }

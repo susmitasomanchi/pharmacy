@@ -3,7 +3,19 @@
 # ~~~~
 
 # Home page
-GET    /                            controllers.Application.index()
+GET    /                            
+GET    /login/                      controllers.LoginController.loginForm()
+POST   /login/                      controllers.LoginController.processLogin()
+GET    /logout/                     controllers.LoginController.processLogout()
+GET    /userform/farmaciest/        controllers.PharmacistController.form() 
+POST   /userform/farmaciest/        controllers.PharmacistController.process() 
+GET    /userform/doctor/            controllers.DoctorController.form() 
+POST   /userform/doctor/            controllers.DoctorController.process() 
+
+GET    /userform/patient/           controllers.PatientController.form() 
+GET    /userform/patient/h/         controllers.PatientController.enterForm() 
+
+POST   /userform/patient/           controllers.Application.index()
 GET    /salesRep/                   controllers.Application.salesRepresentator()
 POST   /salesRepProccess/           controllers.Application.salesRepresentatorProccess()
 GET    /diagRep/                    controllers.Application.diagnosticRep()
@@ -17,6 +29,9 @@ GET    /userform/doctor/            controllers.DoctorController.form()
 POST   /userform/doctor/            controllers.DoctorController.process() 
 GET    /sampledata/populate         controllers.SampleDataController.populate()
 GET    /sampledata/cleanup          controllers.SampleDataController.cleanUp()
+GET    /sampledata/temp             controllers.SampleDataController.temp()
+
+
 
 
 GET    /userform/patient/           controllers.PatientController.form() 
@@ -28,7 +43,9 @@ GET    /home/                       controllers.Application.homePage()
 
 # doctor action
 GET    /doc-stuff                   controllers.DoctorController.docStuff()
-
+GET    /register/                   controllers.RegisterController.register()
+POST   /register/                   controllers.RegisterController.registerProccess()
+GET    /dashboard/                  controllers.UserActions.dashboard()
 GET    /register                    controllers.RegistrationApp.register()
 POST   /register-proccess           controllers.RegistrationApp.registerProccess()
 # Map static resources from the /public folder to the /assets URL path
