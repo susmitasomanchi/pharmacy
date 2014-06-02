@@ -4,10 +4,9 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.OneToOne;
 
 import play.data.validation.Constraints.Required;
-import play.db.ebean.*;
+import play.db.ebean.Model;
 
 @Entity
 public class Doctor extends AppUser {
@@ -45,6 +44,6 @@ public class Doctor extends AppUser {
 
 
 
-	public static Model.Finder<Long,Doctor> find = new Finder<>(Long.class, Doctor.class);
+	public static Model.Finder<Long,Doctor> find = new Finder<Long, Doctor>(Long.class, Doctor.class);
 
 }

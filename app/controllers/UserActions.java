@@ -1,7 +1,7 @@
 package controllers;
 
-import models.Pharmacist;
-import models.Role;
+import models.AppUser;
+import models.Patient;
 import play.mvc.Controller;
 import play.mvc.Result;
 
@@ -11,17 +11,14 @@ public class UserActions extends Controller {
 	public static Result dashboard() {
 
 
-		final Long id=LoginController.getLoggedInUserId();
-		final Role role = LoginController.getLoggedInUserRole();
-		if(role.equals(Role.PHARMACIST)){
-			final Pharmacist pharmacist= Pharmacist.find.byId(id);
-			return ok("pharmaciest dashboard");
+		final AppUser appUser =LoginController.getLoggedInUser();
+		final Patient patient=Patient.find.where().eq("appUser", appUser).findUnique();
+		return ok("dashboard"+appUser);
 
-		}
-		return TODO;
+	}
 
 
-		/*
+	/*
 		final List<KUnit> myKuList = KUnit.find.where().eq("author", LoginController.getLoggedInUser()).eq("kuStatus", KUStatus.APPROVED).findList();
 		myKuList.addAll(KUnit.find.where().in("collaboratorList.id", LoginController.getLoggedInUser().id).eq("kuStatus", KUStatus.APPROVED).findList());
 		final List<KUnit> apprList = new ArrayList<KUnit>();
@@ -100,9 +97,9 @@ public class UserActions extends Controller {
 				areaList,
 				leverList
 				));*/
-		/*}*/
+	/*}*/
 
-	}
+
 
 	/*class SortKUsByApprovedDate implements Comparator<KUnit>{
 	@Override

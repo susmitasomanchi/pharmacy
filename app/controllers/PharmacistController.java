@@ -1,6 +1,7 @@
 package controllers;
 
 
+import models.AppUser;
 import models.Pharmacist;
 import play.Logger;
 import play.data.Form;
@@ -28,7 +29,11 @@ public class PharmacistController extends Controller{
 			final Pharmacist pharmacist= filledForm.get();
 
 			if(pharmacist.id == null) {
+				final AppUser appUser=new AppUser();
+				//pharmacist.appUser=appUser;
+				appUser.save();
 				pharmacist.save();
+
 			}
 			else {
 				pharmacist.update();

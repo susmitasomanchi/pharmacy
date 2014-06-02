@@ -23,11 +23,12 @@ public class AppUser extends BaseEntity{
 	@Id
 	public Long id;
 
-	@OneToOne
-	public Pharmacist pharmacist;
+
 
 	public String name;
 
+	@OneToOne
+	public Patient patient;
 
 
 	public String username;
@@ -40,10 +41,6 @@ public class AppUser extends BaseEntity{
 	public String password;
 
 
-
-	public Role role;
-
-
 	public String gender;
 
 
@@ -51,7 +48,8 @@ public class AppUser extends BaseEntity{
 
 
 
-	public static Model.Finder<Long, AppUser> find = new Finder<>(Long.class, AppUser.class);
+	public static Model.Finder<Long, AppUser> find = new Finder<Long, AppUser>(Long.class, AppUser.class);
+
 
 
 

@@ -1,10 +1,8 @@
 package controllers;
 
 import models.Patient;
-import models.Pharmacist;
 import play.Logger;
 import play.data.Form;
-import play.db.ebean.Model;
 import play.mvc.Controller;
 import play.mvc.Result;
 
@@ -21,7 +19,7 @@ public class PatientController extends Controller {
 		//return TODO;
 	}
 
-	
+
 	public static Result process() {
 		final Form<Patient> filledForm = form.bindFromRequest();
 		//Logger.info("enteredt");
@@ -36,7 +34,7 @@ public class PatientController extends Controller {
 			final Patient patient= filledForm.get();
 
 			if(patient.id == null) {
-				
+
 				//System.out.println("hiiiii");
 				patient.save();
 			}

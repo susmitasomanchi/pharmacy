@@ -3,9 +3,6 @@ package controllers;
 import java.util.List;
 
 import models.AppUser;
-import models.Doctor;
-import models.Patient;
-import models.Pharmacist;
 import models.Role;
 import play.Logger;
 import play.data.Form;
@@ -43,32 +40,25 @@ public class LoginController extends Controller {
 			Logger.info(loginBean.toString());
 
 
-			final List<Doctor> doctors = Doctor.find.where().eq("email", loginBean.email).
-					eq("password", loginBean.password).findList();
-			final List<Patient> patients = Patient.find.where().eq("email", loginBean.email)
-					.eq("password", loginBean.password).findList();
-			final List<Pharmacist> pharmacists  = Pharmacist.find.where().eq("email", loginBean.email)
-					.eq("password", loginBean.password).findList();
-
-
+			final List <AppUser> appUsers=AppUser.find.where().eq("email", loginBean.email).eq("password", loginBean.password).findList();
 			//Logger.info("found users " + appUsers.toString());
-			final List<AppUser> appUsers=whichUserLogging(doctors, patients, pharmacists);
-
+			/*			final List<AppUser> appUsers=whichUserLogging(doctors, patients, pharmacists);
+			 */
 			if (appUsers.size()<=0) {
 
 				// return invalid login/password
 
 				return badRequest(views.html.loginForm.render(filledForm));
-			} else if (doctors.size() == 1 || doctors.size() == 1 || doctors.size() == 1) {
+			} else if (appUsers.size()==0) {
 				session().clear();
 				session(Constants.LOGGED_IN_USER_ID, appUsers.get(0).id + "");
-				session(Constants.LOGGED_IN_USER_ROLE, appUsers.get(0).role + "");
+				//session(Constants.LOGGED_IN_USER_ROLE, appUsers.get(0).role + "");
 				return redirect(routes.UserActions.dashboard());
 				//return ok("login successfull");
 			} else {
 				session().clear();
 				session(Constants.LOGGED_IN_USER_ID, appUsers.get(0).id + "");
-				session(Constants.LOGGED_IN_USER_ROLE, appUsers.get(0).role + "");
+				//session(Constants.LOGGED_IN_USER_ROLE, appUsers.get(0).role + "");
 
 				Logger.info("more than one users exists with same email and passowrd");
 				//return redirect(routes.UserActions.dashboard());
@@ -127,14 +117,14 @@ public class LoginController extends Controller {
 
 	}*/
 
-	public static Long getLoggedInUserId() {
+	public static AppUser getLoggedInUser() {
 		final String idStr = session(Constants.LOGGED_IN_USER_ID);
 		//final String idRole = session(Constants.LOGGED_IN_USER_ID);
 
 		final Long id = Long.parseLong(idStr);
-
-
-		return id;
+		final AppUser appUser=AppUser.find.byId(id);
+		Logger.error(appUser.toString());
+		return appUser;
 	}
 	public static Role getLoggedInUserRole() {
 		final String role = session(Constants.LOGGED_IN_USER_ROLE);
