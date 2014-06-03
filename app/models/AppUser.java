@@ -9,6 +9,7 @@ package models;
 
 import javax.persistence.Entity;
 import javax.persistence.Id;
+import javax.persistence.Lob;
 import javax.persistence.OneToOne;
 
 import play.data.validation.Constraints.Email;
@@ -23,7 +24,8 @@ public class AppUser extends BaseEntity{
 	@Id
 	public Long id;
 
-
+	@Lob
+	public byte[] picture;
 
 	public String name;
 
