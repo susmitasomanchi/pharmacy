@@ -7,16 +7,7 @@ PLEASE DO NOT MODIFY IT BY HAND
  *****/
 package controllers;
 
-import java.util.ArrayList;
-import java.util.List;
-
-import models.AppUser;
-import models.Pharmacist;
-import models.Role;
-import play.Logger;
-import play.data.Form;
 import play.mvc.Controller;
-import play.mvc.Result;
 
 //@BasicAuth
 public class UserController extends Controller {

@@ -7,9 +7,8 @@ import javax.persistence.Id;
 import javax.persistence.OneToOne;
 
 import play.data.validation.Constraints.Required;
-import play.db.ebean.*;
+import play.db.ebean.Model;
 
-@SuppressWarnings("serial")
 @Entity
 public class Doctor extends BaseEntity {
 
@@ -42,10 +41,11 @@ public class Doctor extends BaseEntity {
 	public String categoryOfDoctor;						// homeopathic or ayurvedic or etc.
 
 
+	@OneToOne(mappedBy="doctor")
+	public AppUser appUser;
 
 
 
-
-	public static Model.Finder<Long,Doctor> find = new Finder<>(Long.class, Doctor.class);
+	public static Model.Finder<Long,Doctor> find = new Finder<Long, Doctor>(Long.class, Doctor.class);
 
 }

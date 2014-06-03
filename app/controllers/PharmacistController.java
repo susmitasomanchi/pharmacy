@@ -26,16 +26,21 @@ public class PharmacistController extends Controller{
 			return badRequest(views.html.createPharmacist.render(filledForm));
 		}
 		else {
-			final Pharmacist pharmaciest= filledForm.get();
+			final Pharmacist pharmacist= filledForm.get();
 
-			if(pharmaciest.id == null) {
-				pharmaciest.save();
+			if(pharmacist.id == null) {
+				final AppUser appUser=new AppUser();
+				//pharmacist.appUser=appUser;
+				appUser.save();
+				pharmacist.save();
+
 			}
 			else {
-				pharmaciest.update();
+				pharmacist.update();
 			}
 		}
-		return TODO;
+		return ok("User Created");
+		//return TODO;
 		//return redirect(routes.UserController.list());
 	}
 }
