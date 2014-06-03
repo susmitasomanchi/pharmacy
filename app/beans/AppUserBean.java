@@ -1,10 +1,10 @@
-
-/*****
+/*
+*//*****
 
 THIS IS AN AUTO GENERATED CODE
 PLEASE DO NOT MODIFY IT BY HAND
 
- *****/
+ *****//*
 package beans;
 
 import java.io.Serializable;
@@ -42,7 +42,7 @@ public class AppUserBean implements Serializable {
 
 
 
-	@Required
+
 	public Role role;
 
 	@Required
@@ -100,3 +100,4 @@ public class AppUserBean implements Serializable {
 
 }
 
+*/

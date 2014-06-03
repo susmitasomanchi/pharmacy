@@ -7,10 +7,10 @@ import javax.persistence.Id;
 import javax.persistence.OneToOne;
 
 import play.data.validation.Constraints.Required;
-import play.db.ebean.*;
+import play.db.ebean.Model;
 
 @Entity
-public class Doctor extends AppUser {
+public class Doctor extends BaseEntity {
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO)
@@ -31,14 +31,21 @@ public class Doctor extends AppUser {
 	public Integer fees;
 
 
-	@OneToOne
 	public String clinicAddress;
 
-	@OneToOne
 	public String hospitalAddress;
 
 	@Required
 	public String timings;
 
+	public String categoryOfDoctor;						// homeopathic or ayurvedic or etc.
+
+
+	@OneToOne(mappedBy="doctor")
+	public AppUser appUser;
+
+
+
+	public static Model.Finder<Long,Doctor> find = new Finder<Long, Doctor>(Long.class, Doctor.class);
 
 }

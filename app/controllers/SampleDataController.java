@@ -2,6 +2,8 @@ package controllers;
 import java.util.List;
 
 import models.AppUser;
+import models.Doctor;
+import models.Patient;
 import play.mvc.Controller;
 import play.mvc.Result;
 
@@ -9,12 +11,12 @@ public class SampleDataController extends Controller {
 
 	public static Result populate() {
 
-		final AppUser admin = new AppUser();
-		admin.name = "Test Admin";
-		//admin.role = Role.ADMIN;
-		admin.email = "admin@mednet.com";
-		admin.password = "123456";
-		admin.save();
+		final Doctor doctor = new Doctor();
+		/*doctor.name = "Test Admin";
+		//doctor.role = Role.DOCTOR;
+		doctor.email = "admin@mednet.com";
+		doctor.password = "123456";
+		doctor.save();*/
 
 		final AppUser user = new AppUser();
 		user.name = "Test User";
@@ -36,6 +38,18 @@ public class SampleDataController extends Controller {
 		}
 
 		return ok();
+
+	}
+	public static Result temp() {
+		final AppUser user=new AppUser();
+		user.email="mitesh@ukate.com";
+		user.password="123456";
+		final Patient patient=new Patient();
+		user.patient=patient;
+		patient.save();
+		user.save();
+
+		return ok("created");
 	}
 
 }

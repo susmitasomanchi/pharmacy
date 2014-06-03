@@ -1,0 +1,182 @@
+@(dataForm:play.data.Form[models.Patient])
+
+@*******************************
+
+THIS IS AN AUTO GENERATED CODE
+PLEASE DO NOT MODIFY IT BY HAND
+
+********************************@
+
+@import play.i18n._
+
+@main("User Form"){
+	
+	<br>
+<div class="container">
+@helper.form(action=routes.PatientController.process(),'method -> "post") {
+
+
+ 
+        <div class="container">
+<legend>Sign Up</legend>
+<div class="well">
+    
+        <legend>Sign Up</legend>
+        <div class="control-group">
+            <label class="control-label">Name</label>
+            <div class="controls">
+                <div class="input-prepend">
+                <span class="add-on"><i class="icon-user"></i></span>
+                    <input type="text" class="input-xlarge" id="name" name="name" placeholder="Name">
+                </div>
+
+<div class="control-group">
+<label class="control-label">Profile Picture</label>
+ <div class="controls">
+ <div class="input-prepend">
+ <input type="file" name="picture" value="picture" accept="image/*"></div>
+</div>
+            </div>
+        </div>
+        <div class="control-group ">
+            <label class="control-label">Username</label>
+            <div class="controls">
+                <div class="input-prepend">
+                <span class="add-on"><i class="icon-user"></i></span>
+                    <input type="text" class="input-xlarge" id="username" name="username" placeholder="username Name">
+                </div>
+            </div>
+        </div>
+        
+        
+        
+        <li class="dropdown">
+            <a href="#" data-toggle="dropdown" class="dropdown-toggle">Admin <b class="caret"></b></a>
+            <ul class="dropdown-menu">
+                <li><a href="#">Action</a></li>
+                <li><a href="#">Another action</a></li>
+                <li class="divider"></li>
+                <li><a href="#">Settings</a></li>
+            </ul>
+        </li>
+        
+        
+        
+        
+         
+
+            <label class="control-label">Email</label>
+            <div class="controls">
+                <div class="input-prepend">
+                <span class="add-on"><i class="icon-envelope"></i></span>
+                    <input type="text" class="input-xlarge" id="email" name="email" placeholder="Email">
+                </div>
+            </div>
+        </div>
+          <div class="control-group">
+            <label class="control-label">Password</label>
+            <div class="controls">
+                <div class="input-prepend">
+                <span class="add-on"><i class="icon-lock"></i></span>
+                    <input type="Password" id="password" class="input-xlarge" name="password" placeholder="Password">
+                </div>
+            </div>
+        </div>
+        
+        
+   <div class="control-group">
+    <label for="gender" class="control-label input-group">Gender</label>
+    <div class="btn-group" data-toggle="buttons">
+        <label class="btn btn-default">
+            <input type="radio" name="gender" value="male">Male
+        </label>
+        <label class="btn btn-default">
+            <input type="radio" name="gender" value="female">Female
+        </label>
+        
+    </div>
+
+       
+        <div class="control-group">
+            <label class="control-label">Gender</label>
+            <div class="controls">
+ 
+                    <p><div id="gender" name="gender" class="btn-group" data-toggle="buttons-radio">
+                    <button type="button" class="btn btn-info">Male</button>
+                    <button type="button" class="btn btn-info">Female</button>
+ 
+                  </div></p>
+ 
+            </div>
+        </div>
+         <div class="control-group">
+            <label class="control-label">Age</label>
+            <div class="controls">
+                <div class="input-prepend">
+                <span class="add-on"><i class="icon-envelope"></i></span>
+                    <input type="text" class="input-xlarge" id="age" name="age" placeholder="age">
+                </div>
+            </div>
+            
+            <div class="control-group">
+            <label class="control-label">Disease</label>
+            <div class="controls">
+                <div class="input-prepend">
+                <span class="add-on"><i class="icon-envelope"></i></span>
+                    <input type="text" class="input-xlarge" id="disease" name="disease" placeholder="disease">
+                </div>
+            </div>
+            
+             <div class="control-group">
+            <label class="control-label">Appointment ID</label>
+            <div class="controls">
+                <div class="input-prepend">
+                <span class="add-on"><i class="icon-envelope"></i></span>
+                    <input type="text" class="input-xlarge" id="appointmentId" name="appointmentId" placeholder="appointmentId">
+                </div>
+            </div>
+            
+
+           
+		<br>
+		
+           
+
+             <div class="control-group">
+            <label class="control-label">Doctor Availability</label>
+            <div class="controls">
+ 
+                    <p><div id="doctorAvailability" name="doctorAvailability" class="btn-group" data-toggle="buttons-radio">
+                    <button type="button" class="btn btn-info">Yes</button>
+                    <button type="button" class="btn btn-info">No</button>
+ 
+                  </div></p>
+ 			 
+             <div class="control-group">
+            <label class="control-label">Is Urgent Patient</label>
+            <div class="controls">
+ 
+                    <p><div id="isUrgentPatient" name="isUrgentPatient" class="btn-group" data-toggle="buttons-radio">
+                    <button type="button" class="btn btn-info">Yes</button>
+                    <button type="button" class="btn btn-info">No</button>
+ 
+                  </div></p>
+            </div>
+        </div>
+
+        <input type="hidden" name="id" value='@dataForm("id").value' >
+			<input type="submit" class="submit" value="Login">
+ 
+       
+
+ 
+
+      </form>
+
+   </div>
+</div>
+	<br>
+			
+}
+
+}
