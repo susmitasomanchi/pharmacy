@@ -20,7 +20,6 @@ public class LoginController extends Controller {
 			return ok("hii login");
 		} else {
 			//return ok("hii Not login");
-
 			return ok(views.html.loginForm.render(loginForm));
 		}
 	}
@@ -45,13 +44,11 @@ public class LoginController extends Controller {
 			} else if (appUsers.size() == 1) {
 				session().clear();
 				session(Constants.LOGGED_IN_USER_ID, appUsers.get(0).id + "");
-				//return redirect(routes.UserActions.dashboard());
 				return ok("login successfull");
 			} else {
 				session().clear();
 				session(Constants.LOGGED_IN_USER_ID, appUsers.get(0).id + "");
 				Logger.info("more than one users exists with same email and passowrd");
-				//return redirect(routes.UserActions.dashboard());
 				return ok("login successfull");
 
 			}
