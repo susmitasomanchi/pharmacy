@@ -4,12 +4,13 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.OneToOne;
 
 import play.data.validation.Constraints.Required;
 import play.db.ebean.Model;
 
 @Entity
-public class Doctor extends AppUser {
+public class Doctor extends BaseEntity {
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO)
@@ -40,7 +41,8 @@ public class Doctor extends AppUser {
 	public String categoryOfDoctor;						// homeopathic or ayurvedic or etc.
 
 
-
+	@OneToOne(mappedBy="doctor")
+	public AppUser appUser;
 
 
 

@@ -10,7 +10,7 @@ import javax.persistence.OneToOne;
 import play.db.ebean.Model;
 
 @Entity
-public class Patient extends Model{
+public class Patient extends BaseEntity {
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO)
