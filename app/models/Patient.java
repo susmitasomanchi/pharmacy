@@ -13,7 +13,7 @@ import javax.persistence.ManyToOne;
 import play.data.validation.Constraints.Required;
 
 @Entity
-public class Patients extends AppUser {
+public class Patient extends AppUser {
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO)
