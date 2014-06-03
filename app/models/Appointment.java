@@ -5,6 +5,7 @@ import java.util.Date;
 import javax.persistence.Entity;
 
 import play.data.validation.Constraints.Required;
+import play.db.ebean.*;
 
 @Entity
 public class Appointment extends BaseEntity {
