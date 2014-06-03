@@ -26,9 +26,9 @@ PLEASE DO NOT MODIFY IT BY HAND
 			
 			@helper.inputPassword(dataForm("password"),'class -> "inputs",'_label->"Password")
 			
-			@helper.inputPassword(dataForm("gender"),'class -> "inputs",'_label->"Gender")
+			@helper.inputText(dataForm("gender"),'class -> "inputs",'_label->"Gender")
 						
-			@helper.inputPassword(dataForm("age"),'class -> "inputs",'_label->"Age")
+			@helper.inputText(dataForm("age"),'class -> "inputs",'_label->"Age")
 			
 				
 			@helper.select(dataForm("role"),options=helper.options(Role.options),'class -> "inputs chzn",'_label->"Role")

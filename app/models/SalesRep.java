@@ -20,7 +20,7 @@ public class SalesRep extends AppUser{
 
 	public String typesOfMedecine;
 
-	public int noOfDoctorsVisit;
+	public Integer noOfDoctorsVisit;
 
 	public static Finder<Long, SalesRep> find = new Finder<>(Long.class, SalesRep.class);
 

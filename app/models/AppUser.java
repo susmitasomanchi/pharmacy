@@ -42,6 +42,9 @@ public class AppUser extends BaseEntity{
 	@OneToOne
 	public SalesRep salesRep;
 
+	@OneToOne
+	public DoctorAssistant assistant;
+
 
 	public String username;
 
