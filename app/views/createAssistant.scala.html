@@ -1,0 +1,55 @@
+@(dataForm:play.data.Form[models.DoctorAssistant])
+
+@*******************************
+
+THIS IS AN AUTO GENERATED CODE
+PLEASE DO NOT MODIFY IT BY HAND
+
+********************************@
+
+@import play.i18n._
+
+@main("User Form"){
+	
+	<br>
+<div class="container">
+@helper.form(action=routes.AssistantController.process(),'method -> "post") {
+
+
+			
+			@helper.inputText(dataForm("name"),'class -> "inputs",'_label->"Name")
+			
+			
+			@helper.inputText(dataForm("username"),'class -> "inputs",'_label->"Username")
+			
+			@helper.inputText(dataForm("email"),'class -> "inputs",'_label->"Email")
+			
+			@helper.inputPassword(dataForm("password"),'class -> "inputs",'_label->"Password")
+			
+			@helper.inputText(dataForm("gender"),'class -> "inputs",'_label->"Gender")
+						
+			@helper.inputText(dataForm("age"),'class -> "inputs",'_label->"Age")
+			
+				
+			@helper.select(dataForm("role"),options=helper.options(Role.options),'class -> "inputs chzn",'_label->"Role")
+			
+			
+			@helper.inputText(dataForm("degree"),'class -> "inputs",'_label->"Degree")
+			
+						
+			@helper.inputText(dataForm("experience"),'class -> "inputs",'_label->"Experience")
+			
+						
+			<br>
+			<input type="hidden" name="id" value='@dataForm("id").value' >
+			<input type="submit" class="submit" value="Login">
+			
+				
+			}
+			
+			
+
+	
+	</div>
+}
+
