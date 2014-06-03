@@ -5,13 +5,17 @@
 
 create table app_user (
   id                        bigint not null,
+  picture                   bytea,
   name                      varchar(255),
   patient_id                bigint,
   doctor_id                 bigint,
   diagnostic_rep_id         bigint,
   pharmacist_id             bigint,
   sales_rep_id              bigint,
+<<<<<<< HEAD
   assistant_id              bigint,
+=======
+>>>>>>> branch 'master' of http://pharmacy.bz/green-software/mednetwork.git
   username                  varchar(255),
   email                     varchar(255),
   password                  varchar(255),
@@ -32,13 +36,17 @@ create table appointment (
 
 create table diagnostic_rep (
   id                        bigint not null,
+  picture                   bytea,
   name                      varchar(255),
   patient_id                bigint,
   doctor_id                 bigint,
   diagnostic_rep_id         bigint,
   pharmacist_id             bigint,
   sales_rep_id              bigint,
+<<<<<<< HEAD
   assistant_id              bigint,
+=======
+>>>>>>> branch 'master' of http://pharmacy.bz/green-software/mednetwork.git
   username                  varchar(255),
   email                     varchar(255),
   password                  varchar(255),
@@ -98,13 +106,17 @@ create table pharmacy (
 
 create table sales_rep (
   id                        bigint not null,
+  picture                   bytea,
   name                      varchar(255),
   patient_id                bigint,
   doctor_id                 bigint,
   diagnostic_rep_id         bigint,
   pharmacist_id             bigint,
   sales_rep_id              bigint,
+<<<<<<< HEAD
   assistant_id              bigint,
+=======
+>>>>>>> branch 'master' of http://pharmacy.bz/green-software/mednetwork.git
   username                  varchar(255),
   email                     varchar(255),
   password                  varchar(255),
@@ -142,6 +154,7 @@ alter table app_user add constraint fk_app_user_pharmacist_4 foreign key (pharma
 create index ix_app_user_pharmacist_4 on app_user (pharmacist_id);
 alter table app_user add constraint fk_app_user_salesRep_5 foreign key (sales_rep_id) references sales_rep (id);
 create index ix_app_user_salesRep_5 on app_user (sales_rep_id);
+<<<<<<< HEAD
 alter table app_user add constraint fk_app_user_assistant_6 foreign key (assistant_id) references doctor_assistant (id);
 create index ix_app_user_assistant_6 on app_user (assistant_id);
 alter table diagnostic_rep add constraint fk_diagnostic_rep_patient_7 foreign key (patient_id) references patient (id);
@@ -168,6 +181,28 @@ alter table sales_rep add constraint fk_sales_rep_salesRep_17 foreign key (sales
 create index ix_sales_rep_salesRep_17 on sales_rep (sales_rep_id);
 alter table sales_rep add constraint fk_sales_rep_assistant_18 foreign key (assistant_id) references doctor_assistant (id);
 create index ix_sales_rep_assistant_18 on sales_rep (assistant_id);
+=======
+alter table diagnostic_rep add constraint fk_diagnostic_rep_patient_6 foreign key (patient_id) references patient (id);
+create index ix_diagnostic_rep_patient_6 on diagnostic_rep (patient_id);
+alter table diagnostic_rep add constraint fk_diagnostic_rep_doctor_7 foreign key (doctor_id) references doctor (id);
+create index ix_diagnostic_rep_doctor_7 on diagnostic_rep (doctor_id);
+alter table diagnostic_rep add constraint fk_diagnostic_rep_diagnosticRe_8 foreign key (diagnostic_rep_id) references diagnostic_rep (id);
+create index ix_diagnostic_rep_diagnosticRe_8 on diagnostic_rep (diagnostic_rep_id);
+alter table diagnostic_rep add constraint fk_diagnostic_rep_pharmacist_9 foreign key (pharmacist_id) references pharmacist (id);
+create index ix_diagnostic_rep_pharmacist_9 on diagnostic_rep (pharmacist_id);
+alter table diagnostic_rep add constraint fk_diagnostic_rep_salesRep_10 foreign key (sales_rep_id) references sales_rep (id);
+create index ix_diagnostic_rep_salesRep_10 on diagnostic_rep (sales_rep_id);
+alter table sales_rep add constraint fk_sales_rep_patient_11 foreign key (patient_id) references patient (id);
+create index ix_sales_rep_patient_11 on sales_rep (patient_id);
+alter table sales_rep add constraint fk_sales_rep_doctor_12 foreign key (doctor_id) references doctor (id);
+create index ix_sales_rep_doctor_12 on sales_rep (doctor_id);
+alter table sales_rep add constraint fk_sales_rep_diagnosticRep_13 foreign key (diagnostic_rep_id) references diagnostic_rep (id);
+create index ix_sales_rep_diagnosticRep_13 on sales_rep (diagnostic_rep_id);
+alter table sales_rep add constraint fk_sales_rep_pharmacist_14 foreign key (pharmacist_id) references pharmacist (id);
+create index ix_sales_rep_pharmacist_14 on sales_rep (pharmacist_id);
+alter table sales_rep add constraint fk_sales_rep_salesRep_15 foreign key (sales_rep_id) references sales_rep (id);
+create index ix_sales_rep_salesRep_15 on sales_rep (sales_rep_id);
+>>>>>>> branch 'master' of http://pharmacy.bz/green-software/mednetwork.git
 
 
 

@@ -12,11 +12,21 @@ public class SampleDataController extends Controller {
 	public static Result populate() {
 
 		final Doctor doctor = new Doctor();
+<<<<<<< HEAD
 		//doctor.name = "Test Admin";
+=======
+		/*doctor.name = "Test Admin";
+>>>>>>> branch 'master' of http://pharmacy.bz/green-software/mednetwork.git
 		//doctor.role = Role.DOCTOR;
+<<<<<<< HEAD
 		//doctor.email = "admin@mednet.com";
 		//doctor.password = "123456";
 		//doctor.save();
+=======
+		doctor.email = "admin@mednet.com";
+		doctor.password = "123456";
+		doctor.save();*/
+>>>>>>> branch 'master' of http://pharmacy.bz/green-software/mednetwork.git
 
 		final AppUser user = new AppUser();
 		user.name = "Test User";
