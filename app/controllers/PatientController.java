@@ -60,10 +60,11 @@ public class PatientController extends Controller {
 
 	public static Result process() {
 		final Form<Patient> filledForm = form.bindFromRequest();
+		//Logger.info("enteredt");
 
 		if (filledForm.hasErrors()) {
 			Logger.info("bad request");
-			System.out.println(filledForm.errors());
+			//System.out.println(filledForm.errors());
 			return badRequest(views.html.createPatient.render(filledForm));
 		} else {
 			final Patient patient = filledForm.get();
@@ -75,8 +76,9 @@ public class PatientController extends Controller {
 				patient.update();
 			}
 		}
-		return ok(views.html.scheduleAppointment.render("hello"));
+		//return ok(views.html.scheduleAppointment.render("hello"));
 		// return redirect(routes.UserController.list());
+		return TODO;
 
 	}
 	public static  Result search(final String search) {

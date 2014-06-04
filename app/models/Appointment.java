@@ -3,20 +3,31 @@ package models;
 import java.util.Date;
 
 import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
 import javax.persistence.OneToOne;
 
+import play.data.format.Formats.DateTime;
 import play.data.validation.Constraints.Required;
+import play.db.ebean.Model;
 
 @Entity
 public class Appointment extends BaseEntity {
 
-	@Required
+	@Id
+	@GeneratedValue(strategy = GenerationType.AUTO)
+	public  Long id;
+
+	@DateTime
+	(pattern = "yyyy-MM-dd hh:mm:ss")
 	public Date fromTime;
 
-	@Required
+	@DateTime
+	(pattern = "yyyy-MM-dd hh:mm:ss")
 	public Date toTime;
 
-	public Status appointmentStatus;
+	public AppointmentStatus appointmentStatus;
 
 	@OneToOne
 	public AppUser requestedBy;
@@ -25,6 +36,8 @@ public class Appointment extends BaseEntity {
 	public AppUser apporovedBy;
 
 	public String remarks;
+
+
 
 	public static Finder<Long, Appointment> find = new Finder<>(Long.class, Appointment.class);
 
