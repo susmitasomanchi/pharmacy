@@ -24,9 +24,7 @@ public class Patient extends BaseEntity {
 
 	public String disease;
 
-	@OneToOne
-	public Appointment appointment;
-
+	
 	public Long appointmentId;
 
 
