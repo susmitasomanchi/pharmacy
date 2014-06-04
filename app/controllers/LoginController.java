@@ -28,48 +28,31 @@ public class LoginController extends Controller {
 
 	public static Result processLogin() {
 		final Form<LoginBean> filledForm = loginForm.bindFromRequest();
-
 		if (filledForm.hasErrors()) {
-
 			return badRequest(views.html.loginForm.render(filledForm));
 		} else {
-
 			final LoginBean loginBean = filledForm.get();
-
 			Logger.info(loginBean.toString());
-
-
-			final List <AppUser> appUsers=AppUser.find.where().eq("email", loginBean.email).eq("password", loginBean.password).findList();
-			//Logger.info("found users " + appUsers.toString());
-			/*			final List<AppUser> appUsers=whichUserLogging(doctors, patients, pharmacists);
-			 */
-			if (appUsers.size()<=0) {
-
+			final List<AppUser> appUsers = AppUser.find.where().eq("username", loginBean.email).eq("password", loginBean.password).findList();
+			Logger.info("found users " + appUsers.toString());
+			if(appUsers.size() < 1) {
 				// return invalid login/password
-
 				return badRequest(views.html.loginForm.render(filledForm));
-			} else if (appUsers.size()==0) {
+			}
+			if(appUsers.size() == 1) {
 				session().clear();
 				session(Constants.LOGGED_IN_USER_ID, appUsers.get(0).id + "");
-				return ok("login successfull");
-				//session(Constants.LOGGED_IN_USER_ROLE, appUsers.get(0).role + "");
 				return redirect(routes.UserActions.dashboard());
-				//return ok("login successfull");
-			} else {
-				session().clear();
-				session(Constants.LOGGED_IN_USER_ID, appUsers.get(0).id + "");
-				//session(Constants.LOGGED_IN_USER_ROLE, appUsers.get(0).role + "");
-
-				Logger.info("more than one users exists with same email and passowrd");
-				return ok("login successfull");
-				//return redirect(routes.UserActions.dashboard());
-				return redirect(routes.UserActions.dashboard());
-				//return ok("login successfull");
 
 			}
-
+			if(appUsers.size() > 1) {
+				session().clear();
+				session(Constants.LOGGED_IN_USER_ID, appUsers.get(0).id + "");
+				Logger.info("more than one users exists with same email and passowrd");
+				return redirect(routes.UserActions.dashboard());
+			}
+			return null;
 		}
-
 	}
 
 	//@BasicAuth

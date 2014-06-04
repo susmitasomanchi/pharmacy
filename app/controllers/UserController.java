@@ -7,9 +7,10 @@ PLEASE DO NOT MODIFY IT BY HAND
  *****/
 package controllers;
 
+import actions.BasicAuth;
 import play.mvc.Controller;
 
-//@BasicAuth
+@BasicAuth
 public class UserController extends Controller {
 	//
 	/*public static Form<Pharmacist> form = Form.form(Pharmacist.class);

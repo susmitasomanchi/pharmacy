@@ -9,10 +9,11 @@ package models;
 
 import javax.persistence.Entity;
 import javax.persistence.Id;
+import javax.persistence.Lob;
+import javax.persistence.OneToOne;
 
 import play.data.validation.Constraints.Email;
 import play.db.ebean.Model;
-import beans.AppUserBean;
 
 
 @SuppressWarnings("serial")

@@ -1,11 +1,13 @@
 package controllers;
 
+import actions.BasicAuth;
 import models.Patient;
 import play.Logger;
 import play.data.Form;
 import play.mvc.Controller;
 import play.mvc.Result;
 
+@BasicAuth
 public class PatientController extends Controller {
 
 	public static Form<Patient> form = Form.form(Patient.class);
