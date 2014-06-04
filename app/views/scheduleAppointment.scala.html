@@ -1,58 +1,37 @@
 @* scheduleAppointment Template File *@
-@(message: String)
+@(dataForm:play.data.Form[models.Appointment])
 
-@blank("Schedule Appointment") {
-
-
-
-	<div class="control-group ">
-            <label class="control-label">Patient's Name</label>
-            <div class="controls">
-                <div class="input-prepend">
-                <span class="add-on"><i class="icon-user"></i></span>
-                    <input type="text" class="input-xlarge" id="username" name="patientname" placeholder="username Name">
-                </div>
-            </div>
-        </div>
-                
-                <div class="control-group ">
-            <label class="control-label">Doctor</label>
-            <div class="controls">
-                <div class="input-prepend">
-                <span class="add-on"><i class="icon-user"></i></span>
-                    <input type="text" class="input-xlarge" id="username" name="docname" placeholder="username Name">
-                </div>
-            </div>
-        </div>
-                
-<div class="control-group ">
-            <label class="control-label">Clinic</label>
-            <div class="controls">
-                <div class="input-prepend">
-                <span class="add-on"><i class="icon-user"></i></span>
-                    <input type="text" class="input-xlarge" id="username" name="clinic" placeholder="username Name">
-                </div>
-            </div>
-        </div>
-
-			
-			<div class="control-group ">
-            <label class="control-label">Appointment Date</label>
-            <div class="controls">
-                <div class="input-prepend">
-                <span class="add-on"><i class="icon-user"></i></span>
-                    <input type="date" class="input-xlarge" id="username" name="appdate" placeholder="username Name">
-                </div>
-            </div>
-        </div>
-			
-		
-			
-			
-			
-		
-				<input type="submit" class="submit" value="Save">
-									
+@main("Schedule Appointment"){
 	
+	<br>
+<div class="container">
+@helper.form(action=routes.AppointmentController.process(),'method -> "post") {
+
+
+			
+			@helper.inputDate(dataForm("from"),'class -> "date",'_label->"From")
+			
+			
+			@helper.inputDate(dataForm("to"),'class -> "date",'_label->"To")
+			
+							
+			@helper.select(dataForm("appointmentStatus"),options=helper.options(AppointmentStatus.options),'class -> "inputs chzn",'_label->"Appointment Status")
+			
+			@helper.inputText(dataForm("remarks"),'class -> "inputs",'_label->"Remarks")
+			
+			@helper.inputText(dataForm("references"),'class -> "inputs",'_label->"References")
+			
+			
+			
+			<br>
+			<input type="hidden" name="id" value='@dataForm("id").value' >
+			<input type="submit" class="submit" value="Login">
+			
+				
+			}
+			
+			
+
 	
+	</div>
 	}
