@@ -35,11 +35,11 @@ public class PatientController extends Controller {
 
 			if(patient.id == null) {
 
-				//System.out.println("hiiiii");
+
 				patient.save();
 			}
 			else {
-				//System.out.println("heeellloooo");
+			
 				patient.update();
 			}
 		}
