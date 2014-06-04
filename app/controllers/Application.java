@@ -1,7 +1,6 @@
 package controllers;
 
 
-import models.AppUser;
 import models.DiagnosticRepresentative;
 import models.MedicalRepresentative;
 import play.Logger;
@@ -35,7 +34,7 @@ public class Application extends Controller {
 		}
 		else {
 			//final SalesRep salesRepForm = filledForm.get();
-			final AppUser appUser = filledForm.get();
+			final MedicalRepresentative appUser = filledForm.get();
 			Logger.info("*** user object ");
 
 			if(appUser.id == null) {

@@ -10,14 +10,11 @@ import play.db.ebean.Model;
 
 @SuppressWarnings("serial")
 @Entity
-public class Patient extends Model{
+public class Patient extends BaseEntity {
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO)
 	public Long id;
-
-	//@Lob
-	//public byte[] picture;
 
 	@OneToOne
 	public AppUser appUser;
@@ -32,13 +29,9 @@ public class Patient extends Model{
 
 	public String appointmentId;
 
-
 	public String doctorAvailability;
 
-
 	public String isUrgentPatient;
-
-
 
 	public static Model.Finder<Long, Patient> find = new Finder<Long, Patient>(Long.class, Patient.class);
 

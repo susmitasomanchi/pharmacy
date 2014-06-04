@@ -4,27 +4,108 @@
 @main("User Form"){
 @helper.form(action=routes.PatientController.registerProccess(),'method -> "post") {
 
+<br>
+<div class="container">
 
+
+
+ 
+        <div class="container">
+        <legend>Register</legend>
+<div class="well">
+     <legend>Sign Up</legend>
+     
+     
+        <div class="control-group">
+            <label class="control-label">Name</label>
+            <div class="controls">
+                <div class="input-prepend">
+                <span class="add-on"><i class="icon-user"></i></span>
+                    <input type="text" class="input-xlarge" id="name" name="name" placeholder="Name">
+                </div>
+    
 			
-			@helper.inputText(dataForm("name"),'class -> "inputs",'_label->"Name")
+		<div class="control-group">
+<label class="control-label">Profile Picture</label>
+ <div class="controls">
+ <div class="input-prepend">
+ <input type="file" name="picture" value="picture" accept="image/*"></div>
+</div>
+            </div>
+        </div>
+        
+        
+			
+	 <div class="control-group ">
+            <label class="control-label">Username</label>
+            <div class="controls">
+                <div class="input-prepend">
+                <span class="add-on"><i class="icon-user"></i></span>
+                    <input type="text" class="input-xlarge" id="username" name="username" placeholder="username Name">
+                </div>
+            </div>
+        </div>
+        
+        
+        
+		 <div class="control-group ">
+            <label class="control-label">Email</label>
+            <div class="controls">
+                <div class="input-prepend">
+                <span class="add-on"><i class="icon-envelope"></i></span>
+                    <input type="text" class="input-xlarge" id="email" name="email" placeholder="Email">
+                </div>
+            </div>
+        </div>
 			
 			
-			@helper.inputText(dataForm("username"),'class -> "inputs",'_label->"Username")
+	 <div class="control-group">
+            <label class="control-label">Password</label>
+            <div class="controls">
+                <div class="input-prepend">
+                <span class="add-on"><i class="icon-lock"></i></span>
+                    <input type="Password" id="password" class="input-xlarge" name="password" placeholder="Password">
+                </div>
+            </div>
+        </div>
+        
 			
-			@helper.inputText(dataForm("email"),'class -> "inputs",'_label->"Email")
-			
-			@helper.inputPassword(dataForm("password"),'class -> "inputs",'_label->"Password")
-			
-			@helper.inputPassword(dataForm("gender"),'class -> "inputs",'_label->"Gender")
-						
-			@helper.inputPassword(dataForm("age"),'class -> "inputs",'_label->"Age")
-			
-		
-			<br>
+    <div class="control-group">
+            <label class="control-label">Gender</label>
+            <div class="controls">
+ 
+                    <p><div id="gender" name="gender" class="btn-group" data-toggle="buttons-radio">
+                    <button type="button" class="btn btn-info">Male</button>
+                    <button type="button" class="btn btn-info">Female</button>
+ 
+                  </div></p>
+ 
+            </div>
+        </div>						
+ <div class="control-group">
+            <label class="control-label">Age</label>
+            <div class="controls">
+                <div class="input-prepend">
+                <span class="add-on"><i class="icon-envelope"></i></span>
+                    <input type="text" class="input-xlarge" id="age" name="age" placeholder="age">
+                </div>
+            </div>			
+		   </div>
+	<br>
 			<input type="hidden" name="id" value='@dataForm("id").value' >
 			<input type="submit" class="submit" value="Login">
 			
-				
-			}
+			
+			
+      </form>
+
+   </div>
+</div>
+</div>
+</div>
+	<br>
+		
+		}
 			
 }
+

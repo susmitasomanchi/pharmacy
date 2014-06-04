@@ -9,12 +9,12 @@ import javax.persistence.OneToOne;
 
 @SuppressWarnings("serial")
 @Entity
-public class DiagnosticRepresentative extends AppUser{
+public class DiagnosticRepresentative extends BaseEntity{
 
 	@GeneratedValue(strategy=GenerationType.AUTO)
 	@Id
 	public Long id;
-	
+
 	@OneToOne
 	public AppUser appUser;
 

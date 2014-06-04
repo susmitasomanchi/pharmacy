@@ -4,6 +4,7 @@ import java.util.LinkedHashMap;
 import java.util.Map;
 
 public enum Role {
+
 	ADMIN,DOCTOR,PATIENT,PHARMACIST,MR,DIAGREP;
 
 	public static Map<String, String> options() {

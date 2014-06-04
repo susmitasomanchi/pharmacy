@@ -26,14 +26,14 @@ public class Doctor extends BaseEntity{
 	@Required
 	public String degree;
 
-	public String doctorType;								//government or private
+	//government or private
+	public String doctorType;
 
 	public String experience;
 
 	public String homeFacility;
 
 	public Integer fees;
-
 
 	public String clinicAddress;
 
@@ -43,14 +43,6 @@ public class Doctor extends BaseEntity{
 	public String timings;
 
 	public String categoryOfDoctor;	// homeopathic or ayurvedic or etc.
-
-
-
-	//public RegisterAppUser regAppUsr;
-
-
-
-
 
 	public static Model.Finder<Long,Doctor> find = new Finder<Long, Doctor>(Long.class, Doctor.class);
 

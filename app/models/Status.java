@@ -3,9 +3,9 @@ import java.util.LinkedHashMap;
 import java.util.Map;
 
 public enum Status {
-	REQUEST,APPROVE,CANCEL;
-	
-	
+	REQUESTED,APPROVED,CANCELLED,SERVED;
+
+
 	public static Map<String, String> options() {
 		final LinkedHashMap<String, String> vals = new LinkedHashMap<String, String>();
 		for (final Status val : Status.values()) {

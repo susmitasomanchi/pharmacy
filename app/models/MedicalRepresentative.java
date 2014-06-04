@@ -8,7 +8,7 @@ import javax.persistence.OneToOne;
 
 @SuppressWarnings("serial")
 @Entity
-public class MedicalRepresentative extends AppUser{
+public class MedicalRepresentative extends BaseEntity{
 
 	@Id
 	@GeneratedValue(strategy=GenerationType.AUTO)
