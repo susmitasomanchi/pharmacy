@@ -4,16 +4,21 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.OneToOne;
 
 import play.data.validation.Constraints.Required;
 import play.db.ebean.Model;
 
+@SuppressWarnings("serial")
 @Entity
 public class Doctor extends BaseEntity{
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO)
 	public  Long id;
+
+	@OneToOne
+	public AppUser appUser;
 
 	@Required
 	public String specialization;
@@ -37,10 +42,11 @@ public class Doctor extends BaseEntity{
 	@Required
 	public String timings;
 
-	public String categoryOfDoctor;	             // homeopathic or ayurvedic or etc.
+	public String categoryOfDoctor;	// homeopathic or ayurvedic or etc.
 
-	@OneToOne
-	public RegisterAppUser regAppUsr;
+
+
+	//public RegisterAppUser regAppUsr;
 
 
 

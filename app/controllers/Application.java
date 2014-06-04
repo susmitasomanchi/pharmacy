@@ -2,75 +2,75 @@ package controllers;
 
 
 import models.AppUser;
-import models.DiagnosticRep;
-import models.SalesRep;
+import models.DiagnosticRepresentative;
+import models.MedicalRepresentative;
 import play.Logger;
 import play.data.Form;
 import play.mvc.Controller;
 import play.mvc.Result;
-import views.html.index;
 
 public class Application extends Controller {
-	
-	public static Form<SalesRep> salesRepForm=Form.form(SalesRep.class);
-	public static Form<DiagnosticRep> diagnosticRepForm=Form.form(DiagnosticRep.class);
+
+	public static Form<MedicalRepresentative> salesRepForm=Form.form(MedicalRepresentative.class);
+	public static Form<DiagnosticRepresentative> diagnosticRepForm=Form.form(DiagnosticRepresentative.class);
 
 
-    public static Result index() {
-        return ok(views.html.index.render("Your new application is ready."));
-    }
-    
-    //sales representator proccessing
-    
-    public static Result salesRepresentator(){
-    	return ok(views.html.salesRep.render(salesRepForm));
-    	
-    }
-    
-    public static Result salesRepresentatorProccess(){
-    	final Form<SalesRep> filledForm=salesRepForm.bindFromRequest();
-    	
-    			if(filledForm.hasErrors()) {
-    				Logger.info("*** user bad request");
-    				return badRequest(views.html.salesRep.render(filledForm));
-    			}
-    			else {
-    				final SalesRep salesRepForm = filledForm.get();
-    				Logger.info("*** user object ");
+	public static Result index() {
+		return ok(views.html.index.render("Your new application is ready."));
+	}
 
-    				if(salesRepForm.id == null) {
-    					//final AppUser appUser = salesRepForm.toEntity();
-    					salesRepForm.save();
-    					final String message = flash("success");
+	//sales representator proccessing
 
-    				}
-    				else {
-    					salesRepForm.update();
-    				}
-    			}
-    	
-    	
-    	return ok("salesrepresentr information added");
-    }
+	public static Result salesRepresentator(){
+		return ok(views.html.salesRep.render(salesRepForm));
 
-    //diagnostic representator proccessing
-    
-    
-    public static Result diagnosticRep(){
-    	
-    	return ok(views.html.diagnosticRep.render(diagnosticRepForm));
-    	
-    }
-   
-    public static Result  diagnosticRepProccess(){
-        final Form<DiagnosticRep> filledForm=diagnosticRepForm.bindFromRequest();
-    	
+	}
+
+	public static Result salesRepresentatorProccess(){
+		final Form<MedicalRepresentative> filledForm=salesRepForm.bindFromRequest();
+
+		if(filledForm.hasErrors()) {
+			Logger.info("*** user bad request");
+			return badRequest(views.html.salesRep.render(filledForm));
+		}
+		else {
+			//final SalesRep salesRepForm = filledForm.get();
+			final AppUser appUser = filledForm.get();
+			Logger.info("*** user object ");
+
+			if(appUser.id == null) {
+				//final AppUser appUser = salesRepForm.toEntity();
+				appUser.save();
+				final String message = flash("success");
+
+			}
+			else {
+				appUser.update();
+			}
+		}
+
+
+		return ok("salesrepresentr information added");
+	}
+
+	//diagnostic representator proccessing
+
+
+	public static Result diagnosticRep(){
+
+		return ok(views.html.diagnosticRep.render(diagnosticRepForm));
+
+	}
+
+	public static Result  diagnosticRepProccess(){
+		final Form<DiagnosticRepresentative> filledForm=diagnosticRepForm.bindFromRequest();
+
 		if(filledForm.hasErrors()) {
 			Logger.info("*** user bad request");
 			return badRequest(views.html.diagnosticRep.render(filledForm));
 		}
 		else {
-			final DiagnosticRep diagnosticRepForm = filledForm.get();
+			final DiagnosticRepresentative diagnosticRepForm = filledForm.get();
 			Logger.info("*** user object ");
 
 			if(diagnosticRepForm.id == null) {
@@ -83,14 +83,14 @@ public class Application extends Controller {
 				diagnosticRepForm.update();
 			}
 		}
-    	
-    	return ok("Diagnostic Representr information added");
-    }
-    
-    
-    //home Page
-    
-    public static Result homePage(){
-    	return ok(views.html.home.render());
-    }
+
+		return ok("Diagnostic Representr information added");
+	}
+
+
+	//home Page
+
+	public static Result homePage(){
+		return ok(views.html.home.render());
+	}
 }

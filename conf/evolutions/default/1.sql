@@ -6,13 +6,15 @@
 create table app_user (
   id                        bigint not null,
   name                      varchar(255),
-  patient_id                bigint,
   username                  varchar(255),
   email                     varchar(255),
   password                  varchar(255),
-  gender                    varchar(255),
-  age                       integer,
+  sex                       integer,
+  age                       varchar(255),
+  role                      integer,
   last_update               timestamp not null,
+  constraint ck_app_user_sex check (sex in (0,1,2)),
+  constraint ck_app_user_role check (role in (0,1,2,3,4,5)),
   constraint pk_app_user primary key (id))
 ;
 
@@ -21,34 +23,29 @@ create table appointment (
   role                      integer,
   appointment_status        integer,
   last_update               timestamp not null,
-  constraint ck_appointment_role check (role in (0,1,2,3)),
+  constraint ck_appointment_role check (role in (0,1,2,3,4,5)),
   constraint ck_appointment_appointment_status check (appointment_status in (0,1,2)))
 ;
 
 create table diagnostic_rep (
   id                        bigint not null,
   name                      varchar(255),
-  patient_id                bigint,
   username                  varchar(255),
   email                     varchar(255),
   password                  varchar(255),
-  gender                    varchar(255),
-  age                       integer,
+  sex                       integer,
+  age                       varchar(255),
+  role                      integer,
   diagnostic_type           varchar(255),
   last_update               timestamp not null,
+  constraint ck_diagnostic_rep_sex check (sex in (0,1,2)),
+  constraint ck_diagnostic_rep_role check (role in (0,1,2,3,4,5)),
   constraint pk_diagnostic_rep primary key (id))
 ;
 
 create table doctor (
-  id  
-   name                      varchar(255),
-  patient_id                bigint,
-  username                  varchar(255),
-  email                     varchar(255),
-  password                  varchar(255),
-  gender                    varchar(255),
-  age                       integer,
-                        bigint not null,
+  id                        bigint not null,
+  app_user_id               bigint,
   specialization            varchar(255),
   degree                    varchar(255),
   doctor_type               varchar(255),
@@ -59,16 +56,18 @@ create table doctor (
   hospital_address          varchar(255),
   timings                   varchar(255),
   category_of_doctor        varchar(255),
-  reg_app_usr_id            bigint,
   last_update               timestamp not null,
   constraint pk_doctor primary key (id))
 ;
 
 create table patient (
   id                        bigint not null,
-  picture                   bytea,
+  app_user_id               bigint,
+  mbno                      varchar(255),
+  date                      varchar(255),
+  address                   varchar(255),
   disease                   varchar(255),
-  appointment_id            bigint,
+  appointment_id            varchar(255),
   doctor_availability       varchar(255),
   is_urgent_patient         varchar(255),
   constraint pk_patient primary key (id))
@@ -100,17 +99,19 @@ create table register_app_user (
 create table sales_rep (
   id                        bigint not null,
   name                      varchar(255),
-  patient_id                bigint,
   username                  varchar(255),
   email                     varchar(255),
   password                  varchar(255),
-  gender                    varchar(255),
-  age                       integer,
+  sex                       integer,
+  age                       varchar(255),
+  role                      integer,
   region_alloted            varchar(255),
   company_name              varchar(255),
   types_of_medecine         varchar(255),
   no_of_doctors_visit       integer,
   last_update               timestamp not null,
+  constraint ck_sales_rep_sex check (sex in (0,1,2)),
+  constraint ck_sales_rep_role check (role in (0,1,2,3,4,5)),
   constraint pk_sales_rep primary key (id))
 ;
 
@@ -128,16 +129,10 @@ create sequence register_app_user_seq;
 
 create sequence sales_rep_seq;
 
-alter table doctor add constraint fk_doctor_regAppUsr_1 foreign key (reg_app_usr_id) references register_app_user (id);
-create index ix_doctor_regAppUsr_1 on doctor (reg_app_usr_id);
-alter table app_user add constraint fk_app_user_patient_1 foreign key (patient_id) references patient (id);
-create index ix_app_user_patient_1 on app_user (patient_id);
-alter table diagnostic_rep add constraint fk_diagnostic_rep_patient_2 foreign key (patient_id) references patient (id);
-create index ix_diagnostic_rep_patient_2 on diagnostic_rep (patient_id);
-alter table doctor add constraint fk_doctor_patient_3 foreign key (patient_id) references patient (id);
-create index ix_doctor_patient_3 on doctor (patient_id);
-alter table sales_rep add constraint fk_sales_rep_patient_4 foreign key (patient_id) references patient (id);
-create index ix_sales_rep_patient_4 on sales_rep (patient_id);
+alter table doctor add constraint fk_doctor_appUser_1 foreign key (app_user_id) references app_user (id);
+create index ix_doctor_appUser_1 on doctor (app_user_id);
+alter table patient add constraint fk_patient_appUser_2 foreign key (app_user_id) references app_user (id);
+create index ix_patient_appUser_2 on patient (app_user_id);
 
 
 

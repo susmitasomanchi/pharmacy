@@ -2,7 +2,6 @@ package controllers;
 import java.util.List;
 
 import models.AppUser;
-import models.Doctor;
 import models.Patient;
 import play.mvc.Controller;
 import play.mvc.Result;
@@ -44,7 +43,7 @@ public class SampleDataController extends Controller {
 		user.email="mitesh@ukate.com";
 		user.password="123456";
 		final Patient patient=new Patient();
-		user.patient=patient;
+		//user.patient=patient;
 		patient.save();
 		user.save();
 

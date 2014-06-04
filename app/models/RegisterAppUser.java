@@ -4,7 +4,6 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.OneToOne;
 
 import play.data.validation.Constraints.Email;
 import play.data.validation.Constraints.Required;
@@ -38,8 +37,8 @@ public class RegisterAppUser extends BaseEntity{
 	@Required
 	public Integer age;
 
-	@OneToOne(mappedBy="regAppUsr")
-	public Doctor doctor;
+	//@OneToOne(mappedBy="regAppUsr")
+	//public Doctor doctor;
 
 	public static Model.Finder<Long, RegisterAppUser> find = new Finder<>(Long.class, RegisterAppUser.class);
 

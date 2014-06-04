@@ -9,7 +9,6 @@ package models;
 
 import javax.persistence.Entity;
 import javax.persistence.Id;
-import javax.persistence.OneToOne;
 
 import play.data.validation.Constraints.Email;
 import play.db.ebean.Model;
@@ -26,8 +25,8 @@ public class AppUser extends BaseEntity{
 
 	public String name;
 
-	@OneToOne
-	public Patient patient;
+	//@OneToOne
+	//public Patient patient;
 
 
 	public String username;
@@ -40,16 +39,19 @@ public class AppUser extends BaseEntity{
 	public String password;
 
 
-	public String gender;
+	public Sex sex;
 
 
-	public Integer age;
+	public String age;
+
+
+	public Role role;
 
 
 
 	public static Model.Finder<Long, AppUser> find = new Finder<Long, AppUser>(Long.class, AppUser.class);
 
 
-	
+
 
 }
