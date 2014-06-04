@@ -8,10 +8,10 @@ import javax.persistence.ManyToOne;
 
 @Entity
 public class Pharmacy {
+
 	public String name;
 	public String Address;
 
-
 	@ManyToOne
-	List<Pharmacist> farmacistlist=new ArrayList<Pharmacist>();
+	List<Pharmacist> pharmacistlist = new ArrayList<Pharmacist>();
 }

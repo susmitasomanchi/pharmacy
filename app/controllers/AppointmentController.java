@@ -21,6 +21,7 @@ public class AppointmentController extends Controller {
 
 		if(filledForm.hasErrors()) {
 			Logger.info("bad request");
+			System.out.println(filledForm.errors());
 
 			return badRequest(views.html.scheduleAppointment.render(filledForm));
 		}

@@ -8,23 +8,22 @@ import javax.persistence.OneToOne;
 
 import play.data.validation.Constraints.Required;
 import play.db.ebean.Model;
-import play.db.ebean.Model.Finder;
 
 @Entity
 public class DoctorAssistant extends BaseEntity {
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO)
-	public  Long id;
+	public Long id;
 
 	@Required
 	public String degree;
 
 	public String experience;
 
-
-	@OneToOne(mappedBy="assistant")
+	@OneToOne
 	public AppUser appUser;
 
-	public static Model.Finder<Long,DoctorAssistant> find = new Finder<Long, DoctorAssistant>(Long.class, DoctorAssistant.class);
+	public static Model.Finder<Long, DoctorAssistant> find = new Finder<Long, DoctorAssistant>(
+			Long.class, DoctorAssistant.class);
 }

@@ -14,6 +14,8 @@ public class SampleDataController extends Controller {
 		final Doctor doctor = new Doctor();
 		//doctor.name = "Test Admin";
 		/*doctor.name = "Test Admin";
+		/*final Doctor doctor = new Doctor();
+		doctor.name = "Test Admin";
 		//doctor.role = Role.DOCTOR;
 		//doctor.email = "admin@mednet.com";
 		//doctor.password = "123456";
@@ -21,6 +23,8 @@ public class SampleDataController extends Controller {
 		doctor.email = "admin@mednet.com";
 		doctor.password = "123456";
 		doctor.save();*/
+
+
 
 		final AppUser user = new AppUser();
 		user.name = "Test User";
@@ -48,7 +52,7 @@ public class SampleDataController extends Controller {
 		user.email="mitesh@ukate.com";
 		user.password="123456";
 		final Patient patient=new Patient();
-		user.patient=patient;
+		//user.patient=patient;
 		patient.save();
 		user.save();
 
