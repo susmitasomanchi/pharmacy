@@ -33,7 +33,7 @@ GET    /sampledata/cleanup     controllers.SampleDataController.cleanUp()
 GET     /sampledata/temp		controllers.SampleDataController.temp()
 
 
-
+GET  	/search/:id			   controllers.PatientController.search(id:String)
 
 GET    /userform/patient/      controllers.PatientController.form() 
 GET    /userform/patient/h/    controllers.PatientController.enterForm() 

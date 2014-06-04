@@ -25,10 +25,11 @@ public class RegisterController extends Controller {
 		else {
 			final AppUser appUser  = filledForm.get();
 			final Patient patient=new Patient();
-			appUser.patient=patient;
+			//appUser.patient=patient;
+			appUser.save();
 			patient.appUser=appUser;
 			patient.save();
-			appUser.save();
+
 			Logger.info("*** user object ");
 			return ok("Registerd ");
 		}

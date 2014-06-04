@@ -10,17 +10,18 @@ import javax.persistence.OneToOne;
 import play.db.ebean.Model;
 
 @Entity
-public class Patient extends Model{
+public class Patient extends BaseEntity{
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO)
 	public Long id;
 
+	@OneToOne
+	public AppUser appUser;
+
 	@Lob
 	public byte[] picture;
 
-	@OneToOne(mappedBy="patient")
-	public AppUser appUser;
 
 	public String disease;
 
@@ -34,5 +35,7 @@ public class Patient extends Model{
 	public String isUrgentPatient;
 
 	public static Model.Finder<Long, Patient> find = new Finder<Long, Patient>(Long.class, Patient.class);
+
+
 
 }

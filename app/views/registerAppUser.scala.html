@@ -8,23 +8,23 @@
 			
 			@helper.inputText(dataForm("name"),'class -> "inputs",'_label->"Name")
 			
-			
 			@helper.inputText(dataForm("username"),'class -> "inputs",'_label->"Username")
 			
 			@helper.inputText(dataForm("email"),'class -> "inputs",'_label->"Email")
 			
 			@helper.inputPassword(dataForm("password"),'class -> "inputs",'_label->"Password")
 			
-			@helper.inputPassword(dataForm("gender"),'class -> "inputs",'_label->"Gender")
-						
-			@helper.inputPassword(dataForm("age"),'class -> "inputs",'_label->"Age")
+			@helper.inputText(dataForm("mobileno"),'class -> "inputs",'_label->"Mobile No")
 			
-		
+			
+			@helper.inputText(dataForm("gender"),'class -> "inputs",'_label->"Gender")
+						
+			@helper.inputText(dataForm("age"),'class -> "inputs",'_label->"Age")
+			
 			<br>
 			<input type="hidden" name="id" value='@dataForm("id").value' >
-			<input type="submit" class="submit" value="Login">
+			<input type="submit" class="submit" value="Register">
 			
-				
 			}
 			
 }

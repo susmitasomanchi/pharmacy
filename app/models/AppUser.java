@@ -7,9 +7,12 @@
  *****/
 package models;
 
+import java.util.Date;
+
 import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.OneToOne;
 
 import play.data.validation.Constraints.Email;
 import play.db.ebean.Model;
@@ -21,15 +24,10 @@ import play.db.ebean.Model;
 public class AppUser extends BaseEntity{
 
 	@Id
+	@GeneratedValue(strategy = GenerationType.AUTO)
 	public Long id;
 
-
-
 	public String name;
-
-	@OneToOne
-	public Patient patient;
-
 
 	public String username;
 
@@ -40,17 +38,16 @@ public class AppUser extends BaseEntity{
 
 	public String password;
 
+	public String mobileno;
 
 	public String gender;
 
 
-	public Integer age;
-
-
+	public Date dob;
 
 	public static Model.Finder<Long, AppUser> find = new Finder<Long, AppUser>(Long.class, AppUser.class);
 
 
-	
+
 
 }
