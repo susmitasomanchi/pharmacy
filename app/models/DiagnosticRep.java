@@ -19,7 +19,7 @@ public class DiagnosticRep extends AppUser{
 
 	public static Finder<Long, DiagnosticRep> find = new Finder<>(Long.class, DiagnosticRep.class);
 
-	@OneToOne(mappedBy="pharmacist")
+	@OneToOne(mappedBy="diagnosticRep")
 	public AppUser appUser;
 
 }

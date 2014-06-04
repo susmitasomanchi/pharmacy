@@ -43,7 +43,7 @@ public class PatientController extends Controller {
 				patient.update();
 			}
 		}
-		return TODO;
+		return ok(views.html.scheduleAppointment.render("hello"));
 		//return redirect(routes.UserController.list());
 
 	}

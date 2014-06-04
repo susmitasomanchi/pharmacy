@@ -40,6 +40,8 @@ public class Doctor extends BaseEntity {
 
 	public String categoryOfDoctor;						// homeopathic or ayurvedic or etc.
 
+	@OneToOne
+	public Appointment appointment;
 
 	@OneToOne(mappedBy="doctor")
 	public AppUser appUser;
