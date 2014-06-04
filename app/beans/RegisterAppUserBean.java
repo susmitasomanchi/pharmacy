@@ -1,49 +1,30 @@
-/*
-*//*****
-
-THIS IS AN AUTO GENERATED CODE
-PLEASE DO NOT MODIFY IT BY HAND
-
- *****//*
 package beans;
 
-import java.io.Serializable;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
 
-import models.AppUser;
-import models.Role;
+import models.RegisterAppUser;
 import play.data.validation.Constraints.Email;
 import play.data.validation.Constraints.Required;
 
-@SuppressWarnings("serial")
-public class AppUserBean implements Serializable {
+public class RegisterAppUserBean {
 
+	@Id
+	@GeneratedValue(strategy=GenerationType.AUTO)
 	public Long id;
-
 
 	@Required
 	public String name;
 
-
-
-
 	@Required
 	public String username;
-
-
-
-	@Required @Email
-	public String email;
-
-
 
 	@Required
 	public String password;
 
-
-
-
-
-	public Role role;
+	@Email
+	public String  email;
 
 	@Required
 	public String gender;
@@ -51,34 +32,27 @@ public class AppUserBean implements Serializable {
 	@Required
 	public Integer age;
 
-	public AppUser toEntity(){
 
-		final AppUser appUser = new AppUser();
+	public RegisterAppUser toEntity(){
+
+		final RegisterAppUser appUser = new RegisterAppUser();
+
 		appUser.id = this.id;
 
 		if(this.name != null) {
 			appUser.name= this.name;
 		}
 
-
-
 		if(this.username != null) {
 			appUser.username= this.username;
 		}
-
-		if(this.email != null) {
-			appUser.email= this.email;
-		}
-
 
 		if(this.password != null) {
 			appUser.password= this.password;
 		}
 
-
-
-		if(this.role != null) {
-			appUser.role= this.role;
+		if(this.email != null) {
+			appUser.email= this.email;
 		}
 
 
@@ -93,11 +67,4 @@ public class AppUserBean implements Serializable {
 
 	}
 
-
-
-
-
-
 }
-
-*/

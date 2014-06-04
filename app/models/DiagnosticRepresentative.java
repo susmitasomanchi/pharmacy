@@ -6,23 +6,21 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.OneToOne;
 
-import play.db.ebean.Model;
-
 
 @SuppressWarnings("serial")
 @Entity
-public class DiagnosticRep extends Model{
+public class DiagnosticRepresentative extends BaseEntity{
 
 	@GeneratedValue(strategy=GenerationType.AUTO)
 	@Id
 	public Long id;
 
 	@OneToOne
-	AppUser appUser;
+	public AppUser appUser;
 
 	public String diagnosticType;
 
-	public static Finder<Long, DiagnosticRep> find = new Finder<Long, DiagnosticRep>(Long.class, DiagnosticRep.class);
+	public static Finder<Long, DiagnosticRepresentative> find = new Finder<>(Long.class, DiagnosticRepresentative.class);
 
 
 }

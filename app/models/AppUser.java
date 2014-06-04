@@ -1,4 +1,3 @@
-
 /*****
 
  THIS IS AN AUTO GENERATED CODE
@@ -7,47 +6,39 @@
  *****/
 package models;
 
-import java.util.Date;
-
 import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.Lob;
 
 import play.data.validation.Constraints.Email;
 import play.db.ebean.Model;
 
-
 @SuppressWarnings("serial")
 @Entity
-
-public class AppUser extends BaseEntity{
+public class AppUser extends BaseEntity {
 
 	@Id
-	@GeneratedValue(strategy = GenerationType.AUTO)
 	public Long id;
+
+	@Lob
+	public byte[] image;
 
 	public String name;
 
 	public String username;
 
-
 	@Email
 	public String email;
 
-
 	public String password;
 
-	public String mobileno;
+	public Sex sex;
 
-	public String gender;
+	public String age;
 
+	public Role role;
 
-	public Date dob;
-
-	public static Model.Finder<Long, AppUser> find = new Finder<Long, AppUser>(Long.class, AppUser.class);
-
-
-
+	public static Model.Finder<Long, AppUser> find = new Finder<Long, AppUser>(
+			Long.class, AppUser.class);
 
 }

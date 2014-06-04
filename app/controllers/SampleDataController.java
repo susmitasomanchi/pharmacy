@@ -8,22 +8,7 @@ import play.mvc.Result;
 public class SampleDataController extends Controller {
 
 	public static Result populate() {
-		/*
-		final Doctor doctor = new Doctor();
-		doctor.name = "Test Admin";
-		//doctor.role = Role.DOCTOR;
-		doctor.email = "admin@mednet.com";
-		doctor.password = "123456";
-		doctor.save();
-
-		final AppUser user = new AppUser();
-		user.name = "Test User";
-		//user.role = Role.USER;
-		user.email = "user@mednet.com";
-		user.password = "123456";
-		user.save();*/
-
-		return ok("user created");
+		return TODO;
 
 	}
 

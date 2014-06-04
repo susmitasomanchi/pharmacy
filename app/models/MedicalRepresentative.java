@@ -6,11 +6,9 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.OneToOne;
 
-import play.db.ebean.Model;
-
 @SuppressWarnings("serial")
 @Entity
-public class SalesRep extends Model{
+public class MedicalRepresentative extends BaseEntity{
 
 	@Id
 	@GeneratedValue(strategy=GenerationType.AUTO)
@@ -27,5 +25,10 @@ public class SalesRep extends Model{
 
 	public int noOfDoctorsVisit;
 
-	public static Finder<Long, SalesRep> find = new Finder<Long, SalesRep>(Long.class, SalesRep.class);
+	public static Finder<Long, MedicalRepresentative> find = new Finder<>(Long.class, MedicalRepresentative.class);
+
+	@Override
+	public void save(){
+		super.save();
+	}
 }
