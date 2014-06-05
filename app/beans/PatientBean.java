@@ -46,7 +46,7 @@ public class PatientBean implements Serializable{
 	public String date;
 
 
-	public String address;
+	//	public String address;
 
 	public String disease;
 
@@ -104,9 +104,9 @@ public class PatientBean implements Serializable{
 			patient.date= this.date;
 		}
 
-		if(this.address != null) {
-			patient.address= this.address;
-		}
+		//		if(this.address != null) {
+		//			patient.address= this.address;
+		//		}
 
 		if(this.disease != null) {
 			patient.disease= this.disease;

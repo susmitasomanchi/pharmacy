@@ -24,7 +24,7 @@ public class Patient extends BaseEntity {
 
 	public String date;
 
-	public String address;
+
 
 	public String disease;
 
