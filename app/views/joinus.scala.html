@@ -1,0 +1,40 @@
+@(joinUsForm:play.data.Form[beans.JoinUsBean])
+
+@import play.i18n._
+@import helper.twitterBootstrap._
+@import helper._
+
+@main("Join MedNetwork For Free"){
+
+<div class="container">
+@helper.form(action=routes.UserController.processJoinUs(), '_id->"joinform") {
+
+
+			@helper.inputText(joinUsForm("name"),'class -> "inputs",'_label->"Name")
+			
+			@helper.inputText(joinUsForm("email"),'class -> "inputs",'_label->"Email")
+
+			@helper.inputPassword(joinUsForm("password"),'class -> "inputs",'_label->"Password")
+			
+			@helper.inputPassword(joinUsForm("confirmPassword"),'class -> "inputs",'_label->"Confirm Password")
+
+			@select(joinUsForm("role"), options("PATIENT"->"Patient", "DOCTOR"->"Doctor", "PHARMACIST"->"Pharmacist", "MR"->"Medical Representative", "DIAGREP"->"Diagnostic Representative"), '_label->"Join As")
+			
+			<br>
+			<input type="submit" class="btn btn-primary" id="submitbtn" value="Join" >
+				
+}
+			
+</div>
+
+<script>
+$("#submitbtn").on("click", function(e){
+	if($("#password").val() != $("#confirmPassword").val()){
+		alert('Passwords do not match');
+		e.preventDefault();
+	}
+});
+</script>
+
+}
+
