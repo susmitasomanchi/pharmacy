@@ -3,8 +3,23 @@ package models;
 import java.util.LinkedHashMap;
 import java.util.Map;
 
+import com.avaje.ebean.annotation.EnumValue;
+
 public enum Role {
-	DOCTOR,PATIENT,PHARMACIST,MR;
+	@EnumValue("ADMIN")
+	ADMIN,
+	@EnumValue("DOCTOR")
+	DOCTOR,
+	@EnumValue("PATIENT")
+	PATIENT,
+	@EnumValue("ADMIN_PHARMACIST")
+	ADMIN_PHARMACIST,
+	@EnumValue("PHARMACIST")
+	PHARMACIST,
+	@EnumValue("MR")
+	MR,
+	@EnumValue("DIAGREP")
+	DIAGREP;
 
 	public static Map<String, String> options() {
 		final LinkedHashMap<String, String> vals = new LinkedHashMap<String, String>();

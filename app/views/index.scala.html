@@ -1,6 +1,6 @@
 @(message: String)
 
-@blank("WelCome to MedNetwork") {
+@main("MedNetwork") {
 
 <div class="row">
 <div class="col-md-10 col-md-offset-1">
@@ -18,7 +18,7 @@
   <div class="row">
     <div class="col-md-6 well">
       <ul>
-        <li><h4><a href=""><i class="fa fa-users"></i> Patients </a></h4></li>
+        <li><h4><a href="/register"><i class="fa fa-users"></i> Patients </a></h4></li>
         <li><h4><a href=""><i class="fa fa-user-md"></i> Doctors </a></h4></li>
         <li><h4><a href=""><i class="fa fa-ambulance "></i> Pharma Companies</a></h4></li>
         <li><h4><a href=""><i class="fa fa-bar-chart-o"></i> Diagnostic Centers </a></h4></li>
@@ -34,28 +34,17 @@
     </div>
        <div class="col-md-12 ">
     <div class="btn-group btn-group-justified">
- 		 <div class="btn-group">
-    		<a  href="/userform/patient/" class="btn btn-default">Register as Patient</a>
-  		</div>
   		<div class="btn-group">
-    		<a  href="/userform/doctor/" class="btn btn-default">Register as Doctor</a>
+    		<a  href="@routes.UserController.joinUs()" class="btn btn-default">Join MedNetwork Now (Its free & worth much more than the 15 seconds you'll take to join!!)</a>
   		</div>
-  		<div class="btn-group">
-    		<a  href="https://www.google.co.in" class="btn btn-default">Register as Pharmacist</a>
- 		</div>
- 		<div class="btn-group">
-    		<a  href=/salesRep/" class="btn btn-default">Register as MR</a>
- 		</div>
- 		<div class="btn-group">
-    		<a  href="/diagRep/" class="btn btn-default">Register as Diag Rep</a>
- 		</div>
 	</div>
     </div>
   </div>
   </div>
   <hr>
  
-     <meta name="google-signin-clientid" content="404230636180-4qmlk57403u2985kjibgj3l37a0sdi54.apps.googleusercontent.com" />
+
+<meta name="google-signin-clientid" content="404230636180-4qmlk57403u2985kjibgj3l37a0sdi54.apps.googleusercontent.com" />
 <meta name="google-signin-scope" content="https://www.googleapis.com/auth/plus.login" />
 <meta name="google-signin-requestvisibleactions" content="http://schemas.google.com/AddActivity" />
 <meta name="google-signin-cookiepolicy" content="single_host_origin" />
@@ -105,7 +94,7 @@
  
 </script>
 
-    <span id="signinButton">
+<span id="signinButton">
   <span
     class="g-signin"
     data-callback="signinCallback"
@@ -213,8 +202,6 @@
 
    
 
-  </div>
-  <div class="col-md-1">
   </div>
   </div>
   

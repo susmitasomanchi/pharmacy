@@ -1,19 +1,16 @@
 package controllers;
 
-import actions.BasicAuth;
 import models.AppUser;
-import models.Patient;
 import play.mvc.Controller;
 import play.mvc.Result;
+import actions.BasicAuth;
 
 @BasicAuth
 public class UserActions extends Controller {
 
 	public static Result dashboard() {
-		final AppUser appUser =LoginController.getLoggedInUser();
-		final Patient patient=Patient.find.where().eq("appUser", appUser).findUnique();
-		return ok("dashboard"+appUser);
-
+		final AppUser appUser = LoginController.getLoggedInUser();
+		return ok(views.html.dashboard.render(appUser));
 	}
 
 }

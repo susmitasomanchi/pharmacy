@@ -8,11 +8,14 @@ import javax.persistence.OneToOne;
 
 @SuppressWarnings("serial")
 @Entity
-public class SalesRep extends AppUser{
+public class MedicalRepresentative extends BaseEntity{
 
 	@Id
 	@GeneratedValue(strategy=GenerationType.AUTO)
 	public Long id;
+
+	@OneToOne
+	public AppUser appUser;
 
 	public String regionAlloted;
 
@@ -22,10 +25,10 @@ public class SalesRep extends AppUser{
 
 	public int noOfDoctorsVisit;
 
-	public static Finder<Long, SalesRep> find = new Finder<>(Long.class, SalesRep.class);
+	public static Finder<Long, MedicalRepresentative> find = new Finder<>(Long.class, MedicalRepresentative.class);
 
-	@OneToOne(mappedBy="salesRep")
-	public AppUser appUser;
-
-
+	@Override
+	public void save(){
+		super.save();
+	}
 }

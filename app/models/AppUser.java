@@ -1,4 +1,3 @@
-
 /*****
 
  THIS IS AN AUTO GENERATED CODE
@@ -7,64 +6,41 @@
  *****/
 package models;
 
+import java.util.Date;
+
 import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.Lob;
-import javax.persistence.OneToOne;
 
 import play.data.validation.Constraints.Email;
 import play.db.ebean.Model;
 
-
 @SuppressWarnings("serial")
 @Entity
-
-public class AppUser extends BaseEntity{
+public class AppUser extends BaseEntity {
 
 	@Id
 	public Long id;
 
 	@Lob
-	public byte[] picture;
+	public byte[] image;
 
 	public String name;
 
-	@OneToOne
-	public Patient patient;
-
-	@OneToOne
-	public Doctor doctor;
-
-	@OneToOne
-	public DiagnosticRep diagnosticRep;
-
-	@OneToOne
-	public Pharmacist pharmacist;
-
-	@OneToOne
-	public SalesRep salesRep;
-
-
 	public String username;
-
 
 	@Email
 	public String email;
 
-
 	public String password;
 
+	public Sex sex;
 
-	public String gender;
+	public Date dob;
 
+	public Role role;
 
-	public Integer age;
-
-
-
-	public static Model.Finder<Long, AppUser> find = new Finder<Long, AppUser>(Long.class, AppUser.class);
-
-
-
+	public static Model.Finder<Long, AppUser> find = new Finder<Long, AppUser>(
+			Long.class, AppUser.class);
 
 }
