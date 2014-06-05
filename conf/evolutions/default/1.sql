@@ -20,14 +20,16 @@ create table app_user (
 ;
 
 create table appointment (
+  id                        bigint not null,
   from_time                 timestamp,
   to_time                   timestamp,
-  appointment_status        varchar(9),
+  appointment_status        integer,
   requested_by_id           bigint,
   apporoved_by_id           bigint,
   remarks                   varchar(255),
   last_update               timestamp not null,
-  constraint ck_appointment_appointment_status check (appointment_status in ('CANCELLED','REQUESTED','APPROVED','SERVED')))
+  constraint ck_appointment_appointment_status check (appointment_status in (0,1,2,3)),
+  constraint pk_appointment primary key (id))
 ;
 
 create table diagnostic_representative (
@@ -80,7 +82,6 @@ create table patient (
   app_user_id               bigint,
   mbno                      varchar(255),
   date                      varchar(255),
-  address                   varchar(255),
   disease                   varchar(255),
   appointment_id            varchar(255),
   doctor_availability       varchar(255),
@@ -103,6 +104,8 @@ create table pharmacy (
 ;
 
 create sequence app_user_seq;
+
+create sequence appointment_seq;
 
 create sequence diagnostic_representative_seq;
 
@@ -156,6 +159,8 @@ drop table if exists pharmacist cascade;
 drop table if exists pharmacy cascade;
 
 drop sequence if exists app_user_seq;
+
+drop sequence if exists appointment_seq;
 
 drop sequence if exists diagnostic_representative_seq;
 

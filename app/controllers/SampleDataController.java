@@ -34,7 +34,7 @@ public class SampleDataController extends Controller {
 		user.save();
 
 		//return ok("user created");
-		return redirect(routes.LoginController.loginForm());
+		return redirect(routes.Application.index());
 
 	}
 

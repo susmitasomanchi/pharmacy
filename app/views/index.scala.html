@@ -1,37 +1,86 @@
-@(message: String)
+@(loginForm:play.data.Form[beans.LoginBean])
 
-@main("MedNetwork") {
+@no_navbar("MedNetwork"){
 
 <div class="row">
 <div class="col-md-10 col-md-offset-1">
 	<div class="row">
       <div class="col-md-6">
-          <h3><i class="fa fa-plus-circle"></i> mednetwork</h3>
+          <h3><span style="cursor:pointer;" onclick="window.location.href='/';"><i class="fa fa-plus-circle"></i> mednetwork</span></h3>
       </div>
       <div class="col-md-6">
-          <h3 class="pull-right"><a href="/login/"> login</a></h3>
+          <!--<h3 class="pull-right"><a href="/login/"> login</a></h3>-->
       </div>
   </div>
     <hr>
   
   <div>
   <div class="row">
-    <div class="col-md-6 well">
-      <ul>
-        <li><h4><a href="/register"><i class="fa fa-users"></i> Patients </a></h4></li>
-        <li><h4><a href=""><i class="fa fa-user-md"></i> Doctors </a></h4></li>
-        <li><h4><a href=""><i class="fa fa-ambulance "></i> Pharma Companies</a></h4></li>
-        <li><h4><a href=""><i class="fa fa-bar-chart-o"></i> Diagnostic Centers </a></h4></li>
-        <li><h4><a href=""><i class="fa fa-medkit"></i> Pharmacies </a></h4></li>
-      </ul>
-    </div>
-    <div class="col-md-6">
+    
+    
+    <div class="col-md-4">
+     <div class="row">
       <p class="well">
         <strong>mednetwork</strong> is an online network for all medical professionals
         <br>
-        <small>Please select a role from the left side to know more</small>
+        <small>Please select a role to know more</small>
       </p>
     </div>
+    <div class="row well">
+      <ul>
+        <li><h4><a href="/register"><i class="fa fa-users"></i> Patients </a></h4></li>
+        <li><h4><a href=""><i class="fa fa-user-md"></i> Doctors </a></h4></li>
+        <li><h4><a href=""><i class="fa fa-medkit"></i> Pharmacies </a></h4></li>
+        <li><h4><a href=""><i class="fa fa-ambulance "></i> Pharma Companies</a></h4></li>
+        <li><h4><a href=""><i class="fa fa-bar-chart-o"></i> Diagnostic Centers </a></h4></li>
+      </ul>
+    </div>
+    </div>
+    
+    
+    
+    <div class="col-md-4">
+     <div class="row">
+      <p class="well">
+        <strong>mednetwork</strong> is an online network for all medical professionals
+        <br>
+        <small>Please select a role to know more</small>
+      </p>
+    </div>
+    <div class="row well">
+      <ul>
+        <li><h4><a href="/register"><i class="fa fa-users"></i> Patients </a></h4></li>
+        <li><h4><a href=""><i class="fa fa-user-md"></i> Doctors </a></h4></li>
+        <li><h4><a href=""><i class="fa fa-medkit"></i> Pharmacies </a></h4></li>
+        <li><h4><a href=""><i class="fa fa-ambulance "></i> Pharma Companies</a></h4></li>
+        <li><h4><a href=""><i class="fa fa-bar-chart-o"></i> Diagnostic Centers </a></h4></li>
+      </ul>
+    </div>
+    </div>
+    
+    <div class="col-md-4">
+    @helper.form(action=routes.LoginController.processLogin()) {
+	<div style="margin-top:-1.3em;">
+	<div class="panel panel-primary" >
+	<div class="panel-heading">
+	<h3 class="panel-title">Login</h3>
+	</div>
+	<div class="panel-body" style="padding:0px" >
+	<div style="padding-left:20px">
+	<br>
+			@helper.inputText(loginForm("email"),'_label->"Username")
+			@helper.inputPassword(loginForm("password"),'_label->"Password")
+			</div>
+			<div style="margin-left:35%;">
+					<input type="submit" class="btn btn-primary" value="Login">
+			</div>
+	</div>
+	</div>
+	</div>
+	}
+    </div>
+    
+    
        <div class="col-md-12 ">
     <div class="btn-group btn-group-justified">
   		<div class="btn-group">

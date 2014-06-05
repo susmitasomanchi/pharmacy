@@ -14,19 +14,19 @@ public class LoginController extends Controller {
 
 	public static final Form<LoginBean> loginForm = Form.form(LoginBean.class);
 
-	public static Result loginForm() {
-		if (LoginController.isLoggedIn()) {
-			return redirect(routes.UserActions.dashboard());
-		} else {
-			return ok(views.html.loginForm.render(loginForm));
-		}
-	}
+	//	public static Result loginForm() {
+	//		if (LoginController.isLoggedIn()) {
+	//			return redirect(routes.UserActions.dashboard());
+	//		} else {
+	//			return ok(views.html.loginForm.render(loginForm));
+	//		}
+	//	}
 
 
 	public static Result processLogin() {
 		final Form<LoginBean> filledForm = loginForm.bindFromRequest();
 		if (filledForm.hasErrors()) {
-			return badRequest(views.html.loginForm.render(filledForm));
+			return badRequest(views.html.index.render(filledForm));
 		} else {
 			final LoginBean loginBean = filledForm.get();
 			Logger.info(loginBean.toString());
@@ -34,7 +34,7 @@ public class LoginController extends Controller {
 			Logger.info("found users " + appUsers.toString());
 			if(appUsers.size() < 1) {
 				// return invalid login/password
-				return badRequest(views.html.loginForm.render(filledForm));
+				return badRequest(views.html.index.render(filledForm));
 			}
 			if(appUsers.size() == 1) {
 				session().clear();
@@ -55,7 +55,7 @@ public class LoginController extends Controller {
 	//@BasicAuth
 	public static Result processLogout() {
 		session().clear();
-		return ok(views.html.index.render("logout successful"));
+		return ok(views.html.index.render(loginForm));
 	}
 
 	/*//Change Password

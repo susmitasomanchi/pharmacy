@@ -1,6 +1,7 @@
 package controllers;
 
 
+import beans.LoginBean;
 import models.DiagnosticRepresentative;
 import models.MedicalRepresentative;
 import play.Logger;
@@ -12,10 +13,10 @@ public class Application extends Controller {
 
 	public static Form<MedicalRepresentative> salesRepForm=Form.form(MedicalRepresentative.class);
 	public static Form<DiagnosticRepresentative> diagnosticRepForm=Form.form(DiagnosticRepresentative.class);
-
+	public static final Form<LoginBean> loginForm = Form.form(LoginBean.class);
 
 	public static Result index() {
-		return ok(views.html.index.render("Your new application is ready."));
+		return ok(views.html.index.render(loginForm));
 	}
 
 	//sales representator proccessing

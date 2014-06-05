@@ -23,7 +23,6 @@ public class JoinUsBean {
 	@Required
 	public Role role;
 
-	@Required
 	public String pharmacyName;
 
 	public AppUser toAppUser(){
