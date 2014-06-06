@@ -99,8 +99,13 @@ create table pharmacist (
 ;
 
 create table pharmacy (
+  id                        bigint not null,
   name                      varchar(255),
-  address                   varchar(255))
+  address                   varchar(255),
+  contact_no                varchar(255),
+  admin_name                varchar(255),
+  last_update               timestamp not null,
+  constraint pk_pharmacy primary key (id))
 ;
 
 create table register_app_user (
@@ -130,6 +135,8 @@ create sequence medical_representative_seq;
 create sequence patient_seq;
 
 create sequence pharmacist_seq;
+
+create sequence pharmacy_seq;
 
 create sequence register_app_user_seq;
 
@@ -189,6 +196,8 @@ drop sequence if exists medical_representative_seq;
 drop sequence if exists patient_seq;
 
 drop sequence if exists pharmacist_seq;
+
+drop sequence if exists pharmacy_seq;
 
 drop sequence if exists register_app_user_seq;
 

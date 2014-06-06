@@ -19,12 +19,10 @@ public class Appointment extends BaseEntity {
 	@GeneratedValue(strategy = GenerationType.AUTO)
 	public  Long id;
 
-	@DateTime
-	(pattern = "yyyy-MM-dd hh:mm:ss")
+
 	public Date fromTime;
 
-	@DateTime
-	(pattern = "yyyy-MM-dd hh:mm:ss")
+
 	public Date toTime;
 
 	public AppointmentStatus appointmentStatus;
