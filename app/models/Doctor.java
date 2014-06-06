@@ -9,12 +9,16 @@ import javax.persistence.OneToOne;
 import play.data.validation.Constraints.Required;
 import play.db.ebean.Model;
 
+@SuppressWarnings("serial")
 @Entity
-public class Doctor extends BaseEntity {
+public class Doctor extends BaseEntity{
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO)
 	public  Long id;
+
+	@OneToOne
+	public AppUser appUser;
 
 	@Required
 	public String specialization;
@@ -22,14 +26,14 @@ public class Doctor extends BaseEntity {
 	@Required
 	public String degree;
 
-	public String doctorType;								//government or private
+	//government or private
+	public String doctorType;
 
 	public String experience;
 
 	public String homeFacility;
 
 	public Integer fees;
-
 
 	public String clinicAddress;
 
@@ -41,8 +45,7 @@ public class Doctor extends BaseEntity {
 	public String categoryOfDoctor;						// homeopathic or ayurvedic or etc.
 
 	
-	@OneToOne(mappedBy="doctor")
-	public AppUser appUser;
+	
 
 
 

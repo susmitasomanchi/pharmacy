@@ -6,24 +6,23 @@ import javax.persistence.Entity;
 import javax.persistence.OneToOne;
 
 import play.data.validation.Constraints.Required;
-import play.db.ebean.*;
 
 @Entity
 public class Appointment extends BaseEntity {
 
 	@Required
-	public Date from;
+	public Date fromTime;
 
 	@Required
-	public Date to;
+	public Date toTime;
 
-	@Required
 	public Status appointmentStatus;
 
+	@OneToOne
 	public AppUser requestedBy;
 
+	@OneToOne
 	public AppUser apporovedBy;
-
 
 	public String remarks;
 

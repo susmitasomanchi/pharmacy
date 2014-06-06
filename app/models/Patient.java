@@ -4,11 +4,11 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.Lob;
 import javax.persistence.OneToOne;
 
 import play.db.ebean.Model;
 
+@SuppressWarnings("serial")
 @Entity
 public class Patient extends BaseEntity {
 
@@ -16,20 +16,19 @@ public class Patient extends BaseEntity {
 	@GeneratedValue(strategy = GenerationType.AUTO)
 	public Long id;
 
-	@Lob
-	public byte[] picture;
-
-	@OneToOne(mappedBy="patient")
+	@OneToOne
 	public AppUser appUser;
 
-	public String disease;
+	public String mbno;
+
+	public String date;
 
 	
-	public Long appointmentId;
+	public String disease;
 
+	public String appointmentId;
 
 	public String doctorAvailability;
-
 
 	public String isUrgentPatient;
 
