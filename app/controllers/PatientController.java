@@ -1,5 +1,6 @@
 package controllers;
 
+import actions.BasicAuth;
 import models.AppUser;
 import models.Patient;
 import play.Logger;
@@ -7,6 +8,7 @@ import play.data.Form;
 import play.mvc.Controller;
 import play.mvc.Result;
 
+@BasicAuth
 public class PatientController extends Controller {
 
 	public static Form<Patient> form = Form.form(Patient.class);
@@ -73,8 +75,9 @@ public class PatientController extends Controller {
 				patient.update();
 			}
 		}
-		return ok(views.html.scheduleAppointment.render("hello"));
+		//return ok(views.html.scheduleAppointment.render("hello"));
 		//return redirect(routes.UserController.list());
+		return TODO;
 
 	}
 

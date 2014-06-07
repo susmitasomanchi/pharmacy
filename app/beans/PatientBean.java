@@ -46,7 +46,7 @@ public class PatientBean implements Serializable{
 	public String date;
 
 
-	public String address;
+	//	public String address;
 
 	public String disease;
 
@@ -82,9 +82,9 @@ public class PatientBean implements Serializable{
 			appUser.sex= this.sex;
 		}
 
-		if(this.age != null) {
-			appUser.age= this.age;
-		}
+		//		if(this.age != null) {
+		//			appUser.age= this.age;
+		//		}
 		return appUser;
 
 	}
@@ -104,10 +104,9 @@ public class PatientBean implements Serializable{
 			patient.date= this.date;
 		}
 
-		
-		if(this.disease != null) {
-			patient.disease= this.disease;
-		}
+		//if(this.disease != null) {
+			//patient.disease= this.disease;
+		//}
 
 		if(this.appointmentId != null) {
 			patient.appointmentId= this.appointmentId;

@@ -2,6 +2,7 @@ package controllers;
 import java.util.List;
 
 import models.AppUser;
+import models.Doctor;
 import models.Patient;
 import play.mvc.Controller;
 import play.mvc.Result;
@@ -10,6 +11,9 @@ public class SampleDataController extends Controller {
 
 	public static Result populate() {
 
+		final Doctor doctor = new Doctor();
+		//doctor.name = "Test Admin";
+		/*doctor.name = "Test Admin";
 		//final Doctor doctor = new Doctor();
 		//doctor.name = "Test Admin";
 		/*doctor.name = "Test Admin";
@@ -28,7 +32,8 @@ public class SampleDataController extends Controller {
 		user.password = "123456";
 		user.save();
 
-		return ok("user created");
+		//return ok("user created");
+		return redirect(routes.Application.index());
 
 	}
 

@@ -1,5 +1,7 @@
 package models;
 
+import java.util.List;
+
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -43,11 +45,11 @@ public class Doctor extends BaseEntity{
 	public String timings;
 
 	public String categoryOfDoctor;						// homeopathic or ayurvedic or etc.
-
 	
 	
-
-
+	 public static List<Doctor> all() {
+		    return find.all();
+		  }
 
 	public static Model.Finder<Long,Doctor> find = new Finder<Long, Doctor>(Long.class, Doctor.class);
 

@@ -1,0 +1,50 @@
+@(joinUsForm:play.data.Form[beans.JoinUsBean])
+
+@import play.i18n._
+@import helper.twitterBootstrap._
+@import helper._
+
+@no_navbar("Join MedNetwork For Free"){
+
+<div class="container">
+<div class="row">
+      <div class="col-md-6">
+          <h3><span style="cursor:pointer;" onclick="window.location.href='/';"><i class="fa fa-plus-circle"></i> mednetwork</span></h3>
+      </div>
+      <div class="col-md-6">
+          <h3 class="pull-right"><a href="/login/"> login</a></h3>
+      </div>
+  </div>
+  <hr>
+  
+@helper.form(action=routes.UserController.processJoinUs(), '_id->"joinform") {
+
+
+			@helper.inputText(joinUsForm("name"),'class -> "inputs",'_label->"Name")
+			
+			@helper.inputText(joinUsForm("email"),'class -> "inputs",'_label->"Email")
+
+			@helper.inputPassword(joinUsForm("password"),'class -> "inputs",'_label->"Password")
+			
+			@helper.inputPassword(joinUsForm("confirmPassword"),'class -> "inputs",'_label->"Confirm Password")
+
+			@select(joinUsForm("role"), options("PATIENT"->"Patient", "DOCTOR"->"Doctor", "PHARMACIST"->"Pharmacist", "MR"->"Medical Representative", "DIAGREP"->"Diagnostic Representative"), '_label->"Join As")
+			
+			<br>
+			<input type="submit" class="btn btn-primary" id="submitbtn" value="Join" >
+				
+}
+			
+</div>
+
+<script>
+$("#submitbtn").on("click", function(e){
+	if($("#password").val() != $("#confirmPassword").val()){
+		alert('Passwords do not match');
+		e.preventDefault();
+	}
+});
+</script>
+
+}
+
