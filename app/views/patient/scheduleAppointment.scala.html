@@ -1,0 +1,70 @@
+@(timeMap: Map[Date,List[String]], slots: Integer)
+
+@main("Schedule An Appointment"){
+
+<table class="table table-condensed">
+<thead>
+<tr>
+@for((k,v) <- timeMap){
+	<th style="text-align:center;"><a class="btn btn-primary" style="cursor:default;">@k.format("dd MMM")<br>@k.format("EE")</a></th>
+}
+</tr>
+</thead>
+<tbody>
+
+@for(i <- 0 until slots) {
+	<tr>
+	@for((k,v) <- timeMap){
+  		@if(k.format("EE").equals("Sun")){
+  			<td style="text-align:center;"><a class="btn btn-default disabled">@timeMap.get(k).get(i)</a></td>
+  		}else{
+  			<td class="appt" style="text-align:center;" date="@k.format("dd-MMM-yyyy")"><a class="btn btn-success">@timeMap.get(k).get(i)</a></td>
+  		}
+	}
+	</tr>
+}
+
+</tbody>
+</table>
+
+<style>
+.modal{
+	overflow:hidden;
+	margin-top:15%;
+	left:30%;
+	width:600px;
+	height: 300px;
+}
+</style>
+
+<div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-body" id="model-content">
+      
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+        <button type="button" class="btn btn-primary" onclick="$('#datetimeform').submit();">Confirm</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+var datetime='';
+$(".appt").on("click", function(){
+	datetime = $(this).attr("date")+'~'+$(this).text();
+	$("#inputform").attr("value",datetime);
+	$("#model-content").html('<p> Are you sure you wish to request an appointment on <br>'+$(this).attr("date")+' at '+$(this).text()+' Hrs ?</p>');
+	$('#myModal').modal('show');
+});
+
+</script>
+
+<form id="datetimeform" style="display:none;" action="@routes.DoctorController.requestAppointment()" method="POST">
+	<input type="hidden" id="inputform" name="datetime" value="">
+</form>
+
+
+}

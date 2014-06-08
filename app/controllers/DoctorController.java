@@ -1,5 +1,9 @@
 package controllers;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+
 import actions.BasicAuth;
 import models.AppUser;
 import models.Doctor;
@@ -12,6 +16,38 @@ import beans.PatientBean;
 
 @BasicAuth
 public class DoctorController extends Controller {
+
+
+
+	public static Result requestAppointment(){
+		final String datetime = request().body().asFormUrlEncoded().get("datetime")[0];
+		Logger.info(datetime);
+		final SimpleDateFormat sdf = new SimpleDateFormat("dd-MMM-yyyy~HH:mm");
+		try {
+			final Date date = sdf.parse(datetime);
+			Logger.info("Date extracted: "+date);
+			return ok("Date extracted: "+date);
+		} catch (final ParseException e) {
+			e.printStackTrace();
+		}
+		return ok();
+	}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 	public static Form<Doctor> form = Form.form(Doctor.class);
 	public static Form<PatientBean> patientForm = Form.form(PatientBean.class);

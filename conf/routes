@@ -3,12 +3,25 @@
 # ~~~~
 
 # Home page
-GET    /                               controllers.Application.index()                      
-POST   /login                          controllers.LoginController.processLogin()
-GET    /logout                         controllers.LoginController.processLogout()
+GET		/								controllers.Application.index()                      
+POST	/login							controllers.LoginController.processLogin()
+GET		/logout							controllers.LoginController.processLogout()
 
+# Sign up page
 GET		/join							controllers.UserController.joinUs()
 POST	/join							controllers.UserController.processJoinUs()
+
+# patient actions
+GET		/user/schedule-appointment		controllers.PatientController.scheduleAppointment()
+POST	/doctor/request-appointment		controllers.DoctorController.requestAppointment()
+
+
+
+
+
+
+
+
 
 GET    /userform/farmaciest/            controllers.PharmacistController.form() 
 POST   /userform/farmaciest-proccesss   controllers.PharmacistController.process() 
@@ -20,9 +33,6 @@ GET		/scheduleappointment/			controllers.AppointmentController.form()
 POST	/scheduleappointment/			controllers.AppointmentController.process()
 
 
-GET    /userform/patient/               controllers.PatientController.form() 
-GET    /userform/patient/h/             controllers.PatientController.enterForm() 
-
 GET    /salesRep/                       controllers.Application.salesRepresentator()
 POST   /salesRepProccess/               controllers.Application.salesRepresentatorProccess()
 GET    /diagRep/                        controllers.Application.diagnosticRep()
@@ -31,16 +41,26 @@ GET    /sampledata/populate             controllers.SampleDataController.populat
 GET    /sampledata/cleanup              controllers.SampleDataController.cleanUp()
 GET    /sampledata/temp                 controllers.SampleDataController.temp()
 
-POST   /userform/patientproccess/       controllers.PatientController.process() 
+#POST   /userform/patientproccess/       controllers.PatientController.process() 
 
 GET    /home/                           controllers.Application.homePage()
-GET    /register/                       controllers.PatientController.register()
-POST   /register/                       controllers.PatientController.registerProccess()
 
 # doctor action
 GET    /doc-stuff/                      controllers.DoctorController.docStuff()
 GET    /dashboard/						controllers.UserActions.dashboard()
 GET    /register-patient/               controllers.DoctorController.registerPatient()
 POST   /register-patient-proccess/      controllers.DoctorController.registerPatientProccess()
+
+
+
+
+# delete later
+GET    /userform/patient/               controllers.PatientController.form() 
+GET    /userform/patient/h/             controllers.PatientController.enterForm()
+GET    /register/                       controllers.PatientController.register()
+POST   /register/                       controllers.PatientController.registerProccess()
+
+
+
 # Map static resources from the /public folder to the /assets URL path
 GET    /assets/*file                    controllers.Assets.at(path="/public", file)
