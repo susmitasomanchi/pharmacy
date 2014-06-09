@@ -2,12 +2,17 @@ package controllers;
 import java.util.List;
 
 import models.AppUser;
+import models.Role;
 import play.mvc.Controller;
 import play.mvc.Result;
 
 public class SampleDataController extends Controller {
 
 	public static Result populate() {
+		final AppUser appUser =new AppUser();
+		appUser.name="mitesh";
+		appUser.role=Role.DOCTOR;
+		appUser.save();
 		return TODO;
 
 	}

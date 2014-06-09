@@ -9,8 +9,7 @@ import javax.persistence.Id;
 import javax.persistence.OneToOne;
 
 import play.data.format.Formats.DateTime;
-import play.data.validation.Constraints.Required;
-import play.db.ebean.Model;
+
 
 @Entity
 public class Appointment extends BaseEntity {
@@ -19,22 +18,30 @@ public class Appointment extends BaseEntity {
 	@GeneratedValue(strategy = GenerationType.AUTO)
 	public  Long id;
 
-	@DateTime
-	(pattern = "yyyy-MM-dd hh:mm:ss")
-	public Date fromTime;
+
+	public Date date;
+
 
 	@DateTime
 	(pattern = "yyyy-MM-dd hh:mm:ss")
-	public Date toTime;
+	public Date starttime;
+
+	@DateTime
+	(pattern = "yyyy-MM-dd hh:mm:ss")
+	public Date endtime;
+
+
+
+
 
 	public AppointmentStatus appointmentStatus;
 
 	@OneToOne
 	public AppUser requestedBy;
 
-	@OneToOne
+	/*@OneToOne
 	public AppUser apporovedBy;
-
+	 */
 	public String remarks;
 
 

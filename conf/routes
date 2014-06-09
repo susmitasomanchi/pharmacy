@@ -33,6 +33,12 @@ POST   /userform/patientproccess/       controllers.PatientController.process()
 GET    /home/                           controllers.Application.homePage()
 GET    /register/                       controllers.PatientController.register()
 POST   /register/                       controllers.PatientController.registerProccess()
+GET    /questionform/					controllers.PatientController.displayQuestion()
+POST    /askQuestion/					controllers.PatientController.askQuestion()
+
+GET    /answerform/						controllers.DoctorController.displayAnswer()
+POST    /ansQuestion/:qaId					controllers.DoctorController.answerQuestion(qaId: Long)
+
 
 # doctor action
 GET    /doc-stuff/                      controllers.DoctorController.docStuff()

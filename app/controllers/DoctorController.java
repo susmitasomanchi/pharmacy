@@ -1,18 +1,25 @@
 package controllers;
 
+import java.util.Date;
+import java.util.List;
+
 import models.AppUser;
 import models.Doctor;
 import models.Patient;
+import models.QuestionAndAnswer;
 import play.Logger;
 import play.data.Form;
 import play.mvc.Controller;
 import play.mvc.Result;
 import beans.PatientBean;
+import beans.QuestionAndAnswerBean;
 
 public class DoctorController extends Controller {
 
 	public static Form<Doctor> form = Form.form(Doctor.class);
 	public static Form<PatientBean> patientForm = Form.form(PatientBean.class);
+	public static Form<QuestionAndAnswerBean> questionAndAnswerForm = Form
+			.form(QuestionAndAnswerBean.class);
 
 	public static Result form() {
 		return ok(views.html.createDoctor.render(form));
@@ -81,6 +88,25 @@ public class DoctorController extends Controller {
 
 
 		return ok("patient register successFully");
+	}
+
+	public static Result displayAnswer(){
+		final AppUser user = LoginController.getLoggedInUser();
+		final List<QuestionAndAnswer> qaList = QuestionAndAnswer.find.where()
+				.eq("answerBy.id", user.id).findList();
+		return ok(views.html.mod.kuQuestion.render(qaList,questionAndAnswerForm));
+	}
+	//Question Answered By Doctor
+	public static Result answerQuestion(final Long qaId) {
+		final QuestionAndAnswerBean qaBean = questionAndAnswerForm.bindFromRequest().get();
+		final QuestionAndAnswer qa = QuestionAndAnswer.find.byId(qaId);
+		qa.answer = qaBean.answer;
+		qa.answerDate = new Date();
+		qa.update();
+		flash().put("alert", "saved answer successfully");
+		return redirect(routes.DoctorController.displayAnswer());
+
+
 	}
 
 

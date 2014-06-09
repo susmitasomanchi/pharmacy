@@ -1,0 +1,18 @@
+@* askedQuetion Template File *@
+@(dataForm: play.data.Form[beans.QuestionAndAnswerBean])
+@main("Ask  Question") {
+<h1></h1>
+@helper.form(action=routes.PatientController.askQuestion(),'_method->"post") {
+	
+	@helper.inputText(dataForm("question"),'_label->"Question")
+	<select name='answerBy'>
+	@for(appUser <- models.AppUser.find.where().eq("role",Role.DOCTOR).findList()){
+		<option value='@appUser.id'>@appUser.name</option>
+	}
+	</select>
+	<input type="hidden" name="id" value='@dataForm("id").value' >
+	<input type="submit" value="Ask">
+	
+	
+	}
+	}
