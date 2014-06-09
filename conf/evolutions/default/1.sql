@@ -21,8 +21,7 @@ create table app_user (
 
 create table appointment (
   id                        bigint not null,
-  from_time                 timestamp,
-  to_time                   timestamp,
+  appointment_time          timestamp,
   appointment_status        integer,
   requested_by_id           bigint,
   apporoved_by_id           bigint,

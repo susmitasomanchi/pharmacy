@@ -2,6 +2,19 @@
 
 @main("Schedule An Appointment"){
 
+
+<div class="row">
+<div class="col-md-6">
+	<select id="doc-select">
+	<option>Select Doctor</option>
+	@for(doc <- Doctor.find.all()){
+		<option value="@doc.id">@doc.appUser.name</option>
+	}
+	</select> 
+</div>
+</div>
+<br><br>
+
 <table class="table table-condensed">
 <thead>
 <tr>
@@ -44,8 +57,8 @@
       
       </div>
       <div class="modal-footer">
-        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-        <button type="button" class="btn btn-primary" onclick="$('#datetimeform').submit();">Confirm</button>
+        <a class="btn btn-default" data-dismiss="modal">Close</a>
+        <a class="btn btn-primary" onclick="$('#datetimeform').submit();">Confirm</a>
       </div>
     </div>
   </div>
@@ -55,15 +68,19 @@
 var datetime='';
 $(".appt").on("click", function(){
 	datetime = $(this).attr("date")+'~'+$(this).text();
-	$("#inputform").attr("value",datetime);
+	$("#inputdatetime").attr("value",datetime);
 	$("#model-content").html('<p> Are you sure you wish to request an appointment on <br>'+$(this).attr("date")+' at '+$(this).text()+' Hrs ?</p>');
 	$('#myModal').modal('show');
 });
 
+$("#doc-select").change(function() {
+	$("#doctorId").attr("value",$("#doc-select option:selected").val());
+});
 </script>
 
 <form id="datetimeform" style="display:none;" action="@routes.DoctorController.requestAppointment()" method="POST">
-	<input type="hidden" id="inputform" name="datetime" value="">
+	<input type="hidden" id="inputdatetime" name="datetime" value="">
+	<input type="hidden" id="doctorId" name="doctorId" value="">
 </form>
 
 

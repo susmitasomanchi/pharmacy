@@ -8,10 +8,7 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.OneToOne;
 
-import play.data.format.Formats.DateTime;
-import play.data.validation.Constraints.Required;
-import play.db.ebean.Model;
-
+@SuppressWarnings("serial")
 @Entity
 public class Appointment extends BaseEntity {
 
@@ -19,13 +16,7 @@ public class Appointment extends BaseEntity {
 	@GeneratedValue(strategy = GenerationType.AUTO)
 	public  Long id;
 
-	@DateTime
-	(pattern = "yyyy-MM-dd hh:mm:ss")
-	public Date fromTime;
-
-	@DateTime
-	(pattern = "yyyy-MM-dd hh:mm:ss")
-	public Date toTime;
+	public Date appointmentTime;
 
 	public AppointmentStatus appointmentStatus;
 
@@ -38,12 +29,7 @@ public class Appointment extends BaseEntity {
 	public String remarks;
 
 
-
 	public static Finder<Long, Appointment> find = new Finder<>(Long.class, Appointment.class);
-
-
-
-
 
 
 

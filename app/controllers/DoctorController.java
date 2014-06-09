@@ -21,12 +21,13 @@ public class DoctorController extends Controller {
 
 	public static Result requestAppointment(){
 		final String datetime = request().body().asFormUrlEncoded().get("datetime")[0];
-		Logger.info(datetime);
+		final Long doctorId = Long.parseLong(request().body().asFormUrlEncoded().get("doctorId")[0]);
+		final Doctor doctor = Doctor.find.byId(doctorId);
 		final SimpleDateFormat sdf = new SimpleDateFormat("dd-MMM-yyyy~HH:mm");
 		try {
 			final Date date = sdf.parse(datetime);
 			Logger.info("Date extracted: "+date);
-			return ok("Date extracted: "+date);
+			return ok("Date extracted: "+date+" Doctor: "+doctor.appUser.name);
 		} catch (final ParseException e) {
 			e.printStackTrace();
 		}
