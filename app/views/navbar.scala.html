@@ -1,0 +1,116 @@
+@()
+@import play.i18n._
+<nav class="navbar navbar-default navbar-fixed-top" role="navigation">
+  <div class="container-fluid">
+    <!-- Brand and toggle get grouped for better mobile display -->
+    <div class="navbar-header">
+    <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1">
+        <span class="sr-only">Toggle navigation</span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+      <a class="navbar-brand" href="@routes.UserActions.dashboard()">@Messages.get("MedNetwork")</a>
+    </div> 
+     <!-- Collect the nav links, forms, and other content for toggling -->
+    <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+      
+      <ul class="nav navbar-nav">
+    
+		
+		@if(LoginController.getLoggedInUserRole().equals(Role.PATIENT.toString())){
+		<li class="dropdown">
+          <a href="#" class="dropdown-toggle" data-toggle="dropdown">
+          Doctors
+          <b class="caret"></b></a>
+          <ul class="dropdown-menu">
+            <li><a href="">Search Doctors</a></li>
+            <li><a href="">My Doctors</a></li>
+            <li class="divider"></li>
+            <li><a href="@routes.PatientController.scheduleAppointment()">Schedule an Appointment</a></li>
+          </ul>
+        </li>
+        
+        <li class="dropdown">
+          <a href="#" class="dropdown-toggle" data-toggle="dropdown">
+          Prescriptions
+          <b class="caret"></b></a>
+          <ul class="dropdown-menu">
+            <li><a href="">Prescriptions</a></li>
+            <li><a href="">Diagnostic Reports</a></li>
+          </ul>
+        </li>
+		}
+		
+
+		
+		@if(LoginController.getLoggedInUserRole().equals(Role.DOCTOR.toString())){
+        <li class="dropdown">
+          <a href="#" class="dropdown-toggle" data-toggle="dropdown">
+          Appointments
+          <b class="caret"></b></a>
+          <ul class="dropdown-menu">
+            <li><a href="">Today</a></li>
+            <li><a href="">All</a></li>
+          </ul>
+        </li>
+    
+    	<li class="dropdown">
+          <a href="#" class="dropdown-toggle" data-toggle="dropdown">
+          Prescriptions
+          <b class="caret"></b></a>
+          <ul class="dropdown-menu">
+    	        <li><a href="">List</a></li>
+          </ul>
+        </li>
+	
+        <li class="dropdown">
+          <a href="#" class="dropdown-toggle" data-toggle="dropdown">
+          Assistants
+          <b class="caret"></b></a>
+          <ul class="dropdown-menu">
+	            <li><a href="">Create Assistant</a></li>
+    	        <li><a href="">Assistant List</a></li>
+        	    <li class="divider"></li>
+            	<li><a href="">My Credit Score</a></li>
+          </ul>
+        </li>
+        }
+    	
+        <li class="dropdown">
+          <a href="#" class="dropdown-toggle" data-toggle="dropdown">
+			Report
+          <b class="caret"></b></a>
+          <ul class="dropdown-menu">
+          	<li><a href="">Expenditure Reports</a></li>
+            <li><a href="">Prescription Reports</a></li>
+		    <li><a href="">Doctor Reports</a></li>     
+            <li><a href="">Pharmacy Reports</a></li>
+          </ul>
+        </li>
+
+   	  </ul>
+   	  
+   	  
+   	  
+   	  <ul class="nav navbar-nav navbar-right">
+		@if(LoginController.isLoggedIn()) {
+		<li class="dropdown"><a href="#" class="dropdown-toggle" data-toggle="dropdown">@LoginController.getLoggedInUser.name <b class="caret"></b></a>
+		<ul class="dropdown-menu">
+			<li><a href="/user/preferences"><i class="fa fa-gears"></i>&nbsp;&nbsp;Preferences</a></li>
+			<li class="divider"></li>
+			<li><a href="/change-password"><i class="fa fa-lock"></i>&nbsp;&nbsp;Change Password</a></li>
+			<li><a href="/logout"><i class="fa fa-sign-out"></i>&nbsp;&nbsp;Logout</a></li>
+		</ul>
+		</li>
+		} else {
+			<li><a href="/login">Login</a></li>
+		}
+	</ul>
+   	  
+   	  
+    </div><!-- /.navbar-collapse -->
+  </div><!-- /.container-fluid -->
+</nav>
+
+

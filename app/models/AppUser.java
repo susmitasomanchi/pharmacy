@@ -6,6 +6,8 @@
  *****/
 package models;
 
+import java.util.Date;
+
 import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.Lob;
@@ -34,7 +36,7 @@ public class AppUser extends BaseEntity {
 
 	public Sex sex;
 
-	public String age;
+	public Date dob;
 
 	public Role role;
 

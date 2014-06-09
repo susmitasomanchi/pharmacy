@@ -1,6 +1,7 @@
 package controllers;
 
 
+import actions.BasicAuth;
 import models.AppUser;
 import models.Pharmacist;
 import play.Logger;
@@ -8,6 +9,7 @@ import play.data.Form;
 import play.mvc.Controller;
 import play.mvc.Result;
 
+@BasicAuth
 public class PharmacistController extends Controller{
 
 	public static Form<Pharmacist> form = Form.form(Pharmacist.class);

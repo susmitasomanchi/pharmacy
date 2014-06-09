@@ -7,135 +7,78 @@ PLEASE DO NOT MODIFY IT BY HAND
  *****/
 package controllers;
 
+import models.AppUser;
+import models.DiagnosticRepresentative;
+import models.Doctor;
+import models.MedicalRepresentative;
+import models.Patient;
+import models.Pharmacist;
+import models.Role;
+import play.Logger;
+import play.data.Form;
 import play.mvc.Controller;
+import play.mvc.Result;
+import utils.Constants;
+import beans.JoinUsBean;
 
-//@BasicAuth
+
 public class UserController extends Controller {
-	//
-	/*public static Form<Pharmacist> form = Form.form(Pharmacist.class);
-	//public static Form<UserPreferenceBean> prefForm = Form.form(UserPreferenceBean.class);
 
-	public static Result pharmaciestform() {
-		return ok(views.html.createPharmacy.render(form));
+	public static Form<JoinUsBean> joinUsForm = Form.form(JoinUsBean.class);
+
+	public static Result joinUs(){
+		return ok(views.html.joinus.render(joinUsForm));
 	}
 
-	public static Result process() {
-		final Form<AppUserBean> filledForm = form.bindFromRequest();
+
+	public static Result processJoinUs(){
+		final Form<JoinUsBean> filledForm = joinUsForm.bindFromRequest();
 		if(filledForm.hasErrors()) {
-			return badRequest(views.html.mod.userForm.render(filledForm));
+			Logger.info("Form Errors");
+			Logger.error(filledForm.errors().toString());
+			return badRequest(views.html.joinus.render(filledForm));
 		}
 		else {
-			final AppUserBean userBean = filledForm.get();
-
-			if(userBean.id == null) {
-				final AppUser user = userBean.toEntity();
-				final UserPreference pref = new UserPreference();
-				pref.save();
-				user.userPreference = pref;
-				user.save();
+			final AppUser appUser = filledForm.get().toAppUser();
+			appUser.save();
+			if(appUser.role == Role.PATIENT){
+				final Patient patient = new Patient();
+				patient.appUser = appUser;
+				patient.save();
 			}
-			else {
-				userBean.toEntity().update();
+
+			if(appUser.role == Role.DOCTOR){
+				final Doctor doctor = new Doctor();
+				doctor.appUser = appUser;
+				doctor.save();
 			}
-		}
-		return redirect(routes.UserController.list());
-	}
 
-public static Result list() {
-		List<AppUser> userList = new ArrayList<AppUser>();
-		final AppUser appUser = LoginController.getLoggedInUser();
-		if(appUser.role == Role.COORDINATOR){
-			userList = appUser.location.userList();
-		}
-		else{
-			userList = AppUser.find.all();
-		}
-
-		return ok(views.html.mod.userList.render(userList));
-	}
-
-	public static Result show(final Long id) {
-		final AppUser appUser = AppUser.find.byId(id);
-		return ok(views.html.gen.userShow.render(appUser));
-	}
-
-	public static Result edit(final Long id) {
-		final AppUser appUser = AppUser.find.byId(id);
-		final Form<AppUserBean> filledForm = form.fill(appUser.toBean());
-		return ok(views.html.mod.userForm.render(filledForm));
-	}
-
-	public static Result delete(final Long id) {
-		final AppUser appUser = AppUser.find.byId(id);
-		appUser.delete();
-		return redirect(routes.UserController.list());
-	}
-
-	public static Result search(final String searchStr) {
-		return TODO;
-	}
-
-
-	public static Result preferences(){
-		final AppUser appUser = LoginController.getLoggedInUser();
-		final Form<UserPreferenceBean> filledForm;
-		if(appUser.userPreference != null){
-			filledForm = prefForm.fill(appUser.userPreference.toBean());
-		}
-		else{
-			filledForm = prefForm.fill(new UserPreferenceBean());
-		}
-		return ok(views.html.mod.preferences.render(filledForm));
-	}
-
-	public static Result processPreferences(){
-
-		final Form<UserPreferenceBean> filledForm = prefForm.bindFromRequest();
-		if(filledForm.hasErrors()) {
-			return badRequest(views.html.mod.preferences.render(filledForm));
-		}
-		else {
-			final UserPreferenceBean prefBean = filledForm.get();
-			final AppUser appUser = LoginController.getLoggedInUser();
-
-			final UserPreference userPref = prefBean.toEntity();
-			if(prefBean.id == null) {
-				userPref.save();
-			} else {
-				userPref.update();
+			if(appUser.role == Role.PHARMACIST){
+				final Pharmacist pharmacist = new Pharmacist();
+				pharmacist.appUser = appUser;
+				pharmacist.save();
 			}
-			appUser.userPreference = userPref;
-			appUser.update();
+
+			if(appUser.role == Role.MR){
+				final MedicalRepresentative mr = new MedicalRepresentative();
+				mr.appUser = appUser;
+				mr.save();
+			}
+
+			if(appUser.role == Role.DIAGREP){
+				final DiagnosticRepresentative diagRep = new DiagnosticRepresentative();
+				diagRep.appUser = appUser;
+				diagRep.save();
+			}
+
+			session().clear();
+			session(Constants.LOGGED_IN_USER_ID, appUser.id + "");
+			session(Constants.LOGGED_IN_USER_ROLE, appUser.role+ "");
+
+			return redirect(routes.UserActions.dashboard());
 		}
 
 
-		flash().put("alert", new Alert("alert-success", "Preferences Saved Successfuly.").toString());
-		return redirect(routes.UserController.preferences());
 	}
-
-
-	public static Result removeNotification(final Long nId){
-		final AppUser loggedInUser = LoginController.getLoggedInUser();
-		final Notification n = Notification.find.byId(nId);
-		loggedInUser.notificationList.remove(n);
-		loggedInUser.update();
-		n.delete();
-		return ok();
-	}
-
-	public static Result addToFavourites(final Long kuId){
-		try{
-			final AppUser user = LoginController.getLoggedInUser();
-			user.userPreference.favKUList.add(KUnit.find.byId(kuId));
-			user.userPreference.update();
-			return ok("0");
-		}
-		catch(final Exception e){
-			Logger.info("Error while adding to favourites");
-			e.printStackTrace();
-			return ok("-1");
-		}
-	}	 */
 
 }
-

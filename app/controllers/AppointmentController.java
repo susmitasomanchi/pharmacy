@@ -1,7 +1,6 @@
 package controllers;
 
 import models.Appointment;
-import models.Doctor;
 import play.Logger;
 import play.data.Form;
 import play.mvc.Controller;
@@ -12,7 +11,7 @@ public class AppointmentController extends Controller {
 	public static Form<Appointment> form = Form.form(Appointment.class);
 
 	public static Result form() {
-		return ok(views.html.scheduleAppointment.render(form));
+		return ok(views.html.scheduleAppointmentTest.render(form));
 		//return TODO;
 	}
 	public static Result process() {
@@ -23,7 +22,7 @@ public class AppointmentController extends Controller {
 			Logger.info("bad request");
 			System.out.println(filledForm.errors());
 
-			return badRequest(views.html.scheduleAppointment.render(filledForm));
+			return badRequest(views.html.scheduleAppointmentTest.render(filledForm));
 		}
 		else {
 			final Appointment appointment= filledForm.get();

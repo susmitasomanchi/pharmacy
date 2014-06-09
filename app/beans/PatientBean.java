@@ -82,9 +82,9 @@ public class PatientBean implements Serializable{
 			appUser.sex= this.sex;
 		}
 
-		if(this.age != null) {
-			appUser.age= this.age;
-		}
+		//		if(this.age != null) {
+		//			appUser.age= this.age;
+		//		}
 		return appUser;
 
 	}

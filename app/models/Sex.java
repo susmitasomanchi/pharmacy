@@ -1,5 +1,12 @@
 package models;
 
+import com.avaje.ebean.annotation.EnumValue;
+
 public enum Sex {
-	MALE,FEMALE,OTHER
+	@EnumValue("MALE")
+	MALE,
+	@EnumValue("FEMALE")
+	FEMALE,
+	@EnumValue("OTHER")
+	OTHER
 }

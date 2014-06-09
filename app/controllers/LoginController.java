@@ -3,7 +3,6 @@ package controllers;
 import java.util.List;
 
 import models.AppUser;
-import models.Patient;
 import models.Role;
 import play.Logger;
 import play.data.Form;
@@ -40,24 +39,25 @@ public class LoginController extends Controller {
 
 			Logger.info(loginBean.toString());
 
-			Logger.info(Patient.find.all().size()+"");
 
-			List<Patient> patients=Patient.find.where().eq("appUser.email", loginBean.email).eq("appUser.password", loginBean.password).findList();
-
-			if (patients.size()<=0) {
+			final List <AppUser> appUsers=AppUser.find.where().eq("email", loginBean.email).eq("password", loginBean.password).findList();
+			//Logger.info("found users " + appUsers.toString());
+			/*			final List<AppUser> appUsers=whichUserLogging(doctors, patients, pharmacists);
+			 */
+			if (appUsers.size()<=0) {
 
 				// return invalid login/password
 
 				return badRequest(views.html.loginForm.render(filledForm));
-			} else if (patients.size()==0) {
+			} else if (appUsers.size()==0) {
 				session().clear();
-				session(Constants.LOGGED_IN_USER_ID, patients.get(0).id + "");
+				session(Constants.LOGGED_IN_USER_ID, appUsers.get(0).id + "");
 				//session(Constants.LOGGED_IN_USER_ROLE, appUsers.get(0).role + "");
 				return redirect(routes.UserActions.dashboard());
 				//return ok("login successfull");
 			} else {
 				session().clear();
-				session(Constants.LOGGED_IN_USER_ID, patients.get(0).id + "");
+				session(Constants.LOGGED_IN_USER_ID, appUsers.get(0).id + "");
 				//session(Constants.LOGGED_IN_USER_ROLE, appUsers.get(0).role + "");
 
 				Logger.info("more than one users exists with same email and passowrd");
