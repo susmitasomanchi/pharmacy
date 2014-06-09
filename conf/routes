@@ -37,7 +37,7 @@ GET    /questionform/					controllers.PatientController.displayQuestion()
 POST    /askQuestion/					controllers.PatientController.askQuestion()
 
 GET    /answerform/						controllers.DoctorController.displayAnswer()
-POST    /ansQuestion/:qaId					controllers.DoctorController.answerQuestion(qaId: Long)
+POST    /ansQuestion/:qaId				controllers.DoctorController.answerQuestion(qaId: Long)
 
 
 # doctor action

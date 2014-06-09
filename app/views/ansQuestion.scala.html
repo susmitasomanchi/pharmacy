@@ -1,4 +1,4 @@
-@(qa: List[models.QuestionAndAnswer])
+@(list: List[models.QuestionAndAnswer])
 @*******************************
 
 THIS IS AN AUTO GENERATED CODE
@@ -57,15 +57,15 @@ margin-bottom: 5px;
       	@if(qa.answer == null || qa.answer.isEmpty()){
       		@if(qa.answerBy.id == LoginController.getLoggedInUser().id){	
       			<div id="quesbox" style="width:700px;">
-      			@helper.form(action=routes.DoctorContrller.answerQuestion(qa.id)){
-				<textarea name="answer" rows="4" id="openquesbox" style="left:0px; width:700px;" placeholder="Answer @qa.questionBy.name's Question..."></textarea>
+      			@helper.form(action=routes.DoctorController.answerQuestion(qa.id),'_method->"post"){
+				<textarea name="answer" rows="4" id="openquesbox" style="left:0px; width:700px;" placeholder="Answer 's Question..."></textarea>
 				<br>
 				<button class="btn btn-primary btn-xs pull-right subbtn" id="addcombtn" >Answer</button><br>
 				}
 			} else{
 				<hr>
 				<p style="margin-left:100px;">
-				<span class="pull-right"><small><i>@qa.answerBy.name has not answered the question yet.</i></small></span>
+				<span class="pull-right"><small><i> has not answered the question yet.</i></small></span>
 				</p>
 			}
 		</div>
@@ -79,7 +79,7 @@ margin-bottom: 5px;
 			<p>
 			<i>@qa.answer</i>
 			<br>
-			<small style="color:#aea79f;">@qa.answerDate.format("dd-MMM-yyyy (hh:mm)")</small><span class="pull-right">@qa.answerBy.name</span>
+			<small style="color:#aea79f;">@qa.answerDate.format("dd-MMM-yyyy (hh:mm)")</small><span class="pull-right"></span>
 			</p>
 			</div>
       		</div>

@@ -94,7 +94,7 @@ public class DoctorController extends Controller {
 		final AppUser user = LoginController.getLoggedInUser();
 		final List<QuestionAndAnswer> qaList = QuestionAndAnswer.find.where()
 				.eq("answerBy.id", user.id).findList();
-		return ok(views.html.mod.kuQuestion.render(qaList,questionAndAnswerForm));
+		return ok(views.html.ansQuestion.render(qaList));
 	}
 	//Question Answered By Doctor
 	public static Result answerQuestion(final Long qaId) {
