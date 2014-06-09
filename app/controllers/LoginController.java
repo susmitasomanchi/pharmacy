@@ -3,7 +3,6 @@ package controllers;
 import java.util.List;
 
 import models.AppUser;
-import models.Role;
 import play.Logger;
 import play.data.Form;
 import play.mvc.Controller;
@@ -15,82 +14,52 @@ public class LoginController extends Controller {
 
 	public static final Form<LoginBean> loginForm = Form.form(LoginBean.class);
 
-	public static Result loginForm() {
-		if (LoginController.isLoggedIn()) {
-			//return redirect(routes.UserActions.dashboard());
-			return ok("hii login");
-		} else {
-			//return ok("hii Not login");
-
-			return ok(views.html.loginForm.render(loginForm));
-		}
-	}
+	//	public static Result loginForm() {
+	//		if (LoginController.isLoggedIn()) {
+	//			return redirect(routes.UserActions.dashboard());
+	//		} else {
+	//			return ok(views.html.loginForm.render(loginForm));
+	//		}
+	//	}
 
 
 	public static Result processLogin() {
 		final Form<LoginBean> filledForm = loginForm.bindFromRequest();
-
 		if (filledForm.hasErrors()) {
-
-			return badRequest(views.html.loginForm.render(filledForm));
+			return badRequest(views.html.index.render(filledForm));
 		} else {
-
 			final LoginBean loginBean = filledForm.get();
-
 			Logger.info(loginBean.toString());
-
-
-			final List <AppUser> appUsers=AppUser.find.where().eq("email", loginBean.email).eq("password", loginBean.password).findList();
-			//Logger.info("found users " + appUsers.toString());
-			/*			final List<AppUser> appUsers=whichUserLogging(doctors, patients, pharmacists);
-			 */
-			if (appUsers.size()<=0) {
-
+			final List<AppUser> appUsers = AppUser.find.where().eq("email", loginBean.email).eq("password", loginBean.password).findList();
+			Logger.info("found users " + appUsers.toString());
+			if(appUsers.size() < 1) {
 				// return invalid login/password
-
-				return badRequest(views.html.loginForm.render(filledForm));
-			} else if (appUsers.size()==0) {
+				return badRequest(views.html.index.render(filledForm));
+			}
+			if(appUsers.size() == 1) {
 				session().clear();
 				session(Constants.LOGGED_IN_USER_ID, appUsers.get(0).id + "");
-				//session(Constants.LOGGED_IN_USER_ROLE, appUsers.get(0).role + "");
+				session(Constants.LOGGED_IN_USER_ROLE, appUsers.get(0).role+ "");
 				return redirect(routes.UserActions.dashboard());
-				//return ok("login successfull");
-			} else {
-				session().clear();
-				session(Constants.LOGGED_IN_USER_ID, appUsers.get(0).id + "");
-				//session(Constants.LOGGED_IN_USER_ROLE, appUsers.get(0).role + "");
-
-				Logger.info("more than one users exists with same email and passowrd");
-				//return redirect(routes.UserActions.dashboard());
-				return redirect(routes.UserActions.dashboard());
-				//return ok("login successfull");
 
 			}
-
+			if(appUsers.size() > 1) {
+				session().clear();
+				session(Constants.LOGGED_IN_USER_ID, appUsers.get(0).id + "");
+				session(Constants.LOGGED_IN_USER_ROLE, appUsers.get(0).role+ "");
+				Logger.info("more than one users exists with same email and passowrd");
+				return redirect(routes.UserActions.dashboard());
+			}
+			return null;
 		}
-
 	}
 
 	//@BasicAuth
 	public static Result processLogout() {
 		session().clear();
-		return ok(views.html.index.render("logout successful"));
+		return ok(views.html.index.render(loginForm));
 	}
 
-	public static List whichUserLogging(final List doctors,final List patients,final List pharmacists) {
-		List user=null;
-		if(doctors.size()>=1){
-			user= doctors;
-		}
-		else if (patients.size()>=1) {
-			user= patients;
-		}
-		else {
-			user= pharmacists;
-		}
-		return user;
-	}
-	//
 	/*//Change Password
 	@BasicAuth
 	public static Result changePasswordForm(){
@@ -119,26 +88,16 @@ public class LoginController extends Controller {
 
 	public static AppUser getLoggedInUser() {
 		final String idStr = session(Constants.LOGGED_IN_USER_ID);
-		//final String idRole = session(Constants.LOGGED_IN_USER_ID);
-
 		final Long id = Long.parseLong(idStr);
-		final AppUser appUser=AppUser.find.byId(id);
-		Logger.error(appUser.toString());
-		return appUser;
+		return AppUser.find.byId(id);
 	}
-	public static Role getLoggedInUserRole() {
-		final String role = session(Constants.LOGGED_IN_USER_ROLE);
-		return Role.valueOf(role);
 
-	}
 	public static Boolean isLoggedIn() {
 		return session(Constants.LOGGED_IN_USER_ID) == null ? false : true;
 	}
 
-	/*@BasicAuth
-	public static Result changePassword() {
-
-		return TODO;
-	}*/
+	public static String getLoggedInUserRole() {
+		return session(Constants.LOGGED_IN_USER_ROLE);
+	}
 
 }

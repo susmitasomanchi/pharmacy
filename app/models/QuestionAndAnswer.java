@@ -44,7 +44,7 @@ public class QuestionAndAnswer extends BaseEntity{
 	public AppUser questionBy;
 
 	@OneToOne
-	public Doctor answerBy;
+	public AppUser answerBy;
 
 	public static Finder<Long,QuestionAndAnswer> find = new Finder<Long, QuestionAndAnswer>(Long.class, QuestionAndAnswer.class);
 

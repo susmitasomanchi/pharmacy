@@ -6,6 +6,7 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.LinkedHashMap;
 import java.util.List;
+import java.util.Map;
 
 import models.AppUser;
 import models.Patient;
@@ -14,6 +15,7 @@ import play.Logger;
 import play.data.Form;
 import play.mvc.Controller;
 import play.mvc.Result;
+import utils.Constants;
 import actions.BasicAuth;
 import beans.QuestionAndAnswerBean;
 

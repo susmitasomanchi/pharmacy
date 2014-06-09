@@ -1,13 +1,11 @@
 package controllers;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
-import java.util.Date;
-
-import actions.BasicAuth;
 import models.AppUser;
 import models.Doctor;
 import models.Patient;
@@ -25,6 +23,21 @@ public class DoctorController extends Controller {
 	public static Form<PatientBean> patientForm = Form.form(PatientBean.class);
 	public static Form<QuestionAndAnswerBean> questionAndAnswerForm = Form
 			.form(QuestionAndAnswerBean.class);
+
+	public static Result requestAppointment(){
+		final String datetime = request().body().asFormUrlEncoded().get("datetime")[0];
+		final Long doctorId = Long.parseLong(request().body().asFormUrlEncoded().get("doctorId")[0]);
+		final Doctor doctor = Doctor.find.byId(doctorId);
+		final SimpleDateFormat sdf = new SimpleDateFormat("dd-MMM-yyyy~HH:mm");
+		try {
+			final Date date = sdf.parse(datetime);
+			Logger.info("Date extracted: "+date);
+			return ok("Date extracted: "+date+" Doctor: "+doctor.appUser.name);
+		} catch (final ParseException e) {
+			e.printStackTrace();
+		}
+		return ok();
+	}
 
 	public static Result form() {
 		return ok(views.html.createDoctor.render(form));
@@ -95,11 +108,18 @@ public class DoctorController extends Controller {
 		return ok("patient register successFully");
 	}
 
+
+
 	public static Result displayAnswer(){
 		final AppUser user = LoginController.getLoggedInUser();
-		final List<QuestionAndAnswer> qaList = QuestionAndAnswer.find.where()
-				.eq("answerBy.id", user.id).findList();
+		Doctor doctor=user.getDoctor();
+		List<QuestionAndAnswer> qaList=new ArrayList<QuestionAndAnswer>();
+		if(doctor!=null){
+			qaList = QuestionAndAnswer.find.where()
+					.eq("answerBy.id", doctor.id).findList();
+		}
 		return ok(views.html.ansQuestion.render(qaList));
+
 	}
 	//Question Answered By Doctor
 	public static Result answerQuestion(final Long qaId) {

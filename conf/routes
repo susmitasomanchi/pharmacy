@@ -46,10 +46,10 @@ GET    /sampledata/temp                 controllers.SampleDataController.temp()
 #POST   /userform/patientproccess/       controllers.PatientController.process()
 
 GET    /home/                           controllers.Application.homePage()
-GET    /questionform/					controllers.PatientController.displayQuestion()
-POST    /askQuestion/					controllers.PatientController.askQuestion()
+GET    /questionform					controllers.PatientController.displayQuestion()
+POST    /askQuestion					controllers.PatientController.askQuestion()
 
-GET    /answerform/						controllers.DoctorController.displayAnswer()
+GET    /answerform						controllers.DoctorController.displayAnswer()
 POST    /ansQuestion/:qaId				controllers.DoctorController.answerQuestion(qaId: Long)
 
 

@@ -11,7 +11,6 @@ import java.io.Serializable;
 import java.util.Date;
 
 import models.AppUser;
-import models.Doctor;
 import models.QuestionAndAnswer;
 
 @SuppressWarnings("serial")
@@ -58,7 +57,7 @@ public class QuestionAndAnswerBean implements Serializable {
 		}
 
 		if(this.answerBy != null) {
-			qa.answerBy= Doctor.find.byId(this.answerBy);
+			qa.answerBy= AppUser.find.byId(this.answerBy);
 		}
 
 		return qa;
