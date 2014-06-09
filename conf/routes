@@ -59,7 +59,11 @@ GET    /dashboard						controllers.UserActions.dashboard()
 GET    /register-patient/               controllers.DoctorController.registerPatient()
 POST   /register-patient-proccess/      controllers.DoctorController.registerPatientProccess()
 
-
+#Diagnostic module
+GET    /diagnosticregistration                     controllers.DiagnosticController.diagnosticCenter()
+POST    /diagnosticregistration/save                      controllers.DiagnosticController.diagnosticCenterProcess()
+GET    /diagnosticlist                     controllers.DiagnosticController.Diagnosticlist()
+GET    /diagnostic-delete/:id       controllers.DiagnosticController.deleteCenter(id: Long)
 
 
 # delete later
@@ -67,6 +71,7 @@ GET    /userform/patient/               controllers.PatientController.form()
 GET    /userform/patient/h/             controllers.PatientController.enterForm()
 GET    /register/                       controllers.PatientController.register()
 POST   /register/                       controllers.PatientController.registerProccess()
+
 
 
 
