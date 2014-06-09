@@ -79,6 +79,7 @@ public class UserController extends Controller {
 
 			session().clear();
 			session(Constants.LOGGED_IN_USER_ID, appUser.id + "");
+			session(Constants.LOGGED_IN_USER_ROLE, appUser.role+ "");
 
 			return redirect(routes.UserActions.dashboard());
 		}
