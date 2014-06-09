@@ -30,9 +30,32 @@
 
 			@select(joinUsForm("role"), options("PATIENT"->"Patient", "DOCTOR"->"Doctor", "PHARMACIST"->"Pharmacist", "MR"->"Medical Representative", "DIAGREP"->"Diagnostic Representative"), '_label->"Join As")
 			
-			<br>
-			<input type="submit" class="btn btn-primary" id="submitbtn" value="Join" >
-				
+			 @*@helper.inputText(joinUsForm("pharmacyName"),'class -> "inputs",'_label->"Pharmacy Name")*@
+
+<div class="col-xs-4">
+<div class="form-group">
+    <label id="l1" for="pharmacyName" style="display:none">Pharmacy Name</label>
+    <textarea id="pharmacyName" class="form-control" style="display:none"></textarea>
+</div>
+
+<script>
+$('#role').change(function() {
+    if ($('#role').val() == 'PHARMACIST') {
+        $('textarea').show();
+        $('label').show();
+        
+        
+    } else {
+    	 $('textarea').hide();   
+    	 $('label').hide();   
+        
+    }
+
+});
+	</script>	
+	<br>
+			<input type="hidden" name="id" value='@joinUsForm("id").value' >
+			<input type="submit" class="submit" value="Join">
 }
 			
 </div>
