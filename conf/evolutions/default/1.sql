@@ -14,8 +14,8 @@ create table app_user (
   dob                       timestamp,
   role                      varchar(16),
   last_update               timestamp not null,
-  constraint ck_app_user_sex check (sex in ('FEMALE','OTHER','MALE')),
-  constraint ck_app_user_role check (role in ('PATIENT','DOCTOR','ADMIN','PHARMACIST','ADMIN_PHARMACIST','MR','DIAGREP')),
+  constraint ck_app_user_sex check (sex in ('OTHER','MALE','FEMALE')),
+  constraint ck_app_user_role check (role in ('PHARMACIST','MR','PATIENT','ADMIN','DIAGREP','DOCTOR','ADMIN_PHARMACIST')),
   constraint pk_app_user primary key (id))
 ;
 
@@ -29,6 +29,19 @@ create table appointment (
   last_update               timestamp not null,
   constraint ck_appointment_appointment_status check (appointment_status in (0,1,2,3)),
   constraint pk_appointment primary key (id))
+;
+
+create table diagnostic_center (
+  id                        bigint not null,
+  diagno_center_name        varchar(255),
+  services                  varchar(255),
+  contact_person_name       varchar(255),
+  address                   varchar(255),
+  city                      varchar(255),
+  mobile_no                 varchar(255),
+  email_id                  varchar(255),
+  website_name              varchar(255),
+  constraint pk_diagnostic_center primary key (id))
 ;
 
 create table diagnostic_representative (
@@ -106,6 +119,8 @@ create sequence app_user_seq;
 
 create sequence appointment_seq;
 
+create sequence diagnostic_center_seq;
+
 create sequence diagnostic_representative_seq;
 
 create sequence doctor_seq;
@@ -143,6 +158,8 @@ drop table if exists app_user cascade;
 
 drop table if exists appointment cascade;
 
+drop table if exists diagnostic_center cascade;
+
 drop table if exists diagnostic_representative cascade;
 
 drop table if exists doctor cascade;
@@ -160,6 +177,8 @@ drop table if exists pharmacy cascade;
 drop sequence if exists app_user_seq;
 
 drop sequence if exists appointment_seq;
+
+drop sequence if exists diagnostic_center_seq;
 
 drop sequence if exists diagnostic_representative_seq;
 
