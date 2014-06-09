@@ -10,12 +10,12 @@ create table app_user (
   username                  varchar(255),
   email                     varchar(255),
   password                  varchar(255),
-  sex                       integer,
-  age                       varchar(255),
-  role                      integer,
+  sex                       varchar(6),
+  dob                       timestamp,
+  role                      varchar(16),
   last_update               timestamp not null,
-  constraint ck_app_user_sex check (sex in (0,1,2)),
-  constraint ck_app_user_role check (role in (0,1,2,3,4,5)),
+  constraint ck_app_user_sex check (sex in ('FEMALE','OTHER','MALE')),
+  constraint ck_app_user_role check (role in ('PATIENT','DOCTOR','ADMIN','PHARMACIST','ADMIN_PHARMACIST','MR','DIAGREP')),
   constraint pk_app_user primary key (id))
 ;
 
@@ -103,21 +103,9 @@ create table pharmacy (
   name                      varchar(255),
   address                   varchar(255),
   contact_no                varchar(255),
-  admin_name                varchar(255),
+  admmin_pharmacist_id      bigint,
   last_update               timestamp not null,
   constraint pk_pharmacy primary key (id))
-;
-
-create table register_app_user (
-  id                        bigint not null,
-  name                      varchar(255),
-  username                  varchar(255),
-  password                  varchar(255),
-  email                     varchar(255),
-  gender                    varchar(255),
-  age                       integer,
-  last_update               timestamp not null,
-  constraint pk_register_app_user primary key (id))
 ;
 
 create sequence app_user_seq;
@@ -138,8 +126,6 @@ create sequence pharmacist_seq;
 
 create sequence pharmacy_seq;
 
-create sequence register_app_user_seq;
-
 alter table appointment add constraint fk_appointment_requestedBy_1 foreign key (requested_by_id) references app_user (id);
 create index ix_appointment_requestedBy_1 on appointment (requested_by_id);
 alter table appointment add constraint fk_appointment_apporovedBy_2 foreign key (apporoved_by_id) references app_user (id);
@@ -156,6 +142,8 @@ alter table patient add constraint fk_patient_appUser_7 foreign key (app_user_id
 create index ix_patient_appUser_7 on patient (app_user_id);
 alter table pharmacist add constraint fk_pharmacist_appUser_8 foreign key (app_user_id) references app_user (id);
 create index ix_pharmacist_appUser_8 on pharmacist (app_user_id);
+alter table pharmacy add constraint fk_pharmacy_admminPharmacist_9 foreign key (admmin_pharmacist_id) references pharmacist (id);
+create index ix_pharmacy_admminPharmacist_9 on pharmacy (admmin_pharmacist_id);
 
 
 
@@ -179,8 +167,6 @@ drop table if exists pharmacist cascade;
 
 drop table if exists pharmacy cascade;
 
-drop table if exists register_app_user cascade;
-
 drop sequence if exists app_user_seq;
 
 drop sequence if exists appointment_seq;
@@ -198,6 +184,4 @@ drop sequence if exists patient_seq;
 drop sequence if exists pharmacist_seq;
 
 drop sequence if exists pharmacy_seq;
-
-drop sequence if exists register_app_user_seq;
 

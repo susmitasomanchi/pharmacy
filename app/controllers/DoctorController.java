@@ -1,5 +1,6 @@
 package controllers;
 
+import actions.BasicAuth;
 import models.AppUser;
 import models.Doctor;
 import models.Patient;
@@ -9,6 +10,7 @@ import play.mvc.Controller;
 import play.mvc.Result;
 import beans.PatientBean;
 
+@BasicAuth
 public class DoctorController extends Controller {
 
 	public static Form<Doctor> form = Form.form(Doctor.class);

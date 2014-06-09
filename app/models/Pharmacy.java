@@ -12,6 +12,7 @@ import javax.persistence.OneToOne;
 
 import play.data.validation.Constraints.Required;
 import play.db.ebean.Model;
+import play.db.ebean.Model.Finder;
 
 @Entity
 public class Pharmacy extends BaseEntity {
@@ -31,4 +32,7 @@ public class Pharmacy extends BaseEntity {
 
 	@ManyToOne
 	List<Pharmacist> pharmacistlist = new ArrayList<Pharmacist>();
+
+	public static Finder<Long, Pharmacy> find = new Finder<Long, Pharmacy>(Long.class, Pharmacy.class);
+
 }

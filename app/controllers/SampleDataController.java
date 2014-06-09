@@ -33,7 +33,8 @@ public class SampleDataController extends Controller {
 		user.password = "123456";
 		user.save();
 
-		return ok("user created");
+		//return ok("user created");
+		return redirect(routes.Application.index());
 
 	}
 
