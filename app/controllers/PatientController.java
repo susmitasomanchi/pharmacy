@@ -106,7 +106,7 @@ public class PatientController extends Controller {
 			final QuestionAndAnswerBean questionAndAnswerBean = questionAndAnswerForm
 					.bindFromRequest().get();
 			final QuestionAndAnswer questionAndAnswer=questionAndAnswerBean.toEntity();
-			questionAndAnswer.questionBy = AppUser.find.byId(1L);
+			questionAndAnswer.questionBy = AppUser.find.byId(LoginController.getLoggedInUser().id);
 
 			questionAndAnswer.questionDate = new Date();
 
