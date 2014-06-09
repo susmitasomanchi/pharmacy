@@ -44,6 +44,7 @@ create table doctor (
   id                        bigint not null,
   app_user_id               bigint,
   specialization            varchar(255),
+  position                  varchar(255),
   degree                    varchar(255),
   doctor_type               varchar(255),
   experience                varchar(255),

@@ -1,77 +1,77 @@
 @(created: String)
 
-@main("Mednetwork") {
-	
-	<div class="row">
-	
-<div class="search-box-container" id="search-box-container" style="padding-left:600px">
-<span id="search-autocomplete-container" title="Tip: You can also search by keyword, clinic, pharmacy..." class="/typeahead">
-<label for="main-search-box" class="ghost" style="display: none;">Search for patient, pharmacy, doctors, and more...</label>
+@import play.i18n._
+@import helper.twitterBootstrap._
+@import helper._
 
-<input name="keywords" id="main-search-box" class="search-term typeahead-instant yui-ac-input" type="text" value="" autocomplete="off" placeholder="Search for people, jobs, companies, and more...">
-<span id="typeahead-loader"></span>
+@main("Doctor's Profile"){
 
-
-
-</div>
-<div class="col-md-3" style="padding-left:30px">
+<style>
+.row {
+ margin-left: 0px; 
+ margin-right: 0px;
+}
+</style>
+<div class="container" style="padding-left:100px;padding-right:100px">
+<div class="well row	">
+<div class="col-md-2">
 <br>
-
-<img class="thumbnail" src="/assets/images/img4.png" style="float:left"/>
-
-
-
-
-
-
-
-
-<br><br><br><br><br><br><br>
-<div>
-<div class="row">
-<div class="col-md-9">
-<h3>Basic Information</h3>
+<img src="/assets/images/doctorM.jpg" class="thumbnail"/>
 </div>
-<div class="col-md-3">
+<div class="col-md-10" style="padding-left:30px">
+<h3><b> Dr. Doctor Name </b></h3>
+<h4> MBBS, MD </h4>
+<hr>
+<h5><i> Specialization: </i></h5>
+<h5><i> Position: </i></h5>
+<h5><i> Years of Experience: </i></h5><br>
+<div class="bs-component" style="margin-bottom: 15px;float:right">
+              <div class="btn-group btn-group-justified">
+                <a href="#" class="btn btn-primary">Fix Appointment</a>
+                <a href="#" class="btn btn-primary">Query</a>
+              </div>
+            </div>
+</div>
+</div>
 <br>
-<a style="float:right" href="details/personalform">edit</a>
-</div>
-</div>
-<div>
-<ul style="list-style:none;padding-left:0px">
-
-</ul>
-</div>
-</div>
-
-</div>
-
-<div class="col-md-4">
-<h2>Doctor Name</h2>
-
-<br>
-<div class="panel panel-default">
+<div class="panel panel-primary">
 <div class="panel-heading">
-
-<div><ul class="uiList _1dsl _509- _4ki _6-h _6-j _6-i"><li class="_4j _519b" data-ft="{&quot;tn&quot;:&quot;*t&quot;}"><a data-onclick="[[&quot;ComposerXAttachmentBootstrap&quot;,&quot;bootstrap&quot;]]" class="_9lb" aria-pressed="true" href="#" role="button" data-endpoint="/ajax/composerx/attachment/status/"><span class="uiIconText _51z7"><i class="img sp_Aw392G9WkqT sx_a6a51c"></i>Update Status<i class="_2wr"></i></span></a></li><li class="_92" data-ft="{&quot;tn&quot;:&quot;*u&quot;}"><a data-onclick="[[&quot;ComposerXAttachmentBootstrap&quot;,&quot;bootstrap&quot;]]" class="_9lb" aria-pressed="false" href="#" role="button" data-endpoint="/ajax/composerx/attachment/media/chooser/"><span class="uiIconText _51z7"><i class="img sp_Aw392G9WkqT sx_49126e"></i>Add Photos/Video<i class="_2wr"></i></span></a></li></ul></div>
+<h3 class="panel-title"> About </h3>
 </div>
 <div class="panel-body">
-<form>
-<div class="innerWrap"><textarea class="uiTextareaAutogrow input autofocus mentionsTextarea textInput DOMControl_placeholder" title="What's on your mind?" name="xhpc_message_text" placeholder="What's on your mind?" role="textbox" aria-autocomplete="list" autocomplete="off" aria-expanded="false" aria-owns="typeahead_list_u_0_1u" aria-haspopup="true" onkeydown="run_with(this, [&quot;legacy:control-textarea&quot;], function() {TextAreaControl.getInstance(this)});" id="u_0_1v" aria-label="What's on your mind?">What's on your mind?</textarea></div>
-</form><br>
-<button class="btn btn-primary btn-sm" style="float:right">Post</button>
+<!-- Nav tabs -->
+<ul class="nav nav-tabs">
+  <li  class="active"><a href="#details" data-toggle="tab">Background</a></li>
+  <li><a href="#contact" data-toggle="tab">Contact Info</a></li>
+</ul>
+
+<div class="tab-content">
+<div class="tab-pane active" id="details">
+<br><br>
+<h4><b>Summary</b></h4>
+<hr>
+<h4><b>Experience</b></h4>
+<hr>
+<h4><b>Awards/Recognitions</b></h4>
+<hr>
+<h4><b>Publications/Articles</b></h4>
+<hr>
+<h4><b>Education</b></h4>
+<hr>
+<h4><b>Languages</b></h4>
+<hr>
+<h4><b>Social Interests</b></h4>
+<hr>
+</div> 
+  
+<div class="tab-pane" id="contact">
+
 </div>
-</div>
-</div>
+  
 
-<div style="width:200px;height:150px;line-height:3em;overflow:auto;padding:5px; style="float:right">
-This 'div' element contains more content than the previous one. Because there's too much text to fit into the box, the box grows scrollbars. 
 </div>
 
-
-
-<div class="col-md-2">
-
+</div>
 </div>
 </div>
 

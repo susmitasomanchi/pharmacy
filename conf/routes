@@ -15,11 +15,10 @@ POST   /userform/farmaciest-proccesss   controllers.PharmacistController.process
 GET    /userform/doctor/                controllers.DoctorController.form() 
 POST   /userform/doctor/                controllers.DoctorController.process() 
 
-POST   /userform/doctor/:id                controllers.DoctorController.editProfile(id: Long)
 
 
 
-GET    /Dashboard/             			controllers.DoctorController.enter() 
+GET    /doctorprofile/             		controllers.DoctorController.enter() 
 GET		/userform/assistant/			controllers.AssistantController.form()
 POST	/userform/assistant/			controllers.AssistantController.process()
 GET		/scheduleappointment/			controllers.AppointmentController.form()

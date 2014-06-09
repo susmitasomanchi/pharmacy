@@ -53,7 +53,7 @@ public class DoctorController extends Controller {
 
 	}
 	
-	 public static Result editProfile(Long id){
+	/* public static Result editProfile(Long id){
 		 
 	   	   Form<Doctor> taskForm = Form.form(Doctor.class).bindFromRequest();
 	   
@@ -72,7 +72,7 @@ public class DoctorController extends Controller {
 	     
 	      }
 	          
-	        }
+	        }*/
 
 
 

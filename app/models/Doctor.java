@@ -24,6 +24,10 @@ public class Doctor extends BaseEntity{
 
 	@Required
 	public String specialization;
+	
+	@Required
+	public String position;
+
 
 	@Required
 	public String degree;
@@ -47,10 +51,8 @@ public class Doctor extends BaseEntity{
 	public String categoryOfDoctor;						// homeopathic or ayurvedic or etc.
 	
 	
-	 public static List<Doctor> all() {
-		    return find.all();
-		  }
+	
 
 	public static Model.Finder<Long,Doctor> find = new Finder<Long, Doctor>(Long.class, Doctor.class);
-
+	
 }
