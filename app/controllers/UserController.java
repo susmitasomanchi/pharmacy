@@ -13,6 +13,7 @@ import models.Doctor;
 import models.MedicalRepresentative;
 import models.Patient;
 import models.Pharmacist;
+import models.Pharmacy;
 import models.Role;
 import play.Logger;
 import play.data.Form;
@@ -57,6 +58,11 @@ public class UserController extends Controller {
 				final Pharmacist pharmacist = new Pharmacist();
 				pharmacist.appUser = appUser;
 				pharmacist.save();
+
+				//final Pharmacy pharmacy = filledForm.get();
+				final Pharmacy pharmacy=new Pharmacy();
+				pharmacy.name=filledForm.get().pharmacyName;
+				pharmacy.save();
 			}
 
 			if(appUser.role == Role.MR){

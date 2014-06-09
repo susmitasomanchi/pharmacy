@@ -40,6 +40,7 @@ public class PharmacistController extends Controller{
 			else {
 				pharmacist.update();
 			}
+
 		}
 		return ok("User Created");
 		//return redirect(routes.UserController.list());
