@@ -39,12 +39,14 @@ public class LoginController extends Controller {
 			if(appUsers.size() == 1) {
 				session().clear();
 				session(Constants.LOGGED_IN_USER_ID, appUsers.get(0).id + "");
+				session(Constants.LOGGED_IN_USER_ROLE, appUsers.get(0).role+ "");
 				return redirect(routes.UserActions.dashboard());
 
 			}
 			if(appUsers.size() > 1) {
 				session().clear();
 				session(Constants.LOGGED_IN_USER_ID, appUsers.get(0).id + "");
+				session(Constants.LOGGED_IN_USER_ROLE, appUsers.get(0).role+ "");
 				Logger.info("more than one users exists with same email and passowrd");
 				return redirect(routes.UserActions.dashboard());
 			}
@@ -94,10 +96,8 @@ public class LoginController extends Controller {
 		return session(Constants.LOGGED_IN_USER_ID) == null ? false : true;
 	}
 
-	/*@BasicAuth
-	public static Result changePassword() {
-
-		return TODO;
-	}*/
+	public static String getLoggedInUserRole() {
+		return session(Constants.LOGGED_IN_USER_ROLE);
+	}
 
 }

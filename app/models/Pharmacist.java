@@ -5,6 +5,9 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.OneToOne;
+import play.data.validation.Constraints.Required;
+import play.db.ebean.Model;
+import play.db.ebean.Model.Finder;
 
 @Entity
 public class Pharmacist extends BaseEntity{

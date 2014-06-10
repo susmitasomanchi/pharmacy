@@ -18,17 +18,40 @@
       <ul class="nav navbar-nav">
     
 		
+		@if(LoginController.getLoggedInUserRole().equals(Role.PATIENT.toString())){
+		<li class="dropdown">
+          <a href="#" class="dropdown-toggle" data-toggle="dropdown">
+          Doctors
+          <b class="caret"></b></a>
+          <ul class="dropdown-menu">
+            <li><a href="">Search Doctors</a></li>
+            <li><a href="">My Doctors</a></li>
+            <li class="divider"></li>
+            <li><a href="@routes.PatientController.scheduleAppointment()">Schedule an Appointment</a></li>
+          </ul>
+        </li>
+        
+        <li class="dropdown">
+          <a href="#" class="dropdown-toggle" data-toggle="dropdown">
+          Prescriptions
+          <b class="caret"></b></a>
+          <ul class="dropdown-menu">
+            <li><a href="">Prescriptions</a></li>
+            <li><a href="">Diagnostic Reports</a></li>
+          </ul>
+        </li>
+		}
+		
 
+		
+		@if(LoginController.getLoggedInUserRole().equals(Role.DOCTOR.toString())){
         <li class="dropdown">
           <a href="#" class="dropdown-toggle" data-toggle="dropdown">
           Appointments
           <b class="caret"></b></a>
           <ul class="dropdown-menu">
-            <li><a href="/ku/form">Today</a></li>
-            <li><a href="/ku/manage">All</a></li>
-            <!--
-            <li><a href="/ku/list">Knowledge Unit List</a></li>
-            -->
+            <li><a href="">Today</a></li>
+            <li><a href="">All</a></li>
           </ul>
         </li>
     
@@ -37,7 +60,7 @@
           Prescriptions
           <b class="caret"></b></a>
           <ul class="dropdown-menu">
-    	        <li><a href="/user/list">List</a></li>
+    	        <li><a href="">List</a></li>
           </ul>
         </li>
 	
@@ -46,24 +69,23 @@
           Assistants
           <b class="caret"></b></a>
           <ul class="dropdown-menu">
-	            <li><a href="/user/form">Create Assistant</a></li>
-    	        <li><a href="/user/list">Assistant List</a></li>
+	            <li><a href="">Create Assistant</a></li>
+    	        <li><a href="">Assistant List</a></li>
         	    <li class="divider"></li>
-            	<li><a href="/user/credit-score">My Credit Score</a></li>
+            	<li><a href="">My Credit Score</a></li>
           </ul>
         </li>
+        }
     	
         <li class="dropdown">
           <a href="#" class="dropdown-toggle" data-toggle="dropdown">
 			Report
           <b class="caret"></b></a>
           <ul class="dropdown-menu">
-            <li><a href="/report/selectku/">KU Reports</a></li>
-		    <li><a href="/report/selectloc/">Location Reports</a></li>     
-            <li><a href="/report/selectdept/">Department Reports</a></li>
-            <li><a href="/report/selectarea/">Area Reports</a></li>
-             <li><a href="/report/selectlever/">Lever Reports</a></li>
-            <li><a href="/report/selectuser/">User Reports</a></li>
+          	<li><a href="">Expenditure Reports</a></li>
+            <li><a href="">Prescription Reports</a></li>
+		    <li><a href="">Doctor Reports</a></li>     
+            <li><a href="">Pharmacy Reports</a></li>
           </ul>
         </li>
 
