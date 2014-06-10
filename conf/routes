@@ -3,17 +3,17 @@
 # ~~~~
 
 # Home page
-GET    /                                controllers.Application.index()                      
-POST   /login                           controllers.LoginController.processLogin()
-GET    /logout                          controllers.LoginController.processLogout()
+GET		/								controllers.Application.index()
+POST	/login							controllers.LoginController.processLogin()
+GET		/logout							controllers.LoginController.processLogout()
 
 # Sign up page
-GET    /join                            controllers.UserController.joinUs()
-POST   /join                            controllers.UserController.processJoinUs()
+GET		/join							controllers.UserController.joinUs()
+POST	/join							controllers.UserController.processJoinUs()
 
 # patient actions
-GET    /user/schedule-appointment       controllers.PatientController.scheduleAppointment()
-POST   /doctor/request-appointment      controllers.DoctorController.requestAppointment()
+GET		/user/schedule-appointment		controllers.PatientController.scheduleAppointment()
+POST	/doctor/request-appointment		controllers.DoctorController.requestAppointment()
 
 
 
@@ -23,17 +23,19 @@ POST   /doctor/request-appointment      controllers.DoctorController.requestAppo
 
 
 
-GET    /userform/farmaciest/            controllers.PharmacistController.form() 
-POST   /userform/farmaciest-proccesss   controllers.PharmacistController.process() 
-GET    /userform/doctor/                controllers.DoctorController.form() 
-POST   /userform/doctor/                controllers.DoctorController.process() 
-GET    /userform/assistant/             controllers.AssistantController.form()
-POST   /userform/assistant/             controllers.AssistantController.process()
-GET    /scheduleappointment/            controllers.AppointmentController.form()
-POST   /scheduleappointment/            controllers.AppointmentController.process()
-GET    /userform/pharmacy/              controllers.PharmacyController.form() 
-POST   /userform/pharmacy/              controllers.PharmacyController.process() 
-
+GET    /userform/farmaciest/            controllers.PharmacistController.form()
+POST   /userform/farmaciest-proccesss   controllers.PharmacistController.process()
+GET    /userform/doctor/                controllers.DoctorController.form()
+POST   /userform/doctor/                controllers.DoctorController.process()
+GET		/userform/assistant/			controllers.AssistantController.form()
+POST	/userform/assistant/			controllers.AssistantController.process()
+GET		/scheduleappointment/			controllers.AppointmentController.form()
+POST	/scheduleappointment/			controllers.AppointmentController.process()
+GET    /userform/pharmacy/                controllers.PharmacyController.form() 
+POST   /userform/pharmacy/                controllers.PharmacyController.process()
+GET		/newProduct						controllers.PharmacistController.productForm()
+POST	/newProduct						controllers.PharmacistController.saveProduct()					
+GET		/products						controllers.PharmacistController.displayProducts()
 
 GET    /salesRep/                       controllers.Application.salesRepresentator()
 POST   /salesRepProccess/               controllers.Application.salesRepresentatorProccess()
@@ -51,11 +53,9 @@ POST   /askQuestion                     controllers.PatientController.askQuestio
 
 GET    /answerform                      controllers.DoctorController.displayAnswer()
 POST   /ansQuestion/:qaId               controllers.DoctorController.answerQuestion(qaId: Long)
-
-
 # doctor action
 GET    /doc-stuff/                      controllers.DoctorController.docStuff()
-GET    /dashboard                       controllers.UserActions.dashboard()
+GET    /dashboard						controllers.UserActions.dashboard()
 GET    /register-patient/               controllers.DoctorController.registerPatient()
 POST   /register-patient-proccess/      controllers.DoctorController.registerPatientProccess()
 GET    /doc-schedule                    controllers.DoctorController.doctorSchedule()
@@ -74,7 +74,6 @@ GET    /userform/patient/               controllers.PatientController.form()
 GET    /userform/patient/h/             controllers.PatientController.enterForm()
 GET    /register/                       controllers.PatientController.register()
 POST   /register/                       controllers.PatientController.registerProccess()
-
 
 
 

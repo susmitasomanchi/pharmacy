@@ -1,0 +1,11 @@
+@* products Template File *@
+@(products: List[Product])
+ 
+<h1>Products</h1>
+
+<ul> 
+@for(product <- products) {
+  <li>@product.medicineName</li>
+   
+} 
+</ul>
