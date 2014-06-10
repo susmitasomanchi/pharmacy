@@ -30,7 +30,7 @@
             <li><a href="@routes.PatientController.scheduleAppointment()">Schedule an Appointment</a></li>
           </ul>
         </li>
-        
+        <li><a href="">Today</a></li>
         <li class="dropdown">
           <a href="#" class="dropdown-toggle" data-toggle="dropdown">
           Prescriptions
@@ -41,8 +41,6 @@
           </ul>
         </li>
 		}
-		
-
 		
 		@if(LoginController.getLoggedInUserRole().equals(Role.DOCTOR.toString())){
         <li class="dropdown">
@@ -66,10 +64,12 @@
 	
         <li class="dropdown">
           <a href="#" class="dropdown-toggle" data-toggle="dropdown">
-          Assistant
+          Clinics
           <b class="caret"></b></a>
           <ul class="dropdown-menu">
-	            <li><a href="">My Assistant</a></li>
+	            <li><a href="">Search Clinics</a></li>
+	            <li><a href="@routes.DoctorController.myClinics()">My Clinics</a></li>
+	            <li><a href="@routes.DoctorController.newClinic()">Add a Clinic</a></li>
     	        <li><a href="@routes.DoctorController.newAssistant()">New Assistant</a></li>
           </ul>
         </li>
@@ -121,6 +121,7 @@
             <li><a href="">Pharmacy Reports</a></li>
           </ul>
         </li>
+        
 
    	  </ul>
    	  

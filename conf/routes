@@ -4,20 +4,23 @@
 
 # Home page
 GET    /                                controllers.Application.index()                      
-POST	/login							controllers.LoginController.processLogin()
-GET		/logout							controllers.LoginController.processLogout()
+POST   /login                           controllers.LoginController.processLogin()
+GET    /logout                          controllers.LoginController.processLogout()
 
 # Sign up page
-GET		/join							controllers.UserController.joinUs()
-POST	/join							controllers.UserController.processJoinUs()
+GET    /join                            controllers.UserController.joinUs()
+POST   /join                            controllers.UserController.processJoinUs()
 
 # patient actions
-GET		/user/schedule-appointment		controllers.PatientController.scheduleAppointment()
-POST	/doctor/request-appointment		controllers.DoctorController.requestAppointment()
+GET    /user/schedule-appointment       controllers.PatientController.scheduleAppointment()
+POST   /doctor/request-appointment      controllers.DoctorController.requestAppointment()
 
 
 # doctor actions
 GET		/doctor/new-assistant			controllers.DoctorController.newAssistant()
+GET		/doctor/new-clinic				controllers.DoctorController.newClinic()
+POST	/doctor/new-clinic				controllers.DoctorController.processNewClinic()
+GET		/doctor/clinics					controllers.DoctorController.myClinics()
 
 
 
@@ -27,12 +30,12 @@ GET    /userform/farmaciest/            controllers.PharmacistController.form()
 POST   /userform/farmaciest-proccesss   controllers.PharmacistController.process() 
 GET    /userform/doctor/                controllers.DoctorController.form() 
 POST   /userform/doctor/                controllers.DoctorController.process() 
-GET		/userform/assistant/			controllers.AssistantController.form()
-POST	/userform/assistant/			controllers.AssistantController.process()
-GET		/scheduleappointment/			controllers.AppointmentController.form()
-POST	/scheduleappointment/			controllers.AppointmentController.process()
-GET    /userform/pharmacy/                controllers.PharmacyController.form() 
-POST   /userform/pharmacy/                controllers.PharmacyController.process() 
+GET    /userform/assistant/             controllers.AssistantController.form()
+POST   /userform/assistant/             controllers.AssistantController.process()
+GET    /scheduleappointment/            controllers.AppointmentController.form()
+POST   /scheduleappointment/            controllers.AppointmentController.process()
+GET    /userform/pharmacy/              controllers.PharmacyController.form() 
+POST   /userform/pharmacy/              controllers.PharmacyController.process() 
 
 
 GET    /salesRep/                       controllers.Application.salesRepresentator()
@@ -46,24 +49,27 @@ GET    /sampledata/temp                 controllers.SampleDataController.temp()
 #POST   /userform/patientproccess/       controllers.PatientController.process()
 
 GET    /home/                           controllers.Application.homePage()
-GET    /questionform					controllers.PatientController.displayQuestion()
-POST    /askQuestion					controllers.PatientController.askQuestion()
+GET    /questionform                    controllers.PatientController.displayQuestion()
+POST   /askQuestion                     controllers.PatientController.askQuestion()
 
-GET    /answerform						controllers.DoctorController.displayAnswer()
-POST    /ansQuestion/:qaId				controllers.DoctorController.answerQuestion(qaId: Long)
+GET    /answerform                      controllers.DoctorController.displayAnswer()
+POST   /ansQuestion/:qaId               controllers.DoctorController.answerQuestion(qaId: Long)
 
 
 # doctor action
 GET    /doc-stuff/                      controllers.DoctorController.docStuff()
-GET    /dashboard						controllers.UserActions.dashboard()
+GET    /dashboard                       controllers.UserActions.dashboard()
 GET    /register-patient/               controllers.DoctorController.registerPatient()
 POST   /register-patient-proccess/      controllers.DoctorController.registerPatientProccess()
+GET    /doc-schedule                    controllers.DoctorController.doctorSchedule()
+POST   /doc-schedulr-proccess           controllers.DoctorController.scheduleProccess()
+
 
 #Diagnostic module
-GET    /diagnosticregistration                     controllers.DiagnosticController.diagnosticCenter()
-POST    /diagnosticregistration/save                      controllers.DiagnosticController.diagnosticCenterProcess()
-GET    /diagnosticlist                     controllers.DiagnosticController.Diagnosticlist()
-GET    /diagnostic-delete/:id       controllers.DiagnosticController.deleteCenter(id: Long)
+GET    /diagnosticregistration          controllers.DiagnosticController.diagnosticCenter()
+POST   /diagnosticregistration/save     controllers.DiagnosticController.diagnosticCenterProcess()
+GET    /diagnosticlist                  controllers.DiagnosticController.Diagnosticlist()
+GET    /diagnostic-delete/:id           controllers.DiagnosticController.deleteCenter(id: Long)
 
 
 # delete later

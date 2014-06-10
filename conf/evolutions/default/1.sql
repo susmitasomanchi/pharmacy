@@ -32,6 +32,21 @@ create table appointment (
   constraint pk_appointment primary key (id))
 ;
 
+create table clinic (
+  id                        bigint not null,
+  name                      varchar(255),
+  clinic_address            varchar(255),
+  constraint pk_clinic primary key (id))
+;
+
+create table clinic_info (
+  id                        bigint not null,
+  from_hrs                  integer,
+  to_hrs                    integer,
+  assistant_id              bigint,
+  constraint pk_clinic_info primary key (id))
+;
+
 create table diagnostic_center (
   id                        bigint not null,
   diagno_center_name        varchar(255),
@@ -58,15 +73,6 @@ create table doctor (
   app_user_id               bigint,
   specialization            varchar(255),
   degree                    varchar(255),
-  secretary_id              bigint,
-  doctor_type               varchar(255),
-  experience                varchar(255),
-  home_facility             varchar(255),
-  fees                      integer,
-  clinic_address            varchar(255),
-  hospital_address          varchar(255),
-  timings                   varchar(255),
-  category_of_doctor        varchar(255),
   last_update               timestamp not null,
   constraint pk_doctor primary key (id))
 ;
@@ -78,6 +84,24 @@ create table doctor_assistant (
   experience                varchar(255),
   last_update               timestamp not null,
   constraint pk_doctor_assistant primary key (id))
+;
+
+create table doctor_clinic_info (
+  id                        bigint not null,
+  clinic_id                 bigint,
+  doctor_id                 bigint,
+  from_hrs                  integer,
+  to_hrs                    integer,
+  assistant_id              bigint,
+  constraint pk_doctor_clinic_info primary key (id))
+;
+
+create table doctor_schedule (
+  id                        bigint not null,
+  clinic_id                 bigint,
+  appointment_time          timestamp,
+  last_update               timestamp not null,
+  constraint pk_doctor_schedule primary key (id))
 ;
 
 create table medical_representative (
@@ -138,6 +162,10 @@ create sequence app_user_seq;
 
 create sequence appointment_seq;
 
+create sequence clinic_seq;
+
+create sequence clinic_info_seq;
+
 create sequence diagnostic_center_seq;
 
 create sequence diagnostic_representative_seq;
@@ -145,6 +173,10 @@ create sequence diagnostic_representative_seq;
 create sequence doctor_seq;
 
 create sequence doctor_assistant_seq;
+
+create sequence doctor_clinic_info_seq;
+
+create sequence doctor_schedule_seq;
 
 create sequence medical_representative_seq;
 
@@ -160,26 +192,34 @@ alter table appointment add constraint fk_appointment_requestedBy_1 foreign key 
 create index ix_appointment_requestedBy_1 on appointment (requested_by_id);
 alter table appointment add constraint fk_appointment_apporovedBy_2 foreign key (apporoved_by_id) references app_user (id);
 create index ix_appointment_apporovedBy_2 on appointment (apporoved_by_id);
-alter table diagnostic_representative add constraint fk_diagnostic_representative_a_3 foreign key (app_user_id) references app_user (id);
-create index ix_diagnostic_representative_a_3 on diagnostic_representative (app_user_id);
-alter table doctor add constraint fk_doctor_appUser_4 foreign key (app_user_id) references app_user (id);
-create index ix_doctor_appUser_4 on doctor (app_user_id);
-alter table doctor add constraint fk_doctor_secretary_5 foreign key (secretary_id) references doctor_assistant (id);
-create index ix_doctor_secretary_5 on doctor (secretary_id);
+alter table clinic_info add constraint fk_clinic_info_assistant_3 foreign key (assistant_id) references doctor_assistant (id);
+create index ix_clinic_info_assistant_3 on clinic_info (assistant_id);
+alter table diagnostic_representative add constraint fk_diagnostic_representative_a_4 foreign key (app_user_id) references app_user (id);
+create index ix_diagnostic_representative_a_4 on diagnostic_representative (app_user_id);
+alter table doctor add constraint fk_doctor_appUser_5 foreign key (app_user_id) references app_user (id);
+create index ix_doctor_appUser_5 on doctor (app_user_id);
 alter table doctor_assistant add constraint fk_doctor_assistant_appUser_6 foreign key (app_user_id) references app_user (id);
 create index ix_doctor_assistant_appUser_6 on doctor_assistant (app_user_id);
-alter table medical_representative add constraint fk_medical_representative_appU_7 foreign key (app_user_id) references app_user (id);
-create index ix_medical_representative_appU_7 on medical_representative (app_user_id);
-alter table patient add constraint fk_patient_appUser_8 foreign key (app_user_id) references app_user (id);
-create index ix_patient_appUser_8 on patient (app_user_id);
-alter table pharmacist add constraint fk_pharmacist_appUser_9 foreign key (app_user_id) references app_user (id);
-create index ix_pharmacist_appUser_9 on pharmacist (app_user_id);
-alter table pharmacy add constraint fk_pharmacy_admminPharmacist_10 foreign key (admmin_pharmacist_id) references pharmacist (id);
-create index ix_pharmacy_admminPharmacist_10 on pharmacy (admmin_pharmacist_id);
-alter table question_and_answer add constraint fk_question_and_answer_questi_11 foreign key (question_by_id) references app_user (id);
-create index ix_question_and_answer_questi_11 on question_and_answer (question_by_id);
-alter table question_and_answer add constraint fk_question_and_answer_answer_12 foreign key (answer_by_id) references app_user (id);
-create index ix_question_and_answer_answer_12 on question_and_answer (answer_by_id);
+alter table doctor_clinic_info add constraint fk_doctor_clinic_info_clinic_7 foreign key (clinic_id) references clinic (id);
+create index ix_doctor_clinic_info_clinic_7 on doctor_clinic_info (clinic_id);
+alter table doctor_clinic_info add constraint fk_doctor_clinic_info_doctor_8 foreign key (doctor_id) references doctor (id);
+create index ix_doctor_clinic_info_doctor_8 on doctor_clinic_info (doctor_id);
+alter table doctor_clinic_info add constraint fk_doctor_clinic_info_assistan_9 foreign key (assistant_id) references doctor_assistant (id);
+create index ix_doctor_clinic_info_assistan_9 on doctor_clinic_info (assistant_id);
+alter table doctor_schedule add constraint fk_doctor_schedule_clinic_10 foreign key (clinic_id) references clinic (id);
+create index ix_doctor_schedule_clinic_10 on doctor_schedule (clinic_id);
+alter table medical_representative add constraint fk_medical_representative_app_11 foreign key (app_user_id) references app_user (id);
+create index ix_medical_representative_app_11 on medical_representative (app_user_id);
+alter table patient add constraint fk_patient_appUser_12 foreign key (app_user_id) references app_user (id);
+create index ix_patient_appUser_12 on patient (app_user_id);
+alter table pharmacist add constraint fk_pharmacist_appUser_13 foreign key (app_user_id) references app_user (id);
+create index ix_pharmacist_appUser_13 on pharmacist (app_user_id);
+alter table pharmacy add constraint fk_pharmacy_admminPharmacist_14 foreign key (admmin_pharmacist_id) references pharmacist (id);
+create index ix_pharmacy_admminPharmacist_14 on pharmacy (admmin_pharmacist_id);
+alter table question_and_answer add constraint fk_question_and_answer_questi_15 foreign key (question_by_id) references app_user (id);
+create index ix_question_and_answer_questi_15 on question_and_answer (question_by_id);
+alter table question_and_answer add constraint fk_question_and_answer_answer_16 foreign key (answer_by_id) references app_user (id);
+create index ix_question_and_answer_answer_16 on question_and_answer (answer_by_id);
 
 
 
@@ -189,6 +229,10 @@ drop table if exists app_user cascade;
 
 drop table if exists appointment cascade;
 
+drop table if exists clinic cascade;
+
+drop table if exists clinic_info cascade;
+
 drop table if exists diagnostic_center cascade;
 
 drop table if exists diagnostic_representative cascade;
@@ -196,6 +240,10 @@ drop table if exists diagnostic_representative cascade;
 drop table if exists doctor cascade;
 
 drop table if exists doctor_assistant cascade;
+
+drop table if exists doctor_clinic_info cascade;
+
+drop table if exists doctor_schedule cascade;
 
 drop table if exists medical_representative cascade;
 
@@ -211,6 +259,10 @@ drop sequence if exists app_user_seq;
 
 drop sequence if exists appointment_seq;
 
+drop sequence if exists clinic_seq;
+
+drop sequence if exists clinic_info_seq;
+
 drop sequence if exists diagnostic_center_seq;
 
 drop sequence if exists diagnostic_representative_seq;
@@ -218,6 +270,10 @@ drop sequence if exists diagnostic_representative_seq;
 drop sequence if exists doctor_seq;
 
 drop sequence if exists doctor_assistant_seq;
+
+drop sequence if exists doctor_clinic_info_seq;
+
+drop sequence if exists doctor_schedule_seq;
 
 drop sequence if exists medical_representative_seq;
 
