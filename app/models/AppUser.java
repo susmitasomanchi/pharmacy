@@ -7,6 +7,7 @@
 package models;
 
 import java.util.Date;
+import java.util.List;
 
 import javax.persistence.Entity;
 import javax.persistence.Id;
@@ -42,5 +43,15 @@ public class AppUser extends BaseEntity {
 
 	public static Model.Finder<Long, AppUser> find = new Finder<Long, AppUser>(
 			Long.class, AppUser.class);
+
+	public Patient getPatient(){
+		final List<Patient> patientList = Patient.find.where().eq("app_user_id", this.id).findList();
+		if(patientList.size() == 0){
+			return null;
+		}
+		else{
+			return patientList.get(0);
+		}
+	}
 
 }

@@ -10,6 +10,8 @@ public enum Role {
 	ADMIN,
 	@EnumValue("DOCTOR")
 	DOCTOR,
+	@EnumValue("DOCTOR_SECRETARY")
+	DOCTOR_SECRETARY,
 	@EnumValue("PATIENT")
 	PATIENT,
 	@EnumValue("ADMIN_PHARMACIST")

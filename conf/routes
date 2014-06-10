@@ -16,8 +16,8 @@ GET		/user/schedule-appointment		controllers.PatientController.scheduleAppointme
 POST	/doctor/request-appointment		controllers.DoctorController.requestAppointment()
 
 
-
-
+# doctor actions
+GET		/doctor/new-assistant			controllers.DoctorController.newAssistant()
 
 
 

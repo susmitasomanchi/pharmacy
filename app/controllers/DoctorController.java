@@ -6,6 +6,8 @@ import java.util.Date;
 
 import actions.BasicAuth;
 import models.AppUser;
+import models.Appointment;
+import models.AppointmentStatus;
 import models.Doctor;
 import models.Patient;
 import play.Logger;
@@ -27,6 +29,22 @@ public class DoctorController extends Controller {
 		try {
 			final Date date = sdf.parse(datetime);
 			Logger.info("Date extracted: "+date);
+
+
+			final Appointment appointment = new Appointment();
+			appointment.requestedBy = LoginController.getLoggedInUser();
+			appointment.appointmentTime = date;
+			appointment.appointmentStatus = AppointmentStatus.REQUESTED;
+			//appointment.remarks =
+			appointment.save();
+			doctor.appointmentList.add(appointment);
+			doctor.update();
+
+
+
+
+
+
 			return ok("Date extracted: "+date+" Doctor: "+doctor.appUser.name);
 		} catch (final ParseException e) {
 			e.printStackTrace();
@@ -38,7 +56,9 @@ public class DoctorController extends Controller {
 
 
 
-
+	public static Result newAssistant(){
+		return ok(views.html.doctor.newAssistant.render());
+	}
 
 
 

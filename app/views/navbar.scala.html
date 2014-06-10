@@ -66,7 +66,41 @@
 	
         <li class="dropdown">
           <a href="#" class="dropdown-toggle" data-toggle="dropdown">
-          Assistants
+          Assistant
+          <b class="caret"></b></a>
+          <ul class="dropdown-menu">
+	            <li><a href="">My Assistant</a></li>
+    	        <li><a href="@routes.DoctorController.newAssistant()">New Assistant</a></li>
+          </ul>
+        </li>
+        }
+        
+        
+        
+        @if(LoginController.getLoggedInUserRole().equals(Role.MR.toString())){
+        <li class="dropdown">
+          <a href="#" class="dropdown-toggle" data-toggle="dropdown">
+          Doctors
+          <b class="caret"></b></a>
+          <ul class="dropdown-menu">
+            <li><a href="">Doctor List</a></li>
+            <li><a href="">Add Doctor</a></li>
+            <li><a href="">Schedule Appointment</a></li>
+          </ul>
+        </li>
+    
+    	<li class="dropdown">
+          <a href="#" class="dropdown-toggle" data-toggle="dropdown">
+          Phamacies
+          <b class="caret"></b></a>
+          <ul class="dropdown-menu">
+    	        <li><a href="">List</a></li>
+          </ul>
+        </li>
+	
+        <li class="dropdown">
+          <a href="#" class="dropdown-toggle" data-toggle="dropdown">
+          DCR
           <b class="caret"></b></a>
           <ul class="dropdown-menu">
 	            <li><a href="">Create Assistant</a></li>
@@ -76,6 +110,7 @@
           </ul>
         </li>
         }
+        
     	
         <li class="dropdown">
           <a href="#" class="dropdown-toggle" data-toggle="dropdown">

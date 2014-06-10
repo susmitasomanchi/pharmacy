@@ -15,7 +15,7 @@ create table app_user (
   role                      varchar(16),
   last_update               timestamp not null,
   constraint ck_app_user_sex check (sex in ('FEMALE','OTHER','MALE')),
-  constraint ck_app_user_role check (role in ('PATIENT','DOCTOR','ADMIN','PHARMACIST','ADMIN_PHARMACIST','MR','DIAGREP')),
+  constraint ck_app_user_role check (role in ('PATIENT','DOCTOR','ADMIN','PHARMACIST','ADMIN_PHARMACIST','MR','DIAGREP','DOCTOR_SECRETARY')),
   constraint pk_app_user primary key (id))
 ;
 
@@ -44,6 +44,7 @@ create table doctor (
   app_user_id               bigint,
   specialization            varchar(255),
   degree                    varchar(255),
+  secretary_id              bigint,
   doctor_type               varchar(255),
   experience                varchar(255),
   home_facility             varchar(255),
@@ -58,9 +59,9 @@ create table doctor (
 
 create table doctor_assistant (
   id                        bigint not null,
+  app_user_id               bigint,
   degree                    varchar(255),
   experience                varchar(255),
-  app_user_id               bigint,
   last_update               timestamp not null,
   constraint pk_doctor_assistant primary key (id))
 ;
@@ -133,16 +134,18 @@ alter table diagnostic_representative add constraint fk_diagnostic_representativ
 create index ix_diagnostic_representative_a_3 on diagnostic_representative (app_user_id);
 alter table doctor add constraint fk_doctor_appUser_4 foreign key (app_user_id) references app_user (id);
 create index ix_doctor_appUser_4 on doctor (app_user_id);
-alter table doctor_assistant add constraint fk_doctor_assistant_appUser_5 foreign key (app_user_id) references app_user (id);
-create index ix_doctor_assistant_appUser_5 on doctor_assistant (app_user_id);
-alter table medical_representative add constraint fk_medical_representative_appU_6 foreign key (app_user_id) references app_user (id);
-create index ix_medical_representative_appU_6 on medical_representative (app_user_id);
-alter table patient add constraint fk_patient_appUser_7 foreign key (app_user_id) references app_user (id);
-create index ix_patient_appUser_7 on patient (app_user_id);
-alter table pharmacist add constraint fk_pharmacist_appUser_8 foreign key (app_user_id) references app_user (id);
-create index ix_pharmacist_appUser_8 on pharmacist (app_user_id);
-alter table pharmacy add constraint fk_pharmacy_admminPharmacist_9 foreign key (admmin_pharmacist_id) references pharmacist (id);
-create index ix_pharmacy_admminPharmacist_9 on pharmacy (admmin_pharmacist_id);
+alter table doctor add constraint fk_doctor_secretary_5 foreign key (secretary_id) references doctor_assistant (id);
+create index ix_doctor_secretary_5 on doctor (secretary_id);
+alter table doctor_assistant add constraint fk_doctor_assistant_appUser_6 foreign key (app_user_id) references app_user (id);
+create index ix_doctor_assistant_appUser_6 on doctor_assistant (app_user_id);
+alter table medical_representative add constraint fk_medical_representative_appU_7 foreign key (app_user_id) references app_user (id);
+create index ix_medical_representative_appU_7 on medical_representative (app_user_id);
+alter table patient add constraint fk_patient_appUser_8 foreign key (app_user_id) references app_user (id);
+create index ix_patient_appUser_8 on patient (app_user_id);
+alter table pharmacist add constraint fk_pharmacist_appUser_9 foreign key (app_user_id) references app_user (id);
+create index ix_pharmacist_appUser_9 on pharmacist (app_user_id);
+alter table pharmacy add constraint fk_pharmacy_admminPharmacist_10 foreign key (admmin_pharmacist_id) references pharmacist (id);
+create index ix_pharmacy_admminPharmacist_10 on pharmacy (admmin_pharmacist_id);
 
 
 

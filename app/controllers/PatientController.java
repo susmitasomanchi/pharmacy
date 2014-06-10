@@ -14,7 +14,6 @@ import play.Logger;
 import play.data.Form;
 import play.mvc.Controller;
 import play.mvc.Result;
-import utils.Constants;
 import actions.BasicAuth;
 
 @BasicAuth
@@ -23,11 +22,14 @@ public class PatientController extends Controller {
 
 	public static Result scheduleAppointment(){
 
-		final int startingHrs = 15;
-		final int endingHrs = 20;
+		final int startingHrs = 11;
+		final int endingHrs = 13;
+		final int slotInterval = 5;
+
+		final int caldays = 10;
 
 		final int availableHrs = endingHrs - startingHrs;
-		final int slots =  (availableHrs)*(60/Constants.DOCTOR_APPOINTMENT_INTERVAL);
+		final int slots =  (availableHrs)*(60/slotInterval);
 		final Calendar cal = Calendar.getInstance();
 		cal.set(Calendar.HOUR_OF_DAY, startingHrs);
 		cal.set(Calendar.MINUTE, 0);
@@ -42,12 +44,12 @@ public class PatientController extends Controller {
 		calDate.set(Calendar.SECOND, 0);
 		calDate.set(Calendar.MILLISECOND, 0);
 
-		for(int i=0; i<Constants.DOCTOR_APPOINTMENT_DEFAULT_DAYS; i++){
+		for(int i=0; i<caldays; i++){
 			final List<String> timeList = new ArrayList<String>();
 			final SimpleDateFormat sdf = new SimpleDateFormat("HH:mm");
 			for(int s=0; s<slots; s++){
 				timeList.add(sdf.format(cal.getTime()));
-				cal.add(Calendar.MINUTE, Constants.DOCTOR_APPOINTMENT_INTERVAL);
+				cal.add(Calendar.MINUTE, slotInterval);
 			}
 			cal.set(Calendar.HOUR_OF_DAY, startingHrs);
 			cal.set(Calendar.MINUTE, 0);

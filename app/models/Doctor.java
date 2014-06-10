@@ -31,6 +31,18 @@ public class Doctor extends BaseEntity{
 	@Required
 	public String degree;
 
+	@OneToOne
+	DoctorAssistant secretary;
+
+
+
+
+
+
+
+
+
+
 	//government or private
 	public String doctorType;
 
