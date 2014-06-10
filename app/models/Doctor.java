@@ -32,7 +32,7 @@ public class Doctor extends BaseEntity{
 	public String degree;
 
 	@OneToOne
-	DoctorAssistant secretary;
+	DoctorAssistant assistant;
 
 
 

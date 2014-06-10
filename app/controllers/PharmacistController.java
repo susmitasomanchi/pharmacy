@@ -32,7 +32,7 @@ public class PharmacistController extends Controller{
 
 			if(pharmacist.id == null) {
 				final AppUser appUser=new AppUser();
-				//pharmacist.appUser=appUser;
+				pharmacist.appUser=appUser;
 				appUser.save();
 				pharmacist.save();
 
@@ -43,7 +43,6 @@ public class PharmacistController extends Controller{
 
 		}
 		return ok("User Created");
-		//return TODO;
 		//return redirect(routes.UserController.list());
 	}
 }
