@@ -43,6 +43,37 @@
 		}
 		
 
+		@if(LoginController.getLoggedInUserRole().equals(Role.PHARMACIST.toString())){
+		<li class="dropdown">
+          <a href="#" class="dropdown-toggle" data-toggle="dropdown">
+          Orders
+          <b class="caret"></b></a>
+          <ul class="dropdown-menu">
+            <li><a href="">Products</a></li>
+            <li><a href="">Create new product</a></li>
+            <li class="divider"></li>
+            <li><a href="@routes.PatientController.scheduleAppointment()">Create an Inventory</a></li>
+          </ul>
+        </li>	
+		
+		
+		
+		
+		<li class="dropdown">
+          <a href="#" class="dropdown-toggle" data-toggle="dropdown">
+          Inventory
+          <b class="caret"></b></a>
+          <ul class="dropdown-menu">
+            <li><a href="/products">Products</a></li>
+            <li><a href="/newProduct">Create new product</a></li>
+            <li class="divider"></li>
+            <li><a href="@routes.PatientController.scheduleAppointment()">Create an Inventory</a></li>
+          </ul>
+        </li>
+        
+       
+		}
+		
 		
 		@if(LoginController.getLoggedInUserRole().equals(Role.DOCTOR.toString())){
         <li class="dropdown">

@@ -32,8 +32,10 @@ POST	/userform/assistant/			controllers.AssistantController.process()
 GET		/scheduleappointment/			controllers.AppointmentController.form()
 POST	/scheduleappointment/			controllers.AppointmentController.process()
 GET    /userform/pharmacy/                controllers.PharmacyController.form() 
-POST   /userform/pharmacy/                controllers.PharmacyController.process() 
-
+POST   /userform/pharmacy/                controllers.PharmacyController.process()
+GET		/newProduct						controllers.PharmacistController.productForm()
+POST	/newProduct						controllers.PharmacistController.saveProduct()					
+GET		/products						controllers.PharmacistController.displayProducts()
 
 GET    /salesRep/                       controllers.Application.salesRepresentator()
 POST   /salesRepProccess/               controllers.Application.salesRepresentatorProccess()

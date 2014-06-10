@@ -68,9 +68,8 @@ create table doctor_assistant (
 create table inventory (
   id                        bigint not null,
   product_id                bigint,
-  pharmacy_id               bigint,
-  batch_no                  bigint,
-  mrp                       bigint,
+  batch_no                  varchar(255),
+  mrp                       float,
   expiry_date               timestamp,
   quantity                  bigint,
   last_update               timestamp not null,
@@ -167,16 +166,14 @@ alter table doctor_assistant add constraint fk_doctor_assistant_appUser_5 foreig
 create index ix_doctor_assistant_appUser_5 on doctor_assistant (app_user_id);
 alter table inventory add constraint fk_inventory_product_6 foreign key (product_id) references product (id);
 create index ix_inventory_product_6 on inventory (product_id);
-alter table inventory add constraint fk_inventory_pharmacy_7 foreign key (pharmacy_id) references pharmacy (id);
-create index ix_inventory_pharmacy_7 on inventory (pharmacy_id);
-alter table medical_representative add constraint fk_medical_representative_appU_8 foreign key (app_user_id) references app_user (id);
-create index ix_medical_representative_appU_8 on medical_representative (app_user_id);
-alter table patient add constraint fk_patient_appUser_9 foreign key (app_user_id) references app_user (id);
-create index ix_patient_appUser_9 on patient (app_user_id);
-alter table pharmacist add constraint fk_pharmacist_appUser_10 foreign key (app_user_id) references app_user (id);
-create index ix_pharmacist_appUser_10 on pharmacist (app_user_id);
-alter table pharmacy add constraint fk_pharmacy_admminPharmacist_11 foreign key (admmin_pharmacist_id) references pharmacist (id);
-create index ix_pharmacy_admminPharmacist_11 on pharmacy (admmin_pharmacist_id);
+alter table medical_representative add constraint fk_medical_representative_appU_7 foreign key (app_user_id) references app_user (id);
+create index ix_medical_representative_appU_7 on medical_representative (app_user_id);
+alter table patient add constraint fk_patient_appUser_8 foreign key (app_user_id) references app_user (id);
+create index ix_patient_appUser_8 on patient (app_user_id);
+alter table pharmacist add constraint fk_pharmacist_appUser_9 foreign key (app_user_id) references app_user (id);
+create index ix_pharmacist_appUser_9 on pharmacist (app_user_id);
+alter table pharmacy add constraint fk_pharmacy_admminPharmacist_10 foreign key (admmin_pharmacist_id) references pharmacist (id);
+create index ix_pharmacy_admminPharmacist_10 on pharmacy (admmin_pharmacist_id);
 
 
 
