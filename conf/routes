@@ -60,7 +60,7 @@ GET    /register-patient/               controllers.DoctorController.registerPat
 POST   /register-patient-proccess/      controllers.DoctorController.registerPatientProccess()
 GET    /doc-schedule                    controllers.DoctorController.doctorSchedule()
 POST   /doc-schedulr-proccess           controllers.DoctorController.scheduleProccess()
-
+GET		/createappointments				controllers.DoctorController.createAppointment()
 
 #Diagnostic module
 GET    /diagnosticregistration          controllers.DiagnosticController.diagnosticCenter()

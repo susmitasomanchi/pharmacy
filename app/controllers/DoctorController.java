@@ -3,13 +3,15 @@ package controllers;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Date;
+import java.util.GregorianCalendar;
 import java.util.List;
 
 import models.AppUser;
-import models.Clinic;
+import models.Appointment;
 import models.Doctor;
-import models.DoctorSchedule;
+import models.DoctorClinicInfo;
 import models.Patient;
 import models.QuestionAndAnswer;
 import play.Logger;
@@ -26,8 +28,8 @@ public class DoctorController extends Controller {
 	public static Form<QuestionAndAnswerBean> questionAndAnswerForm = Form
 			.form(QuestionAndAnswerBean.class);
 
-	public static Form<DoctorSchedule> docScheduleForm=Form.form(DoctorSchedule.class);
-	
+	public static Form<DoctorClinicInfo> docScheduleForm=Form.form(DoctorClinicInfo.class);
+
 	public static Result requestAppointment(){
 		final String datetime = request().body().asFormUrlEncoded().get("datetime")[0];
 		final Long doctorId = Long.parseLong(request().body().asFormUrlEncoded().get("doctorId")[0]);
@@ -137,39 +139,67 @@ public class DoctorController extends Controller {
 
 
 	}
-	
+
 	//doctor schedule
-		public static Result doctorSchedule(){
-			final List<Clinic> clinicList=new ArrayList<Clinic>();
-			return ok(views.html.doctorSchedule.render(docScheduleForm,clinicList));
+	public static Result doctorSchedule(){
+		List<DoctorClinicInfo> clinicList=LoginController.getLoggedInUser().getDoctor().doctorClinicInfoList;
+		Logger.error(clinicList.size()+"");
+		return ok(views.html.doctor.setClinicSchedule.render(docScheduleForm,clinicList));
+	}
+
+	//schedule proccess
+	public static Result scheduleProccess(){
+		/*final Form<DoctorSchedule> filledForm = docScheduleForm.bindFromRequest();
+		//Logger.info("enteredt");
+
+		if(filledForm.hasErrors()) {
+			Logger.info("bad request");
+
+			return ok();//badRequest(views.html.doctorSchedule.render(filledForm));
 		}
+		else {
+			final DoctorSchedule docSchedule=filledForm.get();
 
-		//schedule proccess
-		public static Result scheduleProccess(){
-			final Form<DoctorSchedule> filledForm = docScheduleForm.bindFromRequest();
-			//Logger.info("enteredt");
+			if((docSchedule.id==null)){
 
-			if(filledForm.hasErrors()) {
-				Logger.info("bad request");
+				docSchedule.save();
 
-				return ok();//badRequest(views.html.doctorSchedule.render(filledForm));
+			}else{
+				docSchedule.update();
 			}
-			else {
-				final DoctorSchedule docSchedule=filledForm.get();
 
-				if((docSchedule.id==null)){
+			return ok("doctor time scheduled");
+		}
+		 */
+		return ok();
 
-					docSchedule.save();
 
-				}else{
-					docSchedule.update();
+	}
+	//Create appointment for 30 days
+	public static  Result createAppointment() {
+
+
+		int noOfClinics=2;
+		Calendar calendar=new GregorianCalendar();
+		int start[]={11,14,17};
+		calendar.setTime(new Date());
+		for(int days=0;days<30;days++){
+			for(int i=0;i<noOfClinics;i++){
+				int hourToClinic=2;
+				calendar.set(Calendar.HOUR_OF_DAY, start[i]);
+				for (int j2 = 0; j2 < hourToClinic*5; j2++) {
+					calendar.set(Calendar.MINUTE, 1);
+					Appointment appointment=new Appointment();
+					appointment.appointmentTime=calendar.getTime();
+					appointment.save();
+					calendar.add(Calendar.MINUTE, 5);
 				}
-
-				return ok("doctor time scheduled");
 			}
-
-
+			calendar.add(Calendar.DATE, 1);
 		}
+
+		return ok("created");
+	}
 
 
 }
