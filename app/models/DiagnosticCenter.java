@@ -22,44 +22,46 @@ public class DiagnosticCenter extends Model{
 	@Required
 	public String contactPersonName;
 	@Required
+	//public Address address;
 	public String address;
-	public String city;
+
 	@Required
 	public String mobileNo;
 	@Email @Required
 	public String emailId;
 	public String websiteName;
-	
+
 	@ManyToOne
 	List<DiagnosticRepresentative> pharmacistlist = new ArrayList<DiagnosticRepresentative>();
-	
-	
+
+
 	public static Model.Finder<Long, DiagnosticCenter> find = new Finder<Long, DiagnosticCenter>(
 			Long.class, DiagnosticCenter.class);
-	 public static List<DiagnosticCenter> all() {
-			/*List<DiagnosticCenterForm> list=find.all();*/
+	public static List<DiagnosticCenter> all() {
+		/*List<DiagnosticCenterForm> list=find.all();*/
 		/*	Logger.info("fyjfuuygjh     ",list);*/
-				  return find.all();
-			   
-			  }
-	 public static List<DiagnosticCenter> getDetails(String name2) {
-			// TODO Auto-generated method stub
-			List<DiagnosticCenter> c1 = find.where().eq("diagnoCenterName", name2).findList();
+		return find.all();
 
-			return c1;
-		}
-	
-	public String toString(){
-		return id+"  "+diagnoCenterName+"  "+services+"  "+contactPersonName+"  "+address+"  "+mobileNo+"  "+emailId+"  "+websiteName;
 	}
-	public static void delete(Long id2) {
+	public static List<DiagnosticCenter> getDetails(final String name2) {
 		// TODO Auto-generated method stub
-		 
-			  find.ref(id2).delete();
-		 
-		
+		final List<DiagnosticCenter> c1 = find.where().eq("diagnoCenterName", name2).findList();
+
+		return c1;
 	}
-	
-	
+
+	@Override
+	public String toString(){
+		return this.id+"  "+this.diagnoCenterName+"  "+this.services+"  "+this.contactPersonName+"  "+this.address+"  "+this.mobileNo+"  "+this.emailId+"  "+this.websiteName;
+	}
+	public static void delete(final Long id2) {
+		// TODO Auto-generated method stub
+
+		find.ref(id2).delete();
+
+
+	}
+
+
 
 }

@@ -19,17 +19,17 @@ public class Appointment extends BaseEntity {
 	public  Long id;
 
 
-public Date appointmentTime;
+	public Date appointmentTime;
 
-public AppointmentStatus appointmentStatus;
-	
+	public AppointmentStatus appointmentStatus;
+
 
 
 	@DateTime
 	(pattern = "yyyy-MM-dd hh:mm:ss")
 	public Date starttime;
 
-	
+
 
 
 
@@ -41,7 +41,7 @@ public AppointmentStatus appointmentStatus;
 
 	@OneToOne
 	public AppUser apporovedBy;
-	
+
 	public String remarks;
 
 

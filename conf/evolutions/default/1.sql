@@ -104,6 +104,17 @@ create table doctor_schedule (
   constraint pk_doctor_schedule primary key (id))
 ;
 
+create table inventory (
+  id                        bigint not null,
+  product_id                bigint,
+  batch_no                  varchar(255),
+  mrp                       float,
+  expiry_date               timestamp,
+  quantity                  bigint,
+  last_update               timestamp not null,
+  constraint pk_inventory primary key (id))
+;
+
 create table medical_representative (
   id                        bigint not null,
   app_user_id               bigint,
@@ -146,6 +157,20 @@ create table pharmacy (
   constraint pk_pharmacy primary key (id))
 ;
 
+create table product (
+  id                        bigint not null,
+  medicine_name             varchar(255),
+  brand_name                varchar(255),
+  salt                      varchar(255),
+  strength                  varchar(255),
+  type_of_medicine          varchar(255),
+  description               varchar(255),
+  units_per_pack            bigint,
+  full_name                 varchar(255),
+  last_update               timestamp not null,
+  constraint pk_product primary key (id))
+;
+
 create table question_and_answer (
   id                        bigint not null,
   question                  TEXT,
@@ -178,6 +203,8 @@ create sequence doctor_clinic_info_seq;
 
 create sequence doctor_schedule_seq;
 
+create sequence inventory_seq;
+
 create sequence medical_representative_seq;
 
 create sequence patient_seq;
@@ -185,6 +212,8 @@ create sequence patient_seq;
 create sequence pharmacist_seq;
 
 create sequence pharmacy_seq;
+
+create sequence product_seq;
 
 create sequence question_and_answer_seq;
 
@@ -221,8 +250,6 @@ create index ix_question_and_answer_questi_15 on question_and_answer (question_b
 alter table question_and_answer add constraint fk_question_and_answer_answer_16 foreign key (answer_by_id) references app_user (id);
 create index ix_question_and_answer_answer_16 on question_and_answer (answer_by_id);
 
-
-
 # --- !Downs
 
 drop table if exists app_user cascade;
@@ -245,6 +272,8 @@ drop table if exists doctor_clinic_info cascade;
 
 drop table if exists doctor_schedule cascade;
 
+drop table if exists inventory cascade;
+
 drop table if exists medical_representative cascade;
 
 drop table if exists patient cascade;
@@ -252,6 +281,8 @@ drop table if exists patient cascade;
 drop table if exists pharmacist cascade;
 
 drop table if exists pharmacy cascade;
+
+drop table if exists product cascade;
 
 drop table if exists question_and_answer cascade;
 
@@ -275,6 +306,8 @@ drop sequence if exists doctor_clinic_info_seq;
 
 drop sequence if exists doctor_schedule_seq;
 
+drop sequence if exists inventory_seq;
+
 drop sequence if exists medical_representative_seq;
 
 drop sequence if exists patient_seq;
@@ -282,6 +315,8 @@ drop sequence if exists patient_seq;
 drop sequence if exists pharmacist_seq;
 
 drop sequence if exists pharmacy_seq;
+
+drop sequence if exists product_seq;
 
 drop sequence if exists question_and_answer_seq;
 
