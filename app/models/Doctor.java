@@ -24,6 +24,21 @@ public class Doctor extends BaseEntity{
 
 	@OneToOne
 	public AppUser appUser;
+	
+	public List<DoctorClinicInfo> doctorClinicInfoList = new ArrayList<DoctorClinicInfo>();
+
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
 
 	@Required
 	public String specialization;
@@ -44,9 +59,7 @@ public class Doctor extends BaseEntity{
 
 	public String hospitalAddress;
 
-	@Required
-	public String timings;
-
+	
 	public String categoryOfDoctor;						// homeopathic or ayurvedic or etc.
 
 	@ManyToOne(cascade=CascadeType.ALL)
