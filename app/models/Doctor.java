@@ -25,6 +25,12 @@ public class Doctor extends BaseEntity{
 	@OneToOne
 	public AppUser appUser;
 
+	public List<DoctorClinicInfo> doctorClinicInfoList = new ArrayList<DoctorClinicInfo>();
+
+
+
+
+
 	@Required
 	public String specialization;
 
@@ -40,12 +46,10 @@ public class Doctor extends BaseEntity{
 
 	public Integer fees;
 
-	public String clinicAddress;
+	public Address clinicAddress;
 
-	public String hospitalAddress;
+	public Address hospitalAddress;
 
-	@Required
-	public String timings;
 
 	public String categoryOfDoctor;						// homeopathic or ayurvedic or etc.
 

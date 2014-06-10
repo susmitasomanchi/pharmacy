@@ -48,14 +48,25 @@ GET    /sampledata/temp                 controllers.SampleDataController.temp()
 #POST   /userform/patientproccess/       controllers.PatientController.process()
 
 GET    /home/                           controllers.Application.homePage()
+GET    /questionform                    controllers.PatientController.displayQuestion()
+POST   /askQuestion                     controllers.PatientController.askQuestion()
 
+GET    /answerform                      controllers.DoctorController.displayAnswer()
+POST   /ansQuestion/:qaId               controllers.DoctorController.answerQuestion(qaId: Long)
 # doctor action
 GET    /doc-stuff/                      controllers.DoctorController.docStuff()
 GET    /dashboard						controllers.UserActions.dashboard()
 GET    /register-patient/               controllers.DoctorController.registerPatient()
 POST   /register-patient-proccess/      controllers.DoctorController.registerPatientProccess()
+GET    /doc-schedule                    controllers.DoctorController.doctorSchedule()
+POST   /doc-schedulr-proccess           controllers.DoctorController.scheduleProccess()
 
 
+#Diagnostic module
+GET    /diagnosticregistration          controllers.DiagnosticController.diagnosticCenter()
+POST   /diagnosticregistration/save     controllers.DiagnosticController.diagnosticCenterProcess()
+GET    /diagnosticlist                  controllers.DiagnosticController.Diagnosticlist()
+GET    /diagnostic-delete/:id           controllers.DiagnosticController.deleteCenter(id: Long)
 
 
 # delete later

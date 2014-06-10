@@ -1,0 +1,41 @@
+@(list: List[DiagnosticCenter])
+@main("User List") {
+<table class="table table-bordered">
+<thead>
+<tr>
+<th>
+Name
+</th>
+<th>
+Address
+</th>
+<th>
+Contact No
+</th>
+</tr>
+</thead>
+<tbody>
+@for(dc <- list) {
+<tr>
+<td>
+@dc.diagnoCenterName
+</td>
+<td>
+@dc.address
+</td>
+<td>
+@dc.mobileNo
+</td>
+
+<th>
+<a href="#" class="btn btn-xs btn-success">Edit</a>
+
+
+<a href="/diagnostic-delete/@dc.id" class="btn btn-xs btn-danger">Delete</a>
+@*<a href="@{routes.Application.show(bean.id)}" class="btn btn-xs btn-default">View</a>*@
+</th>
+</tr>
+}
+</tbody>
+</table>
+}

@@ -2,23 +2,32 @@ package controllers;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 
-import actions.BasicAuth;
 import models.AppUser;
+import models.Clinic;
 import models.Doctor;
+import models.DoctorSchedule;
 import models.Patient;
+import models.QuestionAndAnswer;
 import play.Logger;
 import play.data.Form;
 import play.mvc.Controller;
 import play.mvc.Result;
 import beans.PatientBean;
+import beans.QuestionAndAnswerBean;
 
-@BasicAuth
 public class DoctorController extends Controller {
 
+	public static Form<Doctor> form = Form.form(Doctor.class);
+	public static Form<PatientBean> patientForm = Form.form(PatientBean.class);
+	public static Form<QuestionAndAnswerBean> questionAndAnswerForm = Form
+			.form(QuestionAndAnswerBean.class);
 
-
+	public static Form<DoctorSchedule> docScheduleForm=Form.form(DoctorSchedule.class);
+	
 	public static Result requestAppointment(){
 		final String datetime = request().body().asFormUrlEncoded().get("datetime")[0];
 		final Long doctorId = Long.parseLong(request().body().asFormUrlEncoded().get("doctorId")[0]);
@@ -33,25 +42,6 @@ public class DoctorController extends Controller {
 		}
 		return ok();
 	}
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-	public static Form<Doctor> form = Form.form(Doctor.class);
-	public static Form<PatientBean> patientForm = Form.form(PatientBean.class);
 
 	public static Result form() {
 		return ok(views.html.createDoctor.render(form));
@@ -121,6 +111,65 @@ public class DoctorController extends Controller {
 
 		return ok("patient register successFully");
 	}
+
+
+
+	public static Result displayAnswer(){
+		final AppUser user = LoginController.getLoggedInUser();
+		Doctor doctor=user.getDoctor();
+		List<QuestionAndAnswer> qaList=new ArrayList<QuestionAndAnswer>();
+		if(doctor!=null){
+			qaList = QuestionAndAnswer.find.where()
+					.eq("answerBy.id", doctor.id).findList();
+		}
+		return ok(views.html.ansQuestion.render(qaList));
+
+	}
+	//Question Answered By Doctor
+	public static Result answerQuestion(final Long qaId) {
+		final QuestionAndAnswerBean qaBean = questionAndAnswerForm.bindFromRequest().get();
+		final QuestionAndAnswer qa = QuestionAndAnswer.find.byId(qaId);
+		qa.answer = qaBean.answer;
+		qa.answerDate = new Date();
+		qa.update();
+		flash().put("alert", "saved answer successfully");
+		return redirect(routes.DoctorController.displayAnswer());
+
+
+	}
+	
+	//doctor schedule
+		public static Result doctorSchedule(){
+			final List<Clinic> clinicList=new ArrayList<Clinic>();
+			return ok(views.html.doctorSchedule.render(docScheduleForm,clinicList));
+		}
+
+		//schedule proccess
+		public static Result scheduleProccess(){
+			final Form<DoctorSchedule> filledForm = docScheduleForm.bindFromRequest();
+			//Logger.info("enteredt");
+
+			if(filledForm.hasErrors()) {
+				Logger.info("bad request");
+
+				return ok();//badRequest(views.html.doctorSchedule.render(filledForm));
+			}
+			else {
+				final DoctorSchedule docSchedule=filledForm.get();
+
+				if((docSchedule.id==null)){
+
+					docSchedule.save();
+
+				}else{
+					docSchedule.update();
+				}
+
+				return ok("doctor time scheduled");
+			}
+
+
+		}
 
 
 }
