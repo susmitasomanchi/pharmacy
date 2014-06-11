@@ -23,12 +23,56 @@ create table appointment (
   id                        bigint not null,
   appointment_time          timestamp,
   appointment_status        integer,
+  starttime                 timestamp,
   requested_by_id           bigint,
   apporoved_by_id           bigint,
   remarks                   varchar(255),
   last_update               timestamp not null,
   constraint ck_appointment_appointment_status check (appointment_status in (0,1,2,3)),
   constraint pk_appointment primary key (id))
+;
+
+create table ddsummary (
+  id                        bigint not null,
+  previous_hospital_name    varchar(255),
+  worked_as                 varchar(255),
+  location                  varchar(255),
+  worked_from               timestamp,
+  worked_to                 timestamp,
+  award_name                varchar(255),
+  award_for                 varchar(255),
+  year                      varchar(255),
+  comment_for_awards        varchar(255),
+  article_on                varchar(255),
+  published_on              varchar(255),
+  comment_for_article       varchar(255),
+  school_name               varchar(255),
+  ug_college_name           varchar(255),
+  degree_name_ug            varchar(255),
+  ugfrom                    bigint,
+  ugto                      bigint,
+  pg_college_name           varchar(255),
+  degree_name_pg            varchar(255),
+  pgfrom                    bigint,
+  pgto                      bigint,
+  language                  varchar(255),
+  social_work_tittle        varchar(255),
+  comment_social_work       varchar(255),
+  last_update               timestamp not null,
+  constraint pk_ddsummary primary key (id))
+;
+
+create table diagnostic_center (
+  id                        bigint not null,
+  diagno_center_name        varchar(255),
+  services                  varchar(255),
+  contact_person_name       varchar(255),
+  address                   varchar(255),
+  city                      varchar(255),
+  mobile_no                 varchar(255),
+  email_id                  varchar(255),
+  website_name              varchar(255),
+  constraint pk_diagnostic_center primary key (id))
 ;
 
 create table diagnostic_representative (
@@ -64,18 +108,6 @@ create table doctor_assistant (
   app_user_id               bigint,
   last_update               timestamp not null,
   constraint pk_doctor_assistant primary key (id))
-;
-
-create table inventory (
-  id                        bigint not null,
-  product_id                bigint,
-  pharmacy_id               bigint,
-  batch_no                  bigint,
-  mrp                       bigint,
-  expiry_date               timestamp,
-  quantity                  bigint,
-  last_update               timestamp not null,
-  constraint pk_inventory primary key (id))
 ;
 
 create table medical_representative (
@@ -120,31 +152,31 @@ create table pharmacy (
   constraint pk_pharmacy primary key (id))
 ;
 
-create table product (
+create table question_and_answer (
   id                        bigint not null,
-  medicine_name             varchar(255),
-  brand_name                varchar(255),
-  salt                      varchar(255),
-  strength                  varchar(255),
-  type_of_medicine          varchar(255),
-  description               varchar(255),
-  units_per_pack            bigint,
-  full_name                 varchar(255),
+  question                  TEXT,
+  answer                    TEXT,
+  question_date             timestamp,
+  answer_date               timestamp,
+  question_by_id            bigint,
+  answer_by_id              bigint,
   last_update               timestamp not null,
-  constraint pk_product primary key (id))
+  constraint pk_question_and_answer primary key (id))
 ;
 
 create sequence app_user_seq;
 
 create sequence appointment_seq;
 
+create sequence ddsummary_seq;
+
+create sequence diagnostic_center_seq;
+
 create sequence diagnostic_representative_seq;
 
 create sequence doctor_seq;
 
 create sequence doctor_assistant_seq;
-
-create sequence inventory_seq;
 
 create sequence medical_representative_seq;
 
@@ -154,7 +186,7 @@ create sequence pharmacist_seq;
 
 create sequence pharmacy_seq;
 
-create sequence product_seq;
+create sequence question_and_answer_seq;
 
 alter table appointment add constraint fk_appointment_requestedBy_1 foreign key (requested_by_id) references app_user (id);
 create index ix_appointment_requestedBy_1 on appointment (requested_by_id);
@@ -166,18 +198,18 @@ alter table doctor add constraint fk_doctor_appUser_4 foreign key (app_user_id) 
 create index ix_doctor_appUser_4 on doctor (app_user_id);
 alter table doctor_assistant add constraint fk_doctor_assistant_appUser_5 foreign key (app_user_id) references app_user (id);
 create index ix_doctor_assistant_appUser_5 on doctor_assistant (app_user_id);
-alter table inventory add constraint fk_inventory_product_6 foreign key (product_id) references product (id);
-create index ix_inventory_product_6 on inventory (product_id);
-alter table inventory add constraint fk_inventory_pharmacy_7 foreign key (pharmacy_id) references pharmacy (id);
-create index ix_inventory_pharmacy_7 on inventory (pharmacy_id);
-alter table medical_representative add constraint fk_medical_representative_appU_8 foreign key (app_user_id) references app_user (id);
-create index ix_medical_representative_appU_8 on medical_representative (app_user_id);
-alter table patient add constraint fk_patient_appUser_9 foreign key (app_user_id) references app_user (id);
-create index ix_patient_appUser_9 on patient (app_user_id);
-alter table pharmacist add constraint fk_pharmacist_appUser_10 foreign key (app_user_id) references app_user (id);
-create index ix_pharmacist_appUser_10 on pharmacist (app_user_id);
-alter table pharmacy add constraint fk_pharmacy_admminPharmacist_11 foreign key (admmin_pharmacist_id) references pharmacist (id);
-create index ix_pharmacy_admminPharmacist_11 on pharmacy (admmin_pharmacist_id);
+alter table medical_representative add constraint fk_medical_representative_appU_6 foreign key (app_user_id) references app_user (id);
+create index ix_medical_representative_appU_6 on medical_representative (app_user_id);
+alter table patient add constraint fk_patient_appUser_7 foreign key (app_user_id) references app_user (id);
+create index ix_patient_appUser_7 on patient (app_user_id);
+alter table pharmacist add constraint fk_pharmacist_appUser_8 foreign key (app_user_id) references app_user (id);
+create index ix_pharmacist_appUser_8 on pharmacist (app_user_id);
+alter table pharmacy add constraint fk_pharmacy_admminPharmacist_9 foreign key (admmin_pharmacist_id) references pharmacist (id);
+create index ix_pharmacy_admminPharmacist_9 on pharmacy (admmin_pharmacist_id);
+alter table question_and_answer add constraint fk_question_and_answer_questi_10 foreign key (question_by_id) references app_user (id);
+create index ix_question_and_answer_questi_10 on question_and_answer (question_by_id);
+alter table question_and_answer add constraint fk_question_and_answer_answer_11 foreign key (answer_by_id) references app_user (id);
+create index ix_question_and_answer_answer_11 on question_and_answer (answer_by_id);
 
 
 
@@ -187,13 +219,15 @@ drop table if exists app_user cascade;
 
 drop table if exists appointment cascade;
 
+drop table if exists ddsummary cascade;
+
+drop table if exists diagnostic_center cascade;
+
 drop table if exists diagnostic_representative cascade;
 
 drop table if exists doctor cascade;
 
 drop table if exists doctor_assistant cascade;
-
-drop table if exists inventory cascade;
 
 drop table if exists medical_representative cascade;
 
@@ -203,19 +237,21 @@ drop table if exists pharmacist cascade;
 
 drop table if exists pharmacy cascade;
 
-drop table if exists product cascade;
+drop table if exists question_and_answer cascade;
 
 drop sequence if exists app_user_seq;
 
 drop sequence if exists appointment_seq;
+
+drop sequence if exists ddsummary_seq;
+
+drop sequence if exists diagnostic_center_seq;
 
 drop sequence if exists diagnostic_representative_seq;
 
 drop sequence if exists doctor_seq;
 
 drop sequence if exists doctor_assistant_seq;
-
-drop sequence if exists inventory_seq;
 
 drop sequence if exists medical_representative_seq;
 
@@ -225,5 +261,5 @@ drop sequence if exists pharmacist_seq;
 
 drop sequence if exists pharmacy_seq;
 
-drop sequence if exists product_seq;
+drop sequence if exists question_and_answer_seq;
 

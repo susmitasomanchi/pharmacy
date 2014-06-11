@@ -14,5 +14,7 @@ import java.lang.annotation.Target;
 @Target({ElementType.METHOD, ElementType.TYPE})
 @Inherited
 @Documented
+
 public @interface BasicAuth {
+	
 }

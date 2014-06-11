@@ -2,22 +2,29 @@ package controllers;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 
-import actions.BasicAuth;
 import models.AppUser;
 import models.Doctor;
+import models.DDSummary;
 import models.Patient;
+import models.QuestionAndAnswer;
 import play.Logger;
 import play.data.Form;
 import play.mvc.Controller;
 import play.mvc.Result;
 import beans.PatientBean;
+import beans.QuestionAndAnswerBean;
 
-@BasicAuth
 public class DoctorController extends Controller {
 
-
+	public static Form<Doctor> form = Form.form(Doctor.class);
+	public static Form<DDSummary> form1 = Form.form(DDSummary.class);
+	public static Form<PatientBean> patientForm = Form.form(PatientBean.class);
+	public static Form<QuestionAndAnswerBean> questionAndAnswerForm = Form
+			.form(QuestionAndAnswerBean.class);
 
 	public static Result requestAppointment(){
 		final String datetime = request().body().asFormUrlEncoded().get("datetime")[0];
@@ -33,25 +40,6 @@ public class DoctorController extends Controller {
 		}
 		return ok();
 	}
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-	public static Form<Doctor> form = Form.form(Doctor.class);
-	public static Form<PatientBean> patientForm = Form.form(PatientBean.class);
 
 	public static Result form() {
 		return ok(views.html.createDoctor.render(form));
@@ -89,6 +77,39 @@ public class DoctorController extends Controller {
 		//return redirect(routes.UserController.list());
 
 	}
+
+	public static Result form1() {
+		return ok(views.html.doctor.dDSummary.render(form1));
+		//return TODO
+	}
+	
+	
+	public static Result process1() {
+		final Form<DDSummary> filledForm = form1.bindFromRequest();
+		//Logger.info("enteredt");
+
+		if(filledForm.hasErrors()) {
+			Logger.info("bad request");
+
+			return badRequest(views.html.doctor.dDSummary.render(filledForm));
+		}
+		else {
+			final DDSummary dDSummary= filledForm.get();
+
+			if(dDSummary.id == null) {
+
+				dDSummary.save();
+			}
+			else {
+
+				dDSummary.update();
+			}
+		}
+		return TODO;
+		//return redirect(routes.UserController.list());
+
+	}
+	
 	
 	/* public static Result editProfile(Long id){
 		 
@@ -152,6 +173,32 @@ public class DoctorController extends Controller {
 
 
 		return ok("patient register successFully");
+	}
+
+
+
+	public static Result displayAnswer(){
+		final AppUser user = LoginController.getLoggedInUser();
+		Doctor doctor=user.getDoctor();
+		List<QuestionAndAnswer> qaList=new ArrayList<QuestionAndAnswer>();
+		if(doctor!=null){
+			qaList = QuestionAndAnswer.find.where()
+					.eq("answerBy.id", doctor.id).findList();
+		}
+		return ok(views.html.ansQuestion.render(qaList));
+
+	}
+	//Question Answered By Doctor
+	public static Result answerQuestion(final Long qaId) {
+		final QuestionAndAnswerBean qaBean = questionAndAnswerForm.bindFromRequest().get();
+		final QuestionAndAnswer qa = QuestionAndAnswer.find.byId(qaId);
+		qa.answer = qaBean.answer;
+		qa.answerDate = new Date();
+		qa.update();
+		flash().put("alert", "saved answer successfully");
+		return redirect(routes.DoctorController.displayAnswer());
+
+
 	}
 
 

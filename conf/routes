@@ -3,7 +3,7 @@
 # ~~~~
 
 # Home page
-GET		/								controllers.Application.index()
+GET    /                                controllers.Application.index()                      
 POST	/login							controllers.LoginController.processLogin()
 GET		/logout							controllers.LoginController.processLogout()
 
@@ -14,24 +14,20 @@ POST	/join							controllers.UserController.processJoinUs()
 # patient actions
 GET		/user/schedule-appointment		controllers.PatientController.scheduleAppointment()
 POST	/doctor/request-appointment		controllers.DoctorController.requestAppointment()
+GET    /doctorprofile/                controllers.DoctorController.enter() 
 
 
 
 
+GET    /ddsummary/               		 controllers.DoctorController.form1() 
+POST   /ddsummary/               		 controllers.DoctorController.process1() 
 
 
 
-
-
-GET    /userform/farmaciest/            controllers.PharmacistController.form()
-POST   /userform/farmaciest-proccesss   controllers.PharmacistController.process()
-GET    /userform/doctor/                controllers.DoctorController.form()
-POST   /userform/doctor/                controllers.DoctorController.process()
-
-
-
-
-GET    /doctorprofile/             		controllers.DoctorController.enter() 
+GET    /userform/farmaciest/            controllers.PharmacistController.form() 
+POST   /userform/farmaciest-proccesss   controllers.PharmacistController.process() 
+GET    /userform/doctor/                controllers.DoctorController.form() 
+POST   /userform/doctor/                controllers.DoctorController.process() 
 GET		/userform/assistant/			controllers.AssistantController.form()
 POST	/userform/assistant/			controllers.AssistantController.process()
 GET		/scheduleappointment/			controllers.AppointmentController.form()
@@ -51,6 +47,12 @@ GET    /sampledata/temp                 controllers.SampleDataController.temp()
 #POST   /userform/patientproccess/       controllers.PatientController.process()
 
 GET    /home/                           controllers.Application.homePage()
+GET    /questionform					controllers.PatientController.displayQuestion()
+POST    /askQuestion					controllers.PatientController.askQuestion()
+
+GET    /answerform						controllers.DoctorController.displayAnswer()
+POST    /ansQuestion/:qaId				controllers.DoctorController.answerQuestion(qaId: Long)
+
 
 # doctor action
 GET    /doc-stuff/                      controllers.DoctorController.docStuff()
@@ -58,7 +60,11 @@ GET    /dashboard						controllers.UserActions.dashboard()
 GET    /register-patient/               controllers.DoctorController.registerPatient()
 POST   /register-patient-proccess/      controllers.DoctorController.registerPatientProccess()
 
-
+#Diagnostic module
+GET    /diagnosticregistration                     controllers.DiagnosticController.diagnosticCenter()
+POST    /diagnosticregistration/save                      controllers.DiagnosticController.diagnosticCenterProcess()
+GET    /diagnosticlist                     controllers.DiagnosticController.Diagnosticlist()
+GET    /diagnostic-delete/:id       controllers.DiagnosticController.deleteCenter(id: Long)
 
 
 # delete later
@@ -66,6 +72,7 @@ GET    /userform/patient/               controllers.PatientController.form()
 GET    /userform/patient/h/             controllers.PatientController.enterForm()
 GET    /register/                       controllers.PatientController.register()
 POST   /register/                       controllers.PatientController.registerProccess()
+
 
 
 
