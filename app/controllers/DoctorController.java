@@ -204,27 +204,35 @@ public class DoctorController extends Controller {
 
 	}
 
+	//creating appointments
 	public static  Result createAppointment() {
 
-		final int noOfClinics=2;
+		final Doctor doctor=LoginController.getLoggedInUser().getDoctor();
+		Logger.error(doctor.appUser.name);
+		final List<DoctorClinicInfo> clinicInfos=doctor.doctorClinicInfoList;
+		final int noOfClinics=clinicInfos.size();
+		Logger.error(noOfClinics+"");
 
 		final Calendar calendar=new GregorianCalendar();
-		final int start[]={11,14,17};
 		calendar.setTime(new Date());
 		for(int days=0;days<30;days++){
-			for(int i=0;i<noOfClinics;i++){
-				final int hourToClinic=2;
-				calendar.set(Calendar.HOUR_OF_DAY, start[i]);
-				for (int j2 = 0; j2 < hourToClinic*5; j2++) {
-					calendar.set(Calendar.MINUTE, 1);
+
+			for (final DoctorClinicInfo doctorClinicInfo : clinicInfos) {
+
+				final int hourToClinic=doctorClinicInfo.toHrs-doctorClinicInfo.fromHrs;
+				calendar.set(Calendar.HOUR_OF_DAY, doctorClinicInfo.fromHrs);
+				calendar.set(Calendar.MINUTE, 1);
+				for (int j2 = 0; j2 <( (hourToClinic*60)/5); j2++) {
+					Logger.error(j2+"");
 					final Appointment appointment=new Appointment();
+					appointment.appointmentStatus=AppointmentStatus.APPROVED;
 					appointment.appointmentTime=calendar.getTime();
 					appointment.save();
+
 					calendar.add(Calendar.MINUTE, 5);
 				}
 			}
 			calendar.add(Calendar.DATE, 1);
-
 		}
 
 		return ok("doctor time scheduled");
