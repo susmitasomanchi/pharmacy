@@ -11,14 +11,11 @@
       <div class="col-md-6">
           <h3><span style="cursor:pointer;" onclick="window.location.href='/';"><i class="fa fa-plus-circle"></i> mednetwork</span></h3>
       </div>
-      <div class="col-md-6">
-          <h3 class="pull-right"><a href="/login/"> login</a></h3>
-      </div>
   </div>
   <hr>
   
 @helper.form(action=routes.UserController.processJoinUs(), '_id->"joinform") {
-
+<div class="row">
 
 			@helper.inputText(joinUsForm("name"),'class -> "inputs",'_label->"Name")
 			
@@ -30,37 +27,31 @@
 
 			@select(joinUsForm("role"), options("PATIENT"->"Patient", "DOCTOR"->"Doctor", "PHARMACIST"->"Pharmacist", "MR"->"Medical Representative", "DIAGREP"->"Diagnostic Representative"), '_label->"Join As")
 			
-			 @*@helper.inputText(joinUsForm("pharmacyName"),'class -> "inputs",'_label->"Pharmacy Name")*@
 
-<div class="col-xs-4">
-<div class="form-group">
-    <label id="l1" for="pharmacyName" style="display:none">Pharmacy Name</label>
-    <textarea id="pharmacyName" class="form-control" style="display:none"></textarea>
-</div>
+			<div id="pharmacyName" class="col-xs-4" style="display:none">
+    			<label for="pharmacyName">Pharmacy Name</label>
+    			<input id="pharmacyName" name="pharmacyName" class="form-control">
+			</div>
+</div>	
+	
+	<div class="row">
+	<br><br>
+	<input type="submit" class="btn btn-primary" value="Join">
+	</div>
+}
+
 
 <script>
 $('#role').change(function() {
     if ($('#role').val() == 'PHARMACIST') {
-        $('textarea').show();
-        $('label').show();
-        
-        
+        $('#pharmacyName').show();
     } else {
-    	 $('textarea').hide();   
-    	 $('label').hide();   
-        
+    	 $('#pharmacyName').hide();   
     }
 
 });
-	</script>	
-	<br>
-			<input type="hidden" name="id" value='@joinUsForm("id").value' >
-			<input type="submit" class="submit" value="Join">
-}
-			
-</div>
 
-<script>
+
 $("#submitbtn").on("click", function(e){
 	if($("#password").val() != $("#confirmPassword").val()){
 		alert('Passwords do not match');

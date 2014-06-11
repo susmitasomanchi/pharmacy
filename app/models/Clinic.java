@@ -4,8 +4,6 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.ManyToOne;
-import javax.persistence.OneToMany;
 
 import play.db.ebean.Model;
 
@@ -17,16 +15,11 @@ public class Clinic extends Model{
 	@Id
 	public Long id;
 
+	public String name;
+
+	//public Address clinicAddress;
 	public String clinicAddress;
 
-	@ManyToOne
-	public Doctor doctor;
-
-	@OneToMany(mappedBy="clinic")
-	public DoctorSchedule timeSchedule;
-
-
-	public static Model.Finder<Long, Clinic> find = new Finder<Long, Clinic>(
-			Long.class, Clinic.class);
+	public static Model.Finder<Long, Clinic> find = new Finder<Long, Clinic>(Long.class, Clinic.class);
 
 }

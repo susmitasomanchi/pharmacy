@@ -1,0 +1,41 @@
+@(dataForm: play.data.Form[models.DoctorClinicInfo],clinics: List[DoctorClinicInfo])
+
+
+@main("doctorSchedule"){
+	<div class="panel-group" id="accordion">
+	@for(clinicInfo <- clinics){
+		<div class="panel panel-default">
+    <div class="panel-heading">
+      <h4 class="panel-title">
+        <a data-toggle="collapse" data-parent="#accordion" href="#collapseOne@clinicInfo.id">
+          @clinicInfo.clinic.name;
+        </a>
+      </h4>
+    </div>
+    <div id="collapseOne@clinicInfo.id" class="panel-collapse collapse in">
+      <div class="panel-body">
+	
+	
+	@helper.form(action=routes.DoctorController.scheduleProccess(),'method -> "post") {
+	
+		@helper.inputDate(dataForm("fromTime"),'_label->"Select Date")
+    	@helper.inputDate(dataForm("toTime"),'_label->"Select Date")
+    
+
+    <input type="hidden" name="id" value=value='@dataForm("id").value' />
+    <input type="submit" value="add schedule" /> 
+    
+    }
+	 </div>
+    </div>
+  </div>
+
+	
+	
+	}
+  
+
+   </div>     
+	
+	
+}
