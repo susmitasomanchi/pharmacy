@@ -30,7 +30,7 @@ public class MedicalRepresentative extends BaseEntity{
 
 	public List<Doctor> doctorList = new ArrayList<Doctor>();
 
-	public static Finder<Long, MedicalRepresentative> find = new Finder<>(Long.class, MedicalRepresentative.class);
+	public static Finder<Long, MedicalRepresentative> find = new Finder<Long, MedicalRepresentative>(Long.class, MedicalRepresentative.class);
 
 	@Override
 	public void save(){

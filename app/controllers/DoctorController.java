@@ -3,16 +3,19 @@ package controllers;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Date;
+import java.util.GregorianCalendar;
 import java.util.List;
 
 import models.AppUser;
 import models.Appointment;
 import models.AppointmentStatus;
+import models.Appointment;
 import models.Clinic;
 import models.Doctor;
 import models.DoctorClinicInfo;
-import models.DoctorSchedule;
+import models.DoctorClinicInfo;
 import models.Patient;
 import models.QuestionAndAnswer;
 import play.Logger;
@@ -205,37 +208,44 @@ public class DoctorController extends Controller {
 	}
 
 	//doctor schedule
-	public static Result doctorSchedule(){
-		final List<Clinic> clinicList=new ArrayList<Clinic>();
-		return ok(views.html.doctorSchedule.render(docScheduleForm,clinicList));
-	}
 
-	//schedule proccess
-	public static Result scheduleProccess(){
-		final Form<DoctorSchedule> filledForm = docScheduleForm.bindFromRequest();
-		//Logger.info("enteredt");
+	//	public static Result doctorSchedule(){
+	//		final List<Clinic> clinicList=new ArrayList<Clinic>();
+	//		return ok(views.html.doctorSchedule.render(docScheduleForm,clinicList));
+	//	}
+	//	else {
+	//		final DoctorSchedule docSchedule=filledForm.get();
+	//
+	//		//schedule proccess
+	//		public static Result scheduleProccess(){
+	//			final Form<DoctorSchedule> filledForm = docScheduleForm.bindFromRequest();
+	//			//Logger.info("enteredt");
+	//
+	//			if(filledForm.hasErrors()) {
+	//				Logger.info("bad request");
+	//
+	//				return ok();//badRequest(views.html.doctorSchedule.render(filledForm));
+	//			}
+	//			else {
+	//				final DoctorSchedule docSchedule=filledForm.get();
+	//
+	//				if((docSchedule.id==null)){
+	//
+	//					docSchedule.save();
+	//
+	//				}else{
+	//					docSchedule.update();
+	//				}
+	//
+	//				return ok("doctor time scheduled");
+	//			}
+	//			calendar.add(Calendar.DATE, 1);
+	//		}
+	//
+	//		return ok("created");
+	//	}
 
-		if(filledForm.hasErrors()) {
-			Logger.info("bad request");
-
-			return ok();//badRequest(views.html.doctorSchedule.render(filledForm));
-		}
-		else {
-			final DoctorSchedule docSchedule=filledForm.get();
-
-			if((docSchedule.id==null)){
-
-				docSchedule.save();
-
-			}else{
-				docSchedule.update();
-			}
-
-			return ok("doctor time scheduled");
-		}
-
-
-	}
+}
 
 
 }

@@ -23,7 +23,6 @@ create table appointment (
   id                        bigint not null,
   appointment_time          timestamp,
   appointment_status        integer,
-  starttime                 timestamp,
   requested_by_id           bigint,
   apporoved_by_id           bigint,
   remarks                   varchar(255),

@@ -8,8 +8,6 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.OneToOne;
 
-import play.data.format.Formats.DateTime;
-
 
 @Entity
 public class Appointment extends BaseEntity {
@@ -24,17 +22,6 @@ public class Appointment extends BaseEntity {
 	public AppointmentStatus appointmentStatus;
 
 
-
-	@DateTime
-	(pattern = "yyyy-MM-dd hh:mm:ss")
-	public Date starttime;
-
-
-
-
-
-
-
 	@OneToOne
 	public AppUser requestedBy;
 
@@ -46,8 +33,7 @@ public class Appointment extends BaseEntity {
 
 
 
-	public static Finder<Long, Appointment> find = new Finder<>(Long.class, Appointment.class);
-
+	public static Finder<Long, Appointment> find = new Finder<Long, Appointment>(Long.class, Appointment.class);
 
 
 

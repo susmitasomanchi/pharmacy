@@ -10,7 +10,7 @@ import play.db.ebean.Model;
 
 @SuppressWarnings("serial")
 @Entity
-public class DoctorClinicInfo extends Model {
+public class DoctorClinicInfo extends BaseEntity {
 
 	@GeneratedValue(strategy = GenerationType.AUTO)
 	@Id
@@ -22,9 +22,9 @@ public class DoctorClinicInfo extends Model {
 	@OneToOne
 	public Doctor doctor;
 
-	public int fromHrs;
+	public Integer fromHrs;
 
-	public int toHrs;
+	public Integer toHrs;
 
 	@OneToOne
 	DoctorAssistant assistant;
