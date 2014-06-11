@@ -17,7 +17,9 @@ public class Clinic extends Model{
 	@Id
 	public Long id;
 
-	public Address clinicAddress;
+	public String name;
+
+	public String clinicAddress;
 
 	@ManyToOne
 	public Doctor doctor;

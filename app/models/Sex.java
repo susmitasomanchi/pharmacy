@@ -11,7 +11,7 @@ public enum Sex {
 	@EnumValue("FEMALE")
 	FEMALE,
 	@EnumValue("OTHER")
-	OTHER
+	OTHER;
 
 	public static Map<String, String> options() {
 		final LinkedHashMap<String, String> vals = new LinkedHashMap<String, String>();

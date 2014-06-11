@@ -10,7 +10,6 @@ import javax.persistence.ManyToOne;
 import play.data.validation.Constraints.Email;
 import play.data.validation.Constraints.Required;
 import play.db.ebean.Model;
-import akka.event.slf4j.Logger;
 @Entity
 public class DiagnosticCenter extends Model{
 	@Id
@@ -22,7 +21,7 @@ public class DiagnosticCenter extends Model{
 	@Required
 	public String contactPersonName;
 	@Required
-	public Address address;
+	public String address;
 
 	@Required
 	public String mobileNo;

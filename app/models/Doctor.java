@@ -9,6 +9,7 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.ManyToOne;
+import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 
 import play.data.validation.Constraints.Required;
@@ -27,10 +28,6 @@ public class Doctor extends BaseEntity{
 
 	public List<DoctorClinicInfo> doctorClinicInfoList = new ArrayList<DoctorClinicInfo>();
 
-
-
-
-
 	@Required
 	public String specialization;
 
@@ -46,12 +43,19 @@ public class Doctor extends BaseEntity{
 
 	public Integer fees;
 
-	public Address clinicAddress;
+	public String clinicAddress;
 
-	public Address hospitalAddress;
+	public String hospitalAddress;
 
 
 	public String categoryOfDoctor;						// homeopathic or ayurvedic or etc.
+
+
+
+	@OneToMany(cascade=CascadeType.ALL)
+	List<DoctorClinicInfo> clinicSchedules=new ArrayList<DoctorClinicInfo>();
+
+
 
 	@ManyToOne(cascade=CascadeType.ALL)
 	public List<Appointment> appointmentList=new ArrayList<Appointment>();

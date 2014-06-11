@@ -23,7 +23,6 @@ create table appointment (
   id                        bigint not null,
   appointment_time          timestamp,
   appointment_status        integer,
-  starttime                 timestamp,
   requested_by_id           bigint,
   apporoved_by_id           bigint,
   remarks                   varchar(255),
@@ -34,6 +33,7 @@ create table appointment (
 
 create table clinic (
   id                        bigint not null,
+  name                      varchar(255),
   clinic_address            varchar(255),
   doctor_id                 bigint,
   constraint pk_clinic primary key (id))
@@ -87,8 +87,10 @@ create table doctor_assistant (
 
 create table doctor_clinic_info (
   id                        bigint not null,
-  from_time                 timestamp,
-  to_time                   timestamp,
+  doctor_id                 bigint not null,
+  from_time                 integer,
+  to_time                   integer,
+  last_update               timestamp not null,
   constraint pk_doctor_clinic_info primary key (id))
 ;
 
@@ -223,10 +225,10 @@ alter table doctor add constraint fk_doctor_appUser_5 foreign key (app_user_id) 
 create index ix_doctor_appUser_5 on doctor (app_user_id);
 alter table doctor_assistant add constraint fk_doctor_assistant_appUser_6 foreign key (app_user_id) references app_user (id);
 create index ix_doctor_assistant_appUser_6 on doctor_assistant (app_user_id);
-alter table doctor_schedule add constraint fk_doctor_schedule_clinic_7 foreign key (clinic_id) references clinic (id);
-create index ix_doctor_schedule_clinic_7 on doctor_schedule (clinic_id);
-alter table inventory add constraint fk_inventory_product_8 foreign key (product_id) references product (id);
-create index ix_inventory_product_8 on inventory (product_id);
+alter table doctor_clinic_info add constraint fk_doctor_clinic_info_doctor_7 foreign key (doctor_id) references doctor (id);
+create index ix_doctor_clinic_info_doctor_7 on doctor_clinic_info (doctor_id);
+alter table doctor_schedule add constraint fk_doctor_schedule_clinic_8 foreign key (clinic_id) references clinic (id);
+create index ix_doctor_schedule_clinic_8 on doctor_schedule (clinic_id);
 alter table medical_representative add constraint fk_medical_representative_appU_9 foreign key (app_user_id) references app_user (id);
 create index ix_medical_representative_appU_9 on medical_representative (app_user_id);
 alter table patient add constraint fk_patient_appUser_10 foreign key (app_user_id) references app_user (id);

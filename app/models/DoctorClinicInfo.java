@@ -1,7 +1,5 @@
 package models;
 
-import java.util.Date;
-
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -11,7 +9,7 @@ import play.db.ebean.Model;
 
 @SuppressWarnings("serial")
 @Entity
-public class DoctorClinicInfo extends Model {
+public class DoctorClinicInfo extends BaseEntity {
 
 	@GeneratedValue(strategy = GenerationType.AUTO)
 	@Id
@@ -19,9 +17,9 @@ public class DoctorClinicInfo extends Model {
 
 	public Clinic clinic;
 
-	public Date fromTime;
+	public Integer fromTime;
 
-	public Date toTime;
+	public Integer toTime;
 
 	public static Model.Finder<Long, DoctorClinicInfo> find = new Finder<Long, DoctorClinicInfo>(Long.class, DoctorClinicInfo.class);
 
