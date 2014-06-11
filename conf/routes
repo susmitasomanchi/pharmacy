@@ -61,8 +61,6 @@ GET    /doc-stuff/                      controllers.DoctorController.docStuff()
 GET    /dashboard						controllers.UserActions.dashboard()
 GET    /register-patient/               controllers.DoctorController.registerPatient()
 POST   /register-patient-proccess/      controllers.DoctorController.registerPatientProccess()
-GET    /doc-schedule                    controllers.DoctorController.doctorSchedule()
-POST   /doc-schedulr-proccess           controllers.DoctorController.scheduleProccess()
 GET		/createappointments				controllers.DoctorController.createAppointment()
 
 #Diagnostic module
