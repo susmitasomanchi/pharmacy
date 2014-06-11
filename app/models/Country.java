@@ -10,6 +10,162 @@ public enum Country {
 	@EnumValue("AFGHANISTAN")
 	AFGHANISTAN,
 
+	@EnumValue("AKROTIRI")
+	AKROTIRI,
+
+	@EnumValue("ALBANIA")
+	ALBANIA,
+
+	@EnumValue("ALGERIA")
+	ALGERIA,
+
+	@EnumValue("AMERICAN SAMOA")
+	AMERICAN_SAMOA,
+
+	@EnumValue("ANDORRA")
+	ANDORRA,
+
+	@EnumValue("ANGOLA")
+	ANGOLA,
+
+	@EnumValue("ANGUILLA")
+	ANGUILLA,
+
+	@EnumValue("ANTARCTICA")
+	ANTARCTICA ,
+
+	@EnumValue("ANTIGUA AND BARBUDA")
+	ANTIGUA_AND_BARBUDA ,
+
+	@EnumValue("ARGENTINA")
+	ARGENTINA,
+
+	@EnumValue("ARMENIA")
+	ARMENIA,
+
+	@EnumValue("ARUBA")
+	ARUBA,
+
+	@EnumValue("ASHMORE AND CARTIER ISLANDS")
+	ASHMORE_AND_CARTIER_ISLANDS ,
+
+	@EnumValue("AUSTRALIA")
+	AUSTRALIA,
+
+	@EnumValue("AUSTRIA")
+	AUSTRIA,
+
+	@EnumValue("AZERBAIJAN")
+	AZERBAIJAN,
+
+	@EnumValue("BAHRAIN")
+	BAHRAIN,
+
+	@EnumValue("BANGLADESH")
+	BANGLADESH,
+
+	@EnumValue("BARBADOS")
+	BARBADOS,
+
+	@EnumValue("BELARUS")
+	BELARUS,
+
+	@EnumValue("BELGIUM")
+	BELGIUM,
+
+	@EnumValue("BELIZE")
+	BELIZE,
+
+	@EnumValue("BENIN")
+	BENIN,
+
+	@EnumValue("BERMUDA")
+	BERMUDA,
+
+	@EnumValue("BHUTAN")
+	BHUTAN,
+
+	@EnumValue("BOLIVIA")
+	BOLIVIA,
+
+	@EnumValue("BOSNIA AND HERZEGOVINA")
+	BOSNIA_AND_HERZEGOVINA,
+
+	@EnumValue("BOTSWANA")
+	BOTSWANA,
+
+	@EnumValue("BOUVET ISLAND")
+	BOUVET_ISLAND,
+
+	@EnumValue("BRAZIL")
+	BRAZIL,
+
+	@EnumValue("BRUNEI")
+	BRUNEI,
+
+	@EnumValue("BULGARIA")
+	BULGARIA,
+
+	@EnumValue("BURKINA FASO")
+	BURKINA_FASO,
+
+	@EnumValue("BURMA")
+	BURMA,
+
+	@EnumValue("BURUNDI")
+	BURUNDI,
+
+	@EnumValue("CAMBODIA")
+	CAMBODIA,
+
+	@EnumValue("CAMEROON")
+	CAMEROON,
+
+	@EnumValue("CANADA")
+	CANADA,
+
+	@EnumValue("CAPE VERDE")
+	CAPE_VERDE,
+
+	@EnumValue("CHAD")
+	CHAD,
+
+	@EnumValue("CHILE")
+	CHILE,
+
+	@EnumValue("CHINA")
+	CHINA,
+
+	@EnumValue("COLOMBIA")
+	COLOMBIA,
+
+	@EnumValue("COMOROS")
+	COMOROS,
+
+	@EnumValue("CUBA")
+	CUBA,
+
+	@EnumValue("CYPRUS")
+	CYPRUS,
+
+	@EnumValue("DENMARK")
+	DENMARK,
+
+	@EnumValue("DHEKELIA")
+	DHEKELIA,
+
+	@EnumValue("DJIBOUTI")
+	DJIBOUTI,
+
+	@EnumValue("DOMINICA")
+	DOMINICA,
+
+	@EnumValue("ECUADOR")
+	ECUADOR,
+
+	@EnumValue("EGYPT")
+	EGYPT,
+
 	@EnumValue("INDIA")
 	INDIA,
 
