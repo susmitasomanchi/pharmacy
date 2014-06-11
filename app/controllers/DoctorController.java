@@ -36,7 +36,6 @@ public class DoctorController extends Controller {
 	public static Form<ClinicBean> clinicForm = Form.form(ClinicBean.class);
 	public static Form<QuestionAndAnswerBean> questionAndAnswerForm = Form.form(QuestionAndAnswerBean.class);
 
-	public static Form<DoctorSchedule> docScheduleForm=Form.form(DoctorSchedule.class);
 
 	public static Result requestAppointment(){
 		final String datetime = request().body().asFormUrlEncoded().get("datetime")[0];
@@ -245,7 +244,7 @@ public class DoctorController extends Controller {
 	//		return ok("created");
 	//	}
 
-}
+	//}
 
 
 }
