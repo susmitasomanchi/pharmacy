@@ -1,0 +1,24 @@
+@(clinicForm:play.data.Form[beans.ClinicBean])
+
+@import play.i18n._
+@import helper.twitterBootstrap._
+@import helper._
+
+
+@main("New Clinic"){
+
+@helper.form(action=routes.DoctorController.processNewClinic()) {
+
+			@helper.inputText(clinicForm("name"),'class -> "inputs",'_label->"Name")
+			
+			@helper.inputText(clinicForm("fromHrs"),'class -> "inputs",'_label->"Available From (in 24-Hrs format)")
+			
+			@helper.inputText(clinicForm("toHrs"),'class -> "inputs",'_label->"Available Till (in 24-Hrs format)")
+			
+			
+	
+	<br><br>
+	<input type="submit" class="btn btn-primary" value="Submit">
+}
+
+}

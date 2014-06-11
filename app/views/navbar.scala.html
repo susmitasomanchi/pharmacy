@@ -30,7 +30,7 @@
             <li><a href="@routes.PatientController.scheduleAppointment()">Schedule an Appointment</a></li>
           </ul>
         </li>
-        
+        <li><a href="">Today</a></li>
         <li class="dropdown">
           <a href="#" class="dropdown-toggle" data-toggle="dropdown">
           Prescriptions
@@ -41,8 +41,50 @@
           </ul>
         </li>
 		}
+		@if(LoginController.getLoggedInUserRole().equals(Role.MR.toString())){
+        <li class="dropdown">
+          <a href="#" class="dropdown-toggle" data-toggle="dropdown">
+          Doctors
+          <b class="caret"></b></a>
+          <ul class="dropdown-menu">
+            <li><a href="/doctor-list">All Doctor</a></li>
+            <li><a href="/mr/doctor-list">My Doctor</a></li>
+          </ul>
+        </li>
+        }
 		
 
+		@if(LoginController.getLoggedInUserRole().equals(Role.PHARMACIST.toString())){
+		<li class="dropdown">
+          <a href="#" class="dropdown-toggle" data-toggle="dropdown">
+          Orders
+          <b class="caret"></b></a>
+          <ul class="dropdown-menu">
+            <li><a href="">Products</a></li>
+            <li><a href="">Create new product</a></li>
+            <li class="divider"></li>
+            <li><a href="@routes.PatientController.scheduleAppointment()">Create an Inventory</a></li>
+          </ul>
+        </li>	
+		
+		
+		
+		
+		<li class="dropdown">
+          <a href="#" class="dropdown-toggle" data-toggle="dropdown">
+          Inventory
+          <b class="caret"></b></a>
+          <ul class="dropdown-menu">
+            <li><a href="/products">Products</a></li>
+            <li><a href="/newProduct">Create new product</a></li>
+            <li class="divider"></li>
+            <li><a href="@routes.PatientController.scheduleAppointment()">Create an Inventory</a></li>
+          </ul>
+        </li>
+        
+       
+		}
+		
 		
 		@if(LoginController.getLoggedInUserRole().equals(Role.DOCTOR.toString())){
         <li class="dropdown">
@@ -66,16 +108,40 @@
 	
         <li class="dropdown">
           <a href="#" class="dropdown-toggle" data-toggle="dropdown">
-          Assistants
+          Clinics
           <b class="caret"></b></a>
           <ul class="dropdown-menu">
-	            <li><a href="">Create Assistant</a></li>
-    	        <li><a href="">Assistant List</a></li>
-        	    <li class="divider"></li>
-            	<li><a href="">My Credit Score</a></li>
+	            <li><a href="">Search Clinics</a></li>
+	            <li><a href="@routes.DoctorController.myClinics()">My Clinics</a></li>
+	            <li><a href="@routes.DoctorController.newClinic()">Add a Clinic</a></li>
+    	        <li><a href="@routes.DoctorController.newAssistant()">New Assistant</a></li>
           </ul>
         </li>
         }
+        
+        
+        
+        @if(LoginController.getLoggedInUserRole().equals(Role.MR.toString())){
+        <li class="dropdown">
+          <a href="#" class="dropdown-toggle" data-toggle="dropdown">
+          Doctors
+          <b class="caret"></b></a>
+          <ul class="dropdown-menu">
+            <li><a href="">Doctor List</a></li>
+            <li><a href="">Add Doctor</a></li>
+            <li><a href="">Schedule Appointment</a></li>
+          </ul>
+        </li>
+    
+    	<li class="dropdown">
+          <a href="#" class="dropdown-toggle" data-toggle="dropdown">
+          Phamacies
+          <b class="caret"></b></a>
+          <ul class="dropdown-menu">
+    	        <li><a href="">List</a></li>
+          </ul>
+        </li>
+	
         <li class="dropdown">
           <a href="#" class="dropdown-toggle" data-toggle="dropdown">
           Question Answer
@@ -85,6 +151,8 @@
             <li><a href="/answerform">See all Question</a></li>
           </ul>
         </li>
+        }
+        
     	
         <li class="dropdown">
           <a href="#" class="dropdown-toggle" data-toggle="dropdown">
@@ -97,6 +165,7 @@
             <li><a href="">Pharmacy Reports</a></li>
           </ul>
         </li>
+        
 
    	  </ul>
    	  

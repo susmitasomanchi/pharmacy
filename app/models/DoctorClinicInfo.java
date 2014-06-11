@@ -6,24 +6,29 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.OneToOne;
 
-import play.data.validation.Constraints.Required;
 import play.db.ebean.Model;
 
 @SuppressWarnings("serial")
 @Entity
-public class DoctorAssistant extends BaseEntity {
+public class DoctorClinicInfo extends BaseEntity {
 
-	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO)
+	@Id
 	public Long id;
 
 	@OneToOne
-	public AppUser appUser;
+	public Clinic clinic;
 
-	@Required
-	public String degree;
+	@OneToOne
+	public Doctor doctor;
 
-	public String experience;
+	public Integer fromHrs;
 
-	public static Model.Finder<Long, DoctorAssistant> find = new Finder<Long, DoctorAssistant>(Long.class, DoctorAssistant.class);
+	public Integer toHrs;
+
+	@OneToOne
+	DoctorAssistant assistant;
+
+	public static Model.Finder<Long, DoctorClinicInfo> find = new Finder<Long, DoctorClinicInfo>(Long.class, DoctorClinicInfo.class);
+
 }
