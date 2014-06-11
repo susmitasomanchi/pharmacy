@@ -24,8 +24,7 @@ public class Clinic extends Model{
 	@ManyToOne
 	public Doctor doctor;
 
-	@OneToMany(mappedBy="clinic")
-	public DoctorSchedule timeSchedule;
+
 
 
 	public static Model.Finder<Long, Clinic> find = new Finder<Long, Clinic>(

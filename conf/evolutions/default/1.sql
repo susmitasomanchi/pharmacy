@@ -3,6 +3,21 @@
 
 # --- !Ups
 
+create table address (
+  id                        bigint not null,
+  addrress_line1            varchar(255),
+  addrress_line2            varchar(255),
+  addrress_line3            varchar(255),
+  city                      varchar(255),
+  state                     varchar(35),
+  pin_code                  bigint,
+  country                   varchar(27),
+  last_update               timestamp not null,
+  constraint ck_address_state check (state in ('DADRA AND NAGAR HAVELI','KERALA','WEST BENGAL','JAMMU & KASHMIR','HIMACHAL PRADESH','MANIPUR','MIZORAM','MAHARASHTRA','JHARKHAND','ASSAM','UTTARAKHAND','SIKKIM','KARNATAKA','CHHATTISGARH','ANDHRA PRADESH','NATIONAL CAPITAL TERRITORY OF DELHI','UTTAR PRADESH','PUDUCHERRY','ANDAMAN AND NICOBAR ISLANDS','TRIPURA','GOA','DAMAN AND DIU','NAGALAND','ODISHA','TAMIL NADU','BIHAR','RAJASTHAN','LAKSHADWEEP','HARYANA','MEGHALAYA','PUNJAB','ARUNACHAL PRADESH','GUJARAT','TELANGANA','MADHYA PRADESH','CHNADIGARH')),
+  constraint ck_address_country check (country in ('ARMENIA','ANGUILLA','AUSTRALIA','ARUBA','CHAD','BOSNIA AND HERZEGOVINA','ANTIGUA AND BARBUDA','CHINA','ASHMORE AND CARTIER ISLANDS','AMERICAN SAMOA','COMOROS','INDIA','BOLIVIA','CAMEROON','PAKISTAN','DENMARK','BURUNDI','CAPE VERDE','BULGARIA','ARGENTINA','DJIBOUTI','BELGIUM','ALBANIA','BAHRAIN','ALGERIA','ECUADOR','BELARUS','BARBADOS','BURMA','CHILE','BRUNEI','BELIZE','AZERBAIJAN','BHUTAN','CANADA','AFGHANISTAN','ANDORRA','CAMBODIA','AKROTIRI','AUSTRIA','BOUVET ISLAND','BERMUDA','DOMINICA','ANGOLA','EGYPT','BENIN','UNITED STATES','DHEKELIA','BOTSWANA','CUBA','ANTARCTICA','BRAZIL','CYPRUS','BURKINA FASO','BANGLADESH','COLOMBIA')),
+  constraint pk_address primary key (id))
+;
+
 create table app_user (
   id                        bigint not null,
   image                     bytea,
@@ -45,7 +60,6 @@ create table diagnostic_center (
   services                  varchar(255),
   contact_person_name       varchar(255),
   address                   varchar(255),
-  city                      varchar(255),
   mobile_no                 varchar(255),
   email_id                  varchar(255),
   website_name              varchar(255),
@@ -92,14 +106,6 @@ create table doctor_clinic_info (
   to_time                   integer,
   last_update               timestamp not null,
   constraint pk_doctor_clinic_info primary key (id))
-;
-
-create table doctor_schedule (
-  id                        bigint not null,
-  clinic_id                 bigint,
-  appointment_time          timestamp,
-  last_update               timestamp not null,
-  constraint pk_doctor_schedule primary key (id))
 ;
 
 create table inventory (
@@ -181,6 +187,8 @@ create table question_and_answer (
   constraint pk_question_and_answer primary key (id))
 ;
 
+create sequence address_seq;
+
 create sequence app_user_seq;
 
 create sequence appointment_seq;
@@ -196,8 +204,6 @@ create sequence doctor_seq;
 create sequence doctor_assistant_seq;
 
 create sequence doctor_clinic_info_seq;
-
-create sequence doctor_schedule_seq;
 
 create sequence inventory_seq;
 
@@ -227,8 +233,8 @@ alter table doctor_assistant add constraint fk_doctor_assistant_appUser_6 foreig
 create index ix_doctor_assistant_appUser_6 on doctor_assistant (app_user_id);
 alter table doctor_clinic_info add constraint fk_doctor_clinic_info_doctor_7 foreign key (doctor_id) references doctor (id);
 create index ix_doctor_clinic_info_doctor_7 on doctor_clinic_info (doctor_id);
-alter table doctor_schedule add constraint fk_doctor_schedule_clinic_8 foreign key (clinic_id) references clinic (id);
-create index ix_doctor_schedule_clinic_8 on doctor_schedule (clinic_id);
+alter table inventory add constraint fk_inventory_product_8 foreign key (product_id) references product (id);
+create index ix_inventory_product_8 on inventory (product_id);
 alter table medical_representative add constraint fk_medical_representative_appU_9 foreign key (app_user_id) references app_user (id);
 create index ix_medical_representative_appU_9 on medical_representative (app_user_id);
 alter table patient add constraint fk_patient_appUser_10 foreign key (app_user_id) references app_user (id);
@@ -246,6 +252,8 @@ create index ix_question_and_answer_answer_14 on question_and_answer (answer_by_
 
 # --- !Downs
 
+drop table if exists address cascade;
+
 drop table if exists app_user cascade;
 
 drop table if exists appointment cascade;
@@ -262,8 +270,6 @@ drop table if exists doctor_assistant cascade;
 
 drop table if exists doctor_clinic_info cascade;
 
-drop table if exists doctor_schedule cascade;
-
 drop table if exists inventory cascade;
 
 drop table if exists medical_representative cascade;
@@ -277,6 +283,8 @@ drop table if exists pharmacy cascade;
 drop table if exists product cascade;
 
 drop table if exists question_and_answer cascade;
+
+drop sequence if exists address_seq;
 
 drop sequence if exists app_user_seq;
 
@@ -293,8 +301,6 @@ drop sequence if exists doctor_seq;
 drop sequence if exists doctor_assistant_seq;
 
 drop sequence if exists doctor_clinic_info_seq;
-
-drop sequence if exists doctor_schedule_seq;
 
 drop sequence if exists inventory_seq;
 
