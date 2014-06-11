@@ -14,8 +14,8 @@ create table app_user (
   dob                       timestamp,
   role                      varchar(16),
   last_update               timestamp not null,
-  constraint ck_app_user_sex check (sex in ('OTHER','MALE','FEMALE')),
-  constraint ck_app_user_role check (role in ('PHARMACIST','MR','PATIENT','ADMIN','DIAGREP','DOCTOR','ADMIN_PHARMACIST')),
+  constraint ck_app_user_sex check (sex in ('FEMALE','OTHER','MALE')),
+  constraint ck_app_user_role check (role in ('PATIENT','DOCTOR','ADMIN','PHARMACIST','ADMIN_PHARMACIST','MR','DIAGREP')),
   constraint pk_app_user primary key (id))
 ;
 
