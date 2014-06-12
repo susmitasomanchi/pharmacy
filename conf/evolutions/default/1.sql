@@ -13,8 +13,8 @@ create table address (
   pin_code                  bigint,
   country                   varchar(27),
   last_update               timestamp not null,
-  constraint ck_address_state check (state in ('DADRA AND NAGAR HAVELI','KERALA','WEST BENGAL','JAMMU & KASHMIR','HIMACHAL PRADESH','MANIPUR','MIZORAM','MAHARASHTRA','JHARKHAND','ASSAM','UTTARAKHAND','SIKKIM','KARNATAKA','CHHATTISGARH','ANDHRA PRADESH','NATIONAL CAPITAL TERRITORY OF DELHI','UTTAR PRADESH','PUDUCHERRY','ANDAMAN AND NICOBAR ISLANDS','TRIPURA','GOA','DAMAN AND DIU','NAGALAND','ODISHA','TAMIL NADU','BIHAR','RAJASTHAN','LAKSHADWEEP','HARYANA','MEGHALAYA','PUNJAB','ARUNACHAL PRADESH','GUJARAT','TELANGANA','MADHYA PRADESH','CHNADIGARH')),
-  constraint ck_address_country check (country in ('ARMENIA','ANGUILLA','AUSTRALIA','ARUBA','CHAD','BOSNIA AND HERZEGOVINA','ANTIGUA AND BARBUDA','CHINA','ASHMORE AND CARTIER ISLANDS','AMERICAN SAMOA','COMOROS','INDIA','BOLIVIA','CAMEROON','PAKISTAN','DENMARK','BURUNDI','CAPE VERDE','BULGARIA','ARGENTINA','DJIBOUTI','BELGIUM','ALBANIA','BAHRAIN','ALGERIA','ECUADOR','BELARUS','BARBADOS','BURMA','CHILE','BRUNEI','BELIZE','AZERBAIJAN','BHUTAN','CANADA','AFGHANISTAN','ANDORRA','CAMBODIA','AKROTIRI','AUSTRIA','BOUVET ISLAND','BERMUDA','DOMINICA','ANGOLA','EGYPT','BENIN','UNITED STATES','DHEKELIA','BOTSWANA','CUBA','ANTARCTICA','BRAZIL','CYPRUS','BURKINA FASO','BANGLADESH','COLOMBIA')),
+  constraint ck_address_state check (state in ('DADRA_AND_NAGAR_HAVELI','KERALA','WEST_BENGAL','JAMMU_AND_KASHMIR','HIMACHAL_PRADESH','MANIPUR','MIZORAM','MAHARASHTRA','JHARKHAND','ASSAM','UTTARAKHAND','SIKKIM','KARNATAKA','CHHATTISGARH','ANDHRA_PRADESH','NATIONAL_CAPITAL_TERRITORY_OF_DELHI','UTTAR_PRADESH','PUDUCHERRY','ANDAMAN_AND_NICOBAR_ISLANDS','TRIPURA','GOA','DAMAN_AND_DIU','NAGALAND','ODISHA','TAMIL_NADU','BIHAR','RAJASTHAN','LAKSHADWEEP','HARYANA','MEGHALAYA','PUNJAB','ARUNACHAL_PRADESH','GUJARAT','TELANGANA','MADHYA_PRADESH','CHNADIGARH')),
+  constraint ck_address_country check (country in ('ARMENIA','ANGUILLA','AUSTRALIA','ARUBA','CHAD','BOSNIA_AND_HERZEGOVINA','ANTIGUA_AND_BARBUDA','CHINA','ASHMORE_AND_CARTIER_ISLANDS','AMERICAN_SAMOA','COMOROS','INDIA','BOLIVIA','CAMEROON','PAKISTAN','DENMARK','BURUNDI','CAPE_VERDE','BULGARIA','ARGENTINA','DJIBOUTI','BELGIUM','ALBANIA','BAHRAIN','ALGERIA','ECUADOR','BELARUS','BARBADOS','BURMA','CHILE','BRUNEI','BELIZE','AZERBAIJAN','BHUTAN','CANADA','AFGHANISTAN','ANDORRA','CAMBODIA','AKROTIRI','AUSTRIA','BOUVET_ISLAND','BERMUDA','DOMINICA','ANGOLA','EGYPT','BENIN','UNITED_STATES','DHEKELIA','BOTSWANA','CUBA','ANTARCTICA','BRAZIL','CYPRUS','BURKINA_FASO','BANGLADESH','COLOMBIA')),
   constraint pk_address primary key (id))
 ;
 
@@ -48,16 +48,16 @@ create table appointment (
 
 create table batch (
   id                        bigint not null,
-  batch_status              varchar(19),
+  batch_status              varchar(18),
   product_id                bigint,
   batch_no                  varchar(255),
   mrp                       float,
   expiry_date               timestamp,
-  quantity                  bigint,
+  quantity                  integer,
   tax                       float,
   discount                  float,
   last_update               timestamp not null,
-  constraint ck_batch_batch_status check (batch_status in ('EXPIRED','SUFFICIENT','APPROACHING EXHAUST','APPROACHING EXPIRY','EXHAUSTED')),
+  constraint ck_batch_batch_status check (batch_status in ('EXPIRED','SUFFICIENT','NEARING_EXHAUSTION','APPROACHING_EXPIRY','EXHAUSTED')),
   constraint pk_batch primary key (id))
 ;
 
@@ -119,10 +119,12 @@ create table doctor_clinic_info (
 create table inventory (
   id                        bigint not null,
   product_id                bigint,
+  shelf_no                  varchar(255),
   product_inventory_status  varchar(12),
-  product_quantity          bigint,
+  product_quantity          integer,
+  remarks                   varchar(255),
   last_update               timestamp not null,
-  constraint ck_inventory_product_inventory_status check (product_inventory_status in ('OUT OF STOCK','AVAILABLE')),
+  constraint ck_inventory_product_inventory_status check (product_inventory_status in ('OUT_OF_STOCK','AVAILABLE')),
   constraint pk_inventory primary key (id))
 ;
 
@@ -163,7 +165,8 @@ create table pharmacy (
   name                      varchar(255),
   address                   varchar(255),
   contact_no                varchar(255),
-  admmin_pharmacist_id      bigint,
+  test_field                varchar(255),
+  admin_pharmacist_id       bigint,
   last_update               timestamp not null,
   constraint pk_pharmacy primary key (id))
 ;
@@ -254,8 +257,8 @@ alter table patient add constraint fk_patient_appUser_12 foreign key (app_user_i
 create index ix_patient_appUser_12 on patient (app_user_id);
 alter table pharmacist add constraint fk_pharmacist_appUser_13 foreign key (app_user_id) references app_user (id);
 create index ix_pharmacist_appUser_13 on pharmacist (app_user_id);
-alter table pharmacy add constraint fk_pharmacy_admminPharmacist_14 foreign key (admmin_pharmacist_id) references pharmacist (id);
-create index ix_pharmacy_admminPharmacist_14 on pharmacy (admmin_pharmacist_id);
+alter table pharmacy add constraint fk_pharmacy_adminPharmacist_14 foreign key (admin_pharmacist_id) references pharmacist (id);
+create index ix_pharmacy_adminPharmacist_14 on pharmacy (admin_pharmacist_id);
 alter table question_and_answer add constraint fk_question_and_answer_questi_15 foreign key (question_by_id) references app_user (id);
 create index ix_question_and_answer_questi_15 on question_and_answer (question_by_id);
 alter table question_and_answer add constraint fk_question_and_answer_answer_16 foreign key (answer_by_id) references app_user (id);

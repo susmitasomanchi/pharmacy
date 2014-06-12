@@ -11,10 +11,8 @@ import java.util.List;
 import models.AppUser;
 import models.Appointment;
 import models.AppointmentStatus;
-import models.Appointment;
 import models.Clinic;
 import models.Doctor;
-import models.DoctorClinicInfo;
 import models.DoctorClinicInfo;
 import models.Patient;
 import models.QuestionAndAnswer;
@@ -206,45 +204,38 @@ public class DoctorController extends Controller {
 
 	}
 
-	//doctor schedule
+	//creating appointments
+	public static  Result createAppointment() {
 
-	//	public static Result doctorSchedule(){
-	//		final List<Clinic> clinicList=new ArrayList<Clinic>();
-	//		return ok(views.html.doctorSchedule.render(docScheduleForm,clinicList));
-	//	}
-	//	else {
-	//		final DoctorSchedule docSchedule=filledForm.get();
-	//
-	//		//schedule proccess
-	//		public static Result scheduleProccess(){
-	//			final Form<DoctorSchedule> filledForm = docScheduleForm.bindFromRequest();
-	//			//Logger.info("enteredt");
-	//
-	//			if(filledForm.hasErrors()) {
-	//				Logger.info("bad request");
-	//
-	//				return ok();//badRequest(views.html.doctorSchedule.render(filledForm));
-	//			}
-	//			else {
-	//				final DoctorSchedule docSchedule=filledForm.get();
-	//
-	//				if((docSchedule.id==null)){
-	//
-	//					docSchedule.save();
-	//
-	//				}else{
-	//					docSchedule.update();
-	//				}
-	//
-	//				return ok("doctor time scheduled");
-	//			}
-	//			calendar.add(Calendar.DATE, 1);
-	//		}
-	//
-	//		return ok("created");
-	//	}
+		final Doctor doctor=LoginController.getLoggedInUser().getDoctor();
+		Logger.error(doctor.appUser.name);
+		final List<DoctorClinicInfo> clinicInfos=doctor.doctorClinicInfoList;
+		final int noOfClinics=clinicInfos.size();
+		Logger.error(noOfClinics+"");
 
-	//}
+		final Calendar calendar=new GregorianCalendar();
+		calendar.setTime(new Date());
+		for(int days=0;days<30;days++){
 
+			for (final DoctorClinicInfo doctorClinicInfo : clinicInfos) {
+
+				final int hourToClinic=doctorClinicInfo.toHrs-doctorClinicInfo.fromHrs;
+				calendar.set(Calendar.HOUR_OF_DAY, doctorClinicInfo.fromHrs);
+				calendar.set(Calendar.MINUTE, 1);
+				for (int j2 = 0; j2 <( (hourToClinic*60)/5); j2++) {
+					Logger.error(j2+"");
+					final Appointment appointment=new Appointment();
+					appointment.appointmentStatus=AppointmentStatus.APPROVED;
+					appointment.appointmentTime=calendar.getTime();
+					appointment.save();
+
+					calendar.add(Calendar.MINUTE, 5);
+				}
+			}
+			calendar.add(Calendar.DATE, 1);
+		}
+
+		return ok("doctor time scheduled");
+	}
 
 }

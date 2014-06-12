@@ -21,19 +21,24 @@ public class Inventory extends BaseEntity {
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO)
-	public  Long id;
+	public Long id;
 
 	@OneToOne
-	Product product;
+	public Product product;
+
+	public String shelfNo;
+
 
 	@ManyToOne(cascade=CascadeType.ALL)
-	List<Batch> batchList = new ArrayList<Batch>();
+	public List<Batch> batchList = new ArrayList<Batch>();
 
 	@Required
 	public ProductInventoryStatus productInventoryStatus;
 
 	@Required
-	public Long productQuantity;
+	public Integer productQuantity;
+
+	public String remarks;
 
 	public static Finder<Long, Inventory> find = new Finder<Long, Inventory>(Long.class, Inventory.class);
 }

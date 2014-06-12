@@ -9,7 +9,7 @@ public enum ProductInventoryStatus {
 
 	@EnumValue("AVAILABLE")
 	AVAILABLE,
-	@EnumValue("OUT OF STOCK")
+	@EnumValue("OUT_OF_STOCK")
 	OUT_OF_STOCK;
 
 	public static Map<String, String> options() {

@@ -7,10 +7,10 @@ import com.avaje.ebean.annotation.EnumValue;
 
 public enum State {
 
-	@EnumValue("ANDHRA PRADESH")
+	@EnumValue("ANDHRA_PRADESH")
 	ANDHRA_PRADESH,
 
-	@EnumValue("ARUNACHAL PRADESH")
+	@EnumValue("ARUNACHAL_PRADESH")
 	ARUNACHAL_PRADESH,
 
 	@EnumValue("ASSAM")
@@ -31,10 +31,10 @@ public enum State {
 	@EnumValue("HARYANA")
 	HARYANA,
 
-	@EnumValue("HIMACHAL PRADESH")
+	@EnumValue("HIMACHAL_PRADESH")
 	HIMACHAL_PRADESH,
 
-	@EnumValue("JAMMU & KASHMIR")
+	@EnumValue("JAMMU_AND_KASHMIR")
 	JAMMU_AND_KASHMIR,
 
 	@EnumValue("JHARKHAND")
@@ -47,7 +47,7 @@ public enum State {
 	KERALA,
 
 
-	@EnumValue("MADHYA PRADESH")
+	@EnumValue("MADHYA_PRADESH")
 	MADHYA_PRADESH,
 
 	@EnumValue("MAHARASHTRA")
@@ -77,7 +77,7 @@ public enum State {
 	@EnumValue("SIKKIM")
 	SIKKIM,
 
-	@EnumValue("TAMIL NADU")
+	@EnumValue("TAMIL_NADU")
 	TAMIL_NADU,
 
 	@EnumValue("TELANGANA")
@@ -86,32 +86,32 @@ public enum State {
 	@EnumValue("TRIPURA")
 	TRIPURA,
 
-	@EnumValue("UTTAR PRADESH")
+	@EnumValue("UTTAR_PRADESH")
 	UTTAR_PRADESH,
 
 
 	@EnumValue("UTTARAKHAND")
 	UTTARAKHAND,
 
-	@EnumValue("WEST BENGAL")
+	@EnumValue("WEST_BENGAL")
 	WEST_BENGAL,
 
-	@EnumValue("ANDAMAN AND NICOBAR ISLANDS")
+	@EnumValue("ANDAMAN_AND_NICOBAR_ISLANDS")
 	ANDAMAN_AND_NICOBAR_ISLANDS,
 
 	@EnumValue("CHNADIGARH")
 	CHNADIGARH,
 
-	@EnumValue("DADRA AND NAGAR HAVELI")
+	@EnumValue("DADRA_AND_NAGAR_HAVELI")
 	DADRA_AND_NAGAR_HAVELI,
 
-	@EnumValue("DAMAN AND DIU")
+	@EnumValue("DAMAN_AND_DIU")
 	DAMAN_AND_DIU,
 
 	@EnumValue("LAKSHADWEEP")
 	LAKSHADWEEP,
 
-	@EnumValue("NATIONAL CAPITAL TERRITORY OF DELHI")
+	@EnumValue("NATIONAL_CAPITAL_TERRITORY_OF_DELHI")
 	NATIONAL_CAPITAL_TERRITORY_OF_DELHI,
 
 	@EnumValue("PUDUCHERRY")

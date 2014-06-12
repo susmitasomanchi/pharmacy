@@ -62,7 +62,7 @@ GET    /doc-stuff/                      controllers.DoctorController.docStuff()
 GET    /dashboard						controllers.UserActions.dashboard()
 GET    /register-patient/               controllers.DoctorController.registerPatient()
 POST   /register-patient-proccess/      controllers.DoctorController.registerPatientProccess()
-
+GET		/createappointments				controllers.DoctorController.createAppointment()
 
 
 
@@ -71,6 +71,12 @@ GET    /diagnosticregistration          controllers.DiagnosticController.diagnos
 POST   /diagnosticregistration/save     controllers.DiagnosticController.diagnosticCenterProcess()
 GET    /diagnosticlist                  controllers.DiagnosticController.Diagnosticlist()
 GET    /diagnostic-delete/:id           controllers.DiagnosticController.deleteCenter(id: Long)
+
+#MR Module
+GET    /doctor-list                     controllers.MRController.doctorList()
+GET    /mr/add-doctor/:id               controllers.MRController.addDoctor(id: Long)
+GET    /mr/remove-doctor/:id				controllers.MRController.removeDoctor(id: Long)
+GET    /mr/doctor-list                  controllers.MRController.mrDoctorList()
 
 
 # delete later

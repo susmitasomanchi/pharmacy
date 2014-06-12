@@ -37,7 +37,7 @@ public class Batch extends BaseEntity {
 	public Date expiryDate;
 
 	@Required
-	public Long quantity;
+	public Integer quantity;
 
 	public Float tax;
 

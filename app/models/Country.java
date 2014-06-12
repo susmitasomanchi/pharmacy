@@ -19,7 +19,7 @@ public enum Country {
 	@EnumValue("ALGERIA")
 	ALGERIA,
 
-	@EnumValue("AMERICAN SAMOA")
+	@EnumValue("AMERICAN_SAMOA")
 	AMERICAN_SAMOA,
 
 	@EnumValue("ANDORRA")
@@ -34,7 +34,7 @@ public enum Country {
 	@EnumValue("ANTARCTICA")
 	ANTARCTICA ,
 
-	@EnumValue("ANTIGUA AND BARBUDA")
+	@EnumValue("ANTIGUA_AND_BARBUDA")
 	ANTIGUA_AND_BARBUDA ,
 
 	@EnumValue("ARGENTINA")
@@ -46,7 +46,7 @@ public enum Country {
 	@EnumValue("ARUBA")
 	ARUBA,
 
-	@EnumValue("ASHMORE AND CARTIER ISLANDS")
+	@EnumValue("ASHMORE_AND_CARTIER_ISLANDS")
 	ASHMORE_AND_CARTIER_ISLANDS ,
 
 	@EnumValue("AUSTRALIA")
@@ -88,13 +88,13 @@ public enum Country {
 	@EnumValue("BOLIVIA")
 	BOLIVIA,
 
-	@EnumValue("BOSNIA AND HERZEGOVINA")
+	@EnumValue("BOSNIA_AND_HERZEGOVINA")
 	BOSNIA_AND_HERZEGOVINA,
 
 	@EnumValue("BOTSWANA")
 	BOTSWANA,
 
-	@EnumValue("BOUVET ISLAND")
+	@EnumValue("BOUVET_ISLAND")
 	BOUVET_ISLAND,
 
 	@EnumValue("BRAZIL")
@@ -106,7 +106,7 @@ public enum Country {
 	@EnumValue("BULGARIA")
 	BULGARIA,
 
-	@EnumValue("BURKINA FASO")
+	@EnumValue("BURKINA_FASO")
 	BURKINA_FASO,
 
 	@EnumValue("BURMA")
@@ -124,7 +124,7 @@ public enum Country {
 	@EnumValue("CANADA")
 	CANADA,
 
-	@EnumValue("CAPE VERDE")
+	@EnumValue("CAPE_VERDE")
 	CAPE_VERDE,
 
 	@EnumValue("CHAD")
@@ -172,7 +172,7 @@ public enum Country {
 	@EnumValue("PAKISTAN")
 	PAKISTAN,
 
-	@EnumValue("UNITED STATES")
+	@EnumValue("UNITED_STATES")
 	UNITED_STATES;
 
 	public static Map<String, String> options() {
