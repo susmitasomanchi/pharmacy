@@ -11,7 +11,7 @@ import play.mvc.Result;
 
 public class Application extends Controller {
 
-	public static Form<MedicalRepresentative> salesRepForm=Form.form(MedicalRepresentative.class);
+	public static Form<MedicalRepresentative> mrForm=Form.form(MedicalRepresentative.class);
 	public static Form<DiagnosticRepresentative> diagnosticRepForm=Form.form(DiagnosticRepresentative.class);
 	public static final Form<LoginBean> loginForm = Form.form(LoginBean.class);
 
@@ -21,13 +21,13 @@ public class Application extends Controller {
 
 	//sales representator proccessing
 
-	public static Result salesRepresentator(){
-		return ok(views.html.mr.medicalRepresentative.render(salesRepForm));
+	public static Result medicalRepresentative(){
+		return ok(views.html.mr.medicalRepresentative.render(mrForm));
 
 	}
 
-	public static Result salesRepresentatorProccess(){
-		final Form<MedicalRepresentative> filledForm=salesRepForm.bindFromRequest();
+	public static Result medicalRepresentativeProccess(){
+		final Form<MedicalRepresentative> filledForm=mrForm.bindFromRequest();
 
 		if(filledForm.hasErrors()) {
 			Logger.info("*** user bad request");
