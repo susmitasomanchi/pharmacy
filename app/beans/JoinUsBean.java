@@ -27,6 +27,8 @@ public class JoinUsBean implements Serializable{
 	public Role role;
 
 	public String pharmacyName;
+	
+	public String pharmacutical_company_name;
 
 	public AppUser toAppUser(){
 		final AppUser appUser = new AppUser();

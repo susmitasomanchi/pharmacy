@@ -22,7 +22,7 @@ public class Application extends Controller {
 	//sales representator proccessing
 
 	public static Result salesRepresentator(){
-		return ok(views.html.salesRep.render(salesRepForm));
+		return ok(views.html.mr.medicalRepresentative.render(salesRepForm));
 
 	}
 
@@ -31,7 +31,7 @@ public class Application extends Controller {
 
 		if(filledForm.hasErrors()) {
 			Logger.info("*** user bad request");
-			return badRequest(views.html.salesRep.render(filledForm));
+			return badRequest(views.html.mr.medicalRepresentative.render(filledForm));
 		}
 		else {
 			//final SalesRep salesRepForm = filledForm.get();

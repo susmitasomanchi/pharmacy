@@ -20,6 +20,8 @@ public enum Role {
 	PHARMACIST,
 	@EnumValue("MR")
 	MR,
+	@EnumValue("ADMIN_MR")
+	ADMIN_MR,
 	@EnumValue("DIAGREP")
 	DIAGREP;
 

@@ -140,10 +140,7 @@ public class DoctorController extends Controller {
 
 	}
 
-	//doctor Action
-	public static Result docStuff(){
-		return ok(views.html.doctorStuff.render());
-	}
+	
 
 	//register patient by doctor
 

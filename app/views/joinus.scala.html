@@ -25,12 +25,16 @@
 			
 			@helper.inputPassword(joinUsForm("confirmPassword"),'class -> "inputs",'_label->"Confirm Password")
 
-			@select(joinUsForm("role"), options("PATIENT"->"Patient", "DOCTOR"->"Doctor", "PHARMACIST"->"Pharmacist", "MR"->"Medical Representative", "DIAGREP"->"Diagnostic Representative"), '_label->"Join As")
+			@select(joinUsForm("role"), options("PATIENT"->"Patient", "DOCTOR"->"Doctor", "PHARMACIST"->"Pharmacist", "MR"->"Medical Representative", "ADMIN_MR"->"Admin Medical Representative","DIAGREP"->"Diagnostic Representative"), '_label->"Join As")
 			
 
 			<div id="pharmacyName" class="col-xs-4" style="display:none">
     			<label for="pharmacyName">Pharmacy Name</label>
     			<input id="pharmacyName" name="pharmacyName" class="form-control">
+			</div>
+			<div id="pharmacutical_company_name" class="col-xs-4" style="display:none">
+    			<label for="pharmacutical_company_name">pharmacutical_company Name</label>
+    			<input id="pharmacutical_company_name" name="pharmacutical_company_name" class="form-control">
 			</div>
 </div>	
 	
@@ -47,6 +51,14 @@ $('#role').change(function() {
         $('#pharmacyName').show();
     } else {
     	 $('#pharmacyName').hide();   
+    }
+
+});
+$('#role').change(function() {
+    if ($('#role').val() == 'ADMIN_MR') {
+        $('#pharmacutical_company_name').show();
+    } else {
+    	 $('#pharmacutical_company_name').hide();   
     }
 
 });

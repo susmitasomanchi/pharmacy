@@ -1,10 +1,12 @@
 @(doctorList:List[Doctor])
 @main("doctor list"){
-	@*<form name="searchform" action="@routes.AppointmentController.search()" method="GET">	
+	
+	<form name="searchform" action="@routes.MRController.search()" method="GET">	
 	<input type="text" name="searchStr">
 	
 	<input type="submit" value="Search Doctor">
-	</form>*@
+	</form>
+	
 	<table>
 	<thead>
 	<th>Doctor Name</th>
@@ -16,6 +18,7 @@
 		<td>@doctor.appUser.name</td>
 		<td><a class="btn btn-primary btn-xs" href="/mr/add-doctor/@doctor.id">Add</a></td>
 		</tr>
+		<tr></tr>
 	}
 	</tbody>
 	</table>

@@ -41,17 +41,7 @@
           </ul>
         </li>
 		}
-		@if(LoginController.getLoggedInUserRole().equals(Role.MR.toString())){
-        <li class="dropdown">
-          <a href="#" class="dropdown-toggle" data-toggle="dropdown">
-          Doctors
-          <b class="caret"></b></a>
-          <ul class="dropdown-menu">
-            <li><a href="/doctor-list">All Doctor</a></li>
-            <li><a href="/mr/doctor-list">My Doctor</a></li>
-          </ul>
-        </li>
-        }
+		
 		
 
 		@if(LoginController.getLoggedInUserRole().equals(Role.PHARMACIST.toString())){
@@ -127,11 +117,12 @@
           Doctors
           <b class="caret"></b></a>
           <ul class="dropdown-menu">
-            <li><a href="">Doctor List</a></li>
-            <li><a href="">Add Doctor</a></li>
+            <li><a href="/doctor-list">Search Doctor</a></li>
+            <li><a href="/mr/doctor-list">My Doctor</a></li>
             <li><a href="">Schedule Appointment</a></li>
           </ul>
         </li>
+        
     
     	<li class="dropdown">
           <a href="#" class="dropdown-toggle" data-toggle="dropdown">
@@ -149,6 +140,16 @@
           <ul class="dropdown-menu">
             <li><a href="/questionform">Ask Question</a></li>
             <li><a href="/answerform">See all Question</a></li>
+          </ul>
+        </li>
+        
+        <li class="dropdown">
+          <a href="#" class="dropdown-toggle" data-toggle="dropdown">
+          DCR
+          <b class="caret"></b></a>
+          <ul class="dropdown-menu">
+            <li><a href="/dcr-line-item">DCR</a></li>
+           
           </ul>
         </li>
         }

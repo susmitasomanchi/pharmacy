@@ -7,6 +7,7 @@ PLEASE DO NOT MODIFY IT BY HAND
  *****/
 package controllers;
 
+import models.AdminMR;
 import models.AppUser;
 import models.DiagnosticRepresentative;
 import models.Doctor;
@@ -69,6 +70,12 @@ public class UserController extends Controller {
 				final MedicalRepresentative mr = new MedicalRepresentative();
 				mr.appUser = appUser;
 				mr.save();
+			}
+			
+			if(appUser.role == Role.ADMIN_MR){
+				final AdminMR adminMR = new AdminMR();
+				adminMR.appUser = appUser;
+				adminMR.save();
 			}
 
 			if(appUser.role == Role.DIAGREP){
