@@ -20,7 +20,7 @@ public class DiagnosticRepresentative extends BaseEntity{
 
 	public String diagnosticType;
 
-	public static Finder<Long, DiagnosticRepresentative> find = new Finder<>(Long.class, DiagnosticRepresentative.class);
+	public static Finder<Long, DiagnosticRepresentative> find = new Finder<Long, DiagnosticRepresentative>(Long.class, DiagnosticRepresentative.class);
 
 
 }

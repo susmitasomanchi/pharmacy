@@ -1,11 +1,14 @@
 package beans;
 
+import java.io.Serializable;
+
 import models.AppUser;
 import models.Role;
 import play.data.validation.Constraints.Email;
 import play.data.validation.Constraints.Required;
 
-public class JoinUsBean {
+@SuppressWarnings("serial")
+public class JoinUsBean implements Serializable{
 
 	@Required
 	public String name;

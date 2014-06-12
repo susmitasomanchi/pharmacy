@@ -3,28 +3,39 @@ package controllers;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Date;
+import java.util.GregorianCalendar;
 import java.util.List;
 
 import models.AppUser;
+import models.Appointment;
+import models.AppointmentStatus;
+import models.Clinic;
 import models.Doctor;
-import models.DDSummary;
+import models.DoctorClinicInfo;
+import models.DoctorExperience;
 import models.Patient;
 import models.QuestionAndAnswer;
 import play.Logger;
 import play.data.Form;
 import play.mvc.Controller;
 import play.mvc.Result;
+import actions.BasicAuth;
+import beans.ClinicBean;
 import beans.PatientBean;
 import beans.QuestionAndAnswerBean;
 
+
+@BasicAuth
 public class DoctorController extends Controller {
 
 	public static Form<Doctor> form = Form.form(Doctor.class);
-	public static Form<DDSummary> form1 = Form.form(DDSummary.class);
 	public static Form<PatientBean> patientForm = Form.form(PatientBean.class);
-	public static Form<QuestionAndAnswerBean> questionAndAnswerForm = Form
-			.form(QuestionAndAnswerBean.class);
+	public static Form<ClinicBean> clinicForm = Form.form(ClinicBean.class);
+	public static Form<DoctorExperience> experienceForm = Form.form(DoctorExperience.class);
+	public static Form<QuestionAndAnswerBean> questionAndAnswerForm = Form.form(QuestionAndAnswerBean.class);
+
 
 	public static Result requestAppointment(){
 		final String datetime = request().body().asFormUrlEncoded().get("datetime")[0];
@@ -34,6 +45,22 @@ public class DoctorController extends Controller {
 		try {
 			final Date date = sdf.parse(datetime);
 			Logger.info("Date extracted: "+date);
+
+
+			final Appointment appointment = new Appointment();
+			appointment.requestedBy = LoginController.getLoggedInUser();
+			appointment.appointmentTime = date;
+			appointment.appointmentStatus = AppointmentStatus.REQUESTED;
+			//appointment.remarks =
+			appointment.save();
+			doctor.appointmentList.add(appointment);
+			doctor.update();
+
+
+
+
+
+
 			return ok("Date extracted: "+date+" Doctor: "+doctor.appUser.name);
 		} catch (final ParseException e) {
 			e.printStackTrace();
@@ -41,17 +68,87 @@ public class DoctorController extends Controller {
 		return ok();
 	}
 
+
+	public static Result doctorProfile(){
+		return ok(views.html.doctor.doctorDashboard.render("hello"));
+	}
+
+
+
+	public static Result newClinic(){
+		return ok(views.html.doctor.newClinic.render(clinicForm));
+	}
+
+
+	public static Result doctorExperience(){
+		return ok(views.html.doctor.doctorExperience.render(experienceForm));
+	}
+	
+	public static Result processDoctorExperience() {
+		final Form<DoctorExperience> filledForm = experienceForm.bindFromRequest();
+		//Logger.info("enteredt");
+
+		if(filledForm.hasErrors()) {
+			Logger.info("bad request");
+
+			return badRequest(views.html.doctor.doctorExperience.render(filledForm));
+		}
+		else {
+			final DoctorExperience doctorExperience= filledForm.get();
+
+			if(doctorExperience.id == null) {
+
+				doctorExperience.save();
+			}
+			else {
+
+				doctorExperience.update();
+			}
+		}
+		return TODO;
+		//return redirect(routes.UserController.list());
+
+	}
+	
+	public static Result processNewClinic(){
+		final Form<ClinicBean> filledForm = clinicForm.bindFromRequest();
+		if(filledForm.hasErrors()){
+			Logger.info(filledForm.errors().toString());
+			return ok(views.html.doctor.newClinic.render(filledForm));
+		}
+		else{
+			final Clinic clinic = filledForm.get().toEntity();
+			clinic.save();
+			final Doctor loggedInDoctor = LoginController.getLoggedInUser().getDoctor();
+			final DoctorClinicInfo dcInfo = new DoctorClinicInfo();
+			dcInfo.doctor = loggedInDoctor;
+			dcInfo.clinic = clinic;
+			dcInfo.fromHrs = filledForm.get().fromHrs;
+			dcInfo.toHrs = filledForm.get().toHrs;
+			dcInfo.save();
+			loggedInDoctor.doctorClinicInfoList.add(dcInfo);
+			loggedInDoctor.update();
+		}
+		return redirect(routes.DoctorController.myClinics());
+	}
+
+	public static Result myClinics(){
+		final Doctor loggedInDoctor = LoginController.getLoggedInUser().getDoctor();
+		return ok(views.html.doctor.myClinics.render(loggedInDoctor.doctorClinicInfoList));
+	}
+
+
+	public static Result newAssistant(){
+		return ok(views.html.doctor.newAssistant.render());
+	}
+
+
+
 	public static Result form() {
 		return ok(views.html.createDoctor.render(form));
 		//return TODO;
 	}
-	
-	public static Result enter() {
-		return ok(views.html.doctorDashboard.render("hello"));
-		//return TODO;
-	}
-	
-	
+
 	public static Result process() {
 		final Form<Doctor> filledForm = form.bindFromRequest();
 		//Logger.info("enteredt");
@@ -77,65 +174,6 @@ public class DoctorController extends Controller {
 		//return redirect(routes.UserController.list());
 
 	}
-
-	public static Result form1() {
-		return ok(views.html.doctor.dDSummary.render(form1));
-		//return TODO
-	}
-	
-	
-	public static Result process1() {
-		final Form<DDSummary> filledForm = form1.bindFromRequest();
-		//Logger.info("enteredt");
-
-		if(filledForm.hasErrors()) {
-			Logger.info("bad request");
-
-			return badRequest(views.html.doctor.dDSummary.render(filledForm));
-		}
-		else {
-			final DDSummary dDSummary= filledForm.get();
-
-			if(dDSummary.id == null) {
-
-				dDSummary.save();
-			}
-			else {
-
-				dDSummary.update();
-			}
-		}
-		return TODO;
-		//return redirect(routes.UserController.list());
-
-	}
-	
-	
-	/* public static Result editProfile(Long id){
-		 
-	   	   Form<Doctor> taskForm = Form.form(Doctor.class).bindFromRequest();
-	   
-	        if (taskForm.hasErrors()) {
-	     
-	          return badRequest(views.html.doctorDashboard.render(Doctor.all(), taskForm));
-	   
-	        }
-	 else {
-	          
-		 Doctor.update(id, taskForm.get());
-	    
-	          
-	            
-	   return redirect(routes.DoctorController.process());
-	     
-	      }
-	          
-	        }*/
-
-
-
-
-
 
 	//doctor Action
 	public static Result docStuff(){
@@ -179,7 +217,7 @@ public class DoctorController extends Controller {
 
 	public static Result displayAnswer(){
 		final AppUser user = LoginController.getLoggedInUser();
-		Doctor doctor=user.getDoctor();
+		final Doctor doctor=user.getDoctor();
 		List<QuestionAndAnswer> qaList=new ArrayList<QuestionAndAnswer>();
 		if(doctor!=null){
 			qaList = QuestionAndAnswer.find.where()
@@ -201,5 +239,38 @@ public class DoctorController extends Controller {
 
 	}
 
+	//creating appointments
+	public static  Result createAppointment() {
+
+		final Doctor doctor=LoginController.getLoggedInUser().getDoctor();
+		Logger.error(doctor.appUser.name);
+		final List<DoctorClinicInfo> clinicInfos=doctor.doctorClinicInfoList;
+		final int noOfClinics=clinicInfos.size();
+		Logger.error(noOfClinics+"");
+
+		final Calendar calendar=new GregorianCalendar();
+		calendar.setTime(new Date());
+		for(int days=0;days<30;days++){
+
+			for (final DoctorClinicInfo doctorClinicInfo : clinicInfos) {
+
+				final int hourToClinic=doctorClinicInfo.toHrs-doctorClinicInfo.fromHrs;
+				calendar.set(Calendar.HOUR_OF_DAY, doctorClinicInfo.fromHrs);
+				calendar.set(Calendar.MINUTE, 1);
+				for (int j2 = 0; j2 <( (hourToClinic*60)/5); j2++) {
+					Logger.error(j2+"");
+					final Appointment appointment=new Appointment();
+					appointment.appointmentStatus=AppointmentStatus.APPROVED;
+					appointment.appointmentTime=calendar.getTime();
+					appointment.save();
+
+					calendar.add(Calendar.MINUTE, 5);
+				}
+			}
+			calendar.add(Calendar.DATE, 1);
+		}
+
+		return ok("doctor time scheduled");
+	}
 
 }

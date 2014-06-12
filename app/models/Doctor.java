@@ -9,6 +9,7 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.ManyToOne;
+import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 
 import play.data.validation.Constraints.Required;
@@ -25,6 +26,9 @@ public class Doctor extends BaseEntity{
 	@OneToOne
 	public AppUser appUser;
 
+	@OneToMany(cascade = CascadeType.ALL)
+	public List<DoctorClinicInfo> doctorClinicInfoList = new ArrayList<DoctorClinicInfo>();
+
 	@Required
 	public String specialization;
 	
@@ -35,6 +39,11 @@ public class Doctor extends BaseEntity{
 	@Required
 	public String degree;
 
+	
+	@ManyToOne
+	public List<DoctorEducation> doctorEducation = new ArrayList<DoctorEducation>();
+	
+	
 	//government or private
 	public String doctorType;
 
