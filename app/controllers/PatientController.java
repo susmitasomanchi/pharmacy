@@ -1,7 +1,5 @@
 package controllers;
 
-import java.text.SimpleDateFormat;
-import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.LinkedHashMap;
@@ -9,6 +7,8 @@ import java.util.List;
 import java.util.Map;
 
 import models.AppUser;
+import models.Appointment;
+import models.Doctor;
 import models.Patient;
 import models.QuestionAndAnswer;
 import play.Logger;
@@ -25,51 +25,38 @@ public class PatientController extends Controller {
 
 
 	public static Result scheduleAppointment(){
-
-		final int startingHrs = 11;
-		final int endingHrs = 13;
-		final int slotInterval = 5;
-
-		final int caldays = 10;
-
-		final int availableHrs = endingHrs - startingHrs;
-		final int slots =  (availableHrs)*(60/slotInterval);
-		final Calendar cal = Calendar.getInstance();
-		cal.set(Calendar.HOUR_OF_DAY, startingHrs);
-		cal.set(Calendar.MINUTE, 0);
-		cal.set(Calendar.SECOND, 0);
-		cal.set(Calendar.MILLISECOND, 0);
-
-		final Map<Date, List<String>> dateMap = new LinkedHashMap<Date, List<String>>();
-
-		final Calendar calDate = Calendar.getInstance();
-		calDate.set(Calendar.HOUR_OF_DAY, 0);
-		calDate.set(Calendar.MINUTE, 0);
-		calDate.set(Calendar.SECOND, 0);
-		calDate.set(Calendar.MILLISECOND, 0);
-
-		for(int i=0; i<caldays; i++){
-			final List<String> timeList = new ArrayList<String>();
-			final SimpleDateFormat sdf = new SimpleDateFormat("HH:mm");
-			for(int s=0; s<slots; s++){
-				timeList.add(sdf.format(cal.getTime()));
-				cal.add(Calendar.MINUTE, slotInterval);
-			}
-			cal.set(Calendar.HOUR_OF_DAY, startingHrs);
-			cal.set(Calendar.MINUTE, 0);
-			cal.set(Calendar.SECOND, 0);
-			cal.set(Calendar.MILLISECOND, 0);
-			dateMap.put(calDate.getTime(), timeList);
-			calDate.add(Calendar.DATE, 1);
-		}
-
-		calDate.add(Calendar.DATE, -1);
-
-		return ok(views.html.patient.scheduleAppointment.render(dateMap, slots));
+		final Map<Date, List<Appointment>> appointmentMap = null;
+		return ok(views.html.patient.scheduleAppointment.render(appointmentMap,null));
 	}
 
 
+	public static Result displayAppointment(final String id) {
+		List<Appointment> listAppointments=null;
+		final Map<Date, List<Appointment>> appointmentMap = new LinkedHashMap<Date, List<Appointment>>();
+		final Doctor doctor=Doctor.find.byId(Long.parseLong(id));
+		final Calendar calendar = Calendar.getInstance();
+		calendar.setTime(new Date());
+		calendar.set(Calendar.HOUR_OF_DAY,0);
+		calendar.set(Calendar.MINUTE,0);
+		calendar.set(Calendar.SECOND,0);
+		calendar.set(Calendar.MILLISECOND,0);
 
+
+		for(int i=0;i<4;i++){
+			listAppointments = Appointment.getAvailableAppointmentList(doctor, calendar.getTime());
+			appointmentMap.put(calendar.getTime(), listAppointments);
+			Logger.error(listAppointments.size()+"Test");
+
+			calendar.add(Calendar.DATE, 1);
+			calendar.set(Calendar.HOUR_OF_DAY,0);
+			calendar.set(Calendar.MINUTE,0);
+			calendar.set(Calendar.SECOND,0);
+			calendar.set(Calendar.MILLISECOND,0);
+			System.out.print(calendar.getTime());
+		}
+
+		return ok(views.html.patient.scheduleAppointment.render(appointmentMap,listAppointments.size()));
+	}
 
 	public static Result processAppointment(){
 		return ok();
@@ -170,7 +157,7 @@ public class PatientController extends Controller {
 	}
 
 	public static  Result  displayQuestion() {
-		return ok(views.html.askQuestion.render(questionAndAnswerForm));
+		return ok(views.html.patient.askQuestion.render(questionAndAnswerForm));
 	}
 	//Question Asked By A Patients
 	public static final Result askQuestion() {

@@ -14,7 +14,7 @@ POST	/join							controllers.UserController.processJoinUs()
 # patient actions
 GET		/user/schedule-appointment		controllers.PatientController.scheduleAppointment()
 POST	/doctor/request-appointment		controllers.DoctorController.requestAppointment()
-
+GET 	/user/display-appointment/:id		controllers.PatientController.displayAppointment(id:String)
 
 # doctor actions
 GET		/doctor/new-assistant			controllers.DoctorController.newAssistant()

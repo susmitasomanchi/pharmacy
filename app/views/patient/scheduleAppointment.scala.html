@@ -1,5 +1,5 @@
-@(timeMap: Map[Date,List[String]], slots: Integer)
-
+@* scheduleAppointmentTemp Template File *@
+@(appointmentMap:Map[Date,List[models.Appointment]],slotes:Integer)
 @main("Schedule An Appointment"){
 
 
@@ -12,26 +12,31 @@
 	}
 	</select> 
 </div>
-</div>
+</div> 
 <br><br>
-
+@if(appointmentMap!=null){
 <table class="table table-condensed">
 <thead>
 <tr>
-@for((k,v) <- timeMap){
-	<th style="text-align:center;"><a class="btn btn-primary" style="cursor:default;">@k.format("dd MMM")<br>@k.format("EE")</a></th>
+@for((date,appt)<- appointmentMap){
+	<th style="text-align:center;"><a class="btn btn-primary" style="cursor:default;">@date.format("dd MMM")<br>@date.format("EE")</a></th>
 }
 </tr>
 </thead>
+
 <tbody>
 
-@for(i <- 0 until slots) {
+@for(i <- 0 until slotes) {
 	<tr>
-	@for((k,v) <- timeMap){
+	@for((k,v) <- appointmentMap){
   		@if(k.format("EE").equals("Sun")){
-  			<td style="text-align:center;"><a class="btn btn-default disabled">@timeMap.get(k).get(i)</a></td>
+  			<td style="text-align:center;"><a class="btn btn-default disabled">@appointmentMap.get(k).get(i).appointmentTime.format("HH:mm")</a></td>
   		}else{
-  			<td class="appt" style="text-align:center;" date="@k.format("dd-MMM-yyyy")"><a class="btn btn-success">@timeMap.get(k).get(i)</a></td>
+  			@if(v.get(i).appointmentStatus==AppointmentStatus.AVAILABLE){ 
+  			  			<td class="appt" date="@appointmentMap.get(k).get(i).appointmentTime.format("dd-mm-yyyy")" style="text-align:center;" id="@appointmentMap.get(k).get(i).id" ><a class="btn btn-success">@appointmentMap.get(k).get(i).appointmentTime.format("HH:mm")</a></td>
+  			}else{
+  			  			<td style="text-align:center;" date="@appointmentMap.get(k).get(i).appointmentTime.format("dd-mm-yyyy")" id="@appointmentMap.get(k).get(i).id" ><a class=" btn btn-success disabled">@appointmentMap.get(k).get(i).appointmentTime.format("HH:mm")</a></td>
+  			}
   		}
 	}
 	</tr>
@@ -39,7 +44,6 @@
 
 </tbody>
 </table>
-
 <style>
 .modal{
 	overflow:hidden;
@@ -54,19 +58,22 @@
   <div class="modal-dialog">
     <div class="modal-content">
       <div class="modal-body" id="model-content">
-      
+     
       </div>
+     	 <textarea id="remark"></textarea>
+     
       <div class="modal-footer">
         <a class="btn btn-default" data-dismiss="modal">Close</a>
-        <a class="btn btn-primary" onclick="$('#datetimeform').submit();">Confirm</a>
+        <a class="btn btn-primary" onclick="$('#datetimeform').submit();" id="confirm">Confirm</a>
       </div>
     </div>
   </div>
 </div>
-
+}
 <script>
 var datetime='';
 $(".appt").on("click", function(){
+	$("#aptid").val($(this).attr('id'));
 	datetime = $(this).attr("date")+'~'+$(this).text();
 	$("#inputdatetime").attr("value",datetime);
 	$("#model-content").html('<p> Are you sure you wish to request an appointment on <br>'+$(this).attr("date")+' at '+$(this).text()+' Hrs ?</p>');
@@ -75,13 +82,21 @@ $(".appt").on("click", function(){
 
 $("#doc-select").change(function() {
 	$("#doctorId").attr("value",$("#doc-select option:selected").val());
+	var id=$("#doc-select option:selected").val();
+	window.location.href = '/user/display-appointment/'+id;
 });
+function confSubmit(){
+	
+	$("#formremark").val($("#remark").val());
+}
 </script>
 
-<form id="datetimeform" style="display:none;" action="@routes.DoctorController.requestAppointment()" method="POST">
-	<input type="hidden" id="inputdatetime" name="datetime" value="">
-	<input type="hidden" id="doctorId" name="doctorId" value="">
+<form id="datetimeform" style="display:none;" action="@routes.DoctorController.requestAppointment()" method="POST" onsubmit="return confSubmit();">
+	<input type="hidden"  id="formremark" name="datetime" value="">
+		<input type="hidden" id="aptid"  name="datetime" value="">
+	
 </form>
+
 
 
 }

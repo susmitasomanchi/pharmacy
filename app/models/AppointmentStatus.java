@@ -3,7 +3,7 @@ import java.util.LinkedHashMap;
 import java.util.Map;
 
 public enum AppointmentStatus {
-	OPEN,REQUESTED,APPROVED,CANCELLED,SERVED;
+	AVAILABLE,REQUESTED,APPROVED,CANCELLED,SERVED;
 
 
 	public static Map<String, String> options() {
