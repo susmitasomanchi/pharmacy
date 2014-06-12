@@ -18,6 +18,13 @@ create table address (
   constraint pk_address primary key (id))
 ;
 
+create table admin_mr (
+  id                        bigint not null,
+  name                      varchar(255),
+  last_update               timestamp not null,
+  constraint pk_admin_mr primary key (id))
+;
+
 create table app_user (
   id                        bigint not null,
   image                     bytea,
@@ -30,7 +37,7 @@ create table app_user (
   role                      varchar(16),
   last_update               timestamp not null,
   constraint ck_app_user_sex check (sex in ('FEMALE','OTHER','MALE')),
-  constraint ck_app_user_role check (role in ('PATIENT','DOCTOR','ADMIN','PHARMACIST','ADMIN_PHARMACIST','MR','DIAGREP')),
+  constraint ck_app_user_role check (role in ('PATIENT','DOCTOR','ADMIN','PHARMACIST','ADMIN_PHARMACIST','ADMIN_MR','MR','DIAGREP','DOCTOR_SECRETARY')),
   constraint pk_app_user primary key (id))
 ;
 
@@ -110,6 +117,13 @@ create table doctor_schedule (
   constraint pk_doctor_schedule primary key (id))
 ;
 
+create table head_quarter (
+  state                     varchar(35),
+  name                      varchar(255),
+  last_update               timestamp not null,
+  constraint ck_head_quarter_state check (state in ('DADRA AND NAGAR HAVELI','KERALA','WEST BENGAL','JAMMU & KASHMIR','HIMACHAL PRADESH','MANIPUR','MIZORAM','MAHARASHTRA','JHARKHAND','ASSAM','UTTARAKHAND','SIKKIM','KARNATAKA','CHHATTISGARH','ANDHRA PRADESH','NATIONAL CAPITAL TERRITORY OF DELHI','UTTAR PRADESH','PUDUCHERRY','ANDAMAN AND NICOBAR ISLANDS','TRIPURA','GOA','DAMAN AND DIU','NAGALAND','ODISHA','TAMIL NADU','BIHAR','RAJASTHAN','LAKSHADWEEP','HARYANA','MEGHALAYA','PUNJAB','ARUNACHAL PRADESH','GUJARAT','TELANGANA','MADHYA PRADESH','CHNADIGARH')))
+;
+
 create table inventory (
   id                        bigint not null,
   product_id                bigint,
@@ -127,7 +141,6 @@ create table medical_representative (
   region_alloted            varchar(255),
   company_name              varchar(255),
   types_of_medecine         varchar(255),
-  no_of_doctors_visit       integer,
   last_update               timestamp not null,
   constraint pk_medical_representative primary key (id))
 ;
@@ -143,6 +156,14 @@ create table patient (
   is_urgent_patient         varchar(255),
   last_update               timestamp not null,
   constraint pk_patient primary key (id))
+;
+
+create table pharmaceutical_company (
+  id                        bigint not null,
+  name                      varchar(255),
+  admin_mr_id               bigint,
+  last_update               timestamp not null,
+  constraint pk_pharmaceutical_company primary key (id))
 ;
 
 create table pharmacist (
@@ -191,6 +212,8 @@ create table question_and_answer (
 
 create sequence address_seq;
 
+create sequence admin_mr_seq;
+
 create sequence app_user_seq;
 
 create sequence appointment_seq;
@@ -214,6 +237,8 @@ create sequence inventory_seq;
 create sequence medical_representative_seq;
 
 create sequence patient_seq;
+
+create sequence pharmaceutical_company_seq;
 
 create sequence pharmacist_seq;
 
@@ -247,20 +272,24 @@ alter table medical_representative add constraint fk_medical_representative_app_
 create index ix_medical_representative_app_11 on medical_representative (app_user_id);
 alter table patient add constraint fk_patient_appUser_12 foreign key (app_user_id) references app_user (id);
 create index ix_patient_appUser_12 on patient (app_user_id);
-alter table pharmacist add constraint fk_pharmacist_appUser_13 foreign key (app_user_id) references app_user (id);
-create index ix_pharmacist_appUser_13 on pharmacist (app_user_id);
-alter table pharmacy add constraint fk_pharmacy_admminPharmacist_14 foreign key (admmin_pharmacist_id) references pharmacist (id);
-create index ix_pharmacy_admminPharmacist_14 on pharmacy (admmin_pharmacist_id);
-alter table question_and_answer add constraint fk_question_and_answer_questi_15 foreign key (question_by_id) references app_user (id);
-create index ix_question_and_answer_questi_15 on question_and_answer (question_by_id);
-alter table question_and_answer add constraint fk_question_and_answer_answer_16 foreign key (answer_by_id) references app_user (id);
-create index ix_question_and_answer_answer_16 on question_and_answer (answer_by_id);
+alter table pharmaceutical_company add constraint fk_pharmaceutical_company_adm_13 foreign key (admin_mr_id) references medical_representative (id);
+create index ix_pharmaceutical_company_adm_13 on pharmaceutical_company (admin_mr_id);
+alter table pharmacist add constraint fk_pharmacist_appUser_14 foreign key (app_user_id) references app_user (id);
+create index ix_pharmacist_appUser_14 on pharmacist (app_user_id);
+alter table pharmacy add constraint fk_pharmacy_admminPharmacist_15 foreign key (admmin_pharmacist_id) references pharmacist (id);
+create index ix_pharmacy_admminPharmacist_15 on pharmacy (admmin_pharmacist_id);
+alter table question_and_answer add constraint fk_question_and_answer_questi_16 foreign key (question_by_id) references app_user (id);
+create index ix_question_and_answer_questi_16 on question_and_answer (question_by_id);
+alter table question_and_answer add constraint fk_question_and_answer_answer_17 foreign key (answer_by_id) references app_user (id);
+create index ix_question_and_answer_answer_17 on question_and_answer (answer_by_id);
 
 
 
 # --- !Downs
 
 drop table if exists address cascade;
+
+drop table if exists admin_mr cascade;
 
 drop table if exists app_user cascade;
 
@@ -280,11 +309,15 @@ drop table if exists doctor_clinic_info cascade;
 
 drop table if exists doctor_schedule cascade;
 
+drop table if exists head_quarter cascade;
+
 drop table if exists inventory cascade;
 
 drop table if exists medical_representative cascade;
 
 drop table if exists patient cascade;
+
+drop table if exists pharmaceutical_company cascade;
 
 drop table if exists pharmacist cascade;
 
@@ -295,6 +328,8 @@ drop table if exists product cascade;
 drop table if exists question_and_answer cascade;
 
 drop sequence if exists address_seq;
+
+drop sequence if exists admin_mr_seq;
 
 drop sequence if exists app_user_seq;
 
@@ -319,6 +354,8 @@ drop sequence if exists inventory_seq;
 drop sequence if exists medical_representative_seq;
 
 drop sequence if exists patient_seq;
+
+drop sequence if exists pharmaceutical_company_seq;
 
 drop sequence if exists pharmacist_seq;
 

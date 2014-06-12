@@ -12,6 +12,7 @@ import models.DiagnosticRepresentative;
 import models.Doctor;
 import models.MedicalRepresentative;
 import models.Patient;
+import models.PharmaceuticalCompany;
 import models.Pharmacist;
 import models.Pharmacy;
 import models.Role;
@@ -65,10 +66,14 @@ public class UserController extends Controller {
 				pharmacy.save();
 			}
 
-			if(appUser.role == Role.MR){
-				final MedicalRepresentative mr = new MedicalRepresentative();
-				mr.appUser = appUser;
-				mr.save();
+			if(appUser.role == Role.ADMIN_MR){
+				final MedicalRepresentative medicalRepresentative = new MedicalRepresentative();
+				medicalRepresentative.appUser = appUser;
+				medicalRepresentative.save();
+				final PharmaceuticalCompany pharmaCompany = new PharmaceuticalCompany();
+				pharmaCompany.name = filledForm.get().pharmaceuticalCompanyName;
+				pharmaCompany.adminMR = medicalRepresentative;
+				pharmaCompany.save();
 			}
 
 			if(appUser.role == Role.DIAGREP){

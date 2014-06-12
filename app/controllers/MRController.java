@@ -5,15 +5,28 @@ import java.util.List;
 
 import models.AppUser;
 import models.Doctor;
+import models.HeadQuarter;
 import models.MedicalRepresentative;
 import models.Role;
 import play.Logger;
+import play.data.Form;
 import play.mvc.Controller;
 import play.mvc.Result;
 
 public class MRController extends Controller{
 	static MedicalRepresentative loggedInMR = LoginController.getLoggedInUser().getMedicalRepresentative();
-    
+	public static Form<MedicalRepresentative> medicalRepresentative=Form.form(MedicalRepresentative.class);
+	public static Form<HeadQuarter> headquarter=Form.form(HeadQuarter.class);
+	
+	//add MR
+	public static Result addMR(){
+		return ok(views.html.mr.medicalRepresentative.render(medicalRepresentative));
+		
+	}
+	
+	public static Result headQuarter(){
+		return ok(views.html.mr.headQuarter.render(headquarter));
+	}
 	
 	public static Result doctorList(){
 		List<Doctor> doctorList = Doctor.find.all();

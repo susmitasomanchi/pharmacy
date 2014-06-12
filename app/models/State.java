@@ -120,7 +120,7 @@ public enum State {
 	public static Map<String, String> options() {
 		final LinkedHashMap<String, String> vals = new LinkedHashMap<String, String>();
 		for (final State val : State.values()) {
-			vals.put(val.toString(), val.toString());
+			vals.put(val.toString(), val.toString().replace("_", " "));
 		}
 		return vals;
 	}
