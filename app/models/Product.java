@@ -6,9 +6,9 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 
 import play.data.validation.Constraints.Required;
-import play.db.ebean.*;
 import play.db.ebean.Model.Finder;
 
+@SuppressWarnings("serial")
 @Entity
 public class Product extends BaseEntity {
 
