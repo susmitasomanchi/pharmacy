@@ -3,7 +3,7 @@
 @import helper.twitterBootstrap._
 @main("MedicalRepresentative form") {
 
-@helper.form(action=routes.Application.salesRepresentatorProccess()) {
+@helper.form(action=routes.Application.medicalRepresentativeProccess()) {
 	
 	@helper.inputText(dataForm("name"),'_label->"Name")
 	@helper.inputText(dataForm("designation"),'_label->"designation")
@@ -19,7 +19,7 @@
 	@helper.inputText(dataForm("typesOfMedecine"),'_label->"Types Of Medicine")
 	@helper.inputText(dataForm("noOfDoctorsVisit"),'_label->"No Of Doctors Visit")
 	
-	<input type="submit" value="Add Representative">
+	<input type="submit" value="Add saleRep">
 	
 	
 	}

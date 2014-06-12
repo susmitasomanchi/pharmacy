@@ -1,11 +1,15 @@
-@* products Template File *@
-@(products: List[Product])
+@(products: List[Product], productForm: play.data.Form[Product])
  
 <h1>Products</h1>
 
 <ul> 
 @for(product <- products) {
-  <li>@product.medicineName</li>
+  <li>@product.medicineName   
+   @helper.form(action=routes.PharmacistController.editProduct(product.id)) {
+    <input type="submit" value="Edit"/>
+    }
+  </li>
+  
    
 } 
 </ul>

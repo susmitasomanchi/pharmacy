@@ -49,10 +49,18 @@
 
 <script>
 $('#role').change(function() {
-    if ($('#role').val() == 'PHARMACIST') {
+    if ($('#role').val() == 'ADMIN_PHARMACIST') {
         $('#pharmacyName').show();
     } else {
     	 $('#pharmacyName').hide();   
+    }
+
+});
+$('#role').change(function() {
+    if ($('#role').val() == 'ADMIN_MR') {
+        $('#pharmacutical_company_name').show();
+    } else {
+    	 $('#pharmacutical_company_name').hide();   
     }
 
 });

@@ -1,6 +1,6 @@
 @()
 @import play.i18n._
-<nav class="navbar navbar-default navbar-fixed-top" role="navigation">
+<nav class="navbar navbar-inverse navbar-fixed-top" role="navigation">
   <div class="container-fluid">
     <!-- Brand and toggle get grouped for better mobile display -->
     <div class="navbar-header">
@@ -41,20 +41,10 @@
           </ul>
         </li>
 		}
-		@if(LoginController.getLoggedInUserRole().equals(Role.MR.toString())){
-        <li class="dropdown">
-          <a href="#" class="dropdown-toggle" data-toggle="dropdown">
-          Doctors
-          <b class="caret"></b></a>
-          <ul class="dropdown-menu">
-            <li><a href="/doctor-list">All Doctor</a></li>
-            <li><a href="/mr/doctor-list">My Doctor</a></li>
-          </ul>
-        </li>
-        }
+		
 		
 
-		@if(LoginController.getLoggedInUserRole().equals(Role.PHARMACIST.toString())){
+		@if(LoginController.getLoggedInUserRole().equals(Role.ADMIN_PHARMACIST.toString())){
 		<li class="dropdown">
           <a href="#" class="dropdown-toggle" data-toggle="dropdown">
           Orders
@@ -148,11 +138,12 @@
           Doctors
           <b class="caret"></b></a>
           <ul class="dropdown-menu">
-            <li><a href="">Doctor List</a></li>
-            <li><a href="">Add Doctor</a></li>
+            <li><a href="/doctor-list">Search Doctor</a></li>
+            <li><a href="/mr/doctor-list">My Doctor</a></li>
             <li><a href="">Schedule Appointment</a></li>
           </ul>
         </li>
+        
     
     	<li class="dropdown">
           <a href="#" class="dropdown-toggle" data-toggle="dropdown">
@@ -172,6 +163,16 @@
             <li><a href="/answerform">See all Question</a></li>
           </ul>
         </li>
+        
+        <li class="dropdown">
+          <a href="#" class="dropdown-toggle" data-toggle="dropdown">
+          DCR
+          <b class="caret"></b></a>
+          <ul class="dropdown-menu">
+            <li><a href="/dcr-line-item">DCR</a></li>
+           
+          </ul>
+        </li>
         }
         
     	
@@ -189,7 +190,12 @@
         
 
    	  </ul>
-   	  
+   	  <form class="navbar-form navbar-left" role="search">
+        <div class="form-group">
+          <input type="text" class="form-control" placeholder="Search">
+        </div>
+        <button type="submit" class="btn btn-default btn-sm">Submit</button>
+      </form>
    	  
    	  
    	  <ul class="nav navbar-nav navbar-right">

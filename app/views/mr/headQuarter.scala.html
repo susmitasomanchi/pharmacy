@@ -6,12 +6,12 @@
 
 @main("HeadQuarter form") {
 
-@helper.form(action=routes.Application.salesRepresentatorProccess()) {
+
 	
 	@select(headQuarter("state"), options=helper.options(models.State.options()), '_label->"State")
 	@helper.inputText(headQuarter("name"),'class -> "inputs",'_label->"Name")
 	<input type="submit" value="Submit">
 	
 	
-	}
+	
 	}

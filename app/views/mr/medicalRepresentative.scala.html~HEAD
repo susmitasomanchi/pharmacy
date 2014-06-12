@@ -19,7 +19,7 @@
 	@helper.inputText(dataForm("typesOfMedecine"),'_label->"Types Of Medicine")
 	@helper.inputText(dataForm("noOfDoctorsVisit"),'_label->"No Of Doctors Visit")
 	
-	<input type="submit" value="Add saleRep">
+	<input type="submit" value="Add Representative">
 	
 	
 	}
