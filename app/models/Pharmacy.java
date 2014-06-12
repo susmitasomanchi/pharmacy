@@ -24,14 +24,16 @@ public class Pharmacy extends BaseEntity {
 
 	public String contactNo;
 
+	public String testField;
+
 	@OneToOne
-	Pharmacist admminPharmacist;
+	public Pharmacist adminPharmacist;
 
 	@ManyToOne(cascade=CascadeType.ALL)
-	List<Pharmacist> pharmacistList = new ArrayList<Pharmacist>();
+	public List<Pharmacist> pharmacistList = new ArrayList<Pharmacist>();
 
 	@ManyToOne(cascade=CascadeType.ALL)
-	List<Inventory> inventoryList = new ArrayList<Inventory>();
+	public List<Inventory> inventoryList = new ArrayList<Inventory>();
 
 	public static Finder<Long, Pharmacy> find = new Finder<Long, Pharmacy>(Long.class, Pharmacy.class);
 

@@ -11,6 +11,7 @@ import models.AppointmentStatus;
 import models.Clinic;
 import models.Doctor;
 import models.DoctorClinicInfo;
+import models.DoctorExperience;
 import models.Patient;
 import models.QuestionAndAnswer;
 import play.Logger;
@@ -29,6 +30,7 @@ public class DoctorController extends Controller {
 	public static Form<Doctor> form = Form.form(Doctor.class);
 	public static Form<PatientBean> patientForm = Form.form(PatientBean.class);
 	public static Form<ClinicBean> clinicForm = Form.form(ClinicBean.class);
+	public static Form<DoctorExperience> experienceForm = Form.form(DoctorExperience.class);
 	public static Form<QuestionAndAnswerBean> questionAndAnswerForm = Form.form(QuestionAndAnswerBean.class);
 
 
@@ -53,6 +55,9 @@ public class DoctorController extends Controller {
 	}
 
 
+	public static Result doctorProfile(){
+		return ok(views.html.doctor.doctorDashboard.render("hello"));
+	}
 
 
 
@@ -61,6 +66,36 @@ public class DoctorController extends Controller {
 	}
 
 
+	public static Result doctorExperience(){
+		return ok(views.html.doctor.doctorExperience.render(experienceForm));
+	}
+	
+	public static Result processDoctorExperience() {
+		final Form<DoctorExperience> filledForm = experienceForm.bindFromRequest();
+		//Logger.info("enteredt");
+
+		if(filledForm.hasErrors()) {
+			Logger.info("bad request");
+
+			return badRequest(views.html.doctor.doctorExperience.render(filledForm));
+		}
+		else {
+			final DoctorExperience doctorExperience= filledForm.get();
+
+			if(doctorExperience.id == null) {
+
+				doctorExperience.save();
+			}
+			else {
+
+				doctorExperience.update();
+			}
+		}
+		return TODO;
+		//return redirect(routes.UserController.list());
+
+	}
+	
 	public static Result processNewClinic(){
 		final Form<ClinicBean> filledForm = clinicForm.bindFromRequest();
 		if(filledForm.hasErrors()){

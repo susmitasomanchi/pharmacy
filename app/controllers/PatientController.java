@@ -132,8 +132,11 @@ public class PatientController extends Controller {
 
 			if (patient.id == null) {
 
+
 				patient.save();
-			} else {
+			}
+			else {
+			
 				patient.update();
 			}
 		}
