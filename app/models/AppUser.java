@@ -40,33 +40,27 @@ public class AppUser extends BaseEntity {
 
 	public Role role;
 
+	public static Model.Finder<Long, AppUser> find = new Finder<Long, AppUser>(Long.class, AppUser.class);
+
 	public Patient getPatient() {
-		final Patient patient=Patient.find.where().eq("appUser.id", this.id).findUnique();
-		return patient;
-
+		return Patient.find.where().eq("appUser.id", this.id).findUnique();
 	}
+
 	public Doctor getDoctor() {
-		final Doctor doctor=Doctor.find.where().eq("appUser.id", this.id).findUnique();
-		return doctor;
-
+		return Doctor.find.where().eq("appUser.id", this.id).findUnique();
 	}
+
 	public Pharmacist getPharmacist() {
-		final Pharmacist pharmacist=Pharmacist.find.where().eq("appUser.id", this.id).findUnique();
-		return pharmacist;
-
+		return Pharmacist.find.where().eq("appUser.id", this.id).findUnique();
 	}
+
 	public MedicalRepresentative getMedicalRepresentative() {
-		final MedicalRepresentative medicalRepresentative=MedicalRepresentative.find.where().eq("appUser.id", this.id).findUnique();
-		return medicalRepresentative;
-
+		return MedicalRepresentative.find.where().eq("appUser.id", this.id).findUnique();
 	}
+
 	public DiagnosticRepresentative getDiagnosticRepresentative() {
-		final DiagnosticRepresentative diagnosticRepresentative=DiagnosticRepresentative.find.where().eq("appUser.id", this.id).findUnique();
-		return diagnosticRepresentative;
-
+		return DiagnosticRepresentative.find.where().eq("appUser.id", this.id).findUnique();
 	}
 
-	public static Model.Finder<Long, AppUser> find = new Finder<Long, AppUser>(
-			Long.class, AppUser.class);
 
 }

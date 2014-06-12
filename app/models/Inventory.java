@@ -1,11 +1,15 @@
 package models;
 
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.ManyToOne;
 import javax.persistence.OneToOne;
 
 import play.data.validation.Constraints.Required;
@@ -22,18 +26,14 @@ public class Inventory extends BaseEntity {
 	@OneToOne
 	Product product;
 
+	@ManyToOne(cascade=CascadeType.ALL)
+	List<Batch> batchList = new ArrayList<Batch>();
 
 	@Required
-	public String batchNo;
+	public ProductInventoryStatus productInventoryStatus;
 
 	@Required
-	public Double mrp;
-
-	@Required
-	public Date expiryDate;
-
-	@Required
-	public Long quantity;
+	public Long productQuantity;
 
 	public static Finder<Long, Inventory> find = new Finder<Long, Inventory>(Long.class, Inventory.class);
 }

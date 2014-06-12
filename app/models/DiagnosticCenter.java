@@ -21,6 +21,7 @@ public class DiagnosticCenter extends Model{
 	@Required
 	public String contactPersonName;
 	@Required
+	//public Address address;
 	public String address;
 
 	@Required

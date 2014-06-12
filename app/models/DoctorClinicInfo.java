@@ -4,6 +4,7 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.OneToOne;
 
 import play.db.ebean.Model;
 
@@ -15,11 +16,18 @@ public class DoctorClinicInfo extends BaseEntity {
 	@Id
 	public Long id;
 
+	@OneToOne
 	public Clinic clinic;
 
-	public Integer fromTime;
+	@OneToOne
+	public Doctor doctor;
 
-	public Integer toTime;
+	public Integer fromHrs;
+
+	public Integer toHrs;
+
+	@OneToOne
+	DoctorAssistant assistant;
 
 	public static Model.Finder<Long, DoctorClinicInfo> find = new Finder<Long, DoctorClinicInfo>(Long.class, DoctorClinicInfo.class);
 

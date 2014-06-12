@@ -16,8 +16,11 @@ GET		/user/schedule-appointment		controllers.PatientController.scheduleAppointme
 POST	/doctor/request-appointment		controllers.DoctorController.requestAppointment()
 
 
-
-
+# doctor actions
+GET		/doctor/new-assistant			controllers.DoctorController.newAssistant()
+GET		/doctor/new-clinic				controllers.DoctorController.newClinic()
+POST	/doctor/new-clinic				controllers.DoctorController.processNewClinic()
+GET		/doctor/clinics					controllers.DoctorController.myClinics()
 
 
 
@@ -31,11 +34,12 @@ GET		/userform/assistant/			controllers.AssistantController.form()
 POST	/userform/assistant/			controllers.AssistantController.process()
 GET		/scheduleappointment/			controllers.AppointmentController.form()
 POST	/scheduleappointment/			controllers.AppointmentController.process()
-GET    /userform/pharmacy/                controllers.PharmacyController.form() 
-POST   /userform/pharmacy/                controllers.PharmacyController.process()
+GET    /userform/pharmacy/                controllers.PharmacistController.pharmacyForm() 
+POST   /userform/pharmacy/                controllers.PharmacistController.pharmacyProcess()
 GET		/newProduct						controllers.PharmacistController.productForm()
 POST	/newProduct						controllers.PharmacistController.saveProduct()					
 GET		/products						controllers.PharmacistController.displayProducts()
+POST    /editproduct/		   			controllers.PharmacistController.editProduct(id: Long)
 
 GET    /salesRep/                       controllers.Application.salesRepresentator()
 POST   /salesRepProccess/               controllers.Application.salesRepresentatorProccess()
@@ -58,9 +62,9 @@ GET    /doc-stuff/                      controllers.DoctorController.docStuff()
 GET    /dashboard						controllers.UserActions.dashboard()
 GET    /register-patient/               controllers.DoctorController.registerPatient()
 POST   /register-patient-proccess/      controllers.DoctorController.registerPatientProccess()
-GET    /doc-schedule                    controllers.DoctorController.doctorSchedule()
-POST   /doc-schedulr-proccess           controllers.DoctorController.scheduleProccess()
-GET		/createappointments				controllers.DoctorController.createAppointment()
+
+
+
 
 #Diagnostic module
 GET    /diagnosticregistration          controllers.DiagnosticController.diagnosticCenter()

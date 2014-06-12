@@ -9,6 +9,7 @@ import javax.persistence.OneToOne;
 import play.data.validation.Constraints.Required;
 import play.db.ebean.Model;
 
+@SuppressWarnings("serial")
 @Entity
 public class DoctorAssistant extends BaseEntity {
 
@@ -16,14 +17,13 @@ public class DoctorAssistant extends BaseEntity {
 	@GeneratedValue(strategy = GenerationType.AUTO)
 	public Long id;
 
+	@OneToOne
+	public AppUser appUser;
+
 	@Required
 	public String degree;
 
 	public String experience;
 
-	@OneToOne
-	public AppUser appUser;
-
-	public static Model.Finder<Long, DoctorAssistant> find = new Finder<Long, DoctorAssistant>(
-			Long.class, DoctorAssistant.class);
+	public static Model.Finder<Long, DoctorAssistant> find = new Finder<Long, DoctorAssistant>(Long.class, DoctorAssistant.class);
 }

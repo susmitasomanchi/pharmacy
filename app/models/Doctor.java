@@ -26,6 +26,7 @@ public class Doctor extends BaseEntity{
 	@OneToOne
 	public AppUser appUser;
 
+	@OneToMany(cascade = CascadeType.ALL)
 	public List<DoctorClinicInfo> doctorClinicInfoList = new ArrayList<DoctorClinicInfo>();
 
 	@Required
@@ -33,29 +34,6 @@ public class Doctor extends BaseEntity{
 
 	@Required
 	public String degree;
-
-	//government or private
-	public String doctorType;
-
-	public String experience;
-
-	public String homeFacility;
-
-	public Integer fees;
-
-	public String clinicAddress;
-
-	public String hospitalAddress;
-
-
-	public String categoryOfDoctor;						// homeopathic or ayurvedic or etc.
-
-
-
-	@OneToMany(cascade=CascadeType.ALL)
-	List<DoctorClinicInfo> clinicSchedules=new ArrayList<DoctorClinicInfo>();
-
-
 
 	@ManyToOne(cascade=CascadeType.ALL)
 	public List<Appointment> appointmentList=new ArrayList<Appointment>();

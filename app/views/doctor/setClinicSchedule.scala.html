@@ -16,16 +16,7 @@
       <div class="panel-body">
 	
 	
-	@helper.form(action=routes.DoctorController.scheduleProccess(),'method -> "post") {
 	
-		@helper.inputDate(dataForm("fromTime"),'_label->"Select Date")
-    	@helper.inputDate(dataForm("toTime"),'_label->"Select Date")
-    
-
-    <input type="hidden" name="id" value=value='@dataForm("id").value' />
-    <input type="submit" value="add schedule" /> 
-    
-    }
 	 </div>
     </div>
   </div>
