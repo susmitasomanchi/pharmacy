@@ -42,6 +42,7 @@ create table appointment (
   apporoved_by_id           bigint,
   remarks                   varchar(255),
   doctor_id                 bigint,
+  clinic_id                 bigint,
   last_update               timestamp not null,
   constraint ck_appointment_appointment_status check (appointment_status in (0,1,2,3,4)),
   constraint pk_appointment primary key (id))
@@ -299,34 +300,36 @@ alter table appointment add constraint fk_appointment_apporovedBy_2 foreign key 
 create index ix_appointment_apporovedBy_2 on appointment (apporoved_by_id);
 alter table appointment add constraint fk_appointment_doctor_3 foreign key (doctor_id) references doctor (id);
 create index ix_appointment_doctor_3 on appointment (doctor_id);
-alter table batch add constraint fk_batch_product_4 foreign key (product_id) references product (id);
-create index ix_batch_product_4 on batch (product_id);
-alter table diagnostic_representative add constraint fk_diagnostic_representative_a_5 foreign key (app_user_id) references app_user (id);
-create index ix_diagnostic_representative_a_5 on diagnostic_representative (app_user_id);
-alter table doctor add constraint fk_doctor_appUser_6 foreign key (app_user_id) references app_user (id);
-create index ix_doctor_appUser_6 on doctor (app_user_id);
-alter table doctor_assistant add constraint fk_doctor_assistant_appUser_7 foreign key (app_user_id) references app_user (id);
-create index ix_doctor_assistant_appUser_7 on doctor_assistant (app_user_id);
-alter table doctor_clinic_info add constraint fk_doctor_clinic_info_clinic_8 foreign key (clinic_id) references clinic (id);
-create index ix_doctor_clinic_info_clinic_8 on doctor_clinic_info (clinic_id);
-alter table doctor_clinic_info add constraint fk_doctor_clinic_info_doctor_9 foreign key (doctor_id) references doctor (id);
-create index ix_doctor_clinic_info_doctor_9 on doctor_clinic_info (doctor_id);
-alter table doctor_clinic_info add constraint fk_doctor_clinic_info_assista_10 foreign key (assistant_id) references doctor_assistant (id);
-create index ix_doctor_clinic_info_assista_10 on doctor_clinic_info (assistant_id);
-alter table inventory add constraint fk_inventory_product_11 foreign key (product_id) references product (id);
-create index ix_inventory_product_11 on inventory (product_id);
-alter table medical_representative add constraint fk_medical_representative_app_12 foreign key (app_user_id) references app_user (id);
-create index ix_medical_representative_app_12 on medical_representative (app_user_id);
-alter table patient add constraint fk_patient_appUser_13 foreign key (app_user_id) references app_user (id);
-create index ix_patient_appUser_13 on patient (app_user_id);
-alter table pharmacist add constraint fk_pharmacist_appUser_14 foreign key (app_user_id) references app_user (id);
-create index ix_pharmacist_appUser_14 on pharmacist (app_user_id);
-alter table pharmacy add constraint fk_pharmacy_adminPharmacist_15 foreign key (admin_pharmacist_id) references pharmacist (id);
-create index ix_pharmacy_adminPharmacist_15 on pharmacy (admin_pharmacist_id);
-alter table question_and_answer add constraint fk_question_and_answer_questi_16 foreign key (question_by_id) references app_user (id);
-create index ix_question_and_answer_questi_16 on question_and_answer (question_by_id);
-alter table question_and_answer add constraint fk_question_and_answer_answer_17 foreign key (answer_by_id) references app_user (id);
-create index ix_question_and_answer_answer_17 on question_and_answer (answer_by_id);
+alter table appointment add constraint fk_appointment_clinic_4 foreign key (clinic_id) references clinic (id);
+create index ix_appointment_clinic_4 on appointment (clinic_id);
+alter table batch add constraint fk_batch_product_5 foreign key (product_id) references product (id);
+create index ix_batch_product_5 on batch (product_id);
+alter table diagnostic_representative add constraint fk_diagnostic_representative_a_6 foreign key (app_user_id) references app_user (id);
+create index ix_diagnostic_representative_a_6 on diagnostic_representative (app_user_id);
+alter table doctor add constraint fk_doctor_appUser_7 foreign key (app_user_id) references app_user (id);
+create index ix_doctor_appUser_7 on doctor (app_user_id);
+alter table doctor_assistant add constraint fk_doctor_assistant_appUser_8 foreign key (app_user_id) references app_user (id);
+create index ix_doctor_assistant_appUser_8 on doctor_assistant (app_user_id);
+alter table doctor_clinic_info add constraint fk_doctor_clinic_info_clinic_9 foreign key (clinic_id) references clinic (id);
+create index ix_doctor_clinic_info_clinic_9 on doctor_clinic_info (clinic_id);
+alter table doctor_clinic_info add constraint fk_doctor_clinic_info_doctor_10 foreign key (doctor_id) references doctor (id);
+create index ix_doctor_clinic_info_doctor_10 on doctor_clinic_info (doctor_id);
+alter table doctor_clinic_info add constraint fk_doctor_clinic_info_assista_11 foreign key (assistant_id) references doctor_assistant (id);
+create index ix_doctor_clinic_info_assista_11 on doctor_clinic_info (assistant_id);
+alter table inventory add constraint fk_inventory_product_12 foreign key (product_id) references product (id);
+create index ix_inventory_product_12 on inventory (product_id);
+alter table medical_representative add constraint fk_medical_representative_app_13 foreign key (app_user_id) references app_user (id);
+create index ix_medical_representative_app_13 on medical_representative (app_user_id);
+alter table patient add constraint fk_patient_appUser_14 foreign key (app_user_id) references app_user (id);
+create index ix_patient_appUser_14 on patient (app_user_id);
+alter table pharmacist add constraint fk_pharmacist_appUser_15 foreign key (app_user_id) references app_user (id);
+create index ix_pharmacist_appUser_15 on pharmacist (app_user_id);
+alter table pharmacy add constraint fk_pharmacy_adminPharmacist_16 foreign key (admin_pharmacist_id) references pharmacist (id);
+create index ix_pharmacy_adminPharmacist_16 on pharmacy (admin_pharmacist_id);
+alter table question_and_answer add constraint fk_question_and_answer_questi_17 foreign key (question_by_id) references app_user (id);
+create index ix_question_and_answer_questi_17 on question_and_answer (question_by_id);
+alter table question_and_answer add constraint fk_question_and_answer_answer_18 foreign key (answer_by_id) references app_user (id);
+create index ix_question_and_answer_answer_18 on question_and_answer (answer_by_id);
 
 
 

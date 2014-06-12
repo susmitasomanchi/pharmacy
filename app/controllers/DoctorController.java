@@ -69,7 +69,7 @@ public class DoctorController extends Controller {
 	public static Result doctorExperience(){
 		return ok(views.html.doctor.doctorExperience.render(experienceForm));
 	}
-	
+
 	public static Result processDoctorExperience() {
 		final Form<DoctorExperience> filledForm = experienceForm.bindFromRequest();
 		//Logger.info("enteredt");
@@ -95,7 +95,7 @@ public class DoctorController extends Controller {
 		//return redirect(routes.UserController.list());
 
 	}
-	
+
 	public static Result processNewClinic(){
 		final Form<ClinicBean> filledForm = clinicForm.bindFromRequest();
 		if(filledForm.hasErrors()){
@@ -256,6 +256,7 @@ public class DoctorController extends Controller {
 					final Appointment appointment=new Appointment();
 					appointment.appointmentStatus=AppointmentStatus.AVAILABLE;
 					appointment.appointmentTime=calendar.getTime();
+					appointment.clinic=doctorClinicInfo.clinic;
 					appointment.doctor=doctor;
 					appointment.save();
 
