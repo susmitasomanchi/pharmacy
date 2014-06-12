@@ -38,7 +38,11 @@ create table app_user (
   role                      varchar(16),
   last_update               timestamp not null,
   constraint ck_app_user_sex check (sex in ('FEMALE','OTHER','MALE')),
+<<<<<<< HEAD
   constraint ck_app_user_role check (role in ('PATIENT','DOCTOR','ADMIN','PHARMACIST','ADMIN_PHARMACIST','ADMIN_MR','MR','DIAGREP','DOCTOR_SECRETARY')),
+=======
+  constraint ck_app_user_role check (role in ('PATIENT','DOCTOR','ADMIN','PHARMACIST','ADMIN_PHARMACIST','MR','DIAGREP','DOCTOR_SECRETARY')),
+>>>>>>> branch 'master' of git@pharmacy.bz:green-software/mednetwork.git
   constraint pk_app_user primary key (id))
 ;
 
@@ -49,6 +53,8 @@ create table appointment (
   requested_by_id           bigint,
   apporoved_by_id           bigint,
   remarks                   varchar(255),
+  doctor_id                 bigint,
+  clinic_id                 bigint,
   last_update               timestamp not null,
   constraint ck_appointment_appointment_status check (appointment_status in (0,1,2,3,4)),
   constraint pk_appointment primary key (id))
@@ -313,6 +319,7 @@ create sequence product_seq;
 
 create sequence question_and_answer_seq;
 
+<<<<<<< HEAD
 alter table admin_mr add constraint fk_admin_mr_appUser_1 foreign key (app_user_id) references app_user (id);
 create index ix_admin_mr_appUser_1 on admin_mr (app_user_id);
 alter table appointment add constraint fk_appointment_requestedBy_2 foreign key (requested_by_id) references app_user (id);
@@ -323,6 +330,18 @@ alter table batch add constraint fk_batch_product_4 foreign key (product_id) ref
 create index ix_batch_product_4 on batch (product_id);
 alter table dcrline_item add constraint fk_dcrline_item_doctor_5 foreign key (doctor_id) references doctor (id);
 create index ix_dcrline_item_doctor_5 on dcrline_item (doctor_id);
+=======
+alter table appointment add constraint fk_appointment_requestedBy_1 foreign key (requested_by_id) references app_user (id);
+create index ix_appointment_requestedBy_1 on appointment (requested_by_id);
+alter table appointment add constraint fk_appointment_apporovedBy_2 foreign key (apporoved_by_id) references app_user (id);
+create index ix_appointment_apporovedBy_2 on appointment (apporoved_by_id);
+alter table appointment add constraint fk_appointment_doctor_3 foreign key (doctor_id) references doctor (id);
+create index ix_appointment_doctor_3 on appointment (doctor_id);
+alter table appointment add constraint fk_appointment_clinic_4 foreign key (clinic_id) references clinic (id);
+create index ix_appointment_clinic_4 on appointment (clinic_id);
+alter table batch add constraint fk_batch_product_5 foreign key (product_id) references product (id);
+create index ix_batch_product_5 on batch (product_id);
+>>>>>>> branch 'master' of git@pharmacy.bz:green-software/mednetwork.git
 alter table diagnostic_representative add constraint fk_diagnostic_representative_a_6 foreign key (app_user_id) references app_user (id);
 create index ix_diagnostic_representative_a_6 on diagnostic_representative (app_user_id);
 alter table doctor add constraint fk_doctor_appUser_7 foreign key (app_user_id) references app_user (id);

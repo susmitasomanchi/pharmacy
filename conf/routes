@@ -13,6 +13,7 @@ POST   /join                              controllers.UserController.processJoin
 
 # patient actions
 GET    /user/schedule-appointment         controllers.PatientController.scheduleAppointment()
+GET		/user/display-appointment/:id		controllers.PatientController.displayAppointment(id:String)
 POST   /doctor/request-appointment        controllers.DoctorController.requestAppointment()
 
 
@@ -24,6 +25,9 @@ GET    /doctor/clinics                    controllers.DoctorController.myClinics
 GET    /doctor-profile                    controllers.DoctorController.doctorProfile()
 GET    /doctor-experience                 controllers.DoctorController.doctorExperience()
 POST   /doctor-experience                 controllers.DoctorController.processDoctorExperience()
+
+
+
 
 
 
