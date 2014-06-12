@@ -54,7 +54,7 @@ public class UserController extends Controller {
 				doctor.save();
 			}
 
-			if(appUser.role == Role.PHARMACIST){
+			if(appUser.role == Role.ADMIN_PHARMACIST){
 				final Pharmacist pharmacist = new Pharmacist();
 				pharmacist.appUser = appUser;
 				pharmacist.save();
@@ -62,6 +62,7 @@ public class UserController extends Controller {
 				//final Pharmacy pharmacy = filledForm.get();
 				final Pharmacy pharmacy=new Pharmacy();
 				pharmacy.name=filledForm.get().pharmacyName;
+				pharmacy.adminPharmacist=pharmacist;
 				pharmacy.save();
 			}
 
