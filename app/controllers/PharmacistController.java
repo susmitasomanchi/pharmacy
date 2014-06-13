@@ -29,70 +29,9 @@ public class PharmacistController extends Controller{
 	public static Form<Batch> batchForm = Form.form(Batch.class);
 
 
-	public static Result form() {
-		return ok(views.html.pharmacist.createPharmacist.render(form));
-		//return TODO;
-	}
+	
 
-	public static Result process() {
-		final Form<Pharmacist> filledForm = form.bindFromRequest();
-		if(filledForm.hasErrors()) {
-			Logger.info("bad request");
-
-			return badRequest(views.html.pharmacist.createPharmacist.render(filledForm));
-		}
-		else {
-			final Pharmacist pharmacist= filledForm.get();
-
-			if(pharmacist.id == null) {
-				final AppUser appUser=new AppUser();
-				pharmacist.appUser=appUser;
-				appUser.save();
-				pharmacist.save();
-
-			}
-			else {
-				pharmacist.update();
-			}
-
-		}
-		return ok("User Created");
-		//return redirect(routes.UserController.list());
-	}
-
-
-
-	public static Result pharmacyForm() {
-		return ok(views.html.pharmacist.createPharmacy.render(pharmacyForm));
-		//return TODO;
-	}
-
-	public static Result pharmacyProcess() {
-		final Form<Pharmacy> pharmacyFilledForm = pharmacyForm.bindFromRequest();
-
-
-		if(pharmacyFilledForm.hasErrors()) {
-			Logger.info("bad request");
-
-			return badRequest(views.html.pharmacist.createPharmacy.render(pharmacyFilledForm));
-		}
-		else {
-			final Pharmacy pharmacy= pharmacyFilledForm.get();
-
-			if(pharmacy.id == null) {
-
-				pharmacy.save();
-			}
-			else {
-
-				pharmacy.update();
-			}
-		}
-		return TODO;
-		//return redirect(routes.UserController.list());
-
-	}
-
+	
 
 	public static Result productForm() {
 

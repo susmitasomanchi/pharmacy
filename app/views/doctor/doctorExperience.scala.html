@@ -1,0 +1,53 @@
+@(dataForm:play.data.Form[models.DoctorExperience])
+
+@*******************************
+
+THIS IS AN AUTO GENERATED CODE
+PLEASE DO NOT MODIFY IT BY HAND
+
+********************************@
+
+@import play.i18n._
+
+@main("Doctor Experience"){
+	
+	<br>
+<div class="container"> 
+
+@helper.form(action=routes.DoctorController.doctorExperience(),'method -> "post") {
+
+			
+
+
+ 			
+			
+			
+			@helper.inputText(dataForm("previousHospitalName"),'class -> "inputs",'_label->"Previous Hospital Name")
+			
+			@helper.inputText(dataForm("workedAs"),'class -> "inputs",'_label->"Worked As")
+			
+			@helper.inputPassword(dataForm("location"),'class -> "inputs",'_label->"Location")
+			
+			@helper.inputText(dataForm("workedFrom"),'class -> "inputs",'_label->"Worked From")
+						
+			@helper.inputText(dataForm("workedTo"),'class -> "inputs",'_label->"Worked To")
+			
+
+			
+			
+			<br>
+			<input type="hidden" name="id" value='@dataForm("id").value' >
+			<input type="submit" class="submit" value="Login">
+			
+				
+			
+			
+			
+
+}
+</div>
+
+			
+
+
+}
