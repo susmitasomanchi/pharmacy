@@ -40,6 +40,14 @@ GET		/newProduct						controllers.PharmacistController.productForm()
 POST	/newProduct						controllers.PharmacistController.saveProduct()					
 GET		/products						controllers.PharmacistController.displayProducts()
 POST    /editproduct/		   			controllers.PharmacistController.editProduct(id: Long)
+GET		/addProductToInventory			controllers.PharmacistController.addProductForm()
+POST	/addProductToInventory			controllers.PharmacistController.addToInventory()		
+
+
+
+
+
+
 
 GET    /salesRep/                       controllers.Application.salesRepresentator()
 POST   /salesRepProccess/               controllers.Application.salesRepresentatorProccess()
