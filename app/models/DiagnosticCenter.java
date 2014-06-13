@@ -6,6 +6,7 @@ import java.util.List;
 import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.ManyToOne;
+import javax.persistence.OneToOne;
 
 import play.data.validation.Constraints.Email;
 import play.data.validation.Constraints.Required;
@@ -21,7 +22,6 @@ public class DiagnosticCenter extends Model{
 	@Required
 	public String contactPersonName;
 	@Required
-	//public Address address;
 	public String address;
 
 	@Required
@@ -29,6 +29,9 @@ public class DiagnosticCenter extends Model{
 	@Email @Required
 	public String emailId;
 	public String websiteName;
+	
+	@OneToOne
+	DiagnosticRepresentative diagnosticRepAdmin;
 
 	@ManyToOne
 	List<DiagnosticRepresentative> pharmacistlist = new ArrayList<DiagnosticRepresentative>();

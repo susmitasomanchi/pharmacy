@@ -26,6 +26,8 @@ public class JoinUsBean implements Serializable{
 	@Required
 	public Role role;
 
+	public String diagnosticCenterName;
+	
 	public String pharmacyName;
 
 	public AppUser toAppUser(){
