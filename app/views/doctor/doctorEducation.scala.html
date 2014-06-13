@@ -1,0 +1,52 @@
+@(dataForm:play.data.Form[models.DoctorEducation])
+
+@*******************************
+
+THIS IS AN AUTO GENERATED CODE
+PLEASE DO NOT MODIFY IT BY HAND
+
+********************************@
+
+@import play.i18n._
+
+@main("Doctor Education"){
+	
+	<br>
+<div class="container"> 
+
+@helper.form(action=routes.DoctorController.processDoctorEducation(),'method -> "post") {
+
+			
+
+
+ 			
+			
+			
+			@helper.inputText(dataForm("collegeName"),'class -> "inputs",'_label->"School Name")
+			
+			@helper.inputText(dataForm("fromYear"),'class -> "inputs",'_label->"From")
+			
+			@helper.inputText(dataForm("toYear"),'class -> "inputs",'_label->"To")
+			
+			
+			
+			
+
+			
+			
+			<br>
+			<input type="hidden" name="id" value='@dataForm("id").value' >
+			<input type="submit" class="submit" value="Login">
+			
+				
+			
+			
+			
+
+}
+</div>
+
+			
+
+
+}
