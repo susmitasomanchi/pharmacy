@@ -7,11 +7,14 @@ PLEASE DO NOT MODIFY IT BY HAND
  *****/
 package controllers;
 
+
+
 import models.AppUser;
 import models.DiagnosticRepresentative;
 import models.Doctor;
 import models.MedicalRepresentative;
 import models.Patient;
+import models.PharmaceuticalCompany;
 import models.Pharmacist;
 import models.Pharmacy;
 import models.Role;
@@ -54,7 +57,7 @@ public class UserController extends Controller {
 				doctor.save();
 			}
 
-			if(appUser.role == Role.PHARMACIST){
+			if(appUser.role == Role.ADMIN_PHARMACIST){
 				final Pharmacist pharmacist = new Pharmacist();
 				pharmacist.appUser = appUser;
 				pharmacist.save();
@@ -62,14 +65,21 @@ public class UserController extends Controller {
 				//final Pharmacy pharmacy = filledForm.get();
 				final Pharmacy pharmacy=new Pharmacy();
 				pharmacy.name=filledForm.get().pharmacyName;
+				pharmacy.adminPharmacist=pharmacist;
 				pharmacy.save();
 			}
 
-			if(appUser.role == Role.MR){
-				final MedicalRepresentative mr = new MedicalRepresentative();
-				mr.appUser = appUser;
-				mr.save();
+			if(appUser.role == Role.ADMIN_MR){
+				final MedicalRepresentative medicalRepresentative = new MedicalRepresentative();
+				medicalRepresentative.appUser = appUser;
+				medicalRepresentative.save();
+				final PharmaceuticalCompany pharmaCompany = new PharmaceuticalCompany();
+				pharmaCompany.name = filledForm.get().pharmaceuticalCompanyName;
+				pharmaCompany.adminMR = medicalRepresentative;
+				pharmaCompany.save();
 			}
+			
+			
 
 			if(appUser.role == Role.DIAGREP){
 				final DiagnosticRepresentative diagRep = new DiagnosticRepresentative();

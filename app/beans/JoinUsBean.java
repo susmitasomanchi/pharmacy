@@ -1,7 +1,6 @@
 package beans;
 
 import java.io.Serializable;
-
 import models.AppUser;
 import models.Role;
 import play.data.validation.Constraints.Email;
@@ -25,10 +24,12 @@ public class JoinUsBean implements Serializable{
 
 	@Required
 	public Role role;
-
-	public String diagnosticCenterName;
 	
 	public String pharmacyName;
+	
+	public String pharmacutical_company_name;
+
+	public String pharmaceuticalCompanyName;
 
 	public AppUser toAppUser(){
 		final AppUser appUser = new AppUser();

@@ -6,6 +6,7 @@ import java.util.List;
 import actions.BasicAuth;
 import models.AppUser;
 import models.Pharmacist;
+import models.Pharmacy;
 import models.Product;
 import play.Logger;
 import play.data.Form;
@@ -19,39 +20,11 @@ public class PharmacistController extends Controller{
 	//public static Form<UserPreferenceBean> prefForm = Form.form(UserPreferenceBean.class);
 	public static Form<Product> productForm = Form.form(Product.class);
 
-	public static Result form() {
-		return ok(views.html.createPharmacist.render(form));
-		//return TODO;
-	}
+	public static Form<Pharmacy> pharmacyForm = Form.form(Pharmacy.class);
 
-	public static Result process() {
-		final Form<Pharmacist> filledForm = form.bindFromRequest();
-		if(filledForm.hasErrors()) {
-			Logger.info("bad request");
+	
 
-			return badRequest(views.html.createPharmacist.render(filledForm));
-		}
-		else {
-			final Pharmacist pharmacist= filledForm.get();
-
-			if(pharmacist.id == null) {
-				final AppUser appUser=new AppUser();
-				pharmacist.appUser=appUser;
-				appUser.save();
-				pharmacist.save();
-
-			}
-			else {
-				pharmacist.update();
-			}
-
-		}
-		return ok("User Created");
-		//return redirect(routes.UserController.list());
-	}
-
-
-
+	
 
 	public static Result productForm() {
 
@@ -86,6 +59,31 @@ public class PharmacistController extends Controller{
 
 	public static Result displayProducts() {
 		final List<Product> products=Product.find.all();
-		return ok(views.html.pharmacist.products.render(products));
+		return ok(views.html.pharmacist.products.render(products, productForm));
 	}
+
+
+
+
+	public static Result editProduct(final Long id) {
+
+		final Product product  = Product.find.byId(id);
+		final Form<Product> editForm = productForm.fill(product);
+
+		//		productForm.fill(product);
+		return ok(views.html.pharmacist.createProduct.render(editForm));
+
+
+
+
+	}
+
+	//	public static Result batchForm() {
+	//
+	//	}
+	//
+	//	public static Result saveBatch() {
+	//
+	//	}
 }
+

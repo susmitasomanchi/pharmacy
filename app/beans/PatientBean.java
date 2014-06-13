@@ -104,13 +104,9 @@ public class PatientBean implements Serializable{
 			patient.date= this.date;
 		}
 
-		//		if(this.address != null) {
-		//			patient.address= this.address;
-		//		}
-
-		if(this.disease != null) {
-			patient.disease= this.disease;
-		}
+		//if(this.disease != null) {
+			//patient.disease= this.disease;
+		//}
 
 		if(this.appointmentId != null) {
 			patient.appointmentId= this.appointmentId;
