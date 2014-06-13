@@ -16,7 +16,7 @@ public class DiagnosticCenter extends Model{
 	@Id
 	public Long id;
 	@Required
-	public String diagnoCenterName;
+	public String name;
 	@Required
 	public String services;
 	@Required
@@ -31,7 +31,7 @@ public class DiagnosticCenter extends Model{
 	public String websiteName;
 	
 	@OneToOne
-	DiagnosticRepresentative diagnosticRepAdmin;
+	public DiagnosticRepresentative diagnosticRepAdmin;
 
 	@ManyToOne
 	List<DiagnosticRepresentative> pharmacistlist = new ArrayList<DiagnosticRepresentative>();
@@ -47,14 +47,14 @@ public class DiagnosticCenter extends Model{
 	}
 	public static List<DiagnosticCenter> getDetails(final String name2) {
 		// TODO Auto-generated method stub
-		final List<DiagnosticCenter> c1 = find.where().eq("diagnoCenterName", name2).findList();
+		final List<DiagnosticCenter> c1 = find.where().eq("name", name2).findList();
 
 		return c1;
 	}
 
 	@Override
 	public String toString(){
-		return this.id+"  "+this.diagnoCenterName+"  "+this.services+"  "+this.contactPersonName+"  "+this.address+"  "+this.mobileNo+"  "+this.emailId+"  "+this.websiteName;
+		return this.id+"  "+this.name+"  "+this.services+"  "+this.contactPersonName+"  "+this.address+"  "+this.mobileNo+"  "+this.emailId+"  "+this.websiteName;
 	}
 	public static void delete(final Long id2) {
 		// TODO Auto-generated method stub

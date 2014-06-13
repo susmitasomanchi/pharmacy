@@ -4,6 +4,7 @@ import java.util.List;
 
 import models.DiagnosticCenter;
 import play.Logger;
+import play.data.DynamicForm;
 import play.data.Form;
 import play.mvc.Controller;
 import play.mvc.Result;
@@ -37,7 +38,7 @@ public class DiagnosticController extends Controller{
 	public static Result Diagnosticlist() {
 		List<DiagnosticCenter> allList=DiagnosticCenter.all();
 		/*views.html.list.render(allList)*/
-		return ok(views.html.diagnosticList.render(allList));
+		return ok(views.html.diagnostic.diagnosticList.render(allList));
 
 	}
 	/*public static Result search(){
@@ -51,5 +52,79 @@ public class DiagnosticController extends Controller{
 		 DiagnosticCenter.delete(id);
 		  return ok("deleted successfully");
 	  }
+	
+	/*
+	 * editing the 
+	 * diagnostic center details
+	 */
+	public static Result editDiagnosticDetails(Long id) {
+		final DiagnosticCenter dc = DiagnosticCenter.find.byId(id);
+		final Form<DiagnosticCenter> filledForm = diagnosticForm.fill(dc);
+		final DiagnosticCenter diagForm = filledForm.get();
+		diagForm.update();
+		return ok(views.html.diagnostic.diagnosticReg.render(filledForm));
+	}
+	public static Result diagnosticEditprocess() {
+		final Form<DiagnosticCenter> filledForm = diagnosticForm.bindFromRequest();
+		if(filledForm.hasErrors()) {
+			return badRequest(views.html.diagnostic.diagnosticReg.render(filledForm));
+		}
+		else {
+			final DiagnosticCenter dc = filledForm.get();
+
+			if(dc.id == null) {
+				dc.save();
+
+			} else {
+				dc.update();
+			}
+		}
+		return ok();
+	}
+	
+	/*
+	 * searching the diagnostic ceter by
+	 *  name ,mobile no &email id
+	 */
+	public static Result diagnosticSearch(){
+
+		final DynamicForm requestData = Form.form().bindFromRequest();
+
+		final String searchStr = requestData.get("searchStr");
+
+		// if string is empty return zero
+		if (searchStr != null && !searchStr.isEmpty()) {
+
+			// it is a string, search by name
+			if (searchStr.matches("[a-zA-Z]+")) {
+
+				final List<DiagnosticCenter> dcSearch = DiagnosticCenter.find.where()
+						.like("name", searchStr+"%").findList();
+
+				return ok(views.html.diagnostic.diagnosticSearch.render(dcSearch));
+			}
+			// if it is an email
+			else if (searchStr.contains("@")) {
+
+				final List<DiagnosticCenter> dcSearch = DiagnosticCenter.find.where()
+						.eq("emailId", searchStr).findList();
+
+				return ok(views.html.diagnostic.diagnosticSearch.render(dcSearch));
+			}// if it is a number
+			else {
+				final List<DiagnosticCenter> dcSearch = DiagnosticCenter.find.where()
+						.eq("mobileNo", searchStr).findList();
+
+				return ok(views.html.diagnostic.diagnosticSearch.render(dcSearch));
+			}
+
+		}
+
+		else {
+
+			return ok();
+		}
+		
+	}
 
 }
