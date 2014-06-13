@@ -10,7 +10,9 @@ import models.Appointment;
 import models.AppointmentStatus;
 import models.Clinic;
 import models.Doctor;
+import models.DoctorAward;
 import models.DoctorClinicInfo;
+import models.DoctorEducation;
 import models.DoctorExperience;
 import models.Patient;
 import models.QuestionAndAnswer;
@@ -31,6 +33,8 @@ public class DoctorController extends Controller {
 	public static Form<PatientBean> patientForm = Form.form(PatientBean.class);
 	public static Form<ClinicBean> clinicForm = Form.form(ClinicBean.class);
 	public static Form<DoctorExperience> experienceForm = Form.form(DoctorExperience.class);
+	public static Form<DoctorEducation> educationForm = Form.form(DoctorEducation.class);
+	public static Form<DoctorAward> awardForm = Form.form(DoctorAward.class);
 	public static Form<QuestionAndAnswerBean> questionAndAnswerForm = Form.form(QuestionAndAnswerBean.class);
 
 
@@ -72,27 +76,91 @@ public class DoctorController extends Controller {
 
 	public static Result processDoctorExperience() {
 		final Form<DoctorExperience> filledForm = experienceForm.bindFromRequest();
-		//Logger.info("enteredt");
+		// Logger.info("enteredt");
 
-		if(filledForm.hasErrors()) {
+		if (filledForm.hasErrors()) {
 			Logger.info("bad request");
-
+			// System.out.println(filledForm.errors());
 			return badRequest(views.html.doctor.doctorExperience.render(filledForm));
-		}
-		else {
-			final DoctorExperience doctorExperience= filledForm.get();
+		} else {
+			final DoctorExperience doctorExperience = filledForm.get();
 
-			if(doctorExperience.id == null) {
+			if (doctorExperience.id == null) {
+
 
 				doctorExperience.save();
 			}
 			else {
-
+			
 				doctorExperience.update();
 			}
 		}
+		// return ok(views.html.scheduleAppointment.render("hello"));
+		// return redirect(routes.UserController.list());
 		return TODO;
-		//return redirect(routes.UserController.list());
+
+	}
+	
+
+	public static Result doctorEducation(){
+		return ok(views.html.doctor.doctorEducation.render(educationForm));
+	}
+	
+	public static Result processDoctorEducation() {
+		final Form<DoctorEducation> educationfilledForm = educationForm.bindFromRequest();
+		// Logger.info("enteredt");
+
+		if (educationfilledForm.hasErrors()) {
+			Logger.info("bad request");
+			// System.out.println(filledForm.errors());
+			return badRequest(views.html.doctor.doctorEducation.render(educationfilledForm));
+		} else {
+			final DoctorEducation doctorEducation = educationfilledForm.get();
+
+			if (doctorEducation.id == null) {
+
+
+				doctorEducation.save();
+			}
+			else {
+			
+				doctorEducation.update();
+			}
+		}
+		// return ok(views.html.scheduleAppointment.render("hello"));
+		// return redirect(routes.UserController.list());
+		return TODO;
+
+	}
+	
+	public static Result doctorAward(){
+		return ok(views.html.doctor.doctorAward.render(awardForm));
+	}
+	
+	public static Result processDoctorAward() {
+		final Form<DoctorAward> awardfilledForm = awardForm.bindFromRequest();
+		// Logger.info("enteredt");
+
+		if (awardfilledForm.hasErrors()) {
+			Logger.info("bad request");
+			// System.out.println(filledForm.errors());
+			return badRequest(views.html.doctor.doctorAward.render(awardfilledForm));
+		} else {
+			final DoctorAward doctorAward = awardfilledForm.get();
+
+			if (doctorAward.id == null) {
+
+
+				doctorAward.save();
+			}
+			else {
+			
+				doctorAward.update();
+			}
+		}
+		// return ok(views.html.scheduleAppointment.render("hello"));
+		// return redirect(routes.UserController.list());
+		return TODO;
 
 	}
 

@@ -5,6 +5,8 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 
+import play.db.ebean.Model.Finder;
+
 @SuppressWarnings("serial")
 @Entity
 public class DoctorAward extends BaseEntity{
@@ -22,4 +24,10 @@ public class DoctorAward extends BaseEntity{
 		public String year;
 		
 		public String commentForAwards;
+		
+		public static Finder<Long, DoctorAward> find = new Finder<Long, DoctorAward>(Long.class, DoctorAward.class);
+
+		public static void update(final Long id, final DoctorAward doctorAward) {
+			doctorAward.update(id);
+		}
 }
