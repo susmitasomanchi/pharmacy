@@ -9,16 +9,16 @@ Name
 </tr>
 </thead>
 <tbody>
-@for(dr <- list) {
+@for(dc <- list) {
 <tr>
 <td>
-@dr.appUser.name
+@dc.appUser.name
 </td>
 <th>
-<a href="/diagnostic-edit/@dr.appUser.id" class="btn btn-xs btn-success">Edit</a>
+<a href="/diagnostic-edit/@dc.appUser.id" class="btn btn-xs btn-success">Edit</a>
 
 
-<a href="/diagnostic-delete/@dr.appUser.id" class="btn btn-xs btn-success">Delete</a>
+<a href="/diagnostic-delete/@dc.appUser.id" class="btn btn-xs btn-success">Delete</a>
 <a href="/diagnosticrep/doctor-list" class="btn btn-xs btn-success">Doctors</a>
 
 </th>

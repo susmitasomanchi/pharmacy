@@ -45,7 +45,7 @@ public class DRController extends Controller {
 		List<DiagnosticRepresentative> allDiagRepList = DiagnosticRepresentative.find
 				.all();
 		/* views.html.list.render(allList) */
-		Logger.info(allDiagRepList.get(0).appUser.name+"~~allDiagRepList");
+		Logger.info(allDiagRepList.get(1).appUser.name+"~~allDiagRepList");
 		return ok(views.html.diagnostic.diagnosticList.render(allDiagRepList));
 
 	}
@@ -58,8 +58,7 @@ public class DRController extends Controller {
 
 	public static Result addDoctor(Long id) {
 		Logger.info("id.............." + id);
-		// DiagnosticRepresentative loggedDr =
-		// LoginController.getLoggedInUser().getDiagnosticRepresentative();
+		
 		if (loggedInDR.doctorList.contains(Doctor.find.byId(id)) != true) {
 			loggedInDR.doctorList.add(Doctor.find.byId(id));
 		}
