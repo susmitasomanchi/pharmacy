@@ -21,11 +21,11 @@ public class Batch extends BaseEntity {
 	@GeneratedValue(strategy = GenerationType.AUTO)
 	public  Long id;
 
-	@Required
+	//@Required
 	public BatchStatus batchStatus;
 
 	@OneToOne
-	Product product;
+	public Product product;
 
 	@Required
 	public String batchNo;

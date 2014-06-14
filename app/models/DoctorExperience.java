@@ -28,8 +28,8 @@ public class DoctorExperience extends BaseEntity{
 		public String location;
 		
 		@Required
-		public Date workedFrom;
+		public Integer workedFrom;
 
 		@Required
-		public Date workedTo;
+		public Integer workedTo;
 }
