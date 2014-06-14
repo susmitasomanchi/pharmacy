@@ -2,8 +2,20 @@ package models;
 import java.util.LinkedHashMap;
 import java.util.Map;
 
+import com.avaje.ebean.annotation.EnumValue;
+
+
 public enum AppointmentStatus {
-	OPEN,REQUESTED,APPROVED,CANCELLED,SERVED;
+	@EnumValue("AVAILABLE")
+	AVAILABLE,
+	@EnumValue("REQUESTED")
+	REQUESTED,
+	@EnumValue("APPROVED")
+	APPROVED,
+	@EnumValue("CANCELLED")
+	CANCELLED,
+	@EnumValue("SERVED")
+	SERVED;
 
 
 	public static Map<String, String> options() {

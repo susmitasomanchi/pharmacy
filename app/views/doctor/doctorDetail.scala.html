@@ -1,0 +1,89 @@
+@(dataForm:play.data.Form[models.DoctorDetail])
+
+@*******************************
+
+THIS IS AN AUTO GENERATED CODE
+PLEASE DO NOT MODIFY IT BY HAND
+
+********************************@
+
+@import play.i18n._
+
+@main("User Form"){
+	
+	<br>
+<div class="container"> {
+			
+
+
+ 			@helper.inputText(dataForm("name"),'class -> "inputs",'_label->"Name")
+			
+			
+			@helper.inputText(dataForm("previousHospitalName"),'class -> "inputs",'_label->"Previous Hospital Name")
+			
+			@helper.inputText(dataForm("workedAs"),'class -> "inputs",'_label->"Worked As")
+			
+			@helper.inputPassword(dataForm("location"),'class -> "inputs",'_label->"Location")
+			
+			@helper.inputText(dataForm("workedFrom"),'class -> "inputs",'_label->"Worked From")
+						
+			@helper.inputText(dataForm("workedTo"),'class -> "inputs",'_label->"Worked To")
+			
+
+			@helper.inputText(dataForm("awardName"),'class -> "inputs",'_label->"Award Name")
+			
+			@helper.inputText(dataForm("awardFor"),'class -> "inputs",'_label->"Award For")
+			
+			
+			@helper.inputText(dataForm("year"),'class -> "inputs",'_label->"Year")
+			
+			@helper.inputText(dataForm("commentForAwards"),'class -> "inputs",'_label->"Comments")
+			
+			@helper.inputText(dataForm("articleOn"),'class -> "inputs",'_label->"Article Name")
+			
+			@helper.inputText(dataForm("publishedOn"),'class -> "inputs",'_label->"Published On")
+			
+			@helper.inputText(dataForm("commentForArticle"),'class -> "inputs",'_label->"Comments")
+			
+			@helper.inputText(dataForm("schoolName"),'class -> "inputs",'_label->"School Name")
+			
+			@helper.inputText(dataForm("ugCollegeName"),'class -> "inputs",'_label->"Graduation College Name")
+			
+			@helper.inputText(dataForm("degreeNameUG"),'class -> "inputs",'_label->"Degree Name")
+			
+			@helper.inputText(dataForm("ugfrom"),'class -> "inputs",'_label->"From")
+			
+			@helper.inputText(dataForm("ugto"),'class -> "inputs",'_label->"To")
+			
+			@helper.inputText(dataForm("pgCollegeName"),'class -> "inputs",'_label->"Post Graduation College Name")
+			
+			@helper.inputText(dataForm("degreeNamePG"),'class -> "inputs",'_label->"Degree Name")
+			
+			@helper.inputText(dataForm("pgfrom"),'class -> "inputs",'_label->"From")
+			
+			@helper.inputText(dataForm("pgto"),'class -> "inputs",'_label->"To")
+			
+			@helper.inputText(dataForm("language"),'class -> "inputs",'_label->"Language")
+			
+			@helper.inputText(dataForm("socialWorkTittle"),'class -> "inputs",'_label->"Tittle")
+			
+			@helper.inputText(dataForm("CommentSocialWork"),'class -> "inputs",'_label->"Comments")
+			
+			
+			
+			<br>
+			<input type="hidden" name="id" value='@dataForm("id").value' >
+			<input type="submit" class="submit" value="Login">
+			
+				
+			}
+			
+			
+
+	
+</div>
+
+			
+
+
+}
