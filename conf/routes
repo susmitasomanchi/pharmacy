@@ -18,17 +18,17 @@ POST   /doctor/request-appointment        controllers.DoctorController.requestAp
 
 
 # doctor actions
-GET    /doctor/new-assistant              controllers.DoctorController.newAssistant()
-GET    /doctor/new-clinic                 controllers.DoctorController.newClinic()
-POST   /doctor/new-clinic                 controllers.DoctorController.processNewClinic()
-GET    /doctor/clinics                    controllers.DoctorController.myClinics()
-GET    /doctor-profile                    controllers.DoctorController.doctorProfile()
-GET    /doctor-experience                 controllers.DoctorController.doctorExperience()
-POST   /doctor-experience                 controllers.DoctorController.processDoctorExperience()
-
-
-
-
+GET		/doctor/new-assistant			controllers.DoctorController.newAssistant()
+GET		/doctor/new-clinic				controllers.DoctorController.newClinic()
+POST	/doctor/new-clinic				controllers.DoctorController.processNewClinic()
+GET		/doctor/clinics					controllers.DoctorController.myClinics()
+GET		/doctor-profile				    controllers.DoctorController.doctorProfile()
+GET		/doctor-experience				controllers.DoctorController.doctorExperience()
+POST	/doctor-experience				controllers.DoctorController.processDoctorExperience()
+GET		/doctor-education				controllers.DoctorController.doctorEducation()
+POST	/doctor-education				controllers.DoctorController.processDoctorEducation()
+GET		/doctor-award					controllers.DoctorController.doctorAward()
+POST	/doctor-award					controllers.DoctorController.processDoctorAward()
 
 
 
@@ -43,6 +43,14 @@ GET    /newProduct                        controllers.PharmacistController.produ
 POST   /newProduct                        controllers.PharmacistController.saveProduct()					
 GET    /products                          controllers.PharmacistController.displayProducts()
 POST   /editproduct/                      controllers.PharmacistController.editProduct(id: Long)
+GET		/addProductToInventory			controllers.PharmacistController.addProductForm()
+POST	/addProductToInventory			controllers.PharmacistController.addToInventory()		
+
+
+
+
+
+
 
 GET    /medical-representative            controllers.Application.medicalRepresentative()
 POST   /medical-representative/proccess   controllers.Application.medicalRepresentativeProccess()

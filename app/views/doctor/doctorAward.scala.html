@@ -1,0 +1,54 @@
+@(dataForm:play.data.Form[models.DoctorAward])
+
+@*******************************
+
+THIS IS AN AUTO GENERATED CODE
+PLEASE DO NOT MODIFY IT BY HAND
+
+********************************@
+
+@import play.i18n._
+
+@main("Doctor Award"){
+	
+	<br>
+<div class="container"> 
+
+@helper.form(action=routes.DoctorController.processDoctorAward(),'method -> "post") {
+
+			
+
+
+ 			
+			
+			
+			@helper.inputText(dataForm("awardName"),'class -> "inputs",'_label->"Award Name")
+			
+			@helper.inputText(dataForm("awardFor"),'class -> "inputs",'_label->"Award For")
+			
+			
+			@helper.inputText(dataForm("year"),'class -> "inputs",'_label->"Year")
+			
+			@helper.inputText(dataForm("commentForAwards"),'class -> "inputs",'_label->"Comments")
+			
+			
+			
+
+			
+			
+			<br>
+			<input type="hidden" name="id" value='@dataForm("id").value' >
+			<input type="submit" class="submit" value="Login">
+			
+				
+			
+			
+			
+
+}
+</div>
+
+			
+
+
+}

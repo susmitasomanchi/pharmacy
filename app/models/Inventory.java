@@ -32,7 +32,7 @@ public class Inventory extends BaseEntity {
 	@ManyToOne(cascade=CascadeType.ALL)
 	public List<Batch> batchList = new ArrayList<Batch>();
 
-	@Required
+	//@Required
 	public ProductInventoryStatus productInventoryStatus;
 
 	@Required

@@ -175,8 +175,8 @@ create table doctor_experience (
   previous_hospital_name    varchar(255),
   worked_as                 varchar(255),
   location                  varchar(255),
-  worked_from               timestamp,
-  worked_to                 timestamp,
+  worked_from               integer,
+  worked_to                 integer,
   last_update               timestamp not null,
   constraint pk_doctor_experience primary key (id))
 ;
