@@ -1,0 +1,27 @@
+@(list: List[DiagnosticCenter])
+@main("Diagnostic Center List") {
+<table class="table table-bordered">
+<thead>
+<tr>
+<th>
+Name
+</th>
+<th>
+Address
+</th>
+</tr>
+</thead>
+<tbody>
+@for(dc <- list) {
+<tr>
+<td>
+<a href="#">@dc.name</a>
+</td>
+<td>
+@dc.address
+</td>
+</tr>
+}
+</tbody>
+</table>
+}

@@ -1,9 +1,12 @@
 package models;
 
 import java.util.ArrayList;
+
 import java.util.List;
 
 import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToOne;
@@ -12,22 +15,30 @@ import play.data.validation.Constraints.Email;
 import play.data.validation.Constraints.Required;
 import play.db.ebean.Model;
 @Entity
-public class DiagnosticCenter extends Model{
+public class DiagnosticCenter extends BaseEntity{
+	
+	@GeneratedValue(strategy=GenerationType.AUTO)
 	@Id
 	public Long id;
+	
 	@Required
 	public String name;
+	
 	@Required
 	public String services;
+	
 	@Required
 	public String contactPersonName;
+	
 	@Required
-	public String address;
+	public Address address;
 
 	@Required
 	public String mobileNo;
-	@Email @Required
+	
+	@Email @Required	
 	public String emailId;
+	
 	public String websiteName;
 	
 	@OneToOne

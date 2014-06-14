@@ -35,12 +35,12 @@ public class DiagnosticController extends Controller{
 	}
 		
 	}
-	public static Result Diagnosticlist() {
+	/*public static Result Diagnosticlist() {
 		List<DiagnosticCenter> allList=DiagnosticCenter.all();
-		/*views.html.list.render(allList)*/
+		views.html.list.render(allList)
 		return ok(views.html.diagnostic.diagnosticList.render(allList));
 
-	}
+	}*/
 	/*public static Result search(){
 		Form form= Form.form().bindFromRequest();
 		String name=form.get("search");

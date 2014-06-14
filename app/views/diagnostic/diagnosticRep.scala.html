@@ -4,7 +4,7 @@
 @main("DiagnosticRepresentative") {
 <h1>DiagnosticRepresentator form</h1>
 
-@helper.form(action=routes.Application.diagnosticRepProccess()) {
+@helper.form(action=routes.DRController.addDiagRepProcess()) {
 	
 	@helper.inputText(dataForm("name"),'_label->"Name")
 	@helper.inputText(dataForm("designation"),'_label->"designation")
@@ -16,7 +16,7 @@
 	Female<input type="radio" name="gender" value="false">
 	@helper.inputText(dataForm("age"),'_label->"Age")
 	@helper.inputText(dataForm("diagnosticType"),'_label->"Diagnostic Type")
-	
+	<input type="hidden" name="id" value='@dataForm("id").value' >
 	<input type="submit" value="Add DiagnosticRep">
 	
 	
