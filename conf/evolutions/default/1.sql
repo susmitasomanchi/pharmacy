@@ -13,8 +13,8 @@ create table address (
   pin_code                  bigint,
   country                   varchar(27),
   last_update               timestamp not null,
-  constraint ck_address_state check (state in ('JAMMU_AND_KASHMIR','RAJASTHAN','HIMACHAL_PRADESH','NAGALAND','TAMIL_NADU','UTTARAKHAND','LAKSHADWEEP','KERALA','MEGHALAYA','SIKKIM','CHHATTISGARH','CHNADIGARH','BIHAR','UTTAR_PRADESH','DADRA_AND_NAGAR_HAVELI','GUJARAT','ODISHA','GOA','TRIPURA','WEST_BENGAL','TELANGANA','MANIPUR','MIZORAM','ARUNACHAL_PRADESH','JHARKHAND','MAHARASHTRA','HARYANA','PUNJAB','PUDUCHERRY','ASSAM','NATIONAL_CAPITAL_TERRITORY_OF_DELHI','ANDAMAN_AND_NICOBAR_ISLANDS','DAMAN_AND_DIU','ANDHRA_PRADESH','MADHYA_PRADESH','KARNATAKA')),
-  constraint ck_address_country check (country in ('ANTARCTICA','BRUNEI','AZERBAIJAN','BELGIUM','AUSTRIA','BENIN','ECUADOR','ASHMORE_AND_CARTIER_ISLANDS','ALBANIA','COMOROS','UNITED_STATES','BAHRAIN','BELARUS','BULGARIA','AUSTRALIA','BOTSWANA','BELIZE','CAPE_VERDE','AMERICAN_SAMOA','PAKISTAN','DOMINICA','CHILE','BRAZIL','CUBA','ALGERIA','BURUNDI','CAMBODIA','AFGHANISTAN','BURKINA_FASO','ARUBA','DHEKELIA','INDIA','CANADA','BARBADOS','ARGENTINA','DJIBOUTI','BERMUDA','EGYPT','CHAD','ANGOLA','AKROTIRI','BOLIVIA','CHINA','CAMEROON','BANGLADESH','BHUTAN','DENMARK','COLOMBIA','CYPRUS','BOUVET_ISLAND','ANGUILLA','BURMA','ANDORRA','ARMENIA','BOSNIA_AND_HERZEGOVINA','ANTIGUA_AND_BARBUDA')),
+  constraint ck_address_state check (state in ('DADRA_AND_NAGAR_HAVELI','KERALA','WEST_BENGAL','JAMMU_AND_KASHMIR','HIMACHAL_PRADESH','MANIPUR','MIZORAM','MAHARASHTRA','JHARKHAND','ASSAM','UTTARAKHAND','SIKKIM','KARNATAKA','CHHATTISGARH','ANDHRA_PRADESH','NATIONAL_CAPITAL_TERRITORY_OF_DELHI','UTTAR_PRADESH','PUDUCHERRY','ANDAMAN_AND_NICOBAR_ISLANDS','TRIPURA','GOA','DAMAN_AND_DIU','NAGALAND','ODISHA','TAMIL_NADU','BIHAR','RAJASTHAN','LAKSHADWEEP','HARYANA','MEGHALAYA','PUNJAB','ARUNACHAL_PRADESH','GUJARAT','TELANGANA','MADHYA_PRADESH','CHNADIGARH')),
+  constraint ck_address_country check (country in ('ARMENIA','ANGUILLA','AUSTRALIA','ARUBA','CHAD','BOSNIA_AND_HERZEGOVINA','ANTIGUA_AND_BARBUDA','CHINA','ASHMORE_AND_CARTIER_ISLANDS','AMERICAN_SAMOA','COMOROS','INDIA','BOLIVIA','CAMEROON','PAKISTAN','DENMARK','BURUNDI','CAPE_VERDE','BULGARIA','ARGENTINA','DJIBOUTI','BELGIUM','ALBANIA','BAHRAIN','ALGERIA','ECUADOR','BELARUS','BARBADOS','BURMA','CHILE','BRUNEI','BELIZE','AZERBAIJAN','BHUTAN','CANADA','AFGHANISTAN','ANDORRA','CAMBODIA','AKROTIRI','AUSTRIA','BOUVET_ISLAND','BERMUDA','DOMINICA','ANGOLA','EGYPT','BENIN','UNITED_STATES','DHEKELIA','BOTSWANA','CUBA','ANTARCTICA','BRAZIL','CYPRUS','BURKINA_FASO','BANGLADESH','COLOMBIA')),
   constraint pk_address primary key (id))
 ;
 
@@ -29,8 +29,8 @@ create table app_user (
   dob                       timestamp,
   role                      varchar(16),
   last_update               timestamp not null,
-  constraint ck_app_user_sex check (sex in ('OTHER','MALE','FEMALE')),
-  constraint ck_app_user_role check (role in ('PHARMACIST','MR','ADMIN_MR','PATIENT','ADMIN','DIAGREP','DOCTOR','ADMIN_PHARMACIST','DOCTOR_SECRETARY')),
+  constraint ck_app_user_sex check (sex in ('FEMALE','OTHER','MALE')),
+  constraint ck_app_user_role check (role in ('PATIENT','DOCTOR','ADMIN','PHARMACIST','ADMIN_PHARMACIST','ADMIN_MR','MR','DIAGREP','DOCTOR_SECRETARY')),
   constraint pk_app_user primary key (id))
 ;
 
@@ -59,7 +59,7 @@ create table batch (
   tax                       float,
   discount                  float,
   last_update               timestamp not null,
-  constraint ck_batch_batch_status check (batch_status in ('EXHAUSTED','APPROACHING_EXPIRY','EXPIRED','NEARING_EXHAUSTION','SUFFICIENT')),
+  constraint ck_batch_batch_status check (batch_status in ('EXPIRED','SUFFICIENT','NEARING_EXHAUSTION','APPROACHING_EXPIRY','EXHAUSTED')),
   constraint pk_batch primary key (id))
 ;
 
@@ -184,7 +184,7 @@ create table head_quarter (
   state                     varchar(35),
   name                      varchar(255),
   last_update               timestamp not null,
-  constraint ck_head_quarter_state check (state in ('JAMMU_AND_KASHMIR','RAJASTHAN','HIMACHAL_PRADESH','NAGALAND','TAMIL_NADU','UTTARAKHAND','LAKSHADWEEP','KERALA','MEGHALAYA','SIKKIM','CHHATTISGARH','CHNADIGARH','BIHAR','UTTAR_PRADESH','DADRA_AND_NAGAR_HAVELI','GUJARAT','ODISHA','GOA','TRIPURA','WEST_BENGAL','TELANGANA','MANIPUR','MIZORAM','ARUNACHAL_PRADESH','JHARKHAND','MAHARASHTRA','HARYANA','PUNJAB','PUDUCHERRY','ASSAM','NATIONAL_CAPITAL_TERRITORY_OF_DELHI','ANDAMAN_AND_NICOBAR_ISLANDS','DAMAN_AND_DIU','ANDHRA_PRADESH','MADHYA_PRADESH','KARNATAKA')))
+  constraint ck_head_quarter_state check (state in ('DADRA_AND_NAGAR_HAVELI','KERALA','WEST_BENGAL','JAMMU_AND_KASHMIR','HIMACHAL_PRADESH','MANIPUR','MIZORAM','MAHARASHTRA','JHARKHAND','ASSAM','UTTARAKHAND','SIKKIM','KARNATAKA','CHHATTISGARH','ANDHRA_PRADESH','NATIONAL_CAPITAL_TERRITORY_OF_DELHI','UTTAR_PRADESH','PUDUCHERRY','ANDAMAN_AND_NICOBAR_ISLANDS','TRIPURA','GOA','DAMAN_AND_DIU','NAGALAND','ODISHA','TAMIL_NADU','BIHAR','RAJASTHAN','LAKSHADWEEP','HARYANA','MEGHALAYA','PUNJAB','ARUNACHAL_PRADESH','GUJARAT','TELANGANA','MADHYA_PRADESH','CHNADIGARH')))
 ;
 
 create table inventory (
@@ -195,7 +195,7 @@ create table inventory (
   product_quantity          integer,
   remarks                   varchar(255),
   last_update               timestamp not null,
-  constraint ck_inventory_product_inventory_status check (product_inventory_status in ('AVAILABLE','OUT_OF_STOCK')),
+  constraint ck_inventory_product_inventory_status check (product_inventory_status in ('OUT_OF_STOCK','AVAILABLE')),
   constraint pk_inventory primary key (id))
 ;
 
