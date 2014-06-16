@@ -86,8 +86,6 @@ public class DoctorController extends Controller {
 			final DoctorExperience doctorExperience = filledForm.get();
 
 			if (doctorExperience.id == null) {
-
-
 				doctorExperience.save();
 			}
 			else {

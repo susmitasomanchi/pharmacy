@@ -83,7 +83,7 @@ public class DiagnosticController extends Controller{
 	}
 	
 	/*
-	 * searching the diagnostic ceter by
+	 * searching the diagnostic center by
 	 *  name ,mobile no &email id
 	 */
 	public static Result diagnosticSearch(){

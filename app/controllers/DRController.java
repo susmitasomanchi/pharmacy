@@ -2,10 +2,8 @@ package controllers;
 
 import java.util.List;
 
-import models.DiagnosticCenter;
 import models.DiagnosticRepresentative;
 import models.Doctor;
-import models.MedicalRepresentative;
 import play.Logger;
 import play.data.DynamicForm;
 import play.data.Form;
@@ -45,7 +43,7 @@ public class DRController extends Controller {
 		List<DiagnosticRepresentative> allDiagRepList = DiagnosticRepresentative.find
 				.all();
 		/* views.html.list.render(allList) */
-		Logger.info(allDiagRepList.get(1).appUser.name+"~~allDiagRepList");
+		Logger.info(allDiagRepList.get(1).appUser.name + "~~allDiagRepList");
 		return ok(views.html.diagnostic.diagnosticList.render(allDiagRepList));
 
 	}
@@ -58,7 +56,7 @@ public class DRController extends Controller {
 
 	public static Result addDoctor(Long id) {
 		Logger.info("id.............." + id);
-		
+
 		if (loggedInDR.doctorList.contains(Doctor.find.byId(id)) != true) {
 			loggedInDR.doctorList.add(Doctor.find.byId(id));
 		}
@@ -105,10 +103,10 @@ public class DRController extends Controller {
 		Logger.info("hello..........................." + searchStr);
 		// if string is empty return zero
 		if (searchStr != null && !searchStr.isEmpty()) {
-			Logger.error("hello...........................");
+			Logger.info("hello...........................");
 			// it is a string, search by name
 			if (searchStr.matches("[a-zA-Z]+")) {
-				Logger.error("inside...........................");
+				Logger.info("inside...........................");
 
 				final List<Doctor> doctorList = Doctor.find.where()
 						.like("appUser.name", searchStr + "%").findList();
