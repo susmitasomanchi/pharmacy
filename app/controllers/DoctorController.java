@@ -313,25 +313,18 @@ public class DoctorController extends Controller {
 				calendar.set(Calendar.MINUTE, 0);
 				calendar.set(Calendar.SECOND,0);
 				calendar.set(Calendar.MILLISECOND,0);
-
 				for (int j2 = 0; j2 <((hourToClinic*60)/5); j2++) {
-					Logger.error(j2+"");
 					final Appointment appointment=new Appointment();
 					appointment.appointmentStatus=AppointmentStatus.AVAILABLE;
 					appointment.appointmentTime=calendar.getTime();
 					appointment.clinic=doctorClinicInfo.clinic;
 					appointment.doctor=doctor;
 					appointment.save();
-
 					calendar.add(Calendar.MINUTE, 5);
 				}
 			}
-			Logger.error(calendar.getTime()+"****");
 
-			calendar.set(Calendar.HOUR_OF_DAY,0);
-			calendar.set(Calendar.MINUTE,0);
-			calendar.set(Calendar.SECOND,0);
-			calendar.set(Calendar.MILLISECOND,0);
+
 			calendar.add(Calendar.DATE, 1);
 
 		}

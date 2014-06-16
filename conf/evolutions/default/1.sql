@@ -37,14 +37,14 @@ create table app_user (
 create table appointment (
   id                        bigint not null,
   appointment_time          timestamp,
-  appointment_status        integer,
+  appointment_status        varchar(9),
   requested_by_id           bigint,
   apporoved_by_id           bigint,
   remarks                   varchar(255),
   doctor_id                 bigint,
   clinic_id                 bigint,
   last_update               timestamp not null,
-  constraint ck_appointment_appointment_status check (appointment_status in (0,1,2,3,4)),
+  constraint ck_appointment_appointment_status check (appointment_status in ('CANCELLED','REQUESTED','APPROVED','AVAILABLE','SERVED')),
   constraint pk_appointment primary key (id))
 ;
 
