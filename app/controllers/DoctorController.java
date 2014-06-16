@@ -8,6 +8,7 @@ import java.util.List;
 import models.AppUser;
 import models.Appointment;
 import models.AppointmentStatus;
+import models.AppointmentType;
 import models.Clinic;
 import models.Doctor;
 import models.DoctorAward;
@@ -36,7 +37,9 @@ public class DoctorController extends Controller {
 	public static Form<DoctorEducation> educationForm = Form.form(DoctorEducation.class);
 	public static Form<DoctorAward> awardForm = Form.form(DoctorAward.class);
 	public static Form<QuestionAndAnswerBean> questionAndAnswerForm = Form.form(QuestionAndAnswerBean.class);
+	public static Form<DoctorClinicInfo> doctorClinicForm	=Form.form(DoctorClinicInfo.class);
 
+	public static Doctor loggedIndoctor=LoginController.getLoggedInUser().getDoctor();
 
 	public static Result requestAppointment(){
 
@@ -91,7 +94,7 @@ public class DoctorController extends Controller {
 				doctorExperience.save();
 			}
 			else {
-			
+
 				doctorExperience.update();
 			}
 		}
@@ -100,12 +103,12 @@ public class DoctorController extends Controller {
 		return TODO;
 
 	}
-	
+
 
 	public static Result doctorEducation(){
 		return ok(views.html.doctor.doctorEducation.render(educationForm));
 	}
-	
+
 	public static Result processDoctorEducation() {
 		final Form<DoctorEducation> educationfilledForm = educationForm.bindFromRequest();
 		// Logger.info("enteredt");
@@ -123,7 +126,7 @@ public class DoctorController extends Controller {
 				doctorEducation.save();
 			}
 			else {
-			
+
 				doctorEducation.update();
 			}
 		}
@@ -132,11 +135,11 @@ public class DoctorController extends Controller {
 		return TODO;
 
 	}
-	
+
 	public static Result doctorAward(){
 		return ok(views.html.doctor.doctorAward.render(awardForm));
 	}
-	
+
 	public static Result processDoctorAward() {
 		final Form<DoctorAward> awardfilledForm = awardForm.bindFromRequest();
 		// Logger.info("enteredt");
@@ -154,7 +157,7 @@ public class DoctorController extends Controller {
 				doctorAward.save();
 			}
 			else {
-			
+
 				doctorAward.update();
 			}
 		}
@@ -229,7 +232,7 @@ public class DoctorController extends Controller {
 
 	}
 
-	
+
 
 	//register patient by doctor
 
@@ -321,6 +324,7 @@ public class DoctorController extends Controller {
 					appointment.appointmentTime=calendar.getTime();
 					appointment.clinic=doctorClinicInfo.clinic;
 					appointment.doctor=doctor;
+					appointment.appointmentType=AppointmentType.NORMAL;
 					appointment.save();
 					calendar.add(Calendar.MINUTE, 5);
 				}
@@ -332,6 +336,50 @@ public class DoctorController extends Controller {
 		}
 
 		return ok("doctor time scheduled");
+	}
+	public static  Result createMrSchedule() {
+		return ok(views.html.doctor.setMrAppointment.render(doctorClinicForm));
+	}
+	public static Result createMrAppointment() {
+
+		final Form<DoctorClinicInfo> filledForm = doctorClinicForm.bindFromRequest();
+		if(filledForm.hasErrors()){
+			Logger.info(filledForm.errors().toString());
+			return ok(views.html.doctor.setMrAppointment.render(doctorClinicForm));
+		}
+		else{
+			final DoctorClinicInfo clinicInfo = filledForm.get();
+			Calendar calendar=Calendar.getInstance();
+			calendar.setTime(new Date());
+			calendar.set(Calendar.HOUR_OF_DAY, clinicInfo.fromHrs);
+			calendar.set(Calendar.MINUTE,0);
+			calendar.set(Calendar.SECOND,0);
+			calendar.set(Calendar.MILLISECOND,0);
+
+
+			Calendar calendar2=Calendar.getInstance();
+			calendar2.setTime(new Date());
+			calendar2.set(Calendar.HOUR_OF_DAY, clinicInfo.fromHrs);
+			calendar2.set(Calendar.MINUTE,29);
+			calendar2.set(Calendar.SECOND,59);
+			calendar2.set(Calendar.MILLISECOND,59);
+
+			List<Appointment> appointments=Appointment.find.where().between("appointmentTime", calendar.getTime(), calendar2.getTime()).findList();
+			for (Appointment appointment : appointments) {
+				appointment.delete();
+			}
+			Appointment appointment=new Appointment();
+			appointment.appointmentStatus=AppointmentStatus.AVAILABLE;
+			appointment.appointmentTime=calendar.getTime();
+			appointment.appointmentType=AppointmentType.SPECIAL;
+			appointment.clinic=clinicInfo.clinic;
+			appointment.doctor=loggedIndoctor;
+			appointment.save();
+		}
+		//return redirect(routes.DoctorController.myClinics());
+
+		return ok("Created Mr appointment");
+
 	}
 
 }
