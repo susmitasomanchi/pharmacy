@@ -2,6 +2,7 @@ package controllers;
 
 import java.util.List;
 
+
 import models.DiagnosticRepresentative;
 import models.Doctor;
 import play.Logger;

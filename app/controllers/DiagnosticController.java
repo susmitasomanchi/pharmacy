@@ -131,6 +131,9 @@ public class DiagnosticController extends Controller{
 	}
 	public static Result diagnosticServiceslist(Long id) {
 		DiagnosticCenter allList=DiagnosticCenter.find.where().eq("id", id).findUnique();
+		DiagnosticCenter allList1=DiagnosticCenter.find.select("services").where().eq("id", id).findUnique();
+		Logger.info("allList1"+allList1.services);
+		Logger.info("allList1"+allList1.costOfServices);
 		
 		Map<String,String> map=new HashMap<>();		
 		String[] services=allList.services.split(",");
