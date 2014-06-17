@@ -44,7 +44,7 @@ public class DRController extends Controller {
 		List<DiagnosticRepresentative> allDiagRepList = DiagnosticRepresentative.find
 				.all();
 		/* views.html.list.render(allList) */
-		Logger.info(allDiagRepList.get(1).appUser.name + "~~allDiagRepList");
+		/*Logger.info(allDiagRepList.get(1).appUser.name + "~~allDiagRepList");*/
 		return ok(views.html.diagnostic.diagnosticList.render(allDiagRepList));
 
 	}
