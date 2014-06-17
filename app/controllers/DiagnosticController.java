@@ -1,6 +1,9 @@
 package controllers;
 
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import models.DiagnosticCenter;
 import play.Logger;
@@ -35,12 +38,12 @@ public class DiagnosticController extends Controller{
 	}
 		
 	}
-	/*public static Result Diagnosticlist() {
+	public static Result diagnosticlist() {
 		List<DiagnosticCenter> allList=DiagnosticCenter.all();
-		views.html.list.render(allList)
-		return ok(views.html.diagnostic.diagnosticList.render(allList));
+		
+		return ok(views.html.diagnostic.diagnosticCenterList.render(allList));
 
-	}*/
+	}
 	/*public static Result search(){
 		Form form= Form.form().bindFromRequest();
 		String name=form.get("search");
@@ -126,5 +129,21 @@ public class DiagnosticController extends Controller{
 		}
 		
 	}
+	public static Result diagnosticServiceslist(Long id) {
+		DiagnosticCenter allList=DiagnosticCenter.find.where().eq("id", id).findUnique();
+		
+		Map<String,String> map=new HashMap<>();		
+		String[] services=allList.services.split(",");
+		String[] cost=allList.costOfServices.split(",");	
+		for(int i=0;i<services.length;i++){
+			Logger.info(services[i]+"--------------------"+cost[i]);
+			map.put(services[i],cost[i]);
+		}
+		
+		
+		return ok(views.html.diagnostic.diagnosticServicesList.render(map));
+
+	}
+
 
 }

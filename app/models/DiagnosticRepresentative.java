@@ -20,6 +20,9 @@ public class DiagnosticRepresentative extends BaseEntity{
 
 	@OneToOne
 	public AppUser appUser;
+	
+	@OneToOne
+	public Patient patient;
 
 	public String diagnosticType;
 	

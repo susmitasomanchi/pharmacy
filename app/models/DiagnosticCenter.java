@@ -28,10 +28,13 @@ public class DiagnosticCenter extends BaseEntity{
 	public String services;
 	
 	@Required
+	public String costOfServices;
+	
+	@Required
 	public String contactPersonName;
 	
 	@Required
-	public Address address;
+	public String address;
 
 	@Required
 	public String mobileNo;

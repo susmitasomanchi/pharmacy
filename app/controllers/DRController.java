@@ -119,4 +119,8 @@ public class DRController extends Controller {
 
 	}
 
+	public static Result addPatient() {
+		return TODO;
+		
+	}
 }

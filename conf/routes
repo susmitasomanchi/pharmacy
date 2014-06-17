@@ -77,7 +77,8 @@ GET    /createappointments                controllers.DoctorController.createApp
 #Diagnostic module	
 GET    /diagnosticregistration            		controllers.DiagnosticController.diagnosticCenter()
 POST   /diagnosticregistration/save       		controllers.DiagnosticController.diagnosticCenterProcess()
-#GET    /diagnosticlist                   	 	controllers.DiagnosticController.Diagnosticlist()
+GET    /diagnosticlist                   	 	controllers.DiagnosticController.diagnosticlist()
+GET    /diagnostic-service-list/:id            	 	controllers.DiagnosticController.diagnosticServiceslist(id: Long)
 GET    /diagnostic-delete/:id             		controllers.DiagnosticController.deleteCenter(id: Long)
 GET    /diagnostic-edit/:id						controllers.DiagnosticController.editDiagnosticDetails(id: Long)
 POST    /diagnostic-edit 						controllers.DiagnosticController.diagnosticEditprocess()
