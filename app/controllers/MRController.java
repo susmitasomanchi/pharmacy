@@ -2,12 +2,10 @@ package controllers;
 
 import java.util.List;
 
-import models.AppUser;
 import models.DCRLineItem;
 import models.Doctor;
 import models.HeadQuarter;
 import models.MedicalRepresentative;
-import models.Role;
 import play.Logger;
 import play.data.DynamicForm;
 import play.data.Form;
@@ -19,32 +17,32 @@ public class MRController extends Controller{
 	public static Form<MedicalRepresentative> medicalRepresentative=Form.form(MedicalRepresentative.class);
 	public static Form<HeadQuarter> headquarter=Form.form(HeadQuarter.class);
 	public static Form<DCRLineItem> DCRLineItemForm=Form.form(DCRLineItem.class);
-	
+
 	//add MR
 	public static Result addMR(){
 		return ok(views.html.mr.medicalRepresentative.render(medicalRepresentative));
-		
+
 	}
-	
+
 	public static Result headQuarter(){
 		return ok(views.html.mr.headQuarter.render(headquarter));
 	}
-	
+
 	public static Result doctorList(){
 		List<Doctor> doctorList = Doctor.find.all();
 		return ok(views.html.mr.doctorList.render(doctorList));
 	}
-	
+
 	public static Result addDoctor(final Long id){
 		if(loggedInMR.doctorList.contains(Doctor.find.byId(id))!=true){
-	    loggedInMR.doctorList.add(Doctor.find.byId(id));	
+			loggedInMR.doctorList.add(Doctor.find.byId(id));
 		}
 		return redirect(routes.MRController.mrDoctorList());
-	
+
 	}
 	public static Result mrDoctorList(){
 		return ok(views.html.mr.mrDoctor.render(loggedInMR.doctorList));
-		
+
 	}
 	//delete doctor from mr list
 	public static Result removeDoctor(final Long id){
@@ -54,19 +52,19 @@ public class MRController extends Controller{
 			indexOfDoctorList++;
 			if(doctor.appUser.name.equals(doc.appUser.name)){
 				Logger.info("doctor name : "+doc.appUser.name);
-				
+
 				//indexOfDoctorList=loggedInMR.doctorList.indexOf(doctor.appUser.name);
-				
+
 				Logger.info("index is : "+indexOfDoctorList);
 				break;
 			}
 		}
-		
+
 		//return TODO;
 		loggedInMR.doctorList.remove(indexOfDoctorList);
-		
+
 		return redirect(routes.MRController.mrDoctorList());
-		
+
 	}
 
 	//for searching doctor
@@ -81,8 +79,8 @@ public class MRController extends Controller{
 
 			// it is a string, search by name
 			if (searchStr.matches("[a-zA-Z]+")) {
-			    
-                
+
+
 				final List<Doctor> doctorList = Doctor.find.where().like("appUser.name", searchStr+"%").findList();
 
 				return ok(views.html.mr.doctorList.render(doctorList));
@@ -96,13 +94,13 @@ public class MRController extends Controller{
 
 
 	}
-	
+
 	//mr visits the doctor
-	
+
 	public static Result visitDoctor(){
 		List<Doctor> doctorList = Doctor.find.all();
 		return ok(views.html.mr.DailyCallReport.render(DCRLineItemForm,doctorList));
-		
+
 	}
 	public static Result visitDoctorProccess(){
 		List<Doctor> doctorList = Doctor.find.all();
@@ -128,6 +126,12 @@ public class MRController extends Controller{
 
 
 		return ok("DCRLineItem stored");
+	}
+
+	//schedule appointment for mr
+	public static Result scheduleAppointment() {
+
+		return redirect(routes.PatientController.scheduleAppointment());
 	}
 
 }

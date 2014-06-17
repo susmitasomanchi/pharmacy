@@ -14,7 +14,7 @@
 			@helper.inputText(clinicForm("fromHrs"),'class -> "inputs",'_label->"Available From (in 24-Hrs format)")
 			
 			@helper.inputText(clinicForm("toHrs"),'class -> "inputs",'_label->"Available Till (in 24-Hrs format)")
-			
+			@helper.select(clinicForm("daysList"),options=helper.options(DayOfTheWeek.options),'_label->"Collaborate",'multiple->"multiple", 'class->"chzn col-sm-6")
 			
 	
 	<br><br>
