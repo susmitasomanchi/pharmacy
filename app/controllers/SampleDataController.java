@@ -2,6 +2,8 @@ package controllers;
 import java.util.List;
 
 import models.AppUser;
+import models.Day;
+import models.DayOfTheWeek;
 import models.Doctor;
 import play.mvc.Controller;
 import play.mvc.Result;
@@ -56,6 +58,15 @@ public class SampleDataController extends Controller {
 		user.save();*/
 
 		return ok("created");
+	}
+	public static  Result days() {
+		for (final Day val : Day.values()) {
+			DayOfTheWeek dayOfTheWeek=new DayOfTheWeek();
+			dayOfTheWeek.day=val;
+			dayOfTheWeek.save();
+		}
+
+		return ok("CREATED");
 	}
 
 

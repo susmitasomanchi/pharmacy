@@ -182,9 +182,13 @@ public class DoctorController extends Controller {
 			dcInfo.clinic = clinic;
 			dcInfo.fromHrs = filledForm.get().fromHrs;
 			dcInfo.toHrs = filledForm.get().toHrs;
+			dcInfo.daysOfWeek=filledForm.get().toDayOfTheWeek();
 			dcInfo.save();
 			loggedInDoctor.doctorClinicInfoList.add(dcInfo);
 			loggedInDoctor.update();
+			DoctorClinicInfo dInfo1=DoctorClinicInfo.find.byId(dcInfo.id);
+			Logger.info(dInfo1.daysOfWeek.size()+"");
+
 		}
 		return redirect(routes.DoctorController.myClinics());
 	}
