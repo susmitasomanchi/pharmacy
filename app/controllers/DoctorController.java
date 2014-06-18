@@ -168,6 +168,8 @@ public class DoctorController extends Controller {
 
 	public static Result processNewClinic(){
 		final Form<ClinicBean> filledForm = clinicForm.bindFromRequest();
+		final DoctorClinicInfo dcInfo = new DoctorClinicInfo();
+
 		if(filledForm.hasErrors()){
 			Logger.info(filledForm.errors().toString());
 			return ok(views.html.doctor.newClinic.render(filledForm));
@@ -176,7 +178,6 @@ public class DoctorController extends Controller {
 			final Clinic clinic = filledForm.get().toEntity();
 			clinic.save();
 			final Doctor loggedInDoctor = LoginController.getLoggedInUser().getDoctor();
-			final DoctorClinicInfo dcInfo = new DoctorClinicInfo();
 			dcInfo.doctor = loggedInDoctor;
 			dcInfo.clinic = clinic;
 			dcInfo.fromHrs = filledForm.get().fromHrs;
@@ -187,7 +188,7 @@ public class DoctorController extends Controller {
 			loggedInDoctor.update();
 
 		}
-		return redirect(routes.DoctorController.myClinics());
+		return DoctorController.createAppointment(dcInfo);
 	}
 
 	public static Result myClinics(){
@@ -295,7 +296,7 @@ public class DoctorController extends Controller {
 	}
 
 	//creating appointments
-	public static  Result createAppointment() {
+	public static  Result createAppointment(DoctorClinicInfo clinicInfo) {
 
 		final Doctor doctor=LoginController.getLoggedInUser().getDoctor();
 		final List<DoctorClinicInfo> clinicInfos=doctor.doctorClinicInfoList;
@@ -307,43 +308,43 @@ public class DoctorController extends Controller {
 		calendar.set(Calendar.SECOND,0);
 		calendar.set(Calendar.MILLISECOND,0);
 
+		List<Integer> days2= new ArrayList<Integer>();
+		for (DayOfTheWeek dayOfTheWeek : clinicInfo.daysOfWeek) {
+			days2.add(dayOfTheWeek.day.ordinal());
+		}
+		final int hourToClinic=clinicInfo.toHrs-clinicInfo.fromHrs;
+
+
 		for(int days=0;days<30;days++){
 
-			for (final DoctorClinicInfo doctorClinicInfo : clinicInfos) {
 
-				List<Integer> days2= new ArrayList<Integer>();
-				for (DayOfTheWeek dayOfTheWeek : doctorClinicInfo.daysOfWeek) {
-					days2.add(dayOfTheWeek.day.ordinal());
+			calendar.set(Calendar.HOUR_OF_DAY, clinicInfo.fromHrs);
+			calendar.set(Calendar.MINUTE, 0);
+			calendar.set(Calendar.SECOND,0);
+			calendar.set(Calendar.MILLISECOND,0);
+			Logger.info(days2+"");
+
+
+			for (int j2 = 0; j2 <((hourToClinic*60)/5); j2++) {
+
+				if (days2.contains(calendar.get(Calendar.DAY_OF_WEEK)-1)) {
+					final Appointment appointment=new Appointment();
+					appointment.appointmentStatus=AppointmentStatus.AVAILABLE;
+					appointment.appointmentTime=calendar.getTime();
+					appointment.clinic=clinicInfo.clinic;
+					appointment.doctor=doctor;
+					appointment.appointmentType=AppointmentType.NORMAL;
+					appointment.save();
+					calendar.add(Calendar.MINUTE, 5);
 				}
-				Logger.info(days2+"");
 
-				final int hourToClinic=doctorClinicInfo.toHrs-doctorClinicInfo.fromHrs;
-				calendar.set(Calendar.HOUR_OF_DAY, doctorClinicInfo.fromHrs);
-				calendar.set(Calendar.MINUTE, 0);
-				calendar.set(Calendar.SECOND,0);
-				calendar.set(Calendar.MILLISECOND,0);
-				for (int j2 = 0; j2 <((hourToClinic*60)/5); j2++) {
-
-					if (days2.contains(calendar.get(Calendar.DAY_OF_WEEK)-1)) {
-						final Appointment appointment=new Appointment();
-						appointment.appointmentStatus=AppointmentStatus.AVAILABLE;
-						appointment.appointmentTime=calendar.getTime();
-						appointment.clinic=doctorClinicInfo.clinic;
-						appointment.doctor=doctor;
-						appointment.appointmentType=AppointmentType.NORMAL;
-						appointment.save();
-						calendar.add(Calendar.MINUTE, 5);
-					}
-
-				}
 			}
-
 
 			calendar.add(Calendar.DATE, 1);
 
 		}
 
-		return ok("doctor time scheduled");
+		return redirect(routes.DoctorController.myClinics());
 	}
 	public static  Result createMrSchedule() {
 		return ok(views.html.doctor.setMrAppointment.render(doctorClinicForm));

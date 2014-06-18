@@ -41,6 +41,7 @@ public class Appointment extends BaseEntity {
 
 	public AppointmentType appointmentType;
 
+
 	public static List<Appointment> getAvailableAppointmentList(final Doctor doctor,final Date date) {
 
 		List<Appointment> list=null;

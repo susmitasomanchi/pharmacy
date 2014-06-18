@@ -72,7 +72,6 @@ POST   /ansQuestion/:qaId                 controllers.DoctorController.answerQue
 GET    /dashboard                         controllers.UserActions.dashboard()
 GET    /register-patient/                 controllers.DoctorController.registerPatient()
 POST   /register-patient-proccess/        controllers.DoctorController.registerPatientProccess()
-GET    /createappointments                controllers.DoctorController.createAppointment()
 
 #Diagnostic module	
 GET    /diagnosticregistration            		controllers.DiagnosticController.diagnosticCenter()
