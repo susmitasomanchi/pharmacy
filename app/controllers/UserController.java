@@ -10,6 +10,7 @@ package controllers;
 
 
 import models.AppUser;
+import models.DiagnosticCenter;
 import models.DiagnosticRepresentative;
 import models.Doctor;
 import models.MedicalRepresentative;
@@ -81,10 +82,14 @@ public class UserController extends Controller {
 			
 			
 
-			if(appUser.role == Role.DIAGREP){
+			if(appUser.role == Role.ADMIN_DIAGREP){
 				final DiagnosticRepresentative diagRep = new DiagnosticRepresentative();
 				diagRep.appUser = appUser;
 				diagRep.save();
+				final DiagnosticCenter diagnosticCenter = new DiagnosticCenter();
+				diagnosticCenter.name = filledForm.get().diagnosticCenterName;
+				diagnosticCenter.diagnosticRepAdmin = diagRep;
+				diagnosticCenter.save();
 			}
 
 			session().clear();

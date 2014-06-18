@@ -42,7 +42,7 @@ public class PatientController extends Controller {
 		calendar.set(Calendar.MILLISECOND,0);
 
 
-		for(int i=0;i<4;i++){
+		for(int i=0;i<15;i++){
 			listAppointments = Appointment.getAvailableAppointmentList(doctor, calendar.getTime());
 			appointmentMap.put(calendar.getTime(), listAppointments);
 			Logger.error(listAppointments.size()+"Test");
@@ -54,7 +54,6 @@ public class PatientController extends Controller {
 			calendar.set(Calendar.MILLISECOND,0);
 			System.out.print(calendar.getTime());
 		}
-
 		return ok(views.html.patient.scheduleAppointment.render(appointmentMap,listAppointments.size()));
 	}
 

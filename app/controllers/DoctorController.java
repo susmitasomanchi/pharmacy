@@ -90,8 +90,6 @@ public class DoctorController extends Controller {
 			final DoctorExperience doctorExperience = filledForm.get();
 
 			if (doctorExperience.id == null) {
-
-
 				doctorExperience.save();
 			}
 			else {
@@ -309,7 +307,7 @@ public class DoctorController extends Controller {
 		calendar.set(Calendar.SECOND,0);
 		calendar.set(Calendar.MILLISECOND,0);
 
-		for(int days=0;days<10;days++){
+		for(int days=0;days<30;days++){
 
 			for (final DoctorClinicInfo doctorClinicInfo : clinicInfos) {
 
