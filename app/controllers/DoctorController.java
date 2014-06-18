@@ -12,8 +12,10 @@ import models.Clinic;
 import models.Doctor;
 import models.DoctorAward;
 import models.DoctorClinicInfo;
+import models.DoctorDetail;
 import models.DoctorEducation;
 import models.DoctorExperience;
+import models.DoctorSocialWork;
 import models.Patient;
 import models.QuestionAndAnswer;
 import play.Logger;
@@ -34,7 +36,9 @@ public class DoctorController extends Controller {
 	public static Form<ClinicBean> clinicForm = Form.form(ClinicBean.class);
 	public static Form<DoctorExperience> experienceForm = Form.form(DoctorExperience.class);
 	public static Form<DoctorEducation> educationForm = Form.form(DoctorEducation.class);
+	public static Form<DoctorSocialWork> socialWorkForm = Form.form(DoctorSocialWork.class);
 	public static Form<DoctorAward> awardForm = Form.form(DoctorAward.class);
+	public static Form<DoctorDetail> languageForm = Form.form(DoctorDetail.class);
 	public static Form<QuestionAndAnswerBean> questionAndAnswerForm = Form.form(QuestionAndAnswerBean.class);
 
 
@@ -156,6 +160,66 @@ public class DoctorController extends Controller {
 			else {
 			
 				doctorAward.update();
+			}
+		}
+		// return ok(views.html.scheduleAppointment.render("hello"));
+		// return redirect(routes.UserController.list());
+		return TODO;
+
+	}
+	public static Result doctorLanguage(){
+		return ok(views.html.doctor.doctorLanguage.render(languageForm));
+	}
+	
+	public static Result processDoctorLanguage(){
+		final Form<DoctorDetail> languagefilledForm = languageForm.bindFromRequest();
+		// Logger.info("enteredt");
+
+		if (languagefilledForm.hasErrors()) {
+			Logger.info("bad request");
+			// System.out.println(filledForm.errors());
+			return badRequest(views.html.doctor.doctorLanguage.render(languagefilledForm));
+		} else {
+			final DoctorDetail doctorDetail = languagefilledForm.get();
+
+			if (doctorDetail.id == null) {
+
+
+				doctorDetail.save();
+			}
+			else {
+			
+				doctorDetail.update();
+			}
+		}
+		// return ok(views.html.scheduleAppointment.render("hello"));
+		// return redirect(routes.UserController.list());
+		return TODO;
+
+	}
+	public static Result doctorSocialWork(){
+		return ok(views.html.doctor.doctorSocialWork.render(socialWorkForm));
+	}
+	
+	public static Result processDoctorSocialWork() {
+		final Form<DoctorSocialWork> socialWorkfilledForm = socialWorkForm.bindFromRequest();
+		// Logger.info("enteredt");
+
+		if (socialWorkfilledForm.hasErrors()) {
+			Logger.info("bad request");
+			// System.out.println(filledForm.errors());
+			return badRequest(views.html.doctor.doctorSocialWork.render(socialWorkfilledForm));
+		} else {
+			final DoctorSocialWork doctorSocialWork = socialWorkfilledForm.get();
+
+			if (doctorSocialWork.id == null) {
+
+
+				doctorSocialWork.save();
+			}
+			else {
+			
+				doctorSocialWork.update();
 			}
 		}
 		// return ok(views.html.scheduleAppointment.render("hello"));

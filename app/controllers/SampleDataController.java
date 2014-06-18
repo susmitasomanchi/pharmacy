@@ -3,6 +3,8 @@ import java.util.List;
 
 import models.AppUser;
 import models.Doctor;
+import models.Language;
+import models.LanguageAppUser;
 import play.mvc.Controller;
 import play.mvc.Result;
 
@@ -56,6 +58,18 @@ public class SampleDataController extends Controller {
 		user.save();*/
 
 		return ok("created");
+	}
+	
+	public static Result language() {
+		
+		for (final Language val : Language.values()) {
+			LanguageAppUser languageAppUser=new LanguageAppUser();
+			languageAppUser.language=val;
+			languageAppUser.save();
+		}
+		return ok("created");
+		
+				
 	}
 
 

@@ -13,8 +13,8 @@ create table address (
   pin_code                  bigint,
   country                   varchar(27),
   last_update               timestamp not null,
-  constraint ck_address_state check (state in ('DADRA_AND_NAGAR_HAVELI','KERALA','WEST_BENGAL','JAMMU_AND_KASHMIR','HIMACHAL_PRADESH','MANIPUR','MIZORAM','MAHARASHTRA','JHARKHAND','ASSAM','UTTARAKHAND','SIKKIM','KARNATAKA','CHHATTISGARH','ANDHRA_PRADESH','NATIONAL_CAPITAL_TERRITORY_OF_DELHI','UTTAR_PRADESH','PUDUCHERRY','ANDAMAN_AND_NICOBAR_ISLANDS','TRIPURA','GOA','DAMAN_AND_DIU','NAGALAND','ODISHA','TAMIL_NADU','BIHAR','RAJASTHAN','LAKSHADWEEP','HARYANA','MEGHALAYA','PUNJAB','ARUNACHAL_PRADESH','GUJARAT','TELANGANA','MADHYA_PRADESH','CHNADIGARH')),
-  constraint ck_address_country check (country in ('ARMENIA','ANGUILLA','AUSTRALIA','ARUBA','CHAD','BOSNIA_AND_HERZEGOVINA','ANTIGUA_AND_BARBUDA','CHINA','ASHMORE_AND_CARTIER_ISLANDS','AMERICAN_SAMOA','COMOROS','INDIA','BOLIVIA','CAMEROON','PAKISTAN','DENMARK','BURUNDI','CAPE_VERDE','BULGARIA','ARGENTINA','DJIBOUTI','BELGIUM','ALBANIA','BAHRAIN','ALGERIA','ECUADOR','BELARUS','BARBADOS','BURMA','CHILE','BRUNEI','BELIZE','AZERBAIJAN','BHUTAN','CANADA','AFGHANISTAN','ANDORRA','CAMBODIA','AKROTIRI','AUSTRIA','BOUVET_ISLAND','BERMUDA','DOMINICA','ANGOLA','EGYPT','BENIN','UNITED_STATES','DHEKELIA','BOTSWANA','CUBA','ANTARCTICA','BRAZIL','CYPRUS','BURKINA_FASO','BANGLADESH','COLOMBIA')),
+  constraint ck_address_state check (state in ('JAMMU_AND_KASHMIR','RAJASTHAN','HIMACHAL_PRADESH','NAGALAND','TAMIL_NADU','UTTARAKHAND','LAKSHADWEEP','KERALA','MEGHALAYA','SIKKIM','CHHATTISGARH','CHNADIGARH','BIHAR','UTTAR_PRADESH','DADRA_AND_NAGAR_HAVELI','GUJARAT','ODISHA','GOA','TRIPURA','WEST_BENGAL','TELANGANA','MANIPUR','MIZORAM','ARUNACHAL_PRADESH','JHARKHAND','MAHARASHTRA','HARYANA','PUNJAB','PUDUCHERRY','ASSAM','NATIONAL_CAPITAL_TERRITORY_OF_DELHI','ANDAMAN_AND_NICOBAR_ISLANDS','DAMAN_AND_DIU','ANDHRA_PRADESH','MADHYA_PRADESH','KARNATAKA')),
+  constraint ck_address_country check (country in ('ANTARCTICA','BRUNEI','AZERBAIJAN','BELGIUM','AUSTRIA','BENIN','ECUADOR','ASHMORE_AND_CARTIER_ISLANDS','ALBANIA','COMOROS','UNITED_STATES','BAHRAIN','BELARUS','BULGARIA','AUSTRALIA','BOTSWANA','BELIZE','CAPE_VERDE','AMERICAN_SAMOA','PAKISTAN','DOMINICA','CHILE','BRAZIL','CUBA','ALGERIA','BURUNDI','CAMBODIA','AFGHANISTAN','BURKINA_FASO','ARUBA','DHEKELIA','INDIA','CANADA','BARBADOS','ARGENTINA','DJIBOUTI','BERMUDA','EGYPT','CHAD','ANGOLA','AKROTIRI','BOLIVIA','CHINA','CAMEROON','BANGLADESH','BHUTAN','DENMARK','COLOMBIA','CYPRUS','BOUVET_ISLAND','ANGUILLA','BURMA','ANDORRA','ARMENIA','BOSNIA_AND_HERZEGOVINA','ANTIGUA_AND_BARBUDA')),
   constraint pk_address primary key (id))
 ;
 
@@ -29,8 +29,8 @@ create table app_user (
   dob                       timestamp,
   role                      varchar(16),
   last_update               timestamp not null,
-  constraint ck_app_user_sex check (sex in ('FEMALE','OTHER','MALE')),
-  constraint ck_app_user_role check (role in ('PATIENT','DOCTOR','ADMIN','PHARMACIST','ADMIN_PHARMACIST','ADMIN_MR','MR','DIAGREP','DOCTOR_SECRETARY')),
+  constraint ck_app_user_sex check (sex in ('OTHER','MALE','FEMALE')),
+  constraint ck_app_user_role check (role in ('PHARMACIST','MR','ADMIN_MR','PATIENT','ADMIN','DIAGREP','DOCTOR','ADMIN_PHARMACIST','DOCTOR_SECRETARY')),
   constraint pk_app_user primary key (id))
 ;
 
@@ -59,7 +59,7 @@ create table batch (
   tax                       float,
   discount                  float,
   last_update               timestamp not null,
-  constraint ck_batch_batch_status check (batch_status in ('EXPIRED','SUFFICIENT','NEARING_EXHAUSTION','APPROACHING_EXPIRY','EXHAUSTED')),
+  constraint ck_batch_batch_status check (batch_status in ('EXHAUSTED','APPROACHING_EXPIRY','EXPIRED','NEARING_EXHAUSTION','SUFFICIENT')),
   constraint pk_batch primary key (id))
 ;
 
@@ -148,13 +148,6 @@ create table doctor_clinic_info (
 
 create table doctor_detail (
   id                        bigint not null,
-  a                         bigint,
-  article_on                varchar(255),
-  published_on              varchar(255),
-  comment_for_article       varchar(255),
-  language                  varchar(255),
-  social_work_tittle        varchar(255),
-  comment_social_work       varchar(255),
   last_update               timestamp not null,
   constraint pk_doctor_detail primary key (id))
 ;
@@ -180,11 +173,19 @@ create table doctor_experience (
   constraint pk_doctor_experience primary key (id))
 ;
 
+create table doctor_social_work (
+  id                        bigint not null,
+  social_work_tittle        varchar(255),
+  comment_social_work       varchar(255),
+  last_update               timestamp not null,
+  constraint pk_doctor_social_work primary key (id))
+;
+
 create table head_quarter (
   state                     varchar(35),
   name                      varchar(255),
   last_update               timestamp not null,
-  constraint ck_head_quarter_state check (state in ('DADRA_AND_NAGAR_HAVELI','KERALA','WEST_BENGAL','JAMMU_AND_KASHMIR','HIMACHAL_PRADESH','MANIPUR','MIZORAM','MAHARASHTRA','JHARKHAND','ASSAM','UTTARAKHAND','SIKKIM','KARNATAKA','CHHATTISGARH','ANDHRA_PRADESH','NATIONAL_CAPITAL_TERRITORY_OF_DELHI','UTTAR_PRADESH','PUDUCHERRY','ANDAMAN_AND_NICOBAR_ISLANDS','TRIPURA','GOA','DAMAN_AND_DIU','NAGALAND','ODISHA','TAMIL_NADU','BIHAR','RAJASTHAN','LAKSHADWEEP','HARYANA','MEGHALAYA','PUNJAB','ARUNACHAL_PRADESH','GUJARAT','TELANGANA','MADHYA_PRADESH','CHNADIGARH')))
+  constraint ck_head_quarter_state check (state in ('JAMMU_AND_KASHMIR','RAJASTHAN','HIMACHAL_PRADESH','NAGALAND','TAMIL_NADU','UTTARAKHAND','LAKSHADWEEP','KERALA','MEGHALAYA','SIKKIM','CHHATTISGARH','CHNADIGARH','BIHAR','UTTAR_PRADESH','DADRA_AND_NAGAR_HAVELI','GUJARAT','ODISHA','GOA','TRIPURA','WEST_BENGAL','TELANGANA','MANIPUR','MIZORAM','ARUNACHAL_PRADESH','JHARKHAND','MAHARASHTRA','HARYANA','PUNJAB','PUDUCHERRY','ASSAM','NATIONAL_CAPITAL_TERRITORY_OF_DELHI','ANDAMAN_AND_NICOBAR_ISLANDS','DAMAN_AND_DIU','ANDHRA_PRADESH','MADHYA_PRADESH','KARNATAKA')))
 ;
 
 create table inventory (
@@ -195,8 +196,17 @@ create table inventory (
   product_quantity          integer,
   remarks                   varchar(255),
   last_update               timestamp not null,
-  constraint ck_inventory_product_inventory_status check (product_inventory_status in ('OUT_OF_STOCK','AVAILABLE')),
+  constraint ck_inventory_product_inventory_status check (product_inventory_status in ('AVAILABLE','OUT_OF_STOCK')),
   constraint pk_inventory primary key (id))
+;
+
+create table language_app_user (
+  id                        bigint not null,
+  language                  varchar(9),
+  doctor_detail_id          bigint,
+  last_update               timestamp not null,
+  constraint ck_language_app_user_language check (language in ('ASSAMESE','BENGALI','ENGLISH','KANNADA','SINDHI','BODO','SANTALI','TELGU','URDU','HINDI','KONKANI','PUNJABI','GUJARATI','MALAYALAM','NEPALI','DOGRI','ORIYA','KASHMIRI','MANIPURI','TAMIL','MAITHILI','MARATHI')),
+  constraint pk_language_app_user primary key (id))
 ;
 
 create table medical_representative (
@@ -305,7 +315,11 @@ create sequence doctor_education_seq;
 
 create sequence doctor_experience_seq;
 
+create sequence doctor_social_work_seq;
+
 create sequence inventory_seq;
+
+create sequence language_app_user_seq;
 
 create sequence medical_representative_seq;
 
@@ -347,20 +361,22 @@ alter table doctor_clinic_info add constraint fk_doctor_clinic_info_assista_12 f
 create index ix_doctor_clinic_info_assista_12 on doctor_clinic_info (assistant_id);
 alter table inventory add constraint fk_inventory_product_13 foreign key (product_id) references product (id);
 create index ix_inventory_product_13 on inventory (product_id);
-alter table medical_representative add constraint fk_medical_representative_app_14 foreign key (app_user_id) references app_user (id);
-create index ix_medical_representative_app_14 on medical_representative (app_user_id);
-alter table patient add constraint fk_patient_appUser_15 foreign key (app_user_id) references app_user (id);
-create index ix_patient_appUser_15 on patient (app_user_id);
-alter table pharmaceutical_company add constraint fk_pharmaceutical_company_adm_16 foreign key (admin_mr_id) references medical_representative (id);
-create index ix_pharmaceutical_company_adm_16 on pharmaceutical_company (admin_mr_id);
-alter table pharmacist add constraint fk_pharmacist_appUser_17 foreign key (app_user_id) references app_user (id);
-create index ix_pharmacist_appUser_17 on pharmacist (app_user_id);
-alter table pharmacy add constraint fk_pharmacy_adminPharmacist_18 foreign key (admin_pharmacist_id) references pharmacist (id);
-create index ix_pharmacy_adminPharmacist_18 on pharmacy (admin_pharmacist_id);
-alter table question_and_answer add constraint fk_question_and_answer_questi_19 foreign key (question_by_id) references app_user (id);
-create index ix_question_and_answer_questi_19 on question_and_answer (question_by_id);
-alter table question_and_answer add constraint fk_question_and_answer_answer_20 foreign key (answer_by_id) references app_user (id);
-create index ix_question_and_answer_answer_20 on question_and_answer (answer_by_id);
+alter table language_app_user add constraint fk_language_app_user_doctorDe_14 foreign key (doctor_detail_id) references doctor_detail (id);
+create index ix_language_app_user_doctorDe_14 on language_app_user (doctor_detail_id);
+alter table medical_representative add constraint fk_medical_representative_app_15 foreign key (app_user_id) references app_user (id);
+create index ix_medical_representative_app_15 on medical_representative (app_user_id);
+alter table patient add constraint fk_patient_appUser_16 foreign key (app_user_id) references app_user (id);
+create index ix_patient_appUser_16 on patient (app_user_id);
+alter table pharmaceutical_company add constraint fk_pharmaceutical_company_adm_17 foreign key (admin_mr_id) references medical_representative (id);
+create index ix_pharmaceutical_company_adm_17 on pharmaceutical_company (admin_mr_id);
+alter table pharmacist add constraint fk_pharmacist_appUser_18 foreign key (app_user_id) references app_user (id);
+create index ix_pharmacist_appUser_18 on pharmacist (app_user_id);
+alter table pharmacy add constraint fk_pharmacy_adminPharmacist_19 foreign key (admin_pharmacist_id) references pharmacist (id);
+create index ix_pharmacy_adminPharmacist_19 on pharmacy (admin_pharmacist_id);
+alter table question_and_answer add constraint fk_question_and_answer_questi_20 foreign key (question_by_id) references app_user (id);
+create index ix_question_and_answer_questi_20 on question_and_answer (question_by_id);
+alter table question_and_answer add constraint fk_question_and_answer_answer_21 foreign key (answer_by_id) references app_user (id);
+create index ix_question_and_answer_answer_21 on question_and_answer (answer_by_id);
 
 
 
@@ -396,9 +412,13 @@ drop table if exists doctor_education cascade;
 
 drop table if exists doctor_experience cascade;
 
+drop table if exists doctor_social_work cascade;
+
 drop table if exists head_quarter cascade;
 
 drop table if exists inventory cascade;
+
+drop table if exists language_app_user cascade;
 
 drop table if exists medical_representative cascade;
 
@@ -444,7 +464,11 @@ drop sequence if exists doctor_education_seq;
 
 drop sequence if exists doctor_experience_seq;
 
+drop sequence if exists doctor_social_work_seq;
+
 drop sequence if exists inventory_seq;
+
+drop sequence if exists language_app_user_seq;
 
 drop sequence if exists medical_representative_seq;
 

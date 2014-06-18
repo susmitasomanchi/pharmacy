@@ -29,6 +29,11 @@ GET		/doctor-education				controllers.DoctorController.doctorEducation()
 POST	/doctor-education				controllers.DoctorController.processDoctorEducation()
 GET		/doctor-award					controllers.DoctorController.doctorAward()
 POST	/doctor-award					controllers.DoctorController.processDoctorAward()
+GET		/doctor-language				controllers.DoctorController.doctorLanguage()
+POST	/doctor-language				controllers.DoctorController.processDoctorLanguage()
+GET		/doctor-socialwork				controllers.DoctorController.doctorSocialWork()
+POST	/doctor-socialwork				controllers.DoctorController.processDoctorSocialWork()
+
 
 
 
@@ -97,6 +102,8 @@ GET    /userform/patient/h/               controllers.PatientController.enterFor
 GET    /register/                         controllers.PatientController.register()
 POST   /register/                         controllers.PatientController.registerProccess()
 
+# SampleData
+GET  /sampledata/language				  controllers.SampleDataController.language()
 
 
 # Map static resources from the /public folder to the /assets URL path

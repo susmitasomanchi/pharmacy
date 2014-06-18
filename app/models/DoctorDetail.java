@@ -1,11 +1,16 @@
 package models;
 
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.OneToMany;
+import javax.persistence.OneToOne;
 
 import play.data.validation.Constraints.Required;
 
@@ -22,31 +27,16 @@ public class DoctorDetail extends BaseEntity{
 	
 	
 	
-	public Long a;
 	
 	
-	//publication/ articles
-	
-	public String articleOn;
-	
-	public String publishedOn;
-	
-	public String commentForArticle;
-	
-	
-	
+
 	//Languages
 	
-	@Required
-	public String language;
+	
+	@OneToMany(cascade=CascadeType.ALL)
+	public List<LanguageAppUser> languageAppUsers=new ArrayList<LanguageAppUser>();
 	
 	
-	
-	//Social Work
-	
-	public String socialWorkTittle;
-	
-	public String CommentSocialWork;
 	
 	
 
