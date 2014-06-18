@@ -7,7 +7,6 @@ import java.util.List;
 import models.Clinic;
 import models.Day;
 import models.DayOfTheWeek;
-import play.Logger;
 
 @SuppressWarnings("serial")
 public class ClinicBean implements Serializable{
@@ -36,7 +35,6 @@ public class ClinicBean implements Serializable{
 			dayOfTheWeek.day=day;
 			dayOfTheWeeks.add(dayOfTheWeek);
 		}
-		Logger.info(this.daysOfWeek.size()+"");
 		return dayOfTheWeeks;
 	}
 }
