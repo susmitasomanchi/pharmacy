@@ -8,7 +8,6 @@ import java.util.List;
 import models.AppUser;
 import models.Appointment;
 import models.AppointmentStatus;
-import models.AppointmentType;
 import models.Clinic;
 import models.DayOfTheWeek;
 import models.Doctor;
@@ -168,27 +167,32 @@ public class DoctorController extends Controller {
 
 	public static Result processNewClinic(){
 		final Form<ClinicBean> filledForm = clinicForm.bindFromRequest();
-		final DoctorClinicInfo dcInfo = new DoctorClinicInfo();
-
+		List<DoctorClinicInfo> doctorClinicInfos=null;
 		if(filledForm.hasErrors()){
 			Logger.info(filledForm.errors().toString());
 			return ok(views.html.doctor.newClinic.render(filledForm));
 		}
 		else{
+
 			final Clinic clinic = filledForm.get().toEntity();
 			clinic.save();
 			final Doctor loggedInDoctor = LoginController.getLoggedInUser().getDoctor();
-			dcInfo.doctor = loggedInDoctor;
-			dcInfo.clinic = clinic;
-			dcInfo.fromHrs = filledForm.get().fromHrs;
-			dcInfo.toHrs = filledForm.get().toHrs;
-			dcInfo.daysOfWeek=filledForm.get().toDayOfTheWeek();
-			dcInfo.save();
-			loggedInDoctor.doctorClinicInfoList.add(dcInfo);
-			loggedInDoctor.update();
+
+			doctorClinicInfos=filledForm.get().toDoctorClinicInfoList();
+			for (DoctorClinicInfo doctorClinicInfo : doctorClinicInfos) {
+				doctorClinicInfo.clinic=clinic;
+				doctorClinicInfo.doctor=loggedInDoctor;
+				doctorClinicInfo.save();
+				loggedInDoctor.doctorClinicInfoList.add(doctorClinicInfo);
+				loggedInDoctor.update();
+			}
+
+
+
+
 
 		}
-		return DoctorController.createAppointment(dcInfo);
+		return DoctorController.createAppointment(doctorClinicInfos);
 	}
 
 	public static Result myClinics(){
@@ -296,10 +300,9 @@ public class DoctorController extends Controller {
 	}
 
 	//creating appointments
-	public static  Result createAppointment(DoctorClinicInfo clinicInfo) {
+	public static  Result createAppointment(List<DoctorClinicInfo> clinicInfoList) {
 
 		final Doctor doctor=LoginController.getLoggedInUser().getDoctor();
-		final List<DoctorClinicInfo> clinicInfos=doctor.doctorClinicInfoList;
 
 		final Calendar calendar = Calendar.getInstance();
 		calendar.setTime(new Date());
@@ -309,35 +312,38 @@ public class DoctorController extends Controller {
 		calendar.set(Calendar.MILLISECOND,0);
 
 		List<Integer> days2= new ArrayList<Integer>();
-		for (DayOfTheWeek dayOfTheWeek : clinicInfo.daysOfWeek) {
-			days2.add(dayOfTheWeek.day.ordinal());
-		}
-		final int hourToClinic=clinicInfo.toHrs-clinicInfo.fromHrs;
+
 
 
 		for(int days=0;days<30;days++){
+			for (DoctorClinicInfo clinicInfo : clinicInfoList) {
 
-
-			calendar.set(Calendar.HOUR_OF_DAY, clinicInfo.fromHrs);
-			calendar.set(Calendar.MINUTE, 0);
-			calendar.set(Calendar.SECOND,0);
-			calendar.set(Calendar.MILLISECOND,0);
-			Logger.info(days2+"");
-
-
-			for (int j2 = 0; j2 <((hourToClinic*60)/5); j2++) {
-
-				if (days2.contains(calendar.get(Calendar.DAY_OF_WEEK)-1)) {
-					final Appointment appointment=new Appointment();
-					appointment.appointmentStatus=AppointmentStatus.AVAILABLE;
-					appointment.appointmentTime=calendar.getTime();
-					appointment.clinic=clinicInfo.clinic;
-					appointment.doctor=doctor;
-					appointment.appointmentType=AppointmentType.NORMAL;
-					appointment.save();
-					calendar.add(Calendar.MINUTE, 5);
+				for (DayOfTheWeek dayOfTheWeek : clinicInfo.daysOfWeek) {
+					days2.add(dayOfTheWeek.day.ordinal());
 				}
 
+				final int hourToClinic=clinicInfo.toHrs-clinicInfo.fromHrs;
+
+				calendar.set(Calendar.HOUR_OF_DAY, clinicInfo.fromHrs);
+				calendar.set(Calendar.MINUTE, 0);
+				calendar.set(Calendar.SECOND,0);
+				calendar.set(Calendar.MILLISECOND,0);
+				Logger.info(days2+"");
+
+
+				for (int j2 = 0; j2 <((hourToClinic*60)/5); j2++) {
+
+					if (days2.contains(calendar.get(Calendar.DAY_OF_WEEK)-1)) {
+						final Appointment appointment=new Appointment();
+						appointment.appointmentStatus=AppointmentStatus.AVAILABLE;
+						appointment.appointmentTime=calendar.getTime();
+						appointment.clinic=clinicInfo.clinic;
+						appointment.doctor=doctor;
+						appointment.save();
+						calendar.add(Calendar.MINUTE, 5);
+					}
+
+				}
 			}
 
 			calendar.add(Calendar.DATE, 1);
@@ -379,7 +385,6 @@ public class DoctorController extends Controller {
 			Appointment appointment=new Appointment();
 			appointment.appointmentStatus=AppointmentStatus.AVAILABLE;
 			appointment.appointmentTime=calendar.getTime();
-			appointment.appointmentType=AppointmentType.SPECIAL;
 			appointment.clinic=clinicInfo.clinic;
 			appointment.doctor=loggedIndoctor;
 			appointment.save();

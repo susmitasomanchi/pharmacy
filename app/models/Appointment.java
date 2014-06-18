@@ -39,7 +39,6 @@ public class Appointment extends BaseEntity {
 	@OneToOne
 	public Clinic clinic;
 
-	public AppointmentType appointmentType;
 
 
 	public static List<Appointment> getAvailableAppointmentList(final Doctor doctor,final Date date) {
