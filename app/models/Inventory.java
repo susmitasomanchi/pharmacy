@@ -23,19 +23,19 @@ public class Inventory extends BaseEntity {
 	@GeneratedValue(strategy = GenerationType.AUTO)
 	public Long id;
 
-	@OneToOne
-	public Product product;
+	//	@OneToOne
+	//	public Product product;
 
 	public String shelfNo;
 
 
-	@ManyToOne(cascade=CascadeType.ALL)
-	public List<Batch> batchList = new ArrayList<Batch>();
+	//	@ManyToOne(cascade=CascadeType.ALL)
+	//	public List<Batch> batchList = new ArrayList<Batch>();
+	//
+	//	//@Required
+	//	public ProductInventoryStatus productInventoryStatus;
 
-	//@Required
-	public ProductInventoryStatus productInventoryStatus;
 
-	@Required
 	public Integer productQuantity;
 
 	public String remarks;

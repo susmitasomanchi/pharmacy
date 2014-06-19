@@ -18,17 +18,17 @@ POST   /doctor/request-appointment        controllers.DoctorController.requestAp
 
 
 # doctor actions
-GET		/doctor/new-assistant			controllers.DoctorController.newAssistant()
-GET		/doctor/new-clinic				controllers.DoctorController.newClinic()
-POST	/doctor/new-clinic				controllers.DoctorController.processNewClinic()
-GET		/doctor/clinics					controllers.DoctorController.myClinics()
-GET		/doctor-profile				    controllers.DoctorController.doctorProfile()
-GET		/doctor-experience				controllers.DoctorController.doctorExperience()
-POST	/doctor-experience				controllers.DoctorController.processDoctorExperience()
-GET		/doctor-education				controllers.DoctorController.doctorEducation()
-POST	/doctor-education				controllers.DoctorController.processDoctorEducation()
-GET		/doctor-award					controllers.DoctorController.doctorAward()
-POST	/doctor-award					controllers.DoctorController.processDoctorAward()
+GET    /doctor/new-assistant              controllers.DoctorController.newAssistant()
+GET    /doctor/new-clinic                 controllers.DoctorController.newClinic()
+POST   /doctor/new-clinic                 controllers.DoctorController.processNewClinic()
+GET    /doctor/clinics                    controllers.DoctorController.myClinics()
+GET    /doctor-profile                    controllers.DoctorController.doctorProfile()
+GET    /doctor-experience                 controllers.DoctorController.doctorExperience()
+POST   /doctor-experience                 controllers.DoctorController.processDoctorExperience()
+GET    /doctor-education                  controllers.DoctorController.doctorEducation()
+POST   /doctor-education                  controllers.DoctorController.processDoctorEducation()
+GET    /doctor-award                      controllers.DoctorController.doctorAward()
+POST   /doctor-award                      controllers.DoctorController.processDoctorAward()
 
 
 
@@ -43,8 +43,10 @@ GET    /newProduct                        controllers.PharmacistController.produ
 POST   /newProduct                        controllers.PharmacistController.saveProduct()					
 GET    /products                          controllers.PharmacistController.displayProducts()
 POST   /editproduct/                      controllers.PharmacistController.editProduct(id: Long)
-GET		/addProductToInventory			controllers.PharmacistController.addProductForm()
-POST	/addProductToInventory			controllers.PharmacistController.addToInventory()		
+GET    /searchProduct                     controllers.PharmacistController.searchForm()
+POST   /searchProduct			        controllers.PharmacistController.searchProduct(arg: String ?= "")
+GET		/addProductToInventory				controllers.PharmacistController.addProductForm(id: Long)
+POST   /addProductToInventory             controllers.PharmacistController.addToInventory()		
 
 
 
@@ -89,7 +91,7 @@ GET    /mr/add-mr                         controllers.MRController.addMR()
 GET    /mr/hq                             controllers.MRController.headQuarter()
 GET    /dcr-line-item                     controllers.MRController.visitDoctor()
 POST   /dcr-line-item/proccess            controllers.MRController.visitDoctorProccess()
-GET    /search								controllers.MRController.search()
+GET    /search                            controllers.MRController.search()
 
 # delete later
 GET    /userform/patient/                 controllers.PatientController.form()

@@ -3,10 +3,15 @@ package controllers;
 
 import java.util.List;
 
+import beans.AddProductToInventoryBean;
+
+import com.avaje.ebean.Expr;
+
 import actions.BasicAuth;
 import models.AppUser;
 import models.Batch;
 import models.Inventory;
+import models.Patient;
 import models.Pharmacist;
 import models.Pharmacy;
 import models.Product;
@@ -24,14 +29,14 @@ public class PharmacistController extends Controller{
 
 	public static Form<Pharmacy> pharmacyForm = Form.form(Pharmacy.class);
 
-	public static Form<Inventory> inventoryForm = Form.form(Inventory.class);
-
-	public static Form<Batch> batchForm = Form.form(Batch.class);
+	public static Form<AddProductToInventoryBean> addProductForm = Form.form(AddProductToInventoryBean.class);
 
 
-	
+	public static Long  Pid;
 
-	
+
+
+
 
 	public static Result productForm() {
 
@@ -66,7 +71,32 @@ public class PharmacistController extends Controller{
 
 	public static Result displayProducts() {
 		final List<Product> products=Product.find.all();
-		return ok(views.html.pharmacist.products.render(products, productForm));
+		return ok(views.html.pharmacist.products.render(products));
+	}
+
+
+
+	public static Result searchForm()
+	{
+		final List<Product> products=Product.find.all();
+		return ok(views.html.pharmacist.searchProduct.render(products));
+	}
+
+
+
+
+
+	public static Result searchProduct(final String search) {
+
+		// final List<Patient> patients=Patient.find.where().eq("appUser.email",
+		// "mitesh@greensoftware.in").findList();
+
+		final List<Product> products = Product.find
+				.where()
+				.or(Expr.like("medicineName", search + "%"),
+						Expr.like("typeOfMedicine", search + "%")).findList();
+
+		return ok(products.toString());
 	}
 
 
@@ -85,33 +115,47 @@ public class PharmacistController extends Controller{
 
 	}
 
-	public static Result addProductForm() {
 
-		return ok(views.html.pharmacist.addProductToInventory.render(inventoryForm, batchForm ));
+
+
+	public static Result addProductForm(final Long id) {
+
+		Pid=id;
+		System.out.println("hjmdhsjhsjhfjjf"+id);
+		return ok(views.html.pharmacist.addProductToInventory.render(addProductForm));
+		//return TODO;
 	}
+
+
+
+
 
 	public static Result addToInventory() {
 
-		final Form<Inventory> inventoryFilledForm = inventoryForm.bindFromRequest();
+		final Form<AddProductToInventoryBean> filledForm = addProductForm.bindFromRequest();
 
-		final Form<Batch> batchFilledForm = batchForm.bindFromRequest();
-
-		if(inventoryFilledForm.hasErrors() && batchFilledForm.hasErrors()) {
+		if(filledForm.hasErrors()) {
 			Logger.info("bad request");
 
-			return badRequest(views.html.pharmacist.addProductToInventory.render(inventoryForm, batchForm ));
+			return badRequest(views.html.pharmacist.addProductToInventory.render(addProductForm));
 		}
-		else {
-			final Inventory inventory= inventoryFilledForm.get();
-			final Batch batch=batchFilledForm.get();
+		/*if(batchFilledForm.hasErrors()) {
+			Logger.info("bad request");
 
-			if(inventory.id == null && batch.id == null) {
-				inventory.save();
+			return badRequest(views.html.pharmacist.addProductToInventory.render(batchForm));
+		}*/
+		else {
+			final Batch batch=filledForm.get().toBatchEntity();
+			final Inventory inventory=filledForm.get().toInventoryEntity();
+			batch.product.id=Pid;
+			if((batch.id==null) && (inventory.id==null)){
 				batch.save();
+				inventory.save();
+
 			}
-			else {
-				inventory.update();
+			else{
 				batch.update();
+				inventory.update();
 			}
 
 		}
