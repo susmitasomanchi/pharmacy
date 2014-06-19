@@ -17,9 +17,10 @@
 			@helper.select(clinicForm("daysOfWeek"),options=helper.options(Day.options),'_label->"Collaborate",'multiple->"multiple", 'class->"chzn col-sm-6")
 			
 			time for Mr
-			@helper.inputText(clinicForm("fromHrsMr"),'class -> "inputs",'_label->"Available From (in 24-Hrs format)")
+			@helper.inputText(clinicForm("fromHrsMr"),'class -> "inputs",'_label->"Available Till (in 24-Hrs format)")
 			
-			@helper.inputText(clinicForm("toHrsMr"),'class -> "inputs",'_label->"Available Till (in 24-Hrs format)")
+			@helper.inputText(clinicForm("toHrsMr"),'class -> "inputs",'_label->"Available From (in 24-Hrs format)")
+			
 			
 			@helper.select(clinicForm("daysOfWeekMr"),options=helper.options(Day.options),'_label->"Collaborate",'multiple->"multiple", 'class->"chzn col-sm-6")
 			

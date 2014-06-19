@@ -31,11 +31,19 @@ public class DoctorClinicInfo extends BaseEntity {
 
 	public Integer toHrs;
 
+	public Integer toHrsMr;
+
+	public Integer fromHrsMr;
+
+
 	@OneToOne
 	DoctorAssistant assistant;
 
 	@OneToMany(cascade=CascadeType.ALL)
 	public List<DayOfTheWeek> daysOfWeek= new ArrayList<DayOfTheWeek>();
+
+	@OneToMany(cascade=CascadeType.ALL)
+	public List<DayOfTheWeek> daysOfWeekMr= new ArrayList<DayOfTheWeek>();
 
 	public static Model.Finder<Long, DoctorClinicInfo> find = new Finder<Long, DoctorClinicInfo>(Long.class, DoctorClinicInfo.class);
 

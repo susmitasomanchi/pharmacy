@@ -17,15 +17,15 @@ public class ClinicBean implements Serializable{
 
 	public String name;
 
-	public int fromHrs;
+	public Integer fromHrs;
 
-	public int toHrs;
+	public Integer toHrs;
 
 	public List<Day> daysOfWeek=new ArrayList<Day>();
 
-	public int fromHrsMr;
+	public Integer fromHrsMr;
 
-	public int toHrsMr;
+	public Integer toHrsMr;
 
 	public List<Day> daysOfWeekMr=new ArrayList<Day>();
 
@@ -35,40 +35,47 @@ public class ClinicBean implements Serializable{
 		clinic.name = this.name;
 		return clinic;
 	}
-	public List<DoctorClinicInfo> toDoctorClinicInfoList()
+	public DoctorClinicInfo toDoctorClinicInfoList()
 	{
-		final List<DoctorClinicInfo> doctorClinicInfos=new ArrayList<DoctorClinicInfo> ();
 
-		DoctorClinicInfo doctorClinicInfo=new  DoctorClinicInfo();
+		final DoctorClinicInfo doctorClinicInfo=new  DoctorClinicInfo();
 
+
+		if(this.toHrs != null) {
+			doctorClinicInfo.toHrs= this.toHrs;
+		}
+		if(this.fromHrs != null) {
+			doctorClinicInfo.fromHrs= this.fromHrs;
+		}
+		if(this.toHrsMr != null) {
+			doctorClinicInfo.toHrsMr= this.toHrsMr;
+		}
+		if(this.fromHrsMr != null) {
+			doctorClinicInfo.fromHrsMr= this.fromHrsMr;
+		}
 
 		List<DayOfTheWeek> dayOfTheWeeks=new ArrayList<DayOfTheWeek>();
-		final DayOfTheWeek dayOfTheWeek=new DayOfTheWeek();
+		DayOfTheWeek dayOfTheWeek=new DayOfTheWeek();
+
 
 		for (final Day day : this.daysOfWeek) {
 			dayOfTheWeek.day=day;
 			dayOfTheWeeks.add(dayOfTheWeek);
 		}
-		doctorClinicInfo.fromHrs=this.fromHrs;
-		doctorClinicInfo.toHrs=this.toHrs;
 		doctorClinicInfo.daysOfWeek=dayOfTheWeeks;
-		doctorClinicInfos.add(doctorClinicInfo);
 
-		doctorClinicInfo=null;
 		dayOfTheWeeks=null;
-		doctorClinicInfo=new DoctorClinicInfo();
+		dayOfTheWeek=null;
 		dayOfTheWeeks=new ArrayList<DayOfTheWeek>();
-
-		for (final Day day : this.daysOfWeekMr) {
+		dayOfTheWeek=new DayOfTheWeek();
+		for (final Day day : this.daysOfWeek) {
 			dayOfTheWeek.day=day;
 			dayOfTheWeeks.add(dayOfTheWeek);
 		}
+		doctorClinicInfo.daysOfWeekMr=dayOfTheWeeks;
 
-		doctorClinicInfo.fromHrs=this.fromHrsMr;
-		doctorClinicInfo.toHrs=this.toHrsMr;
-		doctorClinicInfo.daysOfWeek=dayOfTheWeeks;
 
-		doctorClinicInfos.add(doctorClinicInfo);
-		return doctorClinicInfos;
+
+		return doctorClinicInfo;
 	}
 }

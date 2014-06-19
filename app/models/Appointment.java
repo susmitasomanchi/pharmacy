@@ -41,6 +41,7 @@ public class Appointment extends BaseEntity {
 
 
 
+
 	public static List<Appointment> getAvailableAppointmentList(final Doctor doctor,final Date date) {
 
 		List<Appointment> list=null;
@@ -51,12 +52,30 @@ public class Appointment extends BaseEntity {
 		calendar.set(Calendar.SECOND,59);
 		calendar.set(Calendar.MILLISECOND,59);
 
-		list=Appointment.find.where().eq("appointmentType", AppointmentType.NORMAL).eq("doctor", doctor).between("appointmentTime", date, calendar.getTime()).
+		list=Appointment.find.where().eq("doctor", doctor).between("appointmentTime", date, calendar.getTime()).
 				order().asc("appointmentTime").findList();
 
 		return list;
 
 	}
+	public static List<Appointment> getAvailableMrAppointmentList(final Doctor doctor,final Date date) {
+		List<Appointment> list=null;
+
+		final Calendar calendar=Calendar.getInstance();
+		calendar.setTime(date);
+		calendar.set(Calendar.HOUR_OF_DAY,doctor.doctorClinicInfoList.get(0).toHrsMr);
+		calendar.set(Calendar.MINUTE,59);
+		calendar.set(Calendar.SECOND,59);
+		calendar.set(Calendar.MILLISECOND,59);
+
+		list=Appointment.find.where().eq("doctor", doctor).between("appointmentTime", date, calendar.getTime()).
+				order().asc("appointmentTime").findList();
+
+
+
+		return list;
+	}
+
 	public static Finder<Long, Appointment> find = new Finder<Long, Appointment>(Long.class, Appointment.class);
 
 

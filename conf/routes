@@ -48,9 +48,7 @@ POST	/addProductToInventory			controllers.PharmacistController.addToInventory()
 
 
 
-GET 	/create-Mr-schedule				controllers.DoctorController.createMrSchedule()
-POST	/create-Mr-appointment 			controllers.DoctorController.createMrAppointment()
-
+GET		/doctor/today-appointment		controllers.DoctorController.viewTodaysAppointment()	
 
 GET    /medical-representative            controllers.Application.medicalRepresentative()
 POST   /medical-representative/proccess   controllers.Application.medicalRepresentativeProccess()
@@ -101,7 +99,8 @@ GET    /mr/hq                             controllers.MRController.headQuarter()
 GET    /dcr-line-item                     controllers.MRController.visitDoctor()
 POST   /dcr-line-item/proccess            controllers.MRController.visitDoctorProccess()
 GET    /search								controllers.MRController.search()
-GET 	/mr/schedule-appointment         controllers.MRController.scheduleAppointment()
+GET		/mr/display-appointment/:id			controllers.MRController.scheduleAppointment(id:String)	
+
 
 # delete later
 GET    /userform/patient/                 controllers.PatientController.form()

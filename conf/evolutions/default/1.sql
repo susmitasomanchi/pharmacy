@@ -154,6 +154,8 @@ create table doctor_clinic_info (
   doctor_id                 bigint,
   from_hrs                  integer,
   to_hrs                    integer,
+  to_hrs_mr                 integer,
+  from_hrs_mr               integer,
   assistant_id              bigint,
   last_update               timestamp not null,
   constraint pk_doctor_clinic_info primary key (id))

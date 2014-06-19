@@ -11,6 +11,7 @@ import models.Appointment;
 import models.Doctor;
 import models.Patient;
 import models.QuestionAndAnswer;
+import models.Role;
 import play.Logger;
 import play.data.Form;
 import play.mvc.Controller;
@@ -31,6 +32,11 @@ public class PatientController extends Controller {
 
 
 	public static Result displayAppointment(final String id) {
+		if(LoginController.getLoggedInUserRole().equals(Role.MR)){
+			redirect(routes.MRController.scheduleAppointment(id));
+		}
+
+
 		List<Appointment> listAppointments=null;
 		final Map<Date, List<Appointment>> appointmentMap = new LinkedHashMap<Date, List<Appointment>>();
 		final Doctor doctor=Doctor.find.byId(Long.parseLong(id));
