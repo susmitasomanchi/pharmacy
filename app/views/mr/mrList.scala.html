@@ -1,21 +1,22 @@
-@(doctorList:List[Doctor])
+@(mrList:List[MedicalRepresentative])
 @main("doctor list"){
 	
 	<form name="searchform" action="@routes.MRController.search()" method="GET">	
 	<input type="text" name="searchStr">
 	
-	<input type="submit" value="Search Doctor">
+	<input type="submit" value="Search MR">
 	</form>
+	
 	<table>
 	<thead>
-	<th>Doctor Name</th>
+	<th>MR name</th>
 	</thead>
 	<tbody>
 	
-	@for(doctor <-doctorList){
+	@for(mr <-mrList){
 		<tr>
-		<td>@doctor.appUser.name</td>
-		<td><a class="btn btn-primary btn-xs" href="/mr/add-doctor/@doctor.id">Add</a></td>
+		<td>@mr.appUser.name</td>
+		<td>@mr.companyName</td>		
 		</tr>
 		<tr></tr>
 	}
@@ -23,3 +24,4 @@
 	</table>
 	
 }
+

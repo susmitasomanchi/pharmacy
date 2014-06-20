@@ -7,6 +7,7 @@ import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.ManyToOne;
+import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 
 @SuppressWarnings("serial")
@@ -18,9 +19,12 @@ public class PharmaceuticalCompany extends BaseEntity {
 	public Address address;
 
 	@OneToOne
-	public MedicalRepresentative adminMR;
+	public MedicalRepresentative mr;
+	
+	@OneToMany(cascade=CascadeType.ALL)
+	public List<Product> productList = new ArrayList<Product>();
 
-	@ManyToOne(cascade=CascadeType.ALL)
+	@OneToMany(cascade=CascadeType.ALL)
 	public List<MedicalRepresentative> mrList = new ArrayList<MedicalRepresentative>();
 
 	

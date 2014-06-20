@@ -1,13 +1,16 @@
 package models;
 
+import java.util.ArrayList;
+import java.util.List;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.OneToOne;
+import javax.persistence.ManyToMany;
+import javax.persistence.OneToMany;
 
-import org.elasticsearch.common.joda.time.DateTime;
 
 @SuppressWarnings("serial")
 @Entity
@@ -17,16 +20,16 @@ public class DCRLineItem extends BaseEntity{
 	@Id
 	public Long id;
 	
-	@OneToOne
-	public Doctor doctor;
+	@ManyToMany
+	public List<Doctor> doctorList = new ArrayList<Doctor>();
 	
-	public DateTime fromTime;
+	//@OneToMany
+	//public List<Samples> sampleList = new ArrayList<Samples>();
 	
-	public DateTime toTime;
+	@OneToMany(cascade=CascadeType.ALL)
+	public List<Product> promotionList = new ArrayList<Product>();
 	
-	public Integer pob;
-	
-	public String remarks;
+	public static Finder<Long, DCRLineItem> find = new Finder<Long, DCRLineItem>(Long.class, DCRLineItem.class);
 	
 
 }

@@ -6,9 +6,8 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 
 import play.data.validation.Constraints.Required;
-import play.db.ebean.*;
-import play.db.ebean.Model.Finder;
 
+@SuppressWarnings("serial")
 @Entity
 public class Product extends BaseEntity {
 
@@ -19,20 +18,20 @@ public class Product extends BaseEntity {
 	@Required
 	public String medicineName;
 
-	@Required
+	//@Required
 	public String brandName;
 
 	public String salt;
 
-	@Required
+	//@Required
 	public String strength;
 
-	@Required
+	//@Required
 	public String typeOfMedicine;
 
 	public String description;
 
-	@Required
+	//@Required
 	public Long unitsPerPack;
 
 	public String fullName;

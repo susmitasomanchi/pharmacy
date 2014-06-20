@@ -39,6 +39,7 @@ public class LoginController extends Controller {
 				session().clear();
 				session(Constants.LOGGED_IN_USER_ID, appUsers.get(0).id + "");
 				session(Constants.LOGGED_IN_USER_ROLE, appUsers.get(0).role+ "");
+				
 				return redirect(routes.UserActions.dashboard());
 
 			}

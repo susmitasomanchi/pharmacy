@@ -1,14 +1,17 @@
 package controllers;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
-import models.AppUser;
+import org.apache.lucene.queryparser.classic.ParseException;
+
 import models.DCRLineItem;
+import models.DailyCallReport;
 import models.Doctor;
 import models.HeadQuarter;
 import models.MedicalRepresentative;
-import models.Role;
 import play.Logger;
 import play.data.DynamicForm;
 import play.data.Form;
@@ -16,58 +19,66 @@ import play.mvc.Controller;
 import play.mvc.Result;
 
 public class MRController extends Controller{
-	static MedicalRepresentative loggedInMR = LoginController.getLoggedInUser().getMedicalRepresentative();
+
 	public static Form<MedicalRepresentative> medicalRepresentative=Form.form(MedicalRepresentative.class);
 	public static Form<HeadQuarter> headquarter=Form.form(HeadQuarter.class);
-	public static Form<DCRLineItem> DCRLineItemForm=Form.form(DCRLineItem.class);
-	
+
 	//add MR
 	public static Result addMR(){
 		return ok(views.html.mr.medicalRepresentative.render(medicalRepresentative));
-		
+
 	}
-	
+
 	public static Result headQuarter(){
 		return ok(views.html.mr.headQuarter.render(headquarter));
 	}
-	
+
+	public static Result mrList(){
+		List<MedicalRepresentative> mrList = MedicalRepresentative.find.where().eq("mrAdminId",LoginController.getLoggedInUser().id).findList();
+		return ok(views.html.mr.mrList.render(mrList));
+	}
+
 	public static Result doctorList(){
 		List<Doctor> doctorList = Doctor.find.all();
 		return ok(views.html.mr.doctorList.render(doctorList));
 	}
-	
+
 	public static Result addDoctor(final Long id){
-		if(loggedInMR.doctorList.contains(Doctor.find.byId(id))!=true){
-	    loggedInMR.doctorList.add(Doctor.find.byId(id));	
+		MedicalRepresentative loggedInMr = LoginController.getLoggedInUser().getMedicalRepresentative();
+		if(loggedInMr.doctorList.contains(Doctor.find.byId(id))!=true){
+			loggedInMr.doctorList.add(Doctor.find.byId(id));
 		}
+		Logger.info(" logged IN Mr id : "+loggedInMr.appUser.name);
+		loggedInMr.save();
+
 		return redirect(routes.MRController.mrDoctorList());
-	
+
 	}
 	public static Result mrDoctorList(){
-		return ok(views.html.mr.mrDoctor.render(loggedInMR.doctorList));
-		
+		MedicalRepresentative loggedInMr = LoginController.getLoggedInUser().getMedicalRepresentative();
+		return ok(views.html.mr.mrDoctor.render(loggedInMr.doctorList));
 	}
 	//delete doctor from mr list
 	public static Result removeDoctor(final Long id){
+		MedicalRepresentative loggedInMr = LoginController.getLoggedInUser().getMedicalRepresentative();
 		int indexOfDoctorList=-1;
 		Doctor doctor=Doctor.find.byId(id);
-		for(Doctor doc:loggedInMR.doctorList){
+		for(Doctor doc:loggedInMr.doctorList){
 			indexOfDoctorList++;
 			if(doctor.appUser.name.equals(doc.appUser.name)){
 				Logger.info("doctor name : "+doc.appUser.name);
-				
-				//indexOfDoctorList=loggedInMR.doctorList.indexOf(doctor.appUser.name);
-				
+
 				Logger.info("index is : "+indexOfDoctorList);
 				break;
 			}
 		}
-		
+
 		//return TODO;
-		loggedInMR.doctorList.remove(indexOfDoctorList);
-		
+		loggedInMr.doctorList.remove(indexOfDoctorList);
+		loggedInMr.update();
+		//loggedInMr.doctorList.
 		return redirect(routes.MRController.mrDoctorList());
-		
+
 	}
 
 	//for searching doctor
@@ -82,8 +93,8 @@ public class MRController extends Controller{
 
 			// it is a string, search by name
 			if (searchStr.matches("[a-zA-Z]+")) {
-			    
-                
+
+
 				final List<Doctor> doctorList = Doctor.find.where().like("appUser.name", searchStr+"%").findList();
 
 				return ok(views.html.mr.doctorList.render(doctorList));
@@ -97,38 +108,54 @@ public class MRController extends Controller{
 
 
 	}
-	
-	//mr visits the doctor
-	
-	public static Result visitDoctor(){
-		List<Doctor> doctorList = Doctor.find.all();
-		return ok(views.html.mr.DailyCallReport.render(DCRLineItemForm,doctorList));
+
+
+
+	//DCR Form
+	public static Result dcrForm(){
+		MedicalRepresentative loggedInMr = LoginController.getLoggedInUser().getMedicalRepresentative();
 		
+		return ok(views.html.mr.dcrForm.render(loggedInMr.doctorList,loggedInMr.pharmaceuticalCompany.productList));
+
 	}
-	public static Result visitDoctorProccess(){
-		List<Doctor> doctorList = Doctor.find.all();
-		final Form<DCRLineItem> filledForm=DCRLineItemForm.bindFromRequest();
 
-		if(filledForm.hasErrors()) {
-			Logger.info("*** user bad request");
-			return badRequest(views.html.mr.DailyCallReport.render(filledForm,doctorList));
+	//DCR Form Submission
+	public static Result processDCRForm(){
+		DailyCallReport dcr = new DailyCallReport();
+		DCRLineItem dcrLineItem=new DCRLineItem();
+		final DynamicForm requestData = Form.form().bindFromRequest();
+		final String strDate = requestData.get("date");
+		Logger.info(strDate);
+		//string to date
+		SimpleDateFormat sdf=new SimpleDateFormat("dd-mm-yyyy");
+		try {
+			Date date=sdf.parse(strDate);
+			dcr.forDate=date;
+			//Logger.info(""+date);
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
 		}
-		else {
-			final DCRLineItem dcrLineItem = filledForm.get();
-			Logger.info("*** user object ");
-
-			if(dcrLineItem.id == null) {
-				dcrLineItem.save();
-				final String message = flash("success");
-
-			}
-			else {
-				dcrLineItem.update();
-			}
+		
+		
+		String doctorId[] = request().body().asFormUrlEncoded().get("doctorId");
+		Logger.info("id is : "+doctorId[0]);
+		
+		final List<Doctor> doctorList = new ArrayList<Doctor>();
+		for(int i=0;i<doctorId.length;i++){
+			//Doctor.find.byId(Long.parseLong(doctorId[i]));
+			doctorList.add(Doctor.find.byId(Long.parseLong(doctorId[i])));
 		}
-
-
-		return ok("DCRLineItem stored");
+		dcrLineItem.doctorList=doctorList;
+		dcrLineItem.save();
+		
+		//final List<DCRLineItem> dcrLineItemList = new ArrayList<DCRLineItem>();
+		//for(int i=0;i<dcrLineItem.;i++){
+			
+		//}
+		dcr.dcrLineItem= dcrLineItem;
+		dcr.save();
+		return ok("DCR item saved ");
 	}
 
 }

@@ -7,8 +7,6 @@ PLEASE DO NOT MODIFY IT BY HAND
  *****/
 package controllers;
 
-
-
 import models.AppUser;
 import models.DiagnosticRepresentative;
 import models.Doctor;
@@ -29,6 +27,7 @@ import beans.JoinUsBean;
 public class UserController extends Controller {
 
 	public static Form<JoinUsBean> joinUsForm = Form.form(JoinUsBean.class);
+	public static Form<MedicalRepresentative> mrForm = Form.form(MedicalRepresentative.class);
 
 	public static Result joinUs(){
 		return ok(views.html.joinus.render(joinUsForm));
@@ -37,6 +36,7 @@ public class UserController extends Controller {
 
 	public static Result processJoinUs(){
 		final Form<JoinUsBean> filledForm = joinUsForm.bindFromRequest();
+		final Form<MedicalRepresentative> mR = mrForm.bindFromRequest();
 		if(filledForm.hasErrors()) {
 			Logger.info("Form Errors");
 			Logger.error(filledForm.errors().toString());
@@ -75,10 +75,20 @@ public class UserController extends Controller {
 				medicalRepresentative.save();
 				final PharmaceuticalCompany pharmaCompany = new PharmaceuticalCompany();
 				pharmaCompany.name = filledForm.get().pharmaceuticalCompanyName;
-				pharmaCompany.adminMR = medicalRepresentative;
+				pharmaCompany.mr = medicalRepresentative;
 				pharmaCompany.save();
 			}
 			
+			if(appUser.role == Role.MR){
+//				final MedicalRepresentative medicalRepresentative = new MedicalRepresentative();
+//				medicalRepresentative.appUser = appUser;
+//				medicalRepresentative.regionAlloted=mR.regionAlloted;
+//				medicalRepresentative.save();
+				MedicalRepresentative medicalRepresentative = mR.get();
+				medicalRepresentative.appUser = appUser;
+				medicalRepresentative.mrAdminId =  LoginController.getLoggedInUser().id; 
+				medicalRepresentative.save();
+			}
 			
 
 			if(appUser.role == Role.DIAGREP){

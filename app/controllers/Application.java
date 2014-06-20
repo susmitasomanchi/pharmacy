@@ -1,9 +1,12 @@
 package controllers;
 
 
+import beans.JoinUsBean;
 import beans.LoginBean;
+import models.AppUser;
 import models.DiagnosticRepresentative;
 import models.MedicalRepresentative;
+import models.PharmaceuticalCompany;
 import play.Logger;
 import play.data.Form;
 import play.mvc.Controller;
@@ -11,7 +14,7 @@ import play.mvc.Result;
 
 public class Application extends Controller {
 
-	public static Form<MedicalRepresentative> mrForm=Form.form(MedicalRepresentative.class);
+	public static Form<JoinUsBean> joinUsForm=Form.form(JoinUsBean.class);
 	public static Form<DiagnosticRepresentative> diagnosticRepForm=Form.form(DiagnosticRepresentative.class);
 	public static final Form<LoginBean> loginForm = Form.form(LoginBean.class);
 
@@ -21,38 +24,46 @@ public class Application extends Controller {
 
 	//sales representator proccessing
 
-	public static Result medicalRepresentative(){
-		return ok(views.html.mr.medicalRepresentative.render(mrForm));
+	//public static Result medicalRepresentative(){
+		//return ok(views.html.mr.medicalRepresentative.render(joinUsForm));
 
-	}
+	//}
 
-	public static Result medicalRepresentativeProccess(){
-		final Form<MedicalRepresentative> filledForm=mrForm.bindFromRequest();
-
+	/*public static Result medicalRepresentativeProccess(){
+		final Form<JoinUsBean> filledForm=joinUsForm.bindFromRequest();
+		
 		if(filledForm.hasErrors()) {
 			Logger.info("*** user bad request");
 			return badRequest(views.html.mr.medicalRepresentative.render(filledForm));
 		}
 		else {
-			//final SalesRep salesRepForm = filledForm.get();
-			final MedicalRepresentative appUser = filledForm.get();
+			final AppUser appUser = filledForm.get().toAppUser();
+			appUser.save();
+			
+			final MedicalRepresentative medicalRepresentative = new MedicalRepresentative();
+			if(medicalRepresentative.id != null) {	
+			medicalRepresentative.appUser = appUser;
+			medicalRepresentative.save();
+			final PharmaceuticalCompany pharmaCompany = new PharmaceuticalCompany();
+			pharmaCompany.name = filledForm.get().pharmaceuticalCompanyName;
+			pharmaCompany.adminMR = medicalRepresentative;
+			pharmaCompany.save();
 			Logger.info("*** user object ");
 
-			if(appUser.id == null) {
-				//final AppUser appUser = salesRepForm.toEntity();
-				appUser.save();
+			
+				
 				final String message = flash("success");
 
 			}
 			else {
-				appUser.update();
+				medicalRepresentative.update();
 			}
 		}
 
 
-		return ok("salesrepresentr information added");
+		return ok("Medical representative information added");
 	}
-
+*/
 	//diagnostic representator proccessing
 
 
