@@ -8,7 +8,6 @@ import java.util.List;
 import models.AppUser;
 import models.Appointment;
 import models.AppointmentStatus;
-import models.Clinic;
 import models.DayOfTheWeek;
 import models.Doctor;
 import models.DoctorAward;
@@ -167,16 +166,23 @@ public class DoctorController extends Controller {
 		}
 		else{
 
-			final Clinic clinic = filledForm.get().toEntity();
-			clinic.save();
 			final Doctor loggedInDoctor = LoginController.getLoggedInUser().getDoctor();
 
 			doctorClinicInfo=filledForm.get().toDoctorClinicInfoList();
 
 			if (doctorClinicInfo.id!=null) {
-				return ok();
+				DoctorClinicInfo clinicInfoPrevious=DoctorClinicInfo.find.byId(doctorClinicInfo.id);
+				if(doctorClinicInfo.clinic.name. equals(clinicInfoPrevious.clinic.name)!=true){
+					Logger.info(""+doctorClinicInfo.clinic.name);
+					clinicInfoPrevious.clinic.name=doctorClinicInfo.clinic.name;
+					clinicInfoPrevious.clinic.update();
+					clinicInfoPrevious.update();
+				}
+
+
+				return redirect(routes.DoctorController.myClinics());
 			}else{
-				doctorClinicInfo.clinic=clinic;
+				doctorClinicInfo.clinic.save();
 				doctorClinicInfo.doctor=loggedInDoctor;
 				doctorClinicInfo.save();
 				loggedInDoctor.doctorClinicInfoList.add(doctorClinicInfo);

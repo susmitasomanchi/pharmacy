@@ -37,11 +37,7 @@ public class ClinicBean implements Serializable{
 	public List<Day> daysOfWeekMr=new ArrayList<Day>();
 
 
-	public Clinic toEntity(){
-		final Clinic clinic = new Clinic();
-		clinic.name = this.name;
-		return clinic;
-	}
+
 	public DoctorClinicInfo toDoctorClinicInfoList()
 	{
 
@@ -61,6 +57,13 @@ public class ClinicBean implements Serializable{
 		}
 		if(this.fromHrsMr != null) {
 			doctorClinicInfo.fromHrsMr= this.fromHrsMr;
+		}
+
+		if(this.name != null) {
+			final Clinic clinic = new Clinic();
+			clinic.name = this.name;
+			doctorClinicInfo.clinic= clinic;
+
 		}
 
 		final List<DayOfTheWeek> dayOfTheWeeks=new ArrayList<DayOfTheWeek>();
