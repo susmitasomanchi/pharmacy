@@ -33,9 +33,8 @@ GET		/doctor-language				controllers.DoctorController.doctorLanguage()
 POST	/doctor-language				controllers.DoctorController.processDoctorLanguage()
 GET		/doctor-socialwork				controllers.DoctorController.doctorSocialWork()
 POST	/doctor-socialwork				controllers.DoctorController.processDoctorSocialWork()
-
-
-
+GET		/doctor-publication				controllers.DoctorController.doctorPublication()
+POST	/doctor-publication				controllers.DoctorController.processDoctorPublication()
 
 
 GET    /userform/doctor/                  controllers.DoctorController.form()
@@ -53,8 +52,8 @@ POST	/addProductToInventory			controllers.PharmacistController.addToInventory()
 
 
 
-
-
+GET 	/create-Mr-schedule				controllers.DoctorController.createMrSchedule()
+POST	/create-Mr-appointment 			controllers.DoctorController.createMrAppointment()
 
 
 GET    /medical-representative            controllers.Application.medicalRepresentative()
@@ -79,11 +78,23 @@ GET    /register-patient/                 controllers.DoctorController.registerP
 POST   /register-patient-proccess/        controllers.DoctorController.registerPatientProccess()
 GET    /createappointments                controllers.DoctorController.createAppointment()
 
-#Diagnostic module
-GET    /diagnosticregistration            controllers.DiagnosticController.diagnosticCenter()
-POST   /diagnosticregistration/save       controllers.DiagnosticController.diagnosticCenterProcess()
-GET    /diagnosticlist                    controllers.DiagnosticController.Diagnosticlist()
-GET    /diagnostic-delete/:id             controllers.DiagnosticController.deleteCenter(id: Long)
+#Diagnostic module	
+GET    /diagnosticregistration            		controllers.DiagnosticController.diagnosticCenter()
+POST   /diagnosticregistration/save       		controllers.DiagnosticController.diagnosticCenterProcess()
+GET    /diagnosticlist                   	 	controllers.DiagnosticController.diagnosticlist()
+GET    /diagnostic-service-list/:id            	 	controllers.DiagnosticController.diagnosticServiceslist(id: Long)
+GET    /diagnostic-delete/:id             		controllers.DiagnosticController.deleteCenter(id: Long)
+GET    /diagnostic-edit/:id						controllers.DiagnosticController.editDiagnosticDetails(id: Long)
+POST    /diagnostic-edit 						controllers.DiagnosticController.diagnosticEditprocess()
+GET    /diagnostic-search      					controllers.DiagnosticController.diagnosticSearch()
+GET    /diagnosticrep/doctor-list         		controllers.DRController.doctorList()
+GET    /diagnosticrep			         		controllers.DRController.addDiagRep()
+POST    /diagnosticrep/save		         		controllers.DRController.addDiagRepProcess()
+GET    /diagnosticrep/list			        	controllers.DRController.diagnosticReplist()
+GET    /diagnosticrep/doctor-search	         	controllers.DRController.search()
+GET    /diagnosticrep/doctorsearch	         	controllers.DRController.searchProcess()
+GET    /diagnosticrep/add-doctor/:id      		controllers.DRController.addDoctor(id: Long)
+GET    /diagnosticrep/remove-doctor/:id   		controllers.DRController.removeDoctor(id: Long)
 
 #MR Module
 GET    /doctor-list                       controllers.MRController.doctorList()
@@ -95,6 +106,7 @@ GET    /mr/hq                             controllers.MRController.headQuarter()
 GET    /dcr-line-item                     controllers.MRController.visitDoctor()
 POST   /dcr-line-item/proccess            controllers.MRController.visitDoctorProccess()
 GET    /search								controllers.MRController.search()
+GET 	/mr/schedule-appointment         controllers.MRController.scheduleAppointment()
 
 # delete later
 GET    /userform/patient/                 controllers.PatientController.form()
@@ -102,8 +114,9 @@ GET    /userform/patient/h/               controllers.PatientController.enterFor
 GET    /register/                         controllers.PatientController.register()
 POST   /register/                         controllers.PatientController.registerProccess()
 
-# SampleData
-GET  /sampledata/language				  controllers.SampleDataController.language()
+
+
+
 
 
 # Map static resources from the /public folder to the /assets URL path

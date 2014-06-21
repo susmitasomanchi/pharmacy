@@ -14,8 +14,14 @@
 			@helper.inputText(clinicForm("fromHrs"),'class -> "inputs",'_label->"Available From (in 24-Hrs format)")
 			
 			@helper.inputText(clinicForm("toHrs"),'class -> "inputs",'_label->"Available Till (in 24-Hrs format)")
+			@helper.select(clinicForm("daysOfWeek"),options=helper.options(Day.options),'_label->"Collaborate",'multiple->"multiple", 'class->"chzn col-sm-6")
 			
-			
+			@* <select name="daysOfWeek" multiple>
+			@for(day <- Day.options().keySet()){	
+				
+				<option value="@day">@day</option>
+			}
+			</select>	*@		
 	
 	<br><br>
 	<input type="submit" class="btn btn-primary" value="Submit">

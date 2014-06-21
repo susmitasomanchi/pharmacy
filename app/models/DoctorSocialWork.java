@@ -23,7 +23,7 @@ public class DoctorSocialWork extends BaseEntity{
 	public String CommentSocialWork;
 	
 	
-	public List<DoctorDetail> officialDetailList= new ArrayList<DoctorDetail>();
+	
 	
 	
 

@@ -1,0 +1,24 @@
+@(docClinic: play.data.Form[DoctorClinicInfo])
+
+@import play.i18n._
+@import helper.twitterBootstrap._
+@import helper._
+
+@main("create Appointment For MR"){
+@helper.form(action=routes.DoctorController.createMrAppointment()) {
+
+			<select id="doc-select">
+				<option>Select Doctor</option>
+				@for(clinics <- LoginController.getLoggedInUser().getDoctor().doctorClinicInfoList){
+				<option value="@clinics.clinic">@clinics.clinic.name</option>
+				}
+			</select> 
+			@helper.inputText(docClinic("fromHrs"),'class -> "inputs",'_label->"Available From (in 24-Hrs format)")
+		
+			@helper.inputText(docClinic("toHrs"),'class -> "inputs",'_label->"Available Till (in 24-Hrs format)")
+			
+	<br><br>
+	<input type="submit" class="btn btn-primary" value="Submit">
+}
+
+}

@@ -13,10 +13,12 @@ import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 
 import play.data.validation.Constraints.Required;
+import play.db.ebean.Model;
+import play.db.ebean.Model.Finder;
 
 @SuppressWarnings("serial")
 @Entity
-public class DoctorDetail extends BaseEntity{
+public class DoctorLanguage extends BaseEntity{
 	
 	
 	@Id
@@ -35,6 +37,9 @@ public class DoctorDetail extends BaseEntity{
 	
 	@OneToMany(cascade=CascadeType.ALL)
 	public List<LanguageAppUser> languageAppUsers=new ArrayList<LanguageAppUser>();
+	
+	public static Model.Finder<Long, DoctorLanguage> find = new Finder<Long, DoctorLanguage>(Long.class, DoctorLanguage.class);
+
 	
 	
 	

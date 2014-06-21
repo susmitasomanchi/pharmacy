@@ -40,6 +40,15 @@
             <li><a href="">Diagnostic Reports</a></li>
           </ul>
         </li>
+       <li class="dropdown"> <a href="#" class="dropdown-toggle" data-toggle="dropdown">
+          Diagnostic Centers
+          <b class="caret"></b></a>
+        <ul class="dropdown-menu">
+            <li><a href="/diagnosticlist">View Diagnostic Centers</a></li>
+            <li><a href="/diagnosticrep/list">view Diagnostic Representators</a></li>
+            
+          </ul>
+          </li>
 		}
 		
 		
@@ -128,7 +137,7 @@
          Geography
           <b class="caret"></b></a>
           <ul class="dropdown-menu">
-            <li><a href="@routes.MRController.headQuarter()">Headquarters</a></li> 
+	            <li><a href="@routes.MRController.headQuarter()">Headquarters</a></li> 
             <li><a href="">Fieldstations</a></li>            
           </ul>
         </li>         
@@ -140,7 +149,7 @@
           <ul class="dropdown-menu">
             <li><a href="/doctor-list">Search Doctor</a></li>
             <li><a href="/mr/doctor-list">My Doctor</a></li>
-            <li><a href="">Schedule Appointment</a></li>
+            <li><a href="/mr/schedule-appointment ">Schedule Appointment</a></li>
           </ul>
         </li>
         
@@ -174,8 +183,43 @@
           </ul>
         </li>
         }
+    	@if(LoginController.getLoggedInUserRole().equals(Role.ADMIN_DIAGREP.toString())){
+         
+         <li class="dropdown">
+          <a href="#" class="dropdown-toggle" data-toggle="dropdown">
+          Diagnostic Representatives
+          <b class="caret"></b></a>
+          <ul class="dropdown-menu">
+          <li><a href="/diagnosticregistration">Register Diagnostic Center</a></li> 
+            <li><a href="@routes.DRController.addDiagRep()">Add Diagnostic Representative</a></li> 
+            <li><a href="/diagnosticrep/list">View Diagnostic Representative</a></li>   
+             <li><a href="/diagnosticrep/list">Add Patient</a></li>          
+          </ul>
+        </li> 
         
-    	
+        <li class="dropdown">
+          <a href="#" class="dropdown-toggle" data-toggle="dropdown">
+         Geography
+          <b class="caret"></b></a>
+          <ul class="dropdown-menu">
+            <li><a href="@routes.MRController.headQuarter()">Headquarters</a></li> 
+            <li><a href="">Fieldstations</a></li>            
+          </ul>
+        </li>         
+        
+        <li class="dropdown">
+          <a href="#" class="dropdown-toggle" data-toggle="dropdown">
+          Doctors
+          <b class="caret"></b></a>
+          <ul class="dropdown-menu">
+            <li><a href="/diagnosticrep/doctor-search">Search Doctor</a></li>
+            <li><a href="/diagnosticrep/doctor-list">View Doctors</a></li>
+            
+          </ul>
+        </li>
+        }
+    
+    
         <li class="dropdown">
           <a href="#" class="dropdown-toggle" data-toggle="dropdown">
 			Report
@@ -203,6 +247,7 @@
 		<li class="dropdown"><a href="#" class="dropdown-toggle" data-toggle="dropdown">@LoginController.getLoggedInUser.name <b class="caret"></b></a>
 		<ul class="dropdown-menu">
 			<li><a href="/user/preferences"><i class="fa fa-gears"></i>&nbsp;&nbsp;Preferences</a></li>
+			<li><a href="/doctor-profile"><i class="fa fa-gears"></i>&nbsp;&nbsp;My Profile</a></li>
 			<li class="divider"></li>
 			<li><a href="/change-password"><i class="fa fa-lock"></i>&nbsp;&nbsp;Change Password</a></li>
 			<li><a href="/logout"><i class="fa fa-sign-out"></i>&nbsp;&nbsp;Logout</a></li>

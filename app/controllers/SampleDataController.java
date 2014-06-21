@@ -2,6 +2,8 @@ package controllers;
 import java.util.List;
 
 import models.AppUser;
+import models.Day;
+import models.DayOfTheWeek;
 import models.Doctor;
 import models.Language;
 import models.LanguageAppUser;
@@ -60,17 +62,9 @@ public class SampleDataController extends Controller {
 		return ok("created");
 	}
 	
-	public static Result language() {
-		
-		for (final Language val : Language.values()) {
-			LanguageAppUser languageAppUser=new LanguageAppUser();
-			languageAppUser.language=val;
-			languageAppUser.save();
-		}
-		return ok("created");
-		
+	
 				
 	}
 
 
-}
+

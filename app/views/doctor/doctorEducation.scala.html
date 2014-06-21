@@ -20,9 +20,11 @@ PLEASE DO NOT MODIFY IT BY HAND
 
 
  			
-			
+			School Info
 			
 			@helper.inputText(dataForm("collegeName"),'class -> "inputs",'_label->"School Name")
+			
+			@helper.inputText(dataForm("degree"),'class -> "inputs",'_label->"Degree/Board")
 			
 			@helper.inputText(dataForm("fromYear"),'class -> "inputs",'_label->"From")
 			
@@ -31,12 +33,11 @@ PLEASE DO NOT MODIFY IT BY HAND
 			
 			
 			
-
 			
 			
 			<br>
 			<input type="hidden" name="id" value='@dataForm("id").value' >
-			<input type="submit" class="submit" value="Login">
+			<input type="submit" class="submit" value="Add">
 			
 				
 			

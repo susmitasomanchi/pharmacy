@@ -1,5 +1,4 @@
-@(created: String)
-
+@(doctor: models.Doctor)
 @import play.i18n._
 @import helper.twitterBootstrap._
 @import helper._
@@ -12,11 +11,26 @@
  margin-right: 0px;
 }
 </style>
+<style>
+table,th,td
+{
+border:1px solid black;
+border-collapse:collapse;
+}
+th,td
+{
+padding:5px;
+}
+th
+{
+text-align:left;
+}
+</style>
 <div class="container" style="padding-left:100px;padding-right:100px">
-<div class="well row	">
+<div class="well row ">
 <div class="col-md-2">
 <br>
-<img src="/assets/images/doctorM.png" class="thumbnail"/>
+
 </div>
 <div class="col-md-10" style="padding-left:30px">
 <h3><b> Dr. Doctor Name </b></h3>
@@ -25,14 +39,16 @@
 <h5><i> Specialization: </i></h5>
 <h5><i> Position: </i></h5>
 <h5><i> Years of Experience: </i></h5><br>
-<br>    
 <div class="bs-component" style="margin-bottom: 15px;float:right">
-              <div class="btn-group btn-group-justified">
-                <a href="#" class="btn btn-primary">Fix Appointment</a>
-                <a href="#" class="btn btn-primary">Query</a>
-              </div>
+              <div class="row">
+        <div class="col-md-10">
             </div>
-    <br><br>        
+             <div class="col-md-2">
+             <a href="@routes.DoctorController.doctorExperience" class="btn btn-group-sm"></a>
+            </div>
+</div>
+</div>
+<br>
 <div class="panel panel-primary">
 <div class="panel-heading">
 <h3 class="panel-title"> About </h3>
@@ -58,16 +74,42 @@
         Experience
           </div>
           <div class="col-md-2">
-          <a href="/doctor-experience" class="btn btn-primary">edit</a>
+          <a href="@routes.DoctorController.doctorExperience" class="btn btn-primary">edit</a>
           </div>  </div>
         </a>
       </h4>
     </div>
-    <div id="collapseOne" class="panel-collapse collapse in">
+
       <div class="panel-body">
-       
+        <table style="width:300px" class="table">
+<tr>
+  <th>Previous Hospital Name</th>
+  <th>Position</th>	
+  <th>City</th>		
+  <th>From</th>
+  <th>To</th>
+
+</tr>
+
+<h3>@doctor.doctorExperienceList.size</h3>
+ <div class="row">
+        <div class="col-md-10">
+@for(exp <- doctor.doctorExperienceList) {               
+      
+	<tr>
+		<td>@exp.previousHospitalName</td>
+		<td>@exp.workedAs</td>
+		<td>@exp.location</td>
+		<td>@exp.workedFrom</td>
+		<td>@exp.workedTo</td>
+	</tr>
+    }
+	
+	
+	</table>
+<a href="@routes.DoctorController.doctorExperience" class="btn btn-group-sm">Add</a>
       </div>
-    </div>
+   
   </div>
   <div class="panel panel-default">
     <div class="panel-heading"> 
@@ -79,15 +121,42 @@
         Awards/Recognitions  
           </div>
           <div class="col-md-2">
-          <a href="/doctor-award" class="btn btn-primary">edit</a>
+          <a href="@routes.DoctorController.doctorAward" class="btn btn-primary">edit</a>
           </div>  </div>
         </a>
       </h4>
     </div>
-    <div id="collapseTwo" class="panel-collapse collapse">
+
       <div class="panel-body">
+              <table style="width:300px" class="table">
+<tr>
+  <th>Award Name</th>
+  <th>Award For</th>	
+  <th>Year</th>		
+  <th>Comment</th>
+ 
+
+</tr>
+
+<h3>@doctor.doctorAwardList.size</h3>
+ <div class="row">
+        <div class="col-md-10">
+@for(awd <- doctor.doctorAwardList) {               
+      
+	<tr>
+		<td>@awd.awardName</td>
+		<td>@awd.awardFor</td>
+		<td>@awd.year</td>
+		<td>@awd.commentForAwards</td>
+		
+	</tr>
+    }
+	
+	
+	</table>
+<a href="@routes.DoctorController.doctorAward" class="btn btn-group-sm">Add</a>
       </div>
-    </div>
+  
   </div>
   <div class="panel panel-default">
     <div class="panel-heading">
@@ -100,14 +169,14 @@
           Publications/Articles
           </div>
           <div class="col-md-2">
-          <a href="/doctor-experience" class="btn btn-primary">edit</a>
+          <a href="@routes.DoctorController.doctorPublication" class="btn btn-primary">edit</a>
           </div>  </div>
         </a>
       </h4>
     </div>
     <div id="collapseThree" class="panel-collapse collapse">
       <div class="panel-body">
-      </div>
+	      </div>
     </div>
   </div>
   <div class="panel panel-default">
@@ -121,15 +190,40 @@
          Education
           </div>
           <div class="col-md-2">
-          <a href="/doctor-education" class="btn btn-primary">edit</a>
+          
           </div>  </div>
         </a>
       </h4>
     </div>
-    <div id="collapseThree" class="panel-collapse collapse">
+    
       <div class="panel-body">
+      <table style="width:300px" class="table">
+<tr>
+  <th>School</th>
+  <th>Degree/Board</th>		
+  <th>From</th>
+  <th>To</th>
+
+</tr>
+
+<h3>@doctor.doctorEducationList.size</h3>
+ <div class="row">
+        <div class="col-md-10">
+@for(edu <- doctor.doctorEducationList) {               
+      
+	<tr>
+		<td>@edu.collegeName</td>
+		<td>@edu.degree</td>
+		<td>@edu.fromYear</td>
+		<td>@edu.toYear</td>
+	</tr>
+    }
+	
+	
+	</table>
+<a href="@routes.DoctorController.doctorEducation" class="btn btn-group-sm">Add</a>
       </div>
-    </div>
+  
   </div>
 
  <div class="panel panel-default">
@@ -142,7 +236,7 @@
          Languages
           </div>
           <div class="col-md-2">
-          <a href="/doctor-language" class="btn btn-primary">edit</a>
+          <a href="@routes.DoctorController.doctorLanguage" class="btn btn-primary">edit</a>
           </div>  </div>
         </a>
       </h4>
@@ -186,5 +280,5 @@
 </div>
 </div>
 </div>
-</div>
+
 }
