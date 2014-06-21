@@ -1,0 +1,49 @@
+@(dataForm:play.data.Form[models.DoctorPublication])
+
+@*******************************
+
+THIS IS AN AUTO GENERATED CODE
+PLEASE DO NOT MODIFY IT BY HAND
+
+********************************@
+
+@import play.i18n._
+
+@main("Doctor Pblication"){
+	
+	<br>
+<div class="container"> 
+
+@helper.form(action=routes.DoctorController.processDoctorPublication(),'method -> "post") {
+
+			
+
+
+ 			
+		@helper.inputText(dataForm("articleName"),'class -> "inputs",'_label->"Tittle of the Article")
+			
+		@helper.inputText(dataForm("articleFor"),'class -> "inputs",'_label->"Article on the topic")
+	
+		@helper.inputText(dataForm("year"),'class -> "inputs",'_label->"Year")
+					
+		@helper.inputText(dataForm("commentForArticle"),'class -> "inputs",'_label->"Comments")
+			
+
+			
+			
+			<br>
+			<input type="hidden" name="id" value='@dataForm("id").value' >
+			<input type="submit" class="submit" value="Login">
+			
+				
+			
+			
+			
+
+}
+</div>
+
+			
+
+
+}
