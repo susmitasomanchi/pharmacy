@@ -1,14 +1,23 @@
 package controllers;
 
+import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.FileReader;
+import java.io.IOException;
 import java.util.List;
 
+import org.apache.commons.io.FileUtils;
 
 import models.DiagnosticRepresentative;
 import models.Doctor;
+import models.UploadFile;
 import play.Logger;
 import play.data.DynamicForm;
 import play.data.Form;
 import play.mvc.Controller;
+import play.mvc.Http.MultipartFormData.FilePart;
 import play.mvc.Result;
 
 public class DRController extends Controller {
@@ -16,6 +25,9 @@ public class DRController extends Controller {
 			.getLoggedInUser().getDiagnosticRepresentative();
 	public static Form<DiagnosticRepresentative> diagnosticRepresentative = Form
 			.form(DiagnosticRepresentative.class);
+	
+	public static Form<UploadFile> fileUpload = Form
+	.form(UploadFile.class);
 
 	public static Result addDiagRep() {
 		return ok(views.html.diagnostic.diagnosticRep
@@ -27,13 +39,13 @@ public class DRController extends Controller {
 				.bindFromRequest();
 
 		if (filledForm.hasErrors()) {
-			Logger.info("*** user bad request");
+			
 			return badRequest(views.html.diagnostic.diagnosticRep
 					.render(filledForm));
 		} else {
 
 			final DiagnosticRepresentative diagForm = filledForm.get();
-			Logger.info("*** user object ");
+			
 			diagForm.save();
 			final String message = flash("success");
 			return ok("Saved");
@@ -43,8 +55,6 @@ public class DRController extends Controller {
 	public static Result diagnosticReplist() {
 		List<DiagnosticRepresentative> allDiagRepList = DiagnosticRepresentative.find
 				.all();
-		/* views.html.list.render(allList) */
-		/*Logger.info(allDiagRepList.get(1).appUser.name + "~~allDiagRepList");*/
 		return ok(views.html.diagnostic.diagnosticList.render(allDiagRepList));
 
 	}
@@ -59,7 +69,9 @@ public class DRController extends Controller {
 		Logger.info("id.............." + id);
 
 		if (loggedInDR.doctorList.contains(Doctor.find.byId(id)) != true) {
+			
 			loggedInDR.doctorList.add(Doctor.find.byId(id));
+			Logger.info(loggedInDR.doctorList.get(0).appUser.name+" NAME OF THE DOCTOR");
 		}
 
 		return ok(views.html.diagnostic.addDoctor.render(loggedInDR.doctorList));
@@ -69,11 +81,12 @@ public class DRController extends Controller {
 	// delete doctor from DR list
 	public static Result removeDoctor(final Long id) {
 		System.out.println("id........." + id);
-		int indexOfDoctorList = -1;
-		Doctor doctor = Doctor.find.byId(id);
+		int indexOfDoctorList = 0;
+		/*Doctor doctor = Doctor.find.byId(id);*/
+		Logger.info("size.."+loggedInDR.doctorList.size());
+		
 		for (Doctor doc : loggedInDR.doctorList) {
-			indexOfDoctorList++;
-			if (doctor.appUser.name.equals(doc.appUser.name)) {
+			if (id==doc.id) {
 				Logger.info("doctor name : " + doc.appUser.name);
 
 				// indexOfDoctorList=loggedInMR.doctorList.indexOf(doctor.appUser.name);
@@ -81,6 +94,8 @@ public class DRController extends Controller {
 				Logger.info("index is : " + indexOfDoctorList);
 				break;
 			}
+			indexOfDoctorList++;
+			
 		}
 
 		// return TODO;
@@ -124,4 +139,74 @@ public class DRController extends Controller {
 		return TODO;
 		
 	}
-}
+	public static Result uploadFile() {
+		return ok(views.html.diagnostic.uploadPatientReort.render(fileUpload));
+	}
+	public static Result uploadFileProcess() {
+		UploadFile upload=new UploadFile();
+		play.mvc.Http.MultipartFormData body = request().body().asMultipartFormData();
+		  FilePart file = body.getFile("upload");
+		  if (file != null) {
+		    String fileName = file.getFilename();
+		    String contentType = file.getContentType(); 
+		    
+		    File file1=file.getFile();
+
+	         byte[] bytes = new byte[(int) file1.length()];
+	         try {
+	               FileInputStream fileInputStream = new FileInputStream(file1);
+	               fileInputStream.read(bytes);
+	               for (int i = 0; i < bytes.length; i++) {
+	                           System.out.print((char)bytes[i]);
+	                }
+	          } catch (FileNotFoundException e) {
+	                      System.out.println("File Not Found.");
+	                      e.printStackTrace();
+	          }
+	          catch (IOException e1) {
+	                   System.out.println("Error Reading The File.");
+	                    e1.printStackTrace();
+	          }
+		    upload.fileName=file.getFilename();
+		    upload.fileContent =bytes;
+		    upload.save();
+		    
+		    return ok(views.html.diagnostic.download.render(upload));
+		  } else {
+		    flash("error", "Missing file");
+		    return ok("got error while uploading");    
+		  }
+			
+	    }	
+	
+	public static Result downloadFile() {
+		Long id=(long) 2;
+	/*UploadFile c1 = UploadFile.find.where().eq("id", id).findUnique();
+	byte[] bytes=c1.file;
+	//	 Logger.error(doctorList.get(0).appUser.name);
+		return ok(views.html.diagnostic.displayReport.render(s));*/
+		UploadFile uf = UploadFile.find.byId(id);
+
+		response().setContentType("application/x-download"); 
+
+		response().setHeader("Content-disposition","attachment; filename="+uf.fileName); 
+
+		File file = new File(uf.fileName);
+
+		try {
+
+		FileUtils.writeByteArrayToFile(file, uf.fileContent);
+
+		} catch (IOException e) {
+
+		// TODO Auto-generated catch block
+
+		e.printStackTrace();
+
+		}
+
+		return ok(file);
+	}
+
+    }
+

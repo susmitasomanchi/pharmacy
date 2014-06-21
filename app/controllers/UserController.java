@@ -30,6 +30,7 @@ import beans.JoinUsBean;
 public class UserController extends Controller {
 
 	public static Form<JoinUsBean> joinUsForm = Form.form(JoinUsBean.class);
+	public static Form<DiagnosticRepresentative> drForm = Form.form(DiagnosticRepresentative.class);
 
 	public static Result joinUs(){
 		return ok(views.html.joinus.render(joinUsForm));
@@ -38,6 +39,7 @@ public class UserController extends Controller {
 
 	public static Result processJoinUs(){
 		final Form<JoinUsBean> filledForm = joinUsForm.bindFromRequest();
+		final Form<DiagnosticRepresentative> dr = drForm.bindFromRequest();
 		if(filledForm.hasErrors()) {
 			Logger.info("Form Errors");
 			Logger.error(filledForm.errors().toString());
@@ -91,7 +93,7 @@ public class UserController extends Controller {
 				diagnosticCenter.diagnosticRepAdmin = diagRep;
 				diagnosticCenter.save();
 			}
-
+			
 			session().clear();
 			session(Constants.LOGGED_IN_USER_ID, appUser.id + "");
 			session(Constants.LOGGED_IN_USER_ROLE, appUser.role+ "");

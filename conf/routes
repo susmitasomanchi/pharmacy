@@ -66,6 +66,14 @@ GET    /home/                             controllers.Application.homePage()
 GET    /questionform                      controllers.PatientController.displayQuestion()
 POST   /askQuestion                       controllers.PatientController.askQuestion()
 
+GET    /patient/diagnostics               controllers.PatientController.diagnosticList()
+GET    /add-diagnostic-center/:id               controllers.PatientController.saveDiagnosticCenter(id: Long)
+GET    /patient/my-diag-centers               controllers.PatientController.myDiagnosticCenters()
+GET    /patient/remove-diag-centers/:id               controllers.PatientController.removePatientDiagnoCenter(id: Long)
+
+
+
+
 GET    /answerform                        controllers.DoctorController.displayAnswer()
 POST   /ansQuestion/:qaId                 controllers.DoctorController.answerQuestion(qaId: Long)
 # doctor action
@@ -77,12 +85,15 @@ GET    /createappointments                controllers.DoctorController.createApp
 #Diagnostic module	
 GET    /diagnosticregistration            		controllers.DiagnosticController.diagnosticCenter()
 POST   /diagnosticregistration/save       		controllers.DiagnosticController.diagnosticCenterProcess()
-GET    /diagnosticlist                   	 	controllers.DiagnosticController.diagnosticlist()
-GET    /diagnostic-service-list/:id            	 	controllers.DiagnosticController.diagnosticServiceslist(id: Long)
+GET    /diagnosticlist                   	 	controllers.DiagnosticController.diagnosticList()
+#GET    /diagnostic-list                  	 	controllers.DiagnosticController.drList()
+
+
 GET    /diagnostic-delete/:id             		controllers.DiagnosticController.deleteCenter(id: Long)
 GET    /diagnostic-edit/:id						controllers.DiagnosticController.editDiagnosticDetails(id: Long)
 POST    /diagnostic-edit 						controllers.DiagnosticController.diagnosticEditprocess()
 GET    /diagnostic-search      					controllers.DiagnosticController.diagnosticSearch()
+GET    /diagnostic-search/list 					controllers.DiagnosticController.diagnosticSearchProcess()
 GET    /diagnosticrep/doctor-list         		controllers.DRController.doctorList()
 GET    /diagnosticrep			         		controllers.DRController.addDiagRep()
 POST    /diagnosticrep/save		         		controllers.DRController.addDiagRepProcess()
@@ -91,6 +102,15 @@ GET    /diagnosticrep/doctor-search	         	controllers.DRController.search()
 GET    /diagnosticrep/doctorsearch	         	controllers.DRController.searchProcess()
 GET    /diagnosticrep/add-doctor/:id      		controllers.DRController.addDoctor(id: Long)
 GET    /diagnosticrep/remove-doctor/:id   		controllers.DRController.removeDoctor(id: Long)
+GET    /upload-patient-file  					controllers.DRController.uploadFile()
+POST    /upload-patient-file/save		  		controllers.DRController.uploadFileProcess()
+GET    /download						  		controllers.DRController.downloadFile()
+
+
+#Diagnostic Test
+GET    /test				            		controllers.DiagnosticTestController.addTest()
+POST   /test/save					       		controllers.DiagnosticTestController.addTestProcess()
+GET    /test-list/:id				            controllers.DiagnosticTestController.diagnosticTestList(id: Long)
 
 #MR Module
 GET    /doctor-list                       controllers.MRController.doctorList()
