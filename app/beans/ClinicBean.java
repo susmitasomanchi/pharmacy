@@ -8,6 +8,8 @@ import models.Clinic;
 import models.Day;
 import models.DayOfTheWeek;
 import models.DoctorClinicInfo;
+import play.data.validation.Constraints.Max;
+import play.data.validation.Constraints.Min;
 
 @SuppressWarnings("serial")
 public class ClinicBean implements Serializable{
@@ -17,15 +19,20 @@ public class ClinicBean implements Serializable{
 
 	public String name;
 
+	@Min(1)
 	public Integer fromHrs;
 
+	@Max(24)
 	public Integer toHrs;
 
 	public List<Day> daysOfWeek=new ArrayList<Day>();
 
+	@Min(1)
+	public Integer toHrsMr;
+
+	@Max(24)
 	public Integer fromHrsMr;
 
-	public Integer toHrsMr;
 
 	public List<Day> daysOfWeekMr=new ArrayList<Day>();
 
@@ -40,7 +47,9 @@ public class ClinicBean implements Serializable{
 
 		final DoctorClinicInfo doctorClinicInfo=new  DoctorClinicInfo();
 
-
+		if(this.id != null) {
+			doctorClinicInfo.id= this.id;
+		}
 		if(this.toHrs != null) {
 			doctorClinicInfo.toHrs= this.toHrs;
 		}
@@ -54,8 +63,8 @@ public class ClinicBean implements Serializable{
 			doctorClinicInfo.fromHrsMr= this.fromHrsMr;
 		}
 
-		List<DayOfTheWeek> dayOfTheWeeks=new ArrayList<DayOfTheWeek>();
-		DayOfTheWeek dayOfTheWeek=new DayOfTheWeek();
+		final List<DayOfTheWeek> dayOfTheWeeks=new ArrayList<DayOfTheWeek>();
+		final DayOfTheWeek dayOfTheWeek=new DayOfTheWeek();
 
 
 		for (final Day day : this.daysOfWeek) {
@@ -64,15 +73,15 @@ public class ClinicBean implements Serializable{
 		}
 		doctorClinicInfo.daysOfWeek=dayOfTheWeeks;
 
-		dayOfTheWeeks=null;
-		dayOfTheWeek=null;
-		dayOfTheWeeks=new ArrayList<DayOfTheWeek>();
-		dayOfTheWeek=new DayOfTheWeek();
-		for (final Day day : this.daysOfWeek) {
-			dayOfTheWeek.day=day;
-			dayOfTheWeeks.add(dayOfTheWeek);
+
+		final List<DayOfTheWeek> dayOfTheWeeksMr=new ArrayList<DayOfTheWeek>();
+		final DayOfTheWeek dayOfTheWeekMr=new DayOfTheWeek();
+
+		for (final Day day : this.daysOfWeekMr) {
+			dayOfTheWeekMr.day=day;
+			dayOfTheWeeksMr.add(dayOfTheWeekMr);
 		}
-		doctorClinicInfo.daysOfWeekMr=dayOfTheWeeks;
+		doctorClinicInfo.daysOfWeekMr=dayOfTheWeeksMr;
 
 
 

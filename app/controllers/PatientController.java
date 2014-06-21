@@ -67,7 +67,9 @@ public class PatientController extends Controller {
 	}
 
 	public static Result processAppointment(){
+
 		return ok();
+
 	}
 
 
