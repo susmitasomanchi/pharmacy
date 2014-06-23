@@ -32,7 +32,7 @@ public class Doctor extends BaseEntity{
 
 	@Required
 	public String specialization;
-	
+
 	@Required
 	public String position;
 
@@ -66,6 +66,10 @@ public class Doctor extends BaseEntity{
 		
 	
 	
+	@ManyToOne
+	public List<DoctorEducation> doctorEducation = new ArrayList<DoctorEducation>();
+
+
 	//government or private
 	public String doctorType;
 
@@ -83,13 +87,13 @@ public class Doctor extends BaseEntity{
 	public String timings;
 
 	public String categoryOfDoctor;						// homeopathic or ayurvedic or etc.
-	
-	
-	
+
+
+
 
 	@ManyToOne(cascade=CascadeType.ALL)
 	public List<Appointment> appointmentList=new ArrayList<Appointment>();
 
 	public static Model.Finder<Long,Doctor> find = new Finder<Long, Doctor>(Long.class, Doctor.class);
-	
+
 }

@@ -43,10 +43,8 @@ create table appointment (
   remarks                   varchar(255),
   doctor_id                 bigint,
   clinic_id                 bigint,
-  appointment_type          integer,
   last_update               timestamp not null,
   constraint ck_appointment_appointment_status check (appointment_status in ('AVAILABLE','SERVED','CANCELLED','REQUESTED','APPROVED')),
-  constraint ck_appointment_appointment_type check (appointment_type in (0,1)),
   constraint pk_appointment primary key (id))
 ;
 
@@ -157,6 +155,8 @@ create table doctor_clinic_info (
   doctor_id                 bigint,
   from_hrs                  integer,
   to_hrs                    integer,
+  to_hrs_mr                 integer,
+  from_hrs_mr               integer,
   assistant_id              bigint,
   last_update               timestamp not null,
   constraint pk_doctor_clinic_info primary key (id))
