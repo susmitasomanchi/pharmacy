@@ -38,7 +38,6 @@ public class Doctor extends BaseEntity{
 
 	@Required
 	public String degree;
-
 	@ManyToOne
 	public List<DoctorEducation> doctorEducation = new ArrayList<DoctorEducation>();
 

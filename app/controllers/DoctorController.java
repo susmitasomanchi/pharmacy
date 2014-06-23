@@ -168,18 +168,48 @@ public class DoctorController extends Controller {
 
 			final Doctor loggedInDoctor = LoginController.getLoggedInUser().getDoctor();
 
-			doctorClinicInfo=filledForm.get().toDoctorClinicInfoList();
+			doctorClinicInfo=filledForm.get().toDoctorClinicInfo();
 
 			if (doctorClinicInfo.id!=null) {
 				DoctorClinicInfo clinicInfoPrevious=DoctorClinicInfo.find.byId(doctorClinicInfo.id);
-				if(doctorClinicInfo.clinic.name. equals(clinicInfoPrevious.clinic.name)!=true){
-					Logger.info(""+doctorClinicInfo.clinic.name);
+
+				Logger.info(doctorClinicInfo.daysOfWeek.size()+" "+clinicInfoPrevious.daysOfWeek.size());
+
+				for (DayOfTheWeek daysofweek : doctorClinicInfo.daysOfWeek) {
+					Logger.info(daysofweek.day+"");
+				}
+
+
+				for (DayOfTheWeek daysofweek : clinicInfoPrevious.daysOfWeek) {
+					Logger.info(daysofweek.day+"");
+				}
+
+
+				if(!doctorClinicInfo.clinic.name.equals(clinicInfoPrevious.clinic.name)){
+					Logger.info("name test"+doctorClinicInfo.clinic.name);
 					clinicInfoPrevious.clinic.name=doctorClinicInfo.clinic.name;
 					clinicInfoPrevious.clinic.update();
 					clinicInfoPrevious.update();
 				}
+				if(
+						(!doctorClinicInfo.fromHrs.equals(clinicInfoPrevious.fromHrs))
+						||
+						(!doctorClinicInfo.fromHrsMr.equals(clinicInfoPrevious.fromHrsMr))
+						||
+						(!doctorClinicInfo.toHrs.equals(clinicInfoPrevious.toHrs))
+						||
+						(!doctorClinicInfo.toHrsMr.equals(clinicInfoPrevious.toHrsMr))
+						||
+						(!DoctorController.isListSame(doctorClinicInfo.daysOfWeek,clinicInfoPrevious.daysOfWeek))
+						||
+						(!DoctorController.isListSame(doctorClinicInfo.daysOfWeekMr,clinicInfoPrevious.daysOfWeekMr))
+
+						){
+
+					return TODO;
 
 
+				}
 				return redirect(routes.DoctorController.myClinics());
 			}else{
 				doctorClinicInfo.clinic.save();
@@ -187,6 +217,7 @@ public class DoctorController extends Controller {
 				doctorClinicInfo.save();
 				loggedInDoctor.doctorClinicInfoList.add(doctorClinicInfo);
 				loggedInDoctor.update();
+				Logger.info(doctorClinicInfo.daysOfWeek.size()+"");
 				return DoctorController.createAppointment(doctorClinicInfo);
 			}
 
@@ -243,7 +274,6 @@ public class DoctorController extends Controller {
 
 		DoctorClinicInfo doctorClinicInfo=DoctorClinicInfo.find.byId(docClinicId);
 
-		Logger.info(""+doctorClinicInfo.toBean().name);
 
 		Form<ClinicBean> filledForm = clinicForm.fill(doctorClinicInfo.toBean());
 
@@ -423,5 +453,17 @@ public class DoctorController extends Controller {
 
 	}
 
+	public static boolean isListSame(List<DayOfTheWeek> arrayList1,List<DayOfTheWeek> arrayList2) {
+		if(arrayList1.size() != arrayList2.size()){
+			Logger.info("if 1");
+			return false;
+		}
+		for (DayOfTheWeek dayOfTheWeek : arrayList2) {
+			if(!(arrayList1.contains(dayOfTheWeek))){
+				return false;
+			}
+		}
+		return true;
+	}
 
 }

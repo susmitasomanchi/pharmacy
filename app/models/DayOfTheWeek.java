@@ -16,4 +16,11 @@ public class DayOfTheWeek extends BaseEntity {
 	public static Model.Finder<Long, DayOfTheWeek> find = new Finder<Long, DayOfTheWeek>(Long.class, DayOfTheWeek.class);
 
 
+	@Override
+	public boolean equals(final Object arg0) {
+		return this.day.equals(((DayOfTheWeek)arg0).day);
+
+	}
+
+
 }

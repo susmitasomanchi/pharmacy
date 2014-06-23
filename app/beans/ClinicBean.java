@@ -25,7 +25,6 @@ public class ClinicBean implements Serializable{
 	@Max(24)
 	public Integer toHrs;
 
-	public List<Day> daysOfWeek=new ArrayList<Day>();
 
 	@Min(1)
 	public Integer toHrsMr;
@@ -35,13 +34,14 @@ public class ClinicBean implements Serializable{
 
 
 	public List<Day> daysOfWeekMr=new ArrayList<Day>();
+	public List<Day> daysOfWeek=new ArrayList<Day>();
 
 
 
-	public DoctorClinicInfo toDoctorClinicInfoList()
+	public DoctorClinicInfo toDoctorClinicInfo()
 	{
 
-		final DoctorClinicInfo doctorClinicInfo=new  DoctorClinicInfo();
+		final DoctorClinicInfo doctorClinicInfo = new  DoctorClinicInfo();
 
 		if(this.id != null) {
 			doctorClinicInfo.id= this.id;
@@ -66,22 +66,20 @@ public class ClinicBean implements Serializable{
 
 		}
 
-		final List<DayOfTheWeek> dayOfTheWeeks=new ArrayList<DayOfTheWeek>();
-		final DayOfTheWeek dayOfTheWeek=new DayOfTheWeek();
-
-
+		final List<DayOfTheWeek> dayOfTheWeeks = new ArrayList<DayOfTheWeek>();
 		for (final Day day : this.daysOfWeek) {
-			dayOfTheWeek.day=day;
+			final DayOfTheWeek dayOfTheWeek = new DayOfTheWeek();
+			dayOfTheWeek.day = day;
 			dayOfTheWeeks.add(dayOfTheWeek);
 		}
 		doctorClinicInfo.daysOfWeek=dayOfTheWeeks;
 
 
-		final List<DayOfTheWeek> dayOfTheWeeksMr=new ArrayList<DayOfTheWeek>();
-		final DayOfTheWeek dayOfTheWeekMr=new DayOfTheWeek();
+		final List<DayOfTheWeek> dayOfTheWeeksMr = new ArrayList<DayOfTheWeek>();
 
 		for (final Day day : this.daysOfWeekMr) {
-			dayOfTheWeekMr.day=day;
+			final DayOfTheWeek dayOfTheWeekMr = new DayOfTheWeek();
+			dayOfTheWeekMr.day = day;
 			dayOfTheWeeksMr.add(dayOfTheWeekMr);
 		}
 		doctorClinicInfo.daysOfWeekMr=dayOfTheWeeksMr;
