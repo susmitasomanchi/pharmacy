@@ -42,8 +42,8 @@ public class ClinicBean implements Serializable{
 		clinic.name = this.name;
 		return clinic;
 	}
-	public DoctorClinicInfo toDoctorClinicInfoList()
-	{
+	public DoctorClinicInfo toDayOfTheWeek(){
+	
 
 		final DoctorClinicInfo doctorClinicInfo=new  DoctorClinicInfo();
 

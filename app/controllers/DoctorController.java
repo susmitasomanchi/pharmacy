@@ -1,10 +1,13 @@
-package controllers;
+ package controllers;
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 
+import models.DoctorPublication;
+import models.LanguageAppUser;
 import models.AppUser;
 import models.Appointment;
 import models.AppointmentStatus;
@@ -13,19 +16,24 @@ import models.DayOfTheWeek;
 import models.Doctor;
 import models.DoctorAward;
 import models.DoctorClinicInfo;
+import models.DoctorLanguage;
 import models.DoctorEducation;
 import models.DoctorExperience;
+import models.DoctorSocialWork;
 import models.Patient;
+import models.Product;
 import models.QuestionAndAnswer;
 import play.Logger;
 import play.data.Form;
 import play.mvc.Controller;
+import play.mvc.Http.MultipartFormData;
+import play.mvc.Http.MultipartFormData.FilePart;
 import play.mvc.Result;
 import actions.BasicAuth;
 import beans.ClinicBean;
 import beans.PatientBean;
 import beans.QuestionAndAnswerBean;
-
+import beans.DoctorDetailBean;;
 
 @BasicAuth
 public class DoctorController extends Controller {
@@ -35,10 +43,13 @@ public class DoctorController extends Controller {
 	public static Form<ClinicBean> clinicForm = Form.form(ClinicBean.class);
 	public static Form<DoctorExperience> experienceForm = Form.form(DoctorExperience.class);
 	public static Form<DoctorEducation> educationForm = Form.form(DoctorEducation.class);
+	public static Form<DoctorSocialWork> socialWorkForm = Form.form(DoctorSocialWork.class);
 	public static Form<DoctorAward> awardForm = Form.form(DoctorAward.class);
+	public static Form<DoctorDetailBean> languageForm = Form.form(DoctorDetailBean.class);
 	public static Form<QuestionAndAnswerBean> questionAndAnswerForm = Form.form(QuestionAndAnswerBean.class);
 	public static Form<DoctorClinicInfo> doctorClinicForm	=Form.form(DoctorClinicInfo.class);
-
+	public static Form<DoctorPublication> publicationForm = Form.form(DoctorPublication.class);
+	
 	public static Doctor loggedIndoctor=LoginController.getLoggedInUser().getDoctor();
 
 	public static Result requestAppointment(){
@@ -63,7 +74,7 @@ public class DoctorController extends Controller {
 
 
 	public static Result doctorProfile(){
-		return ok(views.html.doctor.doctorDashboard.render("hello"));
+		return ok(views.html.doctor.doctorDashboard.render(loggedIndoctor));
 	}
 
 
@@ -74,63 +85,84 @@ public class DoctorController extends Controller {
 
 
 	public static Result doctorExperience(){
+		Logger.info(loggedIndoctor.doctorExperienceList.size()+" size of list");
 		return ok(views.html.doctor.doctorExperience.render(experienceForm));
 	}
 
 	public static Result processDoctorExperience() {
-		final Form<DoctorExperience> filledForm = experienceForm.bindFromRequest();
+		final Form<DoctorExperience> experienceFilledForm = experienceForm.bindFromRequest();
 
-		if (filledForm.hasErrors()) {
+		if (experienceFilledForm.hasErrors()) {
 			// System.out.println(filledForm.errors());
-			return badRequest(views.html.doctor.doctorExperience.render(filledForm));
+			return badRequest(views.html.doctor.doctorExperience.render(experienceFilledForm));
 		} else {
-			final DoctorExperience doctorExperience = filledForm.get();
-
-			if (doctorExperience.id == null) {
-				doctorExperience.save();
+			
+				DoctorExperience doctorExperience=experienceFilledForm.get();
+				loggedIndoctor.doctorExperienceList.add(doctorExperience);
+				
+			loggedIndoctor.update();
 			}
-			else {
-
-				doctorExperience.update();
-			}
+		return redirect(routes.DoctorController.doctorProfile());
 		}
 		// return ok(views.html.scheduleAppointment.render("hello"));
 		// return redirect(routes.UserController.list());
-		return TODO;
+		
 
-	}
+	
 
 
 	public static Result doctorEducation(){
+		Logger.info(loggedIndoctor.doctorEducationList.size()+" size of list");
 		return ok(views.html.doctor.doctorEducation.render(educationForm));
 	}
 
 	public static Result processDoctorEducation() {
 		final Form<DoctorEducation> educationfilledForm = educationForm.bindFromRequest();
-
+	
 		if (educationfilledForm.hasErrors()) {
-			// System.out.println(filledForm.errors());
+
 			return badRequest(views.html.doctor.doctorEducation.render(educationfilledForm));
 		} else {
-			final DoctorEducation doctorEducation = educationfilledForm.get();
-
-			if (doctorEducation.id == null) {
-
-
-				doctorEducation.save();
-			}
-			else {
-
-				doctorEducation.update();
-			}
+			
+			DoctorEducation doctorEducation=educationfilledForm.get();
+			
+			loggedIndoctor.doctorEducationList.add(doctorEducation);
+			
+			loggedIndoctor.update();
+			
 		}
-		// return ok(views.html.scheduleAppointment.render("hello"));
-		// return redirect(routes.UserController.list());
-		return TODO;
+	
+		 return redirect(routes.DoctorController.doctorProfile());
+		}
+	
+	
+	public static Result doctorPublication(){
+		Logger.info(loggedIndoctor.doctorPublicationList.size()+" size of list");
+		
+		return ok(views.html.doctor.doctorPublications.render(publicationForm));
+	}
+
+	public static Result processDoctorPublication() {
+		final Form<DoctorPublication> publicationfilledForm = publicationForm.bindFromRequest();
+		// Logger.info("enteredt");
+
+		if (publicationfilledForm.hasErrors()) {
+			Logger.info("bad request");
+			// System.out.println(filledForm.errors());
+			return badRequest(views.html.doctor.doctorPublications.render(publicationfilledForm));
+		} else {
+			DoctorPublication doctorPublication=publicationfilledForm.get();
+			
+			loggedIndoctor.doctorPublicationList.add(doctorPublication);
+			
+			loggedIndoctor.update();
+		}
+		 return redirect(routes.DoctorController.doctorProfile());
 
 	}
 
 	public static Result doctorAward(){
+		Logger.info(loggedIndoctor.doctorAwardList.size()+" size of list");
 		return ok(views.html.doctor.doctorAward.render(awardForm));
 	}
 
@@ -141,21 +173,64 @@ public class DoctorController extends Controller {
 			// System.out.println(filledForm.errors());
 			return badRequest(views.html.doctor.doctorAward.render(awardfilledForm));
 		} else {
-			final DoctorAward doctorAward = awardfilledForm.get();
-
-			if (doctorAward.id == null) {
-
-
-				doctorAward.save();
-			}
-			else {
-
-				doctorAward.update();
-			}
+			DoctorAward doctorAward=awardfilledForm.get();
+			
+			loggedIndoctor.doctorAwardList.add(doctorAward);
+			
+			loggedIndoctor.update();
 		}
-		// return ok(views.html.scheduleAppointment.render("hello"));
-		// return redirect(routes.UserController.list());
-		return TODO;
+		 return redirect(routes.DoctorController.doctorProfile());
+
+	}
+	public static Result doctorLanguage(){
+		return ok(views.html.doctor.doctorLanguage.render(languageForm));
+	}
+	
+	public static Result processDoctorLanguage(){
+		final Form<DoctorDetailBean> languagefilledForm = languageForm.bindFromRequest();
+		Doctor doctor=LoginController.getLoggedInUser().getDoctor();
+		
+		// Logger.info("enteredt");
+		if (languagefilledForm.hasErrors()) {
+			Logger.info("bad request");
+			// System.out.println(filledForm.errors());
+			return badRequest(views.html.doctor.doctorLanguage.render(languagefilledForm));
+		} else {
+			DoctorLanguage docLan=new DoctorLanguage();
+			
+			
+			 List<LanguageAppUser> doctorLanguage = languagefilledForm.get().toLanguageAppUser();
+			 //doctor.doctorLanguageList=doctorLanguage;
+			 doctor.update();
+			 docLan.languageAppUsers=doctorLanguage;
+			
+			 docLan.save();
+		}
+		 return redirect(routes.DoctorController.doctorProfile());
+
+	}
+	public static Result doctorSocialWork(){
+		return ok(views.html.doctor.doctorSocialWork.render(socialWorkForm));
+	}
+	
+	public static Result processDoctorSocialWork() {
+		final Form<DoctorSocialWork> socialWorkfilledForm = socialWorkForm.bindFromRequest();
+		// Logger.info("enteredt");
+
+		if (socialWorkfilledForm.hasErrors()) {
+			Logger.info("bad request");
+			// System.out.println(filledForm.errors());
+			return badRequest(views.html.doctor.doctorSocialWork.render(socialWorkfilledForm));
+		} else {
+			DoctorSocialWork doctorSocialWork=socialWorkfilledForm.get();
+			
+			loggedIndoctor.doctorSocialWorkList.add(doctorSocialWork);
+			
+			loggedIndoctor.update();
+			
+		}
+		
+			 return redirect(routes.DoctorController.doctorProfile());
 
 	}
 
@@ -171,7 +246,7 @@ public class DoctorController extends Controller {
 			clinic.save();
 			final Doctor loggedInDoctor = LoginController.getLoggedInUser().getDoctor();
 
-			doctorClinicInfo=filledForm.get().toDoctorClinicInfoList();
+			doctorClinicInfo=filledForm.get().toDayOfTheWeek();
 
 			if (doctorClinicInfo.id!=null) {
 				return ok();

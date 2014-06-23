@@ -30,8 +30,12 @@ GET		/doctor-education				controllers.DoctorController.doctorEducation()
 POST	/doctor-education				controllers.DoctorController.processDoctorEducation()
 GET		/doctor-award					controllers.DoctorController.doctorAward()
 POST	/doctor-award					controllers.DoctorController.processDoctorAward()
-
-
+GET		/doctor-language				controllers.DoctorController.doctorLanguage()
+POST	/doctor-language				controllers.DoctorController.processDoctorLanguage()
+GET		/doctor-socialwork				controllers.DoctorController.doctorSocialWork()
+POST	/doctor-socialwork				controllers.DoctorController.processDoctorSocialWork()
+GET		/doctor-publication				controllers.DoctorController.doctorPublication()
+POST	/doctor-publication				controllers.DoctorController.processDoctorPublication()
 
 
 GET    /userform/doctor/                  controllers.DoctorController.form()
@@ -130,8 +134,7 @@ GET    /register/                         controllers.PatientController.register
 POST   /register/                         controllers.PatientController.registerProccess()
 
 
-#sample data
-GET   /sampledata/day					controllers.SampleDataController.days()
+
 
 
 

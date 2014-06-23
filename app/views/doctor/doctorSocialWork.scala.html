@@ -1,0 +1,47 @@
+@(dataForm:play.data.Form[models.DoctorSocialWork])
+
+@*******************************
+
+THIS IS AN AUTO GENERATED CODE
+PLEASE DO NOT MODIFY IT BY HAND
+
+********************************@
+
+@import play.i18n._
+
+@main("Doctor Socialwork"){
+	
+	<br>
+<div class="container"> 
+
+@helper.form(action=routes.DoctorController.processDoctorSocialWork(),'method -> "post") {
+
+			
+
+
+ 			
+		@helper.inputText(dataForm("socialWorkTittle"),'class -> "inputs",'_label->"Tittle")
+			
+			@helper.inputText(dataForm("CommentSocialWork"),'class -> "inputs",'_label->"Comments")
+			
+			
+			
+
+			
+			
+			<br>
+			<input type="hidden" name="id" value='@dataForm("id").value' >
+			<input type="submit" class="submit" value="Login">
+			
+				
+			
+			
+			
+
+}
+</div>
+
+			
+
+
+}

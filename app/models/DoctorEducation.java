@@ -4,8 +4,11 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.ManyToOne;
 
 import play.data.validation.Constraints.Required;
+import play.db.ebean.Model;
+import play.db.ebean.Model.Finder;
 
 
 @SuppressWarnings("serial")
@@ -24,7 +27,7 @@ public class DoctorEducation extends BaseEntity{
 	@Required
 	public String collegeName;
 	
-	@Required
+	
 	public String degree;
 	
 	@Required
@@ -33,6 +36,10 @@ public class DoctorEducation extends BaseEntity{
 	@Required
 	public Integer toYear;
 	
+	public static Model.Finder<Long,DoctorEducation> find = new Finder<Long, DoctorEducation>(Long.class, DoctorEducation.class);
 	
+	public static void update(final Long id, final DoctorEducation doctorEducation) {
+		doctorEducation.update(id);
+	}
 
 }

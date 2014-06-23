@@ -20,12 +20,9 @@ create table address (
 
 create table admin_mr (
   id                        bigint not null,
-<<<<<<< HEAD
   name                      varchar(255),
-=======
   app_user_id               bigint,
   pharmacutical_company_name varchar(255),
->>>>>>> e3bcc82117137c212ec1a64e826d3ee9d723afb5
   last_update               timestamp not null,
   constraint pk_admin_mr primary key (id))
 ;
@@ -42,15 +39,9 @@ create table app_user (
   role                      varchar(16),
   last_update               timestamp not null,
   constraint ck_app_user_sex check (sex in ('FEMALE','OTHER','MALE')),
-<<<<<<< HEAD
   constraint ck_app_user_role check (role in ('PATIENT','DOCTOR','ADMIN','PHARMACIST','ADMIN_PHARMACIST','ADMIN_MR','MR','DIAGREP','DOCTOR_SECRETARY')),
-=======
-<<<<<<< HEAD
   constraint ck_app_user_role check (role in ('PATIENT','DOCTOR','ADMIN','PHARMACIST','ADMIN_PHARMACIST','ADMIN_MR','MR','DIAGREP','DOCTOR_SECRETARY')),
-=======
   constraint ck_app_user_role check (role in ('PATIENT','DOCTOR','ADMIN','PHARMACIST','ADMIN_PHARMACIST','MR','DIAGREP','DOCTOR_SECRETARY')),
->>>>>>> branch 'master' of git@pharmacy.bz:green-software/mednetwork.git
->>>>>>> e3bcc82117137c212ec1a64e826d3ee9d723afb5
   constraint pk_app_user primary key (id))
 ;
 
