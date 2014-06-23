@@ -29,7 +29,10 @@ public class DiagnosticTestController extends Controller{
 			.form(DiagnosticCenter.class);
 	public static Form<DiagnosticReport> diagReport = Form
 			.form(DiagnosticReport.class);
-
+/*
+ * adding test to
+ * the diagnostic center
+ */
 	
 	public static Result addTest(){
 		return ok(views.html.diagnostic.addDiagnosticTest.render(diagnosticTestForm));
