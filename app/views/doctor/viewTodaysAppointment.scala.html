@@ -1,0 +1,53 @@
+@* viewTodaysAppointment Template File *@
+@(appointments:List[models.Appointment])
+@import play.i18n._
+
+@main("Today' Appointments"){
+	
+	<div class="container">
+	<div class="row clearfix">
+		<div class="col-md-12 column">
+			<table class="table">
+			<thead>
+			<tr>
+			<div class="row clearfix">
+				<th><div class="col-md-3 column">
+				Patient
+				</div></th>
+				<th><div class="col-md-3 column">
+				Age
+				</div></th>
+				<th><div class="col-md-3 column">
+				Sex
+				</div></th>
+				<th><div class="col-md-3 column">
+				Appointment
+				</div></th>
+			</div>
+			</tr>
+			</thead>
+			@for(appointment <- appointments){
+			<tr class="success">
+			<div class="row clearfix">
+				<div class="col-md-3 column">
+				<td>@appointment.requestedBy.name</td>
+				</div>
+				<div class="col-md-3 column">
+				<td>@appointment.requestedBy.dob</td>
+				</div>
+				<div class="col-md-3 column">
+				<td>@appointment.requestedBy.sex</td>
+				</div>
+				<div class="col-md-3 column">
+				<td><a href="http://www.google.com" class="btn btn-primary"  role="button">Prescription</a></td>
+				</div>
+			</div>
+			</tr>
+			}
+		</table>
+		</div>
+	</div>
+</div>
+	
+	
+}

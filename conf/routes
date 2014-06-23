@@ -22,6 +22,7 @@ GET		/doctor/new-assistant			controllers.DoctorController.newAssistant()
 GET		/doctor/new-clinic				controllers.DoctorController.newClinic()
 POST	/doctor/new-clinic				controllers.DoctorController.processNewClinic()
 GET		/doctor/clinics					controllers.DoctorController.myClinics()
+GET   	/doctor/manage-clinic/:id		controllers.DoctorController.manageClinic(id:Long)
 GET		/doctor-profile				    controllers.DoctorController.doctorProfile()
 GET		/doctor-experience				controllers.DoctorController.doctorExperience()
 POST	/doctor-experience				controllers.DoctorController.processDoctorExperience()
@@ -48,9 +49,7 @@ POST	/addProductToInventory			controllers.PharmacistController.addToInventory()
 
 
 
-GET 	/create-Mr-schedule				controllers.DoctorController.createMrSchedule()
-POST	/create-Mr-appointment 			controllers.DoctorController.createMrAppointment()
-
+GET		/doctor/today-appointment		controllers.DoctorController.viewTodaysAppointment()	
 
 GET    /medical-representative            controllers.Application.medicalRepresentative()
 POST   /medical-representative/proccess   controllers.Application.medicalRepresentativeProccess()
@@ -80,7 +79,6 @@ POST   /ansQuestion/:qaId                 controllers.DoctorController.answerQue
 GET    /dashboard                         controllers.UserActions.dashboard()
 GET    /register-patient/                 controllers.DoctorController.registerPatient()
 POST   /register-patient-proccess/        controllers.DoctorController.registerPatientProccess()
-GET    /createappointments                controllers.DoctorController.createAppointment()
 
 #Diagnostic module	
 GET    /diagnosticregistration            		controllers.DiagnosticController.diagnosticCenter()
@@ -102,9 +100,9 @@ GET    /diagnosticrep/doctor-search	         	controllers.DRController.search()
 GET    /diagnosticrep/doctorsearch	         	controllers.DRController.searchProcess()
 GET    /diagnosticrep/add-doctor/:id      		controllers.DRController.addDoctor(id: Long)
 GET    /diagnosticrep/remove-doctor/:id   		controllers.DRController.removeDoctor(id: Long)
-GET    /upload-patient-file  					controllers.DRController.uploadFile()
-POST    /upload-patient-file/save		  		controllers.DRController.uploadFileProcess()
-GET    /download						  		controllers.DRController.downloadFile()
+GET    /upload-patient-file  					controllers.DiagnosticTestController.uploadFile()
+POST    /upload-patient-file/save		  		controllers.DiagnosticTestController.uploadFileProcess()
+GET    /download						  		controllers.DiagnosticTestController.downloadFile()
 
 
 #Diagnostic Test
@@ -122,13 +120,18 @@ GET    /mr/hq                             controllers.MRController.headQuarter()
 GET    /dcr-line-item                     controllers.MRController.visitDoctor()
 POST   /dcr-line-item/proccess            controllers.MRController.visitDoctorProccess()
 GET    /search								controllers.MRController.search()
-GET 	/mr/schedule-appointment         controllers.MRController.scheduleAppointment()
+GET		/mr/display-appointment/:id			controllers.MRController.scheduleAppointment(id:String)	
+
 
 # delete later
 GET    /userform/patient/                 controllers.PatientController.form()
 GET    /userform/patient/h/               controllers.PatientController.enterForm()
 GET    /register/                         controllers.PatientController.register()
 POST   /register/                         controllers.PatientController.registerProccess()
+
+
+#sample data
+GET   /sampledata/day					controllers.SampleDataController.days()
 
 
 

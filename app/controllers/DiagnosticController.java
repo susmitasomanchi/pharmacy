@@ -20,6 +20,10 @@ public class DiagnosticController extends Controller {
 	public static Result diagnosticCenter() {
 		return ok(views.html.diagnosticCenters.render(diagnosticForm));
 	}
+	/*
+	 * storing diagnostic center details 
+	 * in table
+	 */
 
 	public static Result diagnosticCenterProcess() {
 		final Form<DiagnosticCenter> filledForm = diagnosticForm
@@ -41,19 +45,21 @@ public class DiagnosticController extends Controller {
 		}
 
 	}
-
+	/*
+	 * list out all diagnostic centers
+	 * from diagnostic center table
+	 */
 	public static Result diagnosticList() {
 		List<DiagnosticCenter> allList = DiagnosticCenter.find.all();
 
 		return ok(views.html.diagnostic.diagnosticCenterList.render(allList));
 
 	}
-	/*public static Result drList(){
-	List<DiagnosticCenter> drList = DiagnosticCenter.find.where().eq("id",LoginController.getLoggedInUser().id).findList();
-	Logger.info("id..."+LoginController.getLoggedInUser().id);
-		return ok(views.html.diagnostic.diagnosticCenterList.render(drList));
-	}*/
 	
+	/*
+	 * deleting diagnostic center
+	 * from table based on id
+	 */
 	public static Result deleteCenter(Long id) {
 		DiagnosticCenter.delete(id);
 		return ok("deleted successfully");

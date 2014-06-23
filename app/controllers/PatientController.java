@@ -1,9 +1,7 @@
 package controllers;
 
-import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
-import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
@@ -15,7 +13,6 @@ import models.Doctor;
 import models.Patient;
 import models.QuestionAndAnswer;
 import play.Logger;
-import play.data.DynamicForm;
 import play.data.Form;
 import play.mvc.Controller;
 import play.mvc.Result;
@@ -177,7 +174,10 @@ public class PatientController extends Controller {
 			return ok("-1");
 		}
 	}
-
+/*
+ * displaying  all diagnostic
+ * centers
+ */
 	public static Result diagnosticList() {
 		List<DiagnosticCenter> allList = DiagnosticCenter.find.all();
 
@@ -185,7 +185,10 @@ public class PatientController extends Controller {
 				.render(allList));
 
 	}
-
+	/*
+	 * saving diagnostic center in 
+	 * patient favorite list
+	 */
 	public static Result saveDiagnosticCenter(Long id) {
 		DiagnosticCenter dc = DiagnosticCenter.find.byId(id);
 		Logger.info("diag id...." + dc);
@@ -205,34 +208,31 @@ public class PatientController extends Controller {
 		return ok("diagnostic center persisted in patient table");
 
 	}
+	/*
+	 * displaying diagnostic centers 
+	 * which are there in
+	 * patient favorite list
+	 */
 
 	public static Result myDiagnosticCenters() {
-		Patient patient = LoginController.getLoggedInUser().getPatient();
-		List<DiagnosticCenter> list = patient.diagnosticCenterList;
+		Long id = LoginController.getLoggedInUser().id;
+		Patient diagnoCenterList = Patient.find.where().eq("id", id)
+				.findUnique();
+		List<DiagnosticCenter> list = diagnoCenterList.diagnosticCenterList;
 
 		return ok(views.html.patient.myDiagnoList.render(list));
 
 	}
+	/*
+	 * removing diagnostic center
+	 * from patient favorite 
+	 * diagnostic center list
+	 */
 
 	public static Result removePatientDiagnoCenter(final Long id) {
 		Logger.info("Diagno center id........." + id);
-		int index = 0;
+	
 		Patient patient = LoginController.getLoggedInUser().getPatient();
-		// List<DiagnosticCenter> list=patient.diagnosticCenterList;
-
-		/*
-		 * for (DiagnosticCenter diagCenter :patient.diagnosticCenterList) { if
-		 * (id==diagCenter.id) { Logger.info(" name : " + diagCenter.name);
-		 * Logger.info(" id	 : " + diagCenter.id);
-		 * 
-		 * Logger.info("index is : " + index); break;
-		 * 
-		 * 
-		 * } else{ index++; }
-		 * 
-		 * 
-		 * }
-		 */
 		DiagnosticCenter centre = DiagnosticCenter.find.byId(id);
 		patient.diagnosticCenterList.remove(centre);
 		patient.update();

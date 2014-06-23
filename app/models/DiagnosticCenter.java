@@ -51,7 +51,7 @@ public class DiagnosticCenter extends BaseEntity {
 	public DiagnosticRepresentative diagnosticRepAdmin;
 
 	@ManyToOne(cascade=CascadeType.ALL)
-	List<DiagnosticRepresentative> pharmacistlist = new ArrayList<DiagnosticRepresentative>();
+	public List<DiagnosticRepresentative> diagReplist = new ArrayList<DiagnosticRepresentative>();
 
 	@OneToMany(cascade=CascadeType.ALL)
 	public List<DiagnosticTest> diagnosticTestList = new ArrayList<DiagnosticTest>();

@@ -1,7 +1,7 @@
-@(data:UploadFile)
+@(data:DiagnosticReport)
 
 @main("doctor list"){
-@helper.form(action= routes.DRController.downloadFile()){
+@helper.form(action= routes.DiagnosticTestController.downloadFile()){
 	<input type="submit" value="Download">
 	}
 	}

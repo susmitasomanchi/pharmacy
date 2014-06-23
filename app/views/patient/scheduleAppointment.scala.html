@@ -1,5 +1,7 @@
 @* scheduleAppointmentTemp Template File *@
 @(appointmentMap:Map[Date,List[models.Appointment]],slotes:Integer)
+
+
 @main("Schedule An Appointment"){
 
 
@@ -83,7 +85,10 @@ $(".appt").on("click", function(){
 $("#doc-select").change(function() {
 	$("#doctorId").attr("value",$("#doc-select option:selected").val());
 	var id=$("#doc-select option:selected").val();
+	
 	window.location.href = '/user/display-appointment/'+id;
+	
+	
 });
 function confSubmit(){
 	
