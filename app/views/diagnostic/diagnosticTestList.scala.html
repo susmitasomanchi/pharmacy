@@ -15,18 +15,20 @@ Price
 </tr>
 </thead>
 <tbody>
-@for(dc <- list) {
+@for(dt <- list) {
 <tr>
 <td>
-@dc.name
+@dt.name
 </td>
 <td>
-@dc.description
+@dt.description
 </td>
 <td>
-@dc.price
+@dt.price
 </td>
-
+<th>
+<a href="/prescribe-test/save" class="btn btn-xs btn-success">place order</a>
+</th>
 </tr>
 }
 </tbody>

@@ -102,6 +102,18 @@ create table diagnostic_center (
   constraint pk_diagnostic_center primary key (id))
 ;
 
+create table diagnostic_order (
+  diagnostic_order_id       bigint not null,
+  diagnostic_order_status   varchar(16),
+  doctors_prescription_id   bigint,
+  confirmed_date            timestamp,
+  sample_collected_date     timestamp,
+  report_genertaed_date     timestamp,
+  last_update               timestamp not null,
+  constraint ck_diagnostic_order_diagnostic_order_status check (diagnostic_order_status in ('CONFIRMED','REPORT_READY','SAMPLE_COLLECTED')),
+  constraint pk_diagnostic_order primary key (diagnostic_order_id))
+;
+
 create table diagnostic_report (
   diag_report_id            bigint not null,
   file_name                 varchar(255),
@@ -228,6 +240,12 @@ create table doctor_social_work (
   comment_social_work       varchar(255),
   last_update               timestamp not null,
   constraint pk_doctor_social_work primary key (id))
+;
+
+create table doctors_prescription (
+  doctors_prescription_id   bigint not null,
+  last_update               timestamp not null,
+  constraint pk_doctors_prescription primary key (doctors_prescription_id))
 ;
 
 create table head_quarter (
@@ -362,6 +380,8 @@ create sequence day_of_the_week_seq;
 
 create sequence diagnostic_center_seq;
 
+create sequence diagnostic_order_seq;
+
 create sequence diagnostic_report_seq;
 
 create sequence diagnostic_representative_seq;
@@ -385,6 +405,8 @@ create sequence doctor_language_seq;
 create sequence doctor_publication_seq;
 
 create sequence doctor_social_work_seq;
+
+create sequence doctors_prescription_seq;
 
 create sequence inventory_seq;
 
@@ -493,6 +515,8 @@ drop table if exists day_of_the_week cascade;
 
 drop table if exists diagnostic_center cascade;
 
+drop table if exists diagnostic_order cascade;
+
 drop table if exists diagnostic_report cascade;
 
 drop table if exists diagnostic_representative cascade;
@@ -518,6 +542,8 @@ drop table if exists doctor_language cascade;
 drop table if exists doctor_publication cascade;
 
 drop table if exists doctor_social_work cascade;
+
+drop table if exists doctors_prescription cascade;
 
 drop table if exists head_quarter cascade;
 
@@ -557,6 +583,8 @@ drop sequence if exists day_of_the_week_seq;
 
 drop sequence if exists diagnostic_center_seq;
 
+drop sequence if exists diagnostic_order_seq;
+
 drop sequence if exists diagnostic_report_seq;
 
 drop sequence if exists diagnostic_representative_seq;
@@ -580,6 +608,8 @@ drop sequence if exists doctor_language_seq;
 drop sequence if exists doctor_publication_seq;
 
 drop sequence if exists doctor_social_work_seq;
+
+drop sequence if exists doctors_prescription_seq;
 
 drop sequence if exists inventory_seq;
 

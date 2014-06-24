@@ -50,7 +50,8 @@ public class DiagnosticController extends Controller {
 	 * from diagnostic center table
 	 */
 	public static Result diagnosticList() {
-		List<DiagnosticCenter> allList = DiagnosticCenter.find.all();
+		Long id=LoginController.getLoggedInUser().getDiagnosticRepresentative().id;
+		DiagnosticCenter allList = DiagnosticCenter.find.byId(id);
 
 		return ok(views.html.diagnostic.diagnosticCenterList.render(allList));
 
@@ -120,7 +121,7 @@ public class DiagnosticController extends Controller {
 				return ok(views.html.diagnostic.patientDiagnosticCenterList
 						.render(dcSearch));
 			}
-			// if it is an email
+			// if it is an email	
 			else if (searchStr.contains("@")) {
 
 				final List<DiagnosticCenter> dcSearch = DiagnosticCenter.find

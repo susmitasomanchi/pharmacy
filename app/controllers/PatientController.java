@@ -215,7 +215,7 @@ public class PatientController extends Controller {
 	 */
 
 	public static Result myDiagnosticCenters() {
-		Long id = LoginController.getLoggedInUser().id;
+		Long id = LoginController.getLoggedInUser().getPatient().id;
 		Patient diagnoCenterList = Patient.find.where().eq("id", id)
 				.findUnique();
 		List<DiagnosticCenter> list = diagnoCenterList.diagnosticCenterList;

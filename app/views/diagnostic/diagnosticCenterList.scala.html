@@ -1,4 +1,4 @@
-@(list: List[DiagnosticCenter])
+@(dc: DiagnosticCenter)
 @main("Diagnostic Representatives List") {
 <table class="table table-bordered">
 <thead>
@@ -12,7 +12,7 @@ Address
 </tr>
 </thead>
 <tbody>
-@for(dc <- list) {
+@*for(dc <- list) {*@
 <tr>
 <td>
 @dc.name
@@ -29,7 +29,7 @@ Address
 <a href="/test" class="btn btn-xs btn-success">Add Test</a>
 </th>
 </tr>
-}
+
 </tbody>
 </table>
 }

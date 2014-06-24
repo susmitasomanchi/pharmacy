@@ -113,6 +113,8 @@ GET    /download						  		controllers.DiagnosticTestController.downloadFile()
 GET    /test				            		controllers.DiagnosticTestController.addTest()
 POST   /test/save					       		controllers.DiagnosticTestController.addTestProcess()
 GET    /test-list/:id				            controllers.DiagnosticTestController.diagnosticTestList(id: Long)
+GET    /prescribe-test				            controllers.DiagnosticPrescriptionController.prescribe()
+GET    /prescribe-test/save				            controllers.DiagnosticPrescriptionController.receive()
 
 #MR Module
 GET    /doctor-list                       controllers.MRController.doctorList()
