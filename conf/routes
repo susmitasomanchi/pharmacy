@@ -2,6 +2,31 @@
 # This file defines all application routes (Higher priority routes first)
 # ~~~~
 
+
+#Blog
+
+GET		/blog/create-blog-admin			controllers.SampleDataController.createBlogAdmin()
+
+GET		/blog							controllers.BlogController.blogHome()
+GET		/blogs							controllers.BlogController.blogHome()
+GET		/blog/new-category				controllers.BlogController.categoryForm()
+POST	/blog/new-category				controllers.BlogController.processCategoryForm()
+GET		/blog/categories				controllers.BlogController.categories()
+GET		/blog/edit-category/:id			controllers.BlogController.editCategoryForm(id: Long)
+GET		/blog/new-article				controllers.BlogController.articleForm()
+POST	/blog/new-article				controllers.BlogController.processArticleForm()
+GET		/blog/articles/:categoryId		controllers.BlogController.articles(categoryId: Long)
+GET		/blog/edit-article/:id			controllers.BlogController.editArticleForm(id: Long)
+GET		/blog/get-thumbnail/:id			controllers.BlogController.getThumbnail(id: Long)
+GET		/blog/get-main-image/:id		controllers.BlogController.getMainImage(id: Long)
+GET		/blog/:id						controllers.BlogController.showArticleWithoutSlug(id: Long)
+GET		/blog/:id/:slug					controllers.BlogController.showArticle(id: Long, slug: String)
+
+# Remove later (at Beta Launch)
+GET    /                                  controllers.Application.index()
+GET    /:str		                      controllers.Application.indexX(str: String)
+####################################################################################################
+
 # Home page
 GET    /                                  controllers.Application.index()
 POST   /login                             controllers.LoginController.processLogin()
@@ -48,8 +73,8 @@ POST	/addProductToInventory			controllers.PharmacistController.addToInventory()
 
 
 
-
-
+GET 	/create-Mr-schedule				controllers.DoctorController.createMrSchedule()
+POST	/create-Mr-appointment 			controllers.DoctorController.createMrAppointment()
 
 
 GET    /medical-representative            controllers.Application.medicalRepresentative()
@@ -73,11 +98,23 @@ GET    /dashboard						controllers.UserActions.dashboard()
 GET    /register-patient/               controllers.DoctorController.registerPatient()
 POST   /register-patient-proccess/      controllers.DoctorController.registerPatientProccess()
 
-#Diagnostic module
-GET    /diagnosticregistration            controllers.DiagnosticController.diagnosticCenter()
-POST   /diagnosticregistration/save       controllers.DiagnosticController.diagnosticCenterProcess()
-GET    /diagnosticlist                    controllers.DiagnosticController.Diagnosticlist()
-GET    /diagnostic-delete/:id             controllers.DiagnosticController.deleteCenter(id: Long)
+#Diagnostic module	
+GET    /diagnosticregistration            		controllers.DiagnosticController.diagnosticCenter()
+POST   /diagnosticregistration/save       		controllers.DiagnosticController.diagnosticCenterProcess()
+GET    /diagnosticlist                   	 	controllers.DiagnosticController.diagnosticlist()
+GET    /diagnostic-service-list/:id            	 	controllers.DiagnosticController.diagnosticServiceslist(id: Long)
+GET    /diagnostic-delete/:id             		controllers.DiagnosticController.deleteCenter(id: Long)
+GET    /diagnostic-edit/:id						controllers.DiagnosticController.editDiagnosticDetails(id: Long)
+POST    /diagnostic-edit 						controllers.DiagnosticController.diagnosticEditprocess()
+GET    /diagnostic-search      					controllers.DiagnosticController.diagnosticSearch()
+GET    /diagnosticrep/doctor-list         		controllers.DRController.doctorList()
+GET    /diagnosticrep			         		controllers.DRController.addDiagRep()
+POST    /diagnosticrep/save		         		controllers.DRController.addDiagRepProcess()
+GET    /diagnosticrep/list			        	controllers.DRController.diagnosticReplist()
+GET    /diagnosticrep/doctor-search	         	controllers.DRController.search()
+GET    /diagnosticrep/doctorsearch	         	controllers.DRController.searchProcess()
+GET    /diagnosticrep/add-doctor/:id      		controllers.DRController.addDoctor(id: Long)
+GET    /diagnosticrep/remove-doctor/:id   		controllers.DRController.removeDoctor(id: Long)
 
 #MR Module
 GET    /doctor-list                       controllers.MRController.doctorList()
@@ -89,6 +126,8 @@ GET    /mr/hq                             controllers.MRController.headQuarter()
 GET    /dcr-line-item                     controllers.MRController.visitDoctor()
 POST   /dcr-line-item/proccess            controllers.MRController.visitDoctorProccess()
 GET    /search								controllers.MRController.search()
+GET 	/mr/schedule-appointment         controllers.MRController.scheduleAppointment()
+
 
 # delete later
 GET    /userform/patient/                 controllers.PatientController.form()
@@ -96,7 +135,7 @@ GET    /userform/patient/h/               controllers.PatientController.enterFor
 GET    /register/                         controllers.PatientController.register()
 POST   /register/                         controllers.PatientController.registerProccess()
 
-
+GET		/create-appointment					controllers.DoctorController.createAppointment()
 
 # Map static resources from the /public folder to the /assets URL path
 GET    /assets/*file                      controllers.Assets.at(path="/public", file)

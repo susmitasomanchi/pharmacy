@@ -1,7 +1,9 @@
 package controllers;
 
 import java.util.List;
+
 import models.AppUser;
+import models.Role;
 import play.Logger;
 import play.data.Form;
 import play.mvc.Controller;
@@ -37,6 +39,11 @@ public class LoginController extends Controller {
 			}
 			if(appUsers.size() == 1) {
 				session().clear();
+				if(appUsers.get(0).role.equals(Role.BLOG_ADMIN)){
+					session(Constants.LOGGED_IN_USER_ID, appUsers.get(0).id + "");
+					session(Constants.LOGGED_IN_USER_ROLE, appUsers.get(0).role+ "");
+					return redirect(routes.BlogController.categories());
+				}
 				session(Constants.LOGGED_IN_USER_ID, appUsers.get(0).id + "");
 				session(Constants.LOGGED_IN_USER_ROLE, appUsers.get(0).role+ "");
 				return redirect(routes.UserActions.dashboard());

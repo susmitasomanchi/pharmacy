@@ -22,8 +22,12 @@ public enum Role {
 	ADMIN_MR,
 	@EnumValue("MR")
 	MR,
+	@EnumValue("ADMIN_DIAGREP")
+	ADMIN_DIAGREP,
 	@EnumValue("DIAGREP")
-	DIAGREP;
+	DIAGREP,
+	@EnumValue("BLOG_ADMIN")
+	BLOG_ADMIN;
 
 	public static Map<String, String> options() {
 		final LinkedHashMap<String, String> vals = new LinkedHashMap<String, String>();

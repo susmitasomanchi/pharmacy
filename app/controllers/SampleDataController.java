@@ -3,6 +3,7 @@ import java.util.List;
 
 import models.AppUser;
 import models.Doctor;
+import models.Role;
 import play.mvc.Controller;
 import play.mvc.Result;
 
@@ -56,6 +57,17 @@ public class SampleDataController extends Controller {
 		user.save();*/
 
 		return ok("created");
+	}
+
+	public static Result createBlogAdmin(){
+		System.out.println("sadsfshdf khsgd fkjhkdsf");
+		final AppUser appUser = new AppUser();
+		appUser.name = "Blog Admin";
+		appUser.role = Role.BLOG_ADMIN;
+		appUser.email = "blog@mednetwork.in";
+		appUser.password = "med2014blog";
+		appUser.save();
+		return redirect(routes.Application.index());
 	}
 
 

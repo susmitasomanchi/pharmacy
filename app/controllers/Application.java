@@ -19,6 +19,10 @@ public class Application extends Controller {
 		return ok(views.html.index.render(loginForm));
 	}
 
+	public static Result indexX(final String str) {
+		return ok(views.html.index.render(loginForm));
+	}
+
 	//sales representator proccessing
 
 	public static Result medicalRepresentative(){
@@ -58,7 +62,7 @@ public class Application extends Controller {
 
 	public static Result diagnosticRep(){
 
-		return ok(views.html.diagnosticRep.render(diagnosticRepForm));
+		return ok(views.html.diagnostic.diagnosticRep.render(diagnosticRepForm));
 
 	}
 
@@ -67,7 +71,7 @@ public class Application extends Controller {
 
 		if(filledForm.hasErrors()) {
 			Logger.info("*** user bad request");
-			return badRequest(views.html.diagnosticRep.render(filledForm));
+			return badRequest(views.html.diagnostic.diagnosticRep.render(filledForm));
 		}
 		else {
 			final DiagnosticRepresentative diagnosticRepForm = filledForm.get();

@@ -136,7 +136,7 @@ public class PatientController extends Controller {
 				patient.save();
 			}
 			else {
-			
+
 				patient.update();
 			}
 		}
@@ -151,12 +151,17 @@ public class PatientController extends Controller {
 		// final List<Patient> patients=Patient.find.where().eq("appUser.email",
 		// "mitesh@greensoftware.in").findList();
 
-		final List<Patient> patients = Patient.find
+		final List<AppUser> appUsers = AppUser.find
 				.where()
 				.or(Expr.like("email", search + "%"),
 						Expr.like("mobileno", search + "%")).findList();
 
-		return ok(patients.toString());
+		final List<Doctor> doctors=Doctor.find
+				.where()
+				.or(Expr.like("appUser.email", search + "%"),
+						Expr.like("appUser.mobileno", search + "%")).findList();
+
+		return ok(appUsers.toString());
 	}
 
 	public static  Result  displayQuestion() {
