@@ -104,13 +104,12 @@ create table diagnostic_center (
 
 create table diagnostic_order (
   diagnostic_order_id       bigint not null,
-  diagnostic_order_status   varchar(16),
+  diagnostic_order_status   varchar(20),
   doctors_prescription_id   bigint,
+  received_date             timestamp,
   confirmed_date            timestamp,
-  sample_collected_date     timestamp,
-  report_genertaed_date     timestamp,
   last_update               timestamp not null,
-  constraint ck_diagnostic_order_diagnostic_order_status check (diagnostic_order_status in ('CONFIRMED','REPORT_READY','SAMPLE_COLLECTED')),
+  constraint ck_diagnostic_order_diagnostic_order_status check (diagnostic_order_status in ('RECEIVED','SAMPLE_NOT_COLLECTED','CONFIRMED','REPORT_READY','SAMPLE_COLLECTED')),
   constraint pk_diagnostic_order primary key (diagnostic_order_id))
 ;
 
@@ -118,7 +117,11 @@ create table diagnostic_report (
   diag_report_id            bigint not null,
   file_name                 varchar(255),
   file_content              bytea,
+  report_status             varchar(20),
+  sample_collected_date     timestamp,
+  report_genertaed_date     timestamp,
   last_update               timestamp not null,
+  constraint ck_diagnostic_report_report_status check (report_status in ('RECEIVED','SAMPLE_NOT_COLLECTED','CONFIRMED','REPORT_READY','SAMPLE_COLLECTED')),
   constraint pk_diagnostic_report primary key (diag_report_id))
 ;
 

@@ -6,7 +6,6 @@ import models.DiagnosticCenter;
 import models.DiagnosticRepresentative;
 import models.Doctor;
 
-import play.Logger;
 import play.data.DynamicForm;
 import play.data.Form;
 import play.mvc.Controller;
@@ -28,13 +27,11 @@ public class DRController extends Controller {
 				.bindFromRequest();
 
 		if (filledForm.hasErrors()) {
-			Logger.info("*** user bad request");
 			return badRequest(views.html.diagnostic.diagnosticRep
 					.render(filledForm));
 		} else {
 
 			final DiagnosticRepresentative diagRepForm = filledForm.get();
-			Logger.info("*** user object ");
 			Long id = LoginController.getLoggedInUser()
 					.getDiagnosticRepresentative().id;
 			DiagnosticCenter dc = DiagnosticCenter.find.byId(id);
@@ -61,7 +58,6 @@ public class DRController extends Controller {
 	 */
 	public static Result doctorList() {
 		List<Doctor> doctorList = Doctor.find.all();
-		// Logger.error(doctorList.get(0).appUser.name);
 		return ok(views.html.diagnostic.doctorsList.render(doctorList));
 	}
 
@@ -70,13 +66,10 @@ public class DRController extends Controller {
 	 */
 
 	public static Result addDoctor(Long id) {
-		Logger.info("id.............." + id);
 
 		if (loggedInDR.doctorList.contains(Doctor.find.byId(id)) != true) {
 
 			loggedInDR.doctorList.add(Doctor.find.byId(id));
-			Logger.info(loggedInDR.doctorList.get(0).appUser.name
-					+ " NAME OF THE DOCTOR");
 		}
 
 		return ok(views.html.diagnostic.addDoctor.render(loggedInDR.doctorList));
@@ -107,13 +100,10 @@ public class DRController extends Controller {
 
 		final String searchStr = requestData.get("searchStr");
 
-		Logger.info("hello..........................." + searchStr);
 		// if string is empty return zero
 		if (searchStr != null && !searchStr.isEmpty()) {
-			Logger.info("hello...........................");
 			// it is a string, search by name
 			if (searchStr.matches("[a-zA-Z]+")) {
-				Logger.info("inside...........................");
 
 				final List<Doctor> doctorList = Doctor.find.where()
 						.like("appUser.name", searchStr + "%").findList();
