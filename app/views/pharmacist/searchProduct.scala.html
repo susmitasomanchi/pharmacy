@@ -17,9 +17,9 @@
 	<ul> 
 @for(product <- products) {
   <li>@product.medicineName   
-   @helper.form(action=routes.PharmacistController.addProductForm(product.id)) {
+   @helper.form(action=routes.PharmacistController.addProductForm(product.id),'method -> "post") {
     <input type="submit" value="Add"/>
-    
+
     }
   </li>
   

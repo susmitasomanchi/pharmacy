@@ -18,7 +18,7 @@ public class Clinic extends Model{
 	public String name;
 
 	public Address clinicAddress;
-	//public String clinicAddress;
+
 
 	public static Model.Finder<Long, Clinic> find = new Finder<Long, Clinic>(Long.class, Clinic.class);
 

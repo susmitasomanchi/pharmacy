@@ -1,0 +1,29 @@
+@(list: List[DiagnosticRepresentative])
+@main("Diagnostic Representatives List") {
+<table class="table table-bordered">
+<thead>
+<tr>
+<th>
+Name
+</th>
+</tr>
+</thead>
+<tbody>
+@for(dc <- list) {
+<tr>
+<td>
+@dc.appUser.name
+</td>
+<th>
+<a href="/diagnostic-edit/@dc.appUser.id" class="btn btn-xs btn-success">Edit</a>
+
+
+<a href="/diagnostic-delete/@dc.appUser.id" class="btn btn-xs btn-success">Delete</a>
+<a href="/diagnosticrep/doctor-list" class="btn btn-xs btn-success">Doctors</a>
+
+</th>
+</tr>
+}
+</tbody>
+</table>
+}

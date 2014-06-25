@@ -10,6 +10,7 @@ package controllers;
 
 
 import models.AppUser;
+import models.DiagnosticCenter;
 import models.DiagnosticRepresentative;
 import models.Doctor;
 import models.MedicalRepresentative;
@@ -63,28 +64,37 @@ public class UserController extends Controller {
 				pharmacist.save();
 
 				//final Pharmacy pharmacy = filledForm.get();
-				final Pharmacy pharmacy=new Pharmacy();
+				final Pharmacy pharmacy = new Pharmacy();
 				pharmacy.name=filledForm.get().pharmacyName;
-				pharmacy.adminPharmacist=pharmacist;
+				//pharmacy.adminPharmacist=pharmacist;
+				pharmacy.adminPharmacist = pharmacist;
 				pharmacy.save();
+				//pharmacy.update();
 			}
 
 			if(appUser.role == Role.ADMIN_MR){
 				final MedicalRepresentative medicalRepresentative = new MedicalRepresentative();
+				final PharmaceuticalCompany pharmaCompany = new PharmaceuticalCompany();
 				medicalRepresentative.appUser = appUser;
 				medicalRepresentative.save();
-				final PharmaceuticalCompany pharmaCompany = new PharmaceuticalCompany();
 				pharmaCompany.name = filledForm.get().pharmaceuticalCompanyName;
-				pharmaCompany.adminMR = medicalRepresentative;
-				pharmaCompany.save();
-			}
-			
-			
 
-			if(appUser.role == Role.DIAGREP){
+				pharmaCompany.mrList.add(medicalRepresentative);
+				pharmaCompany.save();
+				medicalRepresentative.pharmaceuticalCompany = pharmaCompany;
+				medicalRepresentative.update();
+
+			}
+
+
+			if(appUser.role == Role.ADMIN_DIAGREP){
 				final DiagnosticRepresentative diagRep = new DiagnosticRepresentative();
 				diagRep.appUser = appUser;
 				diagRep.save();
+				final DiagnosticCenter diagnosticCenter = new DiagnosticCenter();
+				diagnosticCenter.name = filledForm.get().diagnosticCenterName;
+				diagnosticCenter.diagnosticRepAdmin = diagRep;
+				diagnosticCenter.save();
 			}
 
 			session().clear();

@@ -1,14 +1,14 @@
 package models;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.ManyToOne;
 import javax.persistence.OneToOne;
-import play.data.validation.Constraints.Required;
-import play.db.ebean.Model;
-import play.db.ebean.Model.Finder;
 
+@SuppressWarnings("serial")
 @Entity
 public class Pharmacist extends BaseEntity{
 	@Id
@@ -17,6 +17,9 @@ public class Pharmacist extends BaseEntity{
 
 	@OneToOne
 	public AppUser appUser;
+
+	@ManyToOne(cascade=CascadeType.ALL)
+	public Pharmacy pharmacy;
 
 	public String category;
 	public static Finder<Long, Pharmacist> find = new Finder<Long, Pharmacist>(Long.class, Pharmacist.class);

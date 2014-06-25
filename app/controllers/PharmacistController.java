@@ -32,47 +32,45 @@ public class PharmacistController extends Controller{
 	public static Form<AddProductToInventoryBean> addProductForm = Form.form(AddProductToInventoryBean.class);
 
 
-	public static Long  Pid;
 
 
 
-
-
-	public static Result productForm() {
-
-		return ok(views.html.pharmacist.createProduct.render(productForm));
-		//return TODO;
-	}
-
-	public static Result saveProduct() {
-		final Form<Product> productFilledForm = productForm.bindFromRequest();
-		if(productFilledForm.hasErrors()) {
-			Logger.info("bad request");
-
-			return badRequest(views.html.pharmacist.createProduct.render(productFilledForm));
-		}
-		else {
-			final Product product= productFilledForm.get();
-
-			if(product.id == null) {
-				product.save();
-
-			}
-			else {
-				product.update();
-			}
-
-		}
-		//return ok("User Created");
-		//return TODO;
-		//return ok(views.html.dashboard.render(appUser));
-		return redirect(routes.UserActions.dashboard());
-	}
-
-	public static Result displayProducts() {
-		final List<Product> products=Product.find.all();
-		return ok(views.html.pharmacist.products.render(products));
-	}
+	//
+	//	public static Result productForm() {
+	//
+	//		return ok(views.html.pharmacist.createProduct.render(productForm));
+	//		//return TODO;
+	//	}
+	//
+	//	public static Result saveProduct() {
+	//		final Form<Product> productFilledForm = productForm.bindFromRequest();
+	//		if(productFilledForm.hasErrors()) {
+	//			Logger.info("bad request");
+	//
+	//			return badRequest(views.html.pharmacist.createProduct.render(productFilledForm));
+	//		}
+	//		else {
+	//			final Product product= productFilledForm.get();
+	//
+	//			if(product.id == null) {
+	//				product.save();
+	//
+	//			}
+	//			else {
+	//				product.update();
+	//			}
+	//
+	//		}
+	//		//return ok("User Created");
+	//		//return TODO;
+	//		//return ok(views.html.dashboard.render(appUser));
+	//		return redirect(routes.UserActions.dashboard());
+	//	}
+	//
+	//	public static Result displayProducts() {
+	//		final List<Product> products=Product.find.all();
+	//		return ok(views.html.pharmacist.products.render(products));
+	//	}
 
 
 
@@ -108,7 +106,8 @@ public class PharmacistController extends Controller{
 		final Form<Product> editForm = productForm.fill(product);
 
 		//		productForm.fill(product);
-		return ok(views.html.pharmacist.createProduct.render(editForm));
+		return ok(views.html.common.createProduct.render(editForm));
+
 
 
 
@@ -120,9 +119,8 @@ public class PharmacistController extends Controller{
 
 	public static Result addProductForm(final Long id) {
 
-		Pid=id;
-		System.out.println("hjmdhsjhsjhfjjf"+id);
-		return ok(views.html.pharmacist.addProductToInventory.render(addProductForm));
+		Logger.info(""+id);
+		return ok(views.html.pharmacist.addProductToInventory.render(addProductForm,id));
 		//return TODO;
 	}
 
@@ -130,14 +128,14 @@ public class PharmacistController extends Controller{
 
 
 
-	public static Result addToInventory() {
+	public static Result addToInventory(final Long id) {
 
 		final Form<AddProductToInventoryBean> filledForm = addProductForm.bindFromRequest();
 
 		if(filledForm.hasErrors()) {
 			Logger.info("bad request");
-
-			return badRequest(views.html.pharmacist.addProductToInventory.render(addProductForm));
+			//return TODO;
+			return badRequest(views.html.pharmacist.addProductToInventory.render(addProductForm, id));
 		}
 		/*if(batchFilledForm.hasErrors()) {
 			Logger.info("bad request");
@@ -147,7 +145,7 @@ public class PharmacistController extends Controller{
 		else {
 			final Batch batch=filledForm.get().toBatchEntity();
 			final Inventory inventory=filledForm.get().toInventoryEntity();
-			batch.product.id=Pid;
+
 			if((batch.id==null) && (inventory.id==null)){
 				batch.save();
 				inventory.save();
@@ -165,6 +163,14 @@ public class PharmacistController extends Controller{
 		return redirect(routes.UserActions.dashboard());
 		//return TODO;
 
+
+	}
+
+
+	public static Result orderRecord() {
+
+		final List<Product> products=Product.find.all();
+		return ok(views.html.pharmacist.orderEntry.render(products));
 
 	}
 

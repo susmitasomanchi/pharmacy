@@ -1,0 +1,37 @@
+@* registerPatient Template File *@
+@(dataForm:play.data.Form[models.DiagnosticCenter])
+@import helper.twitterBootstrap._
+
+@main("Diagnostic Form"){
+
+     @helper.form(action=routes.DiagnosticController.diagnosticEditprocess(),'method -> "post") {
+
+
+			
+			@helper.inputText(dataForm("name"),'class -> "inputs",'_label->"Name")
+			
+			
+			@helper.inputText(dataForm("services"),'class -> "inputs",'_label->"Services")
+			
+			@helper.inputText(dataForm("costOfServices"),'class -> "inputs",'_label->"Cost")
+			
+			@helper.inputText(dataForm("contactPersonName"),'class -> "inputs",'_label->"Contact Name")
+			
+			@helper.inputText(dataForm("address"),'class -> "inputs",'_label->"Address")
+			
+			@helper.inputText(dataForm("city"),'class -> "inputs",'_label->"City")
+			
+			@helper.inputText(dataForm("mobileNo"),'class -> "inputs",'_label->"Mobile No")
+						
+			@helper.inputText(dataForm("emailId"),'class -> "inputs",'_label->"Email")
+			
+			
+			@helper.inputText(dataForm("websiteName"),'class -> "inputs",'_label->"Website")
+			
+	<input type="hidden" name="id" value='@dataForm("id").value' >
+			<input type="submit" name="submit" value="update profile"/>
+		
+
+
+	}		
+}

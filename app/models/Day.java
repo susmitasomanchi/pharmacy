@@ -1,29 +1,33 @@
 package models;
+
 import java.util.LinkedHashMap;
 import java.util.Map;
 
 import com.avaje.ebean.annotation.EnumValue;
 
-
-public enum AppointmentStatus {
-	@EnumValue("AVAILABLE")
-	AVAILABLE,
-	@EnumValue("REQUESTED")
-	REQUESTED,
-	@EnumValue("APPROVED")
-	APPROVED,
-	@EnumValue("CANCELLED")
-	CANCELLED,
-	@EnumValue("SERVED")
-	SERVED;
-
+public enum Day {
+	@EnumValue("SUNDAY")
+	SUNDAY,
+	@EnumValue("MONDAY")
+	MONDAY,
+	@EnumValue("TUESDAY")
+	TUESDAY,
+	@EnumValue("WEDNESDAY")
+	WEDNESDAY,
+	@EnumValue("THURSDAY")
+	THURSDAY,
+	@EnumValue("FRIDAY")
+	FRIDAY,
+	@EnumValue("SATURDAY")
+	SATURDAY;
 
 	public static Map<String, String> options() {
 		final LinkedHashMap<String, String> vals = new LinkedHashMap<String, String>();
-		for (final AppointmentStatus val : AppointmentStatus.values()) {
+		for (final Day val : Day.values()) {
 			vals.put(val.toString(), val.toString());
 		}
 		return vals;
 	}
 
 }
+
