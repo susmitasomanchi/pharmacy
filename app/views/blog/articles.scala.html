@@ -1,0 +1,32 @@
+@(category: models.ArticleCategory)
+@import play.i18n._
+
+@if((LoginController.isLoggedIn())&&(LoginController.getLoggedInUserRole().equals(Role.BLOG_ADMIN.toString()))){
+<div>
+@blognavbar()
+</div>
+}
+
+@blog.blogmain("", "", ""){
+
+<table class="table table-condensed table-bordered">
+<thead>
+<th>Position</th>
+<th>Name</th>
+<th>Category</th>
+<th>Action</th>
+</thead>
+<tbody>
+@for(art <- category.getArticlesInOrder()){
+<tr>
+	<td>@art.position</td>
+	<td>@art.name</td>
+	<td>@art.category.name</td>
+	<td><a class="btn btn-info btn-small" href="@routes.BlogController.editArticleForm(art.id)">Edit</a></td>
+</tr>
+}
+</tbody>
+<table>
+
+
+}

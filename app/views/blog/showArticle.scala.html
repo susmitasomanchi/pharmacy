@@ -1,0 +1,128 @@
+@(article :models.Article, offset :Integer) @import play.i18n._
+
+@blog.blogmain(article.htmlTitle, article.htmlMetaDescription,
+article.htmlKeywords){
+
+
+<style>
+
+a.prev-t, a.next-t {
+
+	width: 20px;
+	height: 10px;
+	display: block;
+	position: absolute;
+	top: 170px;
+}
+a.prev-t {			left: 223px;
+					background-position: 0 0; }
+a.prev-t:hover {		background-position: 0 -50px; }
+a.prev-t.disabled {	background-position: 0 -100px !important;  }
+a.next-t {			right: 222px;
+					background-position: -50px 0; }
+a.next-t:hover {		background-position: -50px -50px; }
+a.next-t.disabled {	background-position: -50px -100px !important;  }
+a.prev-t.disabled, a.next-t.disabled {
+	cursor: default;
+}
+
+a.prev-t span, a.next-t span {
+	display: none;
+}
+
+
+</style>
+
+
+<!--   Showing top carousel for models and platforms   -->
+<p style="color: #006687; font-size: 20px">
+	<span style="cursor: pointer;" onclick="window.location.href='/blog';">Home</span>
+	&gt; <span style="cursor: pointer;"
+		onclick="window.location.href='/blog#@article.category.slugURL';">@article.category.name</span> <span
+		style="color: #494646"></span>
+</p>
+<div class="row">
+	<div class="wrapper-carousel">
+		<div id="top-carousel">
+
+			@for(art <- article.category.getArticlesInOrder()){ @if(art.id ==
+			article.id){
+			<table class="span3" style="cursor: pointer;"
+				onclick="window.location.href='@routes.BlogController.showArticle(art.id, art.slugURL)';">
+				<tr>
+					<td class="table-head-carousel" style="background-color: #292929">
+						<a class="" style="color: white; font-size: 16px;"
+						href="@routes.BlogController.showArticle(art.id, art.slugURL)"> <span style="line-height: 5px;">@art.name</span>
+										</a>
+										</td>
+									</tr>
+									
+									<tr>
+										<td class="table-top-carousel">@art.shortDescription</td>
+									</tr>
+								</table>
+
+							}else{
+
+							<table class="span3" style="cursor:pointer;" onclick="window.location.href='@routes.BlogController.showArticle(art.id, art.slugURL)';">
+							<tr>
+									<td class="table-head-carousel"><a class="" style="color:white; font-size:16px;" href="@routes.BlogController.showArticle(art.id, art.slugURL)">@art.name</a></td>
+							</tr>
+							<tr>
+								<td class="table-top-carousel" >@art.shortDescription</td>
+							</tr>
+							</table>
+							}
+						}
+					
+   	 			</div>
+   	 			<div class="clearfix"></div>  
+   	 			<a class="prev-t" id="top-carousel_prev" href="#"><img alt="Previcon" class="navigators" src="@routes.Assets.at("blog/images/previcon.png")" /></a>
+				<a class="next-t" id="top-carousel_next" href="#"><img alt="Nexticon" class="navigators" src="@routes.Assets.at("blog/images/nexticon.png")" /></a>
+   	 	  	</div>
+   	 	  </div>
+   	 	  								
+<script>
+runtopcarousel(@offset-1);
+</script>
+
+
+<style>
+.modelimage{
+-webkit-box-shadow: 0 0 10px 5px #888888;
+-moz-box-shadow: 0 0 10px 5px #888888;
+box-shadow: 0 0 10px 5px #888888;	
+}
+</style>
+
+   	 	  
+          <div class="row">
+   	    		<div class="span12">
+   	    		<p>
+   	    			<h3>@article.name</h3>
+   	    			<p style="margin-top: -15px;"><h4>@article.shortDescription</h4></p>
+   	    			@article.onHoverContent
+        		</p>
+   	    		</div>
+          </div>
+   	 	  
+          <div class="row">
+   	    		<div class="span12">
+   	    			<img alt="@article.name" class="modelimage" src="@routes.BlogController.getMainImage(article.id)" style="width:100%; height:500px;" />
+        		</div>
+          </div>
+          
+          <br><br>
+          
+          <div class="row">
+   	    		<div class="span12">
+   	    		<p>
+   	    				@Html(article.content)
+        		</p>
+   	    		</div>
+          </div>
+          <br> 
+
+
+
+}
