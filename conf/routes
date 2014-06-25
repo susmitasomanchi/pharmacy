@@ -22,6 +22,7 @@ GET    /doctor/new-assistant              controllers.DoctorController.newAssist
 GET    /doctor/new-clinic                 controllers.DoctorController.newClinic()
 POST   /doctor/new-clinic                 controllers.DoctorController.processNewClinic()
 GET    /doctor/clinics                    controllers.DoctorController.myClinics()
+GET   	/doctor/manage-clinic/:id		controllers.DoctorController.manageClinic(id:Long)
 GET    /doctor-profile                    controllers.DoctorController.doctorProfile()
 GET    /doctor-experience                 controllers.DoctorController.doctorExperience()
 POST   /doctor-experience                 controllers.DoctorController.processDoctorExperience()
@@ -29,7 +30,12 @@ GET    /doctor-education                  controllers.DoctorController.doctorEdu
 POST   /doctor-education                  controllers.DoctorController.processDoctorEducation()
 GET    /doctor-award                      controllers.DoctorController.doctorAward()
 POST   /doctor-award                      controllers.DoctorController.processDoctorAward()
-
+ET		/doctor-language				controllers.DoctorController.doctorLanguage()
+POST	/doctor-language				controllers.DoctorController.processDoctorLanguage()
+GET		/doctor-socialwork				controllers.DoctorController.doctorSocialWork()
+POST	/doctor-socialwork				controllers.DoctorController.processDoctorSocialWork()
+GET		/doctor-publication				controllers.DoctorController.doctorPublication()
+POST	/doctor-publication				controllers.DoctorController.processDoctorPublication()
 
 
 
@@ -56,6 +62,7 @@ GET    /view-products                     controllers.ProductController.displayP
 GET 	/create-Mr-schedule				controllers.DoctorController.createMrSchedule()
 POST	/create-Mr-appointment 			controllers.DoctorController.createMrAppointment()
 
+GET		/doctor/today-appointment		controllers.DoctorController.viewTodaysAppointment()	
 
 
 GET    /medical-representative            controllers.Application.medicalRepresentative()
@@ -71,6 +78,12 @@ GET    /sampledata/temp                   controllers.SampleDataController.temp(
 GET    /home/                             controllers.Application.homePage()
 GET    /questionform                      controllers.PatientController.displayQuestion()
 POST   /askQuestion                       controllers.PatientController.askQuestion()
+
+GET    /patient/diagnostics               controllers.PatientController.diagnosticList()
+GET    /add-diagnostic-center/:id               controllers.PatientController.saveDiagnosticCenter(id: Long)
+GET    /patient/my-diag-centers               controllers.PatientController.myDiagnosticCenters()
+GET    /patient/remove-diag-centers/:id               controllers.PatientController.removePatientDiagnoCenter(id: Long)
+
 
 GET    /answerform                        controllers.DoctorController.displayAnswer()
 POST   /ansQuestion/:qaId                 controllers.DoctorController.answerQuestion(qaId: Long)
@@ -88,6 +101,7 @@ GET    /diagnostic-delete/:id             		controllers.DiagnosticController.del
 GET    /diagnostic-edit/:id						controllers.DiagnosticController.editDiagnosticDetails(id: Long)
 POST    /diagnostic-edit 						controllers.DiagnosticController.diagnosticEditprocess()
 GET    /diagnostic-search      					controllers.DiagnosticController.diagnosticSearch()
+GET    /diagnostic-search/list 					controllers.DiagnosticController.diagnosticSearchProcess()
 GET    /diagnosticrep/doctor-list         		controllers.DRController.doctorList()
 GET    /diagnosticrep			         		controllers.DRController.addDiagRep()
 POST    /diagnosticrep/save		         		controllers.DRController.addDiagRepProcess()
@@ -96,6 +110,18 @@ GET    /diagnosticrep/doctor-search	         	controllers.DRController.search()
 GET    /diagnosticrep/doctorsearch	         	controllers.DRController.searchProcess()
 GET    /diagnosticrep/add-doctor/:id      		controllers.DRController.addDoctor(id: Long)
 GET    /diagnosticrep/remove-doctor/:id   		controllers.DRController.removeDoctor(id: Long)
+
+GET    /upload-patient-file  					controllers.DiagnosticTestController.uploadFile()
+POST    /upload-patient-file/save		  		controllers.DiagnosticTestController.uploadFileProcess()
+GET    /download						  		controllers.DiagnosticTestController.downloadFile()
+
+
+#Diagnostic Test
+GET    /test				            		controllers.DiagnosticTestController.addTest()
+POST   /test/save					       		controllers.DiagnosticTestController.addTestProcess()
+GET    /test-list/:id				            controllers.DiagnosticTestController.diagnosticTestList(id: Long)
+GET    /prescribe-test				            controllers.DiagnosticPrescriptionController.prescribe()
+GET    /prescribe-test/save				            controllers.DiagnosticPrescriptionController.receive()
 
 #MR Module
 GET    /doctor-list                       controllers.MRController.doctorList()
@@ -108,7 +134,7 @@ GET    /mr/hq                             controllers.MRController.headQuarter()
 GET    /dcr-line-item                     controllers.MRController.visitDoctor()
 POST   /dcr-line-item/proccess            controllers.MRController.visitDoctorProccess()
 GET    /search                            controllers.MRController.search()
-GET 	/mr/schedule-appointment         controllers.MRController.scheduleAppointment()
+GET		/mr/display-appointment/:id			controllers.MRController.scheduleAppointment(id:String)	
 
 # delete later
 GET    /userform/patient/                 controllers.PatientController.form()

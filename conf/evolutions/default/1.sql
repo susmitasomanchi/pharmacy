@@ -50,6 +50,7 @@ create table appointment (
 
 create table batch (
   id                        bigint not null,
+   batch_status              varchar(18),
   inventory_id              bigint not null,
   product_id                bigint,
   batch_no                  varchar(255),

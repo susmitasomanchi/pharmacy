@@ -7,7 +7,9 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.Lob;
 import javax.persistence.OneToOne;
+
 import models.Doctor;
 
 @SuppressWarnings("serial")
@@ -25,8 +27,12 @@ public class DiagnosticRepresentative extends BaseEntity{
 	public Patient patient;
 
 	public String diagnosticType;
+	@Lob
+	public byte[] file;
 	
 	public List<Doctor> doctorList = new ArrayList<Doctor>();
+
+	
 
 	public static Finder<Long, DiagnosticRepresentative> find = new Finder<Long, DiagnosticRepresentative>(Long.class, DiagnosticRepresentative.class);
 

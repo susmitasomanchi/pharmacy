@@ -1,7 +1,12 @@
 package controllers;
 
+import java.util.Calendar;
+import java.util.Date;
+import java.util.LinkedHashMap;
 import java.util.List;
+import java.util.Map;
 
+import models.Appointment;
 import models.DCRLineItem;
 import models.Doctor;
 import models.HeadQuarter;
@@ -102,7 +107,6 @@ public class MRController extends Controller{
 	}
 
 	//mr visits the doctor
-
 	public static Result visitDoctor(){
 		final List<Doctor> doctorList = Doctor.find.all();
 		return ok(views.html.mr.DailyCallReport.render(DCRLineItemForm,doctorList));
@@ -135,9 +139,42 @@ public class MRController extends Controller{
 	}
 
 	//schedule appointment for mr
-	public static Result scheduleAppointment() {
+	public static Result scheduleAppointment(final String docID) {
 
-		return redirect(routes.PatientController.scheduleAppointment());
+
+
+		List<Appointment> listAppointments=null;
+		final Map<Date, List<Appointment>> appointmentMap = new LinkedHashMap<Date, List<Appointment>>();
+		final Doctor doctor=Doctor.find.byId(Long.parseLong(docID));
+		final Calendar calendar = Calendar.getInstance();
+		calendar.setTime(new Date());
+		calendar.set(Calendar.HOUR_OF_DAY,doctor.doctorClinicInfoList.get(0).fromHrsMr);
+		calendar.set(Calendar.MINUTE,0);
+		calendar.set(Calendar.SECOND,0);
+		calendar.set(Calendar.MILLISECOND,0);
+		int size=0;
+
+		for(int i=0;i<20;i++){
+			listAppointments = Appointment.getAvailableMrAppointmentList(doctor, calendar.getTime());
+			if(listAppointments.size()!=0){
+				appointmentMap.put(calendar.getTime(), listAppointments);
+				size=listAppointments.size();
+			}
+			Logger.error(listAppointments.size()+"Test");
+
+			calendar.add(Calendar.DATE, 1);
+			calendar.set(Calendar.HOUR_OF_DAY,doctor.doctorClinicInfoList.get(0).fromHrsMr);
+			calendar.set(Calendar.MINUTE,0);
+			calendar.set(Calendar.SECOND,0);
+			calendar.set(Calendar.MILLISECOND,0);
+			System.out.print(calendar.getTime());
+		}
+		return ok(views.html.patient.scheduleAppointment.render(appointmentMap,size));
+
+
+
+
+
 	}
 
 }
