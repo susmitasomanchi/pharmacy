@@ -21,7 +21,7 @@ GET		/blog/get-thumbnail/:id			controllers.BlogController.getThumbnail(id: Long)
 GET		/blog/get-main-image/:id		controllers.BlogController.getMainImage(id: Long)
 GET		/blog/:id						controllers.BlogController.showArticleWithoutSlug(id: Long)
 GET		/blog/:id/:slug					controllers.BlogController.showArticle(id: Long, slug: String)
-GET		/sitemap.xml				controllers.Application.sitemap()
+GET		/sitemap.xml					controllers.Application.sitemap()
 
 # Remove later (at Beta Launch)
 GET    /                                  controllers.Application.index()

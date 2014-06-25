@@ -1,7 +1,7 @@
-@(protocol: String, host: String)<?xml version="1.0" encoding="UTF-8"?>
+@(protocol: String)<?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
 @for(art <- Article.find.all()){
-<url><loc>@(protocol+host+"/blog/"+art.id+"/"+art.slugURL)</loc></url>
+<url><loc>@(protocol+request().host()+"/blog/"+art.id+"/"+art.slugURL)</loc></url>
 }
 </urlset>
 

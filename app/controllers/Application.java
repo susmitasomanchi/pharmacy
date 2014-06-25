@@ -100,7 +100,7 @@ public class Application extends Controller {
 
 
 	public static Result sitemap(){
-		return ok(views.xml.sitemap.render("http://", request().host()));
+		return ok(views.xml.sitemap.render("http://"));
 	}
 
 
