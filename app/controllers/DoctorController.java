@@ -8,12 +8,17 @@ import java.util.List;
 import models.AppUser;
 import models.Appointment;
 import models.AppointmentStatus;
-import models.DayOfTheWeek;
+import models.Day;
+import models.DaySchedule;
 import models.Doctor;
 import models.DoctorAward;
 import models.DoctorClinicInfo;
 import models.DoctorEducation;
 import models.DoctorExperience;
+import models.DoctorLanguage;
+import models.DoctorPublication;
+import models.DoctorSocialWork;
+import models.LanguageAppUser;
 import models.Patient;
 import models.QuestionAndAnswer;
 import play.Logger;
@@ -22,6 +27,7 @@ import play.mvc.Controller;
 import play.mvc.Result;
 import actions.BasicAuth;
 import beans.ClinicBean;
+import beans.DoctorDetailBean;
 import beans.PatientBean;
 import beans.QuestionAndAnswerBean;
 
@@ -34,25 +40,28 @@ public class DoctorController extends Controller {
 	public static Form<ClinicBean> clinicForm = Form.form(ClinicBean.class);
 	public static Form<DoctorExperience> experienceForm = Form.form(DoctorExperience.class);
 	public static Form<DoctorEducation> educationForm = Form.form(DoctorEducation.class);
+	public static Form<DoctorSocialWork> socialWorkForm = Form.form(DoctorSocialWork.class);
 	public static Form<DoctorAward> awardForm = Form.form(DoctorAward.class);
+	public static Form<DoctorDetailBean> languageForm = Form.form(DoctorDetailBean.class);
 	public static Form<QuestionAndAnswerBean> questionAndAnswerForm = Form.form(QuestionAndAnswerBean.class);
 	public static Form<DoctorClinicInfo> doctorClinicForm	=Form.form(DoctorClinicInfo.class);
+	public static Form<DoctorPublication> publicationForm = Form.form(DoctorPublication.class);
 
 	public static Doctor loggedIndoctor=LoginController.getLoggedInUser().getDoctor();
 
 	public static Result requestAppointment(){
 
 
-		String param[] =request().body().asFormUrlEncoded().get("datetime");
+		final String param[] =request().body().asFormUrlEncoded().get("datetime");
 		try{
-			Appointment appointment=Appointment.find.byId(Long.parseLong(param[1]));
+			final Appointment appointment=Appointment.find.byId(Long.parseLong(param[1]));
 			appointment.remarks=param[0];
 			appointment.requestedBy=LoginController.getLoggedInUser();
 			appointment.appointmentStatus=AppointmentStatus.APPROVED;
 			appointment.update();
 			return ok("0");
 		}
-		catch(Exception e){
+		catch(final Exception e){
 			e.printStackTrace();
 			return ok("-1");
 		}
@@ -62,7 +71,7 @@ public class DoctorController extends Controller {
 
 
 	public static Result doctorProfile(){
-		return ok(views.html.doctor.doctorDashboard.render("hello"));
+		return ok(views.html.doctor.doctorDashboard.render(loggedIndoctor));
 	}
 
 
@@ -73,34 +82,32 @@ public class DoctorController extends Controller {
 
 
 	public static Result doctorExperience(){
+		Logger.info(loggedIndoctor.doctorExperienceList.size()+" size of list");
 		return ok(views.html.doctor.doctorExperience.render(experienceForm));
 	}
 
 	public static Result processDoctorExperience() {
-		final Form<DoctorExperience> filledForm = experienceForm.bindFromRequest();
+		final Form<DoctorExperience> experienceFilledForm = experienceForm.bindFromRequest();
 
-		if (filledForm.hasErrors()) {
+		if (experienceFilledForm.hasErrors()) {
 			// System.out.println(filledForm.errors());
-			return badRequest(views.html.doctor.doctorExperience.render(filledForm));
+			return badRequest(views.html.doctor.doctorExperience.render(experienceFilledForm));
 		} else {
-			final DoctorExperience doctorExperience = filledForm.get();
 
-			if (doctorExperience.id == null) {
-				doctorExperience.save();
-			}
-			else {
+			final DoctorExperience doctorExperience=experienceFilledForm.get();
+			loggedIndoctor.doctorExperienceList.add(doctorExperience);
 
-				doctorExperience.update();
-			}
+			loggedIndoctor.update();
 		}
-		// return ok(views.html.scheduleAppointment.render("hello"));
-		// return redirect(routes.UserController.list());
-		return TODO;
-
+		return redirect(routes.DoctorController.doctorProfile());
 	}
+	// return ok(views.html.scheduleAppointment.render("hello"));
+	// return redirect(routes.UserController.list());
+
 
 
 	public static Result doctorEducation(){
+		Logger.info(loggedIndoctor.doctorEducationList.size()+" size of list");
 		return ok(views.html.doctor.doctorEducation.render(educationForm));
 	}
 
@@ -108,28 +115,49 @@ public class DoctorController extends Controller {
 		final Form<DoctorEducation> educationfilledForm = educationForm.bindFromRequest();
 
 		if (educationfilledForm.hasErrors()) {
-			// System.out.println(filledForm.errors());
+
 			return badRequest(views.html.doctor.doctorEducation.render(educationfilledForm));
 		} else {
-			final DoctorEducation doctorEducation = educationfilledForm.get();
 
-			if (doctorEducation.id == null) {
+			final DoctorEducation doctorEducation=educationfilledForm.get();
 
+			loggedIndoctor.doctorEducationList.add(doctorEducation);
 
-				doctorEducation.save();
-			}
-			else {
+			loggedIndoctor.update();
 
-				doctorEducation.update();
-			}
 		}
-		// return ok(views.html.scheduleAppointment.render("hello"));
-		// return redirect(routes.UserController.list());
-		return TODO;
+
+		return redirect(routes.DoctorController.doctorProfile());
+	}
+
+
+	public static Result doctorPublication(){
+		Logger.info(loggedIndoctor.doctorPublicationList.size()+" size of list");
+
+		return ok(views.html.doctor.doctorPublications.render(publicationForm));
+	}
+
+	public static Result processDoctorPublication() {
+		final Form<DoctorPublication> publicationfilledForm = publicationForm.bindFromRequest();
+		// Logger.info("enteredt");
+
+		if (publicationfilledForm.hasErrors()) {
+			Logger.info("bad request");
+			// System.out.println(filledForm.errors());
+			return badRequest(views.html.doctor.doctorPublications.render(publicationfilledForm));
+		} else {
+			final DoctorPublication doctorPublication=publicationfilledForm.get();
+
+			loggedIndoctor.doctorPublicationList.add(doctorPublication);
+
+			loggedIndoctor.update();
+		}
+		return redirect(routes.DoctorController.doctorProfile());
 
 	}
 
 	public static Result doctorAward(){
+		Logger.info(loggedIndoctor.doctorAwardList.size()+" size of list");
 		return ok(views.html.doctor.doctorAward.render(awardForm));
 	}
 
@@ -140,21 +168,64 @@ public class DoctorController extends Controller {
 			// System.out.println(filledForm.errors());
 			return badRequest(views.html.doctor.doctorAward.render(awardfilledForm));
 		} else {
-			final DoctorAward doctorAward = awardfilledForm.get();
+			final DoctorAward doctorAward=awardfilledForm.get();
 
-			if (doctorAward.id == null) {
+			loggedIndoctor.doctorAwardList.add(doctorAward);
 
-
-				doctorAward.save();
-			}
-			else {
-
-				doctorAward.update();
-			}
+			loggedIndoctor.update();
 		}
-		// return ok(views.html.scheduleAppointment.render("hello"));
-		// return redirect(routes.UserController.list());
-		return TODO;
+		return redirect(routes.DoctorController.doctorProfile());
+
+	}
+	public static Result doctorLanguage(){
+		return ok(views.html.doctor.doctorLanguage.render(languageForm));
+	}
+
+	public static Result processDoctorLanguage(){
+		final Form<DoctorDetailBean> languagefilledForm = languageForm.bindFromRequest();
+		final Doctor doctor=LoginController.getLoggedInUser().getDoctor();
+
+		// Logger.info("enteredt");
+		if (languagefilledForm.hasErrors()) {
+			Logger.info("bad request");
+			// System.out.println(filledForm.errors());
+			return badRequest(views.html.doctor.doctorLanguage.render(languagefilledForm));
+		} else {
+			final DoctorLanguage docLan=new DoctorLanguage();
+
+
+			final List<LanguageAppUser> doctorLanguage = languagefilledForm.get().toLanguageAppUser();
+			//doctor.doctorLanguageList=doctorLanguage;
+			doctor.update();
+			docLan.languageAppUsers=doctorLanguage;
+
+			docLan.save();
+		}
+		return redirect(routes.DoctorController.doctorProfile());
+
+	}
+	public static Result doctorSocialWork(){
+		return ok(views.html.doctor.doctorSocialWork.render(socialWorkForm));
+	}
+
+	public static Result processDoctorSocialWork() {
+		final Form<DoctorSocialWork> socialWorkfilledForm = socialWorkForm.bindFromRequest();
+		// Logger.info("enteredt");
+
+		if (socialWorkfilledForm.hasErrors()) {
+			Logger.info("bad request");
+			// System.out.println(filledForm.errors());
+			return badRequest(views.html.doctor.doctorSocialWork.render(socialWorkfilledForm));
+		} else {
+			final DoctorSocialWork doctorSocialWork=socialWorkfilledForm.get();
+
+			loggedIndoctor.doctorSocialWorkList.add(doctorSocialWork);
+
+			loggedIndoctor.update();
+
+		}
+
+		return redirect(routes.DoctorController.doctorProfile());
 
 	}
 
@@ -165,71 +236,31 @@ public class DoctorController extends Controller {
 			return ok(views.html.doctor.newClinic.render(filledForm));
 		}
 		else{
-
-			final Doctor loggedInDoctor = LoginController.getLoggedInUser().getDoctor();
-
-			doctorClinicInfo=filledForm.get().toDoctorClinicInfo();
-
-			if (doctorClinicInfo.id!=null) {
-				DoctorClinicInfo clinicInfoPrevious=DoctorClinicInfo.find.byId(doctorClinicInfo.id);
-
-				Logger.info(doctorClinicInfo.daysOfWeek.size()+" "+clinicInfoPrevious.daysOfWeek.size());
-
-				for (DayOfTheWeek daysofweek : doctorClinicInfo.daysOfWeek) {
-					Logger.info(daysofweek.day+"");
-				}
+			DoctorClinicInfo clinicInfo=filledForm.get().toDoctorClinicInfo();
 
 
-				for (DayOfTheWeek daysofweek : clinicInfoPrevious.daysOfWeek) {
-					Logger.info(daysofweek.day+"");
-				}
-
-
+			if (filledForm.get().id!=null) {
+				final DoctorClinicInfo clinicInfoPrevious=DoctorClinicInfo.find.byId(doctorClinicInfo.id);
 				if(!doctorClinicInfo.clinic.name.equals(clinicInfoPrevious.clinic.name)){
 					Logger.info("name test"+doctorClinicInfo.clinic.name);
 					clinicInfoPrevious.clinic.name=doctorClinicInfo.clinic.name;
 					clinicInfoPrevious.clinic.update();
 					clinicInfoPrevious.update();
 				}
-				if(
-						(!doctorClinicInfo.fromHrs.equals(clinicInfoPrevious.fromHrs))
-						||
-						(!doctorClinicInfo.fromHrsMr.equals(clinicInfoPrevious.fromHrsMr))
-						||
-						(!doctorClinicInfo.toHrs.equals(clinicInfoPrevious.toHrs))
-						||
-						(!doctorClinicInfo.toHrsMr.equals(clinicInfoPrevious.toHrsMr))
-						||
-						(!DoctorController.isListSame(doctorClinicInfo.daysOfWeek,clinicInfoPrevious.daysOfWeek))
-						||
-						(!DoctorController.isListSame(doctorClinicInfo.daysOfWeekMr,clinicInfoPrevious.daysOfWeekMr))
-
-						){
-
-					return TODO;
-
-
-				}
 				return redirect(routes.DoctorController.myClinics());
 			}else{
-				doctorClinicInfo.clinic.save();
-				doctorClinicInfo.doctor=loggedInDoctor;
-				doctorClinicInfo.save();
-				loggedInDoctor.doctorClinicInfoList.add(doctorClinicInfo);
-				loggedInDoctor.update();
-				Logger.info(doctorClinicInfo.daysOfWeek.size()+"");
-				return DoctorController.createAppointment(doctorClinicInfo);
+
+
+				return DoctorController.createAppointment(clinicInfo);
 			}
-
-
-
 		}
-
 	}
 
 	public static Result myClinics(){
 		final Doctor loggedInDoctor = LoginController.getLoggedInUser().getDoctor();
-		return ok(views.html.doctor.myClinics.render(loggedInDoctor.doctorClinicInfoList));
+		final List<DoctorClinicInfo> clinicInfos = DoctorClinicInfo.find.where().eq("doctor", loggedInDoctor).findList();
+		return ok(views.html.doctor.myClinics.render(clinicInfos));
+
 	}
 
 
@@ -270,13 +301,14 @@ public class DoctorController extends Controller {
 
 
 	//Edit Or Manage Clinic
-	public static Result manageClinic(Long docClinicId) {
+	public static Result manageClinic(final Long docClinicId) {
 
-		DoctorClinicInfo doctorClinicInfo=DoctorClinicInfo.find.byId(docClinicId);
+		final DoctorClinicInfo doctorClinicInfo=DoctorClinicInfo.find.byId(docClinicId);
 
 
-		Form<ClinicBean> filledForm = clinicForm.fill(doctorClinicInfo.toBean());
+		final Form<ClinicBean> filledForm = clinicForm.fill(doctorClinicInfo.toBean());
 
+		//		Logger.info(doctorClinicInfo.toBean().daysOfWeek.size()+" "+doctorClinicInfo.toBean().daysOfWeekMr.size());
 
 		return ok(views.html.doctor.newClinic.render(filledForm));
 
@@ -342,7 +374,17 @@ public class DoctorController extends Controller {
 	}
 
 	//creating appointments
-	public static  Result createAppointment(DoctorClinicInfo docclinicInfo) {
+	public static  Result createAppointment(final DoctorClinicInfo docclinicInfo) {
+
+
+
+		for (DaySchedule schedule : docclinicInfo.schedulDays) {
+			Logger.info(schedule.fromTime.toString());
+			Logger.info(schedule.toTime.toString());
+			Logger.info(schedule.day.toString());
+
+		}
+
 
 		final Doctor doctor=LoginController.getLoggedInUser().getDoctor();
 
@@ -353,91 +395,68 @@ public class DoctorController extends Controller {
 		calendar.set(Calendar.SECOND,0);
 		calendar.set(Calendar.MILLISECOND,0);
 
-		List<Integer> daysMr= new ArrayList<Integer>();
-		List<Integer> days= new ArrayList<Integer>();
 
-		for (DayOfTheWeek dayOfTheWeek : docclinicInfo.daysOfWeek) {
-			Logger.info(""+dayOfTheWeek.day);
-			days.add(dayOfTheWeek.day.ordinal());
-		}
+		for(int date=0;date<31;date++){
+			for (DaySchedule schedule : docclinicInfo.schedulDays) {
 
-		for (DayOfTheWeek dayOfTheWeek : docclinicInfo.daysOfWeekMr) {
-			Logger.info(""+dayOfTheWeek.day);
-			daysMr.add(dayOfTheWeek.day.ordinal());
-		}
-		Logger.info(""+days);
+				Logger.info(schedule.day+ " "+ schedule.fromTime+" "+schedule.toTime);
 
-		Logger.info(""+daysMr);
+				if(schedule.day == Day.getDay(calendar.get(Calendar.DAY_OF_WEEK)-1)){
 
-		for(int date=0;date<8;date++){
+					Logger.info(" "+"Entered");
+					final int hourToClinic = schedule.toTime - schedule.fromTime;
+					calendar.set(Calendar.HOUR_OF_DAY, schedule.fromTime);
+					calendar.set(Calendar.MINUTE, 0);
+					calendar.set(Calendar.SECOND,0);
+					calendar.set(Calendar.MILLISECOND,0);
 
-
-
-			if (days.contains(calendar.get(Calendar.DAY_OF_WEEK)-1)) {
-
-				int hourToClinic=docclinicInfo.toHrs-docclinicInfo.fromHrs;
-
-				calendar.set(Calendar.HOUR_OF_DAY, docclinicInfo.fromHrs);
-				calendar.set(Calendar.MINUTE, 0);
-				calendar.set(Calendar.SECOND,0);
-				calendar.set(Calendar.MILLISECOND,0);
-
-				for (int j2 = 0; j2 <((hourToClinic*60)/5); j2++) {
-					Logger.info(calendar.getTime()+"testpatient");
-
-					final Appointment appointment=new Appointment();
-					appointment.appointmentStatus=AppointmentStatus.AVAILABLE;
-					appointment.appointmentTime=calendar.getTime();
-					appointment.clinic=docclinicInfo.clinic;
-					appointment.doctor=doctor;
-					appointment.save();
-					calendar.add(Calendar.MINUTE, 5);
-				}
-
-			}
-
-
-			if (daysMr.contains(calendar.get(Calendar.DAY_OF_WEEK)-1)) {
-
-				int hourToClinicMr=docclinicInfo.toHrsMr-docclinicInfo.fromHrsMr;
-
-				calendar.set(Calendar.HOUR_OF_DAY, docclinicInfo.fromHrsMr);
-				calendar.set(Calendar.MINUTE, 0);
-				calendar.set(Calendar.SECOND,0);
-				calendar.set(Calendar.MILLISECOND,0);
-
-				Logger.info(hourToClinicMr+"  "+(calendar.get(Calendar.DAY_OF_WEEK)-1));
-				for (int j2 = 0; j2 <((hourToClinicMr*60)/5); j2++) {
-					Logger.info(calendar.getTime()+"test");
-
-					if(Appointment.find.where().eq("appointmentTime", calendar.getTime()).findList().size()==0){
-						final Appointment appointment=new Appointment();
-						appointment.appointmentStatus=AppointmentStatus.AVAILABLE;
-						appointment.appointmentTime=calendar.getTime();
-						appointment.clinic=docclinicInfo.clinic;
-						appointment.doctor=doctor;
-						appointment.save();
-						calendar.add(Calendar.MINUTE, 5);
-					}else{
-						calendar.add(Calendar.MINUTE, 5);
+					for (int j2 = 0; j2 <((hourToClinic*60)/5); j2++) {
+						if(Appointment.find.where().eq("appointmentTime", calendar.getTime()).findUnique()==null){
+							Logger.info("  "+calendar.getTime());
+							final Appointment appointment=new Appointment();
+							appointment.appointmentStatus=AppointmentStatus.AVAILABLE;
+							appointment.appointmentTime=calendar.getTime();
+							appointment.clinic=docclinicInfo.clinic;
+							appointment.doctor=doctor;
+							appointment.save();
+							calendar.add(Calendar.MINUTE, 5);
+						}
+						else
+						{
+							calendar.add(Calendar.MINUTE, 5);
+						}
 					}
+
 				}
 
-
 			}
+			Logger.info("***end of shedules");
 
 			calendar.add(Calendar.DATE, 1);
 
+
 		}
+		Logger.info("***end of");
+
 
 		return redirect(routes.DoctorController.myClinics());
 	}
+	// Re-Create Appointment
+	public static Result reCreateAppointment() {
 
+
+
+
+
+
+		return ok();
+
+	}
 	//Todays Appointment
 	public static Result viewTodaysAppointment() {
 
 
-		Calendar calendar=Calendar.getInstance();
+		final Calendar calendar=Calendar.getInstance();
 		calendar.setTime(new Date());
 		calendar.set(Calendar.HOUR_OF_DAY, 0);
 		calendar.set(Calendar.MINUTE, 0);
@@ -445,7 +464,7 @@ public class DoctorController extends Controller {
 		calendar.set(Calendar.MILLISECOND,0);
 
 
-		List<Appointment> appointments=Appointment.find.where().eq("appointmentStatus", AppointmentStatus.APPROVED).eq("doctor", loggedIndoctor).ge("appointmentTime", calendar.getTime()).findList();
+		final List<Appointment> appointments=Appointment.find.where().eq("appointmentStatus", AppointmentStatus.APPROVED).eq("doctor", loggedIndoctor).ge("appointmentTime", calendar.getTime()).findList();
 
 
 
@@ -453,13 +472,13 @@ public class DoctorController extends Controller {
 
 	}
 
-	public static boolean isListSame(List<DayOfTheWeek> arrayList1,List<DayOfTheWeek> arrayList2) {
+	public static boolean isListSame(final List<Day> arrayList1,final List<Day> arrayList2) {
 		if(arrayList1.size() != arrayList2.size()){
 			Logger.info("if 1");
 			return false;
 		}
-		for (DayOfTheWeek dayOfTheWeek : arrayList2) {
-			if(!(arrayList1.contains(dayOfTheWeek))){
+		for (final Day day : arrayList2) {
+			if(!(arrayList1.contains(day))){
 				return false;
 			}
 		}

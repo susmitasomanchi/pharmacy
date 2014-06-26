@@ -34,7 +34,7 @@ public class MRController extends Controller{
 	}
 
 	public static Result doctorList(){
-		List<Doctor> doctorList = Doctor.find.all();
+		final List<Doctor> doctorList = Doctor.find.all();
 		return ok(views.html.mr.doctorList.render(doctorList));
 	}
 
@@ -52,8 +52,8 @@ public class MRController extends Controller{
 	//delete doctor from mr list
 	public static Result removeDoctor(final Long id){
 		int indexOfDoctorList=-1;
-		Doctor doctor=Doctor.find.byId(id);
-		for(Doctor doc:loggedInMR.doctorList){
+		final Doctor doctor=Doctor.find.byId(id);
+		for(final Doctor doc:loggedInMR.doctorList){
 			indexOfDoctorList++;
 			if(doctor.appUser.name.equals(doc.appUser.name)){
 				Logger.info("doctor name : "+doc.appUser.name);
@@ -102,12 +102,12 @@ public class MRController extends Controller{
 
 	//mr visits the doctor
 	public static Result visitDoctor(){
-		List<Doctor> doctorList = Doctor.find.all();
+		final List<Doctor> doctorList = Doctor.find.all();
 		return ok(views.html.mr.DailyCallReport.render(DCRLineItemForm,doctorList));
 
 	}
 	public static Result visitDoctorProccess(){
-		List<Doctor> doctorList = Doctor.find.all();
+		final List<Doctor> doctorList = Doctor.find.all();
 		final Form<DCRLineItem> filledForm=DCRLineItemForm.bindFromRequest();
 
 		if(filledForm.hasErrors()) {
@@ -142,7 +142,7 @@ public class MRController extends Controller{
 		final Doctor doctor=Doctor.find.byId(Long.parseLong(docID));
 		final Calendar calendar = Calendar.getInstance();
 		calendar.setTime(new Date());
-		calendar.set(Calendar.HOUR_OF_DAY,doctor.doctorClinicInfoList.get(0).fromHrsMr);
+		//		calendar.set(Calendar.HOUR_OF_DAY,doctor.doctorClinicInfoList.get(0).fromHrsMr);
 		calendar.set(Calendar.MINUTE,0);
 		calendar.set(Calendar.SECOND,0);
 		calendar.set(Calendar.MILLISECOND,0);
@@ -157,7 +157,7 @@ public class MRController extends Controller{
 			Logger.error(listAppointments.size()+"Test");
 
 			calendar.add(Calendar.DATE, 1);
-			calendar.set(Calendar.HOUR_OF_DAY,doctor.doctorClinicInfoList.get(0).fromHrsMr);
+			//			calendar.set(Calendar.HOUR_OF_DAY,doctor.doctorClinicInfoList.get(0).fromHrsMr);
 			calendar.set(Calendar.MINUTE,0);
 			calendar.set(Calendar.SECOND,0);
 			calendar.set(Calendar.MILLISECOND,0);

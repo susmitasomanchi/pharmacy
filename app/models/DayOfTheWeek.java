@@ -13,6 +13,7 @@ public class DayOfTheWeek extends BaseEntity {
 
 	public Day day;
 
+
 	public static Model.Finder<Long, DayOfTheWeek> find = new Finder<Long, DayOfTheWeek>(Long.class, DayOfTheWeek.class);
 
 

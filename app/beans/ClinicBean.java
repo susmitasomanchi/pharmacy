@@ -6,10 +6,9 @@ import java.util.List;
 
 import models.Clinic;
 import models.Day;
-import models.DayOfTheWeek;
+import models.DaySchedule;
 import models.DoctorClinicInfo;
-import play.data.validation.Constraints.Max;
-import play.data.validation.Constraints.Min;
+import play.Logger;
 
 @SuppressWarnings("serial")
 public class ClinicBean implements Serializable{
@@ -19,44 +18,26 @@ public class ClinicBean implements Serializable{
 
 	public String name;
 
-	@Min(1)
-	public Integer fromHrs;
 
-	@Max(24)
-	public Integer toHrs;
+	public List<Integer> fromHrs = new ArrayList<Integer>();
 
+	public List<Integer> toHrs = new ArrayList<Integer>();
 
-	@Min(1)
-	public Integer toHrsMr;
+	public List<Integer> fromHrsMr = new ArrayList<Integer>();
 
-	@Max(24)
-	public Integer fromHrsMr;
+	public List<Integer> toHrsMr = new ArrayList<Integer>();
 
+	public List<String> daysOfWeek	= new ArrayList<String>();
 
-	public List<Day> daysOfWeekMr=new ArrayList<Day>();
-	public List<Day> daysOfWeek=new ArrayList<Day>();
+	public List<String> daysOfWeekMr	= new ArrayList<String>();
 
 
-
-	public DoctorClinicInfo toDoctorClinicInfo()
-	{
+	public DoctorClinicInfo toDoctorClinicInfo(){
 
 		final DoctorClinicInfo doctorClinicInfo = new  DoctorClinicInfo();
 
 		if(this.id != null) {
 			doctorClinicInfo.id= this.id;
-		}
-		if(this.toHrs != null) {
-			doctorClinicInfo.toHrs= this.toHrs;
-		}
-		if(this.fromHrs != null) {
-			doctorClinicInfo.fromHrs= this.fromHrs;
-		}
-		if(this.toHrsMr != null) {
-			doctorClinicInfo.toHrsMr= this.toHrsMr;
-		}
-		if(this.fromHrsMr != null) {
-			doctorClinicInfo.fromHrsMr= this.fromHrsMr;
 		}
 
 		if(this.name != null) {
@@ -65,26 +46,38 @@ public class ClinicBean implements Serializable{
 			doctorClinicInfo.clinic= clinic;
 
 		}
-
-		final List<DayOfTheWeek> dayOfTheWeeks = new ArrayList<DayOfTheWeek>();
-		for (final Day day : this.daysOfWeek) {
-			final DayOfTheWeek dayOfTheWeek = new DayOfTheWeek();
-			dayOfTheWeek.day = day;
-			dayOfTheWeeks.add(dayOfTheWeek);
+		for (final String day : this.daysOfWeek) {
+			Logger.info(day);
 		}
-		doctorClinicInfo.daysOfWeek=dayOfTheWeeks;
+		Logger.info(this.daysOfWeek.size()+"");
+		for(int index=0;index<this.daysOfWeek.size();index++){
 
-
-		final List<DayOfTheWeek> dayOfTheWeeksMr = new ArrayList<DayOfTheWeek>();
-
-		for (final Day day : this.daysOfWeekMr) {
-			final DayOfTheWeek dayOfTheWeekMr = new DayOfTheWeek();
-			dayOfTheWeekMr.day = day;
-			dayOfTheWeeksMr.add(dayOfTheWeekMr);
+			if(this.daysOfWeek.get(index)!= null){
+				final DaySchedule schedule = new DaySchedule();
+				schedule.fromTime=this.fromHrs.get(index);
+				schedule.toTime=this.toHrs.get(index);
+				schedule.day=Day.valueOf(this.daysOfWeek.get(index));
+				Logger.info(schedule.day.toString());
+				doctorClinicInfo.schedulDays.add(schedule);
+			}
 		}
-		doctorClinicInfo.daysOfWeekMr=dayOfTheWeeksMr;
 
 
+		for(int index=0;index<this.daysOfWeekMr.size();index++) {
+
+			final DaySchedule schedule = new DaySchedule();
+			schedule.fromTime=this.fromHrsMr.get(index);
+			schedule.toTime=this.toHrsMr.get(index);
+			schedule.day=Day.valueOf(this.daysOfWeekMr.get(index));
+			doctorClinicInfo.schedulDays.add(schedule);
+
+		}
+
+		for (final DaySchedule schedule : doctorClinicInfo.schedulDays) {
+			Logger.info(schedule.day.toString());
+			Logger.info(schedule.fromTime.toString());
+			Logger.info(schedule.toTime.toString());
+		}
 
 		return doctorClinicInfo;
 	}
