@@ -29,6 +29,12 @@ public class MRController extends Controller{
 
 	}
 
+	public static Result mrList(){
+		final List<MedicalRepresentative> mrList = MedicalRepresentative.find.where().eq("mrAdminId",LoginController.getLoggedInUser().id).findList();
+		return ok(views.html.mr.mrList.render(mrList));
+	}
+
+
 	public static Result headQuarter(){
 		return ok(views.html.mr.headQuarter.render(headquarter));
 	}

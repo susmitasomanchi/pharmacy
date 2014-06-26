@@ -1,32 +1,31 @@
-@* addProductToInventory Template File *@
-@(inventoryForm:play.data.Form[models.Inventory], batchForm:play.data.Form[models.Batch])
-
+@(dataform:play.data.Form[beans.AddProductToInventoryBean],id:Long)
 @main("User Form"){
 	
 	<br>
 	<div class="container">
 	
-	@helper.form(action=routes.PharmacistController.addToInventory(),'method -> "post") {	
+	@helper.form(action=routes.PharmacistController.addToInventory(id),'method -> "post") {	
 	
-	@helper.inputText(batchForm("batchNo"),'class -> "inputs",'_label->"Batch No.")
+	@helper.inputText(dataform("batchNo"),'class -> "inputs",'_label->"Batch No.")
 	
-	@helper.inputText(batchForm("mrp"),'class -> "inputs",'_label->"MRP")
+	@helper.inputText(dataform("mrp"),'class -> "inputs",'_label->"MRP")
 	
-	@helper.inputDate(batchForm("expiryDate"),'class -> "inputs",'_label->"Expiry Date")
+	@helper.inputDate(dataform("expiryDate"),'class -> "inputs",'_label->"Expiry Date")
 	
-	@helper.inputText(batchForm("quantity"),'class -> "inputs",'_label->"Quantity")
+	@helper.inputText(dataform("quantity"),'class -> "inputs",'_label->"Quantity")
 	
-	@helper.inputText(batchForm("tax"),'class -> "inputs",'_label->"Tax(if any)")
+	@helper.inputText(dataform("tax"),'class -> "inputs",'_label->"Tax(if any)")
 	
-	@helper.inputText(batchForm("discount"),'class -> "inputs",'_label->"Discount(if any)")
+	@helper.inputText(dataform("discount"),'class -> "inputs",'_label->"Discount(if any)")
 	
 	
-	@helper.inputText(inventoryForm("shelfNo"),'class -> "inputs",'_label->"Shelf No")
+	@helper.inputText(dataform("shelfNo"),'class -> "inputs",'_label->"Shelf No")
 	
-	@helper.inputText(inventoryForm("productQuantity"),'class -> "inputs",'_label->"Quantity of Product")
+	@helper.inputText(dataform("productQuantity"),'class -> "inputs",'_label->"Quantity of Product")
 	
-	@helper.inputText(inventoryForm("remarks"),'class -> "inputs",'_label->"Remarks")
+	@helper.inputText(dataform("remarks"),'class -> "inputs",'_label->"Remarks")
 	
+	<input type="hidden" name="product" value="@id"/>
 	<br>
 	<input type="submit" class="submit" value="Save">
 	

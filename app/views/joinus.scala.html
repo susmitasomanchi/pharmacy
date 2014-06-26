@@ -25,24 +25,23 @@
 			
 			@helper.inputPassword(joinUsForm("confirmPassword"),'class -> "inputs",'_label->"Confirm Password")
 
-			@select(joinUsForm("role"), options("PATIENT"->"Patient", "DOCTOR"->"Doctor", "PHARMACIST"->"Pharmacist", "ADMIN_MR"->"Medical Representative", "ADMIN_DIAGREP"->"Diagnostic Representative"), '_label->"Join As")
+			@select(joinUsForm("role"), options("PATIENT"->"Patient", "DOCTOR"->"Doctor", "ADMIN_PHARMACIST"->"Pharmacist", "ADMIN_MR"->"Medical Representative", "DIAGREP"->"Diagnostic Representative"), '_label->"Join As")
 			
 
 			<div id="pharmacyName" class="col-xs-4" style="display:none">
     			<label for="pharmacyName">Pharmacy Name</label>
     			<input id="pharmacyName" name="pharmacyName" class="form-control">
-			</div>			
+			</div>
 			
 			<div id="pharmaceuticalCompanyName" class="col-xs-4" style="display:none">
     			<label for="pharmaceuticalCompanyName">Pharmacy Name</label>
     			<input id="pharmaceuticalCompanyName" name="pharmaceuticalCompanyName" class="form-control">
 			</div>
-			
-			<div id="diagnosticCenterName" class="col-xs-4" style="display:none">
+	<div id="diagnosticCenterName" class="col-xs-4" style="display:none">
     			<label for="diagnosticCenterName">Diagnostic Center Name</label>
     			<input id="diagnosticCenterName" name="diagnosticCenterName" class="form-control">
 			</div>
-			
+					
 </div>	
 	
 	<div class="row">
@@ -62,7 +61,7 @@ $('#role').change(function() {
 
 });
 $('#role').change(function() {
-    if ($('#role').val() == 'ADMIN_DIAGREP') {
+ if ($('#role').val() == 'ADMIN_DIAGREP') {
         $('#diagnosticCenterName').show();
     } else {
     	 $('#diagnosticCenterName').hide();   

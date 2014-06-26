@@ -51,6 +51,7 @@ create table appointment (
 create table batch (
   id                        bigint not null,
   batch_status              varchar(18),
+  inventory_id              bigint not null,
   product_id                bigint,
   batch_no                  varchar(255),
   mrp                       float,
@@ -153,7 +154,6 @@ create table doctor_assistant (
 
 create table doctor_award (
   id                        bigint not null,
-  doctor_id                 bigint not null,
   award_name                varchar(255),
   award_for                 varchar(255),
   year                      varchar(255),
@@ -170,9 +170,21 @@ create table doctor_clinic_info (
   constraint pk_doctor_clinic_info primary key (id))
 ;
 
+create table doctor_detail (
+  id                        bigint not null,
+  a                         bigint,
+  article_on                varchar(255),
+  published_on              varchar(255),
+  comment_for_article       varchar(255),
+  language                  varchar(255),
+  social_work_tittle        varchar(255),
+  comment_social_work       varchar(255),
+  last_update               timestamp not null,
+  constraint pk_doctor_detail primary key (id))
+;
+
 create table doctor_education (
   id                        bigint not null,
-  doctor_id                 bigint not null,
   college_name              varchar(255),
   degree                    varchar(255),
   from_year                 integer,
@@ -183,7 +195,6 @@ create table doctor_education (
 
 create table doctor_experience (
   id                        bigint not null,
-  doctor_id                 bigint not null,
   previous_hospital_name    varchar(255),
   worked_as                 varchar(255),
   location                  varchar(255),
@@ -191,32 +202,6 @@ create table doctor_experience (
   worked_to                 integer,
   last_update               timestamp not null,
   constraint pk_doctor_experience primary key (id))
-;
-
-create table doctor_language (
-  id                        bigint not null,
-  last_update               timestamp not null,
-  constraint pk_doctor_language primary key (id))
-;
-
-create table doctor_publication (
-  id                        bigint not null,
-  doctor_id                 bigint not null,
-  article_name              varchar(255),
-  article_for               varchar(255),
-  year                      varchar(255),
-  comment_for_article       varchar(255),
-  last_update               timestamp not null,
-  constraint pk_doctor_publication primary key (id))
-;
-
-create table doctor_social_work (
-  id                        bigint not null,
-  doctor_id                 bigint not null,
-  social_work_tittle        varchar(255),
-  comment_social_work       varchar(255),
-  last_update               timestamp not null,
-  constraint pk_doctor_social_work primary key (id))
 ;
 
 create table head_quarter (
@@ -228,9 +213,9 @@ create table head_quarter (
 
 create table inventory (
   id                        bigint not null,
+  pharmacy_id               bigint not null,
   product_id                bigint,
   shelf_no                  varchar(255),
-  product_inventory_status  varchar(12),
   product_quantity          integer,
   remarks                   varchar(255),
   last_update               timestamp not null,
@@ -253,8 +238,23 @@ create table medical_representative (
   region_alloted            varchar(255),
   company_name              varchar(255),
   types_of_medecine         varchar(255),
+  mr_admin_id               bigint,
+  pharmaceutical_company_id bigint,
   last_update               timestamp not null,
   constraint pk_medical_representative primary key (id))
+;
+
+create table order_line_item (
+  id                        bigint not null,
+  pharmacy_order_id         bigint not null,
+  product_id                bigint,
+  quantity                  float,
+  batch_no                  varchar(255),
+  expiry_date               timestamp,
+  price                     float,
+  sub_total                 float,
+  last_update               timestamp not null,
+  constraint pk_order_line_item primary key (id))
 ;
 
 create table patient (
@@ -273,7 +273,6 @@ create table patient (
 create table pharmaceutical_company (
   id                        bigint not null,
   name                      varchar(255),
-  admin_mr_id               bigint,
   last_update               timestamp not null,
   constraint pk_pharmaceutical_company primary key (id))
 ;
@@ -281,6 +280,7 @@ create table pharmaceutical_company (
 create table pharmacist (
   id                        bigint not null,
   app_user_id               bigint,
+  pharmacy_id               bigint,
   category                  varchar(255),
   last_update               timestamp not null,
   constraint pk_pharmacist primary key (id))
@@ -297,8 +297,19 @@ create table pharmacy (
   constraint pk_pharmacy primary key (id))
 ;
 
+create table pharmacy_order (
+  id                        bigint not null,
+  order_status              varchar(9),
+  date                      timestamp,
+  total_amount              float,
+  last_update               timestamp not null,
+  constraint ck_pharmacy_order_order_status check (order_status in ('DRAFT','DELIVERED','READY')),
+  constraint pk_pharmacy_order primary key (id))
+;
+
 create table product (
   id                        bigint not null,
+  pharmaceutical_company_id bigint not null,
   medicine_name             varchar(255),
   brand_name                varchar(255),
   salt                      varchar(255),
@@ -324,10 +335,10 @@ create table question_and_answer (
 ;
 
 
-create table doctor_doctor_language (
+create table medical_representative_doctor (
+  medical_representative_id      bigint not null,
   doctor_id                      bigint not null,
-  doctor_language_id             bigint not null,
-  constraint pk_doctor_doctor_language primary key (doctor_id, doctor_language_id))
+  constraint pk_medical_representative_doctor primary key (medical_representative_id, doctor_id))
 ;
 create sequence address_seq;
 
@@ -357,21 +368,17 @@ create sequence doctor_award_seq;
 
 create sequence doctor_clinic_info_seq;
 
+create sequence doctor_detail_seq;
+
 create sequence doctor_education_seq;
 
 create sequence doctor_experience_seq;
 
-create sequence doctor_language_seq;
-
-create sequence doctor_publication_seq;
-
-create sequence doctor_social_work_seq;
-
 create sequence inventory_seq;
 
-create sequence language_app_user_seq;
-
 create sequence medical_representative_seq;
+
+create sequence order_line_item_seq;
 
 create sequence patient_seq;
 
@@ -380,6 +387,8 @@ create sequence pharmaceutical_company_seq;
 create sequence pharmacist_seq;
 
 create sequence pharmacy_seq;
+
+create sequence pharmacy_order_seq;
 
 create sequence product_seq;
 
@@ -444,9 +453,9 @@ create index ix_question_and_answer_answer_28 on question_and_answer (answer_by_
 
 
 
-alter table doctor_doctor_language add constraint fk_doctor_doctor_language_doc_01 foreign key (doctor_id) references doctor (id);
+alter table medical_representative_doctor add constraint fk_medical_representative_doc_01 foreign key (medical_representative_id) references medical_representative (id);
 
-alter table doctor_doctor_language add constraint fk_doctor_doctor_language_doc_02 foreign key (doctor_language_id) references doctor_language (id);
+alter table medical_representative_doctor add constraint fk_medical_representative_doc_02 foreign key (doctor_id) references doctor (id);
 
 # --- !Downs
 
@@ -472,31 +481,27 @@ drop table if exists diagnostic_representative cascade;
 
 drop table if exists doctor cascade;
 
-drop table if exists doctor_doctor_language cascade;
-
 drop table if exists doctor_assistant cascade;
 
 drop table if exists doctor_award cascade;
 
 drop table if exists doctor_clinic_info cascade;
 
+drop table if exists doctor_detail cascade;
+
 drop table if exists doctor_education cascade;
 
 drop table if exists doctor_experience cascade;
-
-drop table if exists doctor_language cascade;
-
-drop table if exists doctor_publication cascade;
-
-drop table if exists doctor_social_work cascade;
 
 drop table if exists head_quarter cascade;
 
 drop table if exists inventory cascade;
 
-drop table if exists language_app_user cascade;
-
 drop table if exists medical_representative cascade;
+
+drop table if exists medical_representative_doctor cascade;
+
+drop table if exists order_line_item cascade;
 
 drop table if exists patient cascade;
 
@@ -505,6 +510,8 @@ drop table if exists pharmaceutical_company cascade;
 drop table if exists pharmacist cascade;
 
 drop table if exists pharmacy cascade;
+
+drop table if exists pharmacy_order cascade;
 
 drop table if exists product cascade;
 
@@ -538,21 +545,17 @@ drop sequence if exists doctor_award_seq;
 
 drop sequence if exists doctor_clinic_info_seq;
 
+drop sequence if exists doctor_detail_seq;
+
 drop sequence if exists doctor_education_seq;
 
 drop sequence if exists doctor_experience_seq;
 
-drop sequence if exists doctor_language_seq;
-
-drop sequence if exists doctor_publication_seq;
-
-drop sequence if exists doctor_social_work_seq;
-
 drop sequence if exists inventory_seq;
 
-drop sequence if exists language_app_user_seq;
-
 drop sequence if exists medical_representative_seq;
+
+drop sequence if exists order_line_item_seq;
 
 drop sequence if exists patient_seq;
 
@@ -561,6 +564,8 @@ drop sequence if exists pharmaceutical_company_seq;
 drop sequence if exists pharmacist_seq;
 
 drop sequence if exists pharmacy_seq;
+
+drop sequence if exists pharmacy_order_seq;
 
 drop sequence if exists product_seq;
 

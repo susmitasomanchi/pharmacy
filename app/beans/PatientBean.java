@@ -52,6 +52,7 @@ public class PatientBean implements Serializable{
 
 	public String appointmentId;
 
+
 	public String doctorAvailability;
 
 	public String isUrgentPatient;
@@ -105,7 +106,7 @@ public class PatientBean implements Serializable{
 		}
 
 		//if(this.disease != null) {
-			//patient.disease= this.disease;
+		//patient.disease= this.disease;
 		//}
 
 		if(this.appointmentId != null) {

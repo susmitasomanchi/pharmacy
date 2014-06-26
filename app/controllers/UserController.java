@@ -30,6 +30,7 @@ import beans.JoinUsBean;
 public class UserController extends Controller {
 
 	public static Form<JoinUsBean> joinUsForm = Form.form(JoinUsBean.class);
+	public static Form<DiagnosticRepresentative> drForm = Form.form(DiagnosticRepresentative.class);
 
 	public static Result joinUs(){
 		return ok(views.html.joinus.render(joinUsForm));
@@ -38,6 +39,7 @@ public class UserController extends Controller {
 
 	public static Result processJoinUs(){
 		final Form<JoinUsBean> filledForm = joinUsForm.bindFromRequest();
+		final Form<DiagnosticRepresentative> dr = drForm.bindFromRequest();
 		if(filledForm.hasErrors()) {
 			Logger.info("Form Errors");
 			Logger.error(filledForm.errors().toString());
@@ -64,23 +66,28 @@ public class UserController extends Controller {
 				pharmacist.save();
 
 				//final Pharmacy pharmacy = filledForm.get();
-				final Pharmacy pharmacy=new Pharmacy();
+				final Pharmacy pharmacy = new Pharmacy();
 				pharmacy.name=filledForm.get().pharmacyName;
-				pharmacy.adminPharmacist=pharmacist;
+				//pharmacy.adminPharmacist=pharmacist;
+				pharmacy.adminPharmacist = pharmacist;
 				pharmacy.save();
+				//pharmacy.update();
 			}
 
 			if(appUser.role == Role.ADMIN_MR){
 				final MedicalRepresentative medicalRepresentative = new MedicalRepresentative();
+				final PharmaceuticalCompany pharmaCompany = new PharmaceuticalCompany();
 				medicalRepresentative.appUser = appUser;
 				medicalRepresentative.save();
-				final PharmaceuticalCompany pharmaCompany = new PharmaceuticalCompany();
 				pharmaCompany.name = filledForm.get().pharmaceuticalCompanyName;
-				pharmaCompany.adminMR = medicalRepresentative;
+
+				pharmaCompany.mrList.add(medicalRepresentative);
 				pharmaCompany.save();
+				medicalRepresentative.pharmaceuticalCompany = pharmaCompany;
+				medicalRepresentative.update();
+
 			}
-			
-			
+
 
 			if(appUser.role == Role.ADMIN_DIAGREP){
 				final DiagnosticRepresentative diagRep = new DiagnosticRepresentative();
@@ -91,7 +98,7 @@ public class UserController extends Controller {
 				diagnosticCenter.diagnosticRepAdmin = diagRep;
 				diagnosticCenter.save();
 			}
-
+			
 			session().clear();
 			session(Constants.LOGGED_IN_USER_ID, appUser.id + "");
 			session(Constants.LOGGED_IN_USER_ROLE, appUser.role+ "");
