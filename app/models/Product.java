@@ -1,5 +1,8 @@
 package models;
 
+import java.util.LinkedHashMap;
+import java.util.Map;
+
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -9,6 +12,7 @@ import play.data.validation.Constraints.Required;
 import play.db.ebean.*;
 import play.db.ebean.Model.Finder;
 
+@SuppressWarnings("serial")
 @Entity
 public class Product extends BaseEntity {
 
@@ -44,4 +48,13 @@ public class Product extends BaseEntity {
 		product.update(id);
 	}
 
+
+	public static Map<String, String> options() {
+
+		final LinkedHashMap<String, String> vals = new LinkedHashMap<String, String>();
+		for (final Product val : Product.find.all()) {
+			vals.put(val.toString(), val.toString());
+		}
+		return vals;
+	}
 }

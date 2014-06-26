@@ -26,20 +26,21 @@ public class DRController extends Controller {
 		Long id = LoginController.getLoggedInUser().id;
 		final Form<DiagnosticRepresentative> filledForm = diagnosticRepresentative
 				.bindFromRequest();
+		Logger.info("filledForm"+filledForm);
 
 		if (filledForm.hasErrors()) {
 			return badRequest(views.html.diagnostic.diagnosticRep
 					.render(filledForm));
 		} else {
 
-			final DiagnosticRepresentative diagRepForm = filledForm.get();
-
+			final DiagnosticRepresentative diagRep = filledForm.get();
+			Logger.info("name of diagrep..."+diagRep.id);
 			DiagnosticCenter dc = DiagnosticCenter.find.byId(id);
-			dc.diagnosticRepresentativelist.add(diagRepForm);
-			Logger.info("name of diagrep..."+diagRepForm.appUser.name);
+			dc.diagnosticRepresentativelist.add(diagRep);
+			
 			dc.update();
 
-			return ok(String.format("Saved product %s", diagRepForm));
+			return ok(String.format("Saved product %s", diagRep));
 		}
 
 	}

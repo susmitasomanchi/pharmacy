@@ -29,12 +29,18 @@ public class MRController extends Controller{
 
 	}
 
+	public static Result mrList(){
+		final List<MedicalRepresentative> mrList = MedicalRepresentative.find.where().eq("mrAdminId",LoginController.getLoggedInUser().id).findList();
+		return ok(views.html.mr.mrList.render(mrList));
+	}
+
+
 	public static Result headQuarter(){
 		return ok(views.html.mr.headQuarter.render(headquarter));
 	}
 
 	public static Result doctorList(){
-		List<Doctor> doctorList = Doctor.find.all();
+		final List<Doctor> doctorList = Doctor.find.all();
 		return ok(views.html.mr.doctorList.render(doctorList));
 	}
 
@@ -52,8 +58,8 @@ public class MRController extends Controller{
 	//delete doctor from mr list
 	public static Result removeDoctor(final Long id){
 		int indexOfDoctorList=-1;
-		Doctor doctor=Doctor.find.byId(id);
-		for(Doctor doc:loggedInMR.doctorList){
+		final Doctor doctor=Doctor.find.byId(id);
+		for(final Doctor doc:loggedInMR.doctorList){
 			indexOfDoctorList++;
 			if(doctor.appUser.name.equals(doc.appUser.name)){
 				Logger.info("doctor name : "+doc.appUser.name);
@@ -102,12 +108,12 @@ public class MRController extends Controller{
 
 	//mr visits the doctor
 	public static Result visitDoctor(){
-		List<Doctor> doctorList = Doctor.find.all();
+		final List<Doctor> doctorList = Doctor.find.all();
 		return ok(views.html.mr.DailyCallReport.render(DCRLineItemForm,doctorList));
 
 	}
 	public static Result visitDoctorProccess(){
-		List<Doctor> doctorList = Doctor.find.all();
+		final List<Doctor> doctorList = Doctor.find.all();
 		final Form<DCRLineItem> filledForm=DCRLineItemForm.bindFromRequest();
 
 		if(filledForm.hasErrors()) {

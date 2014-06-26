@@ -1,0 +1,27 @@
+@(mrList:List[MedicalRepresentative])
+@main("doctor list"){
+	
+	<form name="searchform" action="@routes.MRController.search()" method="GET">	
+	<input type="text" name="searchStr">
+	
+	<input type="submit" value="Search MR">
+	</form>
+	
+	<table>
+	<thead>
+	<th>MR name</th>
+	</thead>
+	<tbody>
+	
+	@for(mr <-mrList){
+		<tr>
+		<td>@mr.appUser.name</td>
+		<td>@mr.companyName</td>		
+		</tr>
+		<tr></tr>
+	}
+	</tbody>
+	</table>
+	
+}
+

@@ -1,0 +1,33 @@
+@(products: List[Product])
+@main("User Form"){
+	
+	<br>
+	<div class="container">
+@helper.form(action=routes.PharmacistController.searchProduct(),'method -> "get") {
+	
+	<div  class="col-xs-4" >
+    			<label for="productName">Search Product</label>
+    			 <input type="text" name="arg"></br>
+			</div>
+			
+	<br>
+	<input type="submit" class="submit" value="Search">
+	
+	}
+	<ul> 
+@for(product <- products) {
+  <li>@product.medicineName   
+   @helper.form(action=routes.PharmacistController.addProductForm(product.id),'method -> "post") {
+    <input type="submit" value="Add"/>
+
+    }
+  </li>
+  
+   
+} 
+</ul>
+	
+	
+	
+	
+	}
