@@ -2,6 +2,8 @@ package controllers;
 import java.util.List;
 
 import models.AppUser;
+import models.Day;
+import models.DayOfTheWeek;
 import models.Doctor;
 import models.Role;
 import play.mvc.Controller;
@@ -59,8 +61,8 @@ public class SampleDataController extends Controller {
 		return ok("created");
 	}
 
+
 	public static Result createBlogAdmin(){
-		System.out.println("sadsfshdf khsgd fkjhkdsf");
 		final AppUser appUser = new AppUser();
 		appUser.name = "Blog Admin";
 		appUser.role = Role.BLOG_ADMIN;

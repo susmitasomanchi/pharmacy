@@ -1,12 +1,17 @@
 package models;
 
 
+import java.util.ArrayList;
+import java.util.List;
+
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Lob;
+import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 
 import play.db.ebean.Model;
@@ -54,6 +59,9 @@ public class Article extends BaseEntity{
 
 	@OneToOne
 	public ArticleCategory category;
+
+	@OneToMany(cascade = CascadeType.ALL)
+	public List<BlogComment> commentList = new ArrayList<>();
 
 	public static Model.Finder<Long,Article> find = new Finder<Long, Article>(Long.class, Article.class);
 

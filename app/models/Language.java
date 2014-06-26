@@ -74,10 +74,12 @@ public enum Language {
 	
 	public static Map<String, String> options() {
 		final LinkedHashMap<String, String> vals = new LinkedHashMap<String, String>();
-		for (final Status val : Status.values()) {
+		for (final Language val : Language.values()) {
 			vals.put(val.toString(), val.toString());
 		}
 		return vals;
 	}
+	
+
 
 }

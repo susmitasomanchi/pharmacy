@@ -63,7 +63,7 @@ public class LoginController extends Controller {
 	//@BasicAuth
 	public static Result processLogout() {
 		session().clear();
-		return ok(views.html.index.render(loginForm));
+		return redirect(routes.Application.index());
 	}
 
 	/*//Change Password
@@ -104,6 +104,14 @@ public class LoginController extends Controller {
 
 	public static String getLoggedInUserRole() {
 		return session(Constants.LOGGED_IN_USER_ROLE);
+	}
+
+	public static boolean isLoggedInUserBlogAdmin() {
+		final String role = session(Constants.LOGGED_IN_USER_ROLE);
+		if(role.equalsIgnoreCase(Role.BLOG_ADMIN.toString())){
+			return true;
+		}
+		return false;
 	}
 
 }

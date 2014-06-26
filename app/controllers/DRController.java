@@ -2,9 +2,10 @@ package controllers;
 
 import java.util.List;
 
-
+import models.DiagnosticCenter;
 import models.DiagnosticRepresentative;
 import models.Doctor;
+
 import play.Logger;
 import play.data.DynamicForm;
 import play.data.Form;
@@ -32,34 +33,50 @@ public class DRController extends Controller {
 					.render(filledForm));
 		} else {
 
-			final DiagnosticRepresentative diagForm = filledForm.get();
+			final DiagnosticRepresentative diagRepForm = filledForm.get();
 			Logger.info("*** user object ");
-			diagForm.save();
-			final String message = flash("success");
-			return ok("Saved");
+			Long id = LoginController.getLoggedInUser()
+					.getDiagnosticRepresentative().id;
+			DiagnosticCenter dc = DiagnosticCenter.find.byId(id);
+			dc.diagReplist.add(diagRepForm);
+			dc.update();
+
+			return ok(String.format("Saved product %s", diagRepForm));
 		}
+
 	}
 
+	/*
+	 * displaying all diagnostic Representators
+	 */
 	public static Result diagnosticReplist() {
 		List<DiagnosticRepresentative> allDiagRepList = DiagnosticRepresentative.find
 				.all();
-		/* views.html.list.render(allList) */
-		/*Logger.info(allDiagRepList.get(1).appUser.name + "~~allDiagRepList");*/
 		return ok(views.html.diagnostic.diagnosticList.render(allDiagRepList));
 
 	}
 
+	/*
+	 * displaying all doctors
+	 */
 	public static Result doctorList() {
 		List<Doctor> doctorList = Doctor.find.all();
 		// Logger.error(doctorList.get(0).appUser.name);
 		return ok(views.html.diagnostic.doctorsList.render(doctorList));
 	}
 
+	/*
+	 * add
+	 */
+
 	public static Result addDoctor(Long id) {
 		Logger.info("id.............." + id);
 
 		if (loggedInDR.doctorList.contains(Doctor.find.byId(id)) != true) {
+
 			loggedInDR.doctorList.add(Doctor.find.byId(id));
+			Logger.info(loggedInDR.doctorList.get(0).appUser.name
+					+ " NAME OF THE DOCTOR");
 		}
 
 		return ok(views.html.diagnostic.addDoctor.render(loggedInDR.doctorList));
@@ -69,23 +86,9 @@ public class DRController extends Controller {
 	// delete doctor from DR list
 	public static Result removeDoctor(final Long id) {
 		System.out.println("id........." + id);
-		int indexOfDoctorList = -1;
 		Doctor doctor = Doctor.find.byId(id);
-		for (Doctor doc : loggedInDR.doctorList) {
-			indexOfDoctorList++;
-			if (doctor.appUser.name.equals(doc.appUser.name)) {
-				Logger.info("doctor name : " + doc.appUser.name);
-
-				// indexOfDoctorList=loggedInMR.doctorList.indexOf(doctor.appUser.name);
-
-				Logger.info("index is : " + indexOfDoctorList);
-				break;
-			}
-		}
-
-		// return TODO;
-		loggedInDR.doctorList.remove(indexOfDoctorList);
-
+		loggedInDR.doctorList.remove(doctor);
+		loggedInDR.update();
 		return ok(views.html.diagnostic.addDoctor.render(loggedInDR.doctorList));
 
 	}
@@ -95,6 +98,9 @@ public class DRController extends Controller {
 		return ok(views.html.diagnostic.searchDoctor.render());
 	}
 
+	/*
+	 * doctors search process
+	 */
 	public static Result searchProcess() {
 
 		final DynamicForm requestData = Form.form().bindFromRequest();
@@ -122,6 +128,6 @@ public class DRController extends Controller {
 
 	public static Result addPatient() {
 		return TODO;
-		
+
 	}
 }
