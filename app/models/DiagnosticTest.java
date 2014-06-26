@@ -11,7 +11,7 @@ import play.db.ebean.Model.Finder;
 public class DiagnosticTest extends BaseEntity{
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO)
-	public Long diagnosticTestId;
+	public Long id;
 	
 	public String name;
 	

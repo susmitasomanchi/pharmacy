@@ -4,7 +4,7 @@
 
 @main("Diagnostic Form"){
 <div class="row">
-@helper.form(action=routes.DiagnosticTestController.uploadFileProcess(),'enctype -> "multipart/form-data",'method -> "post"){
+@helper.form(action=routes.DiagnosticController.uploadFileProcess(),'enctype -> "multipart/form-data",'method -> "post"){
 
     
    <label for="file">Filename:</label>

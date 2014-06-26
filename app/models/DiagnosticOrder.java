@@ -15,20 +15,17 @@ public class DiagnosticOrder extends BaseEntity{
 	
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO)
-	public Long diagnosticOrderId;
+	public Long id;
 
+	public Patient patient;
 	
-	public List<DiagnosticReport> diagnosticReportList=new ArrayList<>();
+	public List<DiagnosticReport> diagnosticReportList = new ArrayList<>();
 	
 	public DiagnosticOrderStatus diagnosticOrderStatus;
-	
-	public Long doctorsPrescriptionId;
 	
 	public Date receivedDate;
 	
 	public Date confirmedDate;
-	
-	
 	
 	public List<DiagnosticTest> diagnosticTest=new ArrayList<>();
 	

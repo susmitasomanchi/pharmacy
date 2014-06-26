@@ -51,10 +51,13 @@ public class DiagnosticCenter extends BaseEntity {
 	public DiagnosticRepresentative diagnosticRepAdmin;
 
 	@ManyToOne(cascade=CascadeType.ALL)
-	public List<DiagnosticRepresentative> diagReplist = new ArrayList<DiagnosticRepresentative>();
+	public List<DiagnosticRepresentative> diagnosticRepresentativelist = new ArrayList<DiagnosticRepresentative>();
 
 	@OneToMany(cascade=CascadeType.ALL)
 	public List<DiagnosticTest> diagnosticTestList = new ArrayList<DiagnosticTest>();
+	
+	@OneToMany(cascade=CascadeType.ALL)
+	public List<DiagnosticOrder> diagnosticOrderList=new ArrayList<DiagnosticOrder>();
 
 	public static Model.Finder<Long, DiagnosticCenter> find = new Finder<Long, DiagnosticCenter>(
 			Long.class, DiagnosticCenter.class);

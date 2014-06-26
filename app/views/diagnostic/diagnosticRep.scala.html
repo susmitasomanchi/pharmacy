@@ -17,8 +17,9 @@
 	@helper.inputText(dataForm("age"),'_label->"Age")
 	@helper.inputText(dataForm("diagnosticType"),'_label->"Diagnostic Type")
 	<input type="hidden" name="id" value='@dataForm("id").value' >
-	<input type="submit" value="Add DiagnosticRep">
-	
+	@*<a href="/diagnosticrep/save/@LoginController.getLoggedInUser().id" class="btn btn-xs btn-success">Add DiagnosticRep</a>*@
+	<a href=""><input type="submit" value="Add DiagnosticRep"></a>
 	
 	}
+	
 	}

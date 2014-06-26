@@ -2,8 +2,9 @@
 @(dataForm:play.data.Form[models.DiagnosticTest])
 @import helper.twitterBootstrap._
 
+@main("Add a Test"){
 
-     @helper.form(action=routes.DiagnosticTestController.addTestProcess(),'method -> "post") {
+     @helper.form(action=routes.DiagnosticController.addTestProcess(),'method -> "post") {
 
 
 			
@@ -19,5 +20,7 @@
 		
 }
 
+
+}
 
 

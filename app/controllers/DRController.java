@@ -5,7 +5,7 @@ import java.util.List;
 import models.DiagnosticCenter;
 import models.DiagnosticRepresentative;
 import models.Doctor;
-
+import play.Logger;
 import play.data.DynamicForm;
 import play.data.Form;
 import play.mvc.Controller;
@@ -23,6 +23,7 @@ public class DRController extends Controller {
 	}
 
 	public static Result addDiagRepProcess() {
+		Long id = LoginController.getLoggedInUser().id;
 		final Form<DiagnosticRepresentative> filledForm = diagnosticRepresentative
 				.bindFromRequest();
 
@@ -32,10 +33,10 @@ public class DRController extends Controller {
 		} else {
 
 			final DiagnosticRepresentative diagRepForm = filledForm.get();
-			Long id = LoginController.getLoggedInUser()
-					.getDiagnosticRepresentative().id;
+
 			DiagnosticCenter dc = DiagnosticCenter.find.byId(id);
-			dc.diagReplist.add(diagRepForm);
+			dc.diagnosticRepresentativelist.add(diagRepForm);
+			Logger.info("name of diagrep..."+diagRepForm.appUser.name);
 			dc.update();
 
 			return ok(String.format("Saved product %s", diagRepForm));
@@ -46,10 +47,13 @@ public class DRController extends Controller {
 	/*
 	 * displaying all diagnostic Representators
 	 */
-	public static Result diagnosticReplist() {
-		List<DiagnosticRepresentative> allDiagRepList = DiagnosticRepresentative.find
-				.all();
-		return ok(views.html.diagnostic.diagnosticList.render(allDiagRepList));
+	public static Result diagnosticReplist(Long id) {
+		Logger.info("incoming id=" + id);
+		DiagnosticCenter diagnosticCentre = DiagnosticCenter.find.byId(id);
+		Logger.info("this........"
+				+ diagnosticCentre.diagnosticRepresentativelist.size());
+		return ok(views.html.diagnostic.diagnosticList
+				.render(diagnosticCentre.diagnosticRepresentativelist));
 
 	}
 

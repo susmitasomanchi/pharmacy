@@ -1,7 +1,9 @@
 package controllers;
 
 import java.util.Date;
+import java.util.List;
 
+import models.DiagnosticCenter;
 import models.DiagnosticOrder;
 import models.DiagnosticOrderStatus;
 import models.DiagnosticReport;
@@ -12,46 +14,45 @@ import play.data.Form;
 import play.mvc.Controller;
 import play.mvc.Result;
 
-public class DiagnosticPrescriptionController extends Controller {
+public class DiagnosticOrderController extends Controller {
 
 	static Form<DiagnosticOrder> diagnosticOrder = Form
 			.form(DiagnosticOrder.class);
 	static Form<DiagnosticReport> diagnosticReport = Form
 			.form(DiagnosticReport.class);
-	static Form<DoctorsPrescription> doctorsPrescriptionForm = Form
-			.form(DoctorsPrescription.class);
+	static Form<DiagnosticCenter> diagnosticCentreForm = Form
+			.form(DiagnosticCenter.class);
 
-	public static Result prescribe() {
-		return ok(views.html.diagnosticReport.doctorsPrescription
-				.render(doctorsPrescriptionForm));
-	}
-
+	
 	/*
-	 * status of diagostic test order
+	 * status for the order
+	 * received
 	 */
 	public static Result receive() {
-
-		Form<DoctorsPrescription> docPresc = doctorsPrescriptionForm
-				.bindFromRequest();
-		if (docPresc.hasErrors()) {
-			Logger.info("*** user bad request");
-			return badRequest(views.html.diagnosticReport.doctorsPrescription
-					.render(docPresc));
-		} else {
-			DoctorsPrescription doctorsPrescription = docPresc.get();
-			DiagnosticOrder diagnosticOrder = new DiagnosticOrder();
-			diagnosticOrder.doctorsPrescriptionId = doctorsPrescription.doctorsPrescriptionId;
-			diagnosticOrder.diagnosticOrderStatus = DiagnosticOrderStatus.RECEIVED;
-			diagnosticOrder.receivedDate = new Date();
-
-			diagnosticOrder.save();
-			Logger.info("status of the report====="
-					+ diagnosticOrder.diagnosticOrderStatus);
-			return ok("test prescription received");
+		String diagnosticTestIdStrings[] = request().body().asFormUrlEncoded().get("diagnosticTestIds");
+		DiagnosticOrder diagnosticOrder=new DiagnosticOrder();
+		
+		diagnosticOrder.patient=LoginController.getLoggedInUser().getPatient();
+		for (String idStr : diagnosticTestIdStrings) {
+			DiagnosticReport diagnosticReport=new DiagnosticReport();
+			Long id=Long.valueOf(idStr);
+			Logger.info(idStr);
+			diagnosticReport.diagnosticTest=DiagnosticTest.find.byId(id);
+			diagnosticReport.save();
+			
 		}
-
+		
+		
+		
+		
+		
+		
+		return ok();
 	}
-
+	/*
+	 * status for the order
+	 * confirmed
+	 */
 	public static Result confirmed(final Long id) {
 
 		DiagnosticOrder diagnosticOrder = DiagnosticOrder.find.byId(id);
@@ -79,6 +80,11 @@ public class DiagnosticPrescriptionController extends Controller {
 					+ diagnosticOrder.diagnosticOrderStatus);
 
 	}
+	
+	/*
+	 * status for the report
+	 * sample colected
+	 */
 
 	public static Result sampleCollect(final Long id) {
 
@@ -92,14 +98,17 @@ public class DiagnosticPrescriptionController extends Controller {
 		 * doctorsPrescriptionId);
 		 */
 		diagnosticReport.reportStatus = DiagnosticOrderStatus.SAMPLE_COLLECTED;
-		diagnosticReport.sampleCollectedDate = new Date();
+		diagnosticReport.sampleCollectionDate = new Date();
 
 		diagnosticReport.update();
 
 		return ok("sample collected");
 
 	}
-
+	/*
+	 * status for the report
+	 * generated
+	 */
 	public static Result reoprtReady(final Long id) {
 
 		DiagnosticReport diagnosticReport = DiagnosticReport.find.byId(id);
@@ -112,10 +121,11 @@ public class DiagnosticPrescriptionController extends Controller {
 		 * doctorsPrescriptionId);
 		 */
 		diagnosticReport.reportStatus = DiagnosticOrderStatus.REPORT_READY;
-		diagnosticReport.reportGenertaedDate = new Date();
+		diagnosticReport.reportGenerationDate = new Date();
 		diagnosticReport.update();
 		return ok("Report generated");
 
 	}
+	
 
 }
