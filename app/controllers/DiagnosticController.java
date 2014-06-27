@@ -1,6 +1,7 @@
 package controllers;
 
 import java.io.File;
+
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
@@ -11,7 +12,8 @@ import java.util.Map;
 
 import org.apache.commons.io.FileUtils;
 
-import models.DiagnosticCenter;
+import models.AppUser;
+import models.DiagnosticCentre;
 import models.DiagnosticReport;
 import models.DiagnosticRepresentative;
 import models.DiagnosticTest;
@@ -23,8 +25,8 @@ import play.mvc.Result;
 import play.mvc.Http.MultipartFormData.FilePart;
 
 public class DiagnosticController extends Controller {
-	public static Form<DiagnosticCenter> diagnosticForm = Form
-			.form(DiagnosticCenter.class);
+	public static Form<DiagnosticCentre> diagnosticForm = Form
+			.form(DiagnosticCentre.class);
 	
 	public static Form<DiagnosticTest> diagnosticTestForm = Form
 			.form(DiagnosticTest.class);
@@ -41,7 +43,7 @@ public class DiagnosticController extends Controller {
 	 */
 
 	public static Result diagnosticCenterProcess() {
-		final Form<DiagnosticCenter> filledForm = diagnosticForm
+		final Form<DiagnosticCentre> filledForm = diagnosticForm
 				.bindFromRequest();
 
 		if (filledForm.hasErrors()) {
@@ -49,7 +51,7 @@ public class DiagnosticController extends Controller {
 			return badRequest(views.html.diagnosticCenters.render(filledForm));
 		} else {
 			// final SalesRep salesRepForm = filledForm.get();
-			final DiagnosticCenter diagForm = filledForm.get();
+			final DiagnosticCentre diagForm = filledForm.get();
 			Logger.info("*** user object ");
 
 			// final AppUser appUser = salesRepForm.toEntity();
@@ -66,7 +68,7 @@ public class DiagnosticController extends Controller {
 	 */
 	public static Result diagnosticList() {
 		Long id=LoginController.getLoggedInUser().getDiagnosticRepresentative().id;
-		DiagnosticCenter allList = DiagnosticCenter.find.byId(id);
+		DiagnosticCentre allList = DiagnosticCentre.find.byId(id);
 
 		return ok(views.html.diagnostic.diagnosticCenterList.render(allList));
 
@@ -77,7 +79,8 @@ public class DiagnosticController extends Controller {
 	 * from table based on id
 	 */
 	public static Result deleteCenter(Long id) {
-		DiagnosticCenter.delete(id);
+		DiagnosticCentre dc = DiagnosticCentre.find.byId(id);
+		dc.delete();
 		return ok("deleted successfully");
 	}
 
@@ -85,21 +88,21 @@ public class DiagnosticController extends Controller {
 	 * editing the diagnostic center details
 	 */
 	public static Result editDiagnosticDetails(Long id) {
-		final DiagnosticCenter dc = DiagnosticCenter.find.byId(id);
-		final Form<DiagnosticCenter> filledForm = diagnosticForm.fill(dc);
-		final DiagnosticCenter diagForm = filledForm.get();
+		final DiagnosticCentre dc = DiagnosticCentre.find.byId(id);
+		final Form<DiagnosticCentre> filledForm = diagnosticForm.fill(dc);
+		final DiagnosticCentre diagForm = filledForm.get();
 		diagForm.update();
 		return ok(views.html.diagnostic.diagnosticReg.render(filledForm));
 	}
 
 	public static Result diagnosticEditprocess() {
-		final Form<DiagnosticCenter> filledForm = diagnosticForm
+		final Form<DiagnosticCentre> filledForm = diagnosticForm
 				.bindFromRequest();
 		if (filledForm.hasErrors()) {
 			return badRequest(views.html.diagnostic.diagnosticReg
 					.render(filledForm));
 		} else {
-			final DiagnosticCenter dc = filledForm.get();
+			final DiagnosticCentre dc = filledForm.get();
 
 			if (dc.id == null) {
 				dc.save();
@@ -130,7 +133,7 @@ public class DiagnosticController extends Controller {
 			// it is a string, search by name
 			if (searchStr.matches("[a-zA-Z]+")) {
 
-				final List<DiagnosticCenter> dcSearch = DiagnosticCenter.find
+				final List<DiagnosticCentre> dcSearch = DiagnosticCentre.find
 						.where().like("name", searchStr + "%").findList();
 
 				return ok(views.html.diagnostic.patientDiagnosticCenterList
@@ -139,14 +142,14 @@ public class DiagnosticController extends Controller {
 			// if it is an email	
 			else if (searchStr.contains("@")) {
 
-				final List<DiagnosticCenter> dcSearch = DiagnosticCenter.find
+				final List<DiagnosticCentre> dcSearch = DiagnosticCentre.find
 						.where().eq("emailId", searchStr).findList();
 
 				return ok(views.html.diagnostic.patientDiagnosticCenterList
 						.render(dcSearch));
 			}// if it is a number
 			else {
-				final List<DiagnosticCenter> dcSearch = DiagnosticCenter.find
+				final List<DiagnosticCentre> dcSearch = DiagnosticCentre.find
 						.where().eq("mobileNo", searchStr).findList();
 
 				return ok(views.html.diagnostic.patientDiagnosticCenterList
@@ -185,13 +188,17 @@ public class DiagnosticController extends Controller {
 			final DiagnosticTest diagTestForm = filledForm.get();
 			Logger.info("*** user object ");
 			Long id=LoginController.getLoggedInUser().getDiagnosticRepresentative().id;
-			DiagnosticCenter dc=DiagnosticCenter.find.byId(id);
+			DiagnosticCentre dc=DiagnosticCentre.find.byId(id);
 			dc.diagnosticTestList.add(diagTestForm);
 			dc.update();
 			
-			return ok(String.format("Saved product %s", diagTestForm));
+			return ok(views.html.diagnostic.addDiagnosticTest.render(diagnosticTestForm));
 		}
 
+	}
+	public static Result addTestDone(){
+		AppUser appUser = UserController.joinUsForm.bindFromRequest().get().toAppUser();
+		return ok(views.html.dashboard.render(appUser));
 	}
 	/*
 	 * displaying all the
@@ -200,7 +207,7 @@ public class DiagnosticController extends Controller {
 	 */
 	
 	public static Result diagnosticTestList(Long id) {
-		DiagnosticCenter diagnosticCenter =  DiagnosticCenter.find.byId(id);
+		DiagnosticCentre diagnosticCenter =  DiagnosticCentre.find.byId(id);
 		List<DiagnosticTest> diagnosticTestList=diagnosticCenter.diagnosticTestList;
 		return ok(views.html.diagnostic.diagnosticCentreProfile.render(diagnosticCenter));
 	}

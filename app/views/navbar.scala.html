@@ -198,8 +198,8 @@
           <ul class="dropdown-menu">
           <li><a href="/diagnosticlist">View Profile</a></li> 
             <li><a href="@routes.DRController.addDiagRep()">Add Diagnostic Representative</a></li> 
-            <li><a href="/diagnosticrep/list/@LoginController.getLoggedInUser().id">All Diagnostic Representative</a></li>   
-             <li><a href="/diagnosticrep/list">View Diagnostic Orders</a></li>      
+            <li><a href="/diagnosticrep/list">All Diagnostic Representative</a></li>   
+             <li><a href="/display-orders/@LoginController.getLoggedInUser().id">View Diagnostic Orders</a></li>      
               <li><a href="/upload-patient-file">Upload Report</a></li>      
           </ul>
         </li> 
@@ -220,7 +220,7 @@
           <b class="caret"></b></a>
           <ul class="dropdown-menu">
             <li><a href="/diagnosticrep/doctor-search">Search Doctor</a></li>
-            <li><a href="/diagnosticrep/doctor-list">View Doctors</a></li>
+            <li><a href="/diagnostic-centre/all-doctors">View Doctors</a></li>
             
           </ul>
         </li>

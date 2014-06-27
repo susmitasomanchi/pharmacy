@@ -2,7 +2,7 @@ package controllers;
 
 import java.util.List;
 
-import models.DiagnosticCenter;
+import models.DiagnosticCentre;
 import models.DiagnosticRepresentative;
 import models.Doctor;
 import play.Logger;
@@ -12,8 +12,9 @@ import play.mvc.Controller;
 import play.mvc.Result;
 
 public class DRController extends Controller {
-	static DiagnosticRepresentative loggedInDR = LoginController
-			.getLoggedInUser().getDiagnosticRepresentative();
+	public static DiagnosticRepresentative dr = LoginController.getLoggedInUser()
+			.getDiagnosticRepresentative();
+	public static DiagnosticCentre dc = dr.diagnosticCentre;
 	public static Form<DiagnosticRepresentative> diagnosticRepresentative = Form
 			.form(DiagnosticRepresentative.class);
 
@@ -23,10 +24,11 @@ public class DRController extends Controller {
 	}
 
 	public static Result addDiagRepProcess() {
-		Long id = LoginController.getLoggedInUser().id;
-		final Form<DiagnosticRepresentative> filledForm = diagnosticRepresentative
+		/*DiagnosticRepresentative dr = LoginController.getLoggedInUser()
+				.getDiagnosticRepresentative();
+		*/final Form<DiagnosticRepresentative> filledForm = diagnosticRepresentative
 				.bindFromRequest();
-		Logger.info("filledForm"+filledForm);
+		Logger.info("filledForm" + filledForm);
 
 		if (filledForm.hasErrors()) {
 			return badRequest(views.html.diagnostic.diagnosticRep
@@ -34,12 +36,12 @@ public class DRController extends Controller {
 		} else {
 
 			final DiagnosticRepresentative diagRep = filledForm.get();
-			Logger.info("name of diagrep..."+diagRep.id);
-			DiagnosticCenter dc = DiagnosticCenter.find.byId(id);
+			Logger.info("diagrep.." + diagRep);
+			Logger.info("id of diagrep..." + diagRep.id);
+			diagRep.save();
 			dc.diagnosticRepresentativelist.add(diagRep);
-			
-			dc.update();
 
+			dc.update();
 			return ok(String.format("Saved product %s", diagRep));
 		}
 
@@ -48,13 +50,13 @@ public class DRController extends Controller {
 	/*
 	 * displaying all diagnostic Representators
 	 */
-	public static Result diagnosticReplist(Long id) {
-		Logger.info("incoming id=" + id);
-		DiagnosticCenter diagnosticCentre = DiagnosticCenter.find.byId(id);
-		Logger.info("this........"
-				+ diagnosticCentre.diagnosticRepresentativelist.size());
+	public static Result diagnosticRepresentativeList() {
+
+		//DiagnosticCentre diagnosticCentre = dr.diagnosticCentre;
+		Logger.info("size of list........"
+				+ dc.diagnosticRepresentativelist.size());
 		return ok(views.html.diagnostic.diagnosticList
-				.render(diagnosticCentre.diagnosticRepresentativelist));
+				.render(dc.diagnosticRepresentativelist));
 
 	}
 
@@ -71,23 +73,31 @@ public class DRController extends Controller {
 	 */
 
 	public static Result addDoctor(Long id) {
-
-		if (loggedInDR.doctorList.contains(Doctor.find.byId(id)) != true) {
-
-			loggedInDR.doctorList.add(Doctor.find.byId(id));
+		/*DiagnosticRepresentative dr = LoginController.getLoggedInUser()
+				.getDiagnosticRepresentative();*/
+		
+		Logger.info("Diagnostic centre name.." + dc.name);
+		Logger.info("Diagnostic centre id.." + dc.id);
+		Doctor doctor=Doctor.find.byId(id);
+		if(dc.doctorList.contains(doctor)!=true){
+		dc.doctorList.add(doctor);
 		}
-
-		return ok(views.html.diagnostic.addDoctor.render(loggedInDR.doctorList));
+		dc.update();
+		Logger.info("after adding Doctors list size is.." + dc.doctorList.size());
+		// views.html.diagnostic.addDoctor.render(dc.doctorList)
+		Logger.info("after adding Doctors list size is.." + dc.doctorList.get(0).appUser.name);
+		return ok();
 
 	}
 
-	// delete doctor from DR list
+	// remove doctor from DR list
 	public static Result removeDoctor(final Long id) {
+		
 		System.out.println("id........." + id);
 		Doctor doctor = Doctor.find.byId(id);
-		loggedInDR.doctorList.remove(doctor);
-		loggedInDR.update();
-		return ok(views.html.diagnostic.addDoctor.render(loggedInDR.doctorList));
+		dc.doctorList.remove(doctor);
+		dc.update();
+		return ok(views.html.diagnostic.addDoctor.render(dc.doctorList));
 
 	}
 
@@ -119,6 +129,17 @@ public class DRController extends Controller {
 		}
 		return ok("no doctor present with this name");
 
+	}
+
+	public static Result displayDiagnosticCentreDoctors() {
+		/*DiagnosticRepresentative dr = LoginController.getLoggedInUser()
+				.getDiagnosticRepresentative();*/
+		//DiagnosticCentre diagnosticCentre = dr.diagnosticCentre;
+		Logger.info("diagnostic center name:" + dc.name);
+		Logger.info("Diagnostic centre id.." + dc.id);
+		Logger.info("size of list" + dc.doctorList.size());
+		return ok(views.html.diagnostic.diagosticCentreDoctorsList
+				.render(dr.diagnosticCentre.doctorList));
 	}
 
 	public static Result addPatient() {

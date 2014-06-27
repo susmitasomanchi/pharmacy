@@ -3,10 +3,11 @@ package controllers;
 import java.util.Date;
 import java.util.List;
 
-import models.DiagnosticCenter;
+import models.DiagnosticCentre;
 import models.DiagnosticOrder;
 import models.DiagnosticOrderStatus;
 import models.DiagnosticReport;
+import models.DiagnosticRepresentative;
 import models.DiagnosticTest;
 import models.DoctorsPrescription;
 import play.Logger;
@@ -20,8 +21,8 @@ public class DiagnosticOrderController extends Controller {
 			.form(DiagnosticOrder.class);
 	static Form<DiagnosticReport> diagnosticReport = Form
 			.form(DiagnosticReport.class);
-	static Form<DiagnosticCenter> diagnosticCentreForm = Form
-			.form(DiagnosticCenter.class);
+	static Form<DiagnosticCentre> diagnosticCentreForm = Form
+			.form(DiagnosticCentre.class);
 
 	
 	/*
@@ -35,13 +36,18 @@ public class DiagnosticOrderController extends Controller {
 		diagnosticOrder.patient=LoginController.getLoggedInUser().getPatient();
 		for (String idStr : diagnosticTestIdStrings) {
 			DiagnosticReport diagnosticReport=new DiagnosticReport();
-			Long id=Long.valueOf(idStr);
+			Long ids=Long.valueOf(idStr);
 			Logger.info(idStr);
-			diagnosticReport.diagnosticTest=DiagnosticTest.find.byId(id);
-			diagnosticReport.save();
+			diagnosticReport.diagnosticTest=DiagnosticTest.find.byId(ids);
+		//	diagnosticReport.save();
+			diagnosticOrder.diagnosticReportList.add(diagnosticReport);
 			
 		}
+		DiagnosticRepresentative diagnosticRepresentative=LoginController.getLoggedInUser().getDiagnosticRepresentative();
+		DiagnosticCentre dc=DiagnosticCentre.find.where().eq("diagnosticRepAdmin", diagnosticRepresentative).findUnique();
+	//	DiagnosticCenter dc=DiagnosticCenter.find.byId(id);
 		
+		dc.diagnosticOrderList.add(diagnosticOrder);
 		
 		
 		
@@ -49,6 +55,19 @@ public class DiagnosticOrderController extends Controller {
 		
 		return ok();
 	}
+	public static Result viewOrders(Long id){
+		
+		/*DiagnosticRepresentative diagnosticRepresentative=LoginController.getLoggedInUser().getDiagnosticRepresentative();
+		DiagnosticCenter dc=DiagnosticCenter.find.where().eq("diagnosticRepAdmin", diagnosticRepresentative).findUnique();*/
+		DiagnosticCentre dc=DiagnosticCentre.find.byId(id);
+		Logger.info("loggerrrrrrrrrr....."+dc.diagnosticOrderList.get(0).diagnosticOrderStatus);
+		
+		return TODO;
+		
+		
+	}
+	
+	
 	/*
 	 * status for the order
 	 * confirmed

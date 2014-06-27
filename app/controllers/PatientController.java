@@ -1,14 +1,15 @@
 package controllers;
 
 import java.util.Calendar;
+
 import java.util.Date;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
 import models.AppUser;
+import models.DiagnosticCentre;
 import models.Appointment;
-import models.DiagnosticCenter;
 import models.Doctor;
 import models.Patient;
 import models.QuestionAndAnswer;
@@ -171,10 +172,9 @@ public class PatientController extends Controller {
 	 * displaying all diagnostic centers
 	 */
 	public static Result diagnosticList() {
-		List<DiagnosticCenter> allList = DiagnosticCenter.find.all();
+		List<DiagnosticCentre> allList = DiagnosticCentre.find.all();
 
-		return ok(views.html.diagnostic.patientDiagnosticCenterList
-				.render(allList));
+		return ok(views.html.diagnostic.patientDiagnosticCenterList.render(allList));
 
 	}
 
@@ -182,7 +182,7 @@ public class PatientController extends Controller {
 	 * saving diagnostic center in patient favorite list
 	 */
 	public static Result saveDiagnosticCenter(Long id) {
-		DiagnosticCenter dc = DiagnosticCenter.find.byId(id);
+		DiagnosticCentre dc = DiagnosticCentre.find.byId(id);
 		Patient patient = LoginController.getLoggedInUser().getPatient();
 
 		patient.diagnosticCenterList.add(dc);
@@ -200,7 +200,7 @@ public class PatientController extends Controller {
 		Long id = LoginController.getLoggedInUser().getPatient().id;
 		Patient diagnoCenterList = Patient.find.where().eq("id", id)
 				.findUnique();
-		List<DiagnosticCenter> list = diagnoCenterList.diagnosticCenterList;
+		List<DiagnosticCentre> list = diagnoCenterList.diagnosticCenterList;
 
 		return ok(views.html.patient.myDiagnoList.render(list));
 
@@ -213,7 +213,7 @@ public class PatientController extends Controller {
 	public static Result removePatientDiagnoCenter(final Long id) {
 
 		Patient patient = LoginController.getLoggedInUser().getPatient();
-		DiagnosticCenter centre = DiagnosticCenter.find.byId(id);
+		DiagnosticCentre centre = DiagnosticCentre.find.byId(id);
 		patient.diagnosticCenterList.remove(centre);
 		patient.update();
 

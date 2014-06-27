@@ -4,7 +4,7 @@
 <thead>
 <tr>
 <th>
-Name
+NAME
 </th>
 </tr>
 </thead>
@@ -12,14 +12,14 @@ Name
 @for(dc <- list) {
 <tr>
 <td>
-@dc.appUser.name
+@dc.name
 </td>
 <th>
-<a href="/diagnostic-edit/@dc.appUser.id" class="btn btn-xs btn-success">Edit</a>
+<a href="/diagnostic-edit/@dc.id" class="btn btn-xs btn-success">Edit</a>
 
 
-<a href="/diagnostic-delete/@dc.appUser.id" class="btn btn-xs btn-success">Delete</a>
-<a href="/diagnostic-service-list/@dc.id" class="btn btn-xs btn-success">Doctors</a>
+<a href="/diagnostic-delete/@dc.id" class="btn btn-xs btn-success">Delete</a>
+@*<a href="/diagnostic-service-list1/@dc.id" class="btn btn-xs btn-success">Doctors</a>*@
 
 </th>
 </tr>
