@@ -2,8 +2,9 @@
 @(dataForm:play.data.Form[models.DiagnosticTest])
 @import helper.twitterBootstrap._
 
+@main("Add a Test"){
 
-     @helper.form(action=routes.DiagnosticTestController.addTestProcess(),'method -> "post") {
+     @helper.form(action=routes.DiagnosticController.addTestProcess(),'method -> "post") {
 
 
 			
@@ -16,8 +17,11 @@
 			
 			<input type="hidden" name="id" value='@dataForm("id").value' >
 			<input type="submit" name="submit" value="save"/>
+			<a href="/add-test-done" class="btn btn-xs btn-default">Done</a>
 		
 }
 
+
+}
 
 

@@ -10,7 +10,8 @@ package controllers;
 
 
 import models.AppUser;
-import models.DiagnosticCenter;
+
+import models.DiagnosticCentre;
 import models.DiagnosticRepresentative;
 import models.Doctor;
 import models.MedicalRepresentative;
@@ -93,10 +94,15 @@ public class UserController extends Controller {
 				final DiagnosticRepresentative diagRep = new DiagnosticRepresentative();
 				diagRep.appUser = appUser;
 				diagRep.save();
-				final DiagnosticCenter diagnosticCenter = new DiagnosticCenter();
+				final DiagnosticCentre diagnosticCenter = new DiagnosticCentre();
 				diagnosticCenter.name = filledForm.get().diagnosticCenterName;
 				diagnosticCenter.diagnosticRepAdmin = diagRep;
 				diagnosticCenter.save();
+				diagRep.diagnosticCentre = diagnosticCenter;
+				diagRep.update();
+				
+				Logger.info(diagRep.diagnosticCentre.name);
+				
 			}
 			
 			session().clear();
