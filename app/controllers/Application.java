@@ -15,13 +15,20 @@ public class Application extends Controller {
 	public static Form<DiagnosticRepresentative> diagnosticRepForm=Form.form(DiagnosticRepresentative.class);
 	public static final Form<LoginBean> loginForm = Form.form(LoginBean.class);
 
+	// 'Coming Soon' index page
+	public static Result index() {
+		return ok(views.html.comingsoon.render(loginForm));
+	}
+	public static Result indexX(final String str) {
+		return redirect(routes.Application.index());
+	}
+
+
+	/*
 	public static Result index() {
 		return ok(views.html.index.render(loginForm));
 	}
-
-	public static Result indexX(final String str) {
-		return ok(views.html.index.render(loginForm));
-	}
+	 */
 
 	//sales representator proccessing
 

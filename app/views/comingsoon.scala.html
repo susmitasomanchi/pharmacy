@@ -1,0 +1,130 @@
+@(loginForm:play.data.Form[beans.LoginBean])
+
+@no_navbar("MedNetwork"){
+
+<script>
+function toggleuser(id){
+	  //alert(id);
+	  //$('.hidden').hide();
+	  
+	  
+	  $('.hidden').each(function(obj) {
+		  console.log('yay!');
+		  $(this).hide();
+		});
+	  
+	  $('#patient').show();
+}
+</script>
+
+<div class="row">
+<div class="col-md-10 col-md-offset-1">
+	
+	
+	<div class="row">
+      <div class="col-md-6" style="margin-top:-1%; margin-bottom:-2%;">
+          <h3><span style="cursor:pointer;" onclick="window.location.href='/';"><img style="width:140px; height:80px;" src="/assets/blog/images/mednlogo.png" alt="MedNetwork">MedNetwork</span></h3>
+      </div>
+	</div>
+    
+    <hr>
+  
+  <div class="row">
+    
+    
+	<div class="col-md-8">
+     <div class="row">
+      <p class="well">
+        <strong>MedNetwork will be launched soon!</strong>
+        <br><br>
+        	MedNetwork is a platform which will transform the healthcare sector by networking and integrating all stakeholders involved in the sector.
+        	<br>
+        	Launching this Independence Day, MedNetwork's aim is to be the ultimate go-to destination for <u>all</u> healthcare needs.
+        <br>
+      </p>
+    </div>
+    <div class="row well">
+      <ul>
+      	<li><h4>How will MedNetwork help:</h4></li>
+        <li><h4><a style="cursor:pointer;text-decoration:none;" onclick="toggleuser('patient');"><i class="fa fa-users"></i> Patients </a></h4></li>
+        <li><h4><a style="cursor:pointer;text-decoration:none;" onclick="toggleuser('doctor');"><i class="fa fa-user-md"></i> Doctors </a></h4></li>
+        <li><h4><a style="cursor:pointer;text-decoration:none;" onclick="toggleuser('pharmacy');"><i class="fa fa-medkit"></i> Pharmacies </a></h4></li>
+        <li><h4><a style="cursor:pointer;text-decoration:none;" onclick="toggleuser('pharmacompany');"><i class="fa fa-ambulance "></i> Pharma Companies</a></h4></li>
+        <li><h4><a style="cursor:pointer;text-decoration:none;" onclick="toggleuser('diagnostic');"><i class="fa fa-bar-chart-o"></i> Diagnostic Centers </a></h4></li>
+      </ul>
+    </div>
+	</div>
+    
+    
+    <div class="col-md-4">
+    @helper.form(action=routes.LoginController.processLogin()) {
+	<div style="margin-top:-1.3em;">
+	<div class="panel panel-primary" >
+	<div class="panel-heading">
+	<h3 class="panel-title">Login</h3>
+	</div>
+	<div class="panel-body" style="padding:0px" >
+	<div style="padding-left:20px">
+	<br>
+			@helper.inputText(loginForm("email"),'_label->"Username")
+			@helper.inputPassword(loginForm("password"),'_label->"Password")
+			</div>
+			<div style="margin-left:35%;">
+					<input type="submit" class="btn btn-primary" value="Login">
+			</div>
+	</div>
+	</div>
+	</div>
+	}
+    </div>
+    
+    
+	<div class="row">
+    <div class="col-md-12">
+    <div class="well">
+  		<p id="patient" class="hidden">
+			Bid goodbye to your clumsy prescriptions file. All prescriptions will be online and always available
+			<br>
+			MedNetwork will be like a GMail of your prescription. And like GMail, will be absolutely safe and secure! 			
+		</p>
+		
+		<p id="doctor" class="hidden">
+			Bid goodbye to your clumsy prescriptions file. All prescriptions will be online and always available
+			<br>
+			MedNetwork will be like a GMail of your prescription. And like GMail, will be absolutely safe and secure! 			
+		</p>
+		
+		<p id="pharmacy" class="hidden">
+			Bid goodbye to your clumsy prescriptions file. All prescriptions will be online and always available
+			<br>
+			MedNetwork will be like a GMail of your prescription. And like GMail, will be absolutely safe and secure! 			
+		</p>
+		
+		<p id="pharmacompany" class="hidden">
+			Bid goodbye to your clumsy prescriptions file. All prescriptions will be online and always available
+			<br>
+			MedNetwork will be like a GMail of your prescription. And like GMail, will be absolutely safe and secure! 			
+		</p>
+		
+		
+		<p id="diagnostic" class="hidden">
+			Bid goodbye to your clumsy prescriptions file. All prescriptions will be online and always available
+			<br>
+			MedNetwork will be like a GMail of your prescription. And like GMail, will be absolutely safe and secure! 			
+		</p>		
+		
+	</div>
+	</div>
+    </div>
+  
+  
+  </div>
+  <hr>
+ 
+
+  </div>
+  </div>
+  
+  
+}
+

@@ -77,4 +77,8 @@ public class Article extends BaseEntity{
 		super.update();
 	}
 
+	public List<BlogComment> commentListInOrder(){
+		return BlogComment.find.where().eq("article_id", this.id).orderBy("date DESC").findList();
+	}
+
 }

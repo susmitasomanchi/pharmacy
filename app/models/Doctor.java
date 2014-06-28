@@ -40,7 +40,15 @@ public class Doctor extends BaseEntity{
 	@Required
 	public String degree;
 
-	public String test333;
+
+	@Required
+	public String t111;
+
+
+	@Required
+	public String t222;
+
+
 
 	//education
 	@OneToMany(cascade=CascadeType.ALL)

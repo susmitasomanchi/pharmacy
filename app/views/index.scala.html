@@ -115,6 +115,34 @@
      'callback': signinCallback
    };
    function signinCallback(authResult) {
+	   //console.log(authResult);
+	   
+//	   gapi.client.load('plus','v1', function(){
+//			var request = gapi.client.plus.people.get( {'userId' : 'me'} );
+//			request.execute(function ddd(res){
+//			alert(JSON.stringify(res));
+//			alert(res.displayName);
+//			alert(res.emails);
+// 		});
+ //request.execute(function(resp) {
+//   alert('Retrieved profile for:' + JSON.stringify(resp));
+ //});
+//		});
+
+
+
+gapi.client.load('oauth2', 'v2', function() {
+  gapi.client.oauth2.userinfo.get().execute(function(resp) {
+    // Shows user email
+    alert(resp.email);
+  })
+});
+
+
+
+
+		
+	   
 	   if (authResult['status']['signed_in']) {
 		   
 	     // Update the app to reflect a signed in user
@@ -140,6 +168,50 @@
      
    });
  }
+
+/*
+ var profile, email;
+
+ 	function loadProfile(){
+	    var request = gapi.client.plus.people.get( {'userId' : 'me'} );
+	    request.execute(loadProfileCallback);
+	  }
+
+
+ 	function loadProfileCallback(obj) {
+ 	    profile = obj;
+
+ 	    // Filter the emails object to find the user's primary account, which might
+ 	    // not always be the first in the array. The filter() method supports IE9+.
+ 	    email = obj['emails'].filter(function(v) {
+ 	        return v.type === 'account'; // Filter out the primary email
+ 	    })[0].value; // get the email from the filtered results, should always be defined.
+ 	    displayProfile(profile);
+ 	  }
+
+
+ 	   //Display the user's basic profile information from the profile object.
+ 	   //
+ 	  function displayProfile(profile){
+ 	 	alert('email: '+email);  
+ 	    document.getElementById('name').innerHTML = profile['displayName'];
+ 	    document.getElementById('pic').innerHTML = '<img src="' + profile['image']['url'] + '" />';
+ 	    document.getElementById('email').innerHTML = email;
+ 	    toggleElement('profile');
+ 	  }
+
+ 	  
+ 	   //Utility function to show or hide elements by their IDs.
+ 	   //
+ 	  function toggleElement(id) {
+ 	    var el = document.getElementById(id);
+ 	    if (el.getAttribute('class') == 'hide') {
+ 	      el.setAttribute('class', 'show');
+ 	    } else {
+ 	      el.setAttribute('class', 'hide');
+ 	    }
+ 	  }
+ */
  
 </script>
 
@@ -150,9 +222,12 @@
     data-clientid="404230636180-4qmlk57403u2985kjibgj3l37a0sdi54.apps.googleusercontent.com"
     data-cookiepolicy="single_host_origin"
     data-requestvisibleactions="http://schemas.google.com/AddActivity"
-    data-scope="https://www.googleapis.com/auth/plus.login">
+    data-scope="https://www.googleapis.com/auth/plus.login https://www.googleapis.com/auth/userinfo.email">
   </span>
 </span>
+
+
+
 
 
 
@@ -232,7 +307,7 @@
     FB.api('/me', function(response) {
       console.log('Successful login for: ' + response.name);
       document.getElementById('status').innerHTML =
-        'Thanks for logging in, ' + response.name + '!';
+        'Thanks for logging in, ' + response.email + '!';
     });
   }
 </script>
@@ -257,3 +332,4 @@
   
   
 }
+
