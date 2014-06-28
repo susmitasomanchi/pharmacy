@@ -1,14 +1,11 @@
 package models;
-
-import java.util.ArrayList;
 import java.util.List;
-
+import java.util.ArrayList;
 import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 
@@ -16,8 +13,11 @@ import play.data.validation.Constraints.Email;
 import play.data.validation.Constraints.Required;
 import play.db.ebean.Model;
 
+@SuppressWarnings("serial")
 @Entity
-public class DiagnosticCenter extends BaseEntity {
+public class DiagnosticCentre extends BaseEntity {
+
+		
 
 	@GeneratedValue(strategy = GenerationType.AUTO)
 	@Id
@@ -46,31 +46,27 @@ public class DiagnosticCenter extends BaseEntity {
 	public String emailId;
 
 	public String websiteName;
+	
+	
+	public List<Doctor> doctorList = new ArrayList<Doctor>();
 
 	@OneToOne
 	public DiagnosticRepresentative diagnosticRepAdmin;
 
-	@ManyToOne(cascade=CascadeType.ALL)
-	public List<DiagnosticRepresentative> diagReplist = new ArrayList<DiagnosticRepresentative>();
+	@OneToMany(cascade=CascadeType.ALL, mappedBy="diagnosticCentre")
+	public List<DiagnosticRepresentative> diagnosticRepresentativelist = new ArrayList<DiagnosticRepresentative>();
 
 	@OneToMany(cascade=CascadeType.ALL)
 	public List<DiagnosticTest> diagnosticTestList = new ArrayList<DiagnosticTest>();
+	
+	@OneToMany(cascade=CascadeType.ALL)
+	public List<DiagnosticOrder> diagnosticOrderList = new ArrayList<DiagnosticOrder>();
 
-	public static Model.Finder<Long, DiagnosticCenter> find = new Finder<Long, DiagnosticCenter>(
-			Long.class, DiagnosticCenter.class);
+	public static Model.Finder<Long, DiagnosticCentre> find = new Finder<Long, DiagnosticCentre>(
+			Long.class, DiagnosticCentre.class);
 
-	public static List<DiagnosticCenter> all() {
-		return find.all();
 
-	}
-
-	public static List<DiagnosticCenter> getDetails(final String name2) {
-		// TODO Auto-generated method stub
-		final List<DiagnosticCenter> c1 = find.where().eq("name", name2)
-				.findList();
-
-		return c1;
-	}
+	
 
 	@Override
 	public String toString() {
@@ -79,11 +75,5 @@ public class DiagnosticCenter extends BaseEntity {
 				+ this.mobileNo + "  " + this.emailId + "  " + this.websiteName;
 	}
 
-	public static void delete(final Long id2) {
-		// TODO Auto-generated method stub
-
-		find.ref(id2).delete();
-
-	}
-
+	
 }

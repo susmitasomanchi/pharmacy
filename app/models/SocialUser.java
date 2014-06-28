@@ -34,7 +34,7 @@ public class SocialUser extends BaseEntity{
 
 	public Date dob;
 
-	public BlogCommentatorType loggedInVia;
+	public BlogCommentatorType firstLogInVia;
 
 	public static Model.Finder<Long, SocialUser> find = new Finder<Long, SocialUser>(Long.class, SocialUser.class);
 }

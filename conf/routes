@@ -140,24 +140,25 @@ GET    /diagnostic-search/list 					controllers.DiagnosticController.diagnosticS
 GET    /diagnosticrep/doctor-list         		controllers.DRController.doctorList()
 GET    /diagnosticrep			         		controllers.DRController.addDiagRep()
 POST    /diagnosticrep/save		         		controllers.DRController.addDiagRepProcess()
-GET    /diagnosticrep/list			        	controllers.DRController.diagnosticReplist()
+GET    /diagnosticrep/list			        	controllers.DRController.diagnosticRepresentativeList()
 GET    /diagnosticrep/doctor-search	         	controllers.DRController.search()
 GET    /diagnosticrep/doctorsearch	         	controllers.DRController.searchProcess()
 GET    /diagnosticrep/add-doctor/:id      		controllers.DRController.addDoctor(id: Long)
 GET    /diagnosticrep/remove-doctor/:id   		controllers.DRController.removeDoctor(id: Long)
+GET    /diagnostic-centre/all-doctors      		controllers.DRController.displayDiagnosticCentreDoctors()
 
-GET    /upload-patient-file  					controllers.DiagnosticTestController.uploadFile()
-POST    /upload-patient-file/save		  		controllers.DiagnosticTestController.uploadFileProcess()
-GET    /download						  		controllers.DiagnosticTestController.downloadFile()
+GET    /upload-patient-file  					controllers.DiagnosticController.uploadFile()
+POST    /upload-patient-file/save		  		controllers.DiagnosticController.uploadFileProcess()
+GET    /download						  		controllers.DiagnosticController.downloadFile()
+GET    /add-test-done						  		controllers.DiagnosticController.addTestDone()
 
 
 #Diagnostic Test
-GET    /test				            		controllers.DiagnosticTestController.addTest()
-POST   /test/save					       		controllers.DiagnosticTestController.addTestProcess()
-GET    /test-list/:id				            controllers.DiagnosticTestController.diagnosticTestList(id: Long)
-GET    /prescribe-test				            controllers.DiagnosticPrescriptionController.prescribe()
-GET    /prescribe-test/save				            controllers.DiagnosticPrescriptionController.receive()
-
+GET    /test				            		controllers.DiagnosticController.addTest()
+POST   /test/save					       		controllers.DiagnosticController.addTestProcess()
+GET    /test-list/:id				            controllers.DiagnosticController.diagnosticTestList(id: Long)	
+GET		/place-order				controllers.DiagnosticOrderController.receive()		
+GET		/display-orders/:id				controllers.DiagnosticOrderController.viewOrders(id: Long)																																		
 #MR Module
 GET    /doctor-list                       controllers.MRController.doctorList()
 GET    /mr/add-doctor/:id                 controllers.MRController.addDoctor(id: Long)

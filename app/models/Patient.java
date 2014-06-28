@@ -41,7 +41,7 @@ public class Patient extends BaseEntity {
 	public String isUrgentPatient;
 	
 	@ManyToMany(cascade=CascadeType.ALL)
-	public List<DiagnosticCenter> diagnosticCenterList=new ArrayList<DiagnosticCenter>();
+	public List<DiagnosticCentre> diagnosticCenterList=new ArrayList<DiagnosticCentre>();
 
 	public static Model.Finder<Long, Patient> find = new Finder<Long, Patient>(Long.class, Patient.class);
 

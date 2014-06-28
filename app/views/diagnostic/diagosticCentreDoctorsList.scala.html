@@ -1,0 +1,32 @@
+@(list: List[Doctor])
+@main("User List") {
+<table class="table table-bordered">
+<thead>
+<tr>
+<th>
+Name
+</th>
+<th>
+id
+</th>
+</thead>
+<tbody>
+@for(doctor <- list) {
+<tr>
+<td>
+@doctor.appUser.name
+</td>
+<td>
+@doctor.id
+</td>
+
+<th>
+
+
+<a href="/diagnosticrep/remove-doctor/@doctor.id" class="btn btn-xs btn-danger">remove</a>
+</th>
+</tr>
+}
+</tbody>
+</table>
+}

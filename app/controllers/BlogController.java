@@ -232,7 +232,7 @@ public class BlogController extends Controller {
 			socialUser = new SocialUser();
 			socialUser.name = name;
 			socialUser.email = email.trim().toLowerCase();
-			socialUser.loggedInVia = BlogCommentatorType.valueOf(type);
+			socialUser.firstLogInVia = BlogCommentatorType.valueOf(type);
 			socialUser.save();
 		}
 		else{
@@ -273,7 +273,7 @@ public class BlogController extends Controller {
 			socialUser = new SocialUser();
 			socialUser.name = name;
 			socialUser.email = email.trim().toLowerCase();
-			socialUser.loggedInVia = BlogCommentatorType.valueOf(type);
+			socialUser.firstLogInVia = BlogCommentatorType.valueOf(type);
 			socialUser.save();
 		}
 		else{

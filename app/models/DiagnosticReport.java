@@ -9,13 +9,12 @@ import javax.persistence.Id;
 import javax.persistence.Lob;
 
 import play.db.ebean.Model;
-import play.db.ebean.Model.Finder;
 
 @Entity
 public class DiagnosticReport extends BaseEntity {
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO)
-	public Long diagReportId;
+	public Long id;
 
 	public String fileName;
 
@@ -24,11 +23,11 @@ public class DiagnosticReport extends BaseEntity {
 
 	public DiagnosticTest diagnosticTest;
 
-	public DiagnosticOrderStatus reportStatus=DiagnosticOrderStatus.SAMPLE_NOT_COLLECTED;
+	public DiagnosticOrderStatus reportStatus = DiagnosticOrderStatus.SAMPLE_NOT_COLLECTED;
 
-	public Date sampleCollectedDate;
+	public Date sampleCollectionDate;
 
-	public Date reportGenertaedDate;
+	public Date reportGenerationDate;
 
 	public static Model.Finder<Long, DiagnosticReport> find = new Finder<Long, DiagnosticReport>(
 			Long.class, DiagnosticReport.class);
