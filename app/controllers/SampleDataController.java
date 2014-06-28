@@ -63,6 +63,9 @@ public class SampleDataController extends Controller {
 
 
 	public static Result createBlogAdmin(){
+		if(AppUser.find.where().eq("email", "blog@mednetwork.in").findList().size()>0){
+			return redirect(routes.Application.index());
+		}
 		final AppUser appUser = new AppUser();
 		appUser.name = "Blog Admin";
 		appUser.role = Role.BLOG_ADMIN;
