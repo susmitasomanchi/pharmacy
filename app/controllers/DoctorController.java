@@ -21,6 +21,7 @@ import models.DoctorSocialWork;
 import models.LanguageAppUser;
 import models.Patient;
 import models.QuestionAndAnswer;
+import models.Role;
 import play.Logger;
 import play.data.Form;
 import play.mvc.Controller;
@@ -30,6 +31,8 @@ import beans.ClinicBean;
 import beans.DoctorDetailBean;
 import beans.PatientBean;
 import beans.QuestionAndAnswerBean;
+
+import com.avaje.ebean.Ebean;
 
 
 @BasicAuth
@@ -77,7 +80,7 @@ public class DoctorController extends Controller {
 
 
 	public static Result newClinic(){
-		return ok(views.html.doctor.newClinic.render(clinicForm));
+		return ok(views.html.doctor.newClinic.render(clinicForm,new ArrayList<String>(),new ArrayList<String>()));
 	}
 
 
@@ -137,6 +140,7 @@ public class DoctorController extends Controller {
 		return ok(views.html.doctor.doctorPublications.render(publicationForm));
 	}
 
+
 	public static Result processDoctorPublication() {
 		final Form<DoctorPublication> publicationfilledForm = publicationForm.bindFromRequest();
 		// Logger.info("enteredt");
@@ -156,10 +160,13 @@ public class DoctorController extends Controller {
 
 	}
 
+
 	public static Result doctorAward(){
 		Logger.info(loggedIndoctor.doctorAwardList.size()+" size of list");
 		return ok(views.html.doctor.doctorAward.render(awardForm));
 	}
+
+
 
 	public static Result processDoctorAward() {
 		final Form<DoctorAward> awardfilledForm = awardForm.bindFromRequest();
@@ -177,9 +184,13 @@ public class DoctorController extends Controller {
 		return redirect(routes.DoctorController.doctorProfile());
 
 	}
+
+
 	public static Result doctorLanguage(){
 		return ok(views.html.doctor.doctorLanguage.render(languageForm));
 	}
+
+
 
 	public static Result processDoctorLanguage(){
 		final Form<DoctorDetailBean> languagefilledForm = languageForm.bindFromRequest();
@@ -204,9 +215,13 @@ public class DoctorController extends Controller {
 		return redirect(routes.DoctorController.doctorProfile());
 
 	}
+
+
 	public static Result doctorSocialWork(){
 		return ok(views.html.doctor.doctorSocialWork.render(socialWorkForm));
 	}
+
+
 
 	public static Result processDoctorSocialWork() {
 		final Form<DoctorSocialWork> socialWorkfilledForm = socialWorkForm.bindFromRequest();
@@ -229,27 +244,37 @@ public class DoctorController extends Controller {
 
 	}
 
+	//Process new clinic timing Data
 	public static Result processNewClinic(){
 		final Form<ClinicBean> filledForm = clinicForm.bindFromRequest();
-		DoctorClinicInfo doctorClinicInfo=null;
 		if(filledForm.hasErrors()){
-			return ok(views.html.doctor.newClinic.render(filledForm));
+			return ok(views.html.doctor.newClinic.render(clinicForm,new ArrayList<String>(),new ArrayList<String>()));
 		}
 		else{
 			DoctorClinicInfo clinicInfo=filledForm.get().toDoctorClinicInfo();
 
 
 			if (filledForm.get().id!=null) {
-				final DoctorClinicInfo clinicInfoPrevious=DoctorClinicInfo.find.byId(doctorClinicInfo.id);
-				if(!doctorClinicInfo.clinic.name.equals(clinicInfoPrevious.clinic.name)){
-					Logger.info("name test"+doctorClinicInfo.clinic.name);
-					clinicInfoPrevious.clinic.name=doctorClinicInfo.clinic.name;
+				final DoctorClinicInfo clinicInfoPrevious=DoctorClinicInfo.find.byId(clinicInfo.id);
+				if(!clinicInfo.clinic.name.equals(clinicInfoPrevious.clinic.name)){
+					Logger.info("name test"+clinicInfo.clinic.name);
+					clinicInfoPrevious.clinic.name=clinicInfo.clinic.name;
 					clinicInfoPrevious.clinic.update();
 					clinicInfoPrevious.update();
 				}
+				if(!DoctorController.isListSame(clinicInfo.schedulDays, clinicInfoPrevious.schedulDays)||clinicInfo.slot != clinicInfoPrevious.slot || clinicInfo.slotmr!=clinicInfoPrevious.slotmr){
+					clinicInfoPrevious.schedulDays=clinicInfo.schedulDays;
+					clinicInfoPrevious.slot=clinicInfo.slot;
+					clinicInfoPrevious.slotmr=clinicInfo.slotmr;
+					clinicInfoPrevious.update();
+
+
+					return DoctorController.reCreateAppointment(clinicInfoPrevious);
+				}
 				return redirect(routes.DoctorController.myClinics());
 			}else{
-
+				clinicInfo.doctor=LoginController.getLoggedInUser().getDoctor();
+				clinicInfo.save();
 
 				return DoctorController.createAppointment(clinicInfo);
 			}
@@ -258,8 +283,11 @@ public class DoctorController extends Controller {
 
 	public static Result myClinics(){
 		final Doctor loggedInDoctor = LoginController.getLoggedInUser().getDoctor();
-		final List<DoctorClinicInfo> clinicInfos = DoctorClinicInfo.find.where().eq("doctor", loggedInDoctor).findList();
-		return ok(views.html.doctor.myClinics.render(clinicInfos));
+		Logger.warn(loggedInDoctor.doctorClinicInfoList.size()+"");
+		for (DoctorClinicInfo clinicInfo : loggedInDoctor.doctorClinicInfoList) {
+			Logger.warn(clinicInfo.clinic.name);
+		}
+		return ok(views.html.doctor.myClinics.render(loggedInDoctor.doctorClinicInfoList));
 
 	}
 
@@ -305,12 +333,13 @@ public class DoctorController extends Controller {
 
 		final DoctorClinicInfo doctorClinicInfo=DoctorClinicInfo.find.byId(docClinicId);
 
+		ClinicBean bean=doctorClinicInfo.toBean();
 
 		final Form<ClinicBean> filledForm = clinicForm.fill(doctorClinicInfo.toBean());
 
 		//		Logger.info(doctorClinicInfo.toBean().daysOfWeek.size()+" "+doctorClinicInfo.toBean().daysOfWeekMr.size());
 
-		return ok(views.html.doctor.newClinic.render(filledForm));
+		return ok(views.html.doctor.newClinic.render(filledForm,bean.daysOfWeek,bean.daysOfWeekMr));
 
 	}
 
@@ -409,21 +438,39 @@ public class DoctorController extends Controller {
 					calendar.set(Calendar.MINUTE, 0);
 					calendar.set(Calendar.SECOND,0);
 					calendar.set(Calendar.MILLISECOND,0);
-
-					for (int j2 = 0; j2 <((hourToClinic*60)/5); j2++) {
-						if(Appointment.find.where().eq("appointmentTime", calendar.getTime()).findUnique()==null){
-							Logger.info("  "+calendar.getTime());
-							final Appointment appointment=new Appointment();
-							appointment.appointmentStatus=AppointmentStatus.AVAILABLE;
-							appointment.appointmentTime=calendar.getTime();
-							appointment.clinic=docclinicInfo.clinic;
-							appointment.doctor=doctor;
-							appointment.save();
-							calendar.add(Calendar.MINUTE, 5);
+					if(schedule.requester.equals(Role.PATIENT)){
+						for (int j2 = 0; j2 <((hourToClinic*60)/docclinicInfo.slot); j2++) {
+							if(Appointment.find.where().eq("clinic",docclinicInfo.clinic).eq("appointmentTime", calendar.getTime()).findUnique()==null){
+								Logger.info("  "+calendar.getTime());
+								final Appointment appointment=new Appointment();
+								appointment.appointmentStatus=AppointmentStatus.AVAILABLE;
+								appointment.appointmentTime=calendar.getTime();
+								appointment.clinic=docclinicInfo.clinic;
+								appointment.doctor=doctor;
+								appointment.save();
+								calendar.add(Calendar.MINUTE, docclinicInfo.slot);
+							}
+							else
+							{
+								calendar.add(Calendar.MINUTE, docclinicInfo.slot);
+							}
 						}
-						else
-						{
-							calendar.add(Calendar.MINUTE, 5);
+					}else {
+						for (int j2 = 0; j2 <((hourToClinic*60)/docclinicInfo.slotmr); j2++) {
+							if(Appointment.find.where().eq("clinic",docclinicInfo.clinic).eq("appointmentTime", calendar.getTime()).findUnique()==null){
+								Logger.info("  "+calendar.getTime());
+								final Appointment appointment=new Appointment();
+								appointment.appointmentStatus=AppointmentStatus.AVAILABLE;
+								appointment.appointmentTime=calendar.getTime();
+								appointment.clinic=docclinicInfo.clinic;
+								appointment.doctor=doctor;
+								appointment.save();
+								calendar.add(Calendar.MINUTE,docclinicInfo.slotmr);
+							}
+							else
+							{
+								calendar.add(Calendar.MINUTE,docclinicInfo.slotmr);
+							}
 						}
 					}
 
@@ -441,15 +488,14 @@ public class DoctorController extends Controller {
 
 		return redirect(routes.DoctorController.myClinics());
 	}
+
 	// Re-Create Appointment
-	public static Result reCreateAppointment() {
+	public static Result reCreateAppointment(DoctorClinicInfo clinicInfo) {
+		List<Appointment> appointments=Appointment.find.where().eq("doctor",clinicInfo.doctor).
+				eq("clinic",clinicInfo.clinic).eq("appointmentStatus",AppointmentStatus.AVAILABLE).findList();
+		Ebean.delete(appointments);
 
-
-
-
-
-
-		return ok();
+		return DoctorController.createAppointment(clinicInfo);
 
 	}
 	//Todays Appointment
@@ -467,20 +513,24 @@ public class DoctorController extends Controller {
 		final List<Appointment> appointments=Appointment.find.where().eq("appointmentStatus", AppointmentStatus.APPROVED).eq("doctor", loggedIndoctor).ge("appointmentTime", calendar.getTime()).findList();
 
 
-
 		return ok(views.html.doctor.viewTodaysAppointment.render(appointments));
 
 	}
 
-	public static boolean isListSame(final List<Day> arrayList1,final List<Day> arrayList2) {
+	public static boolean isListSame(final List<DaySchedule> arrayList1,final List<DaySchedule> arrayList2) {
 		if(arrayList1.size() != arrayList2.size()){
 			Logger.info("if 1");
 			return false;
 		}
-		for (final Day day : arrayList2) {
-			if(!(arrayList1.contains(day))){
-				return false;
+		for(int i=0;i<arrayList1.size();i++)
+		{
+			DaySchedule schedule=arrayList1.get(i);
+			DaySchedule scheduleMr=arrayList2.get(i);
+			if(!schedule.equals(scheduleMr)){
+				return schedule.equals(scheduleMr);
 			}
+
+
 		}
 		return true;
 	}
