@@ -28,6 +28,7 @@ public class BlogController extends Controller {
 	public static Result blogHome(){
 		return ok(views.html.blog.home.render());
 	}
+	
 
 	@BasicAuth
 	public static Result categoryForm(){

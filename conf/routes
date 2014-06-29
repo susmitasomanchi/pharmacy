@@ -6,6 +6,7 @@
 #Blog
 
 GET		/blog/create-blog-admin			controllers.SampleDataController.createBlogAdmin()
+GET		/blog/login						controllers.LoginController.blogAdminLoginForm()
 
 GET		/blog							controllers.BlogController.blogHome()
 GET		/blogs							controllers.BlogController.blogHome()
