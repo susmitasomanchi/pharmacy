@@ -9,6 +9,7 @@ GET		/blog/create-blog-admin			controllers.SampleDataController.createBlogAdmin(
 
 GET		/blog							controllers.BlogController.blogHome()
 GET		/blogs							controllers.BlogController.blogHome()
+GET		/blog/login-admin				controllers.BlogController.loginBlogAdmin()
 GET		/blog/admin/new-category				controllers.BlogController.categoryForm()
 POST	/blog/admin/new-category				controllers.BlogController.processCategoryForm()
 GET		/blog/admin/categories				controllers.BlogController.categories()
@@ -71,11 +72,11 @@ GET		/doctor-socialwork				controllers.DoctorController.doctorSocialWork()
 POST	/doctor-socialwork				controllers.DoctorController.processDoctorSocialWork()
 GET		/doctor-publication				controllers.DoctorController.doctorPublication()
 POST	/doctor-publication				controllers.DoctorController.processDoctorPublication()
+GET		/doctor-prescribe/:id			controllers.DoctorController.showPrescriptionForm(id: Long)
+POST	/doctor-prescribe				controllers.DoctorController.processPrescriptionForm()
 
 
 
-GET    /userform/doctor/                  controllers.DoctorController.form()
-POST   /userform/doctor/                  controllers.DoctorController.process()
 GET    /userform/assistant/               controllers.AssistantController.form()
 POST   /userform/assistant/               controllers.AssistantController.process()
 GET    /scheduleappointment/              controllers.AppointmentController.form()

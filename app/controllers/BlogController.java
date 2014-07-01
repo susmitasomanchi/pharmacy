@@ -16,6 +16,7 @@ import play.data.Form;
 import play.mvc.Controller;
 import play.mvc.Result;
 import actions.BasicAuth;
+import beans.LoginBean;
 
 import com.google.common.io.Files;
 
@@ -24,9 +25,14 @@ public class BlogController extends Controller {
 
 	public static Form<Article> articleForm =Form.form(Article.class);
 	public static Form<ArticleCategory> categoryForm =Form.form(ArticleCategory.class);
+	public static final Form<LoginBean> loginForm = Form.form(LoginBean.class);
 
 	public static Result blogHome(){
 		return ok(views.html.blog.home.render());
+	}
+
+	public static Result loginBlogAdmin(){
+		return ok(views.html.blog.loginBlogAdmin.render(loginForm));
 	}
 
 	@BasicAuth

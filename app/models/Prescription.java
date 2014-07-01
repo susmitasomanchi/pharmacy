@@ -9,6 +9,9 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.OneToMany;
+import javax.persistence.OneToOne;
+
+import play.db.ebean.Model;
 
 
 @SuppressWarnings("serial")
@@ -19,19 +22,20 @@ public class Prescription extends BaseEntity{
 	@GeneratedValue(strategy = GenerationType.AUTO)
 	public  Long id;
 
+	@OneToOne
+	public Appointment appointment;
+
 	public String problemStatement;
 
 	public String prognosis;
 
 	@OneToMany(cascade=CascadeType.ALL)
-	List<PrescribedMedicine> prescriptionMedicineList = new ArrayList<PrescribedMedicine>();
+	public List<MedicineLineItem> medicineLineItemList = new ArrayList<MedicineLineItem>();
 
 	@OneToMany(cascade=CascadeType.ALL)
-	List<PrescribedDiagnosticTest> diagnosticTestList = new ArrayList<PrescribedDiagnosticTest>();
+	public List<DiagnosticTestLineItem> diagnosticTestLineItemList = new ArrayList<DiagnosticTestLineItem>();
 
 	public String remarks;
 
-	public String contactNo;
-
-
+	public static Model.Finder<Long, Prescription> find = new Finder<Long, Prescription>(Long.class, Prescription.class);
 }

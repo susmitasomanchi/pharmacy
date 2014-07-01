@@ -41,14 +41,8 @@ public class Doctor extends BaseEntity{
 	public String degree;
 
 
-	@Required
-	public String t111;
-
-
-	@Required
-	public String t222;
-
-
+	@OneToMany(cascade = CascadeType.ALL)
+	List<Prescription> priscriptionList = new ArrayList<Prescription>();
 
 	//education
 	@OneToMany(cascade=CascadeType.ALL)

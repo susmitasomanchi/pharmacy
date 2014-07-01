@@ -11,6 +11,7 @@ import javax.persistence.Id;
 import javax.persistence.OneToOne;
 
 
+@SuppressWarnings("serial")
 @Entity
 public class Appointment extends BaseEntity {
 
@@ -23,10 +24,8 @@ public class Appointment extends BaseEntity {
 
 	public AppointmentStatus appointmentStatus;
 
-
 	@OneToOne
 	public AppUser requestedBy;
-
 
 	@OneToOne
 	public AppUser apporovedBy;
