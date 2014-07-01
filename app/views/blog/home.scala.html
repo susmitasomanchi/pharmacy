@@ -1,0 +1,296 @@
+@import play.i18n._
+@blog.blogmain("", "", ""){
+
+
+
+
+
+
+   
+    
+<script type="text/javascript">
+
+
+		$(document).ready(function(){
+
+			@for(c <- ArticleCategory.getCategoriesInOrder()){
+			@if(c.getArticleSize() > 0){
+			
+				$("#models-carousel-@c.id").carouFredSel({
+					items: 4,
+					circular: false,
+					infinite: false,
+					auto 	: false,
+					prev	: {	
+						button	: "#models-carousel_prev-@c.id",
+						//key		: "left"
+					},
+					next	: { 
+						button	: "#models-carousel_next-@c.id",
+						//key		: "right"
+					},
+					scroll : {
+            			duration: 500,
+        			}
+				});
+
+			}
+			}
+
+				$("#banner-carousel").carouFredSel({
+					items: 1,
+					circular: true,
+					infinite: true,
+					auto: {
+						items: 1,
+						play:true,
+						timeoutDuration: 4000,
+					},
+					
+      				scroll : {
+            			//items: 1,
+            			fx: "crossfade",
+            			duration: 1000,
+            			//pauseOnHover: true
+        			}
+
+					/*
+					prev	: {	
+						button	: "#models-carousel_prev",
+						key		: "left"
+					},
+					next	: { 
+						button	: "#models-carousel_next",
+						key		: "right"
+					},
+					*/
+					
+				});
+
+		});
+
+
+</script>
+	    
+
+  	
+  	
+  	
+  	
+  	
+  	
+  		
+   
+   <style>
+   .logo-img{
+   	cursor: pointer;
+   }
+   </style>
+   
+   <script>
+   	$(".logo-img").click(function(){
+   		window.location.href='/';
+   	});
+   </script>
+    	
+    <style>
+    .banner-class{
+    	height:400px;
+    	width:940px;
+    }
+    </style>
+    
+    <div id="banner-carousel">
+    		<div class="pimage"><img alt="MedNetwork" class="border-rounded-images banner-class" height="300" src="@routes.Assets.at("blog/images/banner-image-1.jpg")" width="940" /><br></div>
+    		<div class="pimage"><img alt="MedNetwork" class="border-rounded-images banner-class" height="300" src="@routes.Assets.at("blog/images/banner-image-2.jpg")" width="940" /><br></div>
+    		<div class="pimage"><img alt="MedNetwork" class="border-rounded-images banner-class" height="300" src="@routes.Assets.at("blog/images/banner-image-3.jpg")" width="940" /><br></div>
+    </div>	
+    	
+
+			<!--
+			<br>
+			<br>
+			<p class="font-Quicksand" style="color:#0066FF; font-size:18px; font-weight:500">
+				<big>Blog Header Comes Here</big>
+			</p>
+			<p class="font-Quicksand lh30" style="font-size:18px; text-align:justify ">
+				blog description blog description blog description blog description blog description blog description 
+				blog description blog description blog description blog description blog description blog description 
+			</p>
+			-->
+			
+			<hr style="height:1px; background-color:#006687;">
+	
+
+<style>
+.slide {
+    display:block;
+    float:left;
+}
+</style>
+
+
+<script>
+	function showhover(id){
+		$("#thumbnail-"+id).hide();
+		$("#content-"+id).show();
+	}
+	function hidehover(id){
+		$("#thumbnail-"+id).show();
+		$("#content-"+id).hide();
+	}
+</script>
+
+<br>
+<br>
+
+@for(c <- ArticleCategory.getCategoriesInOrder()){
+
+@if(c.getArticleSize() > 0){
+
+		<p style="color:#006687; font-size:20px">
+		<big><a id="@c.slugURL" href="#@c.slugURL" style="color:#006687">@c.name</a></big></p>
+			<div class="row-fluid">
+				<div class="image_carousel">
+					<div id="models-carousel-@c.id">
+						@for(art <- c.getArticlesInOrder){
+							<div id="case-study-@art.id" onmouseover="showhover('case-study-@art.id');" onmouseout="hidehover('case-study-@art.id');" class="slide"> 
+								<div id="thumbnail-case-study-@art.id">
+								
+								<img alt="@art.name" class="thumbnail" src="@routes.BlogController.getThumbnail(art.id)" style="height: 300px; width:200px;"/>
+								
+								<div class="ptxt1">
+									<a style="padding-left:10px;cursor:pointer;" onclick="window.location.href='@routes.BlogController.showArticle(art.id, art.slugURL)'">@art.name</a>
+    							</div>
+    							<div class="ptxt2">
+    								<p style="padding-left:10px; /*font-family: 'Century Gothic', CenturyGothic, Geneva, AppleGothic, sans-serif;*/">@art.shortDescription</p>
+    							</div>
+    							</div>
+								<div id="content-case-study-@art.id" style="display:none" class="roundedges roundedges-hover">
+									<div class="on-hover-content" style="cursor:pointer;" onclick="window.location.href='@routes.BlogController.showArticle(art.id, art.slugURL)'">
+										<a style="color:white; /*font-family: 'Economica', sans-serif;*/" ><div style="padding:10px;">@art.onHoverContent</div></a>
+    								</div>
+									<div class="on-hover-links">
+										<p style="padding-left:30%; padding-top:5%;">
+											<a href="@routes.BlogController.showArticle(art.id, art.slugURL)" ><span style="color:white; /*font-family: 'Century Gothic', CenturyGothic, Geneva, AppleGothic, sans-serif;*/">view</span></a> 
+											<span style="color:white">|</span> 
+											<a style="cursor:pointer;" onclick="sharethis('@routes.BlogController.showArticle(art.id, art.slugURL)');"><span style="color:white; /*font-family: 'Century Gothic', CenturyGothic, Geneva, AppleGothic, sans-serif;*/">share</span></a>
+										</p>
+									</div>
+								</div>
+							</div>
+						}
+   			</div>
+					<div class="clearfix"> </div>
+					<a class="prev-t" id="models-carousel_prev-@c.id" href="#">
+					<img alt="Previcon" class="carousel-sliders navigators" src="@routes.Assets.at("blog/images/previcon.png")" />
+					</a>
+					<a class="next-t" id="models-carousel_next-@c.id" href="#">
+					<img alt="Nexticon" class="carousel-sliders navigators" src="@routes.Assets.at("blog/images/nexticon.png")" />
+					</a>
+				</div>
+			</div>
+			
+			<hr id="" style="height:1px; background-color:#006687;">
+
+
+}
+}
+
+ 
+ 
+<style>
+
+.share-modal{
+	padding-left: -20px;
+	padding-top: 3px;
+	margin-top: 9%;
+	left: 62%;
+	width:225px;
+	height: 148px;
+	border: 3px solid #008bca; 	
+	background-color: #43ac6a;
+}
+</style>
+
+<div id="shareModal" class="modal hide fade share-modal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+  <div class="modal-body" style="padding: 0px; padding-left: 2px;" onclick="$('#shareModal').modal('hide');">
+	<table>
+		<tr>
+			<td><a id="fbook-id" href="" target="_blank"><img alt="FB" src="@routes.Assets.at("blog/images/sh-facebook.png")" /></a></td>
+			<td><a id="tweet-id" href="" target="_blank"><img alt="TW" src="@routes.Assets.at("blog/images/sh-twitter.png")" /></a></td>
+			<td><a id="linkedin-id" href="" target="_blank"><img alt="LK" src="@routes.Assets.at("blog/images/sh-linkedin.png")" /></a></td>
+		</tr>
+		<tr>
+			<td><a id="gmail-id" href="" target="_blank"><img alt="GM" src="@routes.Assets.at("blog/images/sh-email.png")" /></a></td>
+			<td><a id="gplus-id" href="" target="_blank"><img alt="GP" src="@routes.Assets.at("blog/images/sh-googleplus.png")" /></a></td>
+			<td><a id="pinterest-id" href="" target="_blank"><img alt="PN" src="@routes.Assets.at("blog/images/sh-pinterest.png")" /></a></td>
+		</tr>
+	</table>
+  </div>
+</div>
+
+
+
+<script>
+	
+	var p = 'http://';
+	var h = '@request().host()'
+	
+	function sharethis(url){
+		var encurl = encodeURIComponent(p+h+url);
+		
+		var gmail = "https://mail.google.com/mail/?view=cm&tf=0&fs=1&body={url}";
+		gmail = unescapeHtml(gmail); 
+		gmail = gmail.replace("{url}", encurl);
+		$("#gmail-id").attr('href',gmail);
+		
+		var fbook = "https://www.facebook.com/sharer/sharer.php?u={url}";
+		fbook = unescapeHtml(fbook); 
+		fbook = fbook.replace("{url}", encurl);
+		$("#fbook-id").attr('href',fbook);
+		
+		var tweet = "https://twitter.com/home?status={url}";
+		tweet = unescapeHtml(tweet); 
+		tweet = tweet.replace("{url}", encurl);
+		$("#tweet-id").attr('href',tweet);
+		
+		var linkedin = "https://www.linkedin.com/shareArticle?mini=true&url={url}&title=ALC%20India&summary=&source=";
+		linkedin = unescapeHtml(linkedin); 
+		linkedin = linkedin.replace("{url}", encurl);
+		$("#linkedin-id").attr('href',linkedin);
+		
+		var gplus = "https://plus.google.com/share?url={url}";
+		gplus = unescapeHtml(gplus); 
+		gplus = gplus.replace("{url}", encurl);
+		$("#gplus-id").attr('href',gplus);
+		
+		var pinterest = "https://pinterest.com/pin/create/button/?url={url}&media=&description=";
+		pinterest = unescapeHtml(pinterest); 
+		pinterest = pinterest.replace("{url}", encurl);
+		$("#pinterest-id").attr('href',pinterest);
+		
+		$('#shareModal').modal('show');
+	}
+
+
+function unescapeHtml(unsafe) {
+    return unsafe
+        .replace(/&amp;/g, "&")
+        .replace(/&lt;/g, "<")
+        .replace(/&gt;/g, ">")
+        .replace(/&quot;/g, "\"")
+        .replace(/&#039;/g, "'");
+}
+
+	
+</script>
+
+
+
+
+
+
+
+
+}

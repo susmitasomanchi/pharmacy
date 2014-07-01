@@ -1,7 +1,9 @@
 package controllers;
 
 import java.util.List;
+
 import models.AppUser;
+import models.Role;
 import play.Logger;
 import play.data.Form;
 import play.mvc.Controller;
@@ -21,6 +23,9 @@ public class LoginController extends Controller {
 	//		}
 	//	}
 
+	public static Result blogAdminLoginForm(){
+		return ok(views.html.adminlogin.render(loginForm));
+	}
 
 	public static Result processLogin() {
 		final Form<LoginBean> filledForm = loginForm.bindFromRequest();
@@ -37,6 +42,11 @@ public class LoginController extends Controller {
 			}
 			if(appUsers.size() == 1) {
 				session().clear();
+				if(appUsers.get(0).role.equals(Role.BLOG_ADMIN)){
+					session(Constants.LOGGED_IN_USER_ID, appUsers.get(0).id + "");
+					session(Constants.LOGGED_IN_USER_ROLE, appUsers.get(0).role+ "");
+					return redirect(routes.BlogController.categories());
+				}
 				session(Constants.LOGGED_IN_USER_ID, appUsers.get(0).id + "");
 				session(Constants.LOGGED_IN_USER_ROLE, appUsers.get(0).role+ "");
 				return redirect(routes.UserActions.dashboard());
@@ -56,7 +66,7 @@ public class LoginController extends Controller {
 	//@BasicAuth
 	public static Result processLogout() {
 		session().clear();
-		return ok(views.html.index.render(loginForm));
+		return redirect(routes.Application.index());
 	}
 
 	/*//Change Password
@@ -97,6 +107,14 @@ public class LoginController extends Controller {
 
 	public static String getLoggedInUserRole() {
 		return session(Constants.LOGGED_IN_USER_ROLE);
+	}
+
+	public static boolean isLoggedInUserBlogAdmin() {
+		final String role = session(Constants.LOGGED_IN_USER_ROLE);
+		if(role.equalsIgnoreCase(Role.BLOG_ADMIN.toString())){
+			return true;
+		}
+		return false;
 	}
 
 }

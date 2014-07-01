@@ -1,0 +1,644 @@
+@(article :models.Article, offset :Integer) @import play.i18n._
+
+@blog.blogmain(article.htmlTitle, article.htmlMetaDescription,
+article.htmlKeywords){
+
+<!-- Panel Style (otherwise not present in BootStrap 2) -->
+<style>
+.panel {
+  padding: 15px;
+  margin-bottom: 20px;
+  background-color: #ffffff;
+  border: 1px solid #dddddd;
+  border-radius: 4px;
+  -webkit-box-shadow: 0 1px 1px rgba(0, 0, 0, 0.05);
+  box-shadow: 0 1px 1px rgba(0, 0, 0, 0.05);
+}
+
+.panel-heading {
+  padding: 10px 15px;
+  margin: -15px -15px 15px;
+  font-size: 17.5px;
+  font-weight: 500;      
+  background-color: #f5f5f5;
+  border-bottom: 1px solid #dddddd;
+  border-top-right-radius: 3px;
+  border-top-left-radius: 3px;
+}
+
+.panel-footer {
+  padding: 10px 15px;
+  margin: 15px -15px -15px;
+  background-color: #f5f5f5;
+  border-top: 1px solid #dddddd;
+  border-bottom-right-radius: 3px;
+  border-bottom-left-radius: 3px;
+}
+
+.panel-primary {
+  border-color: #428bca;
+}
+
+.panel-primary .panel-heading {
+  color: #ffffff;
+  background-color: #428bca;
+  border-color: #428bca;
+}
+
+.panel-success {
+  border-color: #d6e9c6;
+}
+
+.panel-success .panel-heading {
+  color: #468847;
+  background-color: #dff0d8;
+  border-color: #d6e9c6;
+}
+
+.panel-warning {
+  border-color: #fbeed5;
+}
+
+.panel-warning .panel-heading {
+  color: #c09853;
+  background-color: #fcf8e3;
+  border-color: #fbeed5;
+}
+
+.panel-danger {
+  border-color: #eed3d7;
+}
+
+.panel-danger .panel-heading {
+  color: #b94a48;
+  background-color: #f2dede;
+  border-color: #eed3d7;
+}
+
+.panel-info {
+  border-color: #bce8f1;
+}
+
+.panel-info .panel-heading {
+  color: #3a87ad;
+  background-color: #d9edf7;
+  border-color: #bce8f1;
+}
+</style>
+<!-- End of Panel Style (otherwise not present in BootStrap 2) -->
+
+
+
+<style>
+
+a.prev-t, a.next-t {
+
+	width: 20px;
+	height: 10px;
+	display: block;
+	position: absolute;
+	top: 170px;
+}
+a.prev-t {			left: 223px;
+					background-position: 0 0; }
+a.prev-t:hover {		background-position: 0 -50px; }
+a.prev-t.disabled {	background-position: 0 -100px !important;  }
+a.next-t {			right: 222px;
+					background-position: -50px 0; }
+a.next-t:hover {		background-position: -50px -50px; }
+a.next-t.disabled {	background-position: -50px -100px !important;  }
+a.prev-t.disabled, a.next-t.disabled {
+	cursor: default;
+}
+
+a.prev-t span, a.next-t span {
+	display: none;
+}
+
+</style>
+
+
+<!--   Showing top carousel for models and platforms   -->
+<p style="color: #006687; font-size: 20px">
+	<span style="cursor: pointer;" onclick="window.location.href='/blog';">Home</span>
+	&gt; <span style="cursor: pointer;"
+		onclick="window.location.href='/blog#@article.category.slugURL';">@article.category.name</span> <span
+		style="color: #494646"></span>
+</p>
+<div class="row">
+	<div class="wrapper-carousel">
+		<div id="top-carousel">
+
+			@for(art <- article.category.getArticlesInOrder()){ @if(art.id ==
+			article.id){
+			<table class="span3" style="cursor: pointer;"
+				onclick="window.location.href='@routes.BlogController.showArticle(art.id, art.slugURL)';">
+				<tr>
+					<td class="table-head-carousel" style="background-color: #292929">
+						<a class="" style="color: white; font-size: 16px;"
+						href="@routes.BlogController.showArticle(art.id, art.slugURL)"> <span style="line-height: 5px;">@art.name</span>
+										</a>
+										</td>
+									</tr>
+									
+									<tr>
+										<td class="table-top-carousel">@art.shortDescription</td>
+									</tr>
+								</table>
+
+							}else{
+
+							<table class="span3" style="cursor:pointer;" onclick="window.location.href='@routes.BlogController.showArticle(art.id, art.slugURL)';">
+							<tr>
+									<td class="table-head-carousel"><a class="" style="color:white; font-size:16px;" href="@routes.BlogController.showArticle(art.id, art.slugURL)">@art.name</a></td>
+							</tr>
+							<tr>
+								<td class="table-top-carousel" >@art.shortDescription</td>
+							</tr>
+							</table>
+							}
+						}
+					
+   	 			</div>
+   	 			<div class="clearfix"></div>  
+   	 			<a class="prev-t" id="top-carousel_prev" href="#"><img alt="Previcon" class="navigators" src="@routes.Assets.at("blog/images/previcon.png")" /></a>
+				<a class="next-t" id="top-carousel_next" href="#"><img alt="Nexticon" class="navigators" src="@routes.Assets.at("blog/images/nexticon.png")" /></a>
+   	 	  	</div>
+   	 	  </div>
+   	 	  								
+<script>
+runtopcarousel(@offset-1);
+</script>
+
+
+<style>
+.modelimage{
+-webkit-box-shadow: 0 0 10px 5px #888888;
+-moz-box-shadow: 0 0 10px 5px #888888;
+box-shadow: 0 0 10px 5px #888888;	
+}
+</style>
+
+   	 	  
+          <div class="row">
+   	    		<div class="span12">
+   	    		<p>
+   	    			<h3>@article.name</h3>
+   	    			<p style="margin-top: -15px;"><h4>@article.shortDescription</h4></p>
+   	    			@article.onHoverContent
+        		</p>
+   	    		</div>
+          </div>
+   	 	  
+          <div class="row">
+   	    		<div class="span12">
+   	    			<img alt="@article.name" class="modelimage" src="@routes.BlogController.getMainImage(article.id)" style="width:100%; height:500px;" />
+        		</div>
+          </div>
+          
+          <br><br>
+          
+          <div class="row">
+   	    		<div class="span12">
+   	    		<p>
+   	    				@Html(article.content)
+        		</p>
+   	    		</div>
+          </div>
+          <br>
+          
+                  
+          <div class="row">
+			<div class="span12">
+			
+			
+			
+<script>
+	
+	var appUserLoggedIn = @LoginController.isLoggedIn();
+	@if(LoginController.isLoggedIn()){
+	var appUserLoggedInName = '@LoginController.getLoggedInUser().name';		
+	}else{
+	var appUserLoggedInName = '';	
+	}
+	var socialUserLoggedIn = false;
+	var socialUserName = '';
+	var socialUserEmail = '';
+	var socialUserType = '';
+	
+	var replyattempted = false;
+	var replyattemptedcomId = '';
+	var replyattemptedcomUserName = '';
+  
+  /**
+   * Global variables to hold the profile and email data.
+   */
+   var profile, email;
+
+  /*
+   * Triggered when the user accepts the sign in, cancels, or closes the
+   * authorization dialog.
+   */
+  function loginFinishedCallback(authResult) {
+    if (authResult) {
+      if (authResult['error'] == undefined){
+        toggleElement('signin-button'); // Hide the sign-in button after successfully signing in the user.
+        gapi.client.load('plus','v1', loadProfile);  // Trigger request to get the email address.
+      } else {
+        console.log('An error occurred');
+      }
+    } else {
+      console.log('Empty authResult');  // Something went wrong
+    }
+  }
+
+  /**
+   * Uses the JavaScript API to request the user's profile, which includes
+   * their basic information. When the plus.profile.emails.read scope is
+   * requested, the response will also include the user's primary email address
+   * and any other email addresses that the user made public.
+   */
+  function loadProfile(){
+    var request = gapi.client.plus.people.get( {'userId' : 'me'} );
+    request.execute(loadProfileCallback);
+  }
+
+  /**
+   * Callback for the asynchronous request to the people.get method. The profile
+   * and email are set to global variables. Triggers the user's basic profile
+   * to display when called.
+   */
+  function loadProfileCallback(obj) {
+    profile = obj;
+
+    // Filter the emails object to find the user's primary account, which might
+    // not always be the first in the array. The filter() method supports IE9+.
+    email = obj['emails'].filter(function(v) {
+        return v.type === 'account'; // Filter out the primary email
+    })[0].value; // get the email from the filtered results, should always be defined.
+
+    //displayProfile(profile);
+	
+	socialUserLoggedIn = true;
+	socialUserName = profile['displayName'];
+	socialUserEmail = email;
+	socialUserType = 'GOOGLE';
+	
+	$("#logintoreply").hide();
+    $("#signin-button").hide();
+    $("#fb-signin-button").hide();
+    $("#addcombtn").show();
+    
+    if(replyattempted){
+  		$('html, body').animate({scrollTop: ($("#textcom-"+replyattemptedcomId).offset().top)-40}, 1000);
+		reply(replyattemptedcomId,replyattemptedcomUserName);    
+    }
+    
+    //alert(socialUserLoggedIn+'\n'+socialUserName+'\n'+socialUserEmail+'\n'+socialUserType);
+    
+    
+  }
+
+  /**
+   * Display the user's basic profile information from the profile object.
+   */
+  function displayProfile(profile){
+    document.getElementById('name').innerHTML = profile['displayName'];
+    document.getElementById('pic').innerHTML = '<img src="' + profile['image']['url'] + '" />';
+    document.getElementById('email').innerHTML = email;
+    toggleElement('profile');
+  }
+
+  /**
+   * Utility function to show or hide elements by their IDs.
+   */
+  function toggleElement(id) {
+    var el = document.getElementById(id);
+    if (el.getAttribute('class') == 'hide') {
+      el.setAttribute('class', 'show');
+    } else {
+      el.setAttribute('class', 'hide');
+    }
+  }
+
+</script>
+<script src="https://apis.google.com/js/client:plusone.js" type="text/javascript"></script>
+
+
+
+	
+	<script>
+	function addcom(){
+		$("#addcombtn").html('<i class="fa fa-cog fa-spin"></i>');
+		var thought = $("#opencombox").val();
+		if(appUserLoggedIn){
+			$.get("/blog/add-comment/@article.id/"+thought,function(data){
+				if(data != -1){
+					$("#opencommentblock").prepend('<div id="textcom-'+data+'" class="panel panel-default" style="display:none;"><div class="panel-heading"><h5 class="panel-title"><i class="fa fa-user"></i>&nbsp;'+appUserLoggedInName+' <span class="pull-right"><small>just now</small></span></h5></div><div class="panel-body"><p>'+thought+'</p></div></div></div>');
+					$("#textcom-"+data).fadeIn(1000);
+				}
+			//	$("#addcombtn").html('Add Comment');
+			//	$("#opencombox").val('');
+			});
+		}
+		if(socialUserLoggedIn){
+			//alert(thought+'\n'+socialUserName+'\n'+socialUserEmail+'\n'+socialUserType);
+			$("#socialname").val(socialUserName);
+			$("#socialemail").val(socialUserEmail);
+			$("#socialtype").val(socialUserType);
+			$("#socialmessage").val(thought);
+		
+			$.post("/blog/add-social-comment",$('#socialform').serialize(),function(data){
+				if(data != -1){
+					$("#opencommentblock").prepend('<div id="textcom-'+data+'" class="panel panel-default" style="display:none;"><div class="panel-heading"><h5 class="panel-title"><i class="fa fa-user"></i>&nbsp;'+socialUserName+' <span class="pull-right"><small>just now</small></span></h5></div><div class="panel-body"><p>'+thought+'</p></div></div></div>');
+					$("#textcom-"+data).fadeIn(1000);
+				}
+			});
+		}
+		$("#addcombtn").html('Add Comment');
+		$("#opencombox").val('');
+	}
+	
+
+	function reply(comId, comUserName){
+		if(appUserLoggedIn || socialUserLoggedIn){
+			$("#replybtn-"+comId).hide();
+			$("#textcom-"+comId).append('<div style="display:none;" id="replydiv-'+comId+'"><a class="pull-right" style="cursor:pointer;color:#3a87ad;" onclick="cancelreply(\''+comId+'\');">cancel</a><br><textarea rows="4" style="width:98%" id="replytext-'+comId+'">@@'+comUserName+': </textarea><br><a id="replysubmitbtn-'+comId+'" style="cursor:pointer;" class="btn btn-primary btn-xs pull-right" onclick="addreply(\''+comId+'\');">Reply</a><br></div>');
+			$("#replydiv-"+comId).fadeIn(750);
+		
+		}
+		else{
+			replyattempted = true;
+			replyattemptedcomId = comId;
+			replyattemptedcomUserName = comUserName;
+			console.log('User not loggedin.')
+			$("#logintoreply").show();
+			$('html, body').animate({scrollTop: $("#logintoreply").offset().top}, 1000);
+		}
+	}
+	
+	function cancelreply(comId){
+		$("#replydiv-"+comId).remove();
+		$("#replybtn-"+comId).show();
+	}
+	
+	function addreply(comId){
+				$("#replysubmitbtn-"+comId).html('<i class="fa fa-cog fa-spin"></i>');
+				var reply = $("#replytext-"+comId).val();
+				if(appUserLoggedIn){
+					$.get('/blog/add-comment-reply/@article.id/'+comId+'/'+reply,function(replydata){
+						$("#replydiv-"+comId).hide(750);
+						$("#replydiv-"+comId).remove();
+						if(replydata != -1){
+							$("#replyblock-"+comId).prepend('<div id="addedreply-'+replydata+'" style="display:none; margin-top:-20px; margin-left:100px;" class="panel panel-default"><div class="panel-heading"><h5 class="panel-title"><i class="fa fa-user"></i>&nbsp;'+appUserLoggedInName+' <span class="pull-right"><small>just now</small></span></h5></div><div class="panel-body"><p>'+reply+'</p></div></div>');
+							$("#replybtn-"+comId).show();
+							$("#addedreply-"+replydata).fadeIn(1000);
+						}
+					});
+				}
+				if(socialUserLoggedIn){
+					//alert(reply+'\n'+socialUserName+'\n'+socialUserEmail+'\n'+socialUserType);
+					$("#socialcommentId").val(comId);
+					$("#socialname").val(socialUserName);
+					$("#socialname").val(socialUserName);
+					$("#socialemail").val(socialUserEmail);
+					$("#socialtype").val(socialUserType);
+					$("#socialmessage").val(reply);
+					$.post("/blog/add-social-comment-reply",$('#socialform').serialize(),function(replydata){
+						$("#replydiv-"+comId).hide(750);
+						$("#replydiv-"+comId).remove();
+						if(replydata != -1){
+							$("#replyblock-"+comId).prepend('<div id="addedreply-'+replydata+'" style="display:none; margin-top:-20px; margin-left:100px;" class="panel panel-default"><div class="panel-heading"><h5 class="panel-title"><i class="fa fa-user"></i>&nbsp;'+socialUserName+' <span class="pull-right"><small>just now</small></span></h5></div><div class="panel-body"><p>'+reply+'</p></div></div>');
+							$("#replybtn-"+comId).show();
+							$("#addedreply-"+replydata).fadeIn(1000);
+						}
+					});
+				}
+           }
+	</script>
+
+
+
+
+
+<!-- Script for Facebook Login -->   
+<script>
+  // This is called with the results from from FB.getLoginStatus().
+  function statusChangeCallback(response) {
+    console.log('statusChangeCallback');
+    console.log(response);
+    // The response object is returned with a status field that lets the
+    // app know the current login status of the person.
+    // Full docs on the response object can be found in the documentation
+    // for FB.getLoginStatus().
+    if (response.status === 'connected') {
+      // Logged into your app and Facebook.
+      testAPI();
+    } else if (response.status === 'not_authorized') {
+      // The person is logged into Facebook, but not your app.
+      document.getElementById('status').innerHTML = 'Please log ' +
+        'into this app.';
+    } else {
+      // The person is not logged into Facebook, so we're not sure if
+      // they are logged into this app or not.
+      document.getElementById('status').innerHTML = 'Please log ' +
+        'into Facebook.';
+    }
+  }
+
+  // This function is called when someone finishes with the Login
+  // Button.  See the onlogin handler attached to it in the sample
+  // code below.
+  function checkLoginState() {
+    FB.getLoginStatus(function(response) {
+      statusChangeCallback(response);
+    });
+  }
+
+  window.fbAsyncInit = function() {
+  FB.init({
+    appId      : '1423515137920394',
+    cookie     : true,  // enable cookies to allow the server to access 
+                        // the session
+    xfbml      : true,  // parse social plugins on this page
+    version    : 'v2.0' // use version 2.0
+  });
+
+  // Now that we've initialized the JavaScript SDK, we call 
+  // FB.getLoginStatus().  This function gets the state of the
+  // person visiting this page and can return one of three states to
+  // the callback you provide.  They can be:
+  //
+  // 1. Logged into your app ('connected')
+  // 2. Logged into Facebook, but not your app ('not_authorized')
+  // 3. Not logged into Facebook and can't tell if they are logged into
+  //    your app or not.
+  //
+  // These three cases are handled in the callback function.
+
+  FB.getLoginStatus(function(response) {
+    //	statusChangeCallback(response);
+  });
+
+  };
+
+  // Load the SDK asynchronously
+  (function(d, s, id) {
+    var js, fjs = d.getElementsByTagName(s)[0];
+    if (d.getElementById(id)) return;
+    js = d.createElement(s); js.id = id;
+    js.src = "//connect.facebook.net/en_US/sdk.js";
+    fjs.parentNode.insertBefore(js, fjs);
+  }(document, 'script', 'facebook-jssdk'));
+
+  // Here we run a very simple test of the Graph API after login is
+  // successful.  See statusChangeCallback() for when this call is made.
+  function testAPI() {
+    console.log('Welcome!  Fetching your information.... ');
+    FB.api('/me', function(response) {
+      console.log('Successful login for: ' + response.name);
+      //document.getElementById('status').innerHTML = 'Thanks for logging in, ' + response.name +", "+ response.email+ '!';
+
+
+	socialUserLoggedIn = true;
+  	socialUserName = response.name;
+  	socialUserEmail = response.email;
+  	socialUserType = 'FACEBOOK';
+
+  	$("#logintoreply").hide();
+  	$("#fb-signin-button").hide();
+  	$("#signin-button").hide();
+    $("#addcombtn").show();
+
+  	if(replyattempted){
+  		$('html, body').animate({scrollTop: ($("#textcom-"+replyattemptedcomId).offset().top)-40}, 1000);
+		reply(replyattemptedcomId,replyattemptedcomUserName);    
+    }
+      
+    });
+  }
+</script>
+<!-- End of Script for Facebook Login -->
+
+
+
+	
+	<br><br>
+	<div class="panel panel-info">
+	<div class="panel-heading">
+	<h4 class="panel-title"><i class="fa fa-comments"></i> Comments</h4>
+	</div>
+	<div class="panel-body">
+	<div style="">
+	<textarea rows="4" id="opencombox" style="left:0px; width:99%;"></textarea>
+	<br>
+
+	
+	
+	<div id="logintoreply" style="display:none;" class="pull-right">Please Login to Reply</div>
+	
+	
+	<!--
+  	Below we include the Login Button social plugin. This button uses
+  	the JavaScript SDK to present a graphical Login button that triggers
+  	the FB.login() function when clicked.
+	-->
+	<div id="fb-signin-button" class="hide" style="margin-left:79%; margin-bottom:-2.8%;">
+	<fb:login-button scope="public_profile,email" data-size="large" onlogin="checkLoginState();" style="height:30px;">
+	</fb:login-button>
+	</div>
+	
+	<!--
+	<div id="status">
+	</div>
+	-->
+	
+	
+	<div id="signin-button" class="hide" style="margin-left:88%; margin-bottom:-2%; margin-top:-3.6%;">
+     <div class="g-signin"
+      data-callback="loginFinishedCallback"
+      data-approvalprompt="force"
+      data-clientid="404230636180-4qmlk57403u2985kjibgj3l37a0sdi54.apps.googleusercontent.com"
+      data-scope="https://www.googleapis.com/auth/plus.login https://www.googleapis.com/auth/plus.profile.emails.read"
+      data-height="standard"
+      data-cookiepolicy="single_host_origin"
+      >
+    </div>
+    <!-- In most cases, you don't want to use approvalprompt=force. Specified
+    here to facilitate the demo.
+    -->
+	</div>
+	<!--
+	<div id="profile" class="hide"><div><span id="pic"></span><span id="name"></span></div><div id="email"></div></div>	
+	-->
+	<button style="display:none;" class="btn btn-primary btn-xs pull-right" onclick="addcom();" id="addcombtn">Add Comment</button><br>
+	
+	</div>
+	
+	<br>
+	
+	<div id="opencommentblock"></div>
+		@for(oc <- article.commentListInOrder()){
+		<div id="textcom-@oc.id" class="panel panel-default" style="">
+		<!-- <div id="textcom-@oc.id" class="panel panel-default" style="width:700px"> -->
+			<div class="panel-heading">
+				<h5 class="panel-title"><i class="fa fa-user"></i>&nbsp;@if(oc.blogCommentatorType.equals(BlogCommentatorType.APP_USER)){@oc.by.name}else{@oc.socialBy.name} <span class="pull-right"><small>@oc.date.format("dd-MMM-yyyy hh:mm")</small></span></h5>
+			</div>
+			<div class="panel-body">
+	 			<p>@oc.message</p>
+	 			<a id="replybtn-@oc.id" class="pull-right" style="cursor:pointer; color:#3a87ad;" onclick="reply('@oc.id', '@if(oc.blogCommentatorType.equals(BlogCommentatorType.APP_USER)){@oc.by.name}else{@oc.socialBy.name}');"><i class="fa fa-reply"></i></a>
+				<br>
+			</div>
+		</div>
+		<div id="replyblock-@oc.id"></div>
+			@for(reply <- oc.replyListInOrder()){
+			<div style="margin-top:-20px; margin-left:100px;" class="panel panel-default">
+			<!-- <div style="margin-top:-20px; margin-left:100px; width:600px" class="panel panel-default"> -->
+				<div class="panel-heading">
+					<h5 class="panel-title"><i class="fa fa-user"></i>&nbsp;@if(reply.blogCommentatorType.equals(BlogCommentatorType.APP_USER)){@reply.by.name}else{@reply.socialBy.name} <span class="pull-right"><small>@reply.date.format("dd-MMM-yyyy hh:mm")</small></span></h5>
+				</div>
+				<div class="panel-body">
+	 				<p>@reply.message</p>
+				</div>
+			</div>
+			}
+		}
+	
+	</div>
+	</div>
+
+			
+			</div>
+          </div>
+          
+          
+<script>
+
+
+if(appUserLoggedIn){
+	$("#addcombtn").show();
+}
+else{
+	$("#fb-signin-button").show();
+	$("#signin-button").show();
+}
+
+</script>
+
+
+
+<form style="display:none;" id="socialform">
+<input type="hidden" name="articleId" value="@article.id"/>
+<!-- In case of replies -->
+<input type="hidden" id="socialcommentId" name="commentId" value=""/>
+<input type="hidden" id="socialname" name="name" value=""/>
+<input type="hidden" id="socialemail" name="email" value=""/>
+<input type="hidden" id="socialtype" name="type" value=""/>
+<input type="hidden" id="socialmessage" name="message" value=""/>
+</form>
+
+
+}
+
+
+

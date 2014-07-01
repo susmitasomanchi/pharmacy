@@ -1,0 +1,70 @@
+@(dataForm:play.data.Form[models.Article], article: models.Article)
+
+@import play.i18n._
+
+@if((LoginController.isLoggedIn())&&(LoginController.getLoggedInUserRole().equals(Role.BLOG_ADMIN.toString()))){
+<div>
+@blognavbar()
+</div>
+}
+
+@blog.blogmain("", "", ""){
+
+<script src="@routes.Assets.at("javascripts/ckeditor.js")" type="text/javascript"></script>
+
+@helper.form(action=routes.BlogController.processArticleForm(), 'enctype -> "multipart/form-data") {
+@helper.inputText(dataForm("name"),'_label->"Name",'class->"col-sm-9")
+@helper.inputText(dataForm("position"),'_label->"Position",'class->"col-sm-9")
+@helper.inputText(dataForm("shortDescription"),'_label->"Short Description",'class->"col-sm-9")
+@helper.textarea(dataForm("onHoverContent"),'_label->"On-Hover Content",'class->"col-sm-9")
+
+<lable for="catselect">Category</lable>
+<br>
+<select id="catselect" name="categoryid">
+@for(cat <- ArticleCategory.find.all()){
+	@if((article.category != null) && (article.category.id == cat.id)){
+		<option value="@cat.id" selected>@cat.name</option>
+	}else{
+		<option value="@cat.id">@cat.name</option>
+	}
+}
+</select>
+
+@helper.textarea(dataForm("content"),'_label->"Content", 'class->"ckeditor")
+
+@if(dataForm("id").value != null){
+	<table class="table table-bordered" style="width:50%;">
+	<tr><td><label>Existing Thumbnail:</label><img alt="@article.name" class="modelimage" src="@routes.BlogController.getThumbnail(article.id)" style="width:66px; height:100px;" /></td></tr>
+	<tr><td>@helper.inputFile(dataForm("thumbnail"),'_label->"Replace Thumbnail",'class->"col-sm-9")</td></tr>
+	<tr><td><label>Existing Main Image:</label><img alt="@article.name" class="modelimage" src="@routes.BlogController.getMainImage(article.id)" style="width:300px; height:200px;" /></td></tr>
+	<tr><td>@helper.inputFile(dataForm("image"),'_label->"Replace Main Image",'class->"col-sm-9")</td></tr>
+	</table>
+}else{
+	@helper.inputFile(dataForm("thumbnail"),'_label->"Thumbnail",'class->"col-sm-9")
+	@helper.inputFile(dataForm("image"),'_label->"Main Image",'class->"col-sm-9")
+}
+
+
+
+<br><br>
+
+
+<table class="table table-bordered" style="width:50%;">
+<caption>SEO Tags</caption>
+<tr><td>@helper.inputText(dataForm("htmlTitle"),'_label->"HTML Title",'class->"col-sm-9")</td></tr>
+<tr><td>@helper.textarea(dataForm("htmlMetaDescription"),'_label->"Meta Description",'class->"col-sm-9")</td></tr>
+<tr><td>@helper.inputText(dataForm("htmlKeywords"),'_label->"Keywords",'class->"col-sm-9")</td></tr>
+</table>
+
+
+<input type="hidden" name="id" value='@dataForm("id").value' >
+<input class="btn btn-primary" type="submit" value="Save">
+}
+
+
+
+<script>
+	CKEDITOR.config.width = '100%';
+</script>
+
+}

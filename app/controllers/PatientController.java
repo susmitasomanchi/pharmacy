@@ -1,18 +1,18 @@
 package controllers;
 
 import java.util.Calendar;
+
 import java.util.Date;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
 import models.AppUser;
+import models.DiagnosticCentre;
 import models.Appointment;
-import models.DiagnosticCenter;
 import models.Doctor;
 import models.Patient;
 import models.QuestionAndAnswer;
-import play.Logger;
 import play.data.Form;
 import play.mvc.Controller;
 import play.mvc.Result;
@@ -45,7 +45,6 @@ public class PatientController extends Controller {
 			listAppointments = Appointment.getAvailableAppointmentList(doctor,
 					calendar.getTime());
 			appointmentMap.put(calendar.getTime(), listAppointments);
-			Logger.error(listAppointments.size() + "Test");
 
 			calendar.add(Calendar.DATE, 1);
 			calendar.set(Calendar.HOUR_OF_DAY, 0);
@@ -79,7 +78,6 @@ public class PatientController extends Controller {
 		final Form<AppUser> filledForm = registrationForm.bindFromRequest();
 
 		if (filledForm.hasErrors()) {
-			Logger.info("*** user bad request");
 			return badRequest(views.html.registerAppUser.render(filledForm));
 		} else {
 			final AppUser appUser = filledForm.get();
@@ -88,15 +86,12 @@ public class PatientController extends Controller {
 			appUser.save();
 			patient.appUser = appUser;
 			patient.save();
-			Logger.info("*** user object ");
 			return ok("Registerd ");
 		}
 
 	}
 
 	public static Result form() {
-
-		Logger.info("" + AppUser.find.all().size());
 
 		return ok(views.html.createPatient.render(form));
 		// return TODO;
@@ -109,10 +104,8 @@ public class PatientController extends Controller {
 
 	public static Result process() {
 		final Form<Patient> filledForm = form.bindFromRequest();
-		// Logger.info("enteredt");
 
 		if (filledForm.hasErrors()) {
-			Logger.info("bad request");
 			// System.out.println(filledForm.errors());
 			return badRequest(views.html.createPatient.render(filledForm));
 		} else {
@@ -174,66 +167,53 @@ public class PatientController extends Controller {
 			return ok("-1");
 		}
 	}
-/*
- * displaying  all diagnostic
- * centers
- */
-	public static Result diagnosticList() {
-		List<DiagnosticCenter> allList = DiagnosticCenter.find.all();
 
-		return ok(views.html.diagnostic.patientDiagnosticCenterList
-				.render(allList));
+	/*
+	 * displaying all diagnostic centers
+	 */
+	public static Result diagnosticList() {
+		List<DiagnosticCentre> allList = DiagnosticCentre.find.all();
+
+		return ok(views.html.diagnostic.patientDiagnosticCenterList.render(allList));
 
 	}
+
 	/*
-	 * saving diagnostic center in 
-	 * patient favorite list
+	 * saving diagnostic center in patient favorite list
 	 */
 	public static Result saveDiagnosticCenter(Long id) {
-		DiagnosticCenter dc = DiagnosticCenter.find.byId(id);
-		Logger.info("diag id...." + dc);
+		DiagnosticCentre dc = DiagnosticCentre.find.byId(id);
 		Patient patient = LoginController.getLoggedInUser().getPatient();
 
-		
-		Logger.info("logged in user id..."
-				+ patient.id);
-		// Logger.info(patient.diagnosticCenterList.get(0)+"");
-
-		Logger.info(patient.diagnosticCenterList.toString());
 		patient.diagnosticCenterList.add(dc);
 		patient.update();
-		Logger.info(Patient.find.byId(patient.id).diagnosticCenterList
-				.toString());
 
 		return ok("diagnostic center persisted in patient table");
 
 	}
+
 	/*
-	 * displaying diagnostic centers 
-	 * which are there in
-	 * patient favorite list
+	 * displaying diagnostic centers which are there in patient favorite list
 	 */
 
 	public static Result myDiagnosticCenters() {
 		Long id = LoginController.getLoggedInUser().getPatient().id;
 		Patient diagnoCenterList = Patient.find.where().eq("id", id)
 				.findUnique();
-		List<DiagnosticCenter> list = diagnoCenterList.diagnosticCenterList;
+		List<DiagnosticCentre> list = diagnoCenterList.diagnosticCenterList;
 
 		return ok(views.html.patient.myDiagnoList.render(list));
 
 	}
+
 	/*
-	 * removing diagnostic center
-	 * from patient favorite 
-	 * diagnostic center list
+	 * removing diagnostic center from patient favorite diagnostic center list
 	 */
 
 	public static Result removePatientDiagnoCenter(final Long id) {
-		Logger.info("Diagno center id........." + id);
-	
+
 		Patient patient = LoginController.getLoggedInUser().getPatient();
-		DiagnosticCenter centre = DiagnosticCenter.find.byId(id);
+		DiagnosticCentre centre = DiagnosticCentre.find.byId(id);
 		patient.diagnosticCenterList.remove(centre);
 		patient.update();
 

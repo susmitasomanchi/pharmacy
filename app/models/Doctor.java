@@ -39,6 +39,17 @@ public class Doctor extends BaseEntity{
 
 	@Required
 	public String degree;
+
+
+	@Required
+	public String t111;
+
+
+	@Required
+	public String t222;
+
+
+
 	//education
 	@OneToMany(cascade=CascadeType.ALL)
 	public List<DoctorEducation> doctorEducationList=new ArrayList<DoctorEducation>();
@@ -63,6 +74,8 @@ public class Doctor extends BaseEntity{
 	@OneToMany(cascade=CascadeType.ALL)
 	public List<DoctorSocialWork> doctorSocialWorkList=new ArrayList<DoctorSocialWork>();
 
+
+
 	@ManyToOne
 	public List<DoctorEducation> doctorEducation = new ArrayList<DoctorEducation>();
 
@@ -80,14 +93,16 @@ public class Doctor extends BaseEntity{
 
 	public String hospitalAddress;
 
-	public String hospitalAddress1;
-
 	@Required
 	public String timings;
 
 	public String categoryOfDoctor;						// homeopathic or ayurvedic or etc.
 
 
+
+
+	@ManyToOne(cascade=CascadeType.ALL)
+	public List<Appointment> appointmentList=new ArrayList<Appointment>();
 
 	public static Model.Finder<Long,Doctor> find = new Finder<Long, Doctor>(Long.class, Doctor.class);
 

@@ -2,10 +2,51 @@
 # This file defines all application routes (Higher priority routes first)
 # ~~~~
 
+
+#Blog
+
+GET		/blog/create-blog-admin			controllers.SampleDataController.createBlogAdmin()
+GET		/blog/login						controllers.LoginController.blogAdminLoginForm()
+
+GET		/blog							controllers.BlogController.blogHome()
+GET		/blogs							controllers.BlogController.blogHome()
+GET		/blog/admin/new-category				controllers.BlogController.categoryForm()
+POST	/blog/admin/new-category				controllers.BlogController.processCategoryForm()
+GET		/blog/admin/categories				controllers.BlogController.categories()
+GET		/blog/admin/edit-category/:id			controllers.BlogController.editCategoryForm(id: Long)
+GET		/blog/admin/new-article				controllers.BlogController.articleForm()
+POST	/blog/admin/new-article				controllers.BlogController.processArticleForm()
+GET		/blog/admin/articles/:categoryId		controllers.BlogController.articles(categoryId: Long)
+GET		/blog/admin/edit-article/:id			controllers.BlogController.editArticleForm(id: Long)
+GET		/blog/get-thumbnail/:id			controllers.BlogController.getThumbnail(id: Long)
+GET		/blog/get-main-image/:id		controllers.BlogController.getMainImage(id: Long)
+
+GET		/blog/add-comment/:id/:message	controllers.BlogController.addComment(id: Long, message: String)
+GET		/blog/add-comment-reply/:id/:cid/:message		controllers.BlogController.addCommentReply(id: Long, cid: Long, message: String)
+
+POST	/blog/add-social-comment		controllers.BlogController.addSocialComment()
+POST	/blog/add-social-comment-reply	controllers.BlogController.addSocialCommentReply()
+
+GET		/blog/:id/:slug					controllers.BlogController.showArticle(id: Long, slug: String)
+GET		/blog/:idorslug					controllers.BlogController.showArticleWithIdOrSlug(idorslug: String)
+GET		/sitemap.xml					controllers.Application.sitemap()
+
+
 # Home page
 GET    /                                  controllers.Application.index()
 POST   /login                             controllers.LoginController.processLogin()
 GET    /logout                            controllers.LoginController.processLogout()
+
+# Remove later (at Beta Launch)
+GET    /                                  controllers.Application.index()
+GET    /:str		                      controllers.Application.indexX(str: String)
+####################################################################################################
+
+# Remove later (at Beta Launch)
+GET    /                                  controllers.Application.index()
+GET    /:str		                      controllers.Application.indexX(str: String)
+####################################################################################################
+
 
 # Sign up page
 GET    /join                              controllers.UserController.joinUs()
@@ -66,7 +107,7 @@ GET    /view-products                     controllers.ProductController.displayP
 #GET 	/create-Mr-schedule				controllers.DoctorController.createMrSchedule()
 #POST	/create-Mr-appointment 			controllers.DoctorController.createMrAppointment()
 
-GET		/doctor/today-appointment		controllers.DoctorController.viewTodaysAppointment()	
+#GET		/doctor/today-appointment		controllers.DoctorController.viewTodaysAppointment()	
 
 
 GET    /medical-representative            controllers.Application.medicalRepresentative()
@@ -92,9 +133,9 @@ GET    /patient/remove-diag-centers/:id               controllers.PatientControl
 GET    /answerform                        controllers.DoctorController.displayAnswer()
 POST   /ansQuestion/:qaId                 controllers.DoctorController.answerQuestion(qaId: Long)
 # doctor action
-GET    /dashboard                         controllers.UserActions.dashboard()
-GET    /register-patient/                 controllers.DoctorController.registerPatient()
-POST   /register-patient-proccess/        controllers.DoctorController.registerPatientProccess()
+GET    /dashboard						controllers.UserActions.dashboard()
+GET    /register-patient/               controllers.DoctorController.registerPatient()
+POST   /register-patient-proccess/      controllers.DoctorController.registerPatientProccess()
 
 #Diagnostic module	
 GET    /diagnosticregistration            		controllers.DiagnosticController.diagnosticCenter()
@@ -109,21 +150,25 @@ GET    /diagnostic-search/list 					controllers.DiagnosticController.diagnosticS
 GET    /diagnosticrep/doctor-list         		controllers.DRController.doctorList()
 GET    /diagnosticrep			         		controllers.DRController.addDiagRep()
 POST    /diagnosticrep/save		         		controllers.DRController.addDiagRepProcess()
-GET    /diagnosticrep/list			        	controllers.DRController.diagnosticReplist()
+GET    /diagnosticrep/list			        	controllers.DRController.diagnosticRepresentativeList()
 GET    /diagnosticrep/doctor-search	         	controllers.DRController.search()
 GET    /diagnosticrep/doctorsearch	         	controllers.DRController.searchProcess()
 GET    /diagnosticrep/add-doctor/:id      		controllers.DRController.addDoctor(id: Long)
 GET    /diagnosticrep/remove-doctor/:id   		controllers.DRController.removeDoctor(id: Long)
+GET    /diagnostic-centre/all-doctors      		controllers.DRController.displayDiagnosticCentreDoctors()
 
-GET    /upload-patient-file  					controllers.DiagnosticTestController.uploadFile()
-POST    /upload-patient-file/save		  		controllers.DiagnosticTestController.uploadFileProcess()
-GET    /download						  		controllers.DiagnosticTestController.downloadFile()
+GET    /upload-patient-file  					controllers.DiagnosticController.uploadFile()
+POST    /upload-patient-file/save		  		controllers.DiagnosticController.uploadFileProcess()
+GET    /download						  		controllers.DiagnosticController.downloadFile()
+GET    /add-test-done						  		controllers.DiagnosticController.addTestDone()
 
 
 #Diagnostic Test
 GET    /test				            		controllers.DiagnosticTestController.addTest()
 POST   /test/save					       		controllers.DiagnosticTestController.addTestProcess()
 GET    /test-list/:id				            controllers.DiagnosticTestController.diagnosticTestList(id: Long)
+GET		/place-order				controllers.DiagnosticOrderController.receive()		
+GET		/display-orders/:id				controllers.DiagnosticOrderController.viewOrders(id: Long)																																		
 
 #MR Module
 GET    /doctor-list                       controllers.MRController.doctorList()
@@ -138,12 +183,13 @@ POST   /dcr-line-item/proccess            controllers.MRController.visitDoctorPr
 GET    /search                            controllers.MRController.search()
 GET		/mr/display-appointment/:id			controllers.MRController.scheduleAppointment(id:String)	
 
+
 # delete later
 GET    /userform/patient/                 controllers.PatientController.form()
 GET    /userform/patient/h/               controllers.PatientController.enterForm()
 GET    /register/                         controllers.PatientController.register()
 POST   /register/                         controllers.PatientController.registerProccess()
-
+#GET		/create-appointment					controllers.DoctorController.createAppointment()
 
 #sample data
 #GET   /sampledata/day					controllers.SampleDataController.days()

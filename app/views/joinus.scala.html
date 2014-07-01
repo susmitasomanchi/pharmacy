@@ -25,7 +25,7 @@
 			
 			@helper.inputPassword(joinUsForm("confirmPassword"),'class -> "inputs",'_label->"Confirm Password")
 
-			@select(joinUsForm("role"), options("PATIENT"->"Patient", "DOCTOR"->"Doctor", "ADMIN_PHARMACIST"->"Pharmacist", "ADMIN_MR"->"Medical Representative", "DIAGREP"->"Diagnostic Representative"), '_label->"Join As")
+			@select(joinUsForm("role"), options("PATIENT"->"Patient", "DOCTOR"->"Doctor", "ADMIN_PHARMACIST"->"Pharmacist", "ADMIN_MR"->"Medical Representative", "ADMIN_DIAGREP"->"Diagnostic Representative"), '_label->"Join As")
 			
 
 			<div id="pharmacyName" class="col-xs-4" style="display:none">
