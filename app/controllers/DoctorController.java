@@ -10,7 +10,8 @@ import models.AppUser;
 import models.Appointment;
 import models.AppointmentStatus;
 import models.Clinic;
-import models.DayOfTheWeek;
+import models.Day;
+import models.DaySchedule;
 import models.Doctor;
 import models.DoctorAward;
 import models.DoctorClinicInfo;
@@ -31,6 +32,7 @@ import beans.ClinicBean;
 import beans.DoctorDetailBean;
 import beans.PatientBean;
 import beans.QuestionAndAnswerBean;
+
 
 @BasicAuth
 public class DoctorController extends Controller {
@@ -104,8 +106,6 @@ public class DoctorController extends Controller {
 	}
 	// return ok(views.html.scheduleAppointment.render("hello"));
 	// return redirect(routes.UserController.list());
-
-
 
 
 
@@ -447,5 +447,18 @@ public class DoctorController extends Controller {
 	public static Result processPrescriptionForm(){
 		return ok();
 	}
+	public static Result doctorPrescription() {
 
+		return ok(views.html.doctor.doctor_prescription.render());
+	}
+
+	public static Result doctorAppointments() {
+
+		return ok(views.html.doctor.doctor_appointments.render());
+	}
+
+	public static Result doctorViewAppointment() {
+
+		return ok(views.html.doctor.doctor_view_appointment.render());
+	}
 }

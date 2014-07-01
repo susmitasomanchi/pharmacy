@@ -31,9 +31,6 @@ public class BlogController extends Controller {
 		return ok(views.html.blog.home.render());
 	}
 
-	public static Result loginBlogAdmin(){
-		return ok(views.html.blog.loginBlogAdmin.render(loginForm));
-	}
 
 	@BasicAuth
 	public static Result categoryForm(){

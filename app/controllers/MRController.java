@@ -148,7 +148,7 @@ public class MRController extends Controller{
 		final Doctor doctor=Doctor.find.byId(Long.parseLong(docID));
 		final Calendar calendar = Calendar.getInstance();
 		calendar.setTime(new Date());
-		calendar.set(Calendar.HOUR_OF_DAY,doctor.doctorClinicInfoList.get(0).fromHrsMr);
+		//		calendar.set(Calendar.HOUR_OF_DAY,doctor.doctorClinicInfoList.get(0).fromHrsMr);
 		calendar.set(Calendar.MINUTE,0);
 		calendar.set(Calendar.SECOND,0);
 		calendar.set(Calendar.MILLISECOND,0);
@@ -163,7 +163,7 @@ public class MRController extends Controller{
 			Logger.error(listAppointments.size()+"Test");
 
 			calendar.add(Calendar.DATE, 1);
-			calendar.set(Calendar.HOUR_OF_DAY,doctor.doctorClinicInfoList.get(0).fromHrsMr);
+			//			calendar.set(Calendar.HOUR_OF_DAY,doctor.doctorClinicInfoList.get(0).fromHrsMr);
 			calendar.set(Calendar.MINUTE,0);
 			calendar.set(Calendar.SECOND,0);
 			calendar.set(Calendar.MILLISECOND,0);

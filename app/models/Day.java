@@ -28,6 +28,14 @@ public enum Day {
 		}
 		return vals;
 	}
+	public static Day getDay(final int number) {
+		for (final Day day : Day.values()) {
+			if(day.ordinal()==number){
+				return day;
+			}
+		}
+		return null;
+	}
 
 }
 

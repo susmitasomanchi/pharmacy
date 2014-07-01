@@ -58,18 +58,18 @@ public class Appointment extends BaseEntity {
 
 	}
 	public static List<Appointment> getAvailableMrAppointmentList(final Doctor doctor,final Date date) {
-		List<Appointment> list=null;
+		final List<Appointment> list=null;
 
-		final Calendar calendar=Calendar.getInstance();
+		/*final Calendar calendar=Calendar.getInstance();
 		calendar.setTime(date);
 		calendar.set(Calendar.HOUR_OF_DAY,doctor.doctorClinicInfoList.get(0).toHrsMr);
 		calendar.set(Calendar.MINUTE,59);
 		calendar.set(Calendar.SECOND,59);
 		calendar.set(Calendar.MILLISECOND,59);
-
-		list=Appointment.find.where().eq("doctor", doctor).between("appointmentTime", date, calendar.getTime()).
+		 */
+		/*list=Appointment.find.where().eq("doctor", doctor).between("appointmentTime", date, calendar.getTime()).
 				order().asc("appointmentTime").findList();
-
+		 */
 
 
 		return list;
