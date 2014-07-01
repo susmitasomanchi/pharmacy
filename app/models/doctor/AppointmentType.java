@@ -1,4 +1,4 @@
-package models;
+package models.doctor;
 
 public enum AppointmentType {
 

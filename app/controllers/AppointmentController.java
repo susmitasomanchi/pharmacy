@@ -1,6 +1,6 @@
 package controllers;
 
-import models.Appointment;
+import models.doctor.Appointment;
 import play.Logger;
 import play.data.Form;
 import play.mvc.Controller;

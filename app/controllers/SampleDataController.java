@@ -4,8 +4,8 @@ import java.util.List;
 import models.AppUser;
 import models.Day;
 import models.DayOfTheWeek;
-import models.Doctor;
 import models.Role;
+import models.doctor.Doctor;
 import play.mvc.Controller;
 import play.mvc.Result;
 

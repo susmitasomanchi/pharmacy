@@ -1,4 +1,4 @@
-package models;
+package models.blog;
 
 
 import java.util.ArrayList;
@@ -14,6 +14,7 @@ import javax.persistence.Lob;
 import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 
+import models.BaseEntity;
 import play.db.ebean.Model;
 import utils.Util;
 

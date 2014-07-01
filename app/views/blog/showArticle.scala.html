@@ -1,6 +1,7 @@
-@(article :models.Article, offset :Integer) @import play.i18n._
+@(article :models.blog.Article, offset :Integer) 
+@import play.i18n._
 
-@blog.blogmain(article.htmlTitle, article.htmlMetaDescription,
+@blogmain(article.htmlTitle, article.htmlMetaDescription,
 article.htmlKeywords){
 
 <!-- Panel Style (otherwise not present in BootStrap 2) -->
@@ -558,7 +559,7 @@ box-shadow: 0 0 10px 5px #888888;
      <div class="g-signin"
       data-callback="loginFinishedCallback"
       data-approvalprompt="force"
-      data-clientid="404230636180-4qmlk57403u2985kjibgj3l37a0sdi54.apps.googleusercontent.com"
+      data-clientid="104967497790-3kr5g7c4jo1569kpfpit0s2aqei7ka6j.apps.googleusercontent.com"
       data-scope="https://www.googleapis.com/auth/plus.login https://www.googleapis.com/auth/plus.profile.emails.read"
       data-height="standard"
       data-cookiepolicy="single_host_origin"
@@ -582,11 +583,11 @@ box-shadow: 0 0 10px 5px #888888;
 		<div id="textcom-@oc.id" class="panel panel-default" style="">
 		<!-- <div id="textcom-@oc.id" class="panel panel-default" style="width:700px"> -->
 			<div class="panel-heading">
-				<h5 class="panel-title"><i class="fa fa-user"></i>&nbsp;@if(oc.blogCommentatorType.equals(BlogCommentatorType.APP_USER)){@oc.by.name}else{@oc.socialBy.name} <span class="pull-right"><small>@oc.date.format("dd-MMM-yyyy hh:mm")</small></span></h5>
+				<h5 class="panel-title"><i class="fa fa-user"></i>&nbsp;@if(oc.blogCommentatorType.equals(models.blog.BlogCommentatorType.APP_USER)){@oc.by.name}else{@oc.socialBy.name} <span class="pull-right"><small>@oc.date.format("dd-MMM-yyyy hh:mm")</small></span></h5>
 			</div>
 			<div class="panel-body">
 	 			<p>@oc.message</p>
-	 			<a id="replybtn-@oc.id" class="pull-right" style="cursor:pointer; color:#3a87ad;" onclick="reply('@oc.id', '@if(oc.blogCommentatorType.equals(BlogCommentatorType.APP_USER)){@oc.by.name}else{@oc.socialBy.name}');"><i class="fa fa-reply"></i></a>
+	 			<a id="replybtn-@oc.id" class="pull-right" style="cursor:pointer; color:#3a87ad;" onclick="reply('@oc.id', '@if(oc.blogCommentatorType.equals(models.blog.BlogCommentatorType.APP_USER)){@oc.by.name}else{@oc.socialBy.name}');"><i class="fa fa-reply"></i></a>
 				<br>
 			</div>
 		</div>
@@ -595,7 +596,7 @@ box-shadow: 0 0 10px 5px #888888;
 			<div style="margin-top:-20px; margin-left:100px;" class="panel panel-default">
 			<!-- <div style="margin-top:-20px; margin-left:100px; width:600px" class="panel panel-default"> -->
 				<div class="panel-heading">
-					<h5 class="panel-title"><i class="fa fa-user"></i>&nbsp;@if(reply.blogCommentatorType.equals(BlogCommentatorType.APP_USER)){@reply.by.name}else{@reply.socialBy.name} <span class="pull-right"><small>@reply.date.format("dd-MMM-yyyy hh:mm")</small></span></h5>
+					<h5 class="panel-title"><i class="fa fa-user"></i>&nbsp;@if(reply.blogCommentatorType.equals(models.blog.BlogCommentatorType.APP_USER)){@reply.by.name}else{@reply.socialBy.name} <span class="pull-right"><small>@reply.date.format("dd-MMM-yyyy hh:mm")</small></span></h5>
 				</div>
 				<div class="panel-body">
 	 				<p>@reply.message</p>

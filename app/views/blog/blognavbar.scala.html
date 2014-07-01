@@ -33,7 +33,7 @@
     <a class="dropdown-toggle"data-toggle="dropdown"href="#">Article<b class="caret"></b></a>
     <ul class="dropdown-menu">
 		<li><a href="@routes.BlogController.articleForm">New Article</a></li>
-		@for(cat <- ArticleCategory.getCategoriesInOrder){
+		@for(cat <- models.blog.ArticleCategory.getCategoriesInOrder){
 		<li><a href="@routes.BlogController.articles(cat.id)">@cat.name Articles</a></li>
 		}
     </ul>

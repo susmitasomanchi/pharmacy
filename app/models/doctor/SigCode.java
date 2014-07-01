@@ -1,7 +1,8 @@
-package models;
+package models.doctor;
 
 import javax.persistence.Entity;
 
+import models.BaseEntity;
 import play.db.ebean.Model;
 
 @SuppressWarnings("serial")

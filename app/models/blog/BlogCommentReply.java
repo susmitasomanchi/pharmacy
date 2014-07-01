@@ -1,4 +1,4 @@
-package models;
+package models.blog;
 
 import java.util.Date;
 
@@ -8,6 +8,9 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.OneToOne;
+
+import models.AppUser;
+import models.BaseEntity;
 
 @SuppressWarnings("serial")
 @Entity

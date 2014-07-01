@@ -2,6 +2,7 @@ package models;
 
 import javax.persistence.Entity;
 
+import models.doctor.SigCode;
 import play.db.ebean.Model;
 
 @SuppressWarnings("serial")

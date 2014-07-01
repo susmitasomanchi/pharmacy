@@ -12,6 +12,8 @@ import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToOne;
 
+import models.doctor.Doctor;
+
 @SuppressWarnings("serial")
 @Entity
 public class MedicalRepresentative extends BaseEntity{

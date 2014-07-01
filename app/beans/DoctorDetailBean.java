@@ -9,9 +9,9 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 
 import play.data.validation.Constraints.Required;
-import models.DoctorEducation;
 import models.Language;
 import models.LanguageAppUser;
+import models.doctor.DoctorEducation;
 
 @SuppressWarnings("serial")
 public class DoctorDetailBean implements Serializable{

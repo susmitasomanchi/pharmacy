@@ -6,11 +6,11 @@ import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
-import models.Appointment;
 import models.DCRLineItem;
-import models.Doctor;
 import models.HeadQuarter;
 import models.MedicalRepresentative;
+import models.doctor.Appointment;
+import models.doctor.Doctor;
 import play.Logger;
 import play.data.DynamicForm;
 import play.data.Form;

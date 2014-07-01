@@ -7,7 +7,7 @@
 </div>
 }
 
-@blog.blogmain("", "", ""){
+@blogmain("", "", ""){
 
 <table class="table table-condensed table-bordered">
 <thead>
@@ -17,7 +17,7 @@
 <th>Action</th>
 </thead>
 <tbody>
-@for(cat <- ArticleCategory.find.orderBy("position").findList()){
+@for(cat <- models.blog.ArticleCategory.find.orderBy("position").findList()){
 <tr>
 	<td>@cat.position</td>
 	<td>@cat.name</td>

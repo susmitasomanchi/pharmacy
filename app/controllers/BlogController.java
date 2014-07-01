@@ -5,12 +5,12 @@ import java.util.Date;
 import java.util.List;
 
 import models.Alert;
-import models.Article;
-import models.ArticleCategory;
-import models.BlogComment;
-import models.BlogCommentReply;
-import models.BlogCommentatorType;
-import models.SocialUser;
+import models.blog.Article;
+import models.blog.ArticleCategory;
+import models.blog.BlogComment;
+import models.blog.BlogCommentReply;
+import models.blog.BlogCommentatorType;
+import models.blog.SocialUser;
 import play.Logger;
 import play.data.Form;
 import play.mvc.Controller;

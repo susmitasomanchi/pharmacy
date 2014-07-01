@@ -1,4 +1,4 @@
-@(category: models.ArticleCategory)
+@(category: models.blog.ArticleCategory)
 @import play.i18n._
 
 @if((LoginController.isLoggedIn())&&(LoginController.getLoggedInUserRole().equals(Role.BLOG_ADMIN.toString()))){
@@ -7,7 +7,7 @@
 </div>
 }
 
-@blog.blogmain("", "", ""){
+@blogmain("", "", ""){
 
 <table class="table table-condensed table-bordered">
 <thead>

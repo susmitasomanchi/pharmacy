@@ -1,5 +1,5 @@
 @import play.i18n._
-@blog.blogmain("", "", ""){
+@blogmain("", "", ""){
 
 
 
@@ -13,7 +13,7 @@
 
 		$(document).ready(function(){
 
-			@for(c <- ArticleCategory.getCategoriesInOrder()){
+			@for(c <- models.blog.ArticleCategory.getCategoriesInOrder()){
 			@if(c.getArticleSize() > 0){
 			
 				$("#models-carousel-@c.id").carouFredSel({
@@ -144,7 +144,7 @@
 <br>
 <br>
 
-@for(c <- ArticleCategory.getCategoriesInOrder()){
+@for(c <- models.blog.ArticleCategory.getCategoriesInOrder()){
 
 @if(c.getArticleSize() > 0){
 

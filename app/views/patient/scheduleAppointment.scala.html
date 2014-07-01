@@ -1,5 +1,5 @@
 @* scheduleAppointmentTemp Template File *@
-@(appointmentMap:Map[Date,List[models.Appointment]],slotes:Integer)
+@(appointmentMap:Map[Date,List[models.doctor.Appointment]],slotes:Integer)
 
 
 @main("Schedule An Appointment"){
@@ -9,7 +9,7 @@
 <div class="col-md-6">
 	<select id="doc-select">
 	<option>Select Doctor</option>
-	@for(doc <- Doctor.find.all()){
+	@for(doc <- models.doctor.Doctor.find.all()){
 		<option value="@doc.id">@doc.appUser.name</option>
 	}
 	</select> 
@@ -34,7 +34,7 @@
   		@if(k.format("EE").equals("Sun")){
   			<td style="text-align:center;"><a class="btn btn-default disabled">@appointmentMap.get(k).get(i).appointmentTime.format("HH:mm")</a></td>
   		}else{
-  			@if(v.get(i).appointmentStatus==AppointmentStatus.AVAILABLE){ 
+  			@if(v.get(i).appointmentStatus == models.doctor.AppointmentStatus.AVAILABLE){ 
   			  			<td class="appt" date="@appointmentMap.get(k).get(i).appointmentTime.format("dd-mm-yyyy")" style="text-align:center;" id="@appointmentMap.get(k).get(i).id" ><a class="btn btn-success">@appointmentMap.get(k).get(i).appointmentTime.format("HH:mm")</a></td>
   			}else{
   			  			<td style="text-align:center;" date="@appointmentMap.get(k).get(i).appointmentTime.format("dd-mm-yyyy")" id="@appointmentMap.get(k).get(i).id" ><a class=" btn btn-success disabled">@appointmentMap.get(k).get(i).appointmentTime.format("HH:mm")</a></td>

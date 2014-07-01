@@ -1,4 +1,4 @@
-package models;
+package models.blog;
 import java.util.List;
 
 import javax.persistence.Column;
@@ -8,6 +8,7 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Lob;
 
+import models.BaseEntity;
 import play.db.ebean.Model;
 import utils.Util;
 

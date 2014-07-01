@@ -1,4 +1,4 @@
-@(dataForm:play.data.Form[models.ArticleCategory])
+@(dataForm:play.data.Form[models.blog.ArticleCategory])
 
 @import play.i18n._
 
@@ -8,7 +8,7 @@
 </div>
 }
 
-@blog.blogmain("", "", ""){
+@blogmain("", "", ""){
 
 @helper.form(action=routes.BlogController.processCategoryForm()) {
 @helper.inputText(dataForm("name"),'_label->"Name",'class->"col-sm-9")

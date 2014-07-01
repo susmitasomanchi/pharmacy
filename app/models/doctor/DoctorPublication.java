@@ -1,10 +1,11 @@
-package models;
+package models.doctor;
 
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 
+import models.BaseEntity;
 import play.db.ebean.Model.Finder;
 
 @SuppressWarnings("serial")

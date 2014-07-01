@@ -13,7 +13,7 @@ import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 
-import models.Doctor;
+import models.doctor.Doctor;
 
 @SuppressWarnings("serial")
 @Entity

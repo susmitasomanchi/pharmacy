@@ -1,4 +1,4 @@
-package models;
+package models.blog;
 
 import com.avaje.ebean.annotation.EnumValue;
 

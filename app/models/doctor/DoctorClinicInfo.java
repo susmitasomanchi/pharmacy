@@ -1,4 +1,4 @@
-package models;
+package models.doctor;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -11,6 +11,8 @@ import javax.persistence.Id;
 import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 
+import models.BaseEntity;
+import models.DaySchedule;
 import play.db.ebean.Model;
 import beans.ClinicBean;
 

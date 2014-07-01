@@ -1,4 +1,4 @@
-package models;
+package models.blog;
 
 import java.util.Date;
 
@@ -8,6 +8,8 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Lob;
 
+import models.BaseEntity;
+import models.Sex;
 import play.data.validation.Constraints.Email;
 import play.db.ebean.Model;
 import play.db.ebean.Model.Finder;

@@ -18,10 +18,10 @@ GET		/blog/admin/new-article				controllers.BlogController.articleForm()
 POST	/blog/admin/new-article				controllers.BlogController.processArticleForm()
 GET		/blog/admin/articles/:categoryId		controllers.BlogController.articles(categoryId: Long)
 GET		/blog/admin/edit-article/:id			controllers.BlogController.editArticleForm(id: Long)
-GET		/blog/get-thumbnail/:id			controllers.BlogController.getThumbnail(id: Long)
-GET		/blog/get-main-image/:id		controllers.BlogController.getMainImage(id: Long)
+GET		/blog/get-thumbnail/:id						controllers.BlogController.getThumbnail(id: Long)
+GET		/blog/get-main-image/:id					controllers.BlogController.getMainImage(id: Long)
 
-GET		/blog/add-comment/:id/:message	controllers.BlogController.addComment(id: Long, message: String)
+GET		/blog/add-comment/:id/:message				controllers.BlogController.addComment(id: Long, message: String)
 GET		/blog/add-comment-reply/:id/:cid/:message		controllers.BlogController.addCommentReply(id: Long, cid: Long, message: String)
 
 POST	/blog/add-social-comment		controllers.BlogController.addSocialComment()
@@ -37,14 +37,10 @@ GET    /                                  controllers.Application.index()
 POST   /login                             controllers.LoginController.processLogin()
 GET    /logout                            controllers.LoginController.processLogout()
 
-# Remove later (at Beta Launch)
-GET    /                                  controllers.Application.index()
-GET    /:str		                      controllers.Application.indexX(str: String)
-####################################################################################################
 
 # Remove later (at Beta Launch)
-GET    /                                  controllers.Application.index()
-GET    /:str		                      controllers.Application.indexX(str: String)
+#GET    /                                  controllers.Application.index()
+#GET    /:str		                      controllers.Application.indexX(str: String)
 ####################################################################################################
 
 
@@ -164,9 +160,9 @@ GET    /add-test-done						  		controllers.DiagnosticController.addTestDone()
 
 
 #Diagnostic Test
-GET    /test				            		controllers.DiagnosticTestController.addTest()
-POST   /test/save					       		controllers.DiagnosticTestController.addTestProcess()
-GET    /test-list/:id				            controllers.DiagnosticTestController.diagnosticTestList(id: Long)
+GET    /test				            		controllers.DiagnosticController.addTest()
+POST   /test/save					       		controllers.DiagnosticController.addTestProcess()
+#GET    /test-list/:id				            controllers.DiagnosticTestController.diagnosticTestList(id: Long)
 GET		/place-order				controllers.DiagnosticOrderController.receive()		
 GET		/display-orders/:id				controllers.DiagnosticOrderController.viewOrders(id: Long)																																		
 

@@ -1,4 +1,4 @@
-package models;
+package models.doctor;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -13,6 +13,8 @@ import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 
+import models.AppUser;
+import models.BaseEntity;
 import play.data.validation.Constraints.Required;
 import play.db.ebean.Model;
 

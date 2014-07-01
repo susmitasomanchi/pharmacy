@@ -9,6 +9,8 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.OneToOne;
 
+import models.doctor.Doctor;
+
 
 @SuppressWarnings("serial")
 @Entity

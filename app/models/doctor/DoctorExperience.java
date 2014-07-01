@@ -1,4 +1,4 @@
-package models;
+package models.doctor;
 
 import java.util.Date;
 
@@ -7,6 +7,7 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 
+import models.BaseEntity;
 import play.data.validation.Constraints.Required;
 
 @SuppressWarnings("serial")
