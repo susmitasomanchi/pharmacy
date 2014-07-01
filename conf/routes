@@ -30,12 +30,16 @@ GET    /doctor-education                  controllers.DoctorController.doctorEdu
 POST   /doctor-education                  controllers.DoctorController.processDoctorEducation()
 GET    /doctor-award                      controllers.DoctorController.doctorAward()
 POST   /doctor-award                      controllers.DoctorController.processDoctorAward()
-ET		/doctor-language				controllers.DoctorController.doctorLanguage()
+GET		/doctor-language				controllers.DoctorController.doctorLanguage()
 POST	/doctor-language				controllers.DoctorController.processDoctorLanguage()
 GET		/doctor-socialwork				controllers.DoctorController.doctorSocialWork()
 POST	/doctor-socialwork				controllers.DoctorController.processDoctorSocialWork()
 GET		/doctor-publication				controllers.DoctorController.doctorPublication()
 POST	/doctor-publication				controllers.DoctorController.processDoctorPublication()
+
+GET     /doctor/prescription			controllers.DoctorController.doctorPrescription()
+GET     /doctor/appointments			controllers.DoctorController.doctorAppointments()
+GET     /doctor/view/appointment		controllers.DoctorController.doctorViewAppointment()
 
 
 
@@ -59,8 +63,8 @@ GET    /new-product                       controllers.ProductController.productF
 POST   /new-product                       controllers.ProductController.saveProduct()
 GET    /view-products                     controllers.ProductController.displayProduct()
 
-GET 	/create-Mr-schedule				controllers.DoctorController.createMrSchedule()
-POST	/create-Mr-appointment 			controllers.DoctorController.createMrAppointment()
+#GET 	/create-Mr-schedule				controllers.DoctorController.createMrSchedule()
+#POST	/create-Mr-appointment 			controllers.DoctorController.createMrAppointment()
 
 GET		/doctor/today-appointment		controllers.DoctorController.viewTodaysAppointment()	
 
@@ -95,8 +99,8 @@ POST   /register-patient-proccess/        controllers.DoctorController.registerP
 #Diagnostic module	
 GET    /diagnosticregistration            		controllers.DiagnosticController.diagnosticCenter()
 POST   /diagnosticregistration/save       		controllers.DiagnosticController.diagnosticCenterProcess()
-GET    /diagnosticlist                   	 	controllers.DiagnosticController.diagnosticlist()
-GET    /diagnostic-service-list/:id            	 	controllers.DiagnosticController.diagnosticServiceslist(id: Long)
+#GET    /diagnosticlist                   	 	controllers.DiagnosticController.diagnosticlist()
+#GET    /diagnostic-service-list/:id            	 	controllers.DiagnosticController.diagnosticServiceslist(id: Long)
 GET    /diagnostic-delete/:id             		controllers.DiagnosticController.deleteCenter(id: Long)
 GET    /diagnostic-edit/:id						controllers.DiagnosticController.editDiagnosticDetails(id: Long)
 POST    /diagnostic-edit 						controllers.DiagnosticController.diagnosticEditprocess()
@@ -120,8 +124,6 @@ GET    /download						  		controllers.DiagnosticTestController.downloadFile()
 GET    /test				            		controllers.DiagnosticTestController.addTest()
 POST   /test/save					       		controllers.DiagnosticTestController.addTestProcess()
 GET    /test-list/:id				            controllers.DiagnosticTestController.diagnosticTestList(id: Long)
-GET    /prescribe-test				            controllers.DiagnosticPrescriptionController.prescribe()
-GET    /prescribe-test/save				            controllers.DiagnosticPrescriptionController.receive()
 
 #MR Module
 GET    /doctor-list                       controllers.MRController.doctorList()
@@ -144,7 +146,7 @@ POST   /register/                         controllers.PatientController.register
 
 
 #sample data
-GET   /sampledata/day					controllers.SampleDataController.days()
+#GET   /sampledata/day					controllers.SampleDataController.days()
 
 
 

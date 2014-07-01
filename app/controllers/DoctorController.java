@@ -485,4 +485,18 @@ public class DoctorController extends Controller {
 		return true;
 	}
 
+	public static Result doctorPrescription() {
+		
+		return ok(views.html.doctor.doctor_prescription.render());
+	}
+	
+	public static Result doctorAppointments() {
+		
+		return ok(views.html.doctor.doctor_appointments.render());
+	}
+	
+	public static Result doctorViewAppointment() {
+		
+		return ok(views.html.doctor.doctor_view_appointment.render());
+	}
 }
