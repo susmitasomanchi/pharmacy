@@ -1,0 +1,21 @@
+@(products: List[Product])
+ @main("product"){
+
+<table>
+	<thead>
+	<th>Products</th>
+	</thead>
+	<tbody>
+	
+	@for(product <- products){
+		<tr>
+		<td>@product.medicineName</td>
+		<td><a class="btn btn-primary btn-xs" href="/edit-product/@product.id">Edit</a></td>
+		<td><a class="btn btn-primary btn-xs" href="/remove-product/@product.id">Remove</a></td>
+		</tr>
+		<tr></tr>
+		
+	}
+	</tbody>
+	</table>
+}
