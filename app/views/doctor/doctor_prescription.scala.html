@@ -1,0 +1,112 @@
+@()
+@import play.i18n._
+@import helper.twitterBootstrap._
+@import helper._
+
+@main("Doctor's Prescription"){
+
+<div class="row col-md-8">
+<div class="row" style="padding-left:20px">
+<div class="col-md-6">
+<h5><b>NAME:</b> Patient's name</h5>
+<h5><b>AGE:</b> 30 years</h5>
+<h5><b>SEX:</b> Male</h5>
+<h5><b>PROBLEM STATEMENT:</b> Stomache pain since 2 days.</h5>
+<button class="btn btn-xs btn-default" style="float:right">Elaborate</button>
+</div>
+<div class="col-md-6" style="padding-left:0px">
+<h5><b>APPOINTMENT:</b> Scheduled on 30th June 2014 at 6:00pm in ABCDEF clinic.</h5>
+</div>
+</div>
+<br>
+<div class="row">
+<div class="col-md-1" style="width:3%">
+</div>
+<div class="col-md-10" style="border:2px solid black;width:94%">
+<form class="form-horizontal">
+<div class="form-group" style="padding-left:20px">
+<h5><b>Prognosis</b></h5>
+<textarea rows="4" cols="60"></textarea>
+</div>
+<h5><b> Medicines</b></h5>
+<div class="row" id="medicines" style="padding-left:20px">
+<div class="form-group col-md-3" style="width:25%">
+<label for="name">Name</label>
+<input type="text" class="form-control" id="name" placeholder="Name"> 
+</div>
+<div class="col-md-1" style="width:3%">
+</div>
+<div class="form-group col-md-3" style="width:25%">
+<label for="frequency">Frequency</label>
+<input type="text" class="form-control" id="frequency" placeholder="Dosage"> 
+</div>
+<div class="col-md-1" style="width:3%">
+</div>
+<div class="form-group col-md-3" style="width:25%">
+<label for="remarks">Remarks</label>
+<input type="text" class="form-control" id="remarks" placeholder="Remarks"> 
+</div>
+<div class="col-md-1" style="width:3%">
+</div>
+<div class="col-md-3" style="width:16%">
+<br>
+<a class="btn btn-sm btn-success" onclick="addmed();" >+</a>
+</div>
+</div>
+<script>
+function addmed(){
+
+	$("#medicines").append('<div class="row" style="padding-left:20px"><div class="form-group col-md-3" style="width:25%"><label for="name">Name</label><input type="text" class="form-control" id="name" placeholder="Name"></div><div class="col-md-1" style="width:3%"></div><div class="form-group col-md-3" style="width:25%"><label for="frequency">Frequency</label><input type="text" class="form-control" id="frequency" placeholder="Dosage"></div><div class="col-md-1" style="width:3%"></div><div class="form-group col-md-3" style="width:25%"><label for="remarks">Remarks</label><input type="text" class="form-control" id="remarks" placeholder="Remarks"></div><div class="col-md-1" style="width:3%"></div>	<div class="col-md-3" style="width:16%"><br><a class="btn btn-sm btn-danger" onclick="removemed();" id="removemedicines">X</a></div></div>')
+
+}
+	</script>
+
+<br>
+<h5><b> Diagnostic Tests</b></h5>
+<div class="row" style="padding-left:20px">
+<div class="form-group col-md-4" style="width:30%">
+<label for="name">Name</label>
+<input type="text" class="form-control" id="name" placeholder="Name"> 
+</div>
+<div class="col-md-1" style="width:5%">
+</div>
+<div class="form-group col-md-4" style="width:30%">
+<label for="remarks">Remarks</label>
+<input type="text" class="form-control" id="remarks" placeholder="Remarks"> 
+</div>
+<div class="col-md-1" style="width:5%">
+</div>
+<div class="col-md-4" style="width:30%">
+<br>
+<button class="btn btn-sm btn-success">+</button>
+</div>
+</div>
+<div class="form-group" style="padding-left:20px">
+<label for="remarks">Remarks</label><br>
+<textarea rows="4" cols="60"></textarea>
+</div>
+</form>
+</div>
+<div class="col-md-1" style="width:3%">
+</div>
+</div>
+</div>
+<div class="col-md-1" style="width:3%">
+</div>
+<div class="col-md-4" style="width:30%">
+<div class="panel panel-primary">
+<div class="panel-heading">
+<h3 class="panel-title">Notifications</h3>
+</div>
+<div class="panel-body">
+<ul style="font-size:13px">
+<li><a href="#">Prescription on 20th June 2014</a></li>
+<li><a href="#">Prescription on 10th June 2014</a></li>
+<li><a href="#">Prescription on 30th May 2014</a></li>
+<li><a href="#">Prescription on 20th May 2014</a></li>
+
+</ul>
+</div>
+</div>
+</div>
+}

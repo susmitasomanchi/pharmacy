@@ -11,7 +11,7 @@ import java.io.Serializable;
 import java.util.Date;
 
 import models.AppUser;
-import models.QuestionAndAnswer;
+import models.doctor.QuestionAndAnswer;
 
 @SuppressWarnings("serial")
 public class QuestionAndAnswerBean implements Serializable {

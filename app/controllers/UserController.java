@@ -10,15 +10,24 @@ package controllers;
 
 
 import models.AppUser;
+<<<<<<< HEAD
 import models.Doctor;
+=======
+import models.DiagnosticCentre;
+import models.DiagnosticRepresentative;
+>>>>>>> branch 'master' of http://pharmacy.bz/green-software/mednetwork.git
 import models.MedicalRepresentative;
 import models.Patient;
 import models.PharmaceuticalCompany;
 import models.Pharmacist;
 import models.Pharmacy;
 import models.Role;
+<<<<<<< HEAD
 import models.diagnostic.DiagnosticCentre;
 import models.diagnostic.DiagnosticRepresentative;
+=======
+import models.doctor.Doctor;
+>>>>>>> branch 'master' of http://pharmacy.bz/green-software/mednetwork.git
 import play.Logger;
 import play.data.Form;
 import play.mvc.Controller;

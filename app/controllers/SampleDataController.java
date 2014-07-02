@@ -1,12 +1,11 @@
 package controllers;
+
+
 import java.util.List;
 
 import models.AppUser;
-import models.Day;
-import models.DayOfTheWeek;
-import models.Doctor;
-import models.Language;
-import models.LanguageAppUser;
+import models.Role;
+import models.doctor.Doctor;
 import play.mvc.Controller;
 import play.mvc.Result;
 
@@ -61,10 +60,22 @@ public class SampleDataController extends Controller {
 
 		return ok("created");
 	}
-	
-	
-				
+
+
+	public static Result createBlogAdmin(){
+		if(AppUser.find.where().eq("email", "blog@mednetwork.in").findList().size()>0){
+			return redirect(routes.Application.index());
+		}
+		final AppUser appUser = new AppUser();
+		appUser.name = "Blog Admin";
+		appUser.role = Role.BLOG_ADMIN;
+		appUser.email = "blog@mednetwork.in";
+		appUser.password = "med2014blog";
+		appUser.save();
+		return redirect(routes.Application.index());
 	}
+
+}
 
 
 

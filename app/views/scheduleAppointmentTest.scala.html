@@ -1,5 +1,5 @@
 @* scheduleAppointment Template File *@
-@(dataForm:play.data.Form[models.Appointment])
+@(dataForm:play.data.Form[models.doctor.Appointment])
 
 @main("Schedule Appointment"){
 	
@@ -35,7 +35,7 @@
 			@helper.inputDate(dataForm("to"),'class -> "date",'_label->"To")
 			
 							
-			@helper.select(dataForm("appointmentStatus"),options=helper.options(AppointmentStatus.options),'class -> "inputs chzn",'_label->"Appointment Status")
+			@helper.select(dataForm("appointmentStatus"),options=helper.options(models.doctor.AppointmentStatus.options),'class -> "inputs chzn",'_label->"Appointment Status")
 			
 			@helper.inputText(dataForm("remarks"),'class -> "inputs",'_label->"Remarks")
 			

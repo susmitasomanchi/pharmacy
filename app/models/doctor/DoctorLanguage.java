@@ -1,4 +1,4 @@
-package models;
+package models.doctor;
 
 import java.util.ArrayList;
 import java.util.Date;
@@ -12,6 +12,8 @@ import javax.persistence.Id;
 import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 
+import models.BaseEntity;
+import models.LanguageAppUser;
 import play.data.validation.Constraints.Required;
 import play.db.ebean.Model;
 import play.db.ebean.Model.Finder;

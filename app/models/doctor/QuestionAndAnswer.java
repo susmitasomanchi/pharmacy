@@ -5,7 +5,7 @@ THIS IS AN AUTO GENERATED CODE
 PLEASE DO NOT MODIFY IT BY HAND
 
  *****/
-package models;
+package models.doctor;
 
 import java.util.Date;
 import java.util.LinkedHashMap;
@@ -18,6 +18,8 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.OneToOne;
 
+import models.AppUser;
+import models.BaseEntity;
 import beans.QuestionAndAnswerBean;
 
 

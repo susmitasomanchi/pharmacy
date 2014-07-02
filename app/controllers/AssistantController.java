@@ -1,7 +1,7 @@
 package controllers;
 
-import models.Doctor;
-import models.DoctorAssistant;
+import models.doctor.Doctor;
+import models.doctor.DoctorAssistant;
 import play.Logger;
 import play.data.Form;
 import play.mvc.Controller;
