@@ -26,7 +26,7 @@ public class LoginController extends Controller {
 	public static Result blogAdminLoginForm(){
 		return ok(views.html.adminlogin.render(loginForm));
 	}
-
+	
 	public static Result processLogin() {
 		final Form<LoginBean> filledForm = loginForm.bindFromRequest();
 		if (filledForm.hasErrors()) {

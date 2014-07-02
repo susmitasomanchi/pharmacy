@@ -76,10 +76,6 @@ POST	/doctor-publication				controllers.DoctorController.processDoctorPublicatio
 GET		/doctor-prescribe/:id			controllers.DoctorController.showPrescriptionForm(id: Long)
 POST	/doctor-prescribe				controllers.DoctorController.processPrescriptionForm()
 
-GET     /doctor/prescription			controllers.DoctorController.doctorPrescription()
-GET     /doctor/appointments			controllers.DoctorController.doctorAppointments()
-GET     /doctor/view/appointment		controllers.DoctorController.doctorViewAppointment()
-
 
 
 GET    /userform/assistant/               controllers.AssistantController.form()
@@ -103,7 +99,7 @@ GET    /view-products                     controllers.ProductController.displayP
 #GET 	/create-Mr-schedule				controllers.DoctorController.createMrSchedule()
 #POST	/create-Mr-appointment 			controllers.DoctorController.createMrAppointment()
 
-#GET		/doctor/today-appointment		controllers.DoctorController.viewTodaysAppointment()	
+GET		/doctor/today-appointment		controllers.DoctorController.viewTodaysAppointment()	
 
 
 GET    /medical-representative            controllers.Application.medicalRepresentative()
@@ -129,9 +125,9 @@ GET    /patient/remove-diag-centers/:id               controllers.PatientControl
 GET    /answerform                        controllers.DoctorController.displayAnswer()
 POST   /ansQuestion/:qaId                 controllers.DoctorController.answerQuestion(qaId: Long)
 # doctor action
-GET    /dashboard						controllers.UserActions.dashboard()
-GET    /register-patient/               controllers.DoctorController.registerPatient()
-POST   /register-patient-proccess/      controllers.DoctorController.registerPatientProccess()
+GET    /dashboard                         controllers.UserActions.dashboard()
+GET    /register-patient/                 controllers.DoctorController.registerPatient()
+POST   /register-patient-proccess/        controllers.DoctorController.registerPatientProccess()
 
 #Diagnostic module	
 GET    /diagnosticregistration            		controllers.DiagnosticController.diagnosticCenter()
@@ -165,7 +161,6 @@ POST   /test/save					       		controllers.DiagnosticController.addTestProcess()
 #GET    /test-list/:id				            controllers.DiagnosticTestController.diagnosticTestList(id: Long)
 GET		/place-order				controllers.DiagnosticOrderController.receive()		
 GET		/display-orders/:id				controllers.DiagnosticOrderController.viewOrders(id: Long)																																		
-
 #MR Module
 GET    /doctor-list                       controllers.MRController.doctorList()
 GET    /mr/add-doctor/:id                 controllers.MRController.addDoctor(id: Long)
@@ -179,13 +174,12 @@ POST   /dcr-line-item/proccess            controllers.MRController.visitDoctorPr
 GET    /search                            controllers.MRController.search()
 GET		/mr/display-appointment/:id			controllers.MRController.scheduleAppointment(id:String)	
 
-
 # delete later
 GET    /userform/patient/                 controllers.PatientController.form()
 GET    /userform/patient/h/               controllers.PatientController.enterForm()
 GET    /register/                         controllers.PatientController.register()
 POST   /register/                         controllers.PatientController.registerProccess()
-#GET		/create-appointment					controllers.DoctorController.createAppointment()
+
 
 #sample data
 #GET   /sampledata/day					controllers.SampleDataController.days()

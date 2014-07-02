@@ -12,7 +12,7 @@ import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 
 import models.BaseEntity;
-import models.DaySchedule;
+import models.Role;
 import play.db.ebean.Model;
 import beans.ClinicBean;
 
@@ -30,6 +30,10 @@ public class DoctorClinicInfo extends BaseEntity {
 	@OneToOne
 	public Doctor doctor;
 
+	public Integer slot;
+
+	public Integer	slotmr;
+
 	@OneToMany(cascade=CascadeType.ALL)
 	public List<DaySchedule> schedulDays = new ArrayList<DaySchedule>();
 
@@ -45,17 +49,49 @@ public class DoctorClinicInfo extends BaseEntity {
 		if(this.clinic != null) {
 			bean.name= this.clinic.name;
 		}
+		final List<Integer> fromHrs = new ArrayList<Integer>();
 
+		final List<Integer> toHrs = new ArrayList<Integer>();
 
-		if(this.schedulDays.size()!=0){/*
-			for (final SchedulDay	 schedulDay : this.schedulDays) {
-				if(schedulDay.dayStatus.equals(DayStatus.mr)){
-					bean.daysOfWeekMr.add(schedulDay.day);
-				}else if (schedulDay.dayStatus.equals(DayStatus.patient)) {
-					bean.daysOfWeek.add(schedulDay.day);
+		final List<Integer> fromHrsMr = new ArrayList<Integer>();
+
+		final List<Integer> toHrsMr = new ArrayList<Integer>();
+
+		final List<String> daysOfWeek	= new ArrayList<String>();
+
+		final List<String> daysOfWeekMr	= new ArrayList<String>();
+
+		final List<Long> scheduleId=new ArrayList<Long>();
+		final List<Long> scheduleMrId=new ArrayList<Long>();
+
+		if(this.schedulDays.size()!=0){
+
+			for (final DaySchedule  schedule : this.schedulDays) {
+				if(schedule.requester.equals(Role.PATIENT)){
+					fromHrs.add(schedule.fromTime);
+					toHrs.add(schedule.toTime);
+					daysOfWeek.add(schedule.day.toString());
+					scheduleId.add(schedule.id);
+
+				}else{
+					fromHrsMr.add(schedule.fromTime);
+					toHrsMr.add(schedule.toTime);
+					daysOfWeekMr.add(schedule.day.toString());
+					scheduleMrId.add(schedule.id);
 				}
 			}
-		 */}
+
+		}
+		bean.fromHrs=fromHrs;
+		bean.toHrs=toHrs;
+		bean.fromHrsMr=fromHrsMr;
+		bean.toHrsMr=toHrsMr;
+		bean.daysOfWeek=daysOfWeek;
+		bean.daysOfWeekMr=daysOfWeekMr;
+
+		bean.slot=this.slot;
+		bean.slotmr=this.slotmr;
+
 		return bean;
 
 	}

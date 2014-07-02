@@ -9,8 +9,6 @@
 	<thead>
 		<tr>
 			<th>Name</th>
-			<th>Available From</th>
-			<th>Available Till</th>
 			<th>Action</th>
 		</tr>
 	</thead>
@@ -18,11 +16,6 @@
 		@for(info <- list){
 			<tr>
 				<td>@info.clinic.name</td>
-				@*
-				<td>@(info.fromHrs):00 Hrs</td>
-				<td>@(info.toHrs):00 Hrs</td>
-				*@
-				
 				<td><a class="btn btn-info btn-xs" href="@routes.DoctorController.manageClinic(info.id)">Manage</a></td>
 			</tr>
 		}
