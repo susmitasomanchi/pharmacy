@@ -8,7 +8,7 @@
 @main("New Clinic"){
 	
 	@helper.form(action=routes.DoctorController.processNewClinic()) {
-	@helper.inputText(clinicForm("name"),'class -> "inputs",'_label->"Name")
+	@helper.inputText(clinicForm("name"),'class -> "inputs",'_value->"10",'_label->"Name")
 			
 	<div class="row clearfix">
 		<div class="col-md-12 column">
@@ -24,7 +24,7 @@
 			</tr>
 			</head>
 			<tbody>
-			@for((day,index) <- Day.getList().zipWithIndex){
+			@for((day,index) <- models.doctor.Day.getList().zipWithIndex){
 				@if(list.contains(day.toString())){
 					
 					<tr>
@@ -43,7 +43,7 @@
 				}
 			</tbody>
 			</table>	
-				@helper.inputText(clinicForm("slot"),'class -> "inputs",'_label->"Patient slot")
+				@helper.inputText(clinicForm("slot"),'_class -> "inputs",'_value->"10",'_label->"Patient slot")
 				</div>
 				<div class="col-md-6 column">
 			<table class="table">
@@ -55,7 +55,7 @@
 			</tr>
 			</head>
 			<tbody>
-			@for((day,index) <- Day.getList().zipWithIndex){
+			@for((day,index) <- models.doctor.Day.getList().zipWithIndex){
 					@if(listmr.contains(day.toString())){
 				<tr>
 					<td><input class="checkday" id="m-@day" type="checkbox" name="daysOfWeekMr[]" value="@day.toString()" checked>@day</input></td>
@@ -72,7 +72,7 @@
 			}
 			</tbody>
 			</table>	
-					@helper.inputText(clinicForm("slotmr"),'class -> "inputs",'_label->"Mr slot")
+					@helper.inputText(clinicForm("slotmr"),'_class -> "inputs",'_value->"10",'_label->"Mr slot")
 				</div>
 			</div>
 		</div>

@@ -19,6 +19,10 @@ public class Application extends Controller {
 		return ok(views.html.index.render(loginForm));
 	}
 
+	public static Result indexX(final String str) {
+		return redirect(routes.Application.index());
+	}
+
 	//sales representator proccessing
 
 	public static Result medicalRepresentative(){
@@ -93,4 +97,9 @@ public class Application extends Controller {
 	public static Result homePage(){
 		return ok(views.html.home.render());
 	}
+
+	public static Result sitemap(){
+		return ok(views.xml.sitemap.render("http://"));
+	}
+
 }

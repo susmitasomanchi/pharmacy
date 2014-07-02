@@ -7,13 +7,13 @@ import java.util.List;
 import java.util.Map;
 
 import models.AppUser;
-import models.Appointment;
-import models.DaySchedule;
 import models.DiagnosticCentre;
-import models.Doctor;
-import models.DoctorClinicInfo;
 import models.Patient;
-import models.QuestionAndAnswer;
+import models.doctor.Appointment;
+import models.doctor.DaySchedule;
+import models.doctor.Doctor;
+import models.doctor.DoctorClinicInfo;
+import models.doctor.QuestionAndAnswer;
 import play.Logger;
 import play.data.Form;
 import play.mvc.Controller;

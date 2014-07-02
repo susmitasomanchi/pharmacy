@@ -4,10 +4,10 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
-import models.Clinic;
-import models.Day;
-import models.DaySchedule;
-import models.DoctorClinicInfo;
+import models.doctor.Clinic;
+import models.doctor.Day;
+import models.doctor.DaySchedule;
+import models.doctor.DoctorClinicInfo;
 import models.Role;
 import play.Logger;
 import play.data.validation.Constraints.Required;

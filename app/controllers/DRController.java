@@ -4,7 +4,7 @@ import java.util.List;
 
 import models.DiagnosticCentre;
 import models.DiagnosticRepresentative;
-import models.Doctor;
+import models.doctor.Doctor;
 import play.Logger;
 import play.data.DynamicForm;
 import play.data.Form;

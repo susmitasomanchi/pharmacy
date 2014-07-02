@@ -5,23 +5,26 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 
+import models.Alert;
 import models.AppUser;
-import models.Appointment;
-import models.AppointmentStatus;
-import models.Day;
-import models.DaySchedule;
-import models.Doctor;
-import models.DoctorAward;
-import models.DoctorClinicInfo;
-import models.DoctorEducation;
-import models.DoctorExperience;
-import models.DoctorLanguage;
-import models.DoctorPublication;
-import models.DoctorSocialWork;
 import models.LanguageAppUser;
 import models.Patient;
-import models.QuestionAndAnswer;
 import models.Role;
+import models.doctor.Appointment;
+import models.doctor.AppointmentStatus;
+import models.doctor.Clinic;
+import models.doctor.Day;
+import models.doctor.DayOfTheWeek;
+import models.doctor.DaySchedule;
+import models.doctor.Doctor;
+import models.doctor.DoctorAward;
+import models.doctor.DoctorClinicInfo;
+import models.doctor.DoctorEducation;
+import models.doctor.DoctorExperience;
+import models.doctor.DoctorLanguage;
+import models.doctor.DoctorPublication;
+import models.doctor.DoctorSocialWork;
+import models.doctor.QuestionAndAnswer;
 import play.Logger;
 import play.data.Form;
 import play.mvc.Controller;
@@ -38,7 +41,6 @@ import com.avaje.ebean.Ebean;
 @BasicAuth
 public class DoctorController extends Controller {
 
-	public static Form<Doctor> form = Form.form(Doctor.class);
 	public static Form<PatientBean> patientForm = Form.form(PatientBean.class);
 	public static Form<ClinicBean> clinicForm = Form.form(ClinicBean.class);
 	public static Form<DoctorExperience> experienceForm = Form.form(DoctorExperience.class);
@@ -246,6 +248,7 @@ public class DoctorController extends Controller {
 
 	//Process new clinic timing Data
 	public static Result processNewClinic(){
+
 		final Form<ClinicBean> filledForm = clinicForm.bindFromRequest();
 		if(filledForm.hasErrors()){
 			return ok(views.html.doctor.newClinic.render(clinicForm,new ArrayList<String>(),new ArrayList<String>()));
@@ -285,10 +288,12 @@ public class DoctorController extends Controller {
 		}
 	}
 
+
+
 	public static Result myClinics(){
 		final Doctor loggedInDoctor = LoginController.getLoggedInUser().getDoctor();
 		Logger.warn(loggedInDoctor.doctorClinicInfoList.size()+"");
-		for (DoctorClinicInfo clinicInfo : loggedInDoctor.doctorClinicInfoList) {
+		for (final DoctorClinicInfo clinicInfo : loggedInDoctor.doctorClinicInfoList) {
 			Logger.warn(clinicInfo.clinic.name);
 		}
 		return ok(views.html.doctor.myClinics.render(loggedInDoctor.doctorClinicInfoList));
@@ -302,42 +307,13 @@ public class DoctorController extends Controller {
 
 
 
-	public static Result form() {
-		return ok(views.html.createDoctor.render(form));
-		//return TODO;
-	}
-
-	public static Result process() {
-		final Form<Doctor> filledForm = form.bindFromRequest();
-
-		if(filledForm.hasErrors()) {
-
-			return badRequest(views.html.createDoctor.render(filledForm));
-		}
-		else {
-			final Doctor doctor= filledForm.get();
-
-			if(doctor.id == null) {
-
-				doctor.save();
-			}
-			else {
-
-				doctor.update();
-			}
-		}
-		return TODO;
-		//return redirect(routes.UserController.list());
-
-	}
-
 
 	//Edit Or Manage Clinic
 	public static Result manageClinic(final Long docClinicId) {
 
 		final DoctorClinicInfo doctorClinicInfo=DoctorClinicInfo.find.byId(docClinicId);
 
-		ClinicBean bean=doctorClinicInfo.toBean();
+		final ClinicBean bean=doctorClinicInfo.toBean();
 
 		final Form<ClinicBean> filledForm = clinicForm.fill(doctorClinicInfo.toBean());
 
@@ -482,26 +458,67 @@ public class DoctorController extends Controller {
 
 			}
 			Logger.info("***end of shedules");
-
 			calendar.add(Calendar.DATE, 1);
-
-
 		}
 		Logger.info("***end of");
-
-
 		return redirect(routes.DoctorController.myClinics());
 	}
 
+
 	// Re-Create Appointment
 	public static Result reCreateAppointment(DoctorClinicInfo clinicInfo) {
-		List<Appointment> appointments=Appointment.find.where().eq("doctor",clinicInfo.doctor).
-				eq("clinic",clinicInfo.clinic).eq("appointmentStatus",AppointmentStatus.AVAILABLE).findList();
+		List<Appointment> appointments = Appointment.find.where()
+				.eq("doctor",clinicInfo.doctor)
+				.eq("clinic",clinicInfo.clinic)
+				.eq("appointmentStatus",AppointmentStatus.AVAILABLE)
+				.findList();
 		Ebean.delete(appointments);
-
 		return DoctorController.createAppointment(clinicInfo);
-
 	}
+
+
+	public static Result showPrescriptionForm(final Long appointmentId){
+		//final Appointment appointment = Appointment.find.byId(appointmentId);
+		return ok();
+	}
+
+
+
+	public static boolean isListSame(final List<DaySchedule> arrayList1,final List<DaySchedule> arrayList2) {
+		if(arrayList1.size() != arrayList2.size()){
+			Logger.info("if 1");
+			return false;
+		}
+		for(int i=0;i<arrayList1.size();i++){
+			DaySchedule schedule=arrayList1.get(i);
+			DaySchedule scheduleMr=arrayList2.get(i);
+			if(!schedule.equals(scheduleMr)){
+				return schedule.equals(scheduleMr);
+			}
+		}
+		return true;
+	}
+
+
+
+	public static Result processPrescriptionForm(){
+		return ok();
+	}
+
+	public static Result doctorPrescription() {
+		return ok(views.html.doctor.doctor_prescription.render());
+	}
+
+	public static Result doctorAppointments() {
+
+		return ok(views.html.doctor.doctor_appointments.render());
+	}
+
+	public static Result doctorViewAppointment() {
+
+		return ok(views.html.doctor.doctor_view_appointment.render());
+	}
+
 	//Todays Appointment
 	public static Result viewTodaysAppointment() {
 
@@ -519,24 +536,6 @@ public class DoctorController extends Controller {
 
 		return ok(views.html.doctor.viewTodaysAppointment.render(appointments));
 
-	}
-
-	public static boolean isListSame(final List<DaySchedule> arrayList1,final List<DaySchedule> arrayList2) {
-		if(arrayList1.size() != arrayList2.size()){
-			Logger.info("if 1");
-			return false;
-		}
-		for(int i=0;i<arrayList1.size();i++)
-		{
-			DaySchedule schedule=arrayList1.get(i);
-			DaySchedule scheduleMr=arrayList2.get(i);
-			if(!schedule.equals(scheduleMr)){
-				return schedule.equals(scheduleMr);
-			}
-
-
-		}
-		return true;
 	}
 
 }
