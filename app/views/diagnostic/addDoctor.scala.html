@@ -1,0 +1,20 @@
+@(doctorList: List[Doctor])
+
+@main("doctor list"){
+	
+	<table>
+	<thead>
+	<th>Doctor Name</th>
+	</thead>
+	<tbody>
+	
+	@for(doctor <-doctorList){
+		<tr>
+		<td>@doctor.appUser.name</td>
+		<td><a class="btn btn-primary btn-xs" href="/diagnosticrep/remove-doctor/@doctor.appUser.id">remove form list</a></td>
+		</tr>
+	}
+	</tbody>
+	</table>
+	
+}

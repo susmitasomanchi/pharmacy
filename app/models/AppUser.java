@@ -14,6 +14,7 @@ import javax.persistence.Id;
 import javax.persistence.Lob;
 import javax.persistence.OneToOne;
 
+import models.mr.MedicalRepresentative;
 import play.data.validation.Constraints.Email;
 import play.db.ebean.Model;
 

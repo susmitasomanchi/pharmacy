@@ -9,8 +9,10 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.ManyToOne;
+import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 
+@SuppressWarnings("serial")
 @Entity
 public class Pharmacy extends BaseEntity {
 
@@ -25,11 +27,14 @@ public class Pharmacy extends BaseEntity {
 	public String contactNo;
 
 	public String testField;
+	
+	//@OneToOne
+	//public PharmacyProductInfo pharmacyProductInfo;
+	
+	@OneToMany(cascade=CascadeType.ALL)
+	public List<Product> productList = new ArrayList<Product>();
 
-	@OneToOne
-	public Pharmacist adminPharmacist;
-
-	@ManyToOne(cascade=CascadeType.ALL)
+	@OneToMany(cascade=CascadeType.ALL)
 	public List<Pharmacist> pharmacistList = new ArrayList<Pharmacist>();
 
 	@ManyToOne(cascade=CascadeType.ALL)

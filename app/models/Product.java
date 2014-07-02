@@ -1,10 +1,16 @@
 package models;
 
+import java.util.ArrayList;
+import java.util.List;
+
+import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.ManyToOne;
 
+import models.mr.PharmaceuticalCompany;
 import play.data.validation.Constraints.Required;
 
 @SuppressWarnings("serial")
@@ -35,7 +41,12 @@ public class Product extends BaseEntity {
 	public Long unitsPerPack;
 
 	public String fullName;
-
+	
+	@ManyToOne(cascade=CascadeType.ALL)
+	public PharmaceuticalCompany pharmaceuticalCompany;
+	
+	@ManyToOne(cascade=CascadeType.ALL)
+	public Pharmacy pharmacy;
 
 	public static Finder<Long, Product> find = new Finder<Long, Product>(Long.class, Product.class);
 

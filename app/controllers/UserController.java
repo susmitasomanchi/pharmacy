@@ -8,14 +8,15 @@ PLEASE DO NOT MODIFY IT BY HAND
 package controllers;
 
 import models.AppUser;
+import models.DiagnosticCenter;
 import models.DiagnosticRepresentative;
 import models.Doctor;
-import models.MedicalRepresentative;
 import models.Patient;
-import models.PharmaceuticalCompany;
 import models.Pharmacist;
 import models.Pharmacy;
 import models.Role;
+import models.mr.MedicalRepresentative;
+import models.mr.PharmaceuticalCompany;
 import play.Logger;
 import play.data.Form;
 import play.mvc.Controller;
@@ -28,7 +29,6 @@ public class UserController extends Controller {
 
 	public static Form<JoinUsBean> joinUsForm = Form.form(JoinUsBean.class);
 	public static Form<MedicalRepresentative> mrForm = Form.form(MedicalRepresentative.class);
-
 	public static Result joinUs(){
 		return ok(views.html.joinus.render(joinUsForm));
 	}
@@ -65,18 +65,24 @@ public class UserController extends Controller {
 				//final Pharmacy pharmacy = filledForm.get();
 				final Pharmacy pharmacy=new Pharmacy();
 				pharmacy.name=filledForm.get().pharmacyName;
-				pharmacy.adminPharmacist=pharmacist;
+				pharmacy.pharmacistList.add(pharmacist);
 				pharmacy.save();
+				pharmacist.pharmacy=pharmacy;
+				pharmacist.update();
 			}
 
 			if(appUser.role == Role.ADMIN_MR){
 				final MedicalRepresentative medicalRepresentative = new MedicalRepresentative();
+                PharmaceuticalCompany pharmaCompany = new PharmaceuticalCompany();
 				medicalRepresentative.appUser = appUser;
 				medicalRepresentative.save();
-				final PharmaceuticalCompany pharmaCompany = new PharmaceuticalCompany();
 				pharmaCompany.name = filledForm.get().pharmaceuticalCompanyName;
-				pharmaCompany.mr = medicalRepresentative;
+				
+				pharmaCompany.mrList.add(medicalRepresentative);
 				pharmaCompany.save();
+				medicalRepresentative.pharmaceuticalCompany = pharmaCompany;
+				medicalRepresentative.update();
+				
 			}
 			
 			if(appUser.role == Role.MR){
@@ -91,10 +97,14 @@ public class UserController extends Controller {
 			}
 			
 
-			if(appUser.role == Role.DIAGREP){
+			if(appUser.role == Role.ADMIN_DIAGREP){
 				final DiagnosticRepresentative diagRep = new DiagnosticRepresentative();
 				diagRep.appUser = appUser;
 				diagRep.save();
+				final DiagnosticCenter diagnosticCenter = new DiagnosticCenter();
+				diagnosticCenter.name = filledForm.get().diagnosticCenterName;
+				diagnosticCenter.diagnosticRepAdmin = diagRep;
+				diagnosticCenter.save();
 			}
 
 			session().clear();

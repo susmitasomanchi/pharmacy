@@ -25,6 +25,8 @@ public class JoinUsBean implements Serializable{
 	//@Required
 	public Role role;
 	
+	public String diagnosticCenterName;
+	
 	public String pharmacyName;
 	
 	public String pharmaceuticalCompanyName;

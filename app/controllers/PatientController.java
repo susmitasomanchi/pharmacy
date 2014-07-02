@@ -11,6 +11,7 @@ import models.Appointment;
 import models.Doctor;
 import models.Patient;
 import models.QuestionAndAnswer;
+import models.Role;
 import play.Logger;
 import play.data.Form;
 import play.mvc.Controller;
@@ -31,6 +32,11 @@ public class PatientController extends Controller {
 
 
 	public static Result displayAppointment(final String id) {
+		if(LoginController.getLoggedInUserRole().equals(Role.MR)){
+			redirect(routes.MRController.scheduleAppointment(id));
+		}
+
+
 		List<Appointment> listAppointments=null;
 		final Map<Date, List<Appointment>> appointmentMap = new LinkedHashMap<Date, List<Appointment>>();
 		final Doctor doctor=Doctor.find.byId(Long.parseLong(id));
@@ -40,11 +46,14 @@ public class PatientController extends Controller {
 		calendar.set(Calendar.MINUTE,0);
 		calendar.set(Calendar.SECOND,0);
 		calendar.set(Calendar.MILLISECOND,0);
+		int size=0;
 
-
-		for(int i=0;i<4;i++){
+		for(int i=0;i<20;i++){
 			listAppointments = Appointment.getAvailableAppointmentList(doctor, calendar.getTime());
-			appointmentMap.put(calendar.getTime(), listAppointments);
+			if(listAppointments.size()!=0){
+				appointmentMap.put(calendar.getTime(), listAppointments);
+				size=listAppointments.size();
+			}
 			Logger.error(listAppointments.size()+"Test");
 
 			calendar.add(Calendar.DATE, 1);
@@ -54,8 +63,7 @@ public class PatientController extends Controller {
 			calendar.set(Calendar.MILLISECOND,0);
 			System.out.print(calendar.getTime());
 		}
-
-		return ok(views.html.patient.scheduleAppointment.render(appointmentMap,listAppointments.size()));
+		return ok(views.html.patient.scheduleAppointment.render(appointmentMap,size));
 	}
 
 	public static Result processAppointment(){
@@ -136,7 +144,7 @@ public class PatientController extends Controller {
 				patient.save();
 			}
 			else {
-			
+
 				patient.update();
 			}
 		}
@@ -151,12 +159,17 @@ public class PatientController extends Controller {
 		// final List<Patient> patients=Patient.find.where().eq("appUser.email",
 		// "mitesh@greensoftware.in").findList();
 
-		final List<Patient> patients = Patient.find
+		final List<AppUser> appUsers = AppUser.find
 				.where()
 				.or(Expr.like("email", search + "%"),
 						Expr.like("mobileno", search + "%")).findList();
 
-		return ok(patients.toString());
+		final List<Doctor> doctors=Doctor.find
+				.where()
+				.or(Expr.like("appUser.email", search + "%"),
+						Expr.like("appUser.mobileno", search + "%")).findList();
+
+		return ok(appUsers.toString());
 	}
 
 	public static  Result  displayQuestion() {

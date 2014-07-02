@@ -5,6 +5,8 @@ import java.util.List;
 
 import actions.BasicAuth;
 import models.AppUser;
+import models.Batch;
+import models.Inventory;
 import models.Pharmacist;
 import models.Pharmacy;
 import models.Product;
@@ -18,21 +20,26 @@ public class PharmacistController extends Controller{
 
 	public static Form<Pharmacist> form = Form.form(Pharmacist.class);
 	//public static Form<UserPreferenceBean> prefForm = Form.form(UserPreferenceBean.class);
-	public static Form<Product> productForm = Form.form(Product.class);
+	//public static Form<Product> productForm = Form.form(Product.class);
 
 	public static Form<Pharmacy> pharmacyForm = Form.form(Pharmacy.class);
 
-	
+	public static Form<Inventory> inventoryForm = Form.form(Inventory.class);
+
+	public static Form<Batch> batchForm = Form.form(Batch.class);
+
 
 	
 
-	public static Result productForm() {
+	
+
+	/*public static Result productForm() {
 
 		return ok(views.html.pharmacist.createProduct.render(productForm));
 		//return TODO;
-	}
+	}*/
 
-	public static Result saveProduct() {
+	/*public static Result saveProduct() {
 		final Form<Product> productFilledForm = productForm.bindFromRequest();
 		if(productFilledForm.hasErrors()) {
 			Logger.info("bad request");
@@ -55,35 +62,67 @@ public class PharmacistController extends Controller{
 		//return TODO;
 		//return ok(views.html.dashboard.render(appUser));
 		return redirect(routes.UserActions.dashboard());
-	}
+	}*/
 
-	public static Result displayProducts() {
+	/*public static Result displayProducts() {
 		final List<Product> products=Product.find.all();
 		return ok(views.html.pharmacist.products.render(products, productForm));
 	}
-
+*/
 
 
 
 	public static Result editProduct(final Long id) {
 
 		final Product product  = Product.find.byId(id);
-		final Form<Product> editForm = productForm.fill(product);
+		final Form<Product> editForm = ProductController.productForm.fill(product);
 
 		//		productForm.fill(product);
-		return ok(views.html.pharmacist.createProduct.render(editForm));
+		return ok(views.html.common.createProduct.render(editForm));
 
 
 
 
 	}
 
-	//	public static Result batchForm() {
-	//
-	//	}
-	//
-	//	public static Result saveBatch() {
-	//
-	//	}
+	public static Result addProductForm() {
+
+		return ok(views.html.pharmacist.addProductToInventory.render(inventoryForm, batchForm ));
+	}
+
+	public static Result addToInventory() {
+
+		final Form<Inventory> inventoryFilledForm = inventoryForm.bindFromRequest();
+
+		final Form<Batch> batchFilledForm = batchForm.bindFromRequest();
+
+		if(inventoryFilledForm.hasErrors() && batchFilledForm.hasErrors()) {
+			Logger.info("bad request");
+
+			return badRequest(views.html.pharmacist.addProductToInventory.render(inventoryForm, batchForm ));
+		}
+		else {
+			final Inventory inventory= inventoryFilledForm.get();
+			final Batch batch=batchFilledForm.get();
+
+			if(inventory.id == null && batch.id == null) {
+				inventory.save();
+				batch.save();
+			}
+			else {
+				inventory.update();
+				batch.update();
+			}
+
+		}
+		//return ok("User Created");
+		//return TODO;
+		//return ok(views.html.dashboard.render(appUser));
+		return redirect(routes.UserActions.dashboard());
+		//return TODO;
+
+
+	}
+
 }
 

@@ -5,8 +5,8 @@ import beans.JoinUsBean;
 import beans.LoginBean;
 import models.AppUser;
 import models.DiagnosticRepresentative;
-import models.MedicalRepresentative;
-import models.PharmaceuticalCompany;
+import models.mr.MedicalRepresentative;
+import models.mr.PharmaceuticalCompany;
 import play.Logger;
 import play.data.Form;
 import play.mvc.Controller;
@@ -69,7 +69,7 @@ public class Application extends Controller {
 
 	public static Result diagnosticRep(){
 
-		return ok(views.html.diagnosticRep.render(diagnosticRepForm));
+		return ok(views.html.diagnostic.diagnosticRep.render(diagnosticRepForm));
 
 	}
 
@@ -78,7 +78,7 @@ public class Application extends Controller {
 
 		if(filledForm.hasErrors()) {
 			Logger.info("*** user bad request");
-			return badRequest(views.html.diagnosticRep.render(filledForm));
+			return badRequest(views.html.diagnostic.diagnosticRep.render(filledForm));
 		}
 		else {
 			final DiagnosticRepresentative diagnosticRepForm = filledForm.get();

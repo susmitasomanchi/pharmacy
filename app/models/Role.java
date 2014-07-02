@@ -21,6 +21,8 @@ public enum Role {
 	ADMIN_MR,
 	@EnumValue("MR")
 	MR,
+	@EnumValue("ADMIN_DIAGREP")
+	ADMIN_DIAGREP,
 	@EnumValue("DIAGREP")
 	DIAGREP;
 
