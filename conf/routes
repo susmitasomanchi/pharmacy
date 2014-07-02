@@ -93,10 +93,9 @@ GET    /register-patient/                 controllers.DoctorController.registerP
 POST   /register-patient-proccess/        controllers.DoctorController.registerPatientProccess()
 
 #Diagnostic module	
-GET    /diagnosticregistration            		controllers.DiagnosticController.diagnosticCenter()
-POST   /diagnosticregistration/save       		controllers.DiagnosticController.diagnosticCenterProcess()
+
 GET    /diagnosticlist                   	 	controllers.DiagnosticController.diagnosticList()
-#GET    /diagnostic-service-list/:id            	 	controllers.DiagnosticController.diagnosticServiceslist(id: Long)
+#GET    /diagnostic-service-list/:id            controllers.DiagnosticController.diagnosticServiceslist(id: Long)
 GET    /diagnostic-delete/:id             		controllers.DiagnosticController.deleteCenter(id: Long)
 GET    /diagnostic-edit/:id						controllers.DiagnosticController.editDiagnosticDetails(id: Long)
 POST    /diagnostic-edit 						controllers.DiagnosticController.diagnosticEditprocess()
@@ -115,15 +114,16 @@ GET    /diagnostic-centre/all-doctors      		controllers.DRController.displayDia
 GET    /upload-patient-file  					controllers.DiagnosticController.uploadFile()
 POST    /upload-patient-file/save		  		controllers.DiagnosticController.uploadFileProcess()
 GET    /download						  		controllers.DiagnosticController.downloadFile()
-GET    /add-test-done						  		controllers.DiagnosticController.addTestDone()
+GET    /add-test-done						  	controllers.DiagnosticController.addTestDone()
 
 
 #Diagnostic Test
 GET    /test				            		controllers.DiagnosticController.addTest()
 POST   /test/save					       		controllers.DiagnosticController.addTestProcess()
-GET    /test-list/:id				            controllers.DiagnosticController.diagnosticTestList(id: Long)	
-GET		/place-order				controllers.DiagnosticOrderController.receive()		
-GET		/display-orders/:id				controllers.DiagnosticOrderController.viewOrders(id: Long)																																		
+GET    /test-list/:id				            controllers.DiagnosticController.diagnosticTestList(id: Long)
+GET    /diagnostic-test-list				    controllers.DiagnosticController.diagnosticCentreTestList()	
+GET		/place-order							controllers.DiagnosticOrderController.receive()		
+GET		/display-orders/:id						controllers.DiagnosticOrderController.viewOrders(id: Long)																																		
 #MR Module
 GET    /doctor-list                       controllers.MRController.doctorList()
 GET    /mr/add-doctor/:id                 controllers.MRController.addDoctor(id: Long)

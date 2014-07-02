@@ -1,6 +1,5 @@
  package controllers;
 
-import java.io.File;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
@@ -21,13 +20,10 @@ import models.DoctorEducation;
 import models.DoctorExperience;
 import models.DoctorSocialWork;
 import models.Patient;
-import models.Product;
 import models.QuestionAndAnswer;
 import play.Logger;
 import play.data.Form;
 import play.mvc.Controller;
-import play.mvc.Http.MultipartFormData;
-import play.mvc.Http.MultipartFormData.FilePart;
 import play.mvc.Result;
 import actions.BasicAuth;
 import beans.ClinicBean;

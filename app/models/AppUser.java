@@ -8,9 +8,12 @@
 package models;
 
 import java.util.Date;
+
 import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.Lob;
+
+import models.diagnostic.DiagnosticRepresentative;
 import play.data.validation.Constraints.Email;
 import play.db.ebean.Model;
 

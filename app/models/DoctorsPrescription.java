@@ -6,6 +6,7 @@ import java.util.List;
 import javax.persistence.Entity;
 import javax.persistence.Id;
 
+import models.diagnostic.DiagnosticTest;
 import play.db.ebean.Model;
 import play.db.ebean.Model.Finder;
 

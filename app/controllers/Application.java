@@ -2,8 +2,8 @@ package controllers;
 
 
 import beans.LoginBean;
-import models.DiagnosticRepresentative;
 import models.MedicalRepresentative;
+import models.diagnostic.DiagnosticRepresentative;
 import play.Logger;
 import play.data.Form;
 import play.mvc.Controller;

@@ -1,18 +1,17 @@
 package controllers;
 
 import java.util.Calendar;
-
 import java.util.Date;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
 import models.AppUser;
-import models.DiagnosticCentre;
 import models.Appointment;
 import models.Doctor;
 import models.Patient;
 import models.QuestionAndAnswer;
+import models.diagnostic.DiagnosticCentre;
 import play.data.Form;
 import play.mvc.Controller;
 import play.mvc.Result;

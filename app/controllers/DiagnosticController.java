@@ -1,67 +1,44 @@
 package controllers;
 
 import java.io.File;
-
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
+
+import models.AppUser;
+import models.diagnostic.DiagnosticCentre;
+import models.diagnostic.DiagnosticReport;
+import models.diagnostic.DiagnosticRepresentative;
+import models.diagnostic.DiagnosticTest;
 
 import org.apache.commons.io.FileUtils;
 
-import models.AppUser;
-import models.DiagnosticCentre;
-import models.DiagnosticReport;
-import models.DiagnosticRepresentative;
-import models.DiagnosticTest;
+import beans.DiagnosticBean;
 import play.Logger;
 import play.data.DynamicForm;
 import play.data.Form;
 import play.mvc.Controller;
-import play.mvc.Result;
 import play.mvc.Http.MultipartFormData.FilePart;
+import play.mvc.Result;
 
 public class DiagnosticController extends Controller {
+	public static DiagnosticRepresentative dr = LoginController.getLoggedInUser()
+			.getDiagnosticRepresentative();
+	public static DiagnosticCentre dc = dr.diagnosticCentre;
+	
+	public static Form<DiagnosticBean> diagnosticBeanForm = Form
+			.form(DiagnosticBean.class);
+	
 	public static Form<DiagnosticCentre> diagnosticForm = Form
 			.form(DiagnosticCentre.class);
-	
+
 	public static Form<DiagnosticTest> diagnosticTestForm = Form
 			.form(DiagnosticTest.class);
-	
+
 	public static Form<DiagnosticReport> diagReport = Form
 			.form(DiagnosticReport.class);
 
-	public static Result diagnosticCenter() {
-		return ok(views.html.diagnosticCenters.render(diagnosticForm));
-	}
-	/*
-	 * storing diagnostic center details 
-	 * in table
-	 */
-
-	public static Result diagnosticCenterProcess() {
-		final Form<DiagnosticCentre> filledForm = diagnosticForm
-				.bindFromRequest();
-
-		if (filledForm.hasErrors()) {
-			Logger.info("*** user bad request");
-			return badRequest(views.html.diagnosticCenters.render(filledForm));
-		} else {
-			// final SalesRep salesRepForm = filledForm.get();
-			final DiagnosticCentre diagForm = filledForm.get();
-			Logger.info("*** user object ");
-
-			// final AppUser appUser = salesRepForm.toEntity();
-			diagForm.save();
-			final String message = flash("success");
-
-			return ok(String.format("Saved product %s", diagForm));
-		}
-
-	}
 	/*
 	 * list out all diagnostic centers
 	 * from diagnostic center table
@@ -73,7 +50,7 @@ public class DiagnosticController extends Controller {
 		return ok(views.html.diagnostic.diagnosticCenterList.render(allList));
 
 	}
-	
+
 	/*
 	 * deleting diagnostic center
 	 * from table based on id
@@ -89,33 +66,28 @@ public class DiagnosticController extends Controller {
 	 */
 	public static Result editDiagnosticDetails(Long id) {
 		final DiagnosticCentre dc = DiagnosticCentre.find.byId(id);
-		final Form<DiagnosticCentre> filledForm = diagnosticForm.fill(dc);
-		final DiagnosticCentre diagForm = filledForm.get();
-		diagForm.update();
+		final Form<DiagnosticBean> filledForm = diagnosticBeanForm.fill(dc.toBean());
 		return ok(views.html.diagnostic.diagnosticReg.render(filledForm));
 	}
 
 	public static Result diagnosticEditprocess() {
-		final Form<DiagnosticCentre> filledForm = diagnosticForm
+		final Form<DiagnosticBean> filledForm = diagnosticBeanForm
 				.bindFromRequest();
 		if (filledForm.hasErrors()) {
 			return badRequest(views.html.diagnostic.diagnosticReg
 					.render(filledForm));
 		} else {
-			final DiagnosticCentre dc = filledForm.get();
-
-			if (dc.id == null) {
-				dc.save();
-
-			} else {
-				dc.update();
-			}
+			
+			final DiagnosticCentre dc = filledForm.get().toDiagnosticCentre();
+			//dc.diagnosticRepAdmin.appUser=filledForm.get().toAppUserEntity();
+			dc.update();
 		}
-		return ok();
+		return ok("updated successfully");
 	}
-	public static Result diagnosticSearch(){
+	
+		public static Result diagnosticSearch(){
 		return ok(views.html.diagnostic.diagnosticSearch.render());
-		
+
 	}
 
 	/*
@@ -164,18 +136,18 @@ public class DiagnosticController extends Controller {
 		}
 
 	}
-	
-	
-/*
- * adding test to
- * the diagnostic center
- */
-	
+
+
+	/*
+	 * adding test to
+	 * the diagnostic center
+	 */
+
 	public static Result addTest(){
 		return ok(views.html.diagnostic.addDiagnosticTest.render(diagnosticTestForm));
-		
+
 	}
-	
+
 	public static Result addTestProcess() {
 		final Form<DiagnosticTest> filledForm = diagnosticTestForm
 				.bindFromRequest();
@@ -184,14 +156,14 @@ public class DiagnosticController extends Controller {
 			Logger.info("*** user bad request");
 			return badRequest(views.html.diagnostic.addDiagnosticTest.render(filledForm));
 		} else {
-			
+
 			final DiagnosticTest diagTestForm = filledForm.get();
 			Logger.info("*** user object ");
 			Long id=LoginController.getLoggedInUser().getDiagnosticRepresentative().id;
 			DiagnosticCentre dc=DiagnosticCentre.find.byId(id);
 			dc.diagnosticTestList.add(diagTestForm);
 			dc.update();
-			
+
 			return ok(views.html.diagnostic.addDiagnosticTest.render(diagnosticTestForm));
 		}
 
@@ -205,13 +177,16 @@ public class DiagnosticController extends Controller {
 	 * tests available for
 	 * incoming id
 	 */
-	
+
 	public static Result diagnosticTestList(Long id) {
 		DiagnosticCentre diagnosticCenter =  DiagnosticCentre.find.byId(id);
-		List<DiagnosticTest> diagnosticTestList=diagnosticCenter.diagnosticTestList;
+		//List<DiagnosticTest> diagnosticTestList=diagnosticCenter.diagnosticTestList;
 		return ok(views.html.diagnostic.diagnosticCentreProfile.render(diagnosticCenter));
 	}
-	
+	public static Result diagnosticCentreTestList() {
+
+		return ok(views.html.diagnostic.diagnosticCentreTestProfile.render(dc));
+	}
 	/*
 	 * uploading the 
 	 * Diagnostic report
@@ -219,61 +194,61 @@ public class DiagnosticController extends Controller {
 	public static Result uploadFile() {
 		return ok(views.html.diagnostic.uploadPatientReort.render(diagReport));
 	}
-	
-	
+
+
 	public static Result uploadFileProcess() {
 		DiagnosticReport upload=new DiagnosticReport();
 		play.mvc.Http.MultipartFormData body = request().body().asMultipartFormData();
-		  FilePart file = body.getFile("upload");
-		  if (file != null) {
-		    String fileName = file.getFilename();
-		    String contentType = file.getContentType(); 		    
-		    File file1=file.getFile();
-	         byte[] bytes = new byte[(int) file1.length()];
-	         try {
-	               FileInputStream fileInputStream = new FileInputStream(file1);
-	               fileInputStream.read(bytes);
-	               for (int i = 0; i < bytes.length; i++) {
-	                           System.out.print((char)bytes[i]);
-	                }
-	          } catch (FileNotFoundException e) {
-	                      System.out.println("File Not Found.");
-	                      e.printStackTrace();
-	          }
-	          catch (IOException e1) {
-	                   System.out.println("Error Reading The File.");
-	                    e1.printStackTrace();
-	          }
-		    upload.fileName=file.getFilename();
-		    upload.fileContent =bytes;
-		    upload.save();
-		    
-		    return ok(views.html.diagnostic.download.render(upload));
-		  } else {
-		    flash("error", "Missing file");
-		    return ok("got error while uploading");    
-		  }			
-	    }	
-	
+		FilePart file = body.getFile("upload");
+		if (file != null) {
+			String fileName = file.getFilename();
+			String contentType = file.getContentType(); 		    
+			File file1=file.getFile();
+			byte[] bytes = new byte[(int) file1.length()];
+			try {
+				FileInputStream fileInputStream = new FileInputStream(file1);
+				fileInputStream.read(bytes);
+				for (int i = 0; i < bytes.length; i++) {
+					System.out.print((char)bytes[i]);
+				}
+			} catch (FileNotFoundException e) {
+				System.out.println("File Not Found.");
+				e.printStackTrace();
+			}
+			catch (IOException e1) {
+				System.out.println("Error Reading The File.");
+				e1.printStackTrace();
+			}
+			upload.fileName=file.getFilename();
+			upload.fileContent =bytes;
+			upload.save();
+
+			return ok(views.html.diagnostic.download.render(upload));
+		} else {
+			flash("error", "Missing file");
+			return ok("got error while uploading");    
+		}			
+	}	
+
 	/*
 	 * downloading the 
 	 * Diagnostic report
 	 */
 	public static Result downloadFile() {
-		Long id=(long) 2;
+		Long id=(long) 1;
 		DiagnosticReport diagReport = DiagnosticReport.find.byId(id);
 		response().setContentType("application/x-download"); 
 		response().setHeader("Content-disposition","attachment; filename="+diagReport.fileName); 
 		File file = new File(diagReport.fileName);
 		try {
-		FileUtils.writeByteArrayToFile(file, diagReport.fileContent);
+			FileUtils.writeByteArrayToFile(file, diagReport.fileContent);
 		} catch (IOException e) {
-		// TODO Auto-generated catch block
-		e.printStackTrace();
+			// TODO Auto-generated catch block
+			e.printStackTrace();
 		}
 		return ok(file);
 	}
 
-	
+
 
 }

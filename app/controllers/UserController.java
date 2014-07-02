@@ -10,9 +10,6 @@ package controllers;
 
 
 import models.AppUser;
-
-import models.DiagnosticCentre;
-import models.DiagnosticRepresentative;
 import models.Doctor;
 import models.MedicalRepresentative;
 import models.Patient;
@@ -20,6 +17,8 @@ import models.PharmaceuticalCompany;
 import models.Pharmacist;
 import models.Pharmacy;
 import models.Role;
+import models.diagnostic.DiagnosticCentre;
+import models.diagnostic.DiagnosticRepresentative;
 import play.Logger;
 import play.data.Form;
 import play.mvc.Controller;

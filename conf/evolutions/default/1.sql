@@ -89,9 +89,6 @@ create table day_of_the_week (
 create table diagnostic_centre (
   id                        bigint not null,
   name                      varchar(255),
-  services                  varchar(255),
-  cost_of_services          varchar(255),
-  contact_person_name       varchar(255),
   address                   varchar(255),
   mobile_no                 varchar(255),
   email_id                  varchar(255),
@@ -104,11 +101,11 @@ create table diagnostic_centre (
 create table diagnostic_order (
   id                        bigint not null,
   diagnostic_centre_id      bigint not null,
-  diagnostic_order_status   varchar(20),
+  diagnostic_order_status   varchar(9),
   received_date             timestamp,
   confirmed_date            timestamp,
   last_update               timestamp not null,
-  constraint ck_diagnostic_order_diagnostic_order_status check (diagnostic_order_status in ('RECEIVED','SAMPLE_NOT_COLLECTED','CONFIRMED','REPORT_READY','SAMPLE_COLLECTED')),
+  constraint ck_diagnostic_order_diagnostic_order_status check (diagnostic_order_status in ('RECEIVED','CONFIRMED')),
   constraint pk_diagnostic_order primary key (id))
 ;
 
@@ -120,7 +117,7 @@ create table diagnostic_report (
   sample_collection_date    timestamp,
   report_generation_date    timestamp,
   last_update               timestamp not null,
-  constraint ck_diagnostic_report_report_status check (report_status in ('RECEIVED','SAMPLE_NOT_COLLECTED','CONFIRMED','REPORT_READY','SAMPLE_COLLECTED')),
+  constraint ck_diagnostic_report_report_status check (report_status in ('SAMPLE_NOT_COLLECTED','REPORT_READY','SAMPLE_COLLECTED')),
   constraint pk_diagnostic_report primary key (id))
 ;
 
@@ -128,7 +125,6 @@ create table diagnostic_representative (
   id                        bigint not null,
   app_user_id               bigint,
   patient_id                bigint,
-  name                      varchar(255),
   diagnostic_type           varchar(255),
   file                      bytea,
   diagnostic_centre_id      bigint,
@@ -356,7 +352,7 @@ create table pharmacy_order (
 
 create table product (
   id                        bigint not null,
-  pharmaceutical_company_id bigint not null,
+  pharmacy_id               bigint not null,
   medicine_name             varchar(255),
   brand_name                varchar(255),
   salt                      varchar(255),
@@ -535,8 +531,8 @@ alter table pharmacist add constraint fk_pharmacist_pharmacy_34 foreign key (pha
 create index ix_pharmacist_pharmacy_34 on pharmacist (pharmacy_id);
 alter table pharmacy add constraint fk_pharmacy_adminPharmacist_35 foreign key (admin_pharmacist_id) references pharmacist (id);
 create index ix_pharmacy_adminPharmacist_35 on pharmacy (admin_pharmacist_id);
-alter table product add constraint fk_product_pharmaceutical_com_36 foreign key (pharmaceutical_company_id) references pharmaceutical_company (id);
-create index ix_product_pharmaceutical_com_36 on product (pharmaceutical_company_id);
+alter table product add constraint fk_product_pharmacy_36 foreign key (pharmacy_id) references pharmacy (id);
+create index ix_product_pharmacy_36 on product (pharmacy_id);
 alter table question_and_answer add constraint fk_question_and_answer_questi_37 foreign key (question_by_id) references app_user (id);
 create index ix_question_and_answer_questi_37 on question_and_answer (question_by_id);
 alter table question_and_answer add constraint fk_question_and_answer_answer_38 foreign key (answer_by_id) references app_user (id);
