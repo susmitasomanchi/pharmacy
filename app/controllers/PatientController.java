@@ -1,18 +1,20 @@
 package controllers;
 
 import java.util.Calendar;
-
 import java.util.Date;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
 import models.AppUser;
-import models.DiagnosticCentre;
 import models.Appointment;
+import models.DaySchedule;
+import models.DiagnosticCentre;
 import models.Doctor;
+import models.DoctorClinicInfo;
 import models.Patient;
 import models.QuestionAndAnswer;
+import play.Logger;
 import play.data.Form;
 import play.mvc.Controller;
 import play.mvc.Result;
@@ -26,8 +28,7 @@ public class PatientController extends Controller {
 
 	public static Result scheduleAppointment() {
 		final Map<Date, List<Appointment>> appointmentMap = null;
-		return ok(views.html.patient.scheduleAppointment.render(appointmentMap,
-				null));
+		return ok(views.html.patient.scheduleAppointment.render(appointmentMap,null));
 	}
 
 	public static Result displayAppointment(final String id) {
@@ -36,26 +37,33 @@ public class PatientController extends Controller {
 		final Doctor doctor = Doctor.find.byId(Long.parseLong(id));
 		final Calendar calendar = Calendar.getInstance();
 		calendar.setTime(new Date());
-		calendar.set(Calendar.HOUR_OF_DAY, 0);
-		calendar.set(Calendar.MINUTE, 0);
-		calendar.set(Calendar.SECOND, 0);
-		calendar.set(Calendar.MILLISECOND, 0);
 
-		for (int i = 0; i < 4; i++) {
-			listAppointments = Appointment.getAvailableAppointmentList(doctor,
-					calendar.getTime());
-			appointmentMap.put(calendar.getTime(), listAppointments);
+		int slots=1000;
+		for (int i = 0; i <4 ; i++) {
+			for (DoctorClinicInfo clinicInfo: doctor.doctorClinicInfoList) {
 
-			calendar.add(Calendar.DATE, 1);
-			calendar.set(Calendar.HOUR_OF_DAY, 0);
-			calendar.set(Calendar.MINUTE, 0);
-			calendar.set(Calendar.SECOND, 0);
-			calendar.set(Calendar.MILLISECOND, 0);
-			System.out.print(calendar.getTime());
+				for (DaySchedule schedule : clinicInfo.schedulDays) {
+
+					calendar.set(Calendar.HOUR_OF_DAY, schedule.fromTime);
+					calendar.set(Calendar.MINUTE, 0);
+					calendar.set(Calendar.SECOND, 0);
+					calendar.set(Calendar.MILLISECOND, 0);
+					listAppointments = Appointment.getAvailableAppointmentList(doctor,calendar.getTime(),schedule.toTime);
+					if(listAppointments.size() != 0 ){
+						appointmentMap.put(calendar.getTime(), listAppointments);
+						slots=Math.min(slots,listAppointments.size());
+					}
+
+
+					calendar.add(Calendar.DATE, 1);
+
+					System.out.print(calendar.getTime());
+				}
+			}
 		}
-
+		Logger.warn(""+listAppointments.size());
 		return ok(views.html.patient.scheduleAppointment.render(appointmentMap,
-				listAppointments.size()));
+				slots));
 	}
 
 	public static Result processAppointment() {

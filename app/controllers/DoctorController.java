@@ -251,24 +251,25 @@ public class DoctorController extends Controller {
 			return ok(views.html.doctor.newClinic.render(clinicForm,new ArrayList<String>(),new ArrayList<String>()));
 		}
 		else{
-			DoctorClinicInfo clinicInfo=filledForm.get().toDoctorClinicInfo();
+			DoctorClinicInfo clinicInfo =filledForm.get().toDoctorClinicInfo();
 
 
 			if (filledForm.get().id!=null) {
 				final DoctorClinicInfo clinicInfoPrevious=DoctorClinicInfo.find.byId(clinicInfo.id);
 				if(!clinicInfo.clinic.name.equals(clinicInfoPrevious.clinic.name)){
 					Logger.info("name test"+clinicInfo.clinic.name);
-					clinicInfoPrevious.clinic.name=clinicInfo.clinic.name;
+					clinicInfoPrevious.clinic.name = clinicInfo.clinic.name;
 					clinicInfoPrevious.clinic.update();
 					clinicInfoPrevious.update();
 				}
 				if(!DoctorController.isListSame(clinicInfo.schedulDays, clinicInfoPrevious.schedulDays)||clinicInfo.slot != clinicInfoPrevious.slot || clinicInfo.slotmr!=clinicInfoPrevious.slotmr){
 
-					clinicInfoPrevious.schedulDays=null;
-					clinicInfoPrevious.schedulDays=clinicInfo.schedulDays;
+					//clinicInfoPrevious.schedulDays=null;
+					Ebean.delete(clinicInfoPrevious.schedulDays);
+					clinicInfoPrevious.schedulDays = clinicInfo.schedulDays;
 
-					clinicInfoPrevious.slot=clinicInfo.slot;
-					clinicInfoPrevious.slotmr=clinicInfo.slotmr;
+					clinicInfoPrevious.slot = clinicInfo.slot;
+					clinicInfoPrevious.slotmr = clinicInfo.slotmr;
 					clinicInfoPrevious.update();
 
 

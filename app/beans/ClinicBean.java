@@ -34,8 +34,6 @@ public class ClinicBean implements Serializable{
 
 	public List<String> daysOfWeekMr	= new ArrayList<String>();
 
-	List<Long> scheduleId=new ArrayList<Long>();
-	List<Long> scheduleMrId=new ArrayList<Long>();
 
 
 	public int slot=1;
@@ -67,9 +65,6 @@ public class ClinicBean implements Serializable{
 				schedule.day=Day.valueOf(this.daysOfWeek.get(index));
 				Logger.info(schedule.day.toString());
 				schedule.requester=Role.PATIENT;
-				if(this.scheduleId.size()!=0){
-					schedule.id=this.scheduleId.get(index);
-				}
 				doctorClinicInfo.schedulDays.add(schedule);
 			}
 		}
@@ -82,9 +77,6 @@ public class ClinicBean implements Serializable{
 			schedule.toTime=this.toHrsMr.get(index);
 			schedule.requester=Role.MR;
 			schedule.day=Day.valueOf(this.daysOfWeekMr.get(index));
-			if(this.scheduleId.size()!=0){
-				schedule.id=this.scheduleMrId.get(index);
-			}
 			doctorClinicInfo.schedulDays.add(schedule);
 
 		}

@@ -65,8 +65,8 @@
 					}else{
 				<tr>
 					<td><input class="checkday" id="m-@day" type="checkbox" name="daysOfWeekMr[]"  value="@day.toString()">@day</input></td>
-					<td><input id="m-@day-from" type="number" name="fromHrsMr[]" disabled required></input></td>
-					<td><input id="m-@day-to" type="number" name="toHrsMr[]" disabled required></input></td>
+					<td><input id="m-@day-from" type="number" name="fromHrsMr[]" value="@clinicForm("fromHrsMr["+index+"]").value"disabled required></input></td>
+					<td><input id="m-@day-to" type="number" name="toHrsMr[]"  value="@clinicForm("toHrsMr["+index+"]").value" disabled required></input></td>
 				</tr>
 					}
 			}
