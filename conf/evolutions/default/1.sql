@@ -367,7 +367,7 @@ create table pharmacy_order (
 
 create table product (
   id                        bigint not null,
-  pharmacy_id               bigint not null,
+  pharmaceutical_company_id bigint not null,
   medicine_name             varchar(255),
   brand_name                varchar(255),
   salt                      varchar(255),
@@ -546,8 +546,8 @@ alter table pharmacist add constraint fk_pharmacist_pharmacy_33 foreign key (pha
 create index ix_pharmacist_pharmacy_33 on pharmacist (pharmacy_id);
 alter table pharmacy add constraint fk_pharmacy_adminPharmacist_34 foreign key (admin_pharmacist_id) references pharmacist (id);
 create index ix_pharmacy_adminPharmacist_34 on pharmacy (admin_pharmacist_id);
-alter table product add constraint fk_product_pharmacy_35 foreign key (pharmacy_id) references pharmacy (id);
-create index ix_product_pharmacy_35 on product (pharmacy_id);
+alter table product add constraint fk_product_pharmaceutical_com_35 foreign key (pharmaceutical_company_id) references pharmaceutical_company (id);
+create index ix_product_pharmaceutical_com_35 on product (pharmaceutical_company_id);
 alter table question_and_answer add constraint fk_question_and_answer_questi_36 foreign key (question_by_id) references app_user (id);
 create index ix_question_and_answer_questi_36 on question_and_answer (question_by_id);
 alter table question_and_answer add constraint fk_question_and_answer_answer_37 foreign key (answer_by_id) references app_user (id);
