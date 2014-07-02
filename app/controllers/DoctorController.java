@@ -263,7 +263,10 @@ public class DoctorController extends Controller {
 					clinicInfoPrevious.update();
 				}
 				if(!DoctorController.isListSame(clinicInfo.schedulDays, clinicInfoPrevious.schedulDays)||clinicInfo.slot != clinicInfoPrevious.slot || clinicInfo.slotmr!=clinicInfoPrevious.slotmr){
+
+					clinicInfoPrevious.schedulDays=null;
 					clinicInfoPrevious.schedulDays=clinicInfo.schedulDays;
+
 					clinicInfoPrevious.slot=clinicInfo.slot;
 					clinicInfoPrevious.slotmr=clinicInfo.slotmr;
 					clinicInfoPrevious.update();

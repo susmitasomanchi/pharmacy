@@ -59,6 +59,9 @@ public class DoctorClinicInfo extends BaseEntity {
 
 		final List<String> daysOfWeekMr	= new ArrayList<String>();
 
+		final List<Long> scheduleId=new ArrayList<Long>();
+		final List<Long> scheduleMrId=new ArrayList<Long>();
+
 		if(this.schedulDays.size()!=0){
 
 			for (final DaySchedule  schedule : this.schedulDays) {
@@ -66,11 +69,13 @@ public class DoctorClinicInfo extends BaseEntity {
 					fromHrs.add(schedule.fromTime);
 					toHrs.add(schedule.toTime);
 					daysOfWeek.add(schedule.day.toString());
+					scheduleId.add(schedule.id);
+
 				}else{
 					fromHrsMr.add(schedule.fromTime);
 					toHrsMr.add(schedule.toTime);
 					daysOfWeekMr.add(schedule.day.toString());
-
+					scheduleMrId.add(schedule.id);
 				}
 			}
 
