@@ -5,16 +5,13 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 
-import models.Alert;
 import models.AppUser;
 import models.LanguageAppUser;
 import models.Patient;
 import models.Role;
 import models.doctor.Appointment;
 import models.doctor.AppointmentStatus;
-import models.doctor.Clinic;
 import models.doctor.Day;
-import models.doctor.DayOfTheWeek;
 import models.doctor.DaySchedule;
 import models.doctor.Doctor;
 import models.doctor.DoctorAward;
@@ -254,7 +251,7 @@ public class DoctorController extends Controller {
 			return ok(views.html.doctor.newClinic.render(clinicForm,new ArrayList<String>(),new ArrayList<String>()));
 		}
 		else{
-			DoctorClinicInfo clinicInfo =filledForm.get().toDoctorClinicInfo();
+			final DoctorClinicInfo clinicInfo =filledForm.get().toDoctorClinicInfo();
 
 
 			if (filledForm.get().id!=null) {
@@ -387,7 +384,7 @@ public class DoctorController extends Controller {
 
 
 
-		for (DaySchedule schedule : docclinicInfo.schedulDays) {
+		for (final DaySchedule schedule : docclinicInfo.schedulDays) {
 			Logger.info(schedule.fromTime.toString());
 			Logger.info(schedule.toTime.toString());
 			Logger.info(schedule.day.toString());
@@ -406,7 +403,7 @@ public class DoctorController extends Controller {
 
 
 		for(int date=0;date<31;date++){
-			for (DaySchedule schedule : docclinicInfo.schedulDays) {
+			for (final DaySchedule schedule : docclinicInfo.schedulDays) {
 
 				Logger.info(schedule.day+ " "+ schedule.fromTime+" "+schedule.toTime);
 
@@ -466,8 +463,8 @@ public class DoctorController extends Controller {
 
 
 	// Re-Create Appointment
-	public static Result reCreateAppointment(DoctorClinicInfo clinicInfo) {
-		List<Appointment> appointments = Appointment.find.where()
+	public static Result reCreateAppointment(final DoctorClinicInfo clinicInfo) {
+		final List<Appointment> appointments = Appointment.find.where()
 				.eq("doctor",clinicInfo.doctor)
 				.eq("clinic",clinicInfo.clinic)
 				.eq("appointmentStatus",AppointmentStatus.AVAILABLE)
@@ -490,8 +487,8 @@ public class DoctorController extends Controller {
 			return false;
 		}
 		for(int i=0;i<arrayList1.size();i++){
-			DaySchedule schedule=arrayList1.get(i);
-			DaySchedule scheduleMr=arrayList2.get(i);
+			final DaySchedule schedule=arrayList1.get(i);
+			final DaySchedule scheduleMr=arrayList2.get(i);
 			if(!schedule.equals(scheduleMr)){
 				return schedule.equals(scheduleMr);
 			}
