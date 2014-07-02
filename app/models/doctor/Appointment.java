@@ -14,7 +14,6 @@ import models.AppUser;
 import models.BaseEntity;
 
 
-@SuppressWarnings("serial")
 @Entity
 public class Appointment extends BaseEntity {
 
@@ -27,8 +26,10 @@ public class Appointment extends BaseEntity {
 
 	public AppointmentStatus appointmentStatus;
 
+
 	@OneToOne
 	public AppUser requestedBy;
+
 
 	@OneToOne
 	public AppUser apporovedBy;
@@ -44,12 +45,12 @@ public class Appointment extends BaseEntity {
 
 
 
-	public static List<Appointment> getAvailableAppointmentList(final Doctor doctor,final Date date) {
+	public static List<Appointment> getAvailableAppointmentList(final Doctor doctor,final Date date,final int toTime) {
 
 		List<Appointment> list=null;
 		final Calendar calendar=Calendar.getInstance();
 		calendar.setTime(date);
-		calendar.set(Calendar.HOUR_OF_DAY,23);
+		calendar.set(Calendar.HOUR_OF_DAY,toTime);
 		calendar.set(Calendar.MINUTE,59);
 		calendar.set(Calendar.SECOND,59);
 		calendar.set(Calendar.MILLISECOND,59);
@@ -63,14 +64,14 @@ public class Appointment extends BaseEntity {
 	public static List<Appointment> getAvailableMrAppointmentList(final Doctor doctor,final Date date) {
 		final List<Appointment> list=null;
 
-		/*final Calendar calendar=Calendar.getInstance();
+		/*	final Calendar calendar=Calendar.getInstance();
 		calendar.setTime(date);
 		calendar.set(Calendar.HOUR_OF_DAY,doctor.doctorClinicInfoList.get(0).toHrsMr);
 		calendar.set(Calendar.MINUTE,59);
 		calendar.set(Calendar.SECOND,59);
 		calendar.set(Calendar.MILLISECOND,59);
-		 */
-		/*list=Appointment.find.where().eq("doctor", doctor).between("appointmentTime", date, calendar.getTime()).
+
+		list=Appointment.find.where().eq("doctor", doctor).between("appointmentTime", date, calendar.getTime()).
 				order().asc("appointmentTime").findList();
 		 */
 
