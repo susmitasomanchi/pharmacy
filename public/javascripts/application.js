@@ -7,5 +7,7 @@ window.onload=function(){
 	$(".boottip").tooltip();
 	
 	
+	$('.datepicker').datepicker();
+	
 }
 

@@ -1,0 +1,136 @@
+@(dcr: models.mr.DailyCallReport, dcrLineItemForm:play.data.Form[models.mr.DCRLineItem],doctorList: List[models.doctor.Doctor],productList: List[Product])
+
+@import play.i18n._
+@import helper.twitterBootstrap._
+@import helper._
+@main("DCR Line Item"){
+	
+	<script>
+	var proList = '@for(product <-productList){<option value="@product.id">@product.medicineName</option>}';
+	
+	function addSamples(){
+		$('#samplesdiv').append('<table><tr><td><select name="sampleList">'+proList+'</select></td><td><input name="qtyList" placeholder="qty" /></td><td>&nbsp;</td></tr></table>');
+	}
+	</script>
+	
+	<form id="dcrliform">
+	<table border="1">
+	<thead>
+	   <th>Doctors</th>
+	   <th>Samples</th>
+	   <th>Promotions</th>
+	   <th>POB</th>
+	   <th>Remarks</th>
+	</thead>
+	<tbody>
+	<tr>
+		
+		<td valign="top" >
+		<select name="doctor" id="doctor">
+			@for(doctor <- doctorList){
+	      	<option value=@doctor.id >@doctor.appUser.name</option>
+	        }
+	       </select>
+	    </td>
+	    
+	    
+		<td valign="top">
+			<div id="samplesdiv">
+			<table>
+				<tr>
+					<td>
+				  	   	<select name="sampleList">
+							@for(product <- productList){
+					      	<option value=@product.id >@product.medicineName</option>
+					        }
+			   		    </select>
+					</td>
+					<td>
+						<input name="qtyList" placeholder="qty"/>
+					</td>
+					<td>
+						&nbsp;
+					</td>
+				</tr>
+			</table>
+			</div>   
+			<button  type="button" class="btn btn-primary btn-xs" onclick="addSamples();">+</button>
+	   	</td>
+	   
+	   
+	   <td valign="top" >
+			    <select name="promotionList" multiple>
+				@for(product <- productList){
+				<option value=@product.id >@product.medicineName</option>
+				}
+				</select>
+		</td>
+		<td valign="top"  ><input name="pob" type="number" /></td>
+		<td valign="top" ><input name="remarks" type="text" placeholder="Remarks"/></td>
+      </tr>
+		
+		
+   </tbody>
+	</table>
+	
+	<input type="hidden" name="dcrId" value="@dcr.id">
+
+	</form>
+	
+<input class="btn btn-primary" onclick="addLineItem();" value="Add" />
+	
+	<hr>
+	
+	
+	<div id="dcrLineItemTable">
+
+<table class="table table-bordered table-condensed">
+	<thead>
+	<tr>
+	   <th>Doctors</th>
+	   <th>Samples (Qty)</th>
+	   <th>Promotions</th>
+	   <th>POB</th>
+	   <th>Remarks</th>
+	</tr>   
+	</thead>
+	<tbody>
+	
+	@for(dcrLineItem <- dcr.dcrLineItemList){
+	<tr>
+		<td>@dcrLineItem.doctor.appUser.name</td>
+		<td>
+			@for(sample <- dcrLineItem.sampleList){
+				@sample.product.medicineName (@sample.quantity)
+				<br>
+			}
+	   	</td>
+	   	<td valign="top">
+			<div id="samplesdiv">
+			      <table> 	
+				  	@for(promotedProduct <- dcrLineItem.promotionList){
+					  <tr>
+						 <td>@promotedProduct.medicineName</td>
+					  </tr>
+					 }
+			      </table>
+			</div>   
+	   	</td>
+	    <td>@dcrLineItem.pob</td>
+		<td>@dcrLineItem.remarks</td>
+     </tr>
+     }
+   </tbody>
+  </table>	
+	
+	</div>
+	
+	
+	<script>
+	    function addLineItem(){
+	        $.post('/mr/dcr/add-line-item',$('#dcrliform').serialize(),function(html){
+				$('#dcrLineItemTable').html(html);
+			});
+		}
+	</script>
+}

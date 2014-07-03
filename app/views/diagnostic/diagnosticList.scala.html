@@ -1,4 +1,4 @@
-@(list: List[DiagnosticRepresentative])
+@(list: List[models.diagnostic.DiagnosticRepresentative])
 @main("Diagnostic Representatives List") {
 <table class="table table-bordered">
 <thead>
@@ -12,7 +12,7 @@ NAME
 @for(dc <- list) {
 <tr>
 <td>
-@dc.name
+@dc.appUser.name
 </td>
 <th>
 <a href="/diagnostic-edit/@dc.id" class="btn btn-xs btn-success">Edit</a>

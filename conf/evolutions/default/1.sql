@@ -128,6 +128,7 @@ create table clinic (
 
 create table dcrline_item (
   id                        bigint not null,
+  daily_call_report_id      bigint not null,
   doctor_id                 bigint,
   pob                       integer,
   remarks                   varchar(255),

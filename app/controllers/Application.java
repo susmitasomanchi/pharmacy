@@ -1,19 +1,21 @@
 package controllers;
 
 
-import beans.LoginBean;
-import models.DiagnosticRepresentative;
-import models.MedicalRepresentative;
+import models.diagnostic.DiagnosticRepresentative;
+import models.mr.MedicalRepresentative;
 import play.Logger;
 import play.data.Form;
 import play.mvc.Controller;
 import play.mvc.Result;
+import beans.JoinUsBean;
+import beans.LoginBean;
 
 public class Application extends Controller {
 
-	public static Form<MedicalRepresentative> mrForm=Form.form(MedicalRepresentative.class);
+	public static Form<JoinUsBean> joinUsForm=Form.form(JoinUsBean.class);
 	public static Form<DiagnosticRepresentative> diagnosticRepForm=Form.form(DiagnosticRepresentative.class);
 	public static final Form<LoginBean> loginForm = Form.form(LoginBean.class);
+	public static Form<MedicalRepresentative> mrForm=Form.form(MedicalRepresentative.class);
 
 	public static Result index() {
 		return ok(views.html.index.render(loginForm));
@@ -22,8 +24,6 @@ public class Application extends Controller {
 	public static Result indexX(final String str) {
 		return redirect(routes.Application.index());
 	}
-
-	//sales representator proccessing
 
 	public static Result medicalRepresentative(){
 		return ok(views.html.mr.medicalRepresentative.render(mrForm));
@@ -56,7 +56,6 @@ public class Application extends Controller {
 
 		return ok("salesrepresentr information added");
 	}
-
 	//diagnostic representator proccessing
 
 

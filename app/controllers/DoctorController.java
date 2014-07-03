@@ -38,6 +38,7 @@ import com.avaje.ebean.Ebean;
 @BasicAuth
 public class DoctorController extends Controller {
 
+	public static Form<Doctor> form= Form.form(Doctor.class);
 	public static Form<PatientBean> patientForm = Form.form(PatientBean.class);
 	public static Form<ClinicBean> clinicForm = Form.form(ClinicBean.class);
 	public static Form<DoctorExperience> experienceForm = Form.form(DoctorExperience.class);
@@ -518,7 +519,6 @@ public class DoctorController extends Controller {
 	//Todays Appointment
 	public static Result viewTodaysAppointment() {
 
-
 		final Calendar calendar=Calendar.getInstance();
 		calendar.setTime(new Date());
 		calendar.set(Calendar.HOUR_OF_DAY, 0);
@@ -531,6 +531,35 @@ public class DoctorController extends Controller {
 
 
 		return ok(views.html.doctor.viewTodaysAppointment.render(appointments));
+
+	}
+
+	public static Result form() {
+		return ok(views.html.createDoctor.render(form));
+		//return TODO;
+	}
+
+	public static Result process() {
+		final Form<Doctor> filledForm = form.bindFromRequest();
+
+		if(filledForm.hasErrors()) {
+
+			return badRequest(views.html.createDoctor.render(filledForm));
+		}
+		else {
+			final Doctor doctor= filledForm.get();
+
+			if(doctor.id == null) {
+
+				doctor.save();
+			}
+			else {
+
+				doctor.update();
+			}
+		}
+		return TODO;
+		//return redirect(routes.UserController.list());
 
 	}
 

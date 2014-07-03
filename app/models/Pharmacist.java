@@ -22,6 +22,7 @@ public class Pharmacist extends BaseEntity{
 	public Pharmacy pharmacy;
 
 	public String category;
+
 	public static Finder<Long, Pharmacist> find = new Finder<Long, Pharmacist>(Long.class, Pharmacist.class);
 
 }

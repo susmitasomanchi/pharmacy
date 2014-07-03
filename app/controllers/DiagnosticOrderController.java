@@ -2,43 +2,41 @@ package controllers;
 
 import java.util.Date;
 
-import models.DiagnosticCentre;
-import models.DiagnosticOrder;
-import models.DiagnosticOrderStatus;
-import models.DiagnosticReport;
-import models.DiagnosticRepresentative;
-import models.DiagnosticTest;
+
+import models.diagnostic.DiagnosticCentre;
+import models.diagnostic.DiagnosticOrder;
+import models.diagnostic.DiagnosticOrderStatus;
+import models.diagnostic.DiagnosticReport;
+import models.diagnostic.DiagnosticReportStatus;
+import models.diagnostic.DiagnosticRepresentative;
+import models.diagnostic.DiagnosticTest;
 import play.Logger;
-import play.data.Form;
 import play.mvc.Controller;
 import play.mvc.Result;
 
 public class DiagnosticOrderController extends Controller {
 
-	static Form<DiagnosticOrder> diagnosticOrder = Form
-			.form(DiagnosticOrder.class);
-	static Form<DiagnosticReport> diagnosticReport = Form
-			.form(DiagnosticReport.class);
-	static Form<DiagnosticCentre> diagnosticCentreForm = Form
-			.form(DiagnosticCentre.class);
+	public static DiagnosticRepresentative diagnosticRepresentative = LoginController
+			.getLoggedInUser().getDiagnosticRepresentative();
+	public static DiagnosticCentre dc = diagnosticRepresentative.diagnosticCentre;
 
 
 	/*
-	 * status for the order
-	 * received
+	 * status for the order received
 	 */
 	public static Result receive() {
+		
 		final String diagnosticTestIdStrings[] = request().body().asFormUrlEncoded().get("diagnosticTestIds");
 		final DiagnosticOrder diagnosticOrder=new DiagnosticOrder();
 
 		diagnosticOrder.patient=LoginController.getLoggedInUser().getPatient();
 		for (final String idStr : diagnosticTestIdStrings) {
 			final DiagnosticReport diagnosticReport=new DiagnosticReport();
-			final Long ids=Long.valueOf(idStr);
+			final Long id=Long.valueOf(idStr);
 			Logger.info(idStr);
-			diagnosticReport.diagnosticTest=DiagnosticTest.find.byId(ids);
-			//	diagnosticReport.save();
+			diagnosticReport.diagnosticTest = DiagnosticTest.find.byId(id);
 			diagnosticOrder.diagnosticReportList.add(diagnosticReport);
+			diagnosticOrder.update();
 
 		}
 		final DiagnosticRepresentative diagnosticRepresentative=LoginController.getLoggedInUser().getDiagnosticRepresentative();
@@ -46,44 +44,30 @@ public class DiagnosticOrderController extends Controller {
 		//	DiagnosticCenter dc=DiagnosticCenter.find.byId(id);
 
 		dc.diagnosticOrderList.add(diagnosticOrder);
-
-
-
-
-
-		return ok();
+		dc.update();
+		return ok("updated successfully");
 	}
-	public static Result viewOrders(final Long id){
 
-		/*DiagnosticRepresentative diagnosticRepresentative=LoginController.getLoggedInUser().getDiagnosticRepresentative();
-		DiagnosticCenter dc=DiagnosticCenter.find.where().eq("diagnosticRepAdmin", diagnosticRepresentative).findUnique();*/
-		final DiagnosticCentre dc=DiagnosticCentre.find.byId(id);
-		Logger.info("loggerrrrrrrrrr....."+dc.diagnosticOrderList.get(0).diagnosticOrderStatus);
+	public static Result viewOrders(Long id) {
 
-		return TODO;
+		Logger.info("loggerrrrrrrrrr....."
+				+ dc.diagnosticOrderList.get(0).diagnosticOrderStatus);
 
+		return ok("views.html.diagnostic.diagnosticCenterList.render(dc.diagnosticOrderList)");
+	
 
 	}
 
 
 	/*
-	 * status for the order
-	 * confirmed
+	 * status for the order confirmed
 	 */
 	public static Result confirmed(final Long id) {
 
 		final DiagnosticOrder diagnosticOrder = DiagnosticOrder.find.byId(id);
-		final DiagnosticReport diagnosticReport = DiagnosticReport.find.byId(id);
-
-		/*
-		 * Long
-		 * doctorsPrescriptionId=diagnosticPrescription.doctorsPrescriptionId;
-		 * DoctorsPrescription
-		 * doctorsPrescription=DoctorsPrescription.find.byId(
-		 * doctorsPrescriptionId);
-		 */
+		final DiagnosticReport diagnosticReport = DiagnosticReport.find.byId(id);		
 		if (diagnosticReport.reportStatus
-				.equals(DiagnosticOrderStatus.REPORT_READY)) {
+				.equals(DiagnosticReportStatus.REPORT_READY)) {
 			diagnosticOrder.diagnosticOrderStatus = DiagnosticOrderStatus.CONFIRMED;
 			diagnosticOrder.confirmedDate = new Date();
 
@@ -99,45 +83,24 @@ public class DiagnosticOrderController extends Controller {
 	}
 
 	/*
-	 * status for the report
-	 * sample colected
+	 * status for the report sample colected
 	 */
 
 	public static Result sampleCollect(final Long id) {
-
-		final DiagnosticReport diagnosticReport = DiagnosticReport.find.byId(id);
-
-		/*
-		 * Long
-		 * doctorsPrescriptionId=diagnosticPrescription.doctorsPrescriptionId;
-		 * DoctorsPrescription
-		 * doctorsPrescription=DoctorsPrescription.find.byId(
-		 * doctorsPrescriptionId);
-		 */
-		diagnosticReport.reportStatus = DiagnosticOrderStatus.SAMPLE_COLLECTED;
+		DiagnosticReport diagnosticReport = DiagnosticReport.find.byId(id);
+		diagnosticReport.reportStatus = DiagnosticReportStatus.SAMPLE_COLLECTED;		
 		diagnosticReport.sampleCollectionDate = new Date();
-
 		diagnosticReport.update();
-
 		return ok("sample collected");
-
 	}
+
 	/*
-	 * status for the report
-	 * generated
+	 * status for the report generated
 	 */
 	public static Result reoprtReady(final Long id) {
 
-		final DiagnosticReport diagnosticReport = DiagnosticReport.find.byId(id);
-
-		/*
-		 * Long
-		 * doctorsPrescriptionId=diagnosticPrescription.doctorsPrescriptionId;
-		 * DoctorsPrescription
-		 * doctorsPrescription=DoctorsPrescription.find.byId(
-		 * doctorsPrescriptionId);
-		 */
-		diagnosticReport.reportStatus = DiagnosticOrderStatus.REPORT_READY;
+		DiagnosticReport diagnosticReport = DiagnosticReport.find.byId(id);
+		diagnosticReport.reportStatus = DiagnosticReportStatus.REPORT_READY;
 		diagnosticReport.reportGenerationDate = new Date();
 		diagnosticReport.update();
 		return ok("Report generated");
