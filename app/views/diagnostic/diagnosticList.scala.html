@@ -1,10 +1,10 @@
-@(list: List[DiagnosticRepresentative])
+@(list: List[models.diagnostic.DiagnosticRepresentative])
 @main("Diagnostic Representatives List") {
 <table class="table table-bordered">
 <thead>
 <tr>
 <th>
-Name
+NAME
 </th>
 </tr>
 </thead>
@@ -15,11 +15,11 @@ Name
 @dc.appUser.name
 </td>
 <th>
-<a href="/diagnostic-edit/@dc.appUser.id" class="btn btn-xs btn-success">Edit</a>
+<a href="/diagnostic-edit/@dc.id" class="btn btn-xs btn-success">Edit</a>
 
 
-<a href="/diagnostic-delete/@dc.appUser.id" class="btn btn-xs btn-success">Delete</a>
-<a href="/diagnosticrep/doctor-list" class="btn btn-xs btn-success">Doctors</a>
+<a href="/diagnostic-delete/@dc.id" class="btn btn-xs btn-success">Delete</a>
+@*<a href="/diagnostic-service-list1/@dc.id" class="btn btn-xs btn-success">Doctors</a>*@
 
 </th>
 </tr>

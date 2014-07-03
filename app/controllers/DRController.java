@@ -3,8 +3,10 @@ package controllers;
 import java.util.List;
 
 
-import models.DiagnosticRepresentative;
-import models.Doctor;
+import models.AppUser;
+import models.diagnostic.DiagnosticCentre;
+import models.diagnostic.DiagnosticRepresentative;
+import models.doctor.Doctor;
 import play.Logger;
 import play.data.DynamicForm;
 import play.data.Form;
@@ -12,8 +14,10 @@ import play.mvc.Controller;
 import play.mvc.Result;
 
 public class DRController extends Controller {
-	static DiagnosticRepresentative loggedInDR = LoginController
-			.getLoggedInUser().getDiagnosticRepresentative();
+	public static DiagnosticRepresentative dr = LoginController.getLoggedInUser()
+			.getDiagnosticRepresentative();
+	public static Form<AppUser> registrationForm = Form.form(AppUser.class);
+	public static DiagnosticCentre dc = dr.diagnosticCentre;
 	public static Form<DiagnosticRepresentative> diagnosticRepresentative = Form
 			.form(DiagnosticRepresentative.class);
 
@@ -23,70 +27,75 @@ public class DRController extends Controller {
 	}
 
 	public static Result addDiagRepProcess() {
-		final Form<DiagnosticRepresentative> filledForm = diagnosticRepresentative
-				.bindFromRequest();
+		final Form<AppUser> filledForm = registrationForm.bindFromRequest();
 
 		if (filledForm.hasErrors()) {
-			Logger.info("*** user bad request");
-			return badRequest(views.html.diagnostic.diagnosticRep
-					.render(filledForm));
+			return badRequest(views.html.registerAppUser.render(filledForm));
 		} else {
-
-			final DiagnosticRepresentative diagForm = filledForm.get();
-			Logger.info("*** user object ");
-			diagForm.save();
-			final String message = flash("success");
-			return ok("Saved");
+			final AppUser appUser = filledForm.get();
+			final DiagnosticRepresentative diagnosticRepresentative = new DiagnosticRepresentative();
+			appUser.save();
+			diagnosticRepresentative.appUser = appUser;
+			dc.diagnosticRepresentativelist.add(diagnosticRepresentative);
+			dc.update();
+			return ok("Registerd ");
 		}
+
+		}
+
+	
+
+	/*
+	 * displaying all diagnostic Representators
+	 */
+	public static Result diagnosticRepresentativeList() {
+
+		//DiagnosticCentre diagnosticCentre = dr.diagnosticCentre;
+		Logger.info("size of list........"
+				+ dc.diagnosticRepresentativelist.size());
+		return ok(views.html.diagnostic.diagnosticList
+				.render(dc.diagnosticRepresentativelist));
+
 	}
 
-	public static Result diagnosticReplist() {
-		List<DiagnosticRepresentative> allDiagRepList = DiagnosticRepresentative.find
-				.all();
-		/* views.html.list.render(allList) */
-		/*Logger.info(allDiagRepList.get(1).appUser.name + "~~allDiagRepList");*/
-		return ok(views.html.diagnostic.diagnosticList.render(allDiagRepList));
-
-	}
-
+	/*
+	 * displaying all doctors
+	 */
 	public static Result doctorList() {
 		List<Doctor> doctorList = Doctor.find.all();
-		// Logger.error(doctorList.get(0).appUser.name);
 		return ok(views.html.diagnostic.doctorsList.render(doctorList));
 	}
 
+	/*
+	 * add
+	 */
+
 	public static Result addDoctor(Long id) {
-		Logger.info("id.............." + id);
-
-		if (loggedInDR.doctorList.contains(Doctor.find.byId(id)) != true) {
-			loggedInDR.doctorList.add(Doctor.find.byId(id));
+		/*DiagnosticRepresentative dr = LoginController.getLoggedInUser()
+				.getDiagnosticRepresentative();*/
+		
+		Logger.info("Diagnostic centre name.." + dc.name);
+		Logger.info("Diagnostic centre id.." + dc.id);
+		Doctor doctor=Doctor.find.byId(id);
+		if(dc.doctorList.contains(doctor)!=true){
+		dc.doctorList.add(doctor);
 		}
-
-		return ok(views.html.diagnostic.addDoctor.render(loggedInDR.doctorList));
+		dc.update();
+		Logger.info("after adding Doctors list size is.." + dc.doctorList.size());
+		// views.html.diagnostic.addDoctor.render(dc.doctorList)
+		Logger.info("after adding Doctors list size is.." + dc.doctorList.get(0).appUser.name);
+		return ok();
 
 	}
 
-	// delete doctor from DR list
+	// remove doctor from DR list
 	public static Result removeDoctor(final Long id) {
+		
 		System.out.println("id........." + id);
-		int indexOfDoctorList = -1;
 		Doctor doctor = Doctor.find.byId(id);
-		for (Doctor doc : loggedInDR.doctorList) {
-			indexOfDoctorList++;
-			if (doctor.appUser.name.equals(doc.appUser.name)) {
-				Logger.info("doctor name : " + doc.appUser.name);
-
-				// indexOfDoctorList=loggedInMR.doctorList.indexOf(doctor.appUser.name);
-
-				Logger.info("index is : " + indexOfDoctorList);
-				break;
-			}
-		}
-
-		// return TODO;
-		loggedInDR.doctorList.remove(indexOfDoctorList);
-
-		return ok(views.html.diagnostic.addDoctor.render(loggedInDR.doctorList));
+		dc.doctorList.remove(doctor);
+		dc.update();
+		return ok(views.html.diagnostic.addDoctor.render(dc.doctorList));
 
 	}
 
@@ -95,19 +104,19 @@ public class DRController extends Controller {
 		return ok(views.html.diagnostic.searchDoctor.render());
 	}
 
+	/*
+	 * doctors search process
+	 */
 	public static Result searchProcess() {
 
 		final DynamicForm requestData = Form.form().bindFromRequest();
 
 		final String searchStr = requestData.get("searchStr");
 
-		Logger.info("hello..........................." + searchStr);
 		// if string is empty return zero
 		if (searchStr != null && !searchStr.isEmpty()) {
-			Logger.info("hello...........................");
 			// it is a string, search by name
 			if (searchStr.matches("[a-zA-Z]+")) {
-				Logger.info("inside...........................");
 
 				final List<Doctor> doctorList = Doctor.find.where()
 						.like("appUser.name", searchStr + "%").findList();
@@ -120,8 +129,19 @@ public class DRController extends Controller {
 
 	}
 
+	public static Result displayDiagnosticCentreDoctors() {
+		/*DiagnosticRepresentative dr = LoginController.getLoggedInUser()
+				.getDiagnosticRepresentative();*/
+		//DiagnosticCentre diagnosticCentre = dr.diagnosticCentre;
+		Logger.info("diagnostic center name:" + dc.name);
+		Logger.info("Diagnostic centre id.." + dc.id);
+		Logger.info("size of list" + dc.doctorList.size());
+		return ok(views.html.diagnostic.diagosticCentreDoctorsList
+				.render(dr.diagnosticCentre.doctorList));
+	}
+
 	public static Result addPatient() {
 		return TODO;
-		
+
 	}
 }

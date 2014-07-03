@@ -30,7 +30,7 @@ create table app_user (
   role                      varchar(16),
   last_update               timestamp not null,
   constraint ck_app_user_sex check (sex in ('FEMALE','OTHER','MALE')),
-  constraint ck_app_user_role check (role in ('PATIENT','ADMIN_DIAGREP','DOCTOR','ADMIN','PHARMACIST','ADMIN_PHARMACIST','ADMIN_MR','MR','DIAGREP','DOCTOR_SECRETARY')),
+  constraint ck_app_user_role check (role in ('PATIENT','ADMIN_DIAGREP','DOCTOR','ADMIN','PHARMACIST','ADMIN_PHARMACIST','BLOG_ADMIN','ADMIN_MR','MR','DIAGREP','DOCTOR_SECRETARY')),
   constraint pk_app_user primary key (id))
 ;
 
@@ -48,9 +48,41 @@ create table appointment (
   constraint pk_appointment primary key (id))
 ;
 
+create table article (
+  id                        bigint not null,
+  name                      TEXT,
+  position                  integer,
+  short_description         TEXT,
+  on_hover_content          TEXT,
+  content                   TEXT,
+  slug_url                  TEXT,
+  thumbnail                 bytea,
+  image                     bytea,
+  html_title                TEXT,
+  html_meta_description     TEXT,
+  html_keywords             TEXT,
+  category_id               bigint,
+  last_update               timestamp not null,
+  constraint pk_article primary key (id))
+;
+
+create table article_category (
+  id                        bigint not null,
+  name                      TEXT,
+  position                  integer,
+  short_description         TEXT,
+  on_hover_content          TEXT,
+  content                   TEXT,
+  slug_url                  TEXT,
+  thumbnail                 bytea,
+  image                     bytea,
+  last_update               timestamp not null,
+  constraint pk_article_category primary key (id))
+;
+
 create table batch (
   id                        bigint not null,
-  batch_status              varchar(18),
+  inventory_id              bigint not null,
   product_id                bigint,
   batch_no                  varchar(255),
   mrp                       float,
@@ -59,8 +91,33 @@ create table batch (
   tax                       float,
   discount                  float,
   last_update               timestamp not null,
-  constraint ck_batch_batch_status check (batch_status in ('EXPIRED','SUFFICIENT','NEARING_EXHAUSTION','APPROACHING_EXPIRY','EXHAUSTED')),
   constraint pk_batch primary key (id))
+;
+
+create table blog_comment (
+  id                        bigint not null,
+  article_id                bigint not null,
+  message                   TEXT,
+  date                      timestamp,
+  by_id                     bigint,
+  social_by_id              bigint,
+  blog_commentator_type     varchar(8),
+  last_update               timestamp not null,
+  constraint ck_blog_comment_blog_commentator_type check (blog_commentator_type in ('GOOGLE','FACEBOOK','APP_USER')),
+  constraint pk_blog_comment primary key (id))
+;
+
+create table blog_comment_reply (
+  id                        bigint not null,
+  blog_comment_id           bigint not null,
+  message                   TEXT,
+  date                      timestamp,
+  by_id                     bigint,
+  social_by_id              bigint,
+  blog_commentator_type     varchar(8),
+  last_update               timestamp not null,
+  constraint ck_blog_comment_reply_blog_commentator_type check (blog_commentator_type in ('GOOGLE','FACEBOOK','APP_USER')),
+  constraint pk_blog_comment_reply primary key (id))
 ;
 
 create table clinic (
@@ -89,26 +146,58 @@ create table daily_call_report (
 
 create table day_of_the_week (
   id                        bigint not null,
-  doctor_clinic_info_id     bigint not null,
   day                       varchar(9),
   last_update               timestamp not null,
   constraint ck_day_of_the_week_day check (day in ('MONDAY','SUNDAY','WEDNESDAY','THURSDAY','SATURDAY','TUESDAY','FRIDAY')),
   constraint pk_day_of_the_week primary key (id))
 ;
 
-create table diagnostic_center (
+create table day_schedule (
+  id                        bigint not null,
+  doctor_clinic_info_id     bigint not null,
+  day                       varchar(9),
+  from_time                 integer,
+  to_time                   integer,
+  requester                 varchar(16),
+  last_update               timestamp not null,
+  constraint ck_day_schedule_day check (day in ('MONDAY','SUNDAY','WEDNESDAY','THURSDAY','SATURDAY','TUESDAY','FRIDAY')),
+  constraint ck_day_schedule_requester check (requester in ('PATIENT','ADMIN_DIAGREP','DOCTOR','ADMIN','PHARMACIST','ADMIN_PHARMACIST','BLOG_ADMIN','ADMIN_MR','MR','DIAGREP','DOCTOR_SECRETARY')),
+  constraint pk_day_schedule primary key (id))
+;
+
+create table diagnostic_centre (
   id                        bigint not null,
   name                      varchar(255),
-  services                  varchar(255),
-  cost_of_services          varchar(255),
-  contact_person_name       varchar(255),
   address                   varchar(255),
   mobile_no                 varchar(255),
   email_id                  varchar(255),
   website_name              varchar(255),
   diagnostic_rep_admin_id   bigint,
   last_update               timestamp not null,
-  constraint pk_diagnostic_center primary key (id))
+  constraint pk_diagnostic_centre primary key (id))
+;
+
+create table diagnostic_order (
+  id                        bigint not null,
+  diagnostic_centre_id      bigint not null,
+  diagnostic_order_status   varchar(9),
+  received_date             timestamp,
+  confirmed_date            timestamp,
+  last_update               timestamp not null,
+  constraint ck_diagnostic_order_diagnostic_order_status check (diagnostic_order_status in ('RECEIVED','CONFIRMED')),
+  constraint pk_diagnostic_order primary key (id))
+;
+
+create table diagnostic_report (
+  id                        bigint not null,
+  file_name                 varchar(255),
+  file_content              bytea,
+  report_status             varchar(20),
+  sample_collection_date    timestamp,
+  report_generation_date    timestamp,
+  last_update               timestamp not null,
+  constraint ck_diagnostic_report_report_status check (report_status in ('SAMPLE_NOT_COLLECTED','REPORT_READY','SAMPLE_COLLECTED')),
+  constraint pk_diagnostic_report primary key (id))
 ;
 
 create table diagnostic_representative (
@@ -116,8 +205,26 @@ create table diagnostic_representative (
   app_user_id               bigint,
   patient_id                bigint,
   diagnostic_type           varchar(255),
+  file                      bytea,
+  diagnostic_centre_id      bigint,
   last_update               timestamp not null,
   constraint pk_diagnostic_representative primary key (id))
+;
+
+create table diagnostic_test (
+  id                        bigint not null,
+  diagnostic_centre_id      bigint not null,
+  name                      varchar(255),
+  description               varchar(255),
+  price                     float,
+  last_update               timestamp not null,
+  constraint pk_diagnostic_test primary key (id))
+;
+
+create table diagnostic_test_line_item (
+  prescription_id           bigint not null,
+  remarks                   varchar(255),
+  last_update               timestamp not null)
 ;
 
 create table doctor (
@@ -126,12 +233,14 @@ create table doctor (
   specialization            varchar(255),
   position                  varchar(255),
   degree                    varchar(255),
+  test                      varchar(255),
   doctor_type               varchar(255),
   experience                varchar(255),
   home_facility             varchar(255),
   fees                      integer,
   clinic_address            varchar(255),
   hospital_address          varchar(255),
+  hospital_address1         varchar(255),
   timings                   varchar(255),
   category_of_doctor        varchar(255),
   last_update               timestamp not null,
@@ -149,6 +258,7 @@ create table doctor_assistant (
 
 create table doctor_award (
   id                        bigint not null,
+  doctor_id                 bigint not null,
   award_name                varchar(255),
   award_for                 varchar(255),
   year                      varchar(255),
@@ -161,30 +271,15 @@ create table doctor_clinic_info (
   id                        bigint not null,
   clinic_id                 bigint,
   doctor_id                 bigint,
-  from_hrs                  integer,
-  to_hrs                    integer,
-  to_hrs_mr                 integer,
-  from_hrs_mr               integer,
-  assistant_id              bigint,
+  slot                      integer,
+  slotmr                    integer,
   last_update               timestamp not null,
   constraint pk_doctor_clinic_info primary key (id))
 ;
 
-create table doctor_detail (
-  id                        bigint not null,
-  a                         bigint,
-  article_on                varchar(255),
-  published_on              varchar(255),
-  comment_for_article       varchar(255),
-  language                  varchar(255),
-  social_work_tittle        varchar(255),
-  comment_social_work       varchar(255),
-  last_update               timestamp not null,
-  constraint pk_doctor_detail primary key (id))
-;
-
 create table doctor_education (
   id                        bigint not null,
+  doctor_id                 bigint not null,
   college_name              varchar(255),
   degree                    varchar(255),
   from_year                 integer,
@@ -195,6 +290,7 @@ create table doctor_education (
 
 create table doctor_experience (
   id                        bigint not null,
+  doctor_id                 bigint not null,
   previous_hospital_name    varchar(255),
   worked_as                 varchar(255),
   location                  varchar(255),
@@ -202,6 +298,32 @@ create table doctor_experience (
   worked_to                 integer,
   last_update               timestamp not null,
   constraint pk_doctor_experience primary key (id))
+;
+
+create table doctor_language (
+  id                        bigint not null,
+  last_update               timestamp not null,
+  constraint pk_doctor_language primary key (id))
+;
+
+create table doctor_publication (
+  id                        bigint not null,
+  doctor_id                 bigint not null,
+  article_name              varchar(255),
+  article_for               varchar(255),
+  year                      varchar(255),
+  comment_for_article       varchar(255),
+  last_update               timestamp not null,
+  constraint pk_doctor_publication primary key (id))
+;
+
+create table doctor_social_work (
+  id                        bigint not null,
+  doctor_id                 bigint not null,
+  social_work_tittle        varchar(255),
+  comment_social_work       varchar(255),
+  last_update               timestamp not null,
+  constraint pk_doctor_social_work primary key (id))
 ;
 
 create table head_quarter (
@@ -213,14 +335,22 @@ create table head_quarter (
 
 create table inventory (
   id                        bigint not null,
+  pharmacy_id               bigint not null,
   product_id                bigint,
   shelf_no                  varchar(255),
-  product_inventory_status  varchar(12),
   product_quantity          integer,
   remarks                   varchar(255),
   last_update               timestamp not null,
-  constraint ck_inventory_product_inventory_status check (product_inventory_status in ('OUT_OF_STOCK','AVAILABLE')),
   constraint pk_inventory primary key (id))
+;
+
+create table language_app_user (
+  id                        bigint not null,
+  doctor_language_id        bigint not null,
+  language                  varchar(9),
+  last_update               timestamp not null,
+  constraint ck_language_app_user_language check (language in ('MALAYALAM','KONKANI','SINDHI','NEPALI','MANIPURI','ENGLISH','ASSAMESE','ORIYA','TELGU','BODO','GUJARATI','TAMIL','MARATHI','BENGALI','URDU','SANTALI','HINDI','PUNJABI','KASHMIRI','MAITHILI','DOGRI','KANNADA')),
+  constraint pk_language_app_user primary key (id))
 ;
 
 create table medical_representative (
@@ -233,6 +363,26 @@ create table medical_representative (
   pharmaceutical_company_id bigint,
   last_update               timestamp not null,
   constraint pk_medical_representative primary key (id))
+;
+
+create table medicine_line_item (
+  prescription_id           bigint not null,
+  frequency                 varchar(255),
+  remarks                   varchar(255),
+  last_update               timestamp not null)
+;
+
+create table order_line_item (
+  id                        bigint not null,
+  pharmacy_order_id         bigint not null,
+  product_id                bigint,
+  quantity                  float,
+  batch_no                  varchar(255),
+  expiry_date               timestamp,
+  price                     float,
+  sub_total                 float,
+  last_update               timestamp not null,
+  constraint pk_order_line_item primary key (id))
 ;
 
 create table patient (
@@ -274,8 +424,29 @@ create table pharmacy (
   constraint pk_pharmacy primary key (id))
 ;
 
+create table pharmacy_order (
+  id                        bigint not null,
+  order_status              varchar(9),
+  date                      timestamp,
+  total_amount              float,
+  last_update               timestamp not null,
+  constraint ck_pharmacy_order_order_status check (order_status in ('DRAFT','DELIVERED','READY')),
+  constraint pk_pharmacy_order primary key (id))
+;
+
+create table prescription (
+  id                        bigint not null,
+  appointment_id            bigint,
+  problem_statement         varchar(255),
+  prognosis                 varchar(255),
+  remarks                   varchar(255),
+  last_update               timestamp not null,
+  constraint pk_prescription primary key (id))
+;
+
 create table product (
   id                        bigint not null,
+  pharmacy_id               bigint not null,
   medicine_name             varchar(255),
   brand_name                varchar(255),
   salt                      varchar(255),
@@ -329,7 +500,15 @@ create sequence app_user_seq;
 
 create sequence appointment_seq;
 
+create sequence article_seq;
+
+create sequence article_category_seq;
+
 create sequence batch_seq;
+
+create sequence blog_comment_seq;
+
+create sequence blog_comment_reply_seq;
 
 create sequence clinic_seq;
 
@@ -339,9 +518,17 @@ create sequence daily_call_report_seq;
 
 create sequence day_of_the_week_seq;
 
-create sequence diagnostic_center_seq;
+create sequence day_schedule_seq;
+
+create sequence diagnostic_centre_seq;
+
+create sequence diagnostic_order_seq;
+
+create sequence diagnostic_report_seq;
 
 create sequence diagnostic_representative_seq;
+
+create sequence diagnostic_test_seq;
 
 create sequence doctor_seq;
 
@@ -351,15 +538,23 @@ create sequence doctor_award_seq;
 
 create sequence doctor_clinic_info_seq;
 
-create sequence doctor_detail_seq;
-
 create sequence doctor_education_seq;
 
 create sequence doctor_experience_seq;
 
+create sequence doctor_language_seq;
+
+create sequence doctor_publication_seq;
+
+create sequence doctor_social_work_seq;
+
 create sequence inventory_seq;
 
+create sequence language_app_user_seq;
+
 create sequence medical_representative_seq;
+
+create sequence order_line_item_seq;
 
 create sequence patient_seq;
 
@@ -368,6 +563,10 @@ create sequence pharmaceutical_company_seq;
 create sequence pharmacist_seq;
 
 create sequence pharmacy_seq;
+
+create sequence pharmacy_order_seq;
+
+create sequence prescription_seq;
 
 create sequence product_seq;
 
@@ -452,7 +651,15 @@ drop table if exists app_user cascade;
 
 drop table if exists appointment cascade;
 
+drop table if exists article cascade;
+
+drop table if exists article_category cascade;
+
 drop table if exists batch cascade;
+
+drop table if exists blog_comment cascade;
+
+drop table if exists blog_comment_reply cascade;
 
 drop table if exists clinic cascade;
 
@@ -464,11 +671,23 @@ drop table if exists daily_call_report cascade;
 
 drop table if exists day_of_the_week cascade;
 
-drop table if exists diagnostic_center cascade;
+drop table if exists day_schedule cascade;
+
+drop table if exists diagnostic_centre cascade;
+
+drop table if exists diagnostic_order cascade;
+
+drop table if exists diagnostic_report cascade;
 
 drop table if exists diagnostic_representative cascade;
 
+drop table if exists diagnostic_test cascade;
+
+drop table if exists diagnostic_test_line_item cascade;
+
 drop table if exists doctor cascade;
+
+drop table if exists doctor_doctor_language cascade;
 
 drop table if exists doctor_assistant cascade;
 
@@ -476,15 +695,21 @@ drop table if exists doctor_award cascade;
 
 drop table if exists doctor_clinic_info cascade;
 
-drop table if exists doctor_detail cascade;
-
 drop table if exists doctor_education cascade;
 
 drop table if exists doctor_experience cascade;
 
+drop table if exists doctor_language cascade;
+
+drop table if exists doctor_publication cascade;
+
+drop table if exists doctor_social_work cascade;
+
 drop table if exists head_quarter cascade;
 
 drop table if exists inventory cascade;
+
+drop table if exists language_app_user cascade;
 
 drop table if exists medical_representative cascade;
 
@@ -492,11 +717,17 @@ drop table if exists medical_representative_doctor cascade;
 
 drop table if exists patient cascade;
 
+drop table if exists patient_diagnostic_centre cascade;
+
 drop table if exists pharmaceutical_company cascade;
 
 drop table if exists pharmacist cascade;
 
 drop table if exists pharmacy cascade;
+
+drop table if exists pharmacy_order cascade;
+
+drop table if exists prescription cascade;
 
 drop table if exists product cascade;
 
@@ -510,7 +741,15 @@ drop sequence if exists app_user_seq;
 
 drop sequence if exists appointment_seq;
 
+drop sequence if exists article_seq;
+
+drop sequence if exists article_category_seq;
+
 drop sequence if exists batch_seq;
+
+drop sequence if exists blog_comment_seq;
+
+drop sequence if exists blog_comment_reply_seq;
 
 drop sequence if exists clinic_seq;
 
@@ -520,9 +759,17 @@ drop sequence if exists daily_call_report_seq;
 
 drop sequence if exists day_of_the_week_seq;
 
-drop sequence if exists diagnostic_center_seq;
+drop sequence if exists day_schedule_seq;
+
+drop sequence if exists diagnostic_centre_seq;
+
+drop sequence if exists diagnostic_order_seq;
+
+drop sequence if exists diagnostic_report_seq;
 
 drop sequence if exists diagnostic_representative_seq;
+
+drop sequence if exists diagnostic_test_seq;
 
 drop sequence if exists doctor_seq;
 
@@ -532,15 +779,23 @@ drop sequence if exists doctor_award_seq;
 
 drop sequence if exists doctor_clinic_info_seq;
 
-drop sequence if exists doctor_detail_seq;
-
 drop sequence if exists doctor_education_seq;
 
 drop sequence if exists doctor_experience_seq;
 
+drop sequence if exists doctor_language_seq;
+
+drop sequence if exists doctor_publication_seq;
+
+drop sequence if exists doctor_social_work_seq;
+
 drop sequence if exists inventory_seq;
 
+drop sequence if exists language_app_user_seq;
+
 drop sequence if exists medical_representative_seq;
+
+drop sequence if exists order_line_item_seq;
 
 drop sequence if exists patient_seq;
 
@@ -549,6 +804,10 @@ drop sequence if exists pharmaceutical_company_seq;
 drop sequence if exists pharmacist_seq;
 
 drop sequence if exists pharmacy_seq;
+
+drop sequence if exists pharmacy_order_seq;
+
+drop sequence if exists prescription_seq;
 
 drop sequence if exists product_seq;
 

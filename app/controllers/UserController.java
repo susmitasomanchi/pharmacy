@@ -28,6 +28,7 @@ import beans.JoinUsBean;
 public class UserController extends Controller {
 
 	public static Form<JoinUsBean> joinUsForm = Form.form(JoinUsBean.class);
+	public static Form<DiagnosticRepresentative> drForm = Form.form(DiagnosticRepresentative.class);
 	public static Form<MedicalRepresentative> mrForm = Form.form(MedicalRepresentative.class);
 	public static Result joinUs(){
 		return ok(views.html.joinus.render(joinUsForm));
@@ -37,6 +38,7 @@ public class UserController extends Controller {
 	public static Result processJoinUs(){
 		final Form<JoinUsBean> filledForm = joinUsForm.bindFromRequest();
 		final Form<MedicalRepresentative> mR = mrForm.bindFromRequest();
+		final Form<DiagnosticRepresentative> dr = drForm.bindFromRequest();
 		if(filledForm.hasErrors()) {
 			Logger.info("Form Errors");
 			Logger.error(filledForm.errors().toString());
@@ -63,7 +65,7 @@ public class UserController extends Controller {
 				pharmacist.save();
 
 				//final Pharmacy pharmacy = filledForm.get();
-				final Pharmacy pharmacy=new Pharmacy();
+				final Pharmacy pharmacy = new Pharmacy();
 				pharmacy.name=filledForm.get().pharmacyName;
 				pharmacy.pharmacistList.add(pharmacist);
 				pharmacy.save();
@@ -73,7 +75,7 @@ public class UserController extends Controller {
 
 			if(appUser.role == Role.ADMIN_MR){
 				final MedicalRepresentative medicalRepresentative = new MedicalRepresentative();
-                PharmaceuticalCompany pharmaCompany = new PharmaceuticalCompany();
+                final PharmaceuticalCompany pharmaCompany = new PharmaceuticalCompany();
 				medicalRepresentative.appUser = appUser;
 				medicalRepresentative.save();
 				pharmaCompany.name = filledForm.get().pharmaceuticalCompanyName;
@@ -97,16 +99,22 @@ public class UserController extends Controller {
 			}
 			
 
+
 			if(appUser.role == Role.ADMIN_DIAGREP){
 				final DiagnosticRepresentative diagRep = new DiagnosticRepresentative();
 				diagRep.appUser = appUser;
 				diagRep.save();
-				final DiagnosticCenter diagnosticCenter = new DiagnosticCenter();
+				final DiagnosticCentre diagnosticCenter = new DiagnosticCentre();
 				diagnosticCenter.name = filledForm.get().diagnosticCenterName;
 				diagnosticCenter.diagnosticRepAdmin = diagRep;
 				diagnosticCenter.save();
+				diagRep.diagnosticCentre = diagnosticCenter;
+				diagRep.update();
+				
+				Logger.info(diagRep.diagnosticCentre.name);
+				
 			}
-
+			
 			session().clear();
 			session(Constants.LOGGED_IN_USER_ID, appUser.id + "");
 			session(Constants.LOGGED_IN_USER_ROLE, appUser.role+ "");

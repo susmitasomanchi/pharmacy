@@ -53,5 +53,14 @@ public class Product extends BaseEntity {
 	public static void update(final Long id, final Product product) {
 		product.update(id);
 	}
+	
+	public static Map<String, String> options() {
+
+		final LinkedHashMap<String, String> vals = new LinkedHashMap<String, String>();
+		for (final Product val : Product.find.all()) {
+			vals.put(val.toString(), val.toString());
+		}
+		return vals;
+	}
 
 }

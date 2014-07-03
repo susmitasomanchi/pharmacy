@@ -1,4 +1,4 @@
-@(clinicForm:play.data.Form[beans.ClinicBean])
+@(clinicForm:play.data.Form[beans.ClinicBean],list:List[String],listmr:List[String])
 
 @import play.i18n._
 @import helper.twitterBootstrap._
@@ -6,26 +6,108 @@
 
 
 @main("New Clinic"){
+	
+	@helper.form(action=routes.DoctorController.processNewClinic()) {
+	@helper.inputText(clinicForm("name"),'class -> "inputs",'_value->"10",'_label->"Name")
+			
+	<div class="row clearfix">
+		<div class="col-md-12 column">
+			<div class="row clearfix">
+				<div class="col-md-6 column">
+				
+				<table class="table">
+			<head>
+			<tr>		
+				<th>Day</th>
+				<th>From time</th>
+				<th>To  time</th>
+			</tr>
+			</head>
+			<tbody>
+			@for((day,index) <- models.doctor.Day.getList().zipWithIndex){
+				@if(list.contains(day.toString())){
+					
+					<tr>
+					<td><input class="checkday" id="p-@day" type="checkbox" name="daysOfWeek[]" value="@day.toString()" checked >@day</input></td>
+					<td><input id="p-@day-from" type="text" name="fromHrs[]" value="@clinicForm("fromHrs["+index+"]").value"  required></input></td>
+					<td><input id="p-@day-to" type="text" name="toHrs[]" value="@clinicForm("toHrs["+index+"]").value" required></input></td>
+					</tr>
+					}else{
+					<tr>
+					<td><input class="checkday" id="p-@day" type="checkbox" name="daysOfWeek[]" value="@day.toString()" >@day</input></td>
+					<td><input id="p-@day-from" type="text" name="fromHrs[]" disabled required></input></td>
+					<td><input id="p-@day-to" type="text" name="toHrs[]"  disabled required></input></td>
+					</tr>
+					}
+						
+				}
+			</tbody>
+			</table>	
+				@helper.inputText(clinicForm("slot"),'_class -> "inputs",'_value->"10",'_label->"Patient slot")
+				</div>
+				<div class="col-md-6 column">
+			<table class="table">
+			<head>
+			<tr>		
+				<th>Day</th>
+				<th>From time</th>
+				<th>To  time</th>
+			</tr>
+			</head>
+			<tbody>
+			@for((day,index) <- models.doctor.Day.getList().zipWithIndex){
+					@if(listmr.contains(day.toString())){
+				<tr>
+					<td><input class="checkday" id="m-@day" type="checkbox" name="daysOfWeekMr[]" value="@day.toString()" checked>@day</input></td>
+					<td><input id="m-@day-from" type="number" name="fromHrsMr[]" value="@clinicForm("fromHrsMr["+index+"]").value" required></input></td>
+					<td><input id="m-@day-to" type="number" name="toHrsMr[]" value="@clinicForm("toHrsMr["+index+"]").value" required></input></td>
+				</tr>	
+					}else{
+				<tr>
+					<td><input class="checkday" id="m-@day" type="checkbox" name="daysOfWeekMr[]"  value="@day.toString()">@day</input></td>
+					<td><input id="m-@day-from" type="number" name="fromHrsMr[]" value="@clinicForm("fromHrsMr["+index+"]").value"disabled required></input></td>
+					<td><input id="m-@day-to" type="number" name="toHrsMr[]"  value="@clinicForm("toHrsMr["+index+"]").value" disabled required></input></td>
+				</tr>
+					}
+			}
+			</tbody>
+			</table>	
+					@helper.inputText(clinicForm("slotmr"),'_class -> "inputs",'_value->"10",'_label->"Mr slot")
+				</div>
+			</div>
+		</div>
+	</div>
 
-@helper.form(action=routes.DoctorController.processNewClinic()) {
-
-			@helper.inputText(clinicForm("name"),'class -> "inputs",'_label->"Name")
-			
-			@helper.inputText(clinicForm("fromHrs"),'class -> "inputs",'_label->"Available From (in 24-Hrs format)")
-			
-			@helper.inputText(clinicForm("toHrs"),'class -> "inputs",'_label->"Available Till (in 24-Hrs format)")
-			@helper.select(clinicForm("daysOfWeek"),options=helper.options(Day.options),'_label->"Collaborate",'multiple->"multiple", 'class->"chzn col-sm-6")
-			
-			time for Mr
-			@helper.inputText(clinicForm("fromHrsMr"),'class -> "inputs",'_label->"Available Till (in 24-Hrs format)")
-			
-			@helper.inputText(clinicForm("toHrsMr"),'class -> "inputs",'_label->"Available From (in 24-Hrs format)")
 			
 			
-			@helper.select(clinicForm("daysOfWeekMr"),options=helper.options(Day.options),'_label->"Collaborate",'multiple->"multiple", 'class->"chzn col-sm-6")
 			
 	<br><br>
-	<input type="submit" class="btn btn-primary" value="Submit">
+				<input type="hidden" name="id" value='@clinicForm("id").value' >
+				<input type="submit" class="btn btn-primary" value="Submit">
 }
+
+
+<script>
+
+$('.checkday').change(function() {	
+    if($(this).is(":checked")) {
+    	var id = $(this).attr("id");
+		$("#"+id+"-from").prop("disabled", false);
+		$("#"+id+"-to").prop("disabled", false);
+    }
+    else{
+		var id = $(this).attr("id");
+		$("#"+id+"-from").val("");
+		$("#"+id+"-from").attr("disabled","disabled");
+		$("#"+id+"-to").val("");
+		$("#"+id+"-to").attr("disabled","disabled");
+    }
+    $('#textbox1').val($(this).is(':checked'));        
+});
+
+
+</script>			
+			
+
 
 }

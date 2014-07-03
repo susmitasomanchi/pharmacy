@@ -8,7 +8,6 @@ import javax.persistence.Id;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToOne;
 
-
 @SuppressWarnings("serial")
 @Entity
 public class Pharmacist extends BaseEntity{
@@ -22,7 +21,11 @@ public class Pharmacist extends BaseEntity{
 	@ManyToOne(cascade=CascadeType.ALL)
 	public Pharmacy pharmacy;
 
+	@ManyToOne(cascade=CascadeType.ALL)
+	public Pharmacy pharmacy;
+
 	public String category;
+	
 	public static Finder<Long, Pharmacist> find = new Finder<Long, Pharmacist>(Long.class, Pharmacist.class);
 
 }

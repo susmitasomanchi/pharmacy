@@ -1,0 +1,44 @@
+@(diagnosticCenter: models.diagnostic.DiagnosticCentre)
+@main("Diagnostic Centre Profile") {
+<div class="container">
+	<div class="row clearfix">
+		<div class="col-md-12 column">
+			<div class="row clearfix">
+				<div class="col-md-4 column">
+					<img class="img-thumbnail" alt="140x140" src="http://lorempixel.com/140/140/" />
+				</div>
+				<div class="col-md-4 column">
+					 <address> <strong>@diagnosticCenter.name</strong><br /> @diagnosticCenter.address<br /><abbr title="Phone">@diagnosticCenter.mobileNo</abbr><br />@diagnosticCenter.emailId</address>
+				</div>
+			</div>
+		</div>
+	</div>
+
+	<h2><b><i>Services Available</i></b></h2><br>
+	
+	<div class="row clearfix">
+		<div class="col-md-12 column">
+			<table class="table table-bordered table-hover">
+					<thead>
+					<tr>
+						<th>Name</th>
+						<th>Description</th>
+						<th>Price</th>			
+					</tr>
+					</thead>
+					<tbody>
+						@for(dt <-diagnosticCenter.diagnosticTestList) {
+						<tr>
+							<td>@dt.name</td>
+							<td>@dt.description</td>
+							<td>@dt.price</td>
+						</tr>
+						}
+					</tbody>
+			</table>
+			
+		</div>
+	</div>
+</div>
+
+}

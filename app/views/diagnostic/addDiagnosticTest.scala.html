@@ -1,0 +1,27 @@
+@* registerPatient Template File *@
+@(dataForm:play.data.Form[models.diagnostic.DiagnosticTest])
+@import helper.twitterBootstrap._
+
+@main("Add a Test"){
+
+     @helper.form(action=routes.DiagnosticController.addTestProcess(),'method -> "post") {
+
+
+			
+			@helper.inputText(dataForm("name"),'class -> "inputs",'_label->"Test")
+			
+			
+			@helper.inputText(dataForm("description"),'class -> "inputs",'_label->"Description")
+			
+			@helper.inputText(dataForm("price"),'class -> "inputs",'_label->"Price")
+			
+			<input type="hidden" name="id" value='@dataForm("id").value' >
+			<input type="submit" name="submit" value="save"/>
+			<a href="/add-test-done" class="btn btn-xs btn-default">Done</a>
+		
+}
+
+
+}
+
+

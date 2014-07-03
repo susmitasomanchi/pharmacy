@@ -4,9 +4,9 @@ package controllers;
 import beans.JoinUsBean;
 import beans.LoginBean;
 import models.AppUser;
-import models.DiagnosticRepresentative;
 import models.mr.MedicalRepresentative;
 import models.mr.PharmaceuticalCompany;
+import models.diagnostic.DiagnosticRepresentative;
 import play.Logger;
 import play.data.Form;
 import play.mvc.Controller;
@@ -20,6 +20,10 @@ public class Application extends Controller {
 
 	public static Result index() {
 		return ok(views.html.index.render(loginForm));
+	}
+
+	public static Result indexX(final String str) {
+		return redirect(routes.Application.index());
 	}
 
 	//sales representator proccessing
@@ -104,4 +108,9 @@ public class Application extends Controller {
 	public static Result homePage(){
 		return ok(views.html.home.render());
 	}
+
+	public static Result sitemap(){
+		return ok(views.xml.sitemap.render("http://"));
+	}
+
 }

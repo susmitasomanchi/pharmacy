@@ -7,11 +7,13 @@ import java.util.List;
 import java.util.Map;
 
 import models.AppUser;
-import models.Appointment;
-import models.Doctor;
+import models.diagnostic.DiagnosticCentre;
 import models.Patient;
-import models.QuestionAndAnswer;
-import models.Role;
+import models.doctor.Appointment;
+import models.doctor.DaySchedule;
+import models.doctor.Doctor;
+import models.doctor.DoctorClinicInfo;
+import models.doctor.QuestionAndAnswer;
 import play.Logger;
 import play.data.Form;
 import play.mvc.Controller;
@@ -24,64 +26,49 @@ import com.avaje.ebean.Expr;
 @BasicAuth
 public class PatientController extends Controller {
 
-
-	public static Result scheduleAppointment(){
+	public static Result scheduleAppointment() {
 		final Map<Date, List<Appointment>> appointmentMap = null;
 		return ok(views.html.patient.scheduleAppointment.render(appointmentMap,null));
 	}
 
-
 	public static Result displayAppointment(final String id) {
-		if(LoginController.getLoggedInUserRole().equals(Role.MR)){
-			redirect(routes.MRController.scheduleAppointment(id));
-		}
-
-
-		List<Appointment> listAppointments=null;
+		List<Appointment> listAppointments = null;
 		final Map<Date, List<Appointment>> appointmentMap = new LinkedHashMap<Date, List<Appointment>>();
-		final Doctor doctor=Doctor.find.byId(Long.parseLong(id));
+		final Doctor doctor = Doctor.find.byId(Long.parseLong(id));
 		final Calendar calendar = Calendar.getInstance();
 		calendar.setTime(new Date());
-		calendar.set(Calendar.HOUR_OF_DAY,0);
-		calendar.set(Calendar.MINUTE,0);
-		calendar.set(Calendar.SECOND,0);
-		calendar.set(Calendar.MILLISECOND,0);
-		int size=0;
 
-		for(int i=0;i<20;i++){
-			listAppointments = Appointment.getAvailableAppointmentList(doctor, calendar.getTime());
-			if(listAppointments.size()!=0){
-				appointmentMap.put(calendar.getTime(), listAppointments);
-				size=listAppointments.size();
+		int slots=1000;
+		for (int i = 0; i <4 ; i++) {
+			for (DoctorClinicInfo clinicInfo: doctor.doctorClinicInfoList) {
+
+				for (DaySchedule schedule : clinicInfo.schedulDays) {
+
+					calendar.set(Calendar.HOUR_OF_DAY, schedule.fromTime);
+					calendar.set(Calendar.MINUTE, 0);
+					calendar.set(Calendar.SECOND, 0);
+					calendar.set(Calendar.MILLISECOND, 0);
+					listAppointments = Appointment.getAvailableAppointmentList(doctor,calendar.getTime(),schedule.toTime);
+					if(listAppointments.size() != 0 ){
+						appointmentMap.put(calendar.getTime(), listAppointments);
+						slots=Math.min(slots,listAppointments.size());
+					}
+
+
+					calendar.add(Calendar.DATE, 1);
+
+					System.out.print(calendar.getTime());
+				}
 			}
-			Logger.error(listAppointments.size()+"Test");
-
-			calendar.add(Calendar.DATE, 1);
-			calendar.set(Calendar.HOUR_OF_DAY,0);
-			calendar.set(Calendar.MINUTE,0);
-			calendar.set(Calendar.SECOND,0);
-			calendar.set(Calendar.MILLISECOND,0);
-			System.out.print(calendar.getTime());
 		}
-		return ok(views.html.patient.scheduleAppointment.render(appointmentMap,size));
+		Logger.warn(""+listAppointments.size());
+		return ok(views.html.patient.scheduleAppointment.render(appointmentMap,
+				slots));
 	}
 
-	public static Result processAppointment(){
+	public static Result processAppointment() {
 		return ok();
 	}
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 	public static Form<Patient> form = Form.form(Patient.class);
 
@@ -99,7 +86,6 @@ public class PatientController extends Controller {
 		final Form<AppUser> filledForm = registrationForm.bindFromRequest();
 
 		if (filledForm.hasErrors()) {
-			Logger.info("*** user bad request");
 			return badRequest(views.html.registerAppUser.render(filledForm));
 		} else {
 			final AppUser appUser = filledForm.get();
@@ -108,15 +94,12 @@ public class PatientController extends Controller {
 			appUser.save();
 			patient.appUser = appUser;
 			patient.save();
-			Logger.info("*** user object ");
 			return ok("Registerd ");
 		}
 
 	}
 
 	public static Result form() {
-
-		Logger.info("" + AppUser.find.all().size());
 
 		return ok(views.html.createPatient.render(form));
 		// return TODO;
@@ -129,10 +112,8 @@ public class PatientController extends Controller {
 
 	public static Result process() {
 		final Form<Patient> filledForm = form.bindFromRequest();
-		// Logger.info("enteredt");
 
 		if (filledForm.hasErrors()) {
-			Logger.info("bad request");
 			// System.out.println(filledForm.errors());
 			return badRequest(views.html.createPatient.render(filledForm));
 		} else {
@@ -140,10 +121,8 @@ public class PatientController extends Controller {
 
 			if (patient.id == null) {
 
-
 				patient.save();
-			}
-			else {
+			} else {
 
 				patient.update();
 			}
@@ -164,7 +143,7 @@ public class PatientController extends Controller {
 				.or(Expr.like("email", search + "%"),
 						Expr.like("mobileno", search + "%")).findList();
 
-		final List<Doctor> doctors=Doctor.find
+		final List<Doctor> doctors = Doctor.find
 				.where()
 				.or(Expr.like("appUser.email", search + "%"),
 						Expr.like("appUser.mobileno", search + "%")).findList();
@@ -172,16 +151,19 @@ public class PatientController extends Controller {
 		return ok(appUsers.toString());
 	}
 
-	public static  Result  displayQuestion() {
+	public static Result displayQuestion() {
 		return ok(views.html.patient.askQuestion.render(questionAndAnswerForm));
 	}
-	//Question Asked By A Patients
+
+	// Question Asked By A Patients
 	public static final Result askQuestion() {
 		try {
 			final QuestionAndAnswerBean questionAndAnswerBean = questionAndAnswerForm
 					.bindFromRequest().get();
-			final QuestionAndAnswer questionAndAnswer=questionAndAnswerBean.toEntity();
-			questionAndAnswer.questionBy = AppUser.find.byId(LoginController.getLoggedInUser().id);
+			final QuestionAndAnswer questionAndAnswer = questionAndAnswerBean
+					.toEntity();
+			questionAndAnswer.questionBy = AppUser.find.byId(LoginController
+					.getLoggedInUser().id);
 
 			questionAndAnswer.questionDate = new Date();
 
@@ -193,4 +175,58 @@ public class PatientController extends Controller {
 			return ok("-1");
 		}
 	}
+
+	/*
+	 * displaying all diagnostic centers
+	 */
+	public static Result diagnosticList() {
+		List<DiagnosticCentre> allList = DiagnosticCentre.find.all();
+
+		return ok(views.html.diagnostic.patientDiagnosticCenterList.render(allList));
+
+	}
+
+	/*
+	 * saving diagnostic center in patient favorite list
+	 */
+	public static Result saveDiagnosticCenter(Long id) {
+		DiagnosticCentre dc = DiagnosticCentre.find.byId(id);
+		Patient patient = LoginController.getLoggedInUser().getPatient();
+
+		patient.diagnosticCenterList.add(dc);
+		patient.update();
+
+		return ok("diagnostic center persisted in patient table");
+
+	}
+
+	/*
+	 * displaying diagnostic centers which are there in patient favorite list
+	 */
+
+	public static Result myDiagnosticCenters() {
+		Long id = LoginController.getLoggedInUser().getPatient().id;
+		Patient diagnoCenterList = Patient.find.where().eq("id", id)
+				.findUnique();
+		List<DiagnosticCentre> list = diagnoCenterList.diagnosticCenterList;
+
+		return ok(views.html.patient.myDiagnoList.render(list));
+
+	}
+
+	/*
+	 * removing diagnostic center from patient favorite diagnostic center list
+	 */
+
+	public static Result removePatientDiagnoCenter(final Long id) {
+
+		Patient patient = LoginController.getLoggedInUser().getPatient();
+		DiagnosticCentre centre = DiagnosticCentre.find.byId(id);
+		patient.diagnosticCenterList.remove(centre);
+		patient.update();
+
+		return redirect(routes.PatientController.myDiagnosticCenters());
+
+	}
+
 }

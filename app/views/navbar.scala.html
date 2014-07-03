@@ -62,6 +62,7 @@
             <li><a href="">Products</a></li>
             <li><a href="">Create new product</a></li>
             <li class="divider"></li>
+            <li><a href="/order">Order Entry</a></li>
             <li><a href="">Add Product to Inventory</a></li>
           </ul>
         </li>	
@@ -76,8 +77,9 @@
           <ul class="dropdown-menu">
             <li><a href="/view-products">Products</a></li>
             <li><a href="/new-product">Create new product</a></li>
+           
             <li class="divider"></li>
-            <li><a href="/addProductToInventory">Add Product to Inventory</a></li>
+            <li><a href="/searchProduct">Add Product to Inventory</a></li>
           </ul>
         </li>
         
@@ -119,9 +121,7 @@
         }
         
         
-        
         @if(LoginController.getLoggedInUserRole().equals(Role.ADMIN_MR.toString())){
-         
          <li class="dropdown">
           <a href="#" class="dropdown-toggle" data-toggle="dropdown">
          User
@@ -137,7 +137,7 @@
          Geography
           <b class="caret"></b></a>
           <ul class="dropdown-menu">
-	            <li><a href="@routes.MRController.headQuarter()">Headquarters</a></li> 
+             <li><a href="@routes.MRController.headQuarter()">Headquarters</a></li> 
             <li><a href="">Fieldstations</a></li>            
           </ul>
         </li>         
@@ -154,12 +154,12 @@
         </li>
         
     
-    	<li class="dropdown">
+     <li class="dropdown">
           <a href="#" class="dropdown-toggle" data-toggle="dropdown">
           Phamacies
           <b class="caret"></b></a>
           <ul class="dropdown-menu">
-    	        <li><a href="">List</a></li>
+             <li><a href="">List</a></li>
           </ul>
         </li>
         <li class="dropdown">
@@ -171,7 +171,16 @@
             <li><a href="/view-products">View All Product</a></li>
           </ul>
         </li>
-	
+        <li class="dropdown">
+          <a href="#" class="dropdown-toggle" data-toggle="dropdown">
+          product
+          <b class="caret"></b></a>
+          <ul class="dropdown-menu">
+            <li><a href="/new-product">Create New Product</a></li>
+            <li><a href="/view-products">View All Product</a></li>
+          </ul>
+        </li>
+ 
         <li class="dropdown">
           <a href="#" class="dropdown-toggle" data-toggle="dropdown">
           Question Answer
@@ -196,13 +205,24 @@
          
          <li class="dropdown">
           <a href="#" class="dropdown-toggle" data-toggle="dropdown">
-          Diagnostic Representatives
+          Diagnostic Centre
           <b class="caret"></b></a>
           <ul class="dropdown-menu">
-          <li><a href="/diagnosticregistration">Register Diagnostic Center</a></li> 
+          <li><a href="/diagnosticlist">View Profile</a></li> 
             <li><a href="@routes.DRController.addDiagRep()">Add Diagnostic Representative</a></li> 
-            <li><a href="/diagnosticrep/list">View Diagnostic Representative</a></li>   
-             <li><a href="/diagnosticrep/list">Add Patient</a></li>          
+            <li><a href="/diagnosticrep/list">All Diagnostic Representatives</a></li>   
+             <li><a href="/display-orders/@LoginController.getLoggedInUser().id">View Diagnostic Orders</a></li>      
+              <li><a href="/upload-patient-file">Upload Report</a></li>      
+          </ul>
+        </li> 
+         <li class="dropdown">
+          <a href="#" class="dropdown-toggle" data-toggle="dropdown">
+          Diagnostic Tests
+          <b class="caret"></b></a>
+          <ul class="dropdown-menu">
+          <li><a href="/test">add Test</a></li> 
+            <li><a href="/diagnostic-test-list">All Tests</a></li> 
+            
           </ul>
         </li> 
         
@@ -217,12 +237,12 @@
         </li>         
         
         <li class="dropdown">
-          <a href="#" class="dropdown-toggle" data-toggle="dropdown">
+          <a href="#" class="dropdown-toggle"data-toggle="dropdown">
           Doctors
           <b class="caret"></b></a>
           <ul class="dropdown-menu">
             <li><a href="/diagnosticrep/doctor-search">Search Doctor</a></li>
-            <li><a href="/diagnosticrep/doctor-list">View Doctors</a></li>
+            <li><a href="/diagnostic-centre/all-doctors">View Doctors</a></li>
             
           </ul>
         </li>
@@ -256,6 +276,7 @@
 		<li class="dropdown"><a href="#" class="dropdown-toggle" data-toggle="dropdown">@LoginController.getLoggedInUser.name <b class="caret"></b></a>
 		<ul class="dropdown-menu">
 			<li><a href="/user/preferences"><i class="fa fa-gears"></i>&nbsp;&nbsp;Preferences</a></li>
+			<li><a href="/doctor-profile"><i class="fa fa-gears"></i>&nbsp;&nbsp;My Profile</a></li>
 			<li class="divider"></li>
 			<li><a href="/change-password"><i class="fa fa-lock"></i>&nbsp;&nbsp;Change Password</a></li>
 			<li><a href="/logout"><i class="fa fa-sign-out"></i>&nbsp;&nbsp;Logout</a></li>

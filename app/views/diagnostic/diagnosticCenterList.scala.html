@@ -1,5 +1,5 @@
-@(list: List[DiagnosticCenter])
-@main("Diagnostic Representatives List") {
+@(dc: models.diagnostic.DiagnosticCentre)
+@main("Diagnostic Centers List") {
 <table class="table table-bordered">
 <thead>
 <tr>
@@ -12,7 +12,7 @@ Address
 </tr>
 </thead>
 <tbody>
-@for(dc <- list) {
+@*for(dc <- list) {*@
 <tr>
 <td>
 @dc.name
@@ -21,15 +21,15 @@ Address
 @dc.address
 </td>
 <th>
+
 <a href="/diagnostic-edit/@dc.id" class="btn btn-xs btn-success">Edit</a>
 
 
 <a href="/diagnostic-delete/@dc.id" class="btn btn-xs btn-success">Delete</a>
-<a href="/diagnostic-service-list/@dc.id" class="btn btn-xs btn-success">Tests Available</a>
-
+<a href="/test" class="btn btn-xs btn-success">Add Test</a>
 </th>
 </tr>
-}
+
 </tbody>
 </table>
 }

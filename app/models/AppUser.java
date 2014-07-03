@@ -9,12 +9,22 @@ package models;
 
 import java.util.Date;
 
+<<<<<<< HEAD
+=======
+
+>>>>>>> branch 'master' of http://pharmacy.bz/green-software/mednetwork.git
 import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.Lob;
+<<<<<<< HEAD
 import javax.persistence.OneToOne;
 
 import models.mr.MedicalRepresentative;
+=======
+
+import models.diagnostic.DiagnosticRepresentative;
+import models.doctor.Doctor;
+>>>>>>> branch 'master' of http://pharmacy.bz/green-software/mednetwork.git
 import play.data.validation.Constraints.Email;
 import play.db.ebean.Model;
 

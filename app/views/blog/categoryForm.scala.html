@@ -1,0 +1,21 @@
+@(dataForm:play.data.Form[models.blog.ArticleCategory])
+
+@import play.i18n._
+
+@if((LoginController.isLoggedIn())&&(LoginController.getLoggedInUserRole().equals(Role.BLOG_ADMIN.toString()))){
+<div>
+@blognavbar()
+</div>
+}
+
+@blogmain("", "", ""){
+
+@helper.form(action=routes.BlogController.processCategoryForm()) {
+@helper.inputText(dataForm("name"),'_label->"Name",'class->"col-sm-9")
+@helper.inputText(dataForm("position"),'_label->"Position",'class->"col-sm-9")
+
+<input type="hidden" name="id" value='@dataForm("id").value' >
+<input class="btn btn-primary" type="submit" value="Save">
+}
+
+}

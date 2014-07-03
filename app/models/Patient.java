@@ -1,12 +1,20 @@
 
 package models;
 
+import java.util.ArrayList;
+import java.util.List;
+
+import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.ManyToMany;
+import javax.persistence.ManyToOne;
+import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 
+import models.diagnostic.DiagnosticCentre;
 import play.db.ebean.Model;
 
 @SuppressWarnings("serial")
@@ -32,6 +40,9 @@ public class Patient extends BaseEntity {
 	public String doctorAvailability;
 
 	public String isUrgentPatient;
+	
+	@ManyToMany(cascade=CascadeType.ALL)
+	public List<DiagnosticCentre> diagnosticCenterList=new ArrayList<DiagnosticCentre>();
 
 	public static Model.Finder<Long, Patient> find = new Finder<Long, Patient>(Long.class, Patient.class);
 
