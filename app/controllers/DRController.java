@@ -2,16 +2,11 @@ package controllers;
 
 import java.util.List;
 
-<<<<<<< HEAD
+
 import models.AppUser;
-import models.Doctor;
 import models.diagnostic.DiagnosticCentre;
 import models.diagnostic.DiagnosticRepresentative;
-=======
-import models.DiagnosticCentre;
-import models.DiagnosticRepresentative;
 import models.doctor.Doctor;
->>>>>>> branch 'master' of http://pharmacy.bz/green-software/mednetwork.git
 import play.Logger;
 import play.data.DynamicForm;
 import play.data.Form;

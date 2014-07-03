@@ -1,5 +1,6 @@
 package models.diagnostic;
-import java.util.ArrayList;
+import java.util.ArrayList
+;
 import java.util.List;
 
 import javax.persistence.CascadeType;
@@ -11,7 +12,7 @@ import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 
 import models.BaseEntity;
-import models.Doctor;
+import models.doctor.Doctor;
 import play.data.validation.Constraints.Email;
 import play.data.validation.Constraints.Required;
 import play.db.ebean.Model;

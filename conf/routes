@@ -41,7 +41,6 @@ GET    /logout                            controllers.LoginController.processLog
 # Remove later (at Beta Launch)
 #GET    /                                  controllers.Application.index()
 #GET    /:str		                      controllers.Application.indexX(str: String)
-####################################################################################################
 
 
 # Sign up page
@@ -130,16 +129,8 @@ GET    /register-patient/                 controllers.DoctorController.registerP
 POST   /register-patient-proccess/        controllers.DoctorController.registerPatientProccess()
 
 #Diagnostic module	
-<<<<<<< HEAD
 
 GET    /diagnosticlist                   	 	controllers.DiagnosticController.diagnosticList()
-#GET    /diagnostic-service-list/:id            controllers.DiagnosticController.diagnosticServiceslist(id: Long)
-=======
-GET    /diagnosticregistration            		controllers.DiagnosticController.diagnosticCenter()
-POST   /diagnosticregistration/save       		controllers.DiagnosticController.diagnosticCenterProcess()
-#GET    /diagnosticlist                   	 	controllers.DiagnosticController.diagnosticlist()
-#GET    /diagnostic-service-list/:id            	 	controllers.DiagnosticController.diagnosticServiceslist(id: Long)
->>>>>>> branch 'master' of http://pharmacy.bz/green-software/mednetwork.git
 GET    /diagnostic-delete/:id             		controllers.DiagnosticController.deleteCenter(id: Long)
 GET    /diagnostic-edit/:id						controllers.DiagnosticController.editDiagnosticDetails(id: Long)
 POST    /diagnostic-edit 						controllers.DiagnosticController.diagnosticEditprocess()
@@ -164,16 +155,11 @@ GET    /add-test-done						  	controllers.DiagnosticController.addTestDone()
 #Diagnostic Test
 GET    /test				            		controllers.DiagnosticController.addTest()
 POST   /test/save					       		controllers.DiagnosticController.addTestProcess()
-<<<<<<< HEAD
 GET    /test-list/:id				            controllers.DiagnosticController.diagnosticTestList(id: Long)
 GET    /diagnostic-test-list				    controllers.DiagnosticController.diagnosticCentreTestList()	
-GET		/place-order							controllers.DiagnosticOrderController.receive()		
+
+POST	/place-order							controllers.DiagnosticOrderController.receive()		
 GET		/display-orders/:id						controllers.DiagnosticOrderController.viewOrders(id: Long)																																		
-=======
-#GET    /test-list/:id				            controllers.DiagnosticTestController.diagnosticTestList(id: Long)
-GET		/place-order				controllers.DiagnosticOrderController.receive()		
-GET		/display-orders/:id				controllers.DiagnosticOrderController.viewOrders(id: Long)																																		
->>>>>>> branch 'master' of http://pharmacy.bz/green-software/mednetwork.git
 #MR Module
 GET    /doctor-list                       controllers.MRController.doctorList()
 GET    /mr/add-doctor/:id                 controllers.MRController.addDoctor(id: Long)

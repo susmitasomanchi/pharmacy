@@ -7,21 +7,11 @@ import java.util.List;
 import java.util.Map;
 
 import models.AppUser;
-<<<<<<< HEAD
-import models.Appointment;
-import models.Doctor;
-=======
-import models.DiagnosticCentre;
->>>>>>> branch 'master' of http://pharmacy.bz/green-software/mednetwork.git
-import models.Patient;
-<<<<<<< HEAD
-import models.QuestionAndAnswer;
 import models.diagnostic.DiagnosticCentre;
-=======
+import models.Patient;
 import models.doctor.Appointment;
 import models.doctor.Doctor;
 import models.doctor.QuestionAndAnswer;
->>>>>>> branch 'master' of http://pharmacy.bz/green-software/mednetwork.git
 import play.data.Form;
 import play.mvc.Controller;
 import play.mvc.Result;

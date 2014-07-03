@@ -1,6 +1,7 @@
 package controllers;
 
 import java.util.ArrayList;
+
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
@@ -9,9 +10,6 @@ import models.Alert;
 import models.AppUser;
 import models.LanguageAppUser;
 import models.Patient;
-<<<<<<< HEAD
-import models.QuestionAndAnswer;
-=======
 import models.Role;
 import models.doctor.Appointment;
 import models.doctor.AppointmentStatus;
@@ -28,7 +26,6 @@ import models.doctor.DoctorLanguage;
 import models.doctor.DoctorPublication;
 import models.doctor.DoctorSocialWork;
 import models.doctor.QuestionAndAnswer;
->>>>>>> branch 'master' of http://pharmacy.bz/green-software/mednetwork.git
 import play.Logger;
 import play.data.Form;
 import play.mvc.Controller;
