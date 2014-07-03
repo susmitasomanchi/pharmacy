@@ -8,7 +8,7 @@
 @main("New Clinic"){
 	
 	@helper.form(action=routes.DoctorController.processNewClinic()) {
-	@helper.inputText(clinicForm("name"),'class -> "inputs",'_label->"Name")
+	@helper.inputText(clinicForm("name"),'class -> "inputs",'_value->"10",'_label->"Name")
 			
 	<div class="row clearfix">
 		<div class="col-md-12 column">
@@ -43,7 +43,7 @@
 				}
 			</tbody>
 			</table>	
-				@helper.inputText(clinicForm("slot"),'class -> "inputs",'_label->"Patient slot")
+				@helper.inputText(clinicForm("slot"),'_class -> "inputs",'_value->"10",'_label->"Patient slot")
 				</div>
 				<div class="col-md-6 column">
 			<table class="table">
@@ -65,14 +65,14 @@
 					}else{
 				<tr>
 					<td><input class="checkday" id="m-@day" type="checkbox" name="daysOfWeekMr[]"  value="@day.toString()">@day</input></td>
-					<td><input id="m-@day-from" type="number" name="fromHrsMr[]" disabled required></input></td>
-					<td><input id="m-@day-to" type="number" name="toHrsMr[]" disabled required></input></td>
+					<td><input id="m-@day-from" type="number" name="fromHrsMr[]" value="@clinicForm("fromHrsMr["+index+"]").value"disabled required></input></td>
+					<td><input id="m-@day-to" type="number" name="toHrsMr[]"  value="@clinicForm("toHrsMr["+index+"]").value" disabled required></input></td>
 				</tr>
 					}
 			}
 			</tbody>
 			</table>	
-					@helper.inputText(clinicForm("slotmr"),'class -> "inputs",'_label->"Mr slot")
+					@helper.inputText(clinicForm("slotmr"),'_class -> "inputs",'_value->"10",'_label->"Mr slot")
 				</div>
 			</div>
 		</div>

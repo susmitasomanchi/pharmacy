@@ -6,16 +6,13 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 
-import models.Alert;
 import models.AppUser;
 import models.LanguageAppUser;
 import models.Patient;
 import models.Role;
 import models.doctor.Appointment;
 import models.doctor.AppointmentStatus;
-import models.doctor.Clinic;
 import models.doctor.Day;
-import models.doctor.DayOfTheWeek;
 import models.doctor.DaySchedule;
 import models.doctor.Doctor;
 import models.doctor.DoctorAward;
@@ -421,7 +418,7 @@ public class DoctorController extends Controller {
 					calendar.set(Calendar.MILLISECOND,0);
 					if(schedule.requester.equals(Role.PATIENT)){
 						for (int j2 = 0; j2 <((hourToClinic*60)/docclinicInfo.slot); j2++) {
-							if(Appointment.find.where().eq("clinic",docclinicInfo.clinic).eq("appointmentTime", calendar.getTime()).findUnique()==null){
+							if(Appointment.find.where().eq("doctor",doctor).eq("clinic",docclinicInfo.clinic).eq("appointmentTime", calendar.getTime()).findUnique()==null){
 								Logger.info("  "+calendar.getTime());
 								final Appointment appointment=new Appointment();
 								appointment.appointmentStatus=AppointmentStatus.AVAILABLE;
