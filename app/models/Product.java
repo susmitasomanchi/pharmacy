@@ -1,7 +1,7 @@
 package models;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.LinkedHashMap;
+import java.util.Map;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Entity;
@@ -41,10 +41,10 @@ public class Product extends BaseEntity {
 	public Long unitsPerPack;
 
 	public String fullName;
-	
+
 	@ManyToOne(cascade=CascadeType.ALL)
 	public PharmaceuticalCompany pharmaceuticalCompany;
-	
+
 	@ManyToOne(cascade=CascadeType.ALL)
 	public Pharmacy pharmacy;
 
@@ -53,7 +53,7 @@ public class Product extends BaseEntity {
 	public static void update(final Long id, final Product product) {
 		product.update(id);
 	}
-	
+
 	public static Map<String, String> options() {
 
 		final LinkedHashMap<String, String> vals = new LinkedHashMap<String, String>();

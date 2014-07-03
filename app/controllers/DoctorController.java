@@ -1,7 +1,6 @@
 package controllers;
 
 import java.util.ArrayList;
-
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
@@ -39,6 +38,7 @@ import com.avaje.ebean.Ebean;
 @BasicAuth
 public class DoctorController extends Controller {
 
+	public static Form<Doctor> form= Form.form(Doctor.class);
 	public static Form<PatientBean> patientForm = Form.form(PatientBean.class);
 	public static Form<ClinicBean> clinicForm = Form.form(ClinicBean.class);
 	public static Form<DoctorExperience> experienceForm = Form.form(DoctorExperience.class);
@@ -252,7 +252,7 @@ public class DoctorController extends Controller {
 			return ok(views.html.doctor.newClinic.render(clinicForm,new ArrayList<String>(),new ArrayList<String>()));
 		}
 		else{
-			DoctorClinicInfo clinicInfo =filledForm.get().toDoctorClinicInfo();
+			final DoctorClinicInfo clinicInfo =filledForm.get().toDoctorClinicInfo();
 
 
 			if (filledForm.get().id!=null) {
@@ -385,7 +385,7 @@ public class DoctorController extends Controller {
 
 
 
-		for (DaySchedule schedule : docclinicInfo.schedulDays) {
+		for (final DaySchedule schedule : docclinicInfo.schedulDays) {
 			Logger.info(schedule.fromTime.toString());
 			Logger.info(schedule.toTime.toString());
 			Logger.info(schedule.day.toString());
@@ -404,7 +404,7 @@ public class DoctorController extends Controller {
 
 
 		for(int date=0;date<31;date++){
-			for (DaySchedule schedule : docclinicInfo.schedulDays) {
+			for (final DaySchedule schedule : docclinicInfo.schedulDays) {
 
 				Logger.info(schedule.day+ " "+ schedule.fromTime+" "+schedule.toTime);
 
@@ -464,8 +464,8 @@ public class DoctorController extends Controller {
 
 
 	// Re-Create Appointment
-	public static Result reCreateAppointment(DoctorClinicInfo clinicInfo) {
-		List<Appointment> appointments = Appointment.find.where()
+	public static Result reCreateAppointment(final DoctorClinicInfo clinicInfo) {
+		final List<Appointment> appointments = Appointment.find.where()
 				.eq("doctor",clinicInfo.doctor)
 				.eq("clinic",clinicInfo.clinic)
 				.eq("appointmentStatus",AppointmentStatus.AVAILABLE)
@@ -488,8 +488,8 @@ public class DoctorController extends Controller {
 			return false;
 		}
 		for(int i=0;i<arrayList1.size();i++){
-			DaySchedule schedule=arrayList1.get(i);
-			DaySchedule scheduleMr=arrayList2.get(i);
+			final DaySchedule schedule=arrayList1.get(i);
+			final DaySchedule scheduleMr=arrayList2.get(i);
 			if(!schedule.equals(scheduleMr)){
 				return schedule.equals(scheduleMr);
 			}
@@ -520,7 +520,6 @@ public class DoctorController extends Controller {
 	//Todays Appointment
 	public static Result viewTodaysAppointment() {
 
-
 		final Calendar calendar=Calendar.getInstance();
 		calendar.setTime(new Date());
 		calendar.set(Calendar.HOUR_OF_DAY, 0);
@@ -533,6 +532,35 @@ public class DoctorController extends Controller {
 
 
 		return ok(views.html.doctor.viewTodaysAppointment.render(appointments));
+
+	}
+
+	public static Result form() {
+		return ok(views.html.createDoctor.render(form));
+		//return TODO;
+	}
+
+	public static Result process() {
+		final Form<Doctor> filledForm = form.bindFromRequest();
+
+		if(filledForm.hasErrors()) {
+
+			return badRequest(views.html.createDoctor.render(filledForm));
+		}
+		else {
+			final Doctor doctor= filledForm.get();
+
+			if(doctor.id == null) {
+
+				doctor.save();
+			}
+			else {
+
+				doctor.update();
+			}
+		}
+		return TODO;
+		//return redirect(routes.UserController.list());
 
 	}
 

@@ -15,7 +15,7 @@ import javax.persistence.OneToOne;
 
 import models.AppUser;
 import models.BaseEntity;
-import models.Doctor;
+import models.doctor.Doctor;
 
 @SuppressWarnings("serial")
 @Entity
@@ -33,18 +33,18 @@ public class MedicalRepresentative extends BaseEntity{
 	public String companyName;
 
 	public String typesOfMedecine;
-	
+
 	public Long mrAdminId;
-	
+
 	@ManyToOne
 	public PharmaceuticalCompany pharmaceuticalCompany = new PharmaceuticalCompany();
-    
+
 	@ManyToMany(cascade=CascadeType.ALL)
 	public List<Doctor> doctorList = new ArrayList<Doctor>();
-	
+
 	@OneToMany(cascade=CascadeType.ALL)
 	public List<DailyCallReport> dcrList = new ArrayList<DailyCallReport>();
-	
+
 	public static Finder<Long, MedicalRepresentative> find = new Finder<Long, MedicalRepresentative>(Long.class, MedicalRepresentative.class);
 
 }

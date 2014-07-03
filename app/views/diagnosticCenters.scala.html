@@ -1,0 +1,61 @@
+@* registerPatient Template File *@
+@(dataForm:play.data.Form[models.diagnostic.DiagnosticCentre])
+@import helper.twitterBootstrap._
+
+@main("Diagnostic Form"){
+<div class="row">
+<div class="col-md-4">
+<div class="btn-group btn-group-justified">
+  <a href="#myModal" data-toggle="modal" class="btn btn-default btn-sm">Registration Form</a>
+  <a href="/diagnosticlist" class="btn btn-default btn-sm">Diagnostic Centers</a>
+</div>
+</div>
+    <form class="navbar-search pull-right">
+    <input type="text" class="search-query" placeholder="Search">
+    <button type="submit" class="btn btn-default btn-sm">Search By Name</button>
+    </form>
+</div>
+
+<div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+        <h4 class="modal-title" id="myModalLabel">Diagnostic Form</h4>
+      </div>
+      <div class="modal-body">
+     @helper.form(action=routes.DiagnosticController.diagnosticCenterProcess(),'method -> "post") {
+
+
+			
+			@helper.inputText(dataForm("name"),'class -> "inputs",'_label->"Name")
+			
+			
+			@helper.inputText(dataForm("services"),'class -> "inputs",'_label->"Services")
+			
+			@helper.inputText(dataForm("costOfServices"),'class -> "inputs",'_label->"Cost")
+			
+			@helper.inputText(dataForm("contactPersonName"),'class -> "inputs",'_label->"Contact Name")
+			
+			@helper.inputText(dataForm("address"),'class -> "inputs",'_label->"Address")
+			
+			@helper.inputText(dataForm("city"),'class -> "inputs",'_label->"City")
+			
+			@helper.inputText(dataForm("mobileNo"),'class -> "inputs",'_label->"Mobile No")
+						
+			@helper.inputText(dataForm("emailId"),'class -> "inputs",'_label->"Email")
+			
+			
+			@helper.inputText(dataForm("websiteName"),'class -> "inputs",'_label->"Website")
+			
+			<input type="submit" name="submit" value="register"/>
+		
+</div>
+      </div>
+  </div>
+</div>
+
+
+
+	}		
+}

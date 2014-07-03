@@ -13,8 +13,8 @@ import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 
 import models.BaseEntity;
-import models.Doctor;
 import models.Product;
+import models.doctor.Doctor;
 
 
 @SuppressWarnings("serial")

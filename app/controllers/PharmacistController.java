@@ -3,15 +3,8 @@ package controllers;
 
 import java.util.List;
 
-import beans.AddProductToInventoryBean;
-
-import com.avaje.ebean.Expr;
-
-import actions.BasicAuth;
-import models.AppUser;
 import models.Batch;
 import models.Inventory;
-import models.Patient;
 import models.Pharmacist;
 import models.Pharmacy;
 import models.Product;
@@ -19,6 +12,10 @@ import play.Logger;
 import play.data.Form;
 import play.mvc.Controller;
 import play.mvc.Result;
+import actions.BasicAuth;
+import beans.AddProductToInventoryBean;
+
+import com.avaje.ebean.Expr;
 
 @BasicAuth
 public class PharmacistController extends Controller{
@@ -36,72 +33,31 @@ public class PharmacistController extends Controller{
 	public static Form<Batch> batchForm = Form.form(Batch.class);
 
 
-	//
-	//	public static Result productForm() {
-	//
-	//		return ok(views.html.pharmacist.createProduct.render(productForm));
-	//		//return TODO;
-	//	}
-	//
-	//	public static Result saveProduct() {
-	//		final Form<Product> productFilledForm = productForm.bindFromRequest();
-	//		if(productFilledForm.hasErrors()) {
-	//			Logger.info("bad request");
-	//
-	//			return badRequest(views.html.pharmacist.createProduct.render(productFilledForm));
-	//		}
-	//		else {
-	//			final Product product= productFilledForm.get();
-	//
-	//			if(product.id == null) {
-	//				product.save();
-	//
-	//			}
-	//			else {
-	//				product.update();
-	//			}
-	//
-	//		}
-	//		//return ok("User Created");
-	//		//return TODO;
-	//		//return ok(views.html.dashboard.render(appUser));
-	//		return redirect(routes.UserActions.dashboard());
-	//	}
-	//
-	//	public static Result displayProducts() {
-	//		final List<Product> products=Product.find.all();
-	//		return ok(views.html.pharmacist.products.render(products));
-	//	}
 
 
-	/*public static Result productForm() {
 
 	public static Result searchForm()
 	{
 		final List<Product> products=Product.find.all();
 		return ok(views.html.pharmacist.searchProduct.render(products));
-	}*/
-
-	/*public static Result saveProduct() {
-		final Form<Product> productFilledForm = productForm.bindFromRequest();
-		if(productFilledForm.hasErrors()) {
-			Logger.info("bad request");
-
-
-
-
-		}
-		//return ok("User Created");
-		//return TODO;
-		//return ok(views.html.dashboard.render(appUser));
-		return redirect(routes.UserActions.dashboard());
-	}*/
-
-	/*public static Result displayProducts() {
-		final List<Product> products=Product.find.all();
-		return ok(views.html.pharmacist.products.render(products, productForm));
 	}
-*/
+
+
+
+
+
+	public static Result searchProduct(final String search) {
+
+		// final List<Patient> patients=Patient.find.where().eq("appUser.email",
+		// "mitesh@greensoftware.in").findList();
+
+		final List<Product> products = Product.find
+				.where()
+				.or(Expr.like("medicineName", search + "%"),
+						Expr.like("typeOfMedicine", search + "%")).findList();
+
+		return ok(products.toString());
+	}
 
 
 

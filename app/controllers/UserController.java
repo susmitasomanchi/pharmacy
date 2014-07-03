@@ -8,13 +8,13 @@ PLEASE DO NOT MODIFY IT BY HAND
 package controllers;
 
 import models.AppUser;
-import models.DiagnosticCenter;
-import models.DiagnosticRepresentative;
-import models.Doctor;
 import models.Patient;
 import models.Pharmacist;
 import models.Pharmacy;
 import models.Role;
+import models.diagnostic.DiagnosticCentre;
+import models.diagnostic.DiagnosticRepresentative;
+import models.doctor.Doctor;
 import models.mr.MedicalRepresentative;
 import models.mr.PharmaceuticalCompany;
 import play.Logger;
@@ -75,29 +75,29 @@ public class UserController extends Controller {
 
 			if(appUser.role == Role.ADMIN_MR){
 				final MedicalRepresentative medicalRepresentative = new MedicalRepresentative();
-                final PharmaceuticalCompany pharmaCompany = new PharmaceuticalCompany();
+				final PharmaceuticalCompany pharmaCompany = new PharmaceuticalCompany();
 				medicalRepresentative.appUser = appUser;
 				medicalRepresentative.save();
 				pharmaCompany.name = filledForm.get().pharmaceuticalCompanyName;
-				
+
 				pharmaCompany.mrList.add(medicalRepresentative);
 				pharmaCompany.save();
 				medicalRepresentative.pharmaceuticalCompany = pharmaCompany;
 				medicalRepresentative.update();
-				
+
 			}
-			
+
 			if(appUser.role == Role.MR){
-//				final MedicalRepresentative medicalRepresentative = new MedicalRepresentative();
-//				medicalRepresentative.appUser = appUser;
-//				medicalRepresentative.regionAlloted=mR.regionAlloted;
-//				medicalRepresentative.save();
-				MedicalRepresentative medicalRepresentative = mR.get();
+				//				final MedicalRepresentative medicalRepresentative = new MedicalRepresentative();
+				//				medicalRepresentative.appUser = appUser;
+				//				medicalRepresentative.regionAlloted=mR.regionAlloted;
+				//				medicalRepresentative.save();
+				final MedicalRepresentative medicalRepresentative = mR.get();
 				medicalRepresentative.appUser = appUser;
-				medicalRepresentative.mrAdminId =  LoginController.getLoggedInUser().id; 
+				medicalRepresentative.mrAdminId =  LoginController.getLoggedInUser().id;
 				medicalRepresentative.save();
 			}
-			
+
 
 
 			if(appUser.role == Role.ADMIN_DIAGREP){
@@ -110,11 +110,11 @@ public class UserController extends Controller {
 				diagnosticCenter.save();
 				diagRep.diagnosticCentre = diagnosticCenter;
 				diagRep.update();
-				
+
 				Logger.info(diagRep.diagnosticCentre.name);
-				
+
 			}
-			
+
 			session().clear();
 			session(Constants.LOGGED_IN_USER_ID, appUser.id + "");
 			session(Constants.LOGGED_IN_USER_ROLE, appUser.role+ "");

@@ -7,10 +7,10 @@ import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
-import models.Appointment;
-import models.Doctor;
 import models.HeadQuarter;
 import models.Product;
+import models.doctor.Appointment;
+import models.doctor.Doctor;
 import models.mr.DCRLineItem;
 import models.mr.DailyCallReport;
 import models.mr.MedicalRepresentative;

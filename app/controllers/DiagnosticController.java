@@ -14,22 +14,22 @@ import models.diagnostic.DiagnosticTest;
 
 import org.apache.commons.io.FileUtils;
 
-import beans.DiagnosticBean;
 import play.Logger;
 import play.data.DynamicForm;
 import play.data.Form;
 import play.mvc.Controller;
 import play.mvc.Http.MultipartFormData.FilePart;
 import play.mvc.Result;
+import beans.DiagnosticBean;
 
 public class DiagnosticController extends Controller {
 	public static DiagnosticRepresentative dr = LoginController.getLoggedInUser()
 			.getDiagnosticRepresentative();
 	public static DiagnosticCentre dc = dr.diagnosticCentre;
-	
+
 	public static Form<DiagnosticBean> diagnosticBeanForm = Form
 			.form(DiagnosticBean.class);
-	
+
 	public static Form<DiagnosticCentre> diagnosticForm = Form
 			.form(DiagnosticCentre.class);
 
@@ -43,9 +43,34 @@ public class DiagnosticController extends Controller {
 	 * list out all diagnostic centers
 	 * from diagnostic center table
 	 */
+	public static Result diagnosticCenter() {
+		return ok(views.html.diagnosticCenters.render(diagnosticForm));
+	}
+
+
+	public static Result diagnosticCenterProcess() {
+		final Form<DiagnosticCentre> filledForm = diagnosticForm
+				.bindFromRequest();
+
+		if (filledForm.hasErrors()) {
+			Logger.info("*** user bad request");
+			return badRequest(views.html.diagnosticCenters.render(filledForm));
+		} else {
+			// final SalesRep salesRepForm = filledForm.get();
+			final DiagnosticCentre diagForm = filledForm.get();
+			Logger.info("*** user object ");
+
+			// final AppUser appUser = salesRepForm.toEntity();
+			diagForm.save();
+			final String message = flash("success");
+
+			return ok(String.format("Saved product %s", diagForm));
+		}
+
+	}
 	public static Result diagnosticList() {
-		Long id=LoginController.getLoggedInUser().getDiagnosticRepresentative().id;
-		DiagnosticCentre allList = DiagnosticCentre.find.byId(id);
+		final Long id=LoginController.getLoggedInUser().getDiagnosticRepresentative().id;
+		final DiagnosticCentre allList = DiagnosticCentre.find.byId(id);
 
 		return ok(views.html.diagnostic.diagnosticCenterList.render(allList));
 
@@ -55,8 +80,8 @@ public class DiagnosticController extends Controller {
 	 * deleting diagnostic center
 	 * from table based on id
 	 */
-	public static Result deleteCenter(Long id) {
-		DiagnosticCentre dc = DiagnosticCentre.find.byId(id);
+	public static Result deleteCenter(final Long id) {
+		final DiagnosticCentre dc = DiagnosticCentre.find.byId(id);
 		dc.delete();
 		return ok("deleted successfully");
 	}
@@ -64,7 +89,7 @@ public class DiagnosticController extends Controller {
 	/*
 	 * editing the diagnostic center details
 	 */
-	public static Result editDiagnosticDetails(Long id) {
+	public static Result editDiagnosticDetails(final Long id) {
 		final DiagnosticCentre dc = DiagnosticCentre.find.byId(id);
 		final Form<DiagnosticBean> filledForm = diagnosticBeanForm.fill(dc.toBean());
 		return ok(views.html.diagnostic.diagnosticReg.render(filledForm));
@@ -77,15 +102,15 @@ public class DiagnosticController extends Controller {
 			return badRequest(views.html.diagnostic.diagnosticReg
 					.render(filledForm));
 		} else {
-			
+
 			final DiagnosticCentre dc = filledForm.get().toDiagnosticCentre();
 			//dc.diagnosticRepAdmin.appUser=filledForm.get().toAppUserEntity();
 			dc.update();
 		}
 		return ok("updated successfully");
 	}
-	
-		public static Result diagnosticSearch(){
+
+	public static Result diagnosticSearch(){
 		return ok(views.html.diagnostic.diagnosticSearch.render());
 
 	}
@@ -111,7 +136,7 @@ public class DiagnosticController extends Controller {
 				return ok(views.html.diagnostic.patientDiagnosticCenterList
 						.render(dcSearch));
 			}
-			// if it is an email	
+			// if it is an email
 			else if (searchStr.contains("@")) {
 
 				final List<DiagnosticCentre> dcSearch = DiagnosticCentre.find
@@ -159,8 +184,8 @@ public class DiagnosticController extends Controller {
 
 			final DiagnosticTest diagTestForm = filledForm.get();
 			Logger.info("*** user object ");
-			Long id=LoginController.getLoggedInUser().getDiagnosticRepresentative().id;
-			DiagnosticCentre dc=DiagnosticCentre.find.byId(id);
+			final Long id=LoginController.getLoggedInUser().getDiagnosticRepresentative().id;
+			final DiagnosticCentre dc=DiagnosticCentre.find.byId(id);
 			dc.diagnosticTestList.add(diagTestForm);
 			dc.update();
 
@@ -169,7 +194,7 @@ public class DiagnosticController extends Controller {
 
 	}
 	public static Result addTestDone(){
-		AppUser appUser = UserController.joinUsForm.bindFromRequest().get().toAppUser();
+		final AppUser appUser = UserController.joinUsForm.bindFromRequest().get().toAppUser();
 		return ok(views.html.dashboard.render(appUser));
 	}
 	/*
@@ -178,8 +203,8 @@ public class DiagnosticController extends Controller {
 	 * incoming id
 	 */
 
-	public static Result diagnosticTestList(Long id) {
-		DiagnosticCentre diagnosticCenter =  DiagnosticCentre.find.byId(id);
+	public static Result diagnosticTestList(final Long id) {
+		final DiagnosticCentre diagnosticCenter =  DiagnosticCentre.find.byId(id);
 		//List<DiagnosticTest> diagnosticTestList=diagnosticCenter.diagnosticTestList;
 		return ok(views.html.diagnostic.diagnosticCentreProfile.render(diagnosticCenter));
 	}
@@ -188,7 +213,7 @@ public class DiagnosticController extends Controller {
 		return ok(views.html.diagnostic.diagnosticCentreTestProfile.render(dc));
 	}
 	/*
-	 * uploading the 
+	 * uploading the
 	 * Diagnostic report
 	 */
 	public static Result uploadFile() {
@@ -197,25 +222,25 @@ public class DiagnosticController extends Controller {
 
 
 	public static Result uploadFileProcess() {
-		DiagnosticReport upload=new DiagnosticReport();
-		play.mvc.Http.MultipartFormData body = request().body().asMultipartFormData();
-		FilePart file = body.getFile("upload");
+		final DiagnosticReport upload=new DiagnosticReport();
+		final play.mvc.Http.MultipartFormData body = request().body().asMultipartFormData();
+		final FilePart file = body.getFile("upload");
 		if (file != null) {
-			String fileName = file.getFilename();
-			String contentType = file.getContentType(); 		    
-			File file1=file.getFile();
-			byte[] bytes = new byte[(int) file1.length()];
+			final String fileName = file.getFilename();
+			final String contentType = file.getContentType();
+			final File file1=file.getFile();
+			final byte[] bytes = new byte[(int) file1.length()];
 			try {
-				FileInputStream fileInputStream = new FileInputStream(file1);
+				final FileInputStream fileInputStream = new FileInputStream(file1);
 				fileInputStream.read(bytes);
 				for (int i = 0; i < bytes.length; i++) {
 					System.out.print((char)bytes[i]);
 				}
-			} catch (FileNotFoundException e) {
+			} catch (final FileNotFoundException e) {
 				System.out.println("File Not Found.");
 				e.printStackTrace();
 			}
-			catch (IOException e1) {
+			catch (final IOException e1) {
 				System.out.println("Error Reading The File.");
 				e1.printStackTrace();
 			}
@@ -226,23 +251,23 @@ public class DiagnosticController extends Controller {
 			return ok(views.html.diagnostic.download.render(upload));
 		} else {
 			flash("error", "Missing file");
-			return ok("got error while uploading");    
-		}			
-	}	
+			return ok("got error while uploading");
+		}
+	}
 
 	/*
-	 * downloading the 
+	 * downloading the
 	 * Diagnostic report
 	 */
 	public static Result downloadFile() {
-		Long id=(long) 1;
-		DiagnosticReport diagReport = DiagnosticReport.find.byId(id);
-		response().setContentType("application/x-download"); 
-		response().setHeader("Content-disposition","attachment; filename="+diagReport.fileName); 
-		File file = new File(diagReport.fileName);
+		final Long id=(long) 1;
+		final DiagnosticReport diagReport = DiagnosticReport.find.byId(id);
+		response().setContentType("application/x-download");
+		response().setHeader("Content-disposition","attachment; filename="+diagReport.fileName);
+		final File file = new File(diagReport.fileName);
 		try {
 			FileUtils.writeByteArrayToFile(file, diagReport.fileContent);
-		} catch (IOException e) {
+		} catch (final IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}

@@ -9,22 +9,13 @@ package models;
 
 import java.util.Date;
 
-<<<<<<< HEAD
-=======
-
->>>>>>> branch 'master' of http://pharmacy.bz/green-software/mednetwork.git
 import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.Lob;
-<<<<<<< HEAD
-import javax.persistence.OneToOne;
-
-import models.mr.MedicalRepresentative;
-=======
 
 import models.diagnostic.DiagnosticRepresentative;
 import models.doctor.Doctor;
->>>>>>> branch 'master' of http://pharmacy.bz/green-software/mednetwork.git
+import models.mr.MedicalRepresentative;
 import play.data.validation.Constraints.Email;
 import play.db.ebean.Model;
 
@@ -52,7 +43,7 @@ public class AppUser extends BaseEntity {
 	public Date dob;
 
 	public Role role;
-	
+
 	//@OneToOne(mappedBy="appUser")
 	//public MedicalRepresentative mr;
 
@@ -73,7 +64,7 @@ public class AppUser extends BaseEntity {
 	public MedicalRepresentative getMedicalRepresentative() {
 		return MedicalRepresentative.find.where().eq("appUser.id", this.id).findUnique();
 	}
-	
+
 	public DiagnosticRepresentative getDiagnosticRepresentative() {
 		return DiagnosticRepresentative.find.where().eq("appUser.id", this.id).findUnique();
 	}
