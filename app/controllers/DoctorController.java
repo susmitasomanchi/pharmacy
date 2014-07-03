@@ -427,14 +427,13 @@ public class DoctorController extends Controller {
 								appointment.save();
 								calendar.add(Calendar.MINUTE, docclinicInfo.slot);
 							}
-							else
-							{
+							else{
 								calendar.add(Calendar.MINUTE, docclinicInfo.slot);
 							}
 						}
 					}else {
 						for (int j2 = 0; j2 <((hourToClinic*60)/docclinicInfo.slotmr); j2++) {
-							if(Appointment.find.where().eq("clinic",docclinicInfo.clinic).eq("appointmentTime", calendar.getTime()).findUnique()==null){
+							if(Appointment.find.where().eq("doctor",doctor).eq("clinic",docclinicInfo.clinic).eq("appointmentTime", calendar.getTime()).findUnique()==null){
 								Logger.info("  "+calendar.getTime());
 								final Appointment appointment=new Appointment();
 								appointment.appointmentStatus=AppointmentStatus.AVAILABLE;

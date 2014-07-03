@@ -228,16 +228,8 @@ create table doctor (
   specialization            varchar(255),
   position                  varchar(255),
   degree                    varchar(255),
-  test                      varchar(255),
   doctor_type               varchar(255),
   experience                varchar(255),
-  home_facility             varchar(255),
-  fees                      integer,
-  clinic_address            varchar(255),
-  hospital_address          varchar(255),
-  hospital_address1         varchar(255),
-  timings                   varchar(255),
-  category_of_doctor        varchar(255),
   last_update               timestamp not null,
   constraint pk_doctor primary key (id))
 ;
@@ -442,7 +434,7 @@ create table prescription (
 
 create table product (
   id                        bigint not null,
-  pharmaceutical_company_id bigint not null,
+  pharmacy_id               bigint not null,
   medicine_name             varchar(255),
   brand_name                varchar(255),
   salt                      varchar(255),
@@ -672,8 +664,8 @@ alter table pharmacy add constraint fk_pharmacy_adminPharmacist_43 foreign key (
 create index ix_pharmacy_adminPharmacist_43 on pharmacy (admin_pharmacist_id);
 alter table prescription add constraint fk_prescription_appointment_44 foreign key (appointment_id) references appointment (id);
 create index ix_prescription_appointment_44 on prescription (appointment_id);
-alter table product add constraint fk_product_pharmaceutical_com_45 foreign key (pharmaceutical_company_id) references pharmaceutical_company (id);
-create index ix_product_pharmaceutical_com_45 on product (pharmaceutical_company_id);
+alter table product add constraint fk_product_pharmacy_45 foreign key (pharmacy_id) references pharmacy (id);
+create index ix_product_pharmacy_45 on product (pharmacy_id);
 alter table question_and_answer add constraint fk_question_and_answer_questi_46 foreign key (question_by_id) references app_user (id);
 create index ix_question_and_answer_questi_46 on question_and_answer (question_by_id);
 alter table question_and_answer add constraint fk_question_and_answer_answer_47 foreign key (answer_by_id) references app_user (id);
