@@ -128,9 +128,7 @@
 	
 	<script>
 	    function addLineItem(){
-	    	alert('ssss');
 	        $.post('/mr/dcr/add-line-item',$('#dcrliform').serialize(),function(html){
-				alert(html);
 				$('#dcrLineItemTable').html(html);
 			});
 		}
