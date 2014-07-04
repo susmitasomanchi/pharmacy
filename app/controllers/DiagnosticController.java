@@ -7,9 +7,10 @@ import java.io.IOException;
 import java.util.List;
 
 import models.AppUser;
-import models.DiagnosticCentre;
-import models.DiagnosticReport;
-import models.DiagnosticTest;
+import models.diagnostic.DiagnosticCentre;
+import models.diagnostic.DiagnosticReport;
+import models.diagnostic.DiagnosticRepresentative;
+import models.diagnostic.DiagnosticTest;
 
 import org.apache.commons.io.FileUtils;
 
@@ -19,8 +20,16 @@ import play.data.Form;
 import play.mvc.Controller;
 import play.mvc.Http.MultipartFormData.FilePart;
 import play.mvc.Result;
+import beans.DiagnosticBean;
 
 public class DiagnosticController extends Controller {
+	public static DiagnosticRepresentative dr = LoginController.getLoggedInUser()
+			.getDiagnosticRepresentative();
+	public static DiagnosticCentre dc = dr.diagnosticCentre;
+
+	public static Form<DiagnosticBean> diagnosticBeanForm = Form
+			.form(DiagnosticBean.class);
+
 	public static Form<DiagnosticCentre> diagnosticForm = Form
 			.form(DiagnosticCentre.class);
 
@@ -30,13 +39,14 @@ public class DiagnosticController extends Controller {
 	public static Form<DiagnosticReport> diagReport = Form
 			.form(DiagnosticReport.class);
 
+	/*
+	 * list out all diagnostic centers
+	 * from diagnostic center table
+	 */
 	public static Result diagnosticCenter() {
 		return ok(views.html.diagnosticCenters.render(diagnosticForm));
 	}
-	/*
-	 * storing diagnostic center details
-	 * in table
-	 */
+
 
 	public static Result diagnosticCenterProcess() {
 		final Form<DiagnosticCentre> filledForm = diagnosticForm
@@ -58,10 +68,6 @@ public class DiagnosticController extends Controller {
 		}
 
 	}
-	/*
-	 * list out all diagnostic centers
-	 * from diagnostic center table
-	 */
 	public static Result diagnosticList() {
 		final Long id=LoginController.getLoggedInUser().getDiagnosticRepresentative().id;
 		final DiagnosticCentre allList = DiagnosticCentre.find.byId(id);
@@ -85,30 +91,25 @@ public class DiagnosticController extends Controller {
 	 */
 	public static Result editDiagnosticDetails(final Long id) {
 		final DiagnosticCentre dc = DiagnosticCentre.find.byId(id);
-		final Form<DiagnosticCentre> filledForm = diagnosticForm.fill(dc);
-		final DiagnosticCentre diagForm = filledForm.get();
-		diagForm.update();
+		final Form<DiagnosticBean> filledForm = diagnosticBeanForm.fill(dc.toBean());
 		return ok(views.html.diagnostic.diagnosticReg.render(filledForm));
 	}
 
 	public static Result diagnosticEditprocess() {
-		final Form<DiagnosticCentre> filledForm = diagnosticForm
+		final Form<DiagnosticBean> filledForm = diagnosticBeanForm
 				.bindFromRequest();
 		if (filledForm.hasErrors()) {
 			return badRequest(views.html.diagnostic.diagnosticReg
 					.render(filledForm));
 		} else {
-			final DiagnosticCentre dc = filledForm.get();
 
-			if (dc.id == null) {
-				dc.save();
-
-			} else {
-				dc.update();
-			}
+			final DiagnosticCentre dc = filledForm.get().toDiagnosticCentre();
+			//dc.diagnosticRepAdmin.appUser=filledForm.get().toAppUserEntity();
+			dc.update();
 		}
-		return ok();
+		return ok("updated successfully");
 	}
+
 	public static Result diagnosticSearch(){
 		return ok(views.html.diagnostic.diagnosticSearch.render());
 
@@ -204,10 +205,13 @@ public class DiagnosticController extends Controller {
 
 	public static Result diagnosticTestList(final Long id) {
 		final DiagnosticCentre diagnosticCenter =  DiagnosticCentre.find.byId(id);
-		final List<DiagnosticTest> diagnosticTestList=diagnosticCenter.diagnosticTestList;
+		//List<DiagnosticTest> diagnosticTestList=diagnosticCenter.diagnosticTestList;
 		return ok(views.html.diagnostic.diagnosticCentreProfile.render(diagnosticCenter));
 	}
+	public static Result diagnosticCentreTestList() {
 
+		return ok(views.html.diagnostic.diagnosticCentreTestProfile.render(dc));
+	}
 	/*
 	 * uploading the
 	 * Diagnostic report
@@ -256,7 +260,7 @@ public class DiagnosticController extends Controller {
 	 * Diagnostic report
 	 */
 	public static Result downloadFile() {
-		final Long id=(long) 2;
+		final Long id=(long) 1;
 		final DiagnosticReport diagReport = DiagnosticReport.find.byId(id);
 		response().setContentType("application/x-download");
 		response().setHeader("Content-disposition","attachment; filename="+diagReport.fileName);

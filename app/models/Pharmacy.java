@@ -9,6 +9,7 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.OneToMany;
+import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 
 @SuppressWarnings("serial")
@@ -26,9 +27,12 @@ public class Pharmacy extends BaseEntity {
 	public String contactNo;
 
 	public String testField;
-
-	@OneToOne
-	public Pharmacist adminPharmacist;
+	
+	//@OneToOne
+	//public PharmacyProductInfo pharmacyProductInfo;
+	
+	@OneToMany(cascade=CascadeType.ALL)
+	public List<Product> productList = new ArrayList<Product>();
 
 	@OneToMany(cascade=CascadeType.ALL)
 	public List<Pharmacist> pharmacistList = new ArrayList<Pharmacist>();
@@ -36,8 +40,7 @@ public class Pharmacy extends BaseEntity {
 	@OneToMany(cascade=CascadeType.ALL)
 	public List<Inventory> inventoryList = new ArrayList<Inventory>();
 
-	@OneToMany(cascade=CascadeType.ALL)
-	public List<Product> productsList = new ArrayList<Product>();
+	
 
 	public static Finder<Long, Pharmacy> find = new Finder<Long, Pharmacy>(Long.class, Pharmacy.class);
 

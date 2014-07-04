@@ -2,6 +2,7 @@ package models;
 
 import javax.persistence.Entity;
 
+import models.diagnostic.DiagnosticTest;
 import play.db.ebean.Model;
 
 @SuppressWarnings("serial")

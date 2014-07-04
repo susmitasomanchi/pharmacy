@@ -1,5 +1,5 @@
 @* registerPatient Template File *@
-@(dataForm:play.data.Form[models.DiagnosticCentre])
+@(dataForm:play.data.Form[beans.DiagnosticBean])
 @import helper.twitterBootstrap._
 
 @main("Diagnostic Form"){
@@ -10,13 +10,7 @@
 			
 			@helper.inputText(dataForm("name"),'class -> "inputs",'_label->"Name")
 			
-			
-			@helper.inputText(dataForm("services"),'class -> "inputs",'_label->"Services")
-			
-			@helper.inputText(dataForm("costOfServices"),'class -> "inputs",'_label->"Cost")
-			
-			@helper.inputText(dataForm("contactPersonName"),'class -> "inputs",'_label->"Contact Name")
-			
+				
 			@helper.inputText(dataForm("address"),'class -> "inputs",'_label->"Address")
 			
 			@helper.inputText(dataForm("city"),'class -> "inputs",'_label->"City")

@@ -14,6 +14,7 @@ import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 
+import models.diagnostic.DiagnosticCentre;
 import play.db.ebean.Model;
 
 @SuppressWarnings("serial")

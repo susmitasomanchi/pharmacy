@@ -7,7 +7,7 @@ import java.util.List;
 import java.util.Map;
 
 import models.AppUser;
-import models.DiagnosticCentre;
+import models.diagnostic.DiagnosticCentre;
 import models.Patient;
 import models.doctor.Appointment;
 import models.doctor.DaySchedule;

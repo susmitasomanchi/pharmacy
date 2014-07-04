@@ -1,0 +1,35 @@
+@(dcrList:List[models.mr.DailyCallReport])
+@import play.i18n._
+@import helper.twitterBootstrap._
+@import helper._
+
+
+@main("DCR"){
+	<form id="dcrliform" action="@routes.MRController.processNewDCR()" method="post">
+			<div class="datepicker input-append date" id="dp3"  data-date="12-02-2012" data-date-format="dd-mm-yyyy" >
+		     <input id="forDate" name="forDate" class="span2" size="16" type="text" value="12-02-2012">
+		     <span class="add-on"><i class="icon-th"></i></span>
+	   	    </div>
+	<input type="submit" class="btn btn-primary" value="Create DCR" />
+	</form>
+	
+	<table class="table table-bordered table-condensed col-md-3">
+	<thead>
+	<th>Date</th>
+	<th>Action</th>
+	</thead>
+	<tbody>
+	@for(dcr<-dcrList){
+	<tr>
+		<td>
+		@dcr.forDate
+		</td>
+		<td>
+		<a class="btn btn-primary btn-xs" href="@routes.MRController.addDCRLineItem(dcr.id)">Add Line Item</a>
+		</td>
+   </tr>
+	}
+	</tbody>
+	</table>
+	
+}
