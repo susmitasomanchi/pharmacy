@@ -12,6 +12,7 @@
 	   <th>Promotions</th>
 	   <th>POB</th>
 	   <th>Remarks</th>
+	   <th>Actions</th>
 	</tr>   
 	</thead>
 	<tbody>
@@ -38,6 +39,7 @@
 	   	</td>
 	    <td>@dcrLineItem.pob</td>
 		<td>@dcrLineItem.remarks</td>
+		<td><a class="btn btn-danger btn-md" onclick="removeLineItem('@dcrLineItem.id');">Remove</a></td>
      </tr>
      }
    </tbody>

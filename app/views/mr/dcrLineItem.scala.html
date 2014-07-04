@@ -3,13 +3,19 @@
 @import play.i18n._
 @import helper.twitterBootstrap._
 @import helper._
+
 @main("DCR Line Item"){
 	
 	<script>
 	var proList = '@for(product <-productList){<option value="@product.id">@product.medicineName</option>}';
+	function removeSamples(id){
+	$('#sample'+id).remove();
+    }	
 	
+	var i=0;
 	function addSamples(){
-		$('#samplesdiv').append('<table><tr><td><select name="sampleList">'+proList+'</select></td><td><input name="qtyList" placeholder="qty" /></td><td>&nbsp;</td></tr></table>');
+		$('#samplestbl').append('<tr id="sample'+i+'"><td><select name="sampleList">'+proList+'</select></td><td><input name="qtyList" placeholder="qty" /></td><td><a class="btn btn-danger btn-xs" onclick="removeSamples('+i+');">-</a></td></tr>');
+	    i++;
 	}
 	</script>
 	
@@ -36,7 +42,7 @@
 	    
 		<td valign="top">
 			<div id="samplesdiv">
-			<table>
+			<table id="samplestbl">
 				<tr>
 					<td>
 				  	   	<select name="sampleList">
@@ -65,7 +71,7 @@
 				}
 				</select>
 		</td>
-		<td valign="top"  ><input name="pob" type="number" /></td>
+		<td valign="top"  ><input name="pob" /></td>
 		<td valign="top" ><input name="remarks" type="text" placeholder="Remarks"/></td>
       </tr>
 		
@@ -92,10 +98,10 @@
 	   <th>Promotions</th>
 	   <th>POB</th>
 	   <th>Remarks</th>
+	   <th>Actions</th>
 	</tr>   
 	</thead>
 	<tbody>
-	
 	@for(dcrLineItem <- dcr.dcrLineItemList){
 	<tr>
 		<td>@dcrLineItem.doctor.appUser.name</td>
@@ -118,19 +124,28 @@
 	   	</td>
 	    <td>@dcrLineItem.pob</td>
 		<td>@dcrLineItem.remarks</td>
+		<td><a class="btn btn-danger btn-md" onclick="removeLineItem('@dcrLineItem.id');">Remove</a></td>
      </tr>
      }
    </tbody>
   </table>	
-	
+  
 	</div>
 	
-	
 	<script>
+
 	    function addLineItem(){
 	        $.post('/mr/dcr/add-line-item',$('#dcrliform').serialize(),function(html){
 				$('#dcrLineItemTable').html(html);
 			});
 		}
+		</script>
+		
+		<script>
+	    function removeLineItem(id){
+		   $.post('/mr/dcr/delete-line-item/@dcr.id/'+id,function(htmldata){
+		     $('#dcrLineItemTable').html(htmldata);
+		    });
+	     }
 	</script>
 }

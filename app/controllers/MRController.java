@@ -54,7 +54,6 @@ public class MRController extends Controller{
 		if(loggedInMr.doctorList.contains(Doctor.find.byId(id))!=true){
 			loggedInMr.doctorList.add(Doctor.find.byId(id));
 		}
-		Logger.info(" logged IN Mr id : "+loggedInMr.appUser.name);
 		loggedInMr.update();
 
 		return redirect(routes.MRController.mrDoctorList());
@@ -62,7 +61,6 @@ public class MRController extends Controller{
 	}
 	public static Result mrDoctorList(){
 		final MedicalRepresentative loggedInMr = LoginController.getLoggedInUser().getMedicalRepresentative();
-		Logger.info(""+loggedInMr.doctorList);
 		return ok(views.html.mr.mrDoctor.render(loggedInMr.doctorList));
 
 	}
@@ -74,9 +72,6 @@ public class MRController extends Controller{
 		for(final Doctor doc:loggedInMr.doctorList){
 			indexOfDoctorList++;
 			if(doctor.appUser.name.equals(doc.appUser.name)){
-				Logger.info("doctor name : "+doc.appUser.name);
-
-				Logger.info("index is : "+indexOfDoctorList);
 				break;
 			}
 		}
@@ -130,7 +125,6 @@ public class MRController extends Controller{
 		final DailyCallReport dcr = new DailyCallReport();
 		final DynamicForm requestData = Form.form().bindFromRequest();
 		final String strDate = requestData.get("forDate");
-		Logger.info(strDate);
 		//string to date
 		final SimpleDateFormat sdf=new SimpleDateFormat("dd-mm-yyyy");
 		try {
@@ -168,7 +162,6 @@ public class MRController extends Controller{
 
 		final DCRLineItem dcrLineItem = new DCRLineItem();
 
-		Logger.info("1");
 		dcrLineItem.doctor=Doctor.find.byId(Long.parseLong(doctorId));
 
 		for(int i=0;i<sampleList.length;i++){
@@ -185,13 +178,23 @@ public class MRController extends Controller{
 		dcrLineItem.pob = Integer.parseInt(pob);
 		dcrLineItem.remarks = remarks;
 
-		Logger.info("2");
 
 		final DailyCallReport dcr = DailyCallReport.find.byId(Long.parseLong(dcrId));
 		dcr.dcrLineItemList.add(dcrLineItem);
 		dcr.update();
 
 
+		return ok(views.html.mr.filledDCRLineItem.render(dcr.dcrLineItemList));
+	}
+
+	//Delete DCRLineItem
+	public static Result removeDCRLineItem(final Long dcrId,final Long lineItemId){
+
+		final DailyCallReport dcr = DailyCallReport.find.byId(dcrId);
+		final DCRLineItem lineItem = DCRLineItem.find.byId(lineItemId);
+		dcr.dcrLineItemList.remove(lineItem);
+		lineItem.delete();
+		dcr.update();
 		return ok(views.html.mr.filledDCRLineItem.render(dcr.dcrLineItemList));
 	}
 	//schedule appointment for mr
