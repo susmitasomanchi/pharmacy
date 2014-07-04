@@ -37,7 +37,11 @@
 			      </table>
 			</div>   
 	   	</td>
-	    <td>@dcrLineItem.pob</td>
+	   	@if(dcrLineItem.pob==0){
+	   		<td>&nbsp;</td>
+	   	}else{
+	   	<td>@dcrLineItem.pob</td>
+	   	}
 		<td>@dcrLineItem.remarks</td>
 		<td><a class="btn btn-danger btn-md" onclick="removeLineItem('@dcrLineItem.id');">Remove</a></td>
      </tr>

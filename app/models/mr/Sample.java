@@ -22,7 +22,7 @@ public class Sample extends BaseEntity{
 	@OneToOne
 	public Product product;
 
-	public int quantity;
+	public Integer quantity;
 
 	public static Finder<Long, Sample> find = new Finder<Long, Sample>(Long.class, Sample.class);
 

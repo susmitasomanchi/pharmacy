@@ -7,14 +7,14 @@
 @main("DCR Line Item"){
 	
 	<script>
-	var proList = '@for(product <-productList){<option value="@product.id">@product.medicineName</option>}';
+	var proList = '<option value="" disabled selected style="display:none;">Select Sample</option>@for(product <-productList){<option value="@product.id">@product.medicineName</option>}';
 	function removeSamples(id){
 	$('#sample'+id).remove();
     }	
 	
 	var i=0;
 	function addSamples(){
-		$('#samplestbl').append('<tr id="sample'+i+'"><td><select name="sampleList">'+proList+'</select></td><td><input name="qtyList" placeholder="qty" /></td><td><a class="btn btn-danger btn-xs" onclick="removeSamples('+i+');">-</a></td></tr>');
+		$('#samplestbl').append('<tr id="sample'+i+'"><td><select class="chzn-select" style="width:200px;" name="sampleList">'+proList+'</select></td><td><input name="qtyList" placeholder="qty" /></td><td><a class="btn btn-danger btn-xs" onclick="removeSamples('+i+');">-</a></td></tr>');
 	    i++;
 	}
 	</script>
@@ -32,7 +32,8 @@
 	<tr>
 		
 		<td valign="top" >
-		<select name="doctor" id="doctor">
+		<select class="chzn-select" name="doctor" style="width:200px;">
+		   <option value='' disabled selected style='display:none;'>Select Doctor</option>
 			@for(doctor <- doctorList){
 	      	<option value=@doctor.id >@doctor.appUser.name</option>
 	        }
@@ -45,7 +46,8 @@
 			<table id="samplestbl">
 				<tr>
 					<td>
-				  	   	<select name="sampleList">
+				  	   	<select class="chzn-select" name="sampleList" style="width:200px;">
+				  	   	   <option value=''  style='display:none;'>Select Sample</option>
 							@for(product <- productList){
 					      	<option value=@product.id >@product.medicineName</option>
 					        }
@@ -65,7 +67,7 @@
 	   
 	   
 	   <td valign="top" >
-			    <select name="promotionList" multiple>
+			    <select class="chzn-select" name="promotionList" multiple="true" style="width:200px;">
 				@for(product <- productList){
 				<option value=@product.id >@product.medicineName</option>
 				}
@@ -139,13 +141,16 @@
 				$('#dcrLineItemTable').html(html);
 			});
 		}
-		</script>
 		
-		<script>
 	    function removeLineItem(id){
 		   $.post('/mr/dcr/delete-line-item/@dcr.id/'+id,function(htmldata){
 		     $('#dcrLineItemTable').html(htmldata);
 		    });
 	     }
 	</script>
+	<script type="text/javascript">
+	$(function(){
+	    $(".chzn-select").chosen();
+	});
+   </script>
 }

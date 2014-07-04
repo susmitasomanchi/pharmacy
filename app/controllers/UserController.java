@@ -75,14 +75,14 @@ public class UserController extends Controller {
 
 			if(appUser.role == Role.ADMIN_MR){
 				final MedicalRepresentative medicalRepresentative = new MedicalRepresentative();
-				final PharmaceuticalCompany pharmaCompany = new PharmaceuticalCompany();
+				final PharmaceuticalCompany pharmaceuticalCompany = new PharmaceuticalCompany();
 				medicalRepresentative.appUser = appUser;
 				medicalRepresentative.save();
-				pharmaCompany.name = filledForm.get().pharmaceuticalCompanyName;
+				pharmaceuticalCompany.name = filledForm.get().pharmaceuticalCompanyName;
 
-				pharmaCompany.mrList.add(medicalRepresentative);
-				pharmaCompany.save();
-				medicalRepresentative.pharmaceuticalCompany = pharmaCompany;
+				pharmaceuticalCompany.mrList.add(medicalRepresentative);
+				pharmaceuticalCompany.save();
+				medicalRepresentative.pharmaceuticalCompany = pharmaceuticalCompany;
 				medicalRepresentative.update();
 
 			}

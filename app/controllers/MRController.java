@@ -174,8 +174,11 @@ public class MRController extends Controller{
 		for(int i=0;i<promotionList.length;i++){
 			dcrLineItem.promotionList.add(Product.find.byId(Long.parseLong(promotionList[i])));
 		}
-
-		dcrLineItem.pob = Integer.parseInt(pob);
+		if(pob==""){
+			dcrLineItem.pob=0;
+		}else{
+			dcrLineItem.pob = Integer.parseInt(pob);
+		}
 		dcrLineItem.remarks = remarks;
 
 
