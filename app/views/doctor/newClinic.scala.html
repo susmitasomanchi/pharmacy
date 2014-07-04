@@ -6,8 +6,7 @@
 
 
 @main("New Clinic"){
-	
-	@helper.form(action=routes.DoctorController.processNewClinic()) {
+	<form action="@routes.DoctorController.processNewClinic()" method="post" onsubmit="return validate()">
 	@helper.inputText(clinicForm("name"),'class -> "inputs",'_value->"10",'_label->"Name")
 			
 	<div class="row clearfix">
@@ -24,6 +23,7 @@
 			</tr>
 			</head>
 			<tbody>
+			For Patient
 			@for((day,index) <- models.doctor.Day.getList().zipWithIndex){
 				@if(list.contains(day.toString())){
 					
@@ -43,7 +43,7 @@
 				}
 			</tbody>
 			</table>	
-				@helper.inputText(clinicForm("slot"),'_class -> "inputs",'_value->"10",'_label->"Patient slot")
+				@helper.inputText(clinicForm("slot"),'_class -> "inputs",'_value->"10",'_label->"Time interval Slot(in minutes)")
 				@clinicForm("slot").value()
 				</div>
 				<div class="col-md-6 column">
@@ -56,6 +56,7 @@
 			</tr>
 			</head>
 			<tbody>
+			For Medical Representative
 			@for((day,index) <- models.doctor.Day.getList().zipWithIndex){
 					@if(listmr.contains(day.toString())){
 				<tr>
@@ -73,7 +74,7 @@
 			}
 			</tbody>
 			</table>	
-					@helper.inputText(clinicForm("slotmr"),'_class -> "inputs",'_value->"10",'_label->"Mr slot")
+					@helper.inputText(clinicForm("slotmr"),'_class -> "inputs",'_value->"10",'_label->"Time interval Slot(in minutes)")
 				</div>
 			</div>
 		</div>
@@ -85,9 +86,8 @@
 	<br><br>
 				<input type="hidden" name="id" value='@clinicForm("id").value' >
 				<input type="submit" class="btn btn-primary" value="Submit">
-}
 
-
+</form>
 <script>
 
 $('.checkday').change(function() {	
@@ -105,6 +105,21 @@ $('.checkday').change(function() {
     }
     $('#textbox1').val($(this).is(':checked'));        
 });
+
+function validate(){
+	var values = $('input:checkbox:checked').map(function () {
+			if($("#"+this.id+"-from").val() > $("#"+this.id+"-to").val()){
+				return 1;
+			}
+
+		  return 0;
+	}).get();
+
+if($.inArray(1, values) != -1){
+	return false;
+	}
+return true;
+}
 
 
 </script>			

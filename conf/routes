@@ -38,8 +38,8 @@ GET    /logout                                     controllers.LoginController.p
 
 
 # Remove later (at Beta Launch)
-GET    /                                  controllers.Application.index()
-GET    /:str		                      controllers.Application.indexX(str: String)
+#GET    /                                  controllers.Application.index()
+#GET    /:str		                      controllers.Application.indexX(str: String)
 
 
 # Sign up page
@@ -82,6 +82,7 @@ POST   /scheduleappointment/                       controllers.AppointmentContro
 
 POST   /editproduct/                               controllers.PharmacistController.editProduct(id: Long)
 GET    /doctor/today-appointment                   controllers.DoctorController.viewTodaysAppointment()	
+GET		/allappointment							controllers.DoctorController.doctorAppointments()
 GET    /searchProduct                              controllers.PharmacistController.searchForm()
 POST   /searchProduct                              controllers.PharmacistController.searchProduct(arg: String ?= "")
 POST   /addProductToInventory/                     controllers.PharmacistController.addProductForm(id: Long)

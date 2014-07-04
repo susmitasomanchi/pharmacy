@@ -4,11 +4,11 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
+import models.Role;
 import models.doctor.Clinic;
 import models.doctor.Day;
 import models.doctor.DaySchedule;
 import models.doctor.DoctorClinicInfo;
-import models.Role;
 import play.Logger;
 import play.data.validation.Constraints.Required;
 
@@ -35,10 +35,10 @@ public class ClinicBean implements Serializable{
 	public List<String> daysOfWeekMr	= new ArrayList<String>();
 
 
+	public Integer slot;
 
-	public int slot=1;
+	public Integer slotmr;
 
-	public int slotmr=5;
 
 	public DoctorClinicInfo toDoctorClinicInfo(){
 
@@ -81,9 +81,13 @@ public class ClinicBean implements Serializable{
 
 		}
 
-		doctorClinicInfo.slot=this.slot;
-		doctorClinicInfo.slotmr=this.slotmr;
+		if(this.slot!=null){
+			doctorClinicInfo.slot=this.slot;
 
+		}
+		if(this.slotmr!=null){
+			doctorClinicInfo.slotmr=this.slotmr;
+		}
 
 		return doctorClinicInfo;
 	}

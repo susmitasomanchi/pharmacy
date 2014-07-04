@@ -5,6 +5,17 @@
 @main("Today' Appointments"){
 	
 	<div class="container">
+	
+		<ul class="nav nav-tabs" role="tablist">
+  			<li class="active"><a href="#">Home</a></li>
+  			@for( a <-  appointments.get(0).doctor.doctorClinicInfoList){
+  				
+ 			 <li><a href="#">@a.clinic</a></li>
+  				
+  			}
+  			
+  			
+		</ul>
 	<div class="row clearfix">
 		<div class="col-md-12 column">
 			<table class="table">
