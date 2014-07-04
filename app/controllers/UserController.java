@@ -73,6 +73,8 @@ public class UserController extends Controller {
 				pharmacist.update();
 			}
 
+			
+			
 			if(appUser.role == Role.ADMIN_MR){
 				final MedicalRepresentative medicalRepresentative = new MedicalRepresentative();
 				final PharmaceuticalCompany pharmaCompany = new PharmaceuticalCompany();
@@ -81,13 +83,14 @@ public class UserController extends Controller {
 				pharmaCompany.name = filledForm.get().pharmaceuticalCompanyName;
 
 				pharmaCompany.mrList.add(medicalRepresentative);
+				pharmaCompany.appuserid=appUser.id;
 				pharmaCompany.save();
 				medicalRepresentative.pharmaceuticalCompany = pharmaCompany;
 				medicalRepresentative.update();
 
 			}
 
-			if(appUser.role == Role.MR){
+			/*if(appUser.role == Role.MR){
 				//				final MedicalRepresentative medicalRepresentative = new MedicalRepresentative();
 				//				medicalRepresentative.appUser = appUser;
 				//				medicalRepresentative.regionAlloted=mR.regionAlloted;
@@ -96,7 +99,7 @@ public class UserController extends Controller {
 				medicalRepresentative.appUser = appUser;
 				medicalRepresentative.mrAdminId =  LoginController.getLoggedInUser().id;
 				medicalRepresentative.save();
-			}
+			}*/
 
 
 

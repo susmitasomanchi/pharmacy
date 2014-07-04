@@ -169,7 +169,8 @@ POST   /mr/new-dcr                                 controllers.MRController.proc
 GET    /mr/show-dcr/:id                            controllers.MRController.addDCRLineItem(id: Long)
 POST   /mr/dcr/add-line-item                       controllers.MRController.processDCRLineItem()
 GET    /search                                     controllers.MRController.search()
-GET    /mr/display-appointment/:id                 controllers.MRController.scheduleAppointment(id:String)	
+GET    /mr/display-appointment/:id                 controllers.MRController.scheduleAppointment(id:String)
+POST    /mr/add                                    controllers.MRController.medicalRepresentativeProccess()	
 
 #common module
 GET    /new-product                                controllers.ProductController.productForm()

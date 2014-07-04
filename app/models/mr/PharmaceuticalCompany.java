@@ -30,11 +30,15 @@ public class PharmaceuticalCompany extends BaseEntity {
 	
 	public Address address;
 	
+	public Long appuserid;
+	
 	@OneToMany(cascade=CascadeType.ALL)
 	public List<Product> productList = new ArrayList<Product>();
 
 	@OneToMany(cascade=CascadeType.ALL)
 	public List<MedicalRepresentative> mrList = new ArrayList<MedicalRepresentative>();
+
+	
 	
 	public static Finder<Long,PharmaceuticalCompany> find = new Finder<Long,PharmaceuticalCompany>(Long.class,PharmaceuticalCompany.class);
 

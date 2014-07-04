@@ -1,27 +1,25 @@
-@(medicalRepresentative: play.data.Form[models.mr.MedicalRepresentative])
+@(dataForm: play.data.Form[beans.MedicalRepresentativeBean])
 @import helper._
 @import helper.twitterBootstrap._
 @main("MedicalRepresentative form") {
 
-@helper.form(action=routes.UserController.processJoinUs(),'_method->"post") {
+@helper.form(action=routes.MRController.medicalRepresentativeProccess()) {
 	
-	@helper.inputText(medicalRepresentative("name"),'_label->"Name")
-	@helper.inputText(medicalRepresentative("username"),'_label->"User Name")
-	@helper.inputText(medicalRepresentative("email"),'_label->"Email")
-	@helper.inputPassword(medicalRepresentative("password"),'_label->"PassWord")
-	@helper.inputPassword(medicalRepresentative("confirmPassword"),'_label->"Confirm PassWord")
-	@helper.select(medicalRepresentative("role"),options=helper.options(Role.options),'class -> "inputs chzn",'_label->"Role")
+	@helper.inputText(dataForm("name"),'_label->"Name")
+	@helper.inputText(dataForm("designation"),'_label->"designation")
+	@helper.inputText(dataForm("username"),'_label->"User Name")
+	@helper.inputText(dataForm("email"),'_label->"Email")
+	@helper.inputPassword(dataForm("password"),'_label->"PassWord")
+	@helper.select(dataForm("role"),options=helper.options(Role.options),'class -> "inputs chzn",'_label->"Role")
+	Male<input type="radio" name="sex" value="false">
+	Female<input type="radio" name="sex" value="false">
+	@helper.inputText(dataForm("age"),'_label->"Age")
+	@helper.inputText(dataForm("companyName"),'_label->"Company Name")
+	@helper.inputText(dataForm("regionAlloted"),'_label->"Region")
+	@helper.inputText(dataForm("typesOfMedicine"),'_label->"Types Of Medicine")
+	@helper.inputText(dataForm("noOfDoctorsVisit"),'_label->"No Of Doctors Visit")
 	
-	Male<input type="radio" name="gender" value="false">
-	Female<input type="radio" name="gender" value="false">
-	@helper.inputText(medicalRepresentative("age"),'_label->"Age")
-	@helper.inputText(medicalRepresentative("companyName"),'_label->"Company Name")
-	
-	
-	@helper.inputText(medicalRepresentative("regionAlloted"),'_label->"Region")
-	@helper.inputText(medicalRepresentative("typesOfMedecine"),'_label->"Types Of Medicine")
-	
-	<input type="submit" value="Add MR">
+	<input type="submit" value="Add mr">
 	
 	
 	}

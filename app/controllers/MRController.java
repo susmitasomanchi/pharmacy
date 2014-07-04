@@ -7,6 +7,8 @@ import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
+import beans.MedicalRepresentativeBean;
+import models.AppUser;
 import models.HeadQuarter;
 import models.Product;
 import models.doctor.Appointment;
@@ -28,11 +30,36 @@ public class MRController extends Controller{
 	public static Form<HeadQuarter> headquarter=Form.form(HeadQuarter.class);
 	public static Form<DCRLineItem> dcrLineItemForm = Form.form(DCRLineItem.class);
 	public static Form<DailyCallReport> dcrForm = Form.form(DailyCallReport.class);
-
+	public static Form<MedicalRepresentativeBean> mrForm = Form.form(MedicalRepresentativeBean.class);
+	static MedicalRepresentative loggedInMR = LoginController.getLoggedInUser().getMedicalRepresentative();
 	//add MR
 	public static Result addMR(){
-		return ok(views.html.mr.medicalRepresentative.render(medicalRepresentative));
+		return ok(views.html.mr.medicalRepresentative.render(mrForm));
 
+	}
+	
+public static Result medicalRepresentativeProccess(){
+		
+		final Form<MedicalRepresentativeBean> filledForm = mrForm.bindFromRequest();
+
+		if(filledForm.hasErrors()) {
+			Logger.info("*** user bad request");
+			return badRequest(views.html.mr.medicalRepresentative.render(filledForm));
+		}
+		else {
+			final AppUser appUser = filledForm.get().toAppUser();
+			appUser.save();
+			final MedicalRepresentative medicalRepresentative = new MedicalRepresentative();			
+			medicalRepresentative.appUser = appUser;
+		//	medicalRepresentative.age = filledForm.get().age;
+			medicalRepresentative.regionAlloted = filledForm.get().regionAlloted;
+			medicalRepresentative.companyName = filledForm.get().companyName;
+			medicalRepresentative.typesOfMedicine = filledForm.get().typesOfMedicine;
+			medicalRepresentative.noOfDoctorsVisit = filledForm.get().noOfDoctorsVisit;
+			medicalRepresentative.mrAdminId = loggedInMR.appUser.id;			
+			medicalRepresentative.save();
+		}
+		return TODO;
 	}
 
 	public static Result headQuarter(){
