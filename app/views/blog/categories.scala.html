@@ -3,10 +3,10 @@
 
 @if((LoginController.isLoggedIn())&&(LoginController.getLoggedInUserRole().equals(Role.BLOG_ADMIN.toString()))){
 <div>
-@*@blognavbar()*@
+@blognavbar()
 </div>
 }
-@*
+
 @blogmain("", "", ""){
 
 <table class="table table-condensed table-bordered">
@@ -29,4 +29,4 @@
 <table>
 
 
-}*@
+}

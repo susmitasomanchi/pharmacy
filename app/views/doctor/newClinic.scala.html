@@ -6,9 +6,29 @@
 
 
 @main("New Clinic"){
+
+	 <style>
+      #map-container { height: 200px }
+    </style>
+    
+    <script type="text/javascript"
+
+        src="https://maps.googleapis.com/maps/api/js?v=3.exp&sensor=false&libraries=places">
+	
+      </script>
+   
 	<form action="@routes.DoctorController.processNewClinic()" method="post" onsubmit="return validate()">
-	@helper.inputText(clinicForm("name"),'class -> "inputs",'_value->"10",'_label->"Name")
-			
+	<div class="row">
+	<div class="col-md-6">
+	<div >@helper.inputText(clinicForm("name"),'class -> "inputs",'_value->"10",'_label->"Name")</div>
+	&nbsp
+	 <label for="city">City</label>
+	<div ><input id="city"></div>
+	</div>
+			<div id="map-container" class="col-md-6"></div>
+	
+	</div>
+	
 	<div class="row clearfix">
 		<div class="col-md-12 column">
 			<div class="row clearfix">
@@ -124,6 +144,51 @@ return true;
 
 </script>			
 			
+ 
+    <script>
 
+    var lng,lat;
+    function initialize() {
+    	alert(lat);
+        alert(lng);      
+        var mapOptions = {
+          center: new google.maps.LatLng(lat, lng),
+          zoom: 13
+        };
+        var map = new google.maps.Map(document.getElementById("map-container"), mapOptions);
+
+        google.maps.event.addListener(map, 'click', function(event) {
+
+        	alert(event.latLng)
+
+        	        marker = new google.maps.Marker({position: event.latLng, map: map});
+
+        	    });
+
+        }
+    
+	$("#city").blur(function(){
+		var geocoder =  new google.maps.Geocoder();
+		alert(this.value);
+	    geocoder.geocode( { 'address': this.value}, function(results, status) {
+	          if (status == google.maps.GeocoderStatus.OK) {
+	            alert("location : " + results[0].geometry.location.lat() + " " +results[0].geometry.location.lng()); 
+					lat=results[0].geometry.location.lat();
+					lng=results[0].geometry.location.lng();
+					initialize();
+		          } else {
+	            alert("Something got wrong " + status);
+	          }
+	        });
+
+			
+	    
+
+	     // google.maps.event.addDomListener(window, 'load', initialize);
+
+		});
+
+
+    </script>
 
 }

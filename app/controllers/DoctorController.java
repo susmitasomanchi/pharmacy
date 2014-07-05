@@ -508,7 +508,8 @@ public class DoctorController extends Controller {
 
 	public static Result doctorAppointments() {
 
-		return ok(views.html.doctor.doctor_appointments.render());
+		//		return ok(views.html.doctor.doctor_appointments.render());
+		return ok();
 	}
 
 	public static Result doctorViewAppointment() {
@@ -529,8 +530,8 @@ public class DoctorController extends Controller {
 
 		final List<Appointment> appointments=Appointment.find.where().eq("appointmentStatus", AppointmentStatus.APPROVED).eq("doctor", loggedIndoctor).ge("appointmentTime", calendar.getTime()).findList();
 
-
-		return ok(views.html.doctor.viewTodaysAppointment.render(appointments));
+		Logger.warn(""+appointments.toString());
+		return ok(views.html.doctor.doctor_appointments.render(appointments));
 
 	}
 
