@@ -1,21 +1,29 @@
-@(products: List[Product])
- @main("product"){
+@(products: List[models.Product])
+ @main("productS"){
 
-<table>
-	<thead>
-	<th>Products</th>
-	</thead>
-	<tbody>
-	
+<table class="table table-bordered">
+<thead>
+<tr>
+<th>Products</th>
+<th>Products</th>
+</thead>
+
+<tbody>
+
+
 	@for(product <- products){
 		<tr>
 		<td>@product.medicineName</td>
-		<td><a class="btn btn-primary btn-xs" href="/edit-product/@product.id">Edit</a></td>
-		<td><a class="btn btn-primary btn-xs" href="/remove-product/@product.id">Remove</a></td>
-		</tr>
-		<tr></tr>
-		
-	}
-	</tbody>
-	</table>
+		<td>@product.brandName</td>
+	<th>
+<a class="btn btn-primary btn-xs" href="/edit-product/@product.id">Edit</a>
+<a class="btn btn-primary btn-xs" href="/remove-product/@product.id">Remove</a>
+</th>
 }
+</tr>
+
+
+</tbody>
+</table>
+}
+

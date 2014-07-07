@@ -8,10 +8,9 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 
 import models.AppUser;
-import models.Batch;
-import models.Inventory;
-
 import models.Product;
+import models.pharmacist.Batch;
+import models.pharmacist.Inventory;
 import play.data.validation.Constraints.Required;
 
 @SuppressWarnings("serial")
