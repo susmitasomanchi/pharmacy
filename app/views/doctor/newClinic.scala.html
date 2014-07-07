@@ -25,8 +25,9 @@
 	 <label for="city">City</label>
 	<div ><input id="city"></div>
 	</div>
-			<div id="map-container" class="col-md-6"></div>
-	
+			<div class="col-md-6" id="map-outer"><div  id="map-container"></div></div>
+			<div ><input type="hidden" name="lat" id="lat1"></div>
+			<div ><input type="hidden" name="lng" id="lng1"></div>
 	</div>
 	
 	<div class="row clearfix">
@@ -147,32 +148,59 @@ return true;
  
     <script>
 
-    var lng,lat;
+    var lng,lat,marker;
+    var dbclk = false;
+    var map;
     function initialize() {
     	alert(lat);
         alert(lng);      
         var mapOptions = {
           center: new google.maps.LatLng(lat, lng),
-          zoom: 13
+           zoom: 8
         };
-        var map = new google.maps.Map(document.getElementById("map-container"), mapOptions);
+         map = new google.maps.Map(document.getElementById("map-container"), mapOptions);
 
-        google.maps.event.addListener(map, 'click', function(event) {
+       //  map.set("disableDoubleClickZoom", false);
+        
+         
+   
+       google.maps.event.addListener(map, 'click', function(event) {
 
-        	alert(event.latLng)
-
+            map.set("disableDoubleClickZoom", false);
+        	
+			
+        	//alert(event.latLng.lat());
+        	alert('marking now');
+        	 if (!marker) {
         	        marker = new google.maps.Marker({position: event.latLng, map: map});
+						$("#lat1").val(event.latLng.lat());
+						$("#lng1").val(event.latLng.lng());
+            	   //     alert("value"+$("#lng1").val());
+                	 }
+        	 else { marker.setPosition(event.latLng); 
 
-        	    });
+        		 $("#lat1").val(event.latLng.lat());
+				 $("#lng1").val(event.latLng.lng());
+			//	 alert("value"+$("#lng1").val());
+        	 }
+        	 //alert(event.latLng.lat());
+		
 
+      	    });
+       google.maps.event.addListener(map,'dblclick',function(e){
+			
+			alert("double click");
+          //  e.stop();
+            });
         }
+   
     
 	$("#city").blur(function(){
 		var geocoder =  new google.maps.Geocoder();
-		alert(this.value);
+		//alert(this.value);
 	    geocoder.geocode( { 'address': this.value}, function(results, status) {
 	          if (status == google.maps.GeocoderStatus.OK) {
-	            alert("location : " + results[0].geometry.location.lat() + " " +results[0].geometry.location.lng()); 
+	          //  alert("location : " + results[0].geometry.location.lat() + " " +results[0].geometry.location.lng()); 
 					lat=results[0].geometry.location.lat();
 					lng=results[0].geometry.location.lng();
 					initialize();
@@ -182,12 +210,12 @@ return true;
 	        });
 
 			
-	    
-
 	     // google.maps.event.addDomListener(window, 'load', initialize);
 
 		});
-
+	$( "#map-outer" ).dblclick(function() {
+		  alert( "Handler for .dblclick() called." );
+		});
 
     </script>
 

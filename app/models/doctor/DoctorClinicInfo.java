@@ -34,6 +34,10 @@ public class DoctorClinicInfo extends BaseEntity {
 
 	public Integer	slotmr;
 
+	public Double lat;
+
+	public Double lng;
+
 	@OneToMany(cascade=CascadeType.ALL)
 	public List<DaySchedule> schedulDays = new ArrayList<DaySchedule>();
 
