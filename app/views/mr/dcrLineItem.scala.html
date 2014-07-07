@@ -14,7 +14,7 @@
 	
 	var i=0;
 	function addSamples(){
-		$('#samplestbl').append('<tr id="sample'+i+'"><td><select class="chzn-select" style="width:200px;" name="sampleList">'+proList+'</select></td><td><input name="qtyList" placeholder="qty" /></td><td><a class="btn btn-danger btn-xs" onclick="removeSamples('+i+');">-</a></td></tr>');
+		$('#samplestbl').append('<tr id="sample'+i+'"><td><select class="chzn" style="width:200px;" name="sampleList">'+proList+'</select></td><td><input name="qtyList" placeholder="qty" /></td><td><a class="btn btn-danger btn-xs" onclick="removeSamples('+i+');">-</a></td></tr>');
 	    i++;
 	}
 	</script>
@@ -32,8 +32,8 @@
 	<tr>
 		
 		<td valign="top" >
-		<select class="chzn-select" name="doctor" style="width:200px;">
-		   <option value='' disabled selected style='display:none;'>Select Doctor</option>
+		<select data-placeholder="Select Doctor" class="chzn" name="doctor" style="width:200px;">
+		   <option></option>
 			@for(doctor <- doctorList){
 	      	<option value=@doctor.id >@doctor.appUser.name</option>
 	        }
@@ -46,8 +46,8 @@
 			<table id="samplestbl">
 				<tr>
 					<td>
-				  	   	<select class="chzn-select" name="sampleList" style="width:200px;">
-				  	   	   <option value=''  style='display:none;'>Select Sample</option>
+				  	   	<select data-placeholder="Select Sample" class="chzn" name="sampleList" style="width:200px;">
+				  	   	   <option></option>
 							@for(product <- productList){
 					      	<option value=@product.id >@product.medicineName</option>
 					        }
@@ -67,7 +67,8 @@
 	   
 	   
 	   <td valign="top" >
-			    <select class="chzn-select" name="promotionList" multiple="true" style="width:200px;">
+			    <select data-placeholder="Select Promotions" class="chzn" name="promotionList" multiple="true" style="width:200px;">
+			    <option></option>
 				@for(product <- productList){
 				<option value=@product.id >@product.medicineName</option>
 				}
@@ -124,7 +125,11 @@
 			      </table>
 			</div>   
 	   	</td>
-	    <td>@dcrLineItem.pob</td>
+	    @if(dcrLineItem.pob==0){
+	   		<td>&nbsp;</td>
+	   	}else{
+	   	<td>@dcrLineItem.pob</td>
+	   	}
 		<td>@dcrLineItem.remarks</td>
 		<td><a class="btn btn-danger btn-md" onclick="removeLineItem('@dcrLineItem.id');">Remove</a></td>
      </tr>
@@ -148,9 +153,5 @@
 		    });
 	     }
 	</script>
-	<script type="text/javascript">
-	$(function(){
-	    $(".chzn-select").chosen();
-	});
-   </script>
+	
 }
