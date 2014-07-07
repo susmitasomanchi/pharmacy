@@ -60,6 +60,7 @@ public class UserController extends Controller {
 				final Doctor doctor = new Doctor();
 				doctor.appUser = appUser;
 				doctor.save();
+				
 			}
 
 			if(appUser.role == Role.ADMIN_PHARMACIST){

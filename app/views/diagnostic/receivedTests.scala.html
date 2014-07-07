@@ -1,0 +1,36 @@
+@(list: List[models.diagnostic.DiagnosticReport])
+@main("Diagnostic Order List") {
+<table class="table table-bordered">
+<thead>
+<tr>
+<th>
+Test
+</th>
+<th>
+Test Status
+</th>
+</tr>
+</thead>
+
+<tbody>
+
+@for(diagnosticReport <- list) {
+<tr>
+<td>
+@diagnosticReport.diagnosticTest.name
+</td>
+<td>
+@diagnosticReport.reportStatus
+</td>
+<th>
+<a href="/sample-collected/@diagnosticReport.id" class="btn btn-xs btn-default">Sample Collected</a>
+<a href="/upload-patient-file/@diagnosticReport.id" class="btn btn-xs btn-default">Upload Report</a>
+@*<a href="/remove-order/@diagnosticOrder.id" class="btn btn-xs btn-default">Remove Order</a>*@
+</th>
+}
+</tr>
+
+
+</tbody>
+</table>
+}

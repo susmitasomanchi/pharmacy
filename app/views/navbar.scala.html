@@ -21,7 +21,7 @@
 		@if(LoginController.getLoggedInUserRole().equals(Role.PATIENT.toString())){
 		<li class="dropdown">
           <a href="#" class="dropdown-toggle" data-toggle="dropdown">
-          Doctors
+        	Doctors
           <b class="caret"></b></a>
           <ul class="dropdown-menu">
             <li><a href="">Search Doctors</a></li>
@@ -199,7 +199,7 @@
           <li><a href="/diagnosticlist">View Profile</a></li> 
             <li><a href="@routes.DRController.addDiagRep()">Add Diagnostic Representative</a></li> 
             <li><a href="/diagnosticrep/list">All Diagnostic Representatives</a></li>   
-             <li><a href="/display-orders/@LoginController.getLoggedInUser().id">View Diagnostic Orders</a></li>      
+             <li><a href="/display-orders">View Diagnostic Orders</a></li>      
               <li><a href="/upload-patient-file">Upload Report</a></li>      
           </ul>
         </li> 
@@ -208,8 +208,18 @@
           Diagnostic Tests
           <b class="caret"></b></a>
           <ul class="dropdown-menu">
-          <li><a href="/test">add Test</a></li> 
-            <li><a href="/diagnostic-test-list">All Tests</a></li> 
+          <li><a href="/test">Add Diagnostic Test</a></li> 
+            <li><a href="/diagnostic-test-list">All Diagnostic Tests</a></li> 
+            
+          </ul>
+        </li> 
+        <li class="dropdown">
+          <a href="#" class="dropdown-toggle" data-toggle="dropdown">
+          Diagnostic Orders
+          <b class="caret"></b></a>
+          <ul class="dropdown-menu">
+          <li><a href="/display-orders">View Diagnostic Orders</a></li> 
+            <li><a href="patient-search">Search Patient</a></li> 
             
           </ul>
         </li> 

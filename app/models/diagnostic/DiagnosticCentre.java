@@ -12,6 +12,7 @@ import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 
 import models.BaseEntity;
+import models.Patient;
 import models.doctor.Doctor;
 import play.data.validation.Constraints.Email;
 import play.data.validation.Constraints.Required;
@@ -52,6 +53,10 @@ public class DiagnosticCentre extends BaseEntity {
 
 	@OneToMany(cascade=CascadeType.ALL)
 	public List<DiagnosticTest> diagnosticTestList = new ArrayList<DiagnosticTest>();
+	
+//	@OneToMany(cascade=CascadeType.ALL)
+//	 * 	public List<Patient> patientList = new ArrayList<Patient>();
+
 	
 	@OneToMany(cascade=CascadeType.ALL)
 	public List<DiagnosticOrder> diagnosticOrderList = new ArrayList<DiagnosticOrder>();
