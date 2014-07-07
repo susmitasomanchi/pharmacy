@@ -98,10 +98,6 @@ GET    /doctor/today-appointment                   controllers.DoctorController.
 GET	   /doctor/appointments						   controllers.DoctorController.doctorAppointments()
 GET    /searchProduct                              controllers.PharmacistController.searchForm()
 POST   /searchProduct                              controllers.PharmacistController.searchProduct(arg: String ?= "")
-POST   /addProductToInventory/                     controllers.PharmacistController.addProductForm(id: Long)
-POST   /addProductToInventory1/                    controllers.PharmacistController.addToInventory(id:Long)		
-GET    /order                                      controllers.PharmacistController.orderRecord()
->>>>>>> branch 'master' of http://pharmacy.bz/green-software/mednetwork.git
 
 GET    /new-product                       controllers.ProductController.productForm()
 POST   /new-product/save                       controllers.ProductController.saveProduct()
@@ -140,11 +136,7 @@ GET    /dashboard                         controllers.UserActions.dashboard()
 GET    /register-patient/                 controllers.DoctorController.registerPatient()
 POST   /register-patient-proccess/        controllers.DoctorController.registerPatientProccess()
 
-#Diagnostic module	
-<<<<<<< HEAD
-=======
-GET    /diagnosticregistration            		controllers.DiagnosticController.diagnosticCenter()
-POST   /diagnosticregistration/save       		controllers.DiagnosticController.diagnosticCenterProcess()
+
 #GET    /diagnosticlist                   	 	controllers.DiagnosticController.diagnosticlist()
 #GET    /diagnostic-service-list/:id            controllers.DiagnosticController.diagnosticServiceslist(id: Long)
 GET    /diagnostic-delete/:id             		controllers.DiagnosticController.deleteCenter(id: Long)
@@ -152,7 +144,7 @@ GET    /diagnostic-edit/:id						controllers.DiagnosticController.editDiagnostic
 POST    /diagnostic-edit 						controllers.DiagnosticController.diagnosticEditprocess()
 GET    /diagnostic-search      					controllers.DiagnosticController.diagnosticSearch()
 GET    /diagnostic-search/list 					controllers.DiagnosticController.diagnosticSearchProcess()
-GET    /diagnosticrep/doctor-list         		controllers.DRController.doctorList()
+#GET    /diagnosticrep/doctor-list         		controllers.DRController.doctorList()
 GET    /diagnosticrep			         		controllers.DRController.addDiagRep()
 POST    /diagnosticrep/save		         		controllers.DRController.addDiagRepProcess()
 GET    /diagnosticrep/list			        	controllers.DRController.diagnosticRepresentativeList()
@@ -161,46 +153,19 @@ GET    /diagnosticrep/doctorsearch	         	controllers.DRController.searchProc
 GET    /diagnosticrep/add-doctor/:id      		controllers.DRController.addDoctor(id: Long)
 GET    /diagnosticrep/remove-doctor/:id   		controllers.DRController.removeDoctor(id: Long)
 GET    /diagnostic-centre/all-doctors      		controllers.DRController.displayDiagnosticCentreDoctors()
->>>>>>> branch 'master' of http://pharmacy.bz/green-software/mednetwork.git
-
-<<<<<<< HEAD
-GET    /diagnosticlist                   	 	controllers.DiagnosticController.diagnosticList()
-GET    /diagnostic-delete/:id             		controllers.DiagnosticController.deleteCenter(id: Long)
-GET    /diagnostic-edit/:id						controllers.DiagnosticController.editDiagnosticDetails(id: Long)
-POST    /diagnostic-edit 						controllers.DiagnosticController.diagnosticEditprocess()
-GET    /diagnostic-search      					controllers.DiagnosticController.diagnosticSearch()
-GET    /diagnostic-search/list 					controllers.DiagnosticController.diagnosticSearchProcess()
-=======
-GET    /upload-patient-file  					controllers.DiagnosticController.uploadFile()
-POST    /upload-patient-file/save		  		controllers.DiagnosticController.uploadFileProcess()
-GET    /download						  		controllers.DiagnosticController.downloadFile()
-GET    /add-test-done						  	controllers.DiagnosticController.addTestDone()
 
 
->>>>>>> branch 'master' of http://pharmacy.bz/green-software/mednetwork.git
 #Diagnostic Test
 GET    /test				            		controllers.DiagnosticController.addTest()
 POST   /test/save					       		controllers.DiagnosticController.addTestProcess()
-<<<<<<< HEAD
 GET    /test-list/:diagnosticCentreId/:patientId   controllers.DiagnosticController.diagnosticTestList(diagnosticCentreId: Long,patientId: Long)
 GET    /diagnostic-test-list				    controllers.DiagnosticController.diagnosticCentreTestList()	
 GET    /upload-patient-file/:id					controllers.DiagnosticController.uploadFile(id: Long)
 POST   /upload-patient-file/save		  		controllers.DiagnosticController.uploadFileProcess()
 GET    /download						  		controllers.DiagnosticController.downloadFile()
 #GET   /add-test-done						  	controllers.DiagnosticController.addTestDone()
-=======
-GET    /test-list/:id				            controllers.DiagnosticController.diagnosticTestList(id: Long)																																
->>>>>>> branch 'master' of http://pharmacy.bz/green-software/mednetwork.git
+#GET    /test-list/:id				            controllers.DiagnosticController.diagnosticCentreTestList(id: Long)																																
 
-
-GET    /diagnosticrep			         		controllers.DRController.addDiagRep()
-POST    /diagnosticrep/save		         		controllers.DRController.addDiagRepProcess()
-GET    /diagnosticrep/list			        	controllers.DRController.diagnosticRepresentativeList()
-GET    /diagnosticrep/doctor-search	         	controllers.DRController.search()
-GET    /diagnosticrep/doctorsearch	         	controllers.DRController.searchProcess()
-GET    /diagnosticrep/add-doctor/:id      		controllers.DRController.addDoctor(id: Long)
-GET    /diagnosticrep/remove-doctor/:id   		controllers.DRController.removeDoctor(id: Long)
-GET    /diagnostic-centre/all-doctors      		controllers.DRController.displayDiagnosticCentreDoctors()
 
 
 POST	/place-order							controllers.DiagnosticOrderController.receive()		
