@@ -3,14 +3,15 @@ package models;
 import java.util.LinkedHashMap;
 import java.util.Map;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.ManyToOne;
 
+import models.mr.PharmaceuticalCompany;
 import play.data.validation.Constraints.Required;
-import play.db.ebean.*;
-import play.db.ebean.Model.Finder;
 
 @SuppressWarnings("serial")
 @Entity
@@ -23,31 +24,35 @@ public class Product extends BaseEntity {
 	@Required
 	public String medicineName;
 
-	@Required
+	//@Required
 	public String brandName;
 
 	public String salt;
 
-	@Required
+	//@Required
 	public String strength;
 
-	@Required
+	//@Required
 	public String typeOfMedicine;
 
 	public String description;
 
-	@Required
+	//@Required
 	public Long unitsPerPack;
 
 	public String fullName;
 
+	@ManyToOne(cascade=CascadeType.ALL)
+	public PharmaceuticalCompany pharmaceuticalCompany;
+
+	@ManyToOne(cascade=CascadeType.ALL)
+	public Pharmacy pharmacy;
 
 	public static Finder<Long, Product> find = new Finder<Long, Product>(Long.class, Product.class);
 
 	public static void update(final Long id, final Product product) {
 		product.update(id);
 	}
-
 
 	public static Map<String, String> options() {
 
@@ -57,4 +62,5 @@ public class Product extends BaseEntity {
 		}
 		return vals;
 	}
+
 }

@@ -1,0 +1,44 @@
+@(dcrLineItemList: List[models.mr.DCRLineItem])
+
+@import play.i18n._
+@import helper.twitterBootstrap._
+@import helper._
+
+<table class="table table-bordered table-condensed">
+	<thead>
+	<tr>
+	   <th>Doctors</th>
+	   <th>Samples (Qty)</th>
+	   <th>Promotions</th>
+	   <th>POB</th>
+	   <th>Remarks</th>
+	</tr>   
+	</thead>
+	<tbody>
+	
+	@for(dcrLineItem <- dcrLineItemList){
+	<tr>
+		<td>@dcrLineItem.doctor.appUser.name</td>
+		<td>
+			@for(sample <- dcrLineItem.sampleList){
+				@sample.product.medicineName (@sample.quantity)
+				<br>
+			}
+	   	</td>
+	   	<td valign="top">
+			<div id="samplesdiv">
+			      <table> 	
+				  	@for(promotedProduct <- dcrLineItem.promotionList){
+					  <tr>
+						 <td>@promotedProduct.medicineName</td>
+					  </tr>
+					 }
+			      </table>
+			</div>   
+	   	</td>
+	    <td>@dcrLineItem.pob</td>
+		<td>@dcrLineItem.remarks</td>
+     </tr>
+     }
+   </tbody>
+  </table>

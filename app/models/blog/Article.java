@@ -62,7 +62,7 @@ public class Article extends BaseEntity{
 	public ArticleCategory category;
 
 	@OneToMany(cascade = CascadeType.ALL)
-	public List<BlogComment> commentList = new ArrayList<>();
+	public List<BlogComment> commentList = new ArrayList<BlogComment>();
 
 	public static Model.Finder<Long,Article> find = new Finder<Long, Article>(Long.class, Article.class);
 

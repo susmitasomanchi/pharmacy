@@ -7,20 +7,16 @@ PLEASE DO NOT MODIFY IT BY HAND
  *****/
 package controllers;
 
-
-
 import models.AppUser;
-
-
-import models.diagnostic.DiagnosticCentre;
-import models.diagnostic.DiagnosticRepresentative;
-import models.MedicalRepresentative;
 import models.Patient;
-import models.PharmaceuticalCompany;
 import models.Pharmacist;
 import models.Pharmacy;
 import models.Role;
+import models.diagnostic.DiagnosticCentre;
+import models.diagnostic.DiagnosticRepresentative;
 import models.doctor.Doctor;
+import models.mr.MedicalRepresentative;
+import models.mr.PharmaceuticalCompany;
 import play.Logger;
 import play.data.Form;
 import play.mvc.Controller;
@@ -33,7 +29,7 @@ public class UserController extends Controller {
 
 	public static Form<JoinUsBean> joinUsForm = Form.form(JoinUsBean.class);
 	public static Form<DiagnosticRepresentative> drForm = Form.form(DiagnosticRepresentative.class);
-
+	public static Form<MedicalRepresentative> mrForm = Form.form(MedicalRepresentative.class);
 	public static Result joinUs(){
 		return ok(views.html.joinus.render(joinUsForm));
 	}
@@ -41,6 +37,7 @@ public class UserController extends Controller {
 
 	public static Result processJoinUs(){
 		final Form<JoinUsBean> filledForm = joinUsForm.bindFromRequest();
+		final Form<MedicalRepresentative> mR = mrForm.bindFromRequest();
 		final Form<DiagnosticRepresentative> dr = drForm.bindFromRequest();
 		if(filledForm.hasErrors()) {
 			Logger.info("Form Errors");
@@ -71,10 +68,10 @@ public class UserController extends Controller {
 				//final Pharmacy pharmacy = filledForm.get();
 				final Pharmacy pharmacy = new Pharmacy();
 				pharmacy.name=filledForm.get().pharmacyName;
-				//pharmacy.adminPharmacist=pharmacist;
-				pharmacy.adminPharmacist = pharmacist;
+				pharmacy.pharmacistList.add(pharmacist);
 				pharmacy.save();
-				//pharmacy.update();
+				pharmacist.pharmacy=pharmacy;
+				pharmacist.update();
 			}
 
 			if(appUser.role == Role.ADMIN_MR){
@@ -91,6 +88,18 @@ public class UserController extends Controller {
 
 			}
 
+			if(appUser.role == Role.MR){
+				//				final MedicalRepresentative medicalRepresentative = new MedicalRepresentative();
+				//				medicalRepresentative.appUser = appUser;
+				//				medicalRepresentative.regionAlloted=mR.regionAlloted;
+				//				medicalRepresentative.save();
+				final MedicalRepresentative medicalRepresentative = mR.get();
+				medicalRepresentative.appUser = appUser;
+				medicalRepresentative.mrAdminId =  LoginController.getLoggedInUser().id;
+				medicalRepresentative.save();
+			}
+
+
 
 			if(appUser.role == Role.ADMIN_DIAGREP){
 				final DiagnosticRepresentative diagRep = new DiagnosticRepresentative();
@@ -102,11 +111,11 @@ public class UserController extends Controller {
 				diagnosticCenter.save();
 				diagRep.diagnosticCentre = diagnosticCenter;
 				diagRep.update();
-				
+
 				Logger.info(diagRep.diagnosticCentre.name);
-				
+
 			}
-			
+
 			session().clear();
 			session(Constants.LOGGED_IN_USER_ID, appUser.id + "");
 			session(Constants.LOGGED_IN_USER_ROLE, appUser.role+ "");

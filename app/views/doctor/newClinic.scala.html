@@ -6,10 +6,29 @@
 
 
 @main("New Clinic"){
+
+	 <style>
+      #map-container { height: 200px }
+    </style>
+    
+    <script type="text/javascript"
+
+        src="https://maps.googleapis.com/maps/api/js?v=3.exp&sensor=false&libraries=places">
 	
-	@helper.form(action=routes.DoctorController.processNewClinic()) {
-	@helper.inputText(clinicForm("name"),'class -> "inputs",'_value->"10",'_label->"Name")
-			
+      </script>
+   
+	<form action="@routes.DoctorController.processNewClinic()" method="post" onsubmit="return validate()">
+	<div class="row">
+	<div class="col-md-6">
+	<div >@helper.inputText(clinicForm("name"),'class -> "inputs",'_value->"10",'_label->"Name")</div>
+	&nbsp
+	 <label for="city">City</label>
+	<div ><input id="city"></div>
+	</div>
+			<div id="map-container" class="col-md-6"></div>
+	
+	</div>
+	
 	<div class="row clearfix">
 		<div class="col-md-12 column">
 			<div class="row clearfix">
@@ -24,6 +43,7 @@
 			</tr>
 			</head>
 			<tbody>
+			For Patient
 			@for((day,index) <- models.doctor.Day.getList().zipWithIndex){
 				@if(list.contains(day.toString())){
 					
@@ -43,7 +63,8 @@
 				}
 			</tbody>
 			</table>	
-				@helper.inputText(clinicForm("slot"),'_class -> "inputs",'_value->"10",'_label->"Patient slot")
+				@helper.inputText(clinicForm("slot"),'_class -> "inputs",'_value->"10",'_label->"Time interval Slot(in minutes)")
+				@clinicForm("slot").value()
 				</div>
 				<div class="col-md-6 column">
 			<table class="table">
@@ -55,6 +76,7 @@
 			</tr>
 			</head>
 			<tbody>
+			For Medical Representative
 			@for((day,index) <- models.doctor.Day.getList().zipWithIndex){
 					@if(listmr.contains(day.toString())){
 				<tr>
@@ -66,13 +88,13 @@
 				<tr>
 					<td><input class="checkday" id="m-@day" type="checkbox" name="daysOfWeekMr[]"  value="@day.toString()">@day</input></td>
 					<td><input id="m-@day-from" type="number" name="fromHrsMr[]" value="@clinicForm("fromHrsMr["+index+"]").value"disabled required></input></td>
-					<td><input id="m-@day-to" type="number" name="toHrsMr[]"  value="@clinicForm("toHrsMr["+index+"]").value" disabled required></input></td>
+					<td><input id="m-@day-	to" type="number" name="toHrsMr[]"  value="@clinicForm("toHrsMr["+index+"]").value" disabled required></input></td>
 				</tr>
 					}
 			}
 			</tbody>
 			</table>	
-					@helper.inputText(clinicForm("slotmr"),'_class -> "inputs",'_value->"10",'_label->"Mr slot")
+					@helper.inputText(clinicForm("slotmr"),'_class -> "inputs",'_value->"10",'_label->"Time interval Slot(in minutes)")
 				</div>
 			</div>
 		</div>
@@ -84,9 +106,8 @@
 	<br><br>
 				<input type="hidden" name="id" value='@clinicForm("id").value' >
 				<input type="submit" class="btn btn-primary" value="Submit">
-}
 
-
+</form>
 <script>
 
 $('.checkday').change(function() {	
@@ -105,9 +126,69 @@ $('.checkday').change(function() {
     $('#textbox1').val($(this).is(':checked'));        
 });
 
+function validate(){
+	var values = $('input:checkbox:checked').map(function () {
+			if($("#"+this.id+"-from").val() > $("#"+this.id+"-to").val()){
+				return 1;
+			}
+
+		  return 0;
+	}).get();
+
+if($.inArray(1, values) != -1){
+	return false;
+	}
+return true;
+}
+
 
 </script>			
 			
+ 
+    <script>
 
+    var lng,lat;
+    function initialize() {
+    	alert(lat);
+        alert(lng);      
+        var mapOptions = {
+          center: new google.maps.LatLng(lat, lng),
+          zoom: 13
+        };
+        var map = new google.maps.Map(document.getElementById("map-container"), mapOptions);
+
+        google.maps.event.addListener(map, 'click', function(event) {
+
+        	alert(event.latLng)
+
+        	        marker = new google.maps.Marker({position: event.latLng, map: map});
+
+        	    });
+
+        }
+    
+	$("#city").blur(function(){
+		var geocoder =  new google.maps.Geocoder();
+		alert(this.value);
+	    geocoder.geocode( { 'address': this.value}, function(results, status) {
+	          if (status == google.maps.GeocoderStatus.OK) {
+	            alert("location : " + results[0].geometry.location.lat() + " " +results[0].geometry.location.lng()); 
+					lat=results[0].geometry.location.lat();
+					lng=results[0].geometry.location.lng();
+					initialize();
+		          } else {
+	            alert("Something got wrong " + status);
+	          }
+	        });
+
+			
+	    
+
+	     // google.maps.event.addDomListener(window, 'load', initialize);
+
+		});
+
+
+    </script>
 
 }

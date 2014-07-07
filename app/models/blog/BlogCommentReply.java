@@ -33,7 +33,7 @@ public class BlogCommentReply extends BaseEntity{
 
 	public BlogCommentatorType blogCommentatorType;
 
-	public static Finder<Long,BlogCommentReply> find = new Finder<>(Long.class, BlogCommentReply.class);
+	public static Finder<Long,BlogCommentReply> find = new Finder<Long,BlogCommentReply>(Long.class, BlogCommentReply.class);
 
 }
 
