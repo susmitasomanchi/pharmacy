@@ -508,8 +508,8 @@ public class DoctorController extends Controller {
 
 	public static Result doctorAppointments() {
 
-		//		return ok(views.html.doctor.doctor_appointments.render());
-		return ok();
+		return ok(views.html.doctor.doctor_all_appointments.render());
+		
 	}
 
 	public static Result doctorViewAppointment() {
