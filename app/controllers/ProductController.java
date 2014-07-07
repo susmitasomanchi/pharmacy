@@ -1,7 +1,6 @@
 package controllers;
 
 import java.util.List;
-
 import models.Pharmacist;
 import models.Product;
 import models.Role;

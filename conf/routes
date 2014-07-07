@@ -96,8 +96,8 @@ GET    /order                                      controllers.PharmacistControl
 
 
 
-GET    /medical-representative                     controllers.Application.medicalRepresentative()
-POST   /medical-representative/proccess            controllers.Application.medicalRepresentativeProccess()
+#GET    /medical-representative                     controllers.Application.medicalRepresentative()
+#POST   /medical-representative/proccess            controllers.Application.medicalRepresentativeProccess()
 GET    /diagRep/                                   controllers.Application.diagnosticRep()
 POST   /diagRepProccess/                           controllers.Application.diagnosticRepProccess()
 GET    /sampledata/populate                        controllers.SampleDataController.populate()
@@ -170,7 +170,10 @@ GET    /mr/show-dcr/:id                            controllers.MRController.addD
 POST   /mr/dcr/add-line-item                       controllers.MRController.processDCRLineItem()
 GET    /search                                     controllers.MRController.search()
 GET    /mr/display-appointment/:id                 controllers.MRController.scheduleAppointment(id:String)
-POST    /mr/add                                    controllers.MRController.medicalRepresentativeProccess()	
+POST    /mr/add                                    controllers.MRController.medicalRepresentativeProccess()
+#POST    /mr/editmr                                 controllers.MRController.medicalRepresentativeProccessUpdate()
+GET     /mr/del	                                   controllers.MRController.removeMR(id: Long)
+GET     /mr/edit/:id	                           controllers.MRController.editMR(id: Long)
 
 #common module
 GET    /new-product                                controllers.ProductController.productForm()

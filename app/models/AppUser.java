@@ -10,6 +10,8 @@ package models;
 import java.util.Date;
 
 import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Lob;
 
@@ -23,6 +25,7 @@ import play.db.ebean.Model;
 @Entity
 public class AppUser extends BaseEntity {
 
+	@GeneratedValue(strategy=GenerationType.AUTO)
 	@Id
 	public Long id;
 

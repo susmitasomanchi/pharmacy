@@ -25,12 +25,12 @@ public class Application extends Controller {
 		return redirect(routes.Application.index());
 	}
 
-	public static Result medicalRepresentative(){
+	/*public static Result medicalRepresentative(){
 		return ok(views.html.mr.medicalRepresentative.render(mrForm));
 
-	}
+	}*/
 
-	public static Result medicalRepresentativeProccess(){
+	/*public static Result medicalRepresentativeProccess(){
 		final Form<MedicalRepresentative> filledForm=mrForm.bindFromRequest();
 
 		if(filledForm.hasErrors()) {
@@ -55,7 +55,7 @@ public class Application extends Controller {
 
 
 		return ok("salesrepresentr information added");
-	}
+	}*/
 	//diagnostic representator proccessing
 
 
