@@ -234,7 +234,7 @@ public class DoctorController extends Controller {
 	}
 
 	public static Result processNewClinic(){
-		final Form<ClinicBean> filledForm = clinicForm.bindFromRequest();
+		/*final Form<ClinicBean> filledForm = clinicForm.bindFromRequest();
 		DoctorClinicInfo doctorClinicInfo=null;
 		if(filledForm.hasErrors()){
 			return ok(views.html.doctor.newClinic.render(filledForm));
@@ -260,13 +260,17 @@ public class DoctorController extends Controller {
 
 
 
-		}
+		}*/
+		
+		return TODO;
 
 	}
 
 	public static Result myClinics(){
-		final Doctor loggedInDoctor = LoginController.getLoggedInUser().getDoctor();
-		return ok(views.html.doctor.myClinics.render(loggedInDoctor.doctorClinicInfoList));
+		//final Doctor loggedInDoctor = LoginController.getLoggedInUser().getDoctor();
+		//return ok(views.html.doctor.myClinics.render(loggedInDoctor.doctorClinicInfoList));
+		 return TODO;
+		 
 	}
 
 
@@ -277,12 +281,12 @@ public class DoctorController extends Controller {
 
 
 	public static Result form() {
-		return ok(views.html.createDoctor.render(form));
-		//return TODO;
+		//return ok(views.html.createDoctor.render(form));
+		return TODO;
 	}
 
 	public static Result process() {
-		final Form<Doctor> filledForm = form.bindFromRequest();
+		/*final Form<Doctor> filledForm = form.bindFromRequest();
 
 		if(filledForm.hasErrors()) {
 
@@ -299,7 +303,7 @@ public class DoctorController extends Controller {
 
 				doctor.update();
 			}
-		}
+		}*/
 		return TODO;
 		//return redirect(routes.UserController.list());
 
@@ -309,14 +313,15 @@ public class DoctorController extends Controller {
 	//Edit Or Manage Clinic
 	public static Result manageClinic(final Long docClinicId) {
 
-		final DoctorClinicInfo doctorClinicInfo=DoctorClinicInfo.find.byId(docClinicId);
+		/*final DoctorClinicInfo doctorClinicInfo=DoctorClinicInfo.find.byId(docClinicId);
 
 		Logger.info(""+doctorClinicInfo.toBean().name);
 
 		final Form<ClinicBean> filledForm = clinicForm.fill(doctorClinicInfo.toBean());
 
 
-		return ok(views.html.doctor.newClinic.render(filledForm));
+		return ok(views.html.doctor.newClinic.render(filledForm)); */
+		return TODO;
 
 	}
 
@@ -382,7 +387,7 @@ public class DoctorController extends Controller {
 	//creating appointments
 	public static  Result createAppointment(final DoctorClinicInfo docclinicInfo) {
 
-		final Doctor doctor=LoginController.getLoggedInUser().getDoctor();
+		/*final Doctor doctor=LoginController.getLoggedInUser().getDoctor();
 
 		final Calendar calendar = Calendar.getInstance();
 		calendar.setTime(new Date());
@@ -468,7 +473,8 @@ public class DoctorController extends Controller {
 
 		}
 
-		return redirect(routes.DoctorController.myClinics());
+		return redirect(routes.DoctorController.myClinics());*/
+		return TODO;
 	}
 
 	//	final Form<DoctorClinicInfo> filledForm = doctorClinicForm.bindFromRequest();
@@ -525,5 +531,10 @@ public class DoctorController extends Controller {
 	public static Result doctorViewAppointment() {
 		
 		return ok(views.html.doctor.doctor_view_appointment.render());
+	}
+	
+	public static Result doctorProfileS() {
+		
+		return ok(views.html.doctor.doctor_profile.render());
 	}
 }

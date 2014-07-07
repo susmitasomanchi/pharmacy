@@ -9,7 +9,6 @@ GET		/blog/create-blog-admin			controllers.SampleDataController.createBlogAdmin(
 GET		/blog/login						controllers.LoginController.blogAdminLoginForm()
 
 GET		/blog							controllers.BlogController.blogHome()
-GET		/blogs							controllers.BlogController.blogHome()
 GET		/blog/admin/new-category				controllers.BlogController.categoryForm()
 POST	/blog/admin/new-category				controllers.BlogController.processCategoryForm()
 GET		/blog/admin/categories				controllers.BlogController.categories()
@@ -37,14 +36,10 @@ GET    /                                  controllers.Application.index()
 POST   /login                             controllers.LoginController.processLogin()
 GET    /logout                            controllers.LoginController.processLogout()
 
-# Remove later (at Beta Launch)
-GET    /                                  controllers.Application.index()
-GET    /:str		                      controllers.Application.indexX(str: String)
-####################################################################################################
+
 
 # Remove later (at Beta Launch)
-GET    /                                  controllers.Application.index()
-GET    /:str		                      controllers.Application.indexX(str: String)
+#GET    /:str		                      controllers.Application.indexX(str: String)
 ####################################################################################################
 
 
@@ -81,7 +76,7 @@ POST	/doctor-publication				controllers.DoctorController.processDoctorPublicatio
 GET     /doctor/prescription			controllers.DoctorController.doctorPrescription()
 GET     /doctor/appointments			controllers.DoctorController.doctorAppointments()
 GET     /doctor/view/appointment		controllers.DoctorController.doctorViewAppointment()
-
+GET		/doctor/profile					controllers.DoctorController.doctorProfileS()
 
 
 GET    /userform/doctor/                  controllers.DoctorController.form()
@@ -141,7 +136,7 @@ POST   /register-patient-proccess/      controllers.DoctorController.registerPat
 GET    /diagnosticregistration            		controllers.DiagnosticController.diagnosticCenter()
 POST   /diagnosticregistration/save       		controllers.DiagnosticController.diagnosticCenterProcess()
 #GET    /diagnosticlist                   	 	controllers.DiagnosticController.diagnosticlist()
-#GET    /diagnostic-service-list/:id            	 	controllers.DiagnosticController.diagnosticServiceslist(id: Long)
+#GET    /diagnostic-service-list/:id            controllers.DiagnosticController.diagnosticServiceslist(id: Long)
 GET    /diagnostic-delete/:id             		controllers.DiagnosticController.deleteCenter(id: Long)
 GET    /diagnostic-edit/:id						controllers.DiagnosticController.editDiagnosticDetails(id: Long)
 POST    /diagnostic-edit 						controllers.DiagnosticController.diagnosticEditprocess()
@@ -160,13 +155,13 @@ GET    /diagnostic-centre/all-doctors      		controllers.DRController.displayDia
 GET    /upload-patient-file  					controllers.DiagnosticController.uploadFile()
 POST    /upload-patient-file/save		  		controllers.DiagnosticController.uploadFileProcess()
 GET    /download						  		controllers.DiagnosticController.downloadFile()
-GET    /add-test-done						  		controllers.DiagnosticController.addTestDone()
+GET    /add-test-done						  	controllers.DiagnosticController.addTestDone()
 
 
 #Diagnostic Test
-GET    /test				            		controllers.DiagnosticTestController.addTest()
-POST   /test/save					       		controllers.DiagnosticTestController.addTestProcess()
-GET    /test-list/:id				            controllers.DiagnosticTestController.diagnosticTestList(id: Long)
+GET    /test				            		controllers.DiagnosticController.addTest()
+POST   /test/save					       		controllers.DiagnosticController.addTestProcess()
+GET    /test-list/:id				            controllers.DiagnosticController.diagnosticTestList(id: Long)
 GET		/place-order				controllers.DiagnosticOrderController.receive()		
 GET		/display-orders/:id				controllers.DiagnosticOrderController.viewOrders(id: Long)																																		
 
