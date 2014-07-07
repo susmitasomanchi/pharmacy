@@ -8,17 +8,17 @@
 GET    /blog/create-blog-admin                     controllers.SampleDataController.createBlogAdmin()
 GET    /blog/login                                 controllers.LoginController.blogAdminLoginForm()
 
-GET    /blog                                       controllers.BlogController.blogHome()
-GET    /blog/admin/new-category                    controllers.BlogController.categoryForm()
-POST   /blog/admin/new-category                    controllers.BlogController.processCategoryForm()
-GET    /blog/admin/categories                      controllers.BlogController.categories()
-GET    /blog/admin/edit-category/:id               controllers.BlogController.editCategoryForm(id: Long)
-GET    /blog/admin/new-article                     controllers.BlogController.articleForm()
-POST   /blog/admin/new-article                     controllers.BlogController.processArticleForm()
-GET    /blog/admin/articles/:categoryId            controllers.BlogController.articles(categoryId: Long)
-GET    /blog/admin/edit-article/:id                controllers.BlogController.editArticleForm(id: Long)
-GET    /blog/get-thumbnail/:id                     controllers.BlogController.getThumbnail(id: Long)
-GET    /blog/get-main-image/:id                    controllers.BlogController.getMainImage(id: Long)
+GET		/blog							controllers.BlogController.blogHome()
+GET		/blog/admin/new-category				controllers.BlogController.categoryForm()
+POST	/blog/admin/new-category				controllers.BlogController.processCategoryForm()
+GET		/blog/admin/categories				controllers.BlogController.categories()
+GET		/blog/admin/edit-category/:id			controllers.BlogController.editCategoryForm(id: Long)
+GET		/blog/admin/new-article				controllers.BlogController.articleForm()
+POST	/blog/admin/new-article				controllers.BlogController.processArticleForm()
+GET		/blog/admin/articles/:categoryId		controllers.BlogController.articles(categoryId: Long)
+GET		/blog/admin/edit-article/:id			controllers.BlogController.editArticleForm(id: Long)
+GET		/blog/get-thumbnail/:id			controllers.BlogController.getThumbnail(id: Long)
+GET		/blog/get-main-image/:id		controllers.BlogController.getMainImage(id: Long)
 
 GET    /blog/add-comment/:id/:message              controllers.BlogController.addComment(id: Long, message: String)
 GET    /blog/add-comment-reply/:id/:cid/:message   controllers.BlogController.addCommentReply(id: Long, cid: Long, message: String)
@@ -37,9 +37,10 @@ POST   /login                             controllers.LoginController.processLog
 GET    /logout                            controllers.LoginController.processLogout()
 
 
+
 # Remove later (at Beta Launch)
-#GET    /                                  controllers.Application.index()
 #GET    /:str		                      controllers.Application.indexX(str: String)
+####################################################################################################
 
 
 # Sign up page
@@ -75,6 +76,8 @@ GET		/doctor-prescribe/:id			controllers.DoctorController.showPrescriptionForm(i
 POST	/doctor-prescribe				controllers.DoctorController.processPrescriptionForm()
 POST   /userform/doctor/                controllers.DoctorController.process()
 
+GET    /doctor/prescription							controllers.DoctorController.doctorPrescription()
+GET		/doctor/profile					controllers.DoctorController.doctorProfileS()
 
 GET    /userform/assistant/               controllers.AssistantController.form()
 POST   /userform/assistant/               controllers.AssistantController.process()
@@ -85,11 +88,20 @@ POST   /scheduleappointment/              controllers.AppointmentController.proc
 GET   /edit-product/:id                      controllers.PharmacistController.editProduct(id: Long)
 GET   /remove-product/:id                      controllers.PharmacistController.removeProduct(id: Long)
 
-GET    /searchProduct                     controllers.PharmacistController.searchForm()
+
 POST   /searchProduct			        controllers.PharmacistController.searchProduct(arg: String ?= "")
 POST		/addProductToInventory/				controllers.PharmacistController.addProductForm(id: Long)
 POST   /addProductToInventory1/            controllers.PharmacistController.addToInventory(id:Long)		
 GET		/order								controllers.PharmacistController.orderRecord()
+POST   /editproduct/                               controllers.PharmacistController.editProduct(id: Long)
+GET    /doctor/today-appointment                   controllers.DoctorController.viewTodaysAppointment()	
+GET	   /doctor/appointments						   controllers.DoctorController.doctorAppointments()
+GET    /searchProduct                              controllers.PharmacistController.searchForm()
+POST   /searchProduct                              controllers.PharmacistController.searchProduct(arg: String ?= "")
+POST   /addProductToInventory/                     controllers.PharmacistController.addProductForm(id: Long)
+POST   /addProductToInventory1/                    controllers.PharmacistController.addToInventory(id:Long)		
+GET    /order                                      controllers.PharmacistController.orderRecord()
+>>>>>>> branch 'master' of http://pharmacy.bz/green-software/mednetwork.git
 
 GET    /new-product                       controllers.ProductController.productForm()
 POST   /new-product/save                       controllers.ProductController.saveProduct()
@@ -129,22 +141,56 @@ GET    /register-patient/                 controllers.DoctorController.registerP
 POST   /register-patient-proccess/        controllers.DoctorController.registerPatientProccess()
 
 #Diagnostic module	
+<<<<<<< HEAD
+=======
+GET    /diagnosticregistration            		controllers.DiagnosticController.diagnosticCenter()
+POST   /diagnosticregistration/save       		controllers.DiagnosticController.diagnosticCenterProcess()
+#GET    /diagnosticlist                   	 	controllers.DiagnosticController.diagnosticlist()
+#GET    /diagnostic-service-list/:id            controllers.DiagnosticController.diagnosticServiceslist(id: Long)
+GET    /diagnostic-delete/:id             		controllers.DiagnosticController.deleteCenter(id: Long)
+GET    /diagnostic-edit/:id						controllers.DiagnosticController.editDiagnosticDetails(id: Long)
+POST    /diagnostic-edit 						controllers.DiagnosticController.diagnosticEditprocess()
+GET    /diagnostic-search      					controllers.DiagnosticController.diagnosticSearch()
+GET    /diagnostic-search/list 					controllers.DiagnosticController.diagnosticSearchProcess()
+GET    /diagnosticrep/doctor-list         		controllers.DRController.doctorList()
+GET    /diagnosticrep			         		controllers.DRController.addDiagRep()
+POST    /diagnosticrep/save		         		controllers.DRController.addDiagRepProcess()
+GET    /diagnosticrep/list			        	controllers.DRController.diagnosticRepresentativeList()
+GET    /diagnosticrep/doctor-search	         	controllers.DRController.search()
+GET    /diagnosticrep/doctorsearch	         	controllers.DRController.searchProcess()
+GET    /diagnosticrep/add-doctor/:id      		controllers.DRController.addDoctor(id: Long)
+GET    /diagnosticrep/remove-doctor/:id   		controllers.DRController.removeDoctor(id: Long)
+GET    /diagnostic-centre/all-doctors      		controllers.DRController.displayDiagnosticCentreDoctors()
+>>>>>>> branch 'master' of http://pharmacy.bz/green-software/mednetwork.git
 
+<<<<<<< HEAD
 GET    /diagnosticlist                   	 	controllers.DiagnosticController.diagnosticList()
 GET    /diagnostic-delete/:id             		controllers.DiagnosticController.deleteCenter(id: Long)
 GET    /diagnostic-edit/:id						controllers.DiagnosticController.editDiagnosticDetails(id: Long)
 POST    /diagnostic-edit 						controllers.DiagnosticController.diagnosticEditprocess()
 GET    /diagnostic-search      					controllers.DiagnosticController.diagnosticSearch()
 GET    /diagnostic-search/list 					controllers.DiagnosticController.diagnosticSearchProcess()
+=======
+GET    /upload-patient-file  					controllers.DiagnosticController.uploadFile()
+POST    /upload-patient-file/save		  		controllers.DiagnosticController.uploadFileProcess()
+GET    /download						  		controllers.DiagnosticController.downloadFile()
+GET    /add-test-done						  	controllers.DiagnosticController.addTestDone()
+
+
+>>>>>>> branch 'master' of http://pharmacy.bz/green-software/mednetwork.git
 #Diagnostic Test
 GET    /test				            		controllers.DiagnosticController.addTest()
 POST   /test/save					       		controllers.DiagnosticController.addTestProcess()
+<<<<<<< HEAD
 GET    /test-list/:diagnosticCentreId/:patientId   controllers.DiagnosticController.diagnosticTestList(diagnosticCentreId: Long,patientId: Long)
 GET    /diagnostic-test-list				    controllers.DiagnosticController.diagnosticCentreTestList()	
 GET    /upload-patient-file/:id					controllers.DiagnosticController.uploadFile(id: Long)
 POST   /upload-patient-file/save		  		controllers.DiagnosticController.uploadFileProcess()
 GET    /download						  		controllers.DiagnosticController.downloadFile()
 #GET   /add-test-done						  	controllers.DiagnosticController.addTestDone()
+=======
+GET    /test-list/:id				            controllers.DiagnosticController.diagnosticTestList(id: Long)																																
+>>>>>>> branch 'master' of http://pharmacy.bz/green-software/mednetwork.git
 
 
 GET    /diagnosticrep			         		controllers.DRController.addDiagRep()
