@@ -1,6 +1,7 @@
-@(article :models.Article, offset :Integer) @import play.i18n._
+@(article :models.blog.Article, offset :Integer) 
+@import play.i18n._
 
-@blog.blogmain(article.htmlTitle, article.htmlMetaDescription,
+@blogmain(article.htmlTitle, article.htmlMetaDescription,
 article.htmlKeywords){
 
 <!-- Panel Style (otherwise not present in BootStrap 2) -->
@@ -97,13 +98,13 @@ a.prev-t, a.next-t {
 	height: 10px;
 	display: block;
 	position: absolute;
-	top: 170px;
+	top: 42px;
 }
-a.prev-t {			left: 223px;
+a.prev-t {			left: 0px;
 					background-position: 0 0; }
 a.prev-t:hover {		background-position: 0 -50px; }
 a.prev-t.disabled {	background-position: 0 -100px !important;  }
-a.next-t {			right: 222px;
+a.next-t {			right: -20px;
 					background-position: -50px 0; }
 a.next-t:hover {		background-position: -50px -50px; }
 a.next-t.disabled {	background-position: -50px -100px !important;  }
@@ -125,7 +126,7 @@ a.prev-t span, a.next-t span {
 		onclick="window.location.href='/blog#@article.category.slugURL';">@article.category.name</span> <span
 		style="color: #494646"></span>
 </p>
-<div class="row">
+<div class="row" style="position:relative;">
 	<div class="wrapper-carousel">
 		<div id="top-carousel">
 
@@ -167,7 +168,8 @@ a.prev-t span, a.next-t span {
    	 	  </div>
    	 	  								
 <script>
-runtopcarousel(@offset-1);
+var offset = @offset-1;
+runtopcarousel(offset);
 </script>
 
 
@@ -178,28 +180,34 @@ runtopcarousel(@offset-1);
 box-shadow: 0 0 10px 5px #888888;	
 }
 </style>
-
-   	 	  
+	
+   		<br> 	  
           <div class="row">
    	    		<div class="span12">
    	    		<p>
    	    			<h3>@article.name</h3>
-   	    			<p style="margin-top: -15px;"><h4>@article.shortDescription</h4></p>
+   	    			<p style="margin-top: -15px;">
+   	    			<h4>@article.shortDescription</h4>
+   	    			</p>
+   	    			<span style="font-size:20px !important; font-family: 'Dosis', sans-serif !important;">
    	    			@article.onHoverContent
+   	    			</span>
         		</p>
    	    		</div>
           </div>
    	 	  
+   	 	  <br>
+   	 	  
           <div class="row">
-   	    		<div class="span12">
-   	    			<img alt="@article.name" class="modelimage" src="@routes.BlogController.getMainImage(article.id)" style="width:100%; height:500px;" />
+   	    		<div class="span8 offset2">
+   	    			<img alt="@article.name" class="modelimage" src="@routes.BlogController.getMainImage(article.id)" style="width:100%; height:300px;" />
         		</div>
           </div>
           
-          <br><br>
+          <br>
           
           <div class="row">
-   	    		<div class="span12">
+   	    		<div class="span12" style="font-size:18px !important; font-family:'Muli', sans-serif !important;" >
    	    		<p>
    	    				@Html(article.content)
         		</p>
@@ -457,7 +465,7 @@ box-shadow: 0 0 10px 5px #888888;
 
   window.fbAsyncInit = function() {
   FB.init({
-    appId      : '1423515137920394',
+    appId      : '1490163064554901',
     cookie     : true,  // enable cookies to allow the server to access 
                         // the session
     xfbml      : true,  // parse social plugins on this page
@@ -558,7 +566,7 @@ box-shadow: 0 0 10px 5px #888888;
      <div class="g-signin"
       data-callback="loginFinishedCallback"
       data-approvalprompt="force"
-      data-clientid="404230636180-4qmlk57403u2985kjibgj3l37a0sdi54.apps.googleusercontent.com"
+      data-clientid="104967497790-3kr5g7c4jo1569kpfpit0s2aqei7ka6j.apps.googleusercontent.com"
       data-scope="https://www.googleapis.com/auth/plus.login https://www.googleapis.com/auth/plus.profile.emails.read"
       data-height="standard"
       data-cookiepolicy="single_host_origin"
@@ -582,11 +590,11 @@ box-shadow: 0 0 10px 5px #888888;
 		<div id="textcom-@oc.id" class="panel panel-default" style="">
 		<!-- <div id="textcom-@oc.id" class="panel panel-default" style="width:700px"> -->
 			<div class="panel-heading">
-				<h5 class="panel-title"><i class="fa fa-user"></i>&nbsp;@if(oc.blogCommentatorType.equals(BlogCommentatorType.APP_USER)){@oc.by.name}else{@oc.socialBy.name} <span class="pull-right"><small>@oc.date.format("dd-MMM-yyyy hh:mm")</small></span></h5>
+				<h5 class="panel-title"><i class="fa fa-user"></i>&nbsp;@if(oc.blogCommentatorType.equals(models.blog.BlogCommentatorType.APP_USER)){@oc.by.name}else{@oc.socialBy.name} <span class="pull-right"><small>@oc.date.format("dd-MMM-yyyy hh:mm")</small></span></h5>
 			</div>
 			<div class="panel-body">
 	 			<p>@oc.message</p>
-	 			<a id="replybtn-@oc.id" class="pull-right" style="cursor:pointer; color:#3a87ad;" onclick="reply('@oc.id', '@if(oc.blogCommentatorType.equals(BlogCommentatorType.APP_USER)){@oc.by.name}else{@oc.socialBy.name}');"><i class="fa fa-reply"></i></a>
+	 			<a id="replybtn-@oc.id" class="pull-right" style="cursor:pointer; color:#3a87ad;" onclick="reply('@oc.id', '@if(oc.blogCommentatorType.equals(models.blog.BlogCommentatorType.APP_USER)){@oc.by.name}else{@oc.socialBy.name}');"><i class="fa fa-reply"></i></a>
 				<br>
 			</div>
 		</div>
@@ -595,7 +603,7 @@ box-shadow: 0 0 10px 5px #888888;
 			<div style="margin-top:-20px; margin-left:100px;" class="panel panel-default">
 			<!-- <div style="margin-top:-20px; margin-left:100px; width:600px" class="panel panel-default"> -->
 				<div class="panel-heading">
-					<h5 class="panel-title"><i class="fa fa-user"></i>&nbsp;@if(reply.blogCommentatorType.equals(BlogCommentatorType.APP_USER)){@reply.by.name}else{@reply.socialBy.name} <span class="pull-right"><small>@reply.date.format("dd-MMM-yyyy hh:mm")</small></span></h5>
+					<h5 class="panel-title"><i class="fa fa-user"></i>&nbsp;@if(reply.blogCommentatorType.equals(models.blog.BlogCommentatorType.APP_USER)){@reply.by.name}else{@reply.socialBy.name} <span class="pull-right"><small>@reply.date.format("dd-MMM-yyyy hh:mm")</small></span></h5>
 				</div>
 				<div class="panel-body">
 	 				<p>@reply.message</p>

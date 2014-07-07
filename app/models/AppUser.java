@@ -8,9 +8,14 @@
 package models;
 
 import java.util.Date;
+
 import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.Lob;
+
+import models.diagnostic.DiagnosticRepresentative;
+import models.doctor.Doctor;
+import models.mr.MedicalRepresentative;
 import play.data.validation.Constraints.Email;
 import play.db.ebean.Model;
 
@@ -38,6 +43,9 @@ public class AppUser extends BaseEntity {
 	public Date dob;
 
 	public Role role;
+
+	//@OneToOne(mappedBy="appUser")
+	//public MedicalRepresentative mr;
 
 	public static Model.Finder<Long, AppUser> find = new Finder<Long, AppUser>(Long.class, AppUser.class);
 

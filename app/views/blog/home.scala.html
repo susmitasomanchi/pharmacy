@@ -1,5 +1,5 @@
 @import play.i18n._
-@blog.blogmain("", "", ""){
+@blogmain("", "", ""){
 
 
 
@@ -13,7 +13,7 @@
 
 		$(document).ready(function(){
 
-			@for(c <- ArticleCategory.getCategoriesInOrder()){
+			@for(c <- models.blog.ArticleCategory.getCategoriesInOrder()){
 			@if(c.getArticleSize() > 0){
 			
 				$("#models-carousel-@c.id").carouFredSel({
@@ -101,9 +101,12 @@
     </style>
     
     <div id="banner-carousel">
-    		<div class="pimage"><img alt="MedNetwork" class="border-rounded-images banner-class" height="300" src="@routes.Assets.at("blog/images/banner-image-1.jpg")" width="940" /><br></div>
-    		<div class="pimage"><img alt="MedNetwork" class="border-rounded-images banner-class" height="300" src="@routes.Assets.at("blog/images/banner-image-2.jpg")" width="940" /><br></div>
-    		<div class="pimage"><img alt="MedNetwork" class="border-rounded-images banner-class" height="300" src="@routes.Assets.at("blog/images/banner-image-3.jpg")" width="940" /><br></div>
+    		<div class="pimage"><img alt="MedNetwork" class="border-rounded-images banner-class" height="300" src="@routes.Assets.at("blog/images/slider1.jpg")" width="940" /><br></div>
+    		<div class="pimage"><img alt="MedNetwork" class="border-rounded-images banner-class" height="300" src="@routes.Assets.at("blog/images/slider2.jpg")" width="940" /><br></div>
+    		<div class="pimage"><img alt="MedNetwork" class="border-rounded-images banner-class" height="300" src="@routes.Assets.at("blog/images/slider3.jpg")" width="940" /><br></div>
+    		<div class="pimage"><img alt="MedNetwork" class="border-rounded-images banner-class" height="300" src="@routes.Assets.at("blog/images/slider4.jpg")" width="940" /><br></div>
+    		<div class="pimage"><img alt="MedNetwork" class="border-rounded-images banner-class" height="300" src="@routes.Assets.at("blog/images/slider5.jpg")" width="940" /><br></div>
+    		<div class="pimage"><img alt="MedNetwork" class="border-rounded-images banner-class" height="300" src="@routes.Assets.at("blog/images/slider6.jpg")" width="940" /><br></div>
     </div>	
     	
 
@@ -144,12 +147,12 @@
 <br>
 <br>
 
-@for(c <- ArticleCategory.getCategoriesInOrder()){
+@for(c <- models.blog.ArticleCategory.getCategoriesInOrder()){
 
 @if(c.getArticleSize() > 0){
 
 		<p style="color:#006687; font-size:20px">
-		<big><a id="@c.slugURL" href="#@c.slugURL" style="color:#006687">@c.name</a></big></p>
+		<big><a id="@c.slugURL" href="#@c.slugURL" style="color:#006687; text-decoration:none;">@c.name</a></big></p>
 			<div class="row-fluid">
 				<div class="image_carousel">
 					<div id="models-carousel-@c.id">
@@ -168,13 +171,13 @@
     							</div>
 								<div id="content-case-study-@art.id" style="display:none" class="roundedges roundedges-hover">
 									<div class="on-hover-content" style="cursor:pointer;" onclick="window.location.href='@routes.BlogController.showArticle(art.id, art.slugURL)'">
-										<a style="color:white; /*font-family: 'Economica', sans-serif;*/" ><div style="padding:10px;">@art.onHoverContent</div></a>
+										<a style="color:white; /*font-family: 'Economica', sans-serif;*/ text-decoration:none;" ><div style="padding:10px;">@art.onHoverContent</div></a>
     								</div>
 									<div class="on-hover-links">
 										<p style="padding-left:30%; padding-top:5%;">
-											<a href="@routes.BlogController.showArticle(art.id, art.slugURL)" ><span style="color:white; /*font-family: 'Century Gothic', CenturyGothic, Geneva, AppleGothic, sans-serif;*/">view</span></a> 
+											<a style="text-decoration:none;" href="@routes.BlogController.showArticle(art.id, art.slugURL)" ><span style="color:white; /*font-family: 'Century Gothic', CenturyGothic, Geneva, AppleGothic, sans-serif;*/">view</span></a> 
 											<span style="color:white">|</span> 
-											<a style="cursor:pointer;" onclick="sharethis('@routes.BlogController.showArticle(art.id, art.slugURL)');"><span style="color:white; /*font-family: 'Century Gothic', CenturyGothic, Geneva, AppleGothic, sans-serif;*/">share</span></a>
+											<a style="cursor:pointer; text-decoration:none;" onclick="sharethis('@routes.BlogController.showArticle(art.id, art.slugURL)');"><span style="color:white; /*font-family: 'Century Gothic', CenturyGothic, Geneva, AppleGothic, sans-serif;*/">share</span></a>
 										</p>
 									</div>
 								</div>
@@ -255,7 +258,7 @@
 		tweet = tweet.replace("{url}", encurl);
 		$("#tweet-id").attr('href',tweet);
 		
-		var linkedin = "https://www.linkedin.com/shareArticle?mini=true&url={url}&title=ALC%20India&summary=&source=";
+		var linkedin = "https://www.linkedin.com/shareArticle?mini=true&url={url}&title=MedNetwork&summary=&source=";
 		linkedin = unescapeHtml(linkedin); 
 		linkedin = linkedin.replace("{url}", encurl);
 		$("#linkedin-id").attr('href',linkedin);

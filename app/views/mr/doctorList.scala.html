@@ -1,4 +1,4 @@
-@(doctorList:List[Doctor])
+@(doctorList:List[models.doctor.Doctor])
 @main("doctor list"){
 	
 	<form name="searchform" action="@routes.MRController.search()" method="GET">	
@@ -6,7 +6,6 @@
 	
 	<input type="submit" value="Search Doctor">
 	</form>
-	
 	<table>
 	<thead>
 	<th>Doctor Name</th>

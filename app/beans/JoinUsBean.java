@@ -22,15 +22,13 @@ public class JoinUsBean implements Serializable{
 	@Required
 	public String confirmPassword;
 
-	@Required
+	//@Required
 	public Role role;
 	
 	public String diagnosticCenterName;
 	
 	public String pharmacyName;
 	
-	public String pharmacutical_company_name;
-
 	public String pharmaceuticalCompanyName;
 
 	public AppUser toAppUser(){

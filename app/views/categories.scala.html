@@ -1,0 +1,32 @@
+
+@import play.i18n._
+
+@if((LoginController.isLoggedIn())&&(LoginController.getLoggedInUserRole().equals(Role.BLOG_ADMIN.toString()))){
+<div>
+@*@blognavbar()*@
+</div>
+}
+@*
+@blogmain("", "", ""){
+
+<table class="table table-condensed table-bordered">
+<thead>
+<th>Position</th>
+<th>Name</th>
+<th>Articles</th>
+<th>Action</th>
+</thead>
+<tbody>
+@for(cat <- models.blog.ArticleCategory.find.orderBy("position").findList()){
+<tr>
+	<td>@cat.position</td>
+	<td>@cat.name</td>
+	<td>@cat.getArticles().size() <a href="@routes.BlogController.articles(cat.id)" class="btn-link">(view)</a></td>
+	<td><a class="btn btn-info btn-small" href="@routes.BlogController.editCategoryForm(cat.id)">Edit</a></td>
+</tr>
+}
+</tbody>
+<table>
+
+
+}*@

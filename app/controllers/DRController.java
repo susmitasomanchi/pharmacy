@@ -2,9 +2,11 @@ package controllers;
 
 import java.util.List;
 
-import models.DiagnosticCentre;
-import models.DiagnosticRepresentative;
-import models.Doctor;
+
+import models.AppUser;
+import models.diagnostic.DiagnosticCentre;
+import models.diagnostic.DiagnosticRepresentative;
+import models.doctor.Doctor;
 import play.Logger;
 import play.data.DynamicForm;
 import play.data.Form;
@@ -14,6 +16,7 @@ import play.mvc.Result;
 public class DRController extends Controller {
 	public static DiagnosticRepresentative dr = LoginController.getLoggedInUser()
 			.getDiagnosticRepresentative();
+	public static Form<AppUser> registrationForm = Form.form(AppUser.class);
 	public static DiagnosticCentre dc = dr.diagnosticCentre;
 	public static Form<DiagnosticRepresentative> diagnosticRepresentative = Form
 			.form(DiagnosticRepresentative.class);
@@ -24,28 +27,23 @@ public class DRController extends Controller {
 	}
 
 	public static Result addDiagRepProcess() {
-		/*DiagnosticRepresentative dr = LoginController.getLoggedInUser()
-				.getDiagnosticRepresentative();
-		*/final Form<DiagnosticRepresentative> filledForm = diagnosticRepresentative
-				.bindFromRequest();
-		Logger.info("filledForm" + filledForm);
+		final Form<AppUser> filledForm = registrationForm.bindFromRequest();
 
 		if (filledForm.hasErrors()) {
-			return badRequest(views.html.diagnostic.diagnosticRep
-					.render(filledForm));
+			return badRequest(views.html.registerAppUser.render(filledForm));
 		} else {
-
-			final DiagnosticRepresentative diagRep = filledForm.get();
-			Logger.info("diagrep.." + diagRep);
-			Logger.info("id of diagrep..." + diagRep.id);
-			diagRep.save();
-			dc.diagnosticRepresentativelist.add(diagRep);
-
+			final AppUser appUser = filledForm.get();
+			final DiagnosticRepresentative diagnosticRepresentative = new DiagnosticRepresentative();
+			appUser.save();
+			diagnosticRepresentative.appUser = appUser;
+			dc.diagnosticRepresentativelist.add(diagnosticRepresentative);
 			dc.update();
-			return ok(String.format("Saved product %s", diagRep));
+			return ok("Registerd ");
 		}
 
-	}
+		}
+
+	
 
 	/*
 	 * displaying all diagnostic Representators

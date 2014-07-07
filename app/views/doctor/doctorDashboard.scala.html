@@ -1,345 +1,54 @@
-@(doctor: models.Doctor)
+@(doctor: models.doctor.Doctor)
 @import play.i18n._
 @import helper.twitterBootstrap._
 @import helper._
 
 @main("Doctor's Profile"){
 
-<div class="row" style="padding-left:20px">
-<div class="col-md-8">
-<div class="row well">
+<style>
+.row {
+ margin-left: 0px; 
+ margin-right: 0px;
+}
+</style>
+<style>
+table,th,td
+{
+border:1px solid black;
+border-collapse:collapse;
+}
+th,td
+{
+padding:5px;
+}
+th
+{
+text-align:left;
+}
+</style>
+<div class="container" style="padding-left:100px;padding-right:100px">
+<div class="well row ">
 <div class="col-md-2">
 <br>
-<img src="/assets/images/user.png" />
+
 </div>
-<div class="col-md-6" style="padding-left:30px">
-<h3><b> Dr. Doctor Name </b></h3>
+<div class="col-md-10" style="padding-left:30px">
+<h3><b> Dr. @doctor.appUser.name</b></h3>
 <h4> MBBS, MD </h4>
-<h5>Hospital Name, Hyderabad</h5>
-<hr>
-<h5><i> Specialization: </i></h5>
-<h5><i> Education: </i></h5>
-<h5><i> Years of Experience: </i></h5><br>
-<a href="#" class="btn btn-xs btn-primary" >Send a message</a>
-<br><br>
-</div>
-</div>
-<br>
-<div class="row well">
-<div class="panel panel-primary">
-<div class="panel-heading">
-<h3 class="panel-title"> About </h3>
-</div>
-<div class="panel-body">
-<!-- Nav tabs -->
-<ul class="nav nav-tabs">
-  <li  class="active"><a href="#details" data-toggle="tab">Background</a></li>
-  <li><a href="#contact" data-toggle="tab">Contact Info</a></li>
-</ul>
-
-<div class="tab-content">
-<div class="tab-pane active" id="details">
-<br><br>
-<div class="panel-group" id="accordion">
-  <div class="panel panel-default">
-    <div class="panel-heading">
-      <h4 class="panel-title">
-        <a data-toggle="collapse" data-parent="#accordion" href="#Experience">
-          
-       <div class="row">
-        <div class="col-md-10">
-        Experience
-          </div>
-          <div class="col-md-2">
-          <a href="@routes.DoctorController.doctorExperience" class="btn btn-primary">edit</a>
-          </div>  </div>
-        </a>
-      </h4>
-    </div>
-
-      <div class="panel-body">
-        <table style="width:300px" class="table">
-<tr>
-  <th>Previous Hospital Name</th>
-  <th>Position</th>	
-  <th>City</th>		
-  <th>From</th>
-  <th>To</th>
-
-</tr>
-
-<h3>@doctor.doctorExperienceList.size</h3>
- <div class="row">
-        <div class="col-md-10">
-@for(exp <- doctor.doctorExperienceList) {               
-      
-	<tr>
-		<td>@exp.previousHospitalName</td>
-		<td>@exp.workedAs</td>
-		<td>@exp.location</td>
-		<td>@exp.workedFrom</td>
-		<td>@exp.workedTo</td>
-	</tr>
-    }
-	
-	
-	</table>
-<a href="@routes.DoctorController.doctorExperience" class="btn btn-group-sm">Add</a>
-      </div>
-   
-  </div>
-  <div class="panel panel-default">
-    <div class="panel-heading"> 
-      <h4 class="panel-title">
-        <a data-toggle="collapse" data-parent="#accordion" href="#Awards/Recognitions">
-          
-           <div class="row">
-        <div class="col-md-10">
-        Awards/Recognitions  
-          </div>
-          <div class="col-md-2">
-          <a href="@routes.DoctorController.doctorAward" class="btn btn-primary">edit</a>
-          </div>  </div>
-        </a>
-      </h4>
-    </div>
-
-      <div class="panel-body">
-              <table style="width:300px" class="table">
-<tr>
-  <th>Award Name</th>
-  <th>Award For</th>	
-  <th>Year</th>		
-  <th>Comment</th>
- 
-
-</tr>
-
-<h3>@doctor.doctorAwardList.size</h3>
- <div class="row">
-        <div class="col-md-10">
-@for(awd <- doctor.doctorAwardList) {               
-      
-	<tr>
-		<td>@awd.awardName</td>
-		<td>@awd.awardFor</td>
-		<td>@awd.year</td>
-		<td>@awd.commentForAwards</td>
-		
-	</tr>
-    }
-	
-	
-	</table>
-<a href="@routes.DoctorController.doctorAward" class="btn btn-group-sm">Add</a>
-      </div>
-  
-  </div>
-  <div class="panel panel-default">
-    <div class="panel-heading">
-      <h4 class="panel-title">
-        <a data-toggle="collapse" data-parent="#accordion" href="#Publications/Articles">
-        
-              
-       <div class="row">
-        <div class="col-md-10">
-          Publications/Articles
-          </div>
-          <div class="col-md-2">
-          <a href="@routes.DoctorController.doctorPublication" class="btn btn-primary">edit</a>
-          </div>  </div>
-        </a>
-      </h4>
-    </div>
-    <div id="collapseThree" class="panel-collapse collapse">
-      <div class="panel-body">
-	      </div>
-    </div>
-  </div>
-  <div class="panel panel-default">
-    <div class="panel-heading">
-      <h4 class="panel-title">
-        <a data-toggle="collapse" data-parent="#accordion" href="#Education">
-          
-                     
-       <div class="row">
-        <div class="col-md-10">
-         Education
-          </div>
-          <div class="col-md-2">
-          
-          </div>  </div>
-        </a>
-      </h4>
-    </div>
-    
-      <div class="panel-body">
-      <table style="width:300px" class="table">
-<tr>
-  <th>School</th>
-  <th>Degree/Board</th>		
-  <th>From</th>
-  <th>To</th>
-
-</tr>
-
-<h3>@doctor.doctorEducationList.size</h3>
- <div class="row">
-        <div class="col-md-10">
-@for(edu <- doctor.doctorEducationList) {               
-      
-	<tr>
-		<td>@edu.collegeName</td>
-		<td>@edu.degree</td>
-		<td>@edu.fromYear</td>
-		<td>@edu.toYear</td>
-	</tr>
-    }
-	
-	
-	</table>
-<a href="@routes.DoctorController.doctorEducation" class="btn btn-group-sm">Add</a>
-      </div>
-  
-  </div>
-
- <div class="panel panel-default">
-    <div class="panel-heading">
-      <h4 class="panel-title">
-        <a data-toggle="collapse" data-parent="#accordion" href="#Languages">
-                        
-       <div class="row">
-        <div class="col-md-10">
-         Languages
-          </div>
-          <div class="col-md-2">
-          <a href="@routes.DoctorController.doctorLanguage" class="btn btn-primary">edit</a>
-          </div>  </div>
-        </a>
-      </h4>
-    </div>
-    <div id="collapseThree" class="panel-collapse collapse">
-      <div class="panel-body">
-      </div>
-    </div>
-  </div>
-  <div class="panel panel-default">
-    <div class="panel-heading">
-      <h4 class="panel-title">
-        <a data-toggle="collapse" data-parent="#accordion" href="#SocialInterests">
-         
-         <div class="row">
-        <div class="col-md-10">
-         Social Interests
-          </div>
-          <div class="col-md-2">
-          <a href="/doctor-socialwork" class="btn btn-primary">edit</a>
-          </div>  </div>
-        </a>
-      </h4>
-    </div>
-    <div id="collapseThree" class="panel-collapse collapse">
-      <div class="panel-body">
-       </div>
-      </div>
-    </div>
-  </div>
-</div>
-</div> 
-  
-<div class="tab-pane" id="contact">
-
-</div>
-  
-
-</div>
-
-</div>
-</div>
-</div>
-<div class="col-md-4" style="padding-left:30px;padding-right:30px">
-<div class="row well">
-<h5><b>Doctors similair to doctor name</b></h5><br>
-<div class="col-md-1" style="width:3%;padding-top:25px;padding-left:0px">
-<img src="/assets/images/prev.png" width="15" height="15"/>
-</div>
-<div class="col-md-3" style="width:28%">
-<img src="/assets/images/img4.png" />
-</div>
-<div class="col-md-3" style="width:28%">
-<img src="/assets/images/img4.png" />
-</div>
-<div class="col-md-3" style="width:28%">
-<img src="/assets/images/img4.png" />
-</div>
-<div class="col-md-1" style="width:3%;padding-top:25px">
-<img src="/assets/images/next.png" width="15" height="15"/>
-</div>
-<div class="col-md-12">
-<br><br>
-<h5>Clinics</h5>
-<h5>Clinics</h5>
-<h5>Clinics</h5>
-<h5>Clinics</h5>
-<h5>Clinics</h5>
-<h5>Clinics</h5>
-<h5>Clinics</h5>
-<h5>Clinics</h5>
-<h5>Clinics</h5>
-<h5>Clinics</h5>
-<h5>Clinics</h5>
-<h5>Clinics</h5>
-<h5>Clinics</h5>
-<h5>Clinics</h5>
-<h5>Clinics</h5>
-<h5>Clinics</h5>
-<h5>Clinics</h5>
-<h5>Clinics</h5>
-<h5>Clinics</h5>
-<h5>Clinics</h5>
-<h5>Clinics</h5>
-<h5>Clinics</h5>
-<h5>Clinics</h5>
-<h5>Clinics</h5>
-<h5>Clinics</h5>
-<h5>Clinics</h5>
-<h5>Clinics</h5>
-</div>
-</div>
-</div>
-</div>
-
-
-
-@*
-<div class="row">
-<div class="col-md-8">
-<div class="well">
-<div class="col-md-2">
-<br>
-<img src="/assets/images/user.png" />
-</div>
-<div class="col-md-6" style="padding-left:30px">
-<h3><b> Dr. Doctor Name </b></h3>
-<h4> MBBS, MD </h4>
-<h5>Hospital Name, Hyderabad</h5>
 <hr>
 <h5><i> Specialization: </i></h5>
 <h5><i> Position: </i></h5>
 <h5><i> Years of Experience: </i></h5><br>
-<a href="#" class="btn btn-xs btn-primary" >Send a message</a>
-<br><br>
-
+<div class="bs-component" style="margin-bottom: 15px;float:right">
+              <div class="row">
+        <div class="col-md-10">
+            </div>
+             <div class="col-md-2">
+             <a href="@routes.DoctorController.doctorExperience" class="btn btn-group-sm"></a>
+            </div>
 </div>
 </div>
-</div>
-<div class="col-md-4">
-
-</div>
-</div>
-
-
-<div class="col-md-8" style="padding-left:0px">
+<br>
 <div class="panel panel-primary">
 <div class="panel-heading">
 <h3 class="panel-title"> About </h3>
@@ -453,6 +162,7 @@
     <div class="panel-heading">
       <h4 class="panel-title">
         <a data-toggle="collapse" data-parent="#accordion" href="#Publications/Articles">
+        
         
               
        <div class="row">
@@ -570,5 +280,6 @@
 
 </div>
 </div>
-*@
+</div>
+
 }

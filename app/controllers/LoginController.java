@@ -31,7 +31,8 @@ public class LoginController extends Controller {
 		final Form<LoginBean> filledForm = loginForm.bindFromRequest();
 		if (filledForm.hasErrors()) {
 			return badRequest(views.html.index.render(filledForm));
-		} else {
+		}
+		else {
 			final LoginBean loginBean = filledForm.get();
 			Logger.info(loginBean.toString());
 			final List<AppUser> appUsers = AppUser.find.where().eq("email", loginBean.email).eq("password", loginBean.password).findList();
@@ -49,6 +50,7 @@ public class LoginController extends Controller {
 				}
 				session(Constants.LOGGED_IN_USER_ID, appUsers.get(0).id + "");
 				session(Constants.LOGGED_IN_USER_ROLE, appUsers.get(0).role+ "");
+				
 				return redirect(routes.UserActions.dashboard());
 
 			}

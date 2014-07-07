@@ -1,11 +1,11 @@
 package controllers;
+
+
 import java.util.List;
 
 import models.AppUser;
-import models.Day;
-import models.DayOfTheWeek;
-import models.Doctor;
 import models.Role;
+import models.doctor.Doctor;
 import play.mvc.Controller;
 import play.mvc.Result;
 
@@ -75,5 +75,7 @@ public class SampleDataController extends Controller {
 		return redirect(routes.Application.index());
 	}
 
-
 }
+
+
+

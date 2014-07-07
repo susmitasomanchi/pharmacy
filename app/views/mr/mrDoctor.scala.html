@@ -1,4 +1,4 @@
-@(doctorList: List[Doctor])
+@(doctorList: List[models.doctor.Doctor])
 
 @main("doctor list"){
 	
@@ -11,7 +11,7 @@
 	@for(doctor <-doctorList){
 		<tr>
 		<td>@doctor.appUser.name</td>
-		<td><a class="btn btn-primary btn-xs" href="/mr/remove-doctor/@doctor.id">Delete</a></td>
+		<td><a class="btn btn-primary btn-xs" href="/mr/remove-doctor/@doctor.id">Remove</a></td>
 		</tr>
 		<tr></tr>
 		

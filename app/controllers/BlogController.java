@@ -5,17 +5,18 @@ import java.util.Date;
 import java.util.List;
 
 import models.Alert;
-import models.Article;
-import models.ArticleCategory;
-import models.BlogComment;
-import models.BlogCommentReply;
-import models.BlogCommentatorType;
-import models.SocialUser;
+import models.blog.Article;
+import models.blog.ArticleCategory;
+import models.blog.BlogComment;
+import models.blog.BlogCommentReply;
+import models.blog.BlogCommentatorType;
+import models.blog.SocialUser;
 import play.Logger;
 import play.data.Form;
 import play.mvc.Controller;
 import play.mvc.Result;
 import actions.BasicAuth;
+import beans.LoginBean;
 
 import com.google.common.io.Files;
 
@@ -24,11 +25,12 @@ public class BlogController extends Controller {
 
 	public static Form<Article> articleForm =Form.form(Article.class);
 	public static Form<ArticleCategory> categoryForm =Form.form(ArticleCategory.class);
+	public static final Form<LoginBean> loginForm = Form.form(LoginBean.class);
 
 	public static Result blogHome(){
 		return ok(views.html.blog.home.render());
 	}
-	
+
 
 	@BasicAuth
 	public static Result categoryForm(){
