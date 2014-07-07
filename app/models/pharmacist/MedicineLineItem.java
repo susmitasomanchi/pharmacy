@@ -1,7 +1,9 @@
-package models;
+package models.pharmacist;
 
 import javax.persistence.Entity;
 
+import models.BaseEntity;
+import models.Product;
 import models.doctor.SigCode;
 import play.db.ebean.Model;
 

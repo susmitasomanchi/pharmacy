@@ -1,6 +1,5 @@
 package models.diagnostic;
-import java.util.ArrayList
-;
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.persistence.CascadeType;
@@ -12,7 +11,6 @@ import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 
 import models.BaseEntity;
-import models.Patient;
 import models.doctor.Doctor;
 import play.data.validation.Constraints.Email;
 import play.data.validation.Constraints.Required;
@@ -23,7 +21,7 @@ import beans.DiagnosticBean;
 @Entity
 public class DiagnosticCentre extends BaseEntity {
 
-		
+
 
 	@GeneratedValue(strategy = GenerationType.AUTO)
 	@Id
@@ -41,8 +39,8 @@ public class DiagnosticCentre extends BaseEntity {
 	public String emailId;
 
 	public String websiteName;
-	
-	
+
+
 	public List<Doctor> doctorList = new ArrayList<Doctor>();
 
 	@OneToOne
@@ -51,20 +49,21 @@ public class DiagnosticCentre extends BaseEntity {
 	@OneToMany(cascade=CascadeType.ALL,mappedBy="diagnosticCentre")
 	public List<DiagnosticRepresentative> diagnosticRepresentativelist = new ArrayList<DiagnosticRepresentative>();
 
+
 	@OneToMany(cascade=CascadeType.ALL)
 	public List<DiagnosticTest> diagnosticTestList = new ArrayList<DiagnosticTest>();
-	
-//	@OneToMany(cascade=CascadeType.ALL)
-//	 * 	public List<Patient> patientList = new ArrayList<Patient>();
 
-	
+	//	@OneToMany(cascade=CascadeType.ALL)
+	//	 * 	public List<Patient> patientList = new ArrayList<Patient>();
+
+
 	@OneToMany(cascade=CascadeType.ALL)
 	public List<DiagnosticOrder> diagnosticOrderList = new ArrayList<DiagnosticOrder>();
 
 	public static Model.Finder<Long, DiagnosticCentre> find = new Finder<Long, DiagnosticCentre>(
 			Long.class, DiagnosticCentre.class);
-	
-	
+
+
 	public DiagnosticBean toBean(){
 
 		final DiagnosticBean diagnosticBean = new DiagnosticBean();
@@ -73,7 +72,7 @@ public class DiagnosticCentre extends BaseEntity {
 
 		if(this.name != null) {
 			diagnosticBean.name= this.name;
-		}		
+		}
 		if(this.address != null) {
 			diagnosticBean.address= this.address;
 		}
@@ -91,14 +90,14 @@ public class DiagnosticCentre extends BaseEntity {
 
 
 
-	
-/*
+
+	/*
 	@Override
 	public String toString() {
 		return this.id + "  " + this.name + "  " + this.services + "  "
 				+ this.contactPersonName + "  " + this.address + "  "
 				+ this.mobileNo + "  " + this.emailId + "  " + this.websiteName;
 	}
-*/
-	
+	 */
+
 }

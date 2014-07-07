@@ -1,4 +1,4 @@
-package models;
+package models.pharmacist;
 
 import java.util.ArrayList;
 import java.util.Date;
@@ -10,6 +10,8 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.OneToMany;
+
+import models.BaseEntity;
 
 @SuppressWarnings("serial")
 @Entity

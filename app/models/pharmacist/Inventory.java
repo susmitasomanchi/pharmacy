@@ -1,4 +1,4 @@
-package models;
+package models.pharmacist;
 
 import java.util.ArrayList;
 import java.util.Date;
@@ -13,6 +13,8 @@ import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 
+import models.BaseEntity;
+import models.Product;
 import play.data.validation.Constraints.Required;
 import play.db.ebean.*;
 import play.db.ebean.Model.Finder;

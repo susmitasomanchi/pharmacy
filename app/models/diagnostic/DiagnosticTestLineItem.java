@@ -1,8 +1,8 @@
-package models;
+package models.diagnostic;
 
 import javax.persistence.Entity;
 
-import models.diagnostic.DiagnosticTest;
+import models.BaseEntity;
 import play.db.ebean.Model;
 
 @SuppressWarnings("serial")

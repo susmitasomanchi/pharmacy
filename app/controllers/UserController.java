@@ -9,14 +9,14 @@ package controllers;
 
 import models.AppUser;
 import models.Patient;
-import models.Pharmacist;
-import models.Pharmacy;
 import models.Role;
 import models.diagnostic.DiagnosticCentre;
 import models.diagnostic.DiagnosticRepresentative;
 import models.doctor.Doctor;
 import models.mr.MedicalRepresentative;
 import models.mr.PharmaceuticalCompany;
+import models.pharmacist.Pharmacist;
+import models.pharmacist.Pharmacy;
 import play.Logger;
 import play.data.Form;
 import play.mvc.Controller;
