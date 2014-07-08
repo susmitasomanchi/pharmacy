@@ -1,4 +1,4 @@
-package models;
+package models.pharmacist;
 
 import java.util.LinkedHashMap;
 import java.util.Map;

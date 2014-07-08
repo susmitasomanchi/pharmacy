@@ -79,12 +79,16 @@ GET    /doctor/prescription							controllers.DoctorController.doctorPrescriptio
 GET		/doctor/profile					controllers.DoctorController.doctorProfileS()
 GET		/doctor/addclinic				controllers.DoctorController.doctorAddClinic()
 
-GET    /userform/doctor/                           controllers.DoctorController.form()
 POST   /userform/doctor/                           controllers.DoctorController.process()
 GET    /userform/assistant/                        controllers.AssistantController.form()
 POST   /userform/assistant/                        controllers.AssistantController.process()
 GET    /scheduleappointment/                       controllers.AppointmentController.form()
 POST   /scheduleappointment/                       controllers.AppointmentController.process()
+
+#GET    /products                          controllers.PharmacistController.displayProducts()
+
+GET   /edit-product/:id                      controllers.PharmacistController.editProduct(id: Long)
+GET   /remove-product/:id                      controllers.PharmacistController.removeProduct(id: Long)
 
 POST   /editproduct/                               controllers.PharmacistController.editProduct(id: Long)
 GET    /doctor/today-appointment                   controllers.DoctorController.viewTodaysAppointment()	
@@ -94,6 +98,10 @@ POST   /searchProduct                              controllers.PharmacistControl
 POST   /addProductToInventory/                     controllers.PharmacistController.addProductForm(id: Long)
 POST   /addProductToInventory1/                    controllers.PharmacistController.addToInventory(id:Long)		
 GET    /order                                      controllers.PharmacistController.orderRecord()
+GET    /new-product                       controllers.ProductController.productForm()
+POST   /new-product/save                       controllers.ProductController.saveProduct()
+GET    /view-products                     controllers.ProductController.displayProduct()
+
 GET	   /pharmacy/profile						   	controllers.PharmacistController.pharmacyProfile()
 GET		/pharmacy/order								controllers.PharmacistController.pharmacyPlaceOrder()
 
@@ -131,8 +139,8 @@ GET    /register-patient/                          controllers.DoctorController.
 POST   /register-patient-proccess/                 controllers.DoctorController.registerPatientProccess()
 
 #Diagnostic module	
-GET    /diagnosticregistration            		controllers.DiagnosticController.diagnosticCenter()
-POST   /diagnosticregistration/save       		controllers.DiagnosticController.diagnosticCenterProcess()
+#GET    /diagnosticregistration            		controllers.DiagnosticController.diagnosticCenter()
+#POST   /diagnosticregistration/save       		controllers.DiagnosticController.diagnosticCenterProcess()
 #GET    /diagnosticlist                   	 	controllers.DiagnosticController.diagnosticlist()
 #GET    /diagnostic-service-list/:id            controllers.DiagnosticController.diagnosticServiceslist(id: Long)
 GET    /diagnostic-delete/:id             		controllers.DiagnosticController.deleteCenter(id: Long)
@@ -140,7 +148,7 @@ GET    /diagnostic-edit/:id						controllers.DiagnosticController.editDiagnostic
 POST    /diagnostic-edit 						controllers.DiagnosticController.diagnosticEditprocess()
 GET    /diagnostic-search      					controllers.DiagnosticController.diagnosticSearch()
 GET    /diagnostic-search/list 					controllers.DiagnosticController.diagnosticSearchProcess()
-GET    /diagnosticrep/doctor-list         		controllers.DRController.doctorList()
+#GET    /diagnosticrep/doctor-list         		controllers.DRController.doctorList()
 GET    /diagnosticrep			         		controllers.DRController.addDiagRep()
 POST    /diagnosticrep/save		         		controllers.DRController.addDiagRepProcess()
 GET    /diagnosticrep/list			        	controllers.DRController.diagnosticRepresentativeList()
@@ -150,19 +158,19 @@ GET    /diagnosticrep/add-doctor/:id      		controllers.DRController.addDoctor(i
 GET    /diagnosticrep/remove-doctor/:id   		controllers.DRController.removeDoctor(id: Long)
 GET    /diagnostic-centre/all-doctors      		controllers.DRController.displayDiagnosticCentreDoctors()
 
-GET    /upload-patient-file  					controllers.DiagnosticController.uploadFile()
+#GET    /upload-patient-file  					controllers.DiagnosticController.uploadFile()
 POST    /upload-patient-file/save		  		controllers.DiagnosticController.uploadFileProcess()
 GET    /download						  		controllers.DiagnosticController.downloadFile()
-GET    /add-test-done						  	controllers.DiagnosticController.addTestDone()
+#GET    /add-test-done						  	controllers.DiagnosticController.addTestDone()
 
 
 #Diagnostic Test
 GET    /test				            		controllers.DiagnosticController.addTest()
 POST   /test/save					       		controllers.DiagnosticController.addTestProcess()
-GET    /test-list/:id				            controllers.DiagnosticController.diagnosticTestList(id: Long)																																
+#GET    /test-list/:id				            controllers.DiagnosticController.diagnosticTestList(id: Long)																																
 
 POST   /place-order                                controllers.DiagnosticOrderController.receive()		
-GET    /display-orders/:id                         controllers.DiagnosticOrderController.viewOrders(id: Long)																																		
+#GET    /display-orders/:id                         controllers.DiagnosticOrderController.viewOrders(id: Long)																																		
 #MR Module
 GET    /doctor-list                                controllers.MRController.doctorList()
 GET    /mr/add-doctor/:id                          controllers.MRController.addDoctor(id: Long)
@@ -182,8 +190,8 @@ GET    /mr/display-appointment/:id                 controllers.MRController.sche
 GET    /new-product                                controllers.ProductController.productForm()
 POST   /new-product                                controllers.ProductController.saveProduct()
 GET    /view-products                              controllers.ProductController.displayProduct()
-GET    /edit-product/:id                           controllers.ProductController.editProduct(id: Long)
-GET    /remove-product/:id                         controllers.ProductController.removeProduct(id: Long)
+#GET    /edit-product/:id                           controllers.ProductController.editProduct(id: Long)
+#GET    /remove-product/:id                         controllers.ProductController.removeProduct(id: Long)
 
 
 # delete later

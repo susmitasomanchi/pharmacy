@@ -1,17 +1,17 @@
-package models;
+package models.pharmacist;
 
 import java.util.Date;
-
 
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.OneToOne;
+import javax.persistence.Version;
 
+import models.BaseEntity;
+import models.Product;
 import play.data.validation.Constraints.Required;
-import play.db.ebean.*;
-import play.db.ebean.Model.Finder;
 
 
 @Entity
@@ -34,6 +34,7 @@ public class Batch extends BaseEntity {
 	public Double mrp;
 
 	@Required
+	@Version
 	public Date expiryDate;
 
 	@Required
