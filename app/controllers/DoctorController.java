@@ -569,4 +569,9 @@ public class DoctorController extends Controller {
 		
 		return ok(views.html.doctor.doctor_profile.render());
 	}
+	
+	public static Result doctorAddClinic() {
+		
+		return ok(views.html.doctor.doctor_add_clinic.render());
+	}
 }
