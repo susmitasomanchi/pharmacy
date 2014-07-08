@@ -1,7 +1,5 @@
 package models.doctor;
 
-import java.util.Date;
-
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -17,20 +15,20 @@ public class DoctorExperience extends BaseEntity{
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO)
 	public  Long id;
-	
+
 	//Experience
-	
-		@Required
-		public String previousHospitalName;  //hospital name 
 
-		public String workedAs;
-		
-		@Required
-		public String location;
-		
-		@Required
-		public Integer workedFrom;
+	@Required
+	public String previousHospitalName;  //hospital name
 
-		@Required
-		public Integer workedTo;
+	public String workedAs;
+
+	@Required
+	public String location;
+
+	@Required
+	public Integer workedFrom;
+
+	@Required
+	public Integer workedTo;
 }

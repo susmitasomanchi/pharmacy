@@ -8,16 +8,10 @@ PLEASE DO NOT MODIFY IT BY HAND
 package controllers;
 
 import models.AppUser;
-import models.Patient;
-import models.Pharmacist;
-import models.Pharmacy;
 import models.Role;
-import models.diagnostic.DiagnosticCentre;
 import models.diagnostic.DiagnosticRepresentative;
 import models.doctor.Doctor;
 import models.mr.MedicalRepresentative;
-import models.mr.PharmaceuticalCompany;
-import play.Logger;
 import play.data.Form;
 import play.mvc.Controller;
 import play.mvc.Result;
@@ -30,11 +24,68 @@ public class UserController extends Controller {
 	public static Form<JoinUsBean> joinUsForm = Form.form(JoinUsBean.class);
 	public static Form<DiagnosticRepresentative> drForm = Form.form(DiagnosticRepresentative.class);
 	public static Form<MedicalRepresentative> mrForm = Form.form(MedicalRepresentative.class);
+
+
+	/**
+	 * Action to render the joinUs page (for Doctors)
+	 * GET    /join
+	 */
 	public static Result joinUs(){
-		return ok(views.html.joinus.render(joinUsForm));
+		return ok(views.html.joinus.render());
+	}
+
+	/**
+	 * Action to onboard a new Doctor by creating a models.Doctor and a models.AppUser
+	 * POST   /join
+	 */
+
+	public static Result processDoctorJoinUs(){
+		final AppUser appUser = new AppUser();
+		appUser.name = request().body().asFormUrlEncoded().get("fullname")[0];
+		appUser.username = request().body().asFormUrlEncoded().get("email")[0];
+		appUser.password = request().body().asFormUrlEncoded().get("password")[0];
+		appUser.role = Role.DOCTOR;
+		appUser.save();
+
+		final Doctor doctor = new Doctor();
+		doctor.specialization = "Specialization";
+		doctor.degree = "Degree";
+		doctor.appUser = appUser;
+		doctor.save();
+
+		session().clear();
+		session(Constants.LOGGED_IN_USER_ID, appUser.id + "");
+		session(Constants.LOGGED_IN_USER_ROLE, appUser.role+ "");
+
+		return redirect(routes.UserActions.dashboard());
 	}
 
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+	/*
 	public static Result processJoinUs(){
 		final Form<JoinUsBean> filledForm = joinUsForm.bindFromRequest();
 		final Form<MedicalRepresentative> mR = mrForm.bindFromRequest();
@@ -124,5 +175,6 @@ public class UserController extends Controller {
 
 
 	}
+	 */
 
 }

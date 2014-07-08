@@ -5,8 +5,9 @@
 
 #Blog
 
+
 GET    /blog/create-blog-admin                     controllers.SampleDataController.createBlogAdmin()
-GET    /blog/login                                 controllers.LoginController.blogAdminLoginForm()
+GET    /login         		                        controllers.LoginController.blogAdminLoginForm()
 
 GET    /blog                                       controllers.BlogController.blogHome()
 GET    /blog/admin/new-category                    controllers.BlogController.categoryForm()
@@ -37,14 +38,26 @@ POST   /login                                      controllers.LoginController.p
 GET    /logout                                     controllers.LoginController.processLogout()
 
 
+# Sign up page
+GET    /join                                       controllers.UserController.joinUs()
+POST   /join                                       controllers.UserController.processDoctorJoinUs()
+
+
+GET		/dashboard                                  controllers.UserActions.dashboard()
+POST	/doctor/doctor-basic-update					controllers.DoctorController.basicUpdate()
+POST	/doctor/doctor-images-update				controllers.DoctorController.imagesUpdate()
+GET    	/doctor/get-image/:id/:type                 controllers.DoctorController.getImage(id: Long, type :String)
+
 # Remove later (at Beta Launch)
 GET    /                                  controllers.Application.index()
 GET    /:str		                      controllers.Application.indexX(str: String)
 
 
+#############################	PRODUCTION	#################################################################################
+
 # Sign up page
-GET    /join                                       controllers.UserController.joinUs()
-POST   /join                                       controllers.UserController.processJoinUs()
+#GET    /join                                       controllers.UserController.joinUs()
+#POST   /join                                       controllers.UserController.processJoinUs()
 
 # patient actions
 GET    /user/schedule-appointment                  controllers.PatientController.scheduleAppointment()

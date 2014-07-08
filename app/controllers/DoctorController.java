@@ -1,14 +1,17 @@
 package controllers;
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
+import java.util.Map;
 
 import models.AppUser;
 import models.LanguageAppUser;
 import models.Patient;
 import models.Role;
+import models.blog.Article;
 import models.doctor.Appointment;
 import models.doctor.AppointmentStatus;
 import models.doctor.Day;
@@ -25,6 +28,7 @@ import models.doctor.QuestionAndAnswer;
 import play.Logger;
 import play.data.Form;
 import play.mvc.Controller;
+import play.mvc.Http.MultipartFormData;
 import play.mvc.Result;
 import actions.BasicAuth;
 import beans.ClinicBean;
@@ -33,12 +37,13 @@ import beans.PatientBean;
 import beans.QuestionAndAnswerBean;
 
 import com.avaje.ebean.Ebean;
+import com.google.common.io.Files;
 
 
 @BasicAuth
 public class DoctorController extends Controller {
 
-	public static Form<Doctor> form= Form.form(Doctor.class);
+	public static Form<Doctor> form = Form.form(Doctor.class);
 	public static Form<PatientBean> patientForm = Form.form(PatientBean.class);
 	public static Form<ClinicBean> clinicForm = Form.form(ClinicBean.class);
 	public static Form<DoctorExperience> experienceForm = Form.form(DoctorExperience.class);
@@ -50,7 +55,117 @@ public class DoctorController extends Controller {
 	public static Form<DoctorClinicInfo> doctorClinicForm	=Form.form(DoctorClinicInfo.class);
 	public static Form<DoctorPublication> publicationForm = Form.form(DoctorPublication.class);
 
-	public static Doctor loggedIndoctor=LoginController.getLoggedInUser().getDoctor();
+
+
+	/**
+	 * Action to update basic field of doctor like name, specialization, degree etc.
+	 * POST	/doctor/doctor-basic-update
+	 */
+	public static Result basicUpdate(){
+		final Map<String, String[]> requestMap = request().body().asFormUrlEncoded();
+		try{
+			final Doctor doctor = Doctor.find.byId(Long.parseLong(requestMap.get("doctorId")[0]));
+
+			// Server side validation
+			if(doctor.id.longValue() != LoginController.getLoggedInUser().getDoctor().id.longValue()){
+				return redirect(routes.LoginController.processLogout());
+			}
+
+			if(requestMap.get("fullname") != null && !(requestMap.get("fullname")[0].trim().isEmpty())){
+				doctor.appUser.name = requestMap.get("fullname")[0];
+			}
+
+			if(requestMap.get("specialization") != null && !(requestMap.get("specialization")[0].trim().isEmpty())){
+				doctor.specialization = requestMap.get("specialization")[0];
+			}
+
+			if(requestMap.get("degree") != null && !(requestMap.get("degree")[0].trim().isEmpty())){
+				doctor.degree = requestMap.get("degree")[0];
+			}
+
+			if(requestMap.get("description") != null && !(requestMap.get("description")[0].trim().isEmpty())){
+				doctor.description = requestMap.get("description")[0];
+			}
+
+			doctor.appUser.update();
+			doctor.update();
+			return ok("0");
+		}
+		catch (final Exception e){
+			Logger.error("ERROR WHILE UPDATING BASIC DOCTOR INFO");
+			e.printStackTrace();
+			return ok("-1");
+		}
+	}
+
+
+	/**
+	 * Action to get images assocaied with a doctor
+	 * GET  /doctor/get-image/:id/:type
+	 */
+	public static Result getImage(final Long id, final String type){
+		final Doctor doctor = Doctor.find.byId(id);
+		if(type.compareToIgnoreCase("backgroundImage") == 0){
+			return ok(doctor.backgroundImage).as("image/jpeg");
+		}
+		if(type.compareToIgnoreCase("profileImage") == 0){
+			return ok(doctor.profileImage).as("image/jpeg");
+		}
+		return ok().as("image/jpeg");
+	}
+
+
+	/**
+	 * Action to update profile and backgound images of Doctor
+	 * POST	/doctor/doctor-images-update
+	 */
+	public static Result imagesUpdate(){
+		final MultipartFormData formData = request().body().asMultipartFormData();
+		final Doctor doctor = Doctor.find.byId(Long.parseLong(formData.asFormUrlEncoded().get("doctorId")[0]));
+		// Server side validation
+		if(doctor.id.longValue() != LoginController.getLoggedInUser().getDoctor().id.longValue()){
+			return redirect(routes.LoginController.processLogout());
+		}
+		try{
+			if(formData.getFile("profileimage") != null){
+				final File profileImageFile = formData.getFile("profileimage").getFile();
+				doctor.profileImage = Files.toByteArray(profileImageFile);
+			}
+			if(formData.getFile("backgroundimage") != null){
+				final File backgroundImageFile = formData.getFile("backgroundimage").getFile();
+				doctor.backgroundImage = Files.toByteArray(backgroundImageFile);
+			}
+			doctor.update();
+		}
+		catch(final Exception e){
+			Logger.error("ERROR WHILE UPDATING IMAGES OF DOCTOR");
+			e.printStackTrace();
+		}
+		return redirect(routes.UserActions.dashboard());
+	}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 	public static Result requestAppointment(){
 
@@ -72,8 +187,8 @@ public class DoctorController extends Controller {
 
 	}
 
-
 	public static Result doctorProfile(){
+		final Doctor loggedIndoctor=LoginController.getLoggedInUser().getDoctor();
 		return ok(views.html.doctor.doctorDashboard.render(loggedIndoctor));
 	}
 
@@ -85,11 +200,13 @@ public class DoctorController extends Controller {
 
 
 	public static Result doctorExperience(){
+		final Doctor loggedIndoctor=LoginController.getLoggedInUser().getDoctor();
 		Logger.info(loggedIndoctor.doctorExperienceList.size()+" size of list");
 		return ok(views.html.doctor.doctorExperience.render(experienceForm));
 	}
 
 	public static Result processDoctorExperience() {
+		final Doctor loggedIndoctor=LoginController.getLoggedInUser().getDoctor();
 		final Form<DoctorExperience> experienceFilledForm = experienceForm.bindFromRequest();
 
 		if (experienceFilledForm.hasErrors()) {
@@ -110,11 +227,13 @@ public class DoctorController extends Controller {
 
 
 	public static Result doctorEducation(){
+		final Doctor loggedIndoctor=LoginController.getLoggedInUser().getDoctor();
 		Logger.info(loggedIndoctor.doctorEducationList.size()+" size of list");
 		return ok(views.html.doctor.doctorEducation.render(educationForm));
 	}
 
 	public static Result processDoctorEducation() {
+		final Doctor loggedIndoctor=LoginController.getLoggedInUser().getDoctor();
 		final Form<DoctorEducation> educationfilledForm = educationForm.bindFromRequest();
 
 		if (educationfilledForm.hasErrors()) {
@@ -135,13 +254,14 @@ public class DoctorController extends Controller {
 
 
 	public static Result doctorPublication(){
+		final Doctor loggedIndoctor=LoginController.getLoggedInUser().getDoctor();
 		Logger.info(loggedIndoctor.doctorPublicationList.size()+" size of list");
-
 		return ok(views.html.doctor.doctorPublications.render(publicationForm));
 	}
 
 
 	public static Result processDoctorPublication() {
+		final Doctor loggedIndoctor=LoginController.getLoggedInUser().getDoctor();
 		final Form<DoctorPublication> publicationfilledForm = publicationForm.bindFromRequest();
 		// Logger.info("enteredt");
 
@@ -162,6 +282,7 @@ public class DoctorController extends Controller {
 
 
 	public static Result doctorAward(){
+		final Doctor loggedIndoctor=LoginController.getLoggedInUser().getDoctor();
 		Logger.info(loggedIndoctor.doctorAwardList.size()+" size of list");
 		return ok(views.html.doctor.doctorAward.render(awardForm));
 	}
@@ -169,6 +290,7 @@ public class DoctorController extends Controller {
 
 
 	public static Result processDoctorAward() {
+		final Doctor loggedIndoctor=LoginController.getLoggedInUser().getDoctor();
 		final Form<DoctorAward> awardfilledForm = awardForm.bindFromRequest();
 
 		if (awardfilledForm.hasErrors()) {
@@ -224,6 +346,7 @@ public class DoctorController extends Controller {
 
 
 	public static Result processDoctorSocialWork() {
+		final Doctor loggedIndoctor=LoginController.getLoggedInUser().getDoctor();
 		final Form<DoctorSocialWork> socialWorkfilledForm = socialWorkForm.bindFromRequest();
 		// Logger.info("enteredt");
 
@@ -239,14 +362,11 @@ public class DoctorController extends Controller {
 			loggedIndoctor.update();
 
 		}
-
 		return redirect(routes.DoctorController.doctorProfile());
-
 	}
 
 	//Process new clinic timing Data
 	public static Result processNewClinic(){
-
 		final Form<ClinicBean> filledForm = clinicForm.bindFromRequest();
 		if(filledForm.hasErrors()){
 			return ok(views.html.doctor.newClinic.render(clinicForm,new ArrayList<String>(),new ArrayList<String>()));
@@ -518,20 +638,15 @@ public class DoctorController extends Controller {
 
 	//Todays Appointment
 	public static Result viewTodaysAppointment() {
-
+		final Doctor loggedIndoctor=LoginController.getLoggedInUser().getDoctor();
 		final Calendar calendar=Calendar.getInstance();
 		calendar.setTime(new Date());
 		calendar.set(Calendar.HOUR_OF_DAY, 0);
 		calendar.set(Calendar.MINUTE, 0);
 		calendar.set(Calendar.SECOND,0);
 		calendar.set(Calendar.MILLISECOND,0);
-
-
 		final List<Appointment> appointments=Appointment.find.where().eq("appointmentStatus", AppointmentStatus.APPROVED).eq("doctor", loggedIndoctor).ge("appointmentTime", calendar.getTime()).findList();
-
-
 		return ok(views.html.doctor.viewTodaysAppointment.render(appointments));
-
 	}
 
 	public static Result form() {

@@ -6,9 +6,8 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 
 import play.data.validation.Constraints.Required;
-import play.db.ebean.*;
-import play.db.ebean.Model.Finder;
 
+@SuppressWarnings("serial")
 @Entity
 public class Address extends BaseEntity {
 
@@ -19,23 +18,18 @@ public class Address extends BaseEntity {
 	@Required
 	public String addrressLine1;
 
-
 	public String addrressLine2;
 
 	public String addrressLine3;
 
-
 	@Required
 	public String city;
-
 
 	@Required
 	public State state;
 
-	@Required
 	public Long pinCode;
 
-	@Required
 	public Country country;
 
 
