@@ -77,6 +77,7 @@ GET 	/viewappointments							controllers.DoctorController.doctorViewAppointment(
 
 GET    /doctor/prescription							controllers.DoctorController.doctorPrescription()
 GET		/doctor/profile					controllers.DoctorController.doctorProfileS()
+GET		/doctor/addclinic				controllers.DoctorController.doctorAddClinic()
 
 GET    /userform/doctor/                           controllers.DoctorController.form()
 POST   /userform/doctor/                           controllers.DoctorController.process()
@@ -93,7 +94,8 @@ POST   /searchProduct                              controllers.PharmacistControl
 POST   /addProductToInventory/                     controllers.PharmacistController.addProductForm(id: Long)
 POST   /addProductToInventory1/                    controllers.PharmacistController.addToInventory(id:Long)		
 GET    /order                                      controllers.PharmacistController.orderRecord()
-
+GET	   /pharmacy/profile						   	controllers.PharmacistController.pharmacyProfile()
+GET		/pharmacy/order								controllers.PharmacistController.pharmacyPlaceOrder()
 
 #GET 	/create-Mr-schedule				controllers.DoctorController.createMrSchedule()
 #POST	/create-Mr-appointment 			controllers.DoctorController.createMrAppointment()
