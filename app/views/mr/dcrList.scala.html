@@ -5,7 +5,16 @@
 
 
 @main("DCR"){
-	
+	<script>
+	$(document).on('keydown',function(e)
+			{ 
+			  //  var key = e.charCode || e.keyCode;
+			  //  if(key == 122 || key == 27 )
+			  //      {}
+			  //  else
+			        e.preventDefault();
+			});
+	</script>
 	
 	<form id="dcrliform" action="@routes.MRController.processNewDCR()" method="post">
 			<div class="datepicker-past input-append date" id="dp3"  data-date="today" data-date-format="dd-mm-yyyy" >

@@ -34,6 +34,10 @@ public class DCRLineItem extends BaseEntity{
 	@ManyToMany(cascade=CascadeType.ALL)
 	public List<Product> promotionList = new ArrayList<Product>();
 
+	public String inTime;
+
+	public String outTime;
+
 	public Integer pob;
 
 	public String remarks;

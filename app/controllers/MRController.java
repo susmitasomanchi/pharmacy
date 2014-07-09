@@ -127,8 +127,8 @@ public class MRController extends Controller{
 	/**
 	 * @author anand
 	 * url : /mr/new-dcr
-	 * 
-	 * 
+	 * this method is used to capture date and store into database
+	 * and date related server side validation
 	 * 
 	 * */
 	public static Result processNewDCR(){
@@ -179,6 +179,12 @@ public class MRController extends Controller{
 		return redirect(routes.MRController.listDCR());
 
 	}
+	/**
+	 * @author anand
+	 * url : /mr/show-dcr/:id
+	 * 
+	 * to show dcr-line-item to adding in daily call report
+	 * **/
 	public static Result addDCRLineItem(final Long id){
 		final DailyCallReport dcr = DailyCallReport.find.byId(id);
 		final MedicalRepresentative loggedInMr = LoginController.getLoggedInUser().getMedicalRepresentative();
@@ -186,37 +192,69 @@ public class MRController extends Controller{
 
 	}
 
+	/**
+	 * @author anand
+	 * url : /mr/dcr/add-line-item
+	 * 
+	 * this shows the added dcrlinetime in daily call report of particular mr
+	 */
 	public static Result processDCRLineItem(){
 
 		final MedicalRepresentative loggedInMr = LoginController.getLoggedInUser().getMedicalRepresentative();
 
 		final String dcrId = request().body().asFormUrlEncoded().get("dcrId")[0];
 		final String doctorId = request().body().asFormUrlEncoded().get("doctor")[0];
+
 		final String sampleList[] = request().body().asFormUrlEncoded().get("sampleList");
 		final String qtyList[] = request().body().asFormUrlEncoded().get("qtyList");
 		final String promotionList[] = request().body().asFormUrlEncoded().get("promotionList");
+		final String inTime = request().body().asFormUrlEncoded().get("inTime")[0];
+		final String outTime = request().body().asFormUrlEncoded().get("outTime")[0];
 		final String pob = request().body().asFormUrlEncoded().get("pob")[0];
 		final String remarks = request().body().asFormUrlEncoded().get("remarks")[0];
 
+
 		final DCRLineItem dcrLineItem = new DCRLineItem();
+		final DailyCallReport dcr = DailyCallReport.find.byId(Long.parseLong(dcrId));
+
 
 		dcrLineItem.doctor=Doctor.find.byId(Long.parseLong(doctorId));
 
+		Logger.info("sample size: "+sampleList.length);
+
 		for(int i=0;i<sampleList.length;i++){
 			final Sample sample = new Sample();
-			Logger.info(" sample is "+sampleList[i]);
-			sample.product = Product.find.byId(Long.parseLong(sampleList[i]));
-			sample.quantity = Integer.parseInt(qtyList[i]);
-			dcrLineItem.sampleList.add(sample);
+
+			if((sampleList[i].compareToIgnoreCase("")==0)||(sampleList[i].compareToIgnoreCase("0")==0)){
+
+			}else{
+				sample.product = Product.find.byId(Long.parseLong(sampleList[i]));
+				if(qtyList[i] == ""){
+					sample.quantity = 0;
+				}else{
+					sample.quantity = Integer.parseInt(qtyList[i]);
+				}
+				dcrLineItem.sampleList.add(sample);
+			}
+
+
+			//Logger.info("product is : "+sample.product.medicineName);
+			//Logger.info("quantity is : "+sample.quantity);
+
 		}
-		Logger.info("promotion list "+promotionList[0]);
-		if(promotionList[0] == null){
-			dcrLineItem.promotionList.add(null);
+
+		Logger.info("promotion is: "+promotionList);
+		if(promotionList == null){
+
 		}else{
 			for(int i=0;i<promotionList.length;i++){
 				dcrLineItem.promotionList.add(Product.find.byId(Long.parseLong(promotionList[i])));
 			}
 		}
+
+		dcrLineItem.inTime = inTime;
+		dcrLineItem.outTime = outTime;
+
 		if(pob==""){
 			dcrLineItem.pob=0;
 		}else{
@@ -225,8 +263,6 @@ public class MRController extends Controller{
 
 		dcrLineItem.remarks = remarks;
 
-
-		final DailyCallReport dcr = DailyCallReport.find.byId(Long.parseLong(dcrId));
 		dcr.dcrLineItemList.add(dcrLineItem);
 		dcr.update();
 
@@ -234,7 +270,16 @@ public class MRController extends Controller{
 		return ok(views.html.mr.filledDCRLineItem.render(dcr.dcrLineItemList));
 	}
 
-	//Delete DCRLineItem
+	/**
+	 * @author anand
+	 * url : /mr/dcr/delete-line-item/:dcrid/:lineitemid
+	 * 
+	 * to remove the added dcr-line-item
+	 * 
+	 * @param dcrId
+	 * @param lineItemId
+	 * @return
+	 */
 	public static Result removeDCRLineItem(final Long dcrId,final Long lineItemId){
 
 		final DailyCallReport dcr = DailyCallReport.find.byId(dcrId);
