@@ -21,7 +21,6 @@ public class PharmacyBean implements Serializable{
 
 	public String addrressLine1;
 
-
 	public String addrressLine2;
 
 	public String addrressLine3;

@@ -1,6 +1,7 @@
 package controllers;
 
 
+import java.io.File;
 import java.util.List;
 
 import models.Address;
@@ -13,12 +14,14 @@ import models.pharmacist.Pharmacy;
 import play.Logger;
 import play.data.Form;
 import play.mvc.Controller;
+import play.mvc.Http.MultipartFormData;
 import play.mvc.Result;
 import actions.BasicAuth;
 import beans.AddProductToInventoryBean;
 import beans.PharmacyBean;
 
 import com.avaje.ebean.Expr;
+import com.google.common.io.Files;
 
 @BasicAuth
 public class PharmacistController extends Controller{
@@ -160,14 +163,10 @@ public class PharmacistController extends Controller{
 		return ok(views.html.pharmacist.orderEntry.render(products));
 
 	}
-	
-	public static Result pharmacyProfile() {
-		
-		return ok(views.html.pharmacist.pharmacy_profile.render());
-	}
-	
+
+
 	public static Result pharmacyPlaceOrder() {
-		
+
 		return ok(views.html.pharmacist.place_order.render());
 	}
 
@@ -261,13 +260,94 @@ public class PharmacistController extends Controller{
 		return ok("updated successfully");
 	}
 
-
-	/*	 public static Result pharmacyPlaceOrder() {
-
-		  return ok(views.html.pharmacist.place_order.render());
-		 }
+	/*
+	 * @author : lakshmi
+	 * 
+	 * @url:
+	 * 
+	 * descrition:rendering to upload the Pharmacy Images
 	 */
+	public static Result uploadPharmacyImage(){
+		return ok(views.html.pharmacist.uploadPharmacyImages.render(pharmacyForm));
+	}
+
+	/*
+	 * @author : lakshmi
+	 * 
+	 * @url:
+	 * 
+	 * descrition:uploading the Pharmacy Images process
+	 */
+
+	public static Result uploadPharmacyImageProcess() {
+		final Pharmacy pharmacy = LoginController.getLoggedInUser().getPharmacist().pharmacy;
+		final MultipartFormData body = request().body().asMultipartFormData();
+		if(request().body().asMultipartFormData().getFile("profileImage") != null){
+			final File image = request().body().asMultipartFormData().getFile("profileImage").getFile();
+			try{
+				pharmacy.profileImage = Files.toByteArray(image);
+				Logger.info("Pharmacy image uploaded");
+			}
+			catch (final Exception e){
+				e.printStackTrace();
+			}
+		}
+
+		if(request().body().asMultipartFormData().getFile("backgroundImage").getFile() != null){
+			Logger.info("bg IMAGE TEST1");
+			final File image = request().body().asMultipartFormData().getFile("backgroundImage").getFile();
+			try{
+				Logger.info("bg IMAGE 2");
+				//final byte[] image1 = Files.toByteArray(image);
+				final byte[] ba = Files.toByteArray(image);
+				Logger.info("23232323");
+
+				pharmacy.backgroundImageList.add(ba);
+
+				Logger.info("Pharmacy Back ground image uploaded");
+				Logger.info("list size"+pharmacy.backgroundImageList.size());
+			}
+			catch (final Exception e){
+				Logger.info("bg IMAGE 3");
+				e.printStackTrace();
+			}
+		}
+		else{
+			Logger.info("BG IMAGE NULL");
+		}
+
+		pharmacy.update();
+
+		return ok(views.html.pharmacist.displayImage.render(pharmacy));
+
+	}
+
+	public static Result getProfileImage(final Long id) {
+
+		return ok(Pharmacy.find.byId(id).profileImage).as("image/jpeg");
+
+	}
+	public static Result getBackgroundImage(final Long id,final Integer index) {
+
+		return ok(	Pharmacy.find.byId(id).backgroundImageList.get(index)).as("image/jpeg");
+
+
+	}
+
+
+
+
+
+	private static Status ok(final List<Byte[]> backgroundImageList) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
 }
+
+
+
+
 
 
 

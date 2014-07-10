@@ -30,8 +30,7 @@ public class Pharmacy extends BaseEntity {
 	@Lob
 	public byte[] profileImage;
 
-	@Lob
-	public List<Byte[]> backgroundImageList = new ArrayList<Byte[]>();
+	public List<byte[]> backgroundImageList = new ArrayList<byte[]>();
 
 	@OneToOne
 	public Address address	= new Address();
@@ -39,7 +38,6 @@ public class Pharmacy extends BaseEntity {
 	public String contactNo;
 
 	public String testField;
-
 	//@OneToOne
 	//public PharmacyProductInfo pharmacyProductInfo;
 

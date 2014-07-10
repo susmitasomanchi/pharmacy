@@ -1,0 +1,29 @@
+@* registerPatient Template File *@
+@(dataForm:play.data.Form[models.pharmacist.Pharmacy])
+@import helper.twitterBootstrap._
+
+@main("Upload Pharmacy Images"){
+<div class="row">
+@helper.form(action = routes.PharmacistController.uploadPharmacyImageProcess(), 'enctype -> "multipart/form-data",'method -> "post") {
+    <p>
+        <label>Profile Image</label>
+         <input type="file" name="profileImage" />
+       
+    </p>
+    <p>
+        <label>Background Image</label>
+         <input type="file" name="backgroundImage" />
+       
+    </p>
+   
+    <p>
+         <input type="submit" name="submit" value="Save Image" />
+    </p>
+    
+}
+</div>
+
+
+
+	}		
+
