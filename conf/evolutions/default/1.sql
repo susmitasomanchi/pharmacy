@@ -268,6 +268,8 @@ create table doctor_clinic_info (
   doctor_id                 bigint,
   slot                      integer,
   slotmr                    integer,
+  lat                       float,
+  lng                       float,
   last_update               timestamp not null,
   constraint pk_doctor_clinic_info primary key (id))
 ;

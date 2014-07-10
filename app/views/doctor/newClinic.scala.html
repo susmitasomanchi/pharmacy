@@ -6,16 +6,29 @@
 
 
 @main("New Clinic"){
-
+	<script src="@routes.Assets.at("javascripts/bootstrap-timepicker.min.js")" type="text/javascript"></script>
+	<link rel="stylesheet" media="screen" href="@routes.Assets.at("stylesheets/bootstrap-timepicker.min.css")">
+	
+	<style>
+	.bootstrap-timepicker-widget table td input {
+		width: 40px;
+	}
+	</style>
+	
+	<script>
+	$(document).ready(function() {
+	$("#patient").hide();
+	$("#medicalrep").hide();
+	});
+	</script>
+	
 	 <style>
       #map-container { height: 200px }
     </style>
     
     <script type="text/javascript"
-
         src="https://maps.googleapis.com/maps/api/js?v=3.exp&sensor=false&libraries=places">
-	
-      </script>
+	</script>
    
 	<form action="@routes.DoctorController.processNewClinic()" method="post" onsubmit="return validate()">
 	<div class="row">
@@ -25,11 +38,12 @@
 	 <label for="city">City</label>
 	<div ><input id="city"></div>
 	</div>
-			<div id="map-container" class="col-md-6"></div>
-	
+			<div class="col-md-6" id="map-outer"><div  id="map-container"></div></div>
+			<div ><input type="hidden" name="lat" id="lat1"></div>
+			<div ><input type="hidden" name="lng" id="lng1"></div>
 	</div>
 	
-	<div class="row clearfix">
+	<div class="row clearfix"> 
 		<div class="col-md-12 column">
 			<div class="row clearfix">
 				<div class="col-md-6 column">
@@ -109,86 +123,121 @@
 
 </form>
 <script>
+	$('.checkday').change(function() {
+		if ($(this).is(":checked")) {
+			var id = $(this).attr("id");
+			$("#" + id + "-from").prop("disabled", false);
+			$("#" + id + "-to").prop("disabled", false);
+		} else {
+			var id = $(this).attr("id");
+			$("#" + id + "-from").val("");
+			$("#" + id + "-from").attr("disabled", "disabled");
+			$("#" + id + "-to").val("");
+			$("#" + id + "-to").attr("disabled", "disabled");
+		}
+		$('#textbox1').val($(this).is(':checked'));
+	});
 
-$('.checkday').change(function() {	
-    if($(this).is(":checked")) {
-    	var id = $(this).attr("id");
-		$("#"+id+"-from").prop("disabled", false);
-		$("#"+id+"-to").prop("disabled", false);
-    }
-    else{
-		var id = $(this).attr("id");
-		$("#"+id+"-from").val("");
-		$("#"+id+"-from").attr("disabled","disabled");
-		$("#"+id+"-to").val("");
-		$("#"+id+"-to").attr("disabled","disabled");
-    }
-    $('#textbox1').val($(this).is(':checked'));        
-});
+	function validate() {
+		var values = $('input:checkbox:checked').map(
+				function() {
+					if ($("#" + this.id + "-from").val() > $(
+							"#" + this.id + "-to").val()) {
+						return 1;
+					}
 
-function validate(){
-	var values = $('input:checkbox:checked').map(function () {
-			if($("#"+this.id+"-from").val() > $("#"+this.id+"-to").val()){
-				return 1;
-			}
+					return 0;
+				}).get();
 
-		  return 0;
-	}).get();
-
-if($.inArray(1, values) != -1){
-	return false;
+		if ($.inArray(1, values) != -1) {
+			return false;
+		}
+		return true;
 	}
-return true;
-}
-
-
 </script>			
 			
  
     <script>
+					var lng, lat, marker;
+					var dbclk = false;
+					var map, myLatLng;
+					function initialize() {
+						alert(lat);
+						alert(lng);
+						var mapOptions = {
+							center : new google.maps.LatLng(lat, lng),
+							zoom : 15
+						};
+						map = new google.maps.Map(document
+								.getElementById("map-container"), mapOptions);
 
-    var lng,lat;
-    function initialize() {
-    	alert(lat);
-        alert(lng);      
-        var mapOptions = {
-          center: new google.maps.LatLng(lat, lng),
-          zoom: 13
-        };
-        var map = new google.maps.Map(document.getElementById("map-container"), mapOptions);
+						//  map.set("disableDoubleClickZoom", false);
 
-        google.maps.event.addListener(map, 'click', function(event) {
+						marker = new google.maps.Marker({
+							position : myLatLng,
+							draggable : true,
+							animation : google.maps.Animation.DROP,
+							map : map
+						});
 
-        	alert(event.latLng)
+						$("#lat1").val(lat);
+						$("#lng1").val(lng);
 
-        	        marker = new google.maps.Marker({position: event.latLng, map: map});
+						//On click event of map markershould be relocate
+						google.maps.event.addListener(map, 'click', function(
+								event) {
 
-        	    });
+							marker.setPosition(event.latLng);
 
-        }
-    
-	$("#city").blur(function(){
-		var geocoder =  new google.maps.Geocoder();
-		alert(this.value);
-	    geocoder.geocode( { 'address': this.value}, function(results, status) {
-	          if (status == google.maps.GeocoderStatus.OK) {
-	            alert("location : " + results[0].geometry.location.lat() + " " +results[0].geometry.location.lng()); 
-					lat=results[0].geometry.location.lat();
-					lng=results[0].geometry.location.lng();
-					initialize();
-		          } else {
-	            alert("Something got wrong " + status);
-	          }
-	        });
+							$("#lat1").val(event.latLng.lat());
 
-			
-	    
+							$("#lng1").val(event.latLng.lng());
 
-	     // google.maps.event.addDomListener(window, 'load', initialize);
+						});
+						// After dragging of marker finished
+						google.maps.event.addListener(marker, 'dragend',
+								function(event) {
 
-		});
+									$("#lat1").val(event.latLng.lat());
+
+									$("#lng1").val(event.latLng.lng());
+								});
+
+					}
+
+					$("#city").blur(function() {
+						var geocoder = new google.maps.Geocoder();
+
+						geocoder.geocode({
+							'address' : this.value
+						}, function(results, status) {
+							if (status == google.maps.GeocoderStatus.OK) {
+								//  alert("location : " + results[0].geometry.location.lat() + " " +results[0].geometry.location.lng()); 
+								myLatLng = results[0].geometry.location;
+								lat = results[0].geometry.location.lat();
+								lng = results[0].geometry.location.lng();
+								initialize();
+							} else {
+								alert("Something got wrong " + status);
+							}
+						});
+
+						// google.maps.event.addDomListener(window, 'load', initialize);
+
+					});
+				</script>
 
 
-    </script>
+
+
+
+
+
+
+
+
+
+
+
 
 }

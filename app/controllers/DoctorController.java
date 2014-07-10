@@ -280,7 +280,7 @@ public class DoctorController extends Controller {
 			}else{
 				clinicInfo.doctor=LoginController.getLoggedInUser().getDoctor();
 				clinicInfo.save();
-
+				Logger.info(""+clinicInfo.lat+" "+clinicInfo.lng);
 				return DoctorController.createAppointment(clinicInfo);
 			}
 		}
