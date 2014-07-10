@@ -63,20 +63,10 @@ function submitbasicform(name){
 <div class="row" style="margin-top:-180px">
 <div class="col-md-1"></div>
 <div class="col-md-10" >
-<div id="carousel-example-generic" class="carousel slide" data-ride="carousel">
-  <!-- Indicators -->
-  <ol class="carousel-indicators" style="top:310px">
-    <li data-target="#carousel-example-generic" data-slide-to="0" class="active"></li>
-    <li data-target="#carousel-example-generic" data-slide-to="1"></li>
-    <li data-target="#carousel-example-generic" data-slide-to="2"></li>
-  </ol>
-	<span data-toggle="modal" data-target="#myModal" style="cursor:pointer; position:relative; top:-3px;left:760px; font-size:25px;">
+<span data-toggle="modal" data-target="#myModal" style="cursor:pointer; position:relative; top:-3px;left:760px; font-size:25px;">
   	<i id="spinner2" class="fa fa-cog"></i>
 	</span>
-  <!-- Wrapper for slides -->
-  <div class="carousel-inner">
-  
-  <div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+	<div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
   <div class="modal-dialog" style="padding-left:100px">
     <div class="modal-content" style="width:400px">
       <div class="modal-header" style="color: #ffffff;background-color: #008cba;border-color: #008cba;">
@@ -109,7 +99,18 @@ function submitbasicform(name){
     </div>
   </div>
 </div>
-    <div class="item active carouselimage">
+<div id="carousel-example-generic" class="carousel slide" data-ride="carousel">
+  <!-- Indicators -->
+  <ol class="carousel-indicators">
+    <li data-target="#carousel-example-generic" data-slide-to="0" class="active"></li>
+    <li data-target="#carousel-example-generic" data-slide-to="1"></li>
+    <li data-target="#carousel-example-generic" data-slide-to="2"></li>
+  </ol>
+  <!-- Wrapper for slides -->
+  <div class="carousel-inner">
+  
+  
+    <div class="item active">
       <img src="/assets/images/pharmacy1.jpg" alt="pharmacy1" />
       <div class="carousel-caption">
        <p>Pharmacy1</p>
