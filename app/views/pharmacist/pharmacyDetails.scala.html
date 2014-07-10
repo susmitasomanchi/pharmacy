@@ -1,0 +1,36 @@
+@* registerPatient Template File *@
+@(dataForm:play.data.Form[beans.PharmacyBean])
+@import helper.twitterBootstrap._
+
+@main("Diagnostic Form"){
+
+     @helper.form(action=routes.PharmacistController.editPharmacyDetailsprocess(),'method -> "post") {
+
+
+			
+			@helper.inputText(dataForm("name"),'class -> "inputs",'_label->"Name")
+			
+				
+			@helper.inputText(dataForm("addrressLine1"),'class -> "inputs",'_label->"addrressLine1")
+			
+			@helper.inputText(dataForm("addrressLine2"),'class -> "inputs",'_label->"addrressLine2")
+			
+			@helper.inputText(dataForm("addrressLine3"),'class -> "inputs",'_label->"addrressLine3")
+						
+			@helper.inputText(dataForm("city"),'class -> "inputs",'_label->"city")			
+			
+			@helper.inputText(dataForm("state"),'class -> "inputs",'_label->"state")
+			
+			@helper.inputText(dataForm("pinCode"),'class -> "inputs",'_label->"pinCode")
+			
+			@helper.inputText(dataForm("country"),'class -> "inputs",'_label->"country")
+			
+			@helper.inputText(dataForm("contactNo"),'class -> "inputs",'_label->"contactNo")
+			
+	<input type="hidden" name="id" value='@dataForm("id").value' >
+			<input type="submit" name="submit" value="update profile"/>
+		
+
+
+	}		
+}

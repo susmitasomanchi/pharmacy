@@ -89,15 +89,19 @@ GET   /edit-product/:id                      controllers.PharmacistController.ed
 GET   /remove-product/:id                      controllers.PharmacistController.removeProduct(id: Long)
 
 
-POST   /searchProduct			        controllers.PharmacistController.searchProduct(arg: String ?= "")
 POST		/addProductToInventory/				controllers.PharmacistController.addProductForm(id: Long)
 POST   /addProductToInventory1/            controllers.PharmacistController.addToInventory(id:Long)		
 GET		/order								controllers.PharmacistController.orderRecord()
-POST   /editproduct/                               controllers.PharmacistController.editProduct(id: Long)
 GET    /doctor/today-appointment                   controllers.DoctorController.viewTodaysAppointment()	
 GET	   /doctor/appointments						   controllers.DoctorController.doctorAppointments()
 GET    /searchProduct                              controllers.PharmacistController.searchForm()
 POST   /searchProduct                              controllers.PharmacistController.searchProduct(arg: String ?= "")
+GET   /place-product-order                     controllers.PharmacistController.placeProductOrder()
+GET   /place-product-order/process                     controllers.PharmacistController.placeProductOrderProcess()
+GET		/pharmacy/profile									controllers.PharmacistController.pharmacyProfile()
+GET		/edit-pharmacy-details									controllers.PharmacistController.editPharmacyDetails()
+POST		/edit-pharmacy-details/save									controllers.PharmacistController.editPharmacyDetailsprocess()
+#GET		/pharmacy/order									controllers.PharmacistController.pharmacyPlaceOrder()
 
 GET    /new-product                       controllers.ProductController.productForm()
 POST   /new-product/save                       controllers.ProductController.saveProduct()
@@ -106,7 +110,6 @@ GET    /view-products                     controllers.ProductController.displayP
 #GET 	/create-Mr-schedule				controllers.DoctorController.createMrSchedule()
 #POST	/create-Mr-appointment 			controllers.DoctorController.createMrAppointment()
 
-GET		/doctor/today-appointment		controllers.DoctorController.viewTodaysAppointment()	
 
 
 GET    /medical-representative            controllers.Application.medicalRepresentative()
