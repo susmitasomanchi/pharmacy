@@ -28,14 +28,15 @@
 	}
 	
 	</script>
-	<script>
-	
-	$('#timepicker1').on('keydown',function(e){ 
-	        e.preventDefault();
-			});
+	<script type="text/javascript">
+				$(document).ready(function() {
+				 $('.input-small').bind('copy paste cut',function(e) { 
+ 					e.preventDefault(); //disable cut,copy,paste
+ 				});
+				});
 	</script>
 	
-	
+		
 	<form id="dcrliform">
 	<table border="1">
 	<thead>
@@ -51,7 +52,7 @@
 	<tr>
 		
 		<td valign="top" >
-		<select data-placeholder="Select Doctor" class="chzn" name="doctor" style="width:200px;">
+		<select id="selectDoctor" data-placeholder="Select Doctor" class="chzn" name="doctor" style="width:200px;">
 		   <option></option>
 			@for(doctor <- doctorList){
 	      	<option value=@doctor.id >@doctor.appUser.name</option>
@@ -67,14 +68,13 @@
 					<td>
 				  	   	<select data-placeholder="Select Sample" class="chzn" name="sampleList" style="width:200px;">
 				  	   	   <option ></option>
-				  	   	   <option value="0">None</option>
 							@for(product <- productList){
 					      	<option value="@product.id">@product.medicineName</option>
 					        }
 			   		    </select>
 					</td>
 					<td>
-						<input name="qtyList" placeholder="qty"/>
+						<input class="numeric-textbox" name="qtyList" placeholder="qty"/>
 					</td>
 					<td>
 						&nbsp;
@@ -87,7 +87,7 @@
 	   
 	   
 	   <td valign="top" >
-			    <select data-placeholder="Select Promotions" class="chzn" name="promotionList" multiple="true" style="width:200px;">
+			    <select id="promotionList" data-placeholder="Select Promotions" class="chzn" name="promotionList" multiple="true" style="width:200px;">
 			    <option></option>
 				@for(product <- productList){
 				<option value=@product.id >@product.medicineName</option>
@@ -96,18 +96,18 @@
 		</td>
 		<td valign="top">
 				<div class="input-append bootstrap-timepicker">
-	   			<input id="timepicker1" name="inTime" class="input-small" style="padding-left:20px">
+	   			<input id="timepicker1" name="inTime" class="input-small" style="padding-left:20px" >
 	            <span class="add-on"><i class="fa fa-clock-o"></i></span>
 	       		</div>
         </td>
 		<td valign="top">
 			<div class="input-append bootstrap-timepicker">
-	   			<input id="timepicker2" name="outTime" class="input-small" padding-left:20px">
+	   			<input id="timepicker2" name="outTime" class="input-small" style="padding-left:20px">
 	            <span class="add-on"><i class="fa fa-clock-o"></i></span>
 	        </div>
         </td>
         
-		<td valign="top"  ><input name="pob" /></td>
+		<td valign="top"  ><input class="numeric-textbox" name="pob" /></td>
 		<td valign="top" ><input name="remarks" type="text" placeholder="Remarks"/></td>
       </tr>
 		
@@ -117,8 +117,8 @@
 	<input type="hidden" name="dcrId" value="@dcr.id">
 
 	</form>
-	
-<input class="btn btn-primary" onclick="addLineItem();" value="Add" />
+	<br>
+	<a class="btn btn-primary" onclick="addLineItem();">Add</a>
 	
 	<hr>
 	
@@ -162,9 +162,9 @@
 			</div>   
 	   	</td>
 	   	
-	   	<td>@dcrLineItem.inTime</td>
+	   	<td>@dcrLineItem.inTime.format("kk:mm")</td>
 	   	
-	   	<td>@dcrLineItem.outTime</td>
+	   	<td>@dcrLineItem.outTime.format("kk:mm")</td>
 	   	
 	   	
 	    @if(dcrLineItem.pob==0){
@@ -183,16 +183,39 @@
 	</div>
 	
 	<script type="text/javascript"> 
+            $('.input-small').timepicker({
+            	showMeridian:false,
+            	defaultTime: false
+                });
+    </script>
+	<script type="text/javascript"> 
+	
             $('#timepicker1').timepicker();
             $('#timepicker2').timepicker();
+            $('#timepicker1').on('keydown',function(e)
+        			{ 
+        			        e.preventDefault();
+        			});
+        	$('#timepicker2').on('keydown',function(e)
+        			{ 
+        			        e.preventDefault();
+        			});
     </script>
     
 	<script>
-
+		
 	    function addLineItem(){
-	        $.post('/mr/dcr/add-line-item',$('#dcrliform').serialize(),function(html){
-				$('#dcrLineItemTable').html(html);
-			});
+	    	var docId=$( "#selectDoctor" ).val();
+	    	if($('#selectDoctor').val()== ""){
+	  		  alert('Please, Select a Doctor');
+	   		  return false;
+			}else{
+		        $.post('/mr/dcr/add-line-item',$('#dcrliform').serialize(),function(html){
+					$('#dcrLineItemTable').html(html);
+				});
+				$('#selectDoctor option[value == "2"]').remove();
+			}
+			
 		}
 		
 	    function removeLineItem(id){

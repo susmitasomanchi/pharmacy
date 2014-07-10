@@ -198,6 +198,7 @@ public class MRController extends Controller{
 	 * 
 	 * this shows the added dcrlinetime in daily call report of particular mr
 	 */
+	@SuppressWarnings("deprecation")
 	public static Result processDCRLineItem(){
 
 		final MedicalRepresentative loggedInMr = LoginController.getLoggedInUser().getMedicalRepresentative();
@@ -217,16 +218,13 @@ public class MRController extends Controller{
 		final DCRLineItem dcrLineItem = new DCRLineItem();
 		final DailyCallReport dcr = DailyCallReport.find.byId(Long.parseLong(dcrId));
 
-
 		dcrLineItem.doctor=Doctor.find.byId(Long.parseLong(doctorId));
 
-		Logger.info("sample size: "+sampleList.length);
-
+		Logger.info("doctor Id : "+doctorId);
 		for(int i=0;i<sampleList.length;i++){
 			final Sample sample = new Sample();
 
 			if((sampleList[i].compareToIgnoreCase("")==0)||(sampleList[i].compareToIgnoreCase("0")==0)){
-
 			}else{
 				sample.product = Product.find.byId(Long.parseLong(sampleList[i]));
 				if(qtyList[i] == ""){
@@ -236,24 +234,34 @@ public class MRController extends Controller{
 				}
 				dcrLineItem.sampleList.add(sample);
 			}
-
-
-			//Logger.info("product is : "+sample.product.medicineName);
-			//Logger.info("quantity is : "+sample.quantity);
-
 		}
 
-		Logger.info("promotion is: "+promotionList);
 		if(promotionList == null){
-
 		}else{
 			for(int i=0;i<promotionList.length;i++){
 				dcrLineItem.promotionList.add(Product.find.byId(Long.parseLong(promotionList[i])));
 			}
 		}
 
-		dcrLineItem.inTime = inTime;
-		dcrLineItem.outTime = outTime;
+
+		final Date dcrDate = dcr.forDate;
+		final DateTimeFormatter formatter = DateTimeFormat.forPattern("kk:mm");
+
+		final DateTime inDateTime = new DateTime(dcrDate);
+		final DateTime outDateTime = new DateTime(dcrDate);
+
+		final DateTime fromTime=formatter.parseDateTime(inTime);
+		final DateTime toTime = formatter.parseDateTime(outTime);
+
+		final DateTime inDateTimeHours = inDateTime.plusHours(fromTime.getHourOfDay());
+		final DateTime outDateTimeHours = outDateTime.plusHours(toTime.getHourOfDay());
+
+		final DateTime inDateTimeHoursMin = inDateTimeHours.plusMinutes(fromTime.getMinuteOfDay()-(60*fromTime.getHourOfDay()));
+		final DateTime outDateTimeHoursMin = outDateTimeHours.plusMinutes(toTime.getMinuteOfDay()-(60*toTime.getHourOfDay()));
+
+		dcrLineItem.inTime = inDateTimeHoursMin.toDate();
+		dcrLineItem.outTime = outDateTimeHoursMin.toDate();
+
 
 		if(pob==""){
 			dcrLineItem.pob=0;
