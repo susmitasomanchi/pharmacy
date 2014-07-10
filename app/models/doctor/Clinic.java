@@ -18,9 +18,29 @@ public class Clinic extends Model{
 
 	public String name;
 
+	public String contactPersonName;
+
+	public String contactNo;
+
 	public Address clinicAddress;
 
 
 	public static Model.Finder<Long, Clinic> find = new Finder<Long, Clinic>(Long.class, Clinic.class);
+
+	@Override
+	public boolean equals(final Object arg0) {
+		if(!this.name.equals(((Clinic)arg0).name)){
+			return this.name.equals(((Clinic)arg0).name);
+		}
+		if(!this.contactPersonName.equals(((Clinic)arg0).contactPersonName)){
+			return this.contactPersonName.equals(((Clinic)arg0).contactPersonName);
+		}
+
+		if(!this.contactNo.equals(((Clinic)arg0).contactNo)){
+			return this.contactNo.equals(((Clinic)arg0).contactNo);
+		}
+
+		return super.equals(arg0);
+	}
 
 }
