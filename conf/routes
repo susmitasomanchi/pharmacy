@@ -74,10 +74,13 @@ POST   /doctor-publication                         controllers.DoctorController.
 GET    /doctor-prescribe/:id                       controllers.DoctorController.showPrescriptionForm(id: Long)
 POST   /doctor-prescribe                           controllers.DoctorController.processPrescriptionForm()
 GET 	/viewappointments							controllers.DoctorController.doctorViewAppointment()
-
+GET    /doctor/today-appointment                   controllers.DoctorController.viewTodaysAppointment()	
+GET	   /doctor/appointments						   controllers.DoctorController.doctorAppointments()
+GET		/doctor/search/appointment					controllers.DoctorController.doctorSearchAppointment()
 GET    /doctor/prescription							controllers.DoctorController.doctorPrescription()
 GET		/doctor/profile					controllers.DoctorController.doctorProfileS()
 GET		/doctor/addclinic				controllers.DoctorController.doctorAddClinic()
+
 
 POST   /userform/doctor/                           controllers.DoctorController.process()
 GET    /userform/assistant/                        controllers.AssistantController.form()
@@ -91,8 +94,7 @@ GET   /edit-product/:id                      controllers.PharmacistController.ed
 GET   /remove-product/:id                      controllers.PharmacistController.removeProduct(id: Long)
 
 POST   /editproduct/                               controllers.PharmacistController.editProduct(id: Long)
-GET    /doctor/today-appointment                   controllers.DoctorController.viewTodaysAppointment()	
-GET	   /doctor/appointments						   controllers.DoctorController.doctorAppointments()
+
 GET    /searchProduct                              controllers.PharmacistController.searchForm()
 POST   /searchProduct                              controllers.PharmacistController.searchProduct(arg: String ?= "")
 POST   /addProductToInventory/                     controllers.PharmacistController.addProductForm(id: Long)
