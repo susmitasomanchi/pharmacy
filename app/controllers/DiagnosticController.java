@@ -269,7 +269,8 @@ public class DiagnosticController extends Controller {
 			upload.fileName = file.getFilename();
 			upload.fileContent = bytes;
 			upload.update();
-			return redirect(routes.DiagnosticOrderController.reoprtReady(ids));
+			return TODO;
+			//return redirect(routes.DiagnosticOrderController.reportReady(ids));
 		} else {
 			flash("error", "Missing file");
 			return ok("got error while uploading");

@@ -160,6 +160,16 @@ public class PharmacistController extends Controller{
 		return ok(views.html.pharmacist.orderEntry.render(products));
 
 	}
+	
+	public static Result pharmacyProfile() {
+		
+		return ok(views.html.pharmacist.pharmacy_profile.render());
+	}
+	
+	public static Result pharmacyPlaceOrder() {
+		
+		return ok(views.html.pharmacist.place_order.render());
+	}
 
 	public static Result placeProductOrder()
 	{

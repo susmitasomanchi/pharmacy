@@ -280,7 +280,7 @@ public class DoctorController extends Controller {
 			}else{
 				clinicInfo.doctor=LoginController.getLoggedInUser().getDoctor();
 				clinicInfo.save();
-
+				Logger.info(""+clinicInfo.lat+" "+clinicInfo.lng);
 				return DoctorController.createAppointment(clinicInfo);
 			}
 		}
@@ -568,5 +568,10 @@ public class DoctorController extends Controller {
 	public static Result doctorProfileS() {
 		
 		return ok(views.html.doctor.doctor_profile.render());
+	}
+	
+	public static Result doctorAddClinic() {
+		
+		return ok(views.html.doctor.doctor_add_clinic.render());
 	}
 }

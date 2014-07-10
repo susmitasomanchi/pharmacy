@@ -34,6 +34,9 @@ public class ClinicBean implements Serializable{
 
 	public List<String> daysOfWeekMr	= new ArrayList<String>();
 
+	public double lat;
+
+	public double lng;
 
 	public Integer slot;
 
@@ -89,6 +92,10 @@ public class ClinicBean implements Serializable{
 			doctorClinicInfo.slotmr=this.slotmr;
 		}
 
+		doctorClinicInfo.lat=this.lat;
+		doctorClinicInfo.lng=this.lng;
+
+		Logger.info(""+this.lat);
 		return doctorClinicInfo;
 	}
 }

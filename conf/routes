@@ -78,7 +78,9 @@ POST   /userform/doctor/                controllers.DoctorController.process()
 
 GET    /doctor/prescription							controllers.DoctorController.doctorPrescription()
 GET		/doctor/profile					controllers.DoctorController.doctorProfileS()
+GET		/doctor/addclinic				controllers.DoctorController.doctorAddClinic()
 
+POST   /userform/doctor/                           controllers.DoctorController.process()
 GET    /userform/assistant/               controllers.AssistantController.form()
 POST   /userform/assistant/               controllers.AssistantController.process()
 GET    /scheduleappointment/              controllers.AppointmentController.form()
@@ -194,10 +196,15 @@ GET    /mr/show-dcr/:id                            controllers.MRController.addD
 POST   /mr/dcr/add-line-item                       controllers.MRController.processDCRLineItem()
 GET    /search                                     controllers.MRController.search()
 GET    /mr/display-appointment/:id                 controllers.MRController.scheduleAppointment(id:String)
-#POST    /mr/add                                    controllers.MRController.medicalRepresentativeProccess()
-#POST    /mr/update                                   controllers.MRController.medicalRepresentativeProccessUpdate()
-#GET     /mr/del	                                   controllers.MRController.removeMR(id: Long)
-#GET     /mr/edit	                               controllers.MRController.editMR(id: Long)
+
+
+#common module
+GET    /new-product                                controllers.ProductController.productForm()
+POST   /new-product                                controllers.ProductController.saveProduct()
+GET    /view-products                              controllers.ProductController.displayProduct()
+#GET    /edit-product/:id                           controllers.ProductController.editProduct(id: Long)
+#GET    /remove-product/:id 
+
 
 # delete later
 GET    /userform/patient/                 controllers.PatientController.form()
