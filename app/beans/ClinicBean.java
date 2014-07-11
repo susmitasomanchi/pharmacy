@@ -14,8 +14,7 @@ import models.doctor.DoctorClinicInfo;
 import play.Logger;
 
 @SuppressWarnings("serial")
-public class ClinicBean implements Serializable{
-
+public class ClinicBean implements Serializable {
 
 	public Long id;
 
@@ -33,7 +32,6 @@ public class ClinicBean implements Serializable{
 
 	public String state;
 
-
 	public List<String> fromHrs = new ArrayList<String>();
 
 	public List<String> toHrs = new ArrayList<String>();
@@ -42,7 +40,7 @@ public class ClinicBean implements Serializable{
 
 	public List<String> toHrsMr = new ArrayList<String>();
 
-	public List<String> daysOfWeek	= new ArrayList<String>();
+	public List<String> daysOfWeek = new ArrayList<String>();
 
 	public List<String> daysOfWeekMr = new ArrayList<String>();
 
@@ -54,74 +52,82 @@ public class ClinicBean implements Serializable{
 
 	public Integer slotmr;
 
+	public DoctorClinicInfo toDoctorClinicInfo() {
 
-	public DoctorClinicInfo toDoctorClinicInfo(){
+		final DoctorClinicInfo doctorClinicInfo = new DoctorClinicInfo();
 
-		final DoctorClinicInfo doctorClinicInfo = new  DoctorClinicInfo();
-
-		if(this.id != null) {
-			doctorClinicInfo.id= this.id;
+		if (this.id != null) {
+			doctorClinicInfo.id = this.id;
 		}
-		Logger.info(""+this.id);
+		Logger.info("" + this.id);
 		Logger.info("name null");
 
 		final Clinic clinic = new Clinic();
 		clinic.name = this.name;
-		clinic.contactNo=this.contactNo;
-		clinic.contactPersonName=this.contactPersonName;
-		doctorClinicInfo.clinic= clinic;
+		clinic.contactNo = this.contactNo;
+		clinic.contactPersonName = this.contactPersonName;
+		doctorClinicInfo.clinic = clinic;
 		clinic.save();
 
 		Logger.info(doctorClinicInfo.clinic.name);
-		Logger.info(""+this.fromHrs.size());
-		Logger.info(""+this.toHrs);
-		Logger.info(this.daysOfWeek.size()+"");
+		Logger.info("from hrs" + this.fromHrs.size());
+		Logger.info("" + this.toHrs);
+		Logger.info(this.daysOfWeek.size() + "");
 
-		for(int index=0;index<this.daysOfWeek.size();index++){
+		for (int index = 0; index < this.daysOfWeek.size(); index++) {
 
-			if(this.daysOfWeek.get(index)!= null){
+			if (this.daysOfWeek.get(index) != null) {
 				final DaySchedule schedule = new DaySchedule();
-				schedule.fromTime=this.fromHrs.get(index);
-				schedule.toTime=this.toHrs.get(index);
-				schedule.day=Day.valueOf(this.daysOfWeek.get(index));
+				schedule.fromTime = this.fromHrs.get(index);
+				schedule.toTime = this.toHrs.get(index);
+				schedule.day = Day.valueOf(this.daysOfWeek.get(index));
 				Logger.info(schedule.day.toString());
-				schedule.requester=Role.PATIENT;
+				schedule.requester = Role.PATIENT;
 				doctorClinicInfo.schedulDays.add(schedule);
 			}
 		}
 
-		Logger.info(this.daysOfWeekMr.size()+"mr size");
+		Logger.info(this.daysOfWeekMr.size() + "mr size");
 
-		for(int index=0;index<this.daysOfWeekMr.size();index++) {
-			if(this.daysOfWeekMr.get(index)!= null){
+		for (int index = 0; index < this.daysOfWeekMr.size(); index++) {
+			if (this.daysOfWeekMr.get(index) != null) {
 				final DaySchedule schedule = new DaySchedule();
-				schedule.fromTime=this.fromHrsMr.get(index);
-				schedule.toTime=this.toHrsMr.get(index);
-				schedule.requester=Role.MR;
-				schedule.day=Day.valueOf(this.daysOfWeekMr.get(index));
+				schedule.fromTime = this.fromHrsMr.get(index);
+				schedule.toTime = this.toHrsMr.get(index);
+				schedule.requester = Role.MR;
+				schedule.day = Day.valueOf(this.daysOfWeekMr.get(index));
 				doctorClinicInfo.schedulDays.add(schedule);
 			}
 		}
 
-		if(this.slot!=null){
-			doctorClinicInfo.slot=this.slot;
+		if (this.slot != null) {
+			doctorClinicInfo.slot = this.slot;
 
 		}
-		if(this.slotmr!=null){
-			doctorClinicInfo.slotmr=this.slotmr;
+		if (this.slotmr != null) {
+			doctorClinicInfo.slotmr = this.slotmr;
 		}
 
-		final Address address=new Address();
-		address.addrressLine1=this.street;
-		address.addrressLine2=this.area;
-		address.city=this.city;
+		final Address address = new Address();
+		if (this.street != null) {
+			address.addrressLine1 = this.street;
 
-		address.state=State.valueOf(this.state);
-		address.lat=this.lat;
-		address.lng=this.lng;
-		doctorClinicInfo.address=address;
+		}
+		if (this.area != null) {
+			address.addrressLine2 = this.area;
+		}
+		if (this.city != null) {
+			address.city = this.city;
+		}
+		if (this.state != null) {
+			address.state = State.valueOf(this.state);
+		}
+
+		address.lat = this.lat;
+		address.lng = this.lng;
+		doctorClinicInfo.address = address;
 		doctorClinicInfo.address.save();
-		Logger.info(""+this.lat);
+		Logger.info("" + this.lat);
 		return doctorClinicInfo;
 	}
 }

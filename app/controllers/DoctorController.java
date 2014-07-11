@@ -82,8 +82,9 @@ public class DoctorController extends Controller {
 
 
 	public static Result newClinic(){
-		return ok(views.html.doctor.newClinic.render(clinicForm,new ArrayList<String>(),new ArrayList<String>()));
+		return ok(views.html.doctor.newClinic.render(clinicForm));
 	}
+
 
 
 	public static Result doctorExperience(){
@@ -252,7 +253,7 @@ public class DoctorController extends Controller {
 		final Form<ClinicBean> filledForm = clinicForm.bindFromRequest();
 		if(filledForm.hasErrors()){
 
-			return ok(views.html.doctor.newClinic.render(clinicForm,new ArrayList<String>(),new ArrayList<String>()));
+			return ok(views.html.doctor.newClinic.render(clinicForm));
 
 		}
 		else{
@@ -295,7 +296,7 @@ public class DoctorController extends Controller {
 			clinicInfoPrevious.update();
 
 			flash().put("alert", new Alert("alert-success","Successfully Updated").toString());
-			return redirect(routes.DoctorController.manageClinic(clinicInfoPrevious.id));
+			return redirect(routes.DoctorController.myClinics());
 
 
 		}
@@ -303,21 +304,28 @@ public class DoctorController extends Controller {
 
 	public static Result processUpdateClinicSchedule() {
 		final Form<ClinicBean> filledForm = clinicForm.bindFromRequest();
-
 		if(filledForm.hasErrors()){
 
 			return ok(views.html.doctor.editClinic.render(clinicForm,new ArrayList<String>(),new ArrayList<String>()));
 
 		}
 		else{
+			Logger.warn("enterd in method");
+
 			final DoctorClinicInfo clinicInfo =filledForm.get().toDoctorClinicInfo();
 
 			final DoctorClinicInfo clinicInfoPrevious=DoctorClinicInfo.find.byId(clinicInfo.id);
+			for (DaySchedule sc4: clinicInfo.schedulDays) {
+				Logger.info("test day"+sc4.day);
+			}
 			Ebean.delete(clinicInfoPrevious.schedulDays);
 			clinicInfoPrevious.schedulDays=clinicInfo.schedulDays;
+			clinicInfoPrevious.slot=clinicInfo.slot;
+			clinicInfoPrevious.slotmr=clinicInfo.slotmr;
+
 			clinicInfoPrevious.update();
 			flash().put("alert", new Alert("alert-success","Successfully Updated").toString());
-			return redirect(routes.DoctorController.manageClinic(clinicInfoPrevious.id));
+			return DoctorController.reCreateAppointment(clinicInfoPrevious);
 
 		}
 
@@ -350,8 +358,9 @@ public class DoctorController extends Controller {
 
 		final Form<ClinicBean> filledForm = clinicForm.fill(doctorClinicInfo.toBean());
 
-		//		Logger.info(doctorClinicInfo.toBean().daysOfWeek.size()+" "+doctorClinicInfo.toBean().daysOfWeekMr.size());
-
+		for (String	 from : bean.fromHrs) {
+			Logger.warn(from);
+		}
 		return ok(views.html.doctor.editClinic.render(filledForm,bean.daysOfWeek,bean.daysOfWeekMr));
 
 	}
@@ -548,11 +557,11 @@ public class DoctorController extends Controller {
 		return ok(views.html.doctor.doctor_all_appointments.render());
 
 	}
-	
+
 	public static Result doctorSearchAppointment() {
 
 		return ok(views.html.doctor.doctor_search_appointments.render());
-		
+
 	}
 
 	public static Result doctorViewAppointment() {

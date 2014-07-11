@@ -1,4 +1,4 @@
-@(clinicForm:play.data.Form[beans.ClinicBean],list:List[String],listmr:List[String])
+@(clinicForm:play.data.Form[beans.ClinicBean])
 
 @import play.i18n._
 @import helper.twitterBootstrap._
@@ -90,7 +90,7 @@
 			</div>
 			</div>
 			<div class="col-md-6">
-				<h2>Location Map</h2>
+				<h2>Location </h2>
 				<div id="map_canvas" style="width:520px;height:400px">
 <img src="/assets/images/googlemap1.png" width="520" height="400" style="position:relative"/>
 <div class="maptext">
@@ -185,7 +185,7 @@
 	</div>
 </div>
 <input type="hidden" name="id" value="@clinicForm("id").value">
-<button type="submit" class="btn btn-primary btn-sm">Submit</button>
+<button id="submit"type="submit" class="btn btn-primary btn-sm"  data-toggle="popover" title="Data Incorrect" data-content="Check From and To values">Submit</button>
 
 </form>
 
@@ -217,6 +217,8 @@
 				}).get();
 
 		if ($.inArray(1, values) != -1) {
+			$('#submit').popover('enable');
+			$('#submit').popover('show');
 			return false;
 		}
 		return true;
@@ -305,6 +307,15 @@
 
 <script type="text/javascript"> 
 $( document ).ready(function() {
+});
+
+$("#submit").popover('disable');
+$('body').on('click', function (e) {
+    $('[data-toggle="popover"]').each(function () {
+        if (!$(this).is(e.target) && $(this).has(e.target).length === 0 && $('.popover').has(e.target).length === 0) {
+            $(this).popover('hide');
+        }
+    });
 });
 </script>
 }
