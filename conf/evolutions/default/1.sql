@@ -256,9 +256,10 @@ create table doctor_award (
   id                        bigint not null,
   doctor_id                 bigint not null,
   award_name                varchar(255),
-  award_for                 varchar(255),
+  awarded_by                varchar(255),
   year                      varchar(255),
-  comment_for_awards        varchar(255),
+  description               varchar(255),
+  position                  integer,
   last_update               timestamp not null,
   constraint pk_doctor_award primary key (id))
 ;
@@ -276,10 +277,11 @@ create table doctor_clinic_info (
 create table doctor_education (
   id                        bigint not null,
   doctor_id                 bigint not null,
-  college_name              varchar(255),
+  institution_name          varchar(255),
   degree                    varchar(255),
   from_year                 integer,
   to_year                   integer,
+  description               varchar(255),
   last_update               timestamp not null,
   constraint pk_doctor_education primary key (id))
 ;
@@ -287,9 +289,9 @@ create table doctor_education (
 create table doctor_experience (
   id                        bigint not null,
   doctor_id                 bigint not null,
-  previous_hospital_name    varchar(255),
-  worked_as                 varchar(255),
-  location                  varchar(255),
+  institution_name          varchar(255),
+  position                  varchar(255),
+  description               TEXT,
   worked_from               integer,
   worked_to                 integer,
   last_update               timestamp not null,
@@ -316,8 +318,8 @@ create table doctor_publication (
 create table doctor_social_work (
   id                        bigint not null,
   doctor_id                 bigint not null,
-  social_work_tittle        varchar(255),
-  comment_social_work       varchar(255),
+  title                     varchar(255),
+  description               varchar(255),
   last_update               timestamp not null,
   constraint pk_doctor_social_work primary key (id))
 ;

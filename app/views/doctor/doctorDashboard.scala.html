@@ -97,9 +97,9 @@ text-align:left;
 @for(exp <- doctor.doctorExperienceList) {               
       
 	<tr>
-		<td>@exp.previousHospitalName</td>
-		<td>@exp.workedAs</td>
-		<td>@exp.location</td>
+		<td>@exp.institutionName</td>
+		<td>@exp.position</td>
+		<td>@exp.description</td>
 		<td>@exp.workedFrom</td>
 		<td>@exp.workedTo</td>
 	</tr>
@@ -145,9 +145,7 @@ text-align:left;
       
 	<tr>
 		<td>@awd.awardName</td>
-		<td>@awd.awardFor</td>
 		<td>@awd.year</td>
-		<td>@awd.commentForAwards</td>
 		
 	</tr>
     }
@@ -213,7 +211,6 @@ text-align:left;
 @for(edu <- doctor.doctorEducationList) {               
       
 	<tr>
-		<td>@edu.collegeName</td>
 		<td>@edu.degree</td>
 		<td>@edu.fromYear</td>
 		<td>@edu.toYear</td>

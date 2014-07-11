@@ -1,0 +1,1097 @@
+@(doctor :models.doctor.Doctor)
+@import play.i18n._
+@import helper.twitterBootstrap._
+@import helper._
+
+@main("Dr. "+doctor.appUser.name){
+	
+<script src="http://maps.googleapis.com/maps/api/js?sensor=false"></script>
+<script src="@routes.Assets.at("blog/jquery.carouFredSel-6.2.1-packed.js")" type="text/javascript"></script>
+<!--
+<script src="@routes.Assets.at("javascripts/carousel.js")" type="text/javascript"></script>
+<script src="@routes.Assets.at("javascripts/googlemaps.js")" type="text/javascript"></script>
+-->
+<link href='http://fonts.googleapis.com/css?family=Muli|Dosis' rel='stylesheet' type='text/css'>
+<style>
+.ptxt1 {
+    position:absolute;
+    margin-top:225px;
+    height:30px;
+    width:180px;
+    font-size:18px;
+    font-weight:bolder;
+    font-family: 'Dosis', sans-serif;
+    background-color:#43ac6a; 
+    margin-left:17.25px;
+    line-height:30px;
+    /*-webkit-text-stroke: 0.25px;*/
+}
+
+.ptxt1 a{
+	color:black;
+}
+
+.ptxt2 {
+    position:absolute;
+    margin-top:255px;
+    width:180px;
+    height:45px;
+    font-size:13px;
+    background-color:#008cba;
+    /*border-bottom-right-radius:1.5em;
+    border-bottom-left-radius:1.5em;*/
+    margin-left:17.25px;
+	/*-webkit-text-stroke: 0.25px;*/
+	color:white;
+    line-height: normal;
+}
+
+.ptxt2 p{
+	padding-top: 6px;
+}
+
+.container{
+	padding-left: 30px;
+	width:1032px;
+	padding-right: 30px;
+}
+
+.span{
+	width:200px;
+}
+.row-fluid .span {
+  width: 23.4%;
+  *width: 23.4%;
+}
+
+
+
+.roundedges {
+/*
+border:10px solid #a1a1a1;
+padding:20px 40px; 
+background:#dddddd;
+width:300px;
+
+*/
+border:1px solid #EEEEEE;
+width:200;
+height:300;
+/*
+border-top-left-radius:2em;
+border-bottom-right-radius:2em;
+border-top-right-radius:2em;
+border-bottom-left-radius:2em;
+
+box-shadow: 5px 0px 5px #CCC;
+*/
+}
+
+
+
+			.btn-link:hover, .btn-link:focus {
+				/*
+				 background-color: transparent;
+				 */
+				background-color: #5ec691;
+			}
+
+			.image_carousel {
+				padding: 10px 1px 5px 1px;
+				position: relative;
+			}
+			
+			.carousel-sliders{
+    				opacity: 0.4;
+   					 filter: alpha(opacity=40); /* For IE8 and earlier */
+			}	
+			.carousel-sliders:hover {
+    				opacity: 1.0;
+    				filter: alpha(opacity=100); /* For IE8 and earlier */
+			}
+
+			.image_carousel img:not(.navigators) {
+
+				/*
+				 border: 1px solid #ccc;
+				 background-color: white;
+				 E3E8EC
+				 */
+
+				background-color: #EEEEEE;
+				padding: 9px;
+				margin: 7px;
+				display: block;
+				float: left;
+				height: 300px;
+				width: 200px;
+			}
+			a.prev, a.next {
+				/*	background: url(../images/miscellaneous_sprite.png) no-repeat transparent;  */
+				/*
+				 width: 45px;
+				 height: 50px;
+				 */
+				width: 20px;
+				height: 10px;
+				display: block;
+				position: absolute;
+				top: 855px;
+			}
+			a.prev {
+				left: -12px;
+				background-position: 0 0;
+			}
+			a.prev:hover {
+				background-position: 0 -50px;
+			}
+			a.prev.disabled {
+				background-position: 0 -100px !important;
+			}
+			a.next {
+				right: -11px;
+				background-position: -50px 0;
+			}
+			a.next:hover {
+				background-position: -50px -50px;
+			}
+			a.next.disabled {
+				background-position: -50px -100px !important;
+			}
+			a.prev.disabled, a.next.disabled {
+				cursor: default;
+			}
+
+			a.prev span, a.next span {
+				display: none;
+			}
+
+			.clearfix {
+				float: none;
+				clear: both;
+			}
+.alert-info{
+background-image: linear-gradient(to bottom,#d9edf7 0,#b9def0 100%);
+background-repeat: repeat-x;
+border-color: #9acfea;
+color:black;
+}
+.alert-success{
+background-image: linear-gradient(to bottom,#dff0d8 0,#c8e5bc 100%);
+background-repeat: repeat-x;
+border-color: #b2dba1;
+color:black;
+}
+.badge{
+color:black;
+background-color:#bbbbbb;
+}
+.alert a{
+color:#006687;
+text-decoration:none;
+}
+.image_carousel {
+padding: 10px 1px 5px 1px;
+position: relative;
+}
+.slide {
+display: block;
+float: left;
+}
+.image_carousel img:not(.navigators) {
+
+				border: 1px solid #EEEEEE;
+				background-color: #EEEEEE;
+				padding: 9px;
+				margin: 7px;
+				display: block;
+				float: left;
+				height: 250px;
+				width: 200px;
+			}
+a.prev, a.next {
+	width: 20px;
+	height: 10px;
+	display: block;
+	position: absolute;
+	top: 1070px;
+}
+a.prev {
+	left: 30px;
+	background-position: 0 0;
+}
+a.prev:hover {
+	background-position: 0 -50px;
+}
+a.prev.disabled {
+	background-position: 0 -100px !important;
+}
+a.next {
+	right: 30px;
+	background-position: -50px 0;
+}
+a.next:hover {
+	background-position: -50px -50px;
+}
+a.next.disabled {
+	background-position: -50px -100px !important;
+}
+a.prev.disabled, a.next.disabled {
+	cursor: default;
+}
+
+a.prev span, a.next span {
+	display: none;
+}
+
+.clearfix {
+	float: none;
+	clear: both;
+}
+
+
+</style>
+
+
+<form style="display:none" id="basicinfoform">
+<input type="hidden" name="doctorId" value="@doctor.id">
+<input id="fullname" type="hidden" name="fullname" value="">
+<input id="specialization" type="hidden" name="specialization" value="">
+<input id="degree" type="hidden" name="degree" value="">
+<input id="description" type="hidden" name="description" value="">
+</form>
+
+<form style="display:none" id="imagesform" action="@routes.DoctorController.imagesUpdate()" method="post" enctype="multipart/form-data">
+<input type="hidden" name="doctorId" value="@doctor.id">
+<input id="profileimage" type="file" name="profileimage">
+<input id="backgroundimage" type="file" name="backgroundimage">
+</form>
+
+
+
+<script>
+
+
+$(document).ready(function(){
+	$("#clinics-carousel").carouFredSel({
+					items: 4,
+					circular: false,
+					infinite: false,
+					auto 	: false,
+					prev	: {	
+						button	: "#clinics-carousel_prev",
+					},
+					next	: { 
+						button	: "#clinics-carousel_next",
+					},
+					scroll : {
+            			duration: 1000,                        
+        			}
+				});
+});
+
+
+$('body').on('click', function (e) {
+    $('[data-toggle="popover"]').each(function () {
+        if (!$(this).is(e.target) && $(this).has(e.target).length === 0 && $('.popover').has(e.target).length === 0) {
+            $(this).popover('hide');
+        }
+    });
+});
+
+function submitbasicform(name){
+	$("[data-toggle=popover]").popover('hide');
+	$('#spinner-'+name).addClass( "fa-spin" );
+	$('#'+name).val($('#new-'+name).val());
+
+	$.post("@routes.DoctorController.basicUpdate()",$('#basicinfoform').serialize(),function(data){
+		if(data == 0){
+			window.location.href='';
+		}
+	});
+}
+
+function submitimagesform(name){
+	$("[data-toggle=popover]").popover('hide');
+	$('#spinner-'+name).addClass( "fa-spin" );
+}
+</script>
+
+
+@if(doctor.backgroundImage != null){
+	<div style="background-image:url('@routes.DoctorController.getImage(doctor.id,"backgroundImage")');background-repeat:no-repeat; height:400px; font-size:40px;">
+}else{
+	<div style="background-image:url('/assets/images/sunrise.png'); height:400px; font-size:40px;">
+}
+<span data-toggle="popover" data-placement="left" title="Change Background Image" data-html="true" data-content="<form action=&quot;@routes.DoctorController.imagesUpdate()&quot; enctype=&quot;multipart/form-data&quot; method=&quot;POST&quot;><input type=&quot;file&quot; name=&quot;backgroundimage&quot;> <input type=&quot;hidden&quot; name=&quot;doctorId&quot; value=&quot;@doctor.id&quot;> <br><input class=&quot;pull-right btn btn-xs btn-primary&quot; type=&quot;submit&quot; onclick=&quot;submitimagesform('backgroundimage');&quot; value=&quot;save&quot;></form>" style="cursor:pointer; position:relative; top:-5px; left:900px;"><i id="spinner-backgroundimage" class="fa fa-cog"></i></span>
+</div>
+<div class="row" style="margin-top:-150px">
+<div class="col-md-1" style="width:5%"></div>
+<div class="col-md-4" >
+<br>
+@if(doctor.profileImage != null){
+	<img src="@routes.DoctorController.getImage(doctor.id,"profileImage")" style="width:250px; height:275px;" class="thumbnail"/>
+}else{
+	<img src="/assets/images/doctor.png" style="width:250px; height:275px;" class="thumbnail"/>
+}
+
+<span data-toggle="popover" title="Change Profile Pic" data-html="true" data-content="<form action=&quot;@routes.DoctorController.imagesUpdate()&quot; enctype=&quot;multipart/form-data&quot; method=&quot;POST&quot;><input type=&quot;file&quot; name=&quot;profileimage&quot;> <input type=&quot;hidden&quot; name=&quot;doctorId&quot; value=&quot;@doctor.id&quot;> <br><input class=&quot;pull-right btn btn-xs btn-primary&quot; type=&quot;submit&quot; onclick=&quot;submitimagesform('profileimage');&quot; value=&quot;save&quot;></form>" style="font-size:20px; position:relative; top:-295px; left:228px; cursor:pointer;"><i id="spinner-profileimage" class="fa fa-cog"></i></span>
+</div>
+<div class="col-md-6">
+<h2><span style="text-shadow:1px 1px 20px #292929, 3px 3px 20px white;"><b> Dr. @doctor.appUser.name </b></span><span data-toggle="popover" title="Edit Name" data-html="true" data-content="<input id=&quot;new-fullname&quot; style=&quot;color:#292929; font-weight:bold;&quot; type=&quot;text&quot; value=&quot;@doctor.appUser.name&quot;><br><a class=&quot;pull-right btn btn-xs btn-primary&quot; onclick=&quot;submitbasicform('fullname');&quot; >save</a> " style="cursor:pointer; position:relative; font-size:15px; top:-15px;"><i id="spinner-fullname" class="fa fa-cog"></i></span></h2>
+<h3><span style="text-shadow:1px 1px 20px #292929, 3px 3px 20px white;">@doctor.specialization</span><span data-toggle="popover" title="Edit Specialization" data-html="true" data-content="<input id=&quot;new-specialization&quot; style=&quot;color:#292929; font-weight:bold;&quot; type=&quot;text&quot; value=&quot;@doctor.specialization&quot;><br><a class=&quot;pull-right btn btn-xs btn-primary&quot; onclick=&quot;submitbasicform('specialization');&quot; >save</a> " style="cursor:pointer; position:relative; font-size:15px; top:-10px;"><i id="spinner-specialization" class="fa fa-cog"></i></span></h3>
+<h4><span style="text-shadow:1px 1px 20px #292929, 3px 3px 20px white;">@doctor.degree</span><span data-toggle="popover" title="Edit Degree" data-html="true" data-content="<input id=&quot;new-degree&quot; style=&quot;color:#292929; font-weight:bold;&quot; type=&quot;text&quot; value=&quot;@doctor.degree&quot;><br><a class=&quot;pull-right btn btn-xs btn-primary&quot; onclick=&quot;submitbasicform('degree');&quot; >save</a> " style="cursor:pointer; position:relative; font-size:15px; top:-10px;"><i id="spinner-degree" class="fa fa-cog"></i></span></h4>
+<br>
+
+<!--
+<h5>Brand Name</h5>
+<h5>Main Clinic: <br><br><br></h5>
+<h5>Phone nos: 9999999999 </h5><br>
+-->
+
+
+<br><br>
+</div>
+
+
+<div class="col-md-1"></div>
+</div>	
+<div class="alert alert-success">
+<span data-toggle="popover" title="Brief Professional Description" data-placement="left" data-html="true" data-content="<textarea placeholder=&quot;I am...&quot; id=&quot;new-description&quot; rows=&quot;12&quot; cols=&quot;25&quot; style=&quot;color:#292929; font-weight:bold;&quot; >@doctor.description</textarea><br><a class=&quot;pull-right btn btn-xs btn-primary&quot; onclick=&quot;submitbasicform('description');&quot; >save</a> " style="cursor:pointer; position:relative; font-size:15px; top:-10px; left:905px;"><i id="spinner-description" class="fa fa-cog"></i></span>
+<p style="font-size:1.5em; align:justify; margin-top:-20px;">
+	@doctor.description
+</p>
+
+</div>
+
+
+<script>
+	function submitworkexform(){
+		if(($('#workexname').val().trim() != '') && ($('#workexfrom').val().trim() != '')){
+			$("[data-toggle=popover]").popover('hide');
+			$('#addworkex').html('&nbsp;<i class="fa fa-cog fa-spin"></i>&nbsp;');
+		}
+	}
+
+	function deleteworkex(id){
+			$("[data-toggle=popover]").popover('hide');
+			$('#removeworkex-'+id).html('&nbsp;<i class="fa fa-cog fa-spin"></i>&nbsp;');
+	}
+
+
+	function submitawardform(){
+		if($('#awardname').val().trim() != ''){
+			$("[data-toggle=popover]").popover('hide');
+			$('#addaward').html('&nbsp;<i class="fa fa-cog fa-spin"></i>&nbsp;');
+		}
+	}
+
+	function deleteaward(id){
+			$("[data-toggle=popover]").popover('hide');
+			$('#removeaward-'+id).html('&nbsp;<i class="fa fa-cog fa-spin"></i>&nbsp;');
+	}
+
+	function submiteducationform(){
+		if(($('#educationname').val().trim() != '') && ($('#educationfrom').val().trim() != '')){
+			$("[data-toggle=popover]").popover('hide');
+			$('#addeducation').html('&nbsp;<i class="fa fa-cog fa-spin"></i>&nbsp;');
+		}
+	}
+
+	function deleteeducation(id){
+			$("[data-toggle=popover]").popover('hide');
+			$('#removeeducation-'+id).html('&nbsp;<i class="fa fa-cog fa-spin"></i>&nbsp;');
+	}
+
+	function submitsocialform(){
+		if(($('#socialname').val().trim() != '') && ($('#socialdescription').val().trim() != '')){
+			$("[data-toggle=popover]").popover('hide');
+			$('#addsocial').html('&nbsp;<i class="fa fa-cog fa-spin"></i>&nbsp;');
+		}
+	}
+
+	function deletesocial(id){
+			$("[data-toggle=popover]").popover('hide');
+			$('#removesocial-'+id).html('&nbsp;<i class="fa fa-cog fa-spin"></i>&nbsp;');
+	}	
+
+</script>
+
+
+
+<div class="well" style="background-color:#eeeeee">
+<!-- Nav tabs -->
+<ul class="nav nav-tabs">
+  <li  class="active"><a href="#experience" data-toggle="tab">Experience</a></li>
+  <li><a href="#awards" data-toggle="tab">Awards/Recognitions</a></li>
+  
+	<!--
+	<li><a href="#articles" data-toggle="tab">Articles/Publications</a></li>
+	-->
+  <li><a href="#education" data-toggle="tab">Education</a></li>
+  <li><a href="#social" data-toggle="tab">Social Interests</a></li>
+</ul>
+
+
+
+<div class="tab-content">
+<div class="tab-pane active" id="experience">
+<br>
+
+
+@for(exp <- doctor.getExperienceListInOrder()){
+	<h4>
+		@exp.institutionName
+		<span class="pull-right"data-toggle="popover" title="Are You Sure ?" data-placement="left" data-html="true" data-content="<a href=&quot;@routes.DoctorController.removeWorkExperience(doctor.id,exp.id)&quot; class=&quot;btn btn-xs btn-danger&quot; onclick=&quot;deleteworkex('@exp.id');&quot; >Delete</a> ">
+			<a id="removeworkex-@exp.id" class="btn btn-danger btn-xs"><i class="fa fa-minus"></i></a>
+		</span>
+	</h4>
+
+	<h4>@exp.position</h4>
+	<h5>
+	@exp.workedFrom - 
+	@if(exp.workedTo != null && exp.workedTo != 0){
+		@exp.workedTo
+	}else{
+		present
+	}
+	</h5>
+	<h5>
+		@exp.description
+	</h5>
+	<hr>	
+}
+
+
+
+<span data-toggle="popover" title="Add Work Experience" data-html="true" data-content=
+"<form id=&quot;workexform&quot; action=&quot;@routes.DoctorController.addWorkExperience()&quot; method=&quot;POST&quot;>
+<input id=&quot;workexname&quot; style=&quot;width:100%; color:#292929;&quot; placeholder=&quot;Institution Name*&quot; type=&quot;text&quot; name=&quot;name&quot; required>
+<input style=&quot;width:100%; color:#292929;&quot; placeholder=&quot;Position&quot; type=&quot;text&quot; name=&quot;position&quot;>
+<input id=&quot;workexfrom&quot; style=&quot;width:100%; color:#292929;&quot; placeholder=&quot;From (Year)*&quot; type=&quot;text&quot; name=&quot;from&quot; required>
+<input style=&quot;width:100%; color:#292929;&quot; placeholder=&quot;To (Year)&quot; type=&quot;text&quot; name=&quot;to&quot;>
+<textarea placeholder=&quot;Description, Roles, Responsibilities etc.&quot; rows=&quot;12&quot; name=&quot;description&quot; style=&quot;color:#292929; width:100%; font-weight:bold;&quot;></textarea>
+<input type=&quot;hidden&quot; name=&quot;doctorId&quot; value=&quot;@doctor.id&quot;>
+<br>
+<input class=&quot;pull-right btn btn-xs btn-primary&quot; type=&quot;submit&quot; onclick=&quot;submitworkexform();&quot; value=&quot;save&quot;>
+</form>">
+<a id="addworkex" class="btn btn-success btn-xs"><span style="font-size:15px;">&nbsp;<i class="fa fa-plus"></i>&nbsp;</span></a>
+</span>
+
+</div>
+
+
+
+
+
+
+
+<div class="tab-pane" id="awards">
+<br>
+
+@for(award <- doctor.doctorAwardList){
+	<h4>
+		@award.awardName
+		<span class="pull-right"data-toggle="popover" title="Are You Sure ?" data-placement="left" data-html="true" data-content="<a href=&quot;@routes.DoctorController.removeAward(doctor.id,award.id)&quot; class=&quot;btn btn-xs btn-danger&quot; onclick=&quot;deleteaward('@award.id');&quot; >Delete</a> ">
+			<a id="removeaward-@award.id" class="btn btn-danger btn-xs"><i class="fa fa-minus"></i></a>
+		</span>
+	</h4>
+
+	<h5>@award.year</h5>
+	<h4>Bestowed by @award.awardedBy</h4>
+
+	<h5>
+		@award.description
+	</h5>
+	<hr>	
+}
+
+
+
+<span data-toggle="popover" title="Add Award/Recognition" data-html="true" data-content=
+"<form id=&quot;awardform&quot; action=&quot;@routes.DoctorController.addAward()&quot; method=&quot;POST&quot;>
+<input id=&quot;awardname&quot; style=&quot;width:100%; color:#292929;&quot; placeholder=&quot;Award Name*&quot; type=&quot;text&quot; name=&quot;name&quot; required>
+<input style=&quot;width:100%; color:#292929;&quot; placeholder=&quot;Year&quot; type=&quot;text&quot; name=&quot;year&quot;>
+<input style=&quot;width:100%; color:#292929;&quot; placeholder=&quot;Bestowed By&quot; type=&quot;text&quot; name=&quot;by&quot;>
+<textarea placeholder=&quot;Description of Award/Recognition, Achievements leading to the award etc.&quot; rows=&quot;12&quot; name=&quot;description&quot; style=&quot;color:#292929; width:100%; font-weight:bold;&quot;></textarea>
+<input type=&quot;hidden&quot; name=&quot;doctorId&quot; value=&quot;@doctor.id&quot;>
+<br>
+<input class=&quot;pull-right btn btn-xs btn-primary&quot; type=&quot;submit&quot; onclick=&quot;submitawardform();&quot; value=&quot;save&quot;>
+</form>">
+<a id="addaward" class="btn btn-success btn-xs"><span style="font-size:15px;">&nbsp;<i class="fa fa-plus"></i>&nbsp;</span></a>
+</span>
+
+
+
+
+
+</div>
+
+
+
+<!--
+<div class="tab-pane" id="articles">
+</div>
+-->
+
+
+
+
+<div class="tab-pane" id="education">
+<br>
+
+@for(edu <- doctor.getEducationListInOrder()){
+	<h4>
+		@edu.institutionName
+		<span class="pull-right"data-toggle="popover" title="Are You Sure ?" data-placement="left" data-html="true" data-content="<a href=&quot;@routes.DoctorController.removeEducation(doctor.id,edu.id)&quot; class=&quot;btn btn-xs btn-danger&quot; onclick=&quot;deleteeducation('@edu.id');&quot; >Delete</a> ">
+			<a id="removeeducation-@edu.id" class="btn btn-danger btn-xs"><i class="fa fa-minus"></i></a>
+		</span>
+	</h4>
+
+	<h4>@edu.degree</h4>
+	<h5>
+	@edu.fromYear - 
+	@if(edu.toYear != null && edu.toYear != 0){
+		@edu.toYear
+	}else{
+		present
+	}
+	</h5>
+	<h5>
+		@edu.description
+	</h5>
+	<hr>	
+}
+
+
+
+<span data-toggle="popover" title="Add Education" data-html="true" data-content=
+"<form action=&quot;@routes.DoctorController.addEducation()&quot; method=&quot;POST&quot;>
+<input id=&quot;educationname&quot; style=&quot;width:100%; color:#292929;&quot; placeholder=&quot;Institution Name*&quot; type=&quot;text&quot; name=&quot;name&quot; required>
+<input style=&quot;width:100%; color:#292929;&quot; placeholder=&quot;Degree&quot; type=&quot;text&quot; name=&quot;degree&quot;>
+<input id=&quot;educationfrom&quot; style=&quot;width:100%; color:#292929;&quot; placeholder=&quot;From (Year)*&quot; type=&quot;text&quot; name=&quot;from&quot; required>
+<input style=&quot;width:100%; color:#292929;&quot; placeholder=&quot;To (Year)&quot; type=&quot;text&quot; name=&quot;to&quot;>
+<textarea placeholder=&quot;Description, Roles, Responsibilities etc.&quot; rows=&quot;12&quot; name=&quot;description&quot; style=&quot;color:#292929; width:100%; font-weight:bold;&quot;></textarea>
+<input type=&quot;hidden&quot; name=&quot;doctorId&quot; value=&quot;@doctor.id&quot;>
+<br>
+<input class=&quot;pull-right btn btn-xs btn-primary&quot; type=&quot;submit&quot; onclick=&quot;submiteducationform();&quot; value=&quot;save&quot;>
+</form>">
+<a id="addeducation" class="btn btn-success btn-xs"><span style="font-size:15px;">&nbsp;<i class="fa fa-plus"></i>&nbsp;</span></a>
+</span>
+
+</div>
+
+
+
+<div class="tab-pane" id="social">
+
+
+<br>
+
+@for(soc <- doctor.doctorSocialWorkList){
+	<h4>
+		@soc.title
+		<span class="pull-right"data-toggle="popover" title="Are You Sure ?" data-placement="left" data-html="true" data-content="<a href=&quot;@routes.DoctorController.removeSocialWork(doctor.id,soc.id)&quot; class=&quot;btn btn-xs btn-danger&quot; onclick=&quot;deletesocial('@soc.id');&quot; >Delete</a> ">
+			<a id="removeeducation-@soc.id" class="btn btn-danger btn-xs"><i class="fa fa-minus"></i></a>
+		</span>
+	</h4>
+
+	<h5>
+		@soc.description
+	</h5>
+	<hr>	
+}
+
+
+
+<span data-toggle="popover" title="Add Social Work" data-html="true" data-content=
+"<form action=&quot;@routes.DoctorController.addSocialWork()&quot; method=&quot;POST&quot;>
+<input id=&quot;socialname&quot; style=&quot;width:100%; color:#292929;&quot; placeholder=&quot;Title*&quot; type=&quot;text&quot; name=&quot;title&quot; required>
+<textarea id=&quot;socialdescription&quot; placeholder=&quot;Nature and impact of work done etc.&quot; rows=&quot;12&quot; name=&quot;description&quot; style=&quot;color:#292929; width:100%; font-weight:bold;&quot; required></textarea>
+<input type=&quot;hidden&quot; name=&quot;doctorId&quot; value=&quot;@doctor.id&quot;>
+<br>
+<input class=&quot;pull-right btn btn-xs btn-primary&quot; type=&quot;submit&quot; onclick=&quot;submiteducationform();&quot; value=&quot;save&quot;>
+</form>">
+<a id="addeducation" class="btn btn-success btn-xs"><span style="font-size:15px;">&nbsp;<i class="fa fa-plus"></i>&nbsp;</span></a>
+</span>
+
+
+</div>
+
+
+
+</div>
+
+</div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<h4 style="color:#006687;font-weight:bold">Clinics</h4>
+<div id="clinics-carousel" class="row-fluid" style="padding-left:20px;padding-right:15px">
+
+<div class="slide col-md-3 alert alert-info" style="width:200px;">
+<h4><b><a href="#" data-toggle="modal" data-target="#myModal" data-toggle="tooltip" data-placement="right" title="Click for Location">XYZ Clinic</a></b></h4>
+
+<div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+     	<h4 class="modal-title" id="myModalLabel">Location Map</h4>
+      </div>
+      <div class="modal-body">
+       <div id="map_canvas" style="width:400px;height:300px"> </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+<h6>Flat no<br>
+Address<br>
+Place<br>
+Phone nos: 04023456789, 9876543210</h6>
+<h6>Weekdays:<br><br>
+<span class="badge">M</span> - 9am - 9pm<br>
+<span class="badge">T</span> - 9am - 9pm<br>
+<span class="badge">Th</span> - 9am - 9pm<br</h6>
+<h6>Weekends:<br><br><span class="badge"> Sa </span> - 11am - 5pm</h6>
+</div>
+
+<!--
+<div class="col-md-1" style="width:1%"></div>
+-->
+<div class="slide col-md-3 alert alert-info" style="width:200px;">
+<h4><b><a href="#" data-toggle="modal" data-target="#myModal1" data-toggle="tooltip" data-placement="right" title="Click for Location">ABC Clinic</a></b></h4>
+<div class="modal fade" id="myModal1" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+     	<h4 class="modal-title" id="myModalLabel">Location Map</h4>
+      </div>
+      <div class="modal-body">
+       <div id="map_canvas" style="width:400px;height:300px"> </div>
+      </div>
+    </div>
+  </div>
+</div>
+<h6>Flat no<br>
+Address<br>
+Place<br>
+Phone nos: 04023456789, 9876543210</h6>
+<h6>Weekdays:<br><br>
+<span class="badge">M</span> - 9am to 9pm<br>
+<span class="badge">W</span> - 9am to 9pm<br>
+<span class="badge">F</span> - 9am to 9pm<br></h6>
+<h6>Weekends:<br><br><span class="badge"> Sa </span> - 11am - 5pm</h6></h6>
+</div>
+
+<!--
+<div class="col-md-1" style="width:1%"></div>
+-->
+
+<div class="slide col-md-3 alert alert-info" style="width:200px;">
+<h4><b><a href="#" data-toggle="modal" data-target="#myModal2" data-toggle="tooltip" data-placement="right" title="Click for Location">SAKP Clinic</a></b></h4>
+<div class="modal fade" id="myModal2" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+     	<h4 class="modal-title" id="myModalLabel">Location Map</h4>
+      </div>
+      <div class="modal-body">
+       <div id="map_canvas" style="width:400px;height:300px"> </div>
+      </div>
+    </div>
+  </div>
+</div>
+<h6>Flat no<br>
+Address<br>
+Place<br>
+Phone nos: 04023456789, 9876543210</h6>
+<h6>Weekdays:<br><br>
+<span class="badge">M</span> - 9am to 9pm<br>
+<span class="badge">T</span> - 9am to 9pm<br>
+<span class="badge">W</span> - 9am to 9pm<br></h6>
+<h6>Weekends:<br><br><span class="badge"> Sa </span> - 11am - 5pm</h6>
+</div>
+
+<!--
+<div class="col-md-1" style="width:1%"></div>
+-->
+<div class="slide col-md-3 alert alert-info" style="width:200px;">
+<h4><b><a href="#" data-toggle="modal" data-target="#myModal3" data-toggle="tooltip" data-placement="right" title="Click for Location">Clinic</a></b></h4>
+<div class="modal fade" id="myModal3" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+     	<h4 class="modal-title" id="myModalLabel">Location Map</h4>
+      </div>
+      <div class="modal-body">
+       <div id="map_canvas" style="width:400px;height:300px"> </div>
+      </div>
+    </div>
+  </div>
+</div>
+<h6>Flat no<br>
+Address<br>
+Place<br>
+Phone nos: 04023456789, 9876543210</h6>
+<h6>Weekdays:<br><br>
+<span class="badge">M</span> - 9am to 9pm<br>
+<span class="badge">T</span> - 9am to 9pm<br>
+<span class="badge">F</span> - 9am to 9pm<br></h6>
+<h6>Weekends:<br><br><span class="badge"> Sa </span> - 11am - 5pm</h6>
+</div>
+
+
+<!--
+<div class="col-md-1" style="width:1%"></div>
+-->
+<div class="slide col-md-3 alert alert-info" style="width:200px;">
+<h4><b><a href="#" data-toggle="modal" data-target="#myModal4" data-toggle="tooltip" data-placement="right" title="Click for Location">Clinic</a></b></h4>
+<div class="modal fade" id="myModal4" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+     	<h4 class="modal-title" id="myModalLabel">Location Map</h4>
+      </div>
+      <div class="modal-body">
+       <div id="map_canvas" style="width:400px;height:300px"> </div>
+      </div>
+    </div>
+  </div>
+</div>
+<h6>Flat no<br>
+Address<br>
+Place<br>
+Phone nos: 04023456789, 9876543210</h6>
+<h6>Weekdays:<br><br>
+<span class="badge">M</span> - 9am to 9pm<br>
+<span class="badge">T</span> - 9am to 9pm<br>
+<span class="badge">F</span> - 9am to 9pm<br></h6>
+<h6>Weekends:<br><br><span class="badge"> Sa </span> - 11am - 5pm</h6>
+</div>
+
+
+</div>
+<div class="clearfix"></div>  
+<a class="prev" id="clinics-carousel_prev" href="#"><img class="navigators" src="/assets/blog/images/previcon.png" width="15" height="15"/></a>
+<a class="next" id="clinics-carousel_next" href="#"><img class="navigators" src="/assets/blog/images/nexticon.png" width="15" height="15"/></a>
+
+
+
+
+
+@*
+
+<h4 style="color:#006687;font-weight:bold">Articles/Publications</h4>
+
+
+<div class="row-fluid">
+				<div class="image_carousel">
+					<div id="models-carousel">
+						<div class="slide">
+							<img src="/assets/images/article2.jpg" width="200" height="250" border="0" alt="image" class="home-imgconfig">
+						</div>
+
+						<div class="slide">
+							<img src="/assets/images/articles.jpg" width="200" height="250" border="0" alt="image" class="home-imgconfig">
+							
+						</div>
+
+						<div class="slide">
+							<img src="/assets/images/article2.jpg" width="200" height="250" border="0" alt="image" class="home-imgconfig">
+							
+						</div>
+
+						<div class="slide">
+							<img  src="/assets/images/articles.jpg" width="200" height="250" border="0" alt="image" class="home-imgconfig">
+							
+						</div>
+
+						<div class="slide">
+							<img src="/assets/images/article2.jpg" width="200" height="250" border="0" alt="image" class="home-imgconfig">
+							
+						</div>
+
+						
+					</div>
+					<div class="clearfix"></div>
+					<a class="prev" id="models-carousel_prev" href="#"><img class="navigators" src="/assets/images/prev.png" width="15" height="15"/></a>
+					<a class="next" id="models-carousel_next" href="#"><img class="navigators" src="/assets/images/next.png" width="15" height="15"/></a>
+				</div>
+			</div>
+			
+<div class="row-fluid">
+
+<div class="image_carousel">
+
+<div id="models-carousel">
+
+<div id="case-study" onmouseover="showhover('case-study');" onmouseout="hidehover('case-study');" class="slide"> 
+
+<div id="thumbnail-case-study">
+
+
+<img alt="name" class="thumbnail" src="/assets/images/articles.jpg" style="height: 300px; width:200px;"/>
+
+
+<div class="ptxt1">
+
+<a style="padding-left:10px;cursor:pointer;">Article1</a>
+
+    </div>
+
+    <div class="ptxt2">
+
+    <p style="padding-left:10px; /*font-family: 'Century Gothic', CenturyGothic, Geneva, AppleGothic, sans-serif;*/">Article desc</p>
+
+    </div>
+
+    </div>
+
+<div id="content-case-study" style="display:none" class="roundedges roundedges-hover">
+
+<div class="on-hover-content" style="cursor:pointer;" >
+
+<a style="color:white; /*font-family: 'Economica', sans-serif;*/ text-decoration:none;" ><div style="padding:10px;">Hover content</div></a>
+
+    </div>
+
+<div class="on-hover-links">
+
+<p style="padding-left:30%; padding-top:5%;">
+
+<a style="text-decoration:none;" href="#" ><span style="color:white; /*font-family: 'Century Gothic', CenturyGothic, Geneva, AppleGothic, sans-serif;*/">view</span></a> 
+
+<span style="color:white">|</span> 
+
+<a style="cursor:pointer; text-decoration:none;"><span style="color:white; /*font-family: 'Century Gothic', CenturyGothic, Geneva, AppleGothic, sans-serif;*/">share</span></a>
+
+</p>
+
+</div>
+
+</div>
+
+</div>
+
+<div id="case-study1" onmouseover="showhover('case-study1');" onmouseout="hidehover('case-study1');" class="slide"> 
+
+<div id="thumbnail-case-study1">
+
+
+<img alt="name" class="thumbnail" src="/assets/images/articles.jpg" style="height: 300px; width:200px;"/>
+
+
+<div class="ptxt1">
+
+<a style="padding-left:10px;cursor:pointer;">Article1</a>
+
+    </div>
+
+    <div class="ptxt2">
+
+    <p style="padding-left:10px; /*font-family: 'Century Gothic', CenturyGothic, Geneva, AppleGothic, sans-serif;*/">Article desc</p>
+
+    </div>
+
+    </div>
+
+<div id="content-case-study1" style="display:none" class="roundedges roundedges-hover">
+
+<div class="on-hover-content" style="cursor:pointer;" >
+
+<a style="color:white; /*font-family: 'Economica', sans-serif;*/ text-decoration:none;" ><div style="padding:10px;">Hover content</div></a>
+
+    </div>
+
+<div class="on-hover-links">
+
+<p style="padding-left:30%; padding-top:5%;">
+
+<a style="text-decoration:none;" href="#" ><span style="color:white; /*font-family: 'Century Gothic', CenturyGothic, Geneva, AppleGothic, sans-serif;*/">view</span></a> 
+
+<span style="color:white">|</span> 
+
+<a style="cursor:pointer; text-decoration:none;"><span style="color:white; /*font-family: 'Century Gothic', CenturyGothic, Geneva, AppleGothic, sans-serif;*/">share</span></a>
+
+</p>
+
+</div>
+
+</div>
+
+</div>
+
+<div id="case-study2" onmouseover="showhover('case-study2');" onmouseout="hidehover('case-study2');" class="slide"> 
+
+<div id="thumbnail-case-study2">
+
+
+<img alt="name" class="thumbnail" src="/assets/images/articles.jpg" style="height: 300px; width:200px;"/>
+
+
+<div class="ptxt1">
+
+<a style="padding-left:10px;cursor:pointer;">Article1</a>
+
+    </div>
+
+    <div class="ptxt2">
+
+    <p style="padding-left:10px; /*font-family: 'Century Gothic', CenturyGothic, Geneva, AppleGothic, sans-serif;*/">Article desc</p>
+
+    </div>
+
+    </div>
+
+<div id="content-case-study2" style="display:none" class="roundedges roundedges-hover">
+
+<div class="on-hover-content" style="cursor:pointer;" >
+
+<a style="color:white; /*font-family: 'Economica', sans-serif;*/ text-decoration:none;" ><div style="padding:10px;">Hover content</div></a>
+
+    </div>
+
+<div class="on-hover-links">
+
+<p style="padding-left:30%; padding-top:5%;">
+
+<a style="text-decoration:none;" href="#" ><span style="color:white; /*font-family: 'Century Gothic', CenturyGothic, Geneva, AppleGothic, sans-serif;*/">view</span></a> 
+
+<span style="color:white">|</span> 
+
+<a style="cursor:pointer; text-decoration:none;"><span style="color:white; /*font-family: 'Century Gothic', CenturyGothic, Geneva, AppleGothic, sans-serif;*/">share</span></a>
+
+</p>
+
+</div>
+
+</div>
+
+</div>
+
+<div id="case-study3" onmouseover="showhover('case-study3');" onmouseout="hidehover('case-study3');" class="slide"> 
+
+<div id="thumbnail-case-study3">
+
+
+<img alt="name" class="thumbnail" src="/assets/images/articles.jpg" style="height: 300px; width:200px;"/>
+
+
+<div class="ptxt1">
+
+<a style="padding-left:10px;cursor:pointer;">Article1</a>
+
+    </div>
+
+    <div class="ptxt2">
+
+    <p style="padding-left:10px; /*font-family: 'Century Gothic', CenturyGothic, Geneva, AppleGothic, sans-serif;*/">Article desc</p>
+
+    </div>
+
+    </div>
+
+<div id="content-case-study3" style="display:none" class="roundedges roundedges-hover">
+
+<div class="on-hover-content" style="cursor:pointer;" >
+
+<a style="color:white; /*font-family: 'Economica', sans-serif;*/ text-decoration:none;" ><div style="padding:10px;">Hover content</div></a>
+
+    </div>
+
+<div class="on-hover-links">
+
+<p style="padding-left:30%; padding-top:5%;">
+
+<a style="text-decoration:none;" href="#" ><span style="color:white; /*font-family: 'Century Gothic', CenturyGothic, Geneva, AppleGothic, sans-serif;*/">view</span></a> 
+
+<span style="color:white">|</span> 
+
+<a style="cursor:pointer; text-decoration:none;"><span style="color:white; /*font-family: 'Century Gothic', CenturyGothic, Geneva, AppleGothic, sans-serif;*/">share</span></a>
+
+</p>
+
+</div>
+
+</div>
+
+</div>
+   </div>
+
+<div class="clearfix"> </div>
+
+<a class="prev-t" id="models-carousel_prev" href="#">
+
+<img alt="Previcon" class="carousel-sliders navigators" src="assets/images/prev.png" />
+
+</a>
+
+<a class="next-t" id="models-carousel_next" href="#">
+
+<img alt="Nexticon" class="carousel-sliders navigators" src="assets/images/next.png" />
+
+</a>
+
+</div>
+
+</div>
+
+
+
+
+
+
+
+
+
+<script>
+
+function showhover(id){
+
+$("#thumbnail-"+id).hide();
+
+$("#content-"+id).show();
+
+}
+
+function hidehover(id){
+
+$("#thumbnail-"+id).show();
+
+$("#content-"+id).hide();
+
+}
+
+</script>
+
+*@
+
+
+
+
+
+
+}
+

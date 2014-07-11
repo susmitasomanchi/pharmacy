@@ -7,7 +7,6 @@
 
 
 GET    /blog/create-blog-admin                     controllers.SampleDataController.createBlogAdmin()
-GET    /login         		                        controllers.LoginController.blogAdminLoginForm()
 
 GET    /blog                                       controllers.BlogController.blogHome()
 GET    /blog/admin/new-category                    controllers.BlogController.categoryForm()
@@ -32,8 +31,9 @@ GET    /blog/:idorslug                             controllers.BlogController.sh
 GET    /sitemap.xml                                controllers.Application.sitemap()
 
 
-# Home page
+# Home page & Logins
 GET    /                                           controllers.Application.index()
+GET    /login         		                       controllers.LoginController.blogAdminLoginForm()
 POST   /login                                      controllers.LoginController.processLogin()
 GET    /logout                                     controllers.LoginController.processLogout()
 
@@ -43,10 +43,20 @@ GET    /join                                       controllers.UserController.jo
 POST   /join                                       controllers.UserController.processDoctorJoinUs()
 
 
+# Doctor's Profile
 GET		/dashboard                                  controllers.UserActions.dashboard()
 POST	/doctor/doctor-basic-update					controllers.DoctorController.basicUpdate()
 POST	/doctor/doctor-images-update				controllers.DoctorController.imagesUpdate()
 GET    	/doctor/get-image/:id/:type                 controllers.DoctorController.getImage(id: Long, type :String)
+POST	/doctor/add-work-experience					controllers.DoctorController.addWorkExperience()
+GET		/doctor/remove-work-experience/:docId/:id	controllers.DoctorController.removeWorkExperience(docId: Long, id: Long)
+POST	/doctor/add-award							controllers.DoctorController.addAward()
+GET		/doctor/remove-award/:docId/:id				controllers.DoctorController.removeAward(docId: Long, id: Long)
+POST	/doctor/add-education						controllers.DoctorController.addEducation()
+GET		/doctor/remove-education/:docId/:id			controllers.DoctorController.removeEducation(docId: Long, id: Long)
+POST	/doctor/add-social-work						controllers.DoctorController.addSocialWork()
+GET		/doctor/remove-social-work/:docId/:id		controllers.DoctorController.removeSocialWork(docId: Long, id: Long)
+
 
 # Remove later (at Beta Launch)
 GET    /                                  controllers.Application.index()

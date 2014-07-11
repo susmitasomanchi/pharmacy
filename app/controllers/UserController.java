@@ -42,7 +42,7 @@ public class UserController extends Controller {
 	public static Result processDoctorJoinUs(){
 		final AppUser appUser = new AppUser();
 		appUser.name = request().body().asFormUrlEncoded().get("fullname")[0];
-		appUser.username = request().body().asFormUrlEncoded().get("email")[0];
+		appUser.email = request().body().asFormUrlEncoded().get("email")[0];
 		appUser.password = request().body().asFormUrlEncoded().get("password")[0];
 		appUser.role = Role.DOCTOR;
 		appUser.save();

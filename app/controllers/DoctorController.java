@@ -7,11 +7,11 @@ import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
+import models.Alert;
 import models.AppUser;
 import models.LanguageAppUser;
 import models.Patient;
 import models.Role;
-import models.blog.Article;
 import models.doctor.Appointment;
 import models.doctor.AppointmentStatus;
 import models.doctor.Day;
@@ -100,7 +100,7 @@ public class DoctorController extends Controller {
 
 
 	/**
-	 * Action to get images assocaied with a doctor
+	 * Action to get images associated with a doctor
 	 * GET  /doctor/get-image/:id/:type
 	 */
 	public static Result getImage(final Long id, final String type){
@@ -116,7 +116,7 @@ public class DoctorController extends Controller {
 
 
 	/**
-	 * Action to update profile and backgound images of Doctor
+	 * Action to update profile and background images of Doctor
 	 * POST	/doctor/doctor-images-update
 	 */
 	public static Result imagesUpdate(){
@@ -143,6 +143,261 @@ public class DoctorController extends Controller {
 		}
 		return redirect(routes.UserActions.dashboard());
 	}
+
+
+
+	/**
+	 * Action to create a new DoctorExperience entity for the loggedIn Doctor
+	 * POST	/doctor/add-work-experience
+	 */
+	public static Result addWorkExperience(){
+		final Map<String, String[]> requestMap = request().body().asFormUrlEncoded();
+		final Doctor doctor = Doctor.find.byId(Long.parseLong(requestMap.get("doctorId")[0]));
+		// Server side validation
+		if(doctor.id.longValue() != LoginController.getLoggedInUser().getDoctor().id.longValue()){
+			return redirect(routes.LoginController.processLogout());
+		}
+
+		try{
+			final DoctorExperience experience = new DoctorExperience();
+			experience.institutionName = requestMap.get("name")[0];
+			experience.workedFrom = Integer.parseInt(requestMap.get("from")[0]);
+
+			if(requestMap.get("position")[0] != null && requestMap.get("position")[0].compareToIgnoreCase("")!= 0){
+				experience.position = requestMap.get("position")[0];
+			}
+
+			if(requestMap.get("to")[0] != null && requestMap.get("to")[0].compareToIgnoreCase("")!= 0){
+				experience.workedTo = Integer.parseInt(requestMap.get("to")[0]);
+			}
+
+			if(requestMap.get("description")[0] != null && requestMap.get("description")[0].compareToIgnoreCase("")!= 0){
+				experience.description = requestMap.get("description")[0];
+			}
+			doctor.doctorExperienceList.add(experience);
+			doctor.update();
+			return redirect(routes.UserActions.dashboard());
+		}
+		catch(final NumberFormatException e){
+			Logger.error("NumberFormatException WHILE PARSING DOCTOR'S WORK EXPERIENCE");
+			e.printStackTrace();
+			flash().put("alert", new Alert("alert-danger", "Year field(s) invalid.").toString());
+			return redirect(routes.UserActions.dashboard());
+		}
+		catch(final Exception e){
+			Logger.error("ERROR WHILE SAVING DOCTOR'S WORK EXPERIENCE");
+			e.printStackTrace();
+			flash().put("alert", new Alert("alert-danger", "Sorry! Something went wrong. Please try again.").toString());
+			return redirect(routes.UserActions.dashboard());
+		}
+	}
+
+
+	/**
+	 * Action to remove a DoctorExperience entity for the loggedIn Doctor
+	 * GET /doctor/remove-work-experience/:docId/:id
+	 */
+	public static Result removeWorkExperience(final Long docId, final Long id){
+		final Doctor doctor = Doctor.find.byId(docId);
+		// Server side validation
+		if(doctor.id.longValue() != LoginController.getLoggedInUser().getDoctor().id.longValue()){
+			return redirect(routes.LoginController.processLogout());
+		}
+
+		final DoctorExperience experience = DoctorExperience.find.byId(id);
+		doctor.doctorExperienceList.remove(experience);
+		experience.delete();
+		doctor.update();
+		return redirect(routes.UserActions.dashboard());
+	}
+
+
+
+	/**
+	 * Action to create a new Award entity for the loggedIn Doctor
+	 * POST	/doctor/add-award
+	 */
+	public static Result addAward(){
+		final Map<String, String[]> requestMap = request().body().asFormUrlEncoded();
+		final Doctor doctor = Doctor.find.byId(Long.parseLong(requestMap.get("doctorId")[0]));
+		// Server side validation
+		if(doctor.id.longValue() != LoginController.getLoggedInUser().getDoctor().id.longValue()){
+			return redirect(routes.LoginController.processLogout());
+		}
+
+		try{
+			final DoctorAward award = new DoctorAward();
+
+			if(requestMap.get("name")[0] != null && requestMap.get("name")[0].compareToIgnoreCase("")!= 0){
+				award.awardName = requestMap.get("name")[0];
+			}
+
+			if(requestMap.get("by")[0] != null && requestMap.get("by")[0].compareToIgnoreCase("")!= 0){
+				award.awardedBy = requestMap.get("by")[0];
+			}
+
+			if(requestMap.get("year")[0] != null && requestMap.get("year")[0].compareToIgnoreCase("")!= 0){
+				award.year = requestMap.get("year")[0];
+			}
+
+			if(requestMap.get("description")[0] != null && requestMap.get("description")[0].compareToIgnoreCase("")!= 0){
+				award.description = requestMap.get("description")[0];
+			}
+			doctor.doctorAwardList.add(award);
+			doctor.update();
+			return redirect(routes.UserActions.dashboard());
+		}
+		catch(final Exception e){
+			Logger.error("ERROR WHILE SAVING DOCTOR'S AWARD");
+			e.printStackTrace();
+			flash().put("alert", new Alert("alert-danger", "Sorry! Something went wrong. Please try again.").toString());
+			return redirect(routes.UserActions.dashboard());
+		}
+	}
+
+
+	/**
+	 * Action to remove a Award entity from the loggedIn Doctor
+	 * GET	/doctor/remove-award/:docId/:id
+	 */
+	public static Result removeAward(final Long docId, final Long id){
+		final Doctor doctor = Doctor.find.byId(docId);
+		// Server side validation
+		if(doctor.id.longValue() != LoginController.getLoggedInUser().getDoctor().id.longValue()){
+			return redirect(routes.LoginController.processLogout());
+		}
+
+		final DoctorAward award = DoctorAward.find.byId(id);
+		doctor.doctorAwardList.remove(award);
+		award.delete();
+		doctor.update();
+		return redirect(routes.UserActions.dashboard());
+	}
+
+
+
+	/**
+	 * Action to create a new DoctorEducation entity for the loggedIn Doctor
+	 * POST	/doctor/add-education
+	 */
+	public static Result addEducation(){
+		final Map<String, String[]> requestMap = request().body().asFormUrlEncoded();
+		final Doctor doctor = Doctor.find.byId(Long.parseLong(requestMap.get("doctorId")[0]));
+		// Server side validation
+		if(doctor.id.longValue() != LoginController.getLoggedInUser().getDoctor().id.longValue()){
+			return redirect(routes.LoginController.processLogout());
+		}
+
+		try{
+			final DoctorEducation education = new DoctorEducation();
+			education.institutionName = requestMap.get("name")[0];
+			education.fromYear = Integer.parseInt(requestMap.get("from")[0]);
+
+			if(requestMap.get("degree")[0] != null && requestMap.get("degree")[0].compareToIgnoreCase("")!= 0){
+				education.degree = requestMap.get("degree")[0];
+			}
+
+			if(requestMap.get("to")[0] != null && requestMap.get("to")[0].compareToIgnoreCase("")!= 0){
+				education.toYear = Integer.parseInt(requestMap.get("to")[0]);
+			}
+
+			if(requestMap.get("description")[0] != null && requestMap.get("description")[0].compareToIgnoreCase("")!= 0){
+				education.description = requestMap.get("description")[0];
+			}
+			doctor.doctorEducationList.add(education);
+			doctor.update();
+			return redirect(routes.UserActions.dashboard());
+		}
+		catch(final NumberFormatException e){
+			Logger.error("NumberFormatException WHILE PARSING DOCTOR'S EDUCATION");
+			e.printStackTrace();
+			flash().put("alert", new Alert("alert-danger", "Year field(s) invalid.").toString());
+			return redirect(routes.UserActions.dashboard());
+		}
+		catch(final Exception e){
+			Logger.error("ERROR WHILE SAVING DOCTOR'S EDUCATION");
+			e.printStackTrace();
+			flash().put("alert", new Alert("alert-danger", "Sorry! Something went wrong. Please try again.").toString());
+			return redirect(routes.UserActions.dashboard());
+		}
+	}
+
+
+	/**
+	 * Action to remove a DoctorEducation entity from the loggedIn Doctor
+	 * GET	/doctor/remove-education/:docId/:id
+	 */
+	public static Result removeEducation(final Long docId, final Long id){
+		final Doctor doctor = Doctor.find.byId(docId);
+		// Server side validation
+		if(doctor.id.longValue() != LoginController.getLoggedInUser().getDoctor().id.longValue()){
+			return redirect(routes.LoginController.processLogout());
+		}
+
+		final DoctorEducation education = DoctorEducation.find.byId(id);
+		doctor.doctorEducationList.remove(education);
+		education.delete();
+		doctor.update();
+		return redirect(routes.UserActions.dashboard());
+	}
+
+
+
+	/**
+	 * Action to create a new SocialWork entity for the loggedIn Doctor
+	 * POST	/doctor/add-social-work
+	 */
+	public static Result addSocialWork(){
+		final Map<String, String[]> requestMap = request().body().asFormUrlEncoded();
+		final Doctor doctor = Doctor.find.byId(Long.parseLong(requestMap.get("doctorId")[0]));
+		// Server side validation
+		if(doctor.id.longValue() != LoginController.getLoggedInUser().getDoctor().id.longValue()){
+			return redirect(routes.LoginController.processLogout());
+		}
+
+		try{
+			final DoctorSocialWork socialWork = new DoctorSocialWork();
+			socialWork.title = requestMap.get("title")[0];
+			socialWork.description = requestMap.get("description")[0];
+
+			doctor.getDoctorSocialWorkList().add(socialWork);
+			doctor.update();
+			return redirect(routes.UserActions.dashboard());
+		}
+		catch(final Exception e){
+			Logger.error("ERROR WHILE SAVING DOCTOR'S SOCIAL WORK");
+			e.printStackTrace();
+			flash().put("alert", new Alert("alert-danger", "Sorry! Something went wrong. Please try again.").toString());
+			return redirect(routes.UserActions.dashboard());
+		}
+	}
+
+
+	/**
+	 * Action to remove a SocialWork entity from the loggedIn Doctor
+	 * GET	/doctor/remove-social-work/:docId/:id
+	 */
+	public static Result removeSocialWork(final Long docId, final Long id){
+		final Doctor doctor = Doctor.find.byId(docId);
+		// Server side validation
+		if(doctor.id.longValue() != LoginController.getLoggedInUser().getDoctor().id.longValue()){
+			return redirect(routes.LoginController.processLogout());
+		}
+
+		final DoctorSocialWork socialWork = DoctorSocialWork.find.byId(id);
+		doctor.doctorSocialWorkList.remove(socialWork);
+		socialWork.delete();
+		doctor.update();
+		return redirect(routes.UserActions.dashboard());
+	}
+
+
+
+
+
+
+
+
 
 
 
@@ -210,19 +465,14 @@ public class DoctorController extends Controller {
 		final Form<DoctorExperience> experienceFilledForm = experienceForm.bindFromRequest();
 
 		if (experienceFilledForm.hasErrors()) {
-			// System.out.println(filledForm.errors());
 			return badRequest(views.html.doctor.doctorExperience.render(experienceFilledForm));
 		} else {
-
 			final DoctorExperience doctorExperience=experienceFilledForm.get();
 			loggedIndoctor.doctorExperienceList.add(doctorExperience);
-
 			loggedIndoctor.update();
 		}
 		return redirect(routes.DoctorController.doctorProfile());
 	}
-	// return ok(views.html.scheduleAppointment.render("hello"));
-	// return redirect(routes.UserController.list());
 
 
 

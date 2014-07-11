@@ -10,7 +10,7 @@ public class UserActions extends Controller {
 
 	public static Result dashboard() {
 		final Doctor doctor = LoginController.getLoggedInUser().getDoctor();
-		return ok(views.html.doctor.doctor_profile.render(doctor));
+		return ok(views.html.doctor.doctorProfile.render(doctor));
 	}
 
 }

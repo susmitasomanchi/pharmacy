@@ -87,8 +87,9 @@
 		}
 		
 		
-		@*
+			
 		@if(LoginController.getLoggedInUserRole().equals(Role.DOCTOR.toString())){
+        @*
         <li class="dropdown">
           <a href="#" class="dropdown-toggle" data-toggle="dropdown">
           Appointments
@@ -99,6 +100,7 @@
           </ul>
         </li>
     
+    	
     	<li class="dropdown">
           <a href="#" class="dropdown-toggle" data-toggle="dropdown">
           Prescriptions
@@ -107,20 +109,26 @@
     	        <li><a href="">List</a></li>
           </ul>
         </li>
-	
+		*@
+		
         <li class="dropdown">
           <a href="#" class="dropdown-toggle" data-toggle="dropdown">
           Clinics
           <b class="caret"></b></a>
           <ul class="dropdown-menu">
+	            @*
 	            <li><a href="">Search Clinics</a></li>
 	            <li><a href="@routes.DoctorController.myClinics()">My Clinics</a></li>
-	            <li><a href="@routes.DoctorController.newClinic()">Add a Clinic</a></li>
+	            *@
+	            <li><a href="@routes.DoctorController.newClinic()">Add Clinic</a></li>
+    	        @*
     	        <li><a href="@routes.DoctorController.newAssistant()">New Assistant</a></li>
+    	        *@
           </ul>
         </li>
         }
-        *@
+        
+        
         
         @if(LoginController.getLoggedInUserRole().equals(Role.ADMIN_MR.toString())){
          <li class="dropdown">

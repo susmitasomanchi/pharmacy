@@ -57,27 +57,27 @@ public class Doctor extends BaseEntity{
 
 	//education
 	@OneToMany(cascade=CascadeType.ALL)
-	public List<DoctorEducation> doctorEducationList=new ArrayList<DoctorEducation>();
+	public List<DoctorEducation> doctorEducationList = new ArrayList<DoctorEducation>();
 
 	//experience
 	@OneToMany(cascade=CascadeType.ALL)
-	public List<DoctorExperience> doctorExperienceList=new ArrayList<DoctorExperience>();
+	public List<DoctorExperience> doctorExperienceList = new ArrayList<DoctorExperience>();
 
 	//publications
 	@OneToMany(cascade=CascadeType.ALL)
-	public List<DoctorPublication> doctorPublicationList=new ArrayList<DoctorPublication>();
+	public List<DoctorPublication> doctorPublicationList = new ArrayList<DoctorPublication>();
 
 	//awards
 	@OneToMany(cascade=CascadeType.ALL)
-	public List<DoctorAward> doctorAwardList=new ArrayList<DoctorAward>();
+	public List<DoctorAward> doctorAwardList = new ArrayList<DoctorAward>();
 
 	//language
 	@ManyToMany(cascade=CascadeType.ALL)
-	public List<DoctorLanguage> doctorLanguageList=new ArrayList<DoctorLanguage>();
+	public List<DoctorLanguage> doctorLanguageList = new ArrayList<DoctorLanguage>();
 
 	//socialwork
 	@OneToMany(cascade=CascadeType.ALL)
-	public List<DoctorSocialWork> doctorSocialWorkList=new ArrayList<DoctorSocialWork>();
+	public List<DoctorSocialWork> doctorSocialWorkList = new ArrayList<DoctorSocialWork>();
 
 	@ManyToOne
 	public List<DoctorEducation> doctorEducation = new ArrayList<DoctorEducation>();
@@ -89,5 +89,18 @@ public class Doctor extends BaseEntity{
 	public String experience;
 
 	public static Model.Finder<Long,Doctor> find = new Finder<Long, Doctor>(Long.class, Doctor.class);
+
+	public List<DoctorExperience> getExperienceListInOrder(){
+		return DoctorExperience.find.where().eq("doctor_id", this.id).orderBy("workedFrom DESC").findList();
+	}
+
+	public List<DoctorEducation> getEducationListInOrder(){
+		return DoctorEducation.find.where().eq("doctor_id", this.id).orderBy("fromYear DESC").findList();
+	}
+
+	public List<DoctorSocialWork> getDoctorSocialWorkList() {
+		return this.doctorSocialWorkList;
+	}
+
 
 }
