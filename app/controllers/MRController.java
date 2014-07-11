@@ -1,5 +1,6 @@
 package controllers;
 
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.LinkedHashMap;
@@ -188,7 +189,12 @@ public class MRController extends Controller{
 	public static Result addDCRLineItem(final Long id){
 		final DailyCallReport dcr = DailyCallReport.find.byId(id);
 		final MedicalRepresentative loggedInMr = LoginController.getLoggedInUser().getMedicalRepresentative();
-		return ok(views.html.mr.dcrLineItem.render(dcr, dcrLineItemForm,loggedInMr.doctorList,loggedInMr.pharmaceuticalCompany.productList));
+		final List<Doctor> disabledDoctorList = new ArrayList<Doctor>();
+		for (final DCRLineItem lineItem : dcr.dcrLineItemList) {
+			disabledDoctorList.add(lineItem.doctor);
+		}
+
+		return ok(views.html.mr.dcrLineItem.render(dcr, dcrLineItemForm,loggedInMr.doctorList,disabledDoctorList,loggedInMr.pharmaceuticalCompany.productList));
 
 	}
 
@@ -224,7 +230,7 @@ public class MRController extends Controller{
 		for(int i=0;i<sampleList.length;i++){
 			final Sample sample = new Sample();
 
-			if((sampleList[i].compareToIgnoreCase("")==0)||(sampleList[i].compareToIgnoreCase("0")==0)){
+			if((sampleList[i].compareToIgnoreCase("")==0)){
 			}else{
 				sample.product = Product.find.byId(Long.parseLong(sampleList[i]));
 				if(qtyList[i] == ""){
@@ -249,19 +255,20 @@ public class MRController extends Controller{
 
 		final DateTime inDateTime = new DateTime(dcrDate);
 		final DateTime outDateTime = new DateTime(dcrDate);
-
-		final DateTime fromTime=formatter.parseDateTime(inTime);
-		final DateTime toTime = formatter.parseDateTime(outTime);
-
-		final DateTime inDateTimeHours = inDateTime.plusHours(fromTime.getHourOfDay());
-		final DateTime outDateTimeHours = outDateTime.plusHours(toTime.getHourOfDay());
-
-		final DateTime inDateTimeHoursMin = inDateTimeHours.plusMinutes(fromTime.getMinuteOfDay()-(60*fromTime.getHourOfDay()));
-		final DateTime outDateTimeHoursMin = outDateTimeHours.plusMinutes(toTime.getMinuteOfDay()-(60*toTime.getHourOfDay()));
-
-		dcrLineItem.inTime = inDateTimeHoursMin.toDate();
-		dcrLineItem.outTime = outDateTimeHoursMin.toDate();
-
+		if(inTime.compareToIgnoreCase("")==0 ){
+		}else{
+			final DateTime fromTime=formatter.parseDateTime(inTime);
+			final DateTime inDateTimeHours = inDateTime.plusHours(fromTime.getHourOfDay());
+			final DateTime inDateTimeHoursMin = inDateTimeHours.plusMinutes(fromTime.getMinuteOfDay()-(60*fromTime.getHourOfDay()));
+			dcrLineItem.inTime = inDateTimeHoursMin.toDate();
+		}
+		if(outTime.compareToIgnoreCase("")==0){
+		}else{
+			final DateTime toTime = formatter.parseDateTime(outTime);
+			final DateTime outDateTimeHours = outDateTime.plusHours(toTime.getHourOfDay());
+			final DateTime outDateTimeHoursMin = outDateTimeHours.plusMinutes(toTime.getMinuteOfDay()-(60*toTime.getHourOfDay()));
+			dcrLineItem.outTime = outDateTimeHoursMin.toDate();
+		}
 
 		if(pob==""){
 			dcrLineItem.pob=0;
@@ -272,8 +279,8 @@ public class MRController extends Controller{
 		dcrLineItem.remarks = remarks;
 
 		dcr.dcrLineItemList.add(dcrLineItem);
-		dcr.update();
 
+		dcr.update();
 
 		return ok(views.html.mr.filledDCRLineItem.render(dcr.dcrLineItemList));
 	}

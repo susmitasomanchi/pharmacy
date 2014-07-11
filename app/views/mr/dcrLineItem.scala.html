@@ -1,4 +1,4 @@
-@(dcr: models.mr.DailyCallReport, dcrLineItemForm:play.data.Form[models.mr.DCRLineItem],doctorList: List[models.doctor.Doctor],productList: List[Product])
+@(dcr: models.mr.DailyCallReport, dcrLineItemForm:play.data.Form[models.mr.DCRLineItem],doctorList: List[models.doctor.Doctor],disabledDoctorList: List[models.doctor.Doctor],productList: List[Product])
 
 @import play.i18n._
 @import helper.twitterBootstrap._
@@ -22,9 +22,10 @@
 	
 	var i=0;
 	function addSamples(){
-		$('#samplestbl').append('<tr id="sample'+i+'"><td><select class="chzn" style="width:200px;" name="sampleList">'+proList+'</select></td><td><input name="qtyList" placeholder="qty" /></td><td><a class="btn btn-danger btn-xs" onclick="removeSamples('+i+');">-</a></td></tr>');
+		$('#samplestbl').append('<tr id="sample'+i+'"><td><select id="selsam-'+i+'" class="chzn" style="width:200px;" name="sampleList">'+proList+'</select></td><td><input id="qty" name="qtyList" placeholder="quantity" /></td><td><a class="btn btn-danger btn-xs" onclick="removeSamples('+i+');">-</a></td></tr>');
+	    $('#selsam-'+i).chosen();
 	    i++;
-	    $('.chzn').chosen();
+	    
 	}
 	
 	</script>
@@ -33,11 +34,18 @@
 				 $('.input-small').bind('copy paste cut',function(e) { 
  					e.preventDefault(); //disable cut,copy,paste
  				});
+				 $('#pob').bind('copy paste cut',function(e) { 
+	 					e.preventDefault(); //disable cut,copy,paste
+	 				});
+				 $('#qty').bind('copy paste cut',function(e) { 
+	 					e.preventDefault(); //disable cut,copy,paste
+	 				});
 				});
+	</script>
 	</script>
 	
 		
-	<form id="dcrliform">
+	<form id="dcrliform" name="dcrliform">
 	<table border="1">
 	<thead>
 	   <th>Doctors</th>
@@ -52,10 +60,14 @@
 	<tr>
 		
 		<td valign="top" >
-		<select id="selectDoctor" data-placeholder="Select Doctor" class="chzn" name="doctor" style="width:200px;">
+		<select id="selectDoctor" data-placeholder="Select Doctor" class="chzn" name="doctor" style="width:200px;" >
 		   <option></option>
 			@for(doctor <- doctorList){
-	      	<option value=@doctor.id >@doctor.appUser.name</option>
+				@if(disabledDoctorList.contains(doctor)){
+					<option id="docid-@doctor.id" value="@doctor.id" disabled>@doctor.appUser.name</option>
+				}else{
+					<option id="docid-@doctor.id" value="@doctor.id" >@doctor.appUser.name</option>				
+				}
 	        }
 	       </select>
 	    </td>
@@ -66,15 +78,15 @@
 			<table id="samplestbl">
 				<tr>
 					<td>
-				  	   	<select data-placeholder="Select Sample" class="chzn" name="sampleList" style="width:200px;">
-				  	   	   <option ></option>
+				  	   	<select id="select-samples" data-placeholder="Select Sample" class="chzn" name="sampleList" style="width:200px;" onchange="changeSample()">
+				  	   	   <option value=""></option>
 							@for(product <- productList){
 					      	<option value="@product.id">@product.medicineName</option>
 					        }
 			   		    </select>
 					</td>
 					<td>
-						<input class="numeric-textbox" name="qtyList" placeholder="qty"/>
+						<input id="qty" class="numeric-textbox" name="qtyList" placeholder="quantity"/>
 					</td>
 					<td>
 						&nbsp;
@@ -107,7 +119,7 @@
 	        </div>
         </td>
         
-		<td valign="top"  ><input class="numeric-textbox" name="pob" /></td>
+		<td valign="top"  ><input id="pob" class="numeric-textbox" name="pob" /></td>
 		<td valign="top" ><input name="remarks" type="text" placeholder="Remarks"/></td>
       </tr>
 		
@@ -162,10 +174,16 @@
 			</div>   
 	   	</td>
 	   	
-	   	<td>@dcrLineItem.inTime.format("kk:mm")</td>
-	   	
-	   	<td>@dcrLineItem.outTime.format("kk:mm")</td>
-	   	
+	   	@if(dcrLineItem.inTime == null){
+	   		<td>&nbsp;</td>
+	   		}else{
+	   		<td>@dcrLineItem.inTime.format("kk:mm")</td>
+	   		}
+	   	@if(dcrLineItem.outTime == null){
+	   		<td>&nbsp;</td>
+	   		}else{
+	   		<td>@dcrLineItem.outTime.format("kk:mm")</td>
+	   		}
 	   	
 	    @if(dcrLineItem.pob==0){
 	   		<td>&nbsp;</td>
@@ -174,22 +192,49 @@
 	   	}
 	   	
 		<td>@dcrLineItem.remarks</td>
-		<td><a class="btn btn-danger btn-md" onclick="removeLineItem('@dcrLineItem.id');">Remove</a></td>
+		<td><a class="btn btn-danger btn-md" onclick="removeLineItem('@dcrLineItem.id','@dcrLineItem.doctor.id');">Remove</a></td>
      </tr>
      }
    </tbody>
   </table>	
   
 	</div>
-	
+	<script>
+		$("#pob").keypress(function (evt) {
+			  var keycode = evt.charCode || evt.keyCode;
+			  if (keycode >=48 && keycode <=57) { //Enter key's keycode
+			  }else{
+			 return false;
+			  }
+			});
+		$("#qty").keypress(function (evt) {
+			  var keycode = evt.charCode || evt.keyCode;
+			  if (keycode >=48 && keycode <=57) {
+
+				  if($("#select-samples").val() == "") {
+					    alert("Please! Select a sample. ");
+					    return false;
+					   }
+			  }else{
+				 return false;
+			  }
+			});
+		function changeSample(){
+			if($("#select-samples").val() == "") {
+				document.dcrliform.qtyList.value = "";
+			}else{
+			if($("#qty").val() == "") {
+				//alert("please Mention the quantity");
+			}
+			}
+		}
+		
+	</script>
 	<script type="text/javascript"> 
             $('.input-small').timepicker({
             	showMeridian:false,
             	defaultTime: false
                 });
-    </script>
-	<script type="text/javascript"> 
-	
             $('#timepicker1').timepicker();
             $('#timepicker2').timepicker();
             $('#timepicker1').on('keydown',function(e)
@@ -205,22 +250,33 @@
 	<script>
 		
 	    function addLineItem(){
-	    	var docId=$( "#selectDoctor" ).val();
+	    	var docId=$("#selectDoctor").val();
 	    	if($('#selectDoctor').val()== ""){
 	  		  alert('Please, Select a Doctor');
 	   		  return false;
 			}else{
+				if($("#select-samples").val() == "") {
+				document.dcrliform.qtyList.value = "";
+				}else{
+					if($("#qty").val() == "") {
+					alert("please Mention the quantity");
+					return false;
+					}
+				}
+			
 		        $.post('/mr/dcr/add-line-item',$('#dcrliform').serialize(),function(html){
 					$('#dcrLineItemTable').html(html);
+						$('#docid-'+docId).attr('disabled','disabled');
+						$('#selectDoctor').val('').trigger("chosen:updated");
 				});
-				$('#selectDoctor option[value == "2"]').remove();
 			}
-			
 		}
 		
-	    function removeLineItem(id){
+	    function removeLineItem(id, docId){
 		   $.post('/mr/dcr/delete-line-item/@dcr.id/'+id,function(htmldata){
 		     $('#dcrLineItemTable').html(htmldata);
+		     $('#docid-'+docId).removeAttr('disabled');
+		     $('#selectDoctor').val('').trigger("chosen:updated");
 		    });
 	     }
 	</script>

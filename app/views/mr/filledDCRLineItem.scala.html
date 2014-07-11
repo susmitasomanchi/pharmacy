@@ -45,11 +45,16 @@
 			</div>   
 	   	</td>
 	   	
-	   	
-	   	<td>@dcrLineItem.inTime.format("kk:mm")</td>
-	   	
-	   	<td>@dcrLineItem.outTime.format("kk:mm")</td>
-	   	
+	   	@if(dcrLineItem.inTime == null){
+	   		<td>&nbsp;</td>
+	   		}else{
+	   		<td>@dcrLineItem.inTime.format("kk:mm")</td>
+	   		}
+	   	@if(dcrLineItem.outTime == null){
+	   		<td>&nbsp;</td>
+	   		}else{
+	   		<td>@dcrLineItem.outTime.format("kk:mm")</td>
+	   		}
 	   	
 	   	@if(dcrLineItem.pob==0){
 	   		<td>&nbsp;</td>
@@ -58,7 +63,7 @@
 	   	}
 	   	
 		<td>@dcrLineItem.remarks</td>
-		<td><a class="btn btn-danger btn-md" onclick="removeLineItem('@dcrLineItem.id');">Remove</a></td>
+		<td><a class="btn btn-danger btn-md" onclick="removeLineItem('@dcrLineItem.id','@dcrLineItem.doctor.id');">Remove</a></td>
      </tr>
      }
    </tbody>
