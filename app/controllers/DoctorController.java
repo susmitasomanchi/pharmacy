@@ -548,6 +548,12 @@ public class DoctorController extends Controller {
 		return ok(views.html.doctor.doctor_all_appointments.render());
 
 	}
+	
+	public static Result doctorSearchAppointment() {
+
+		return ok(views.html.doctor.doctor_search_appointments.render());
+		
+	}
 
 	public static Result doctorViewAppointment() {
 

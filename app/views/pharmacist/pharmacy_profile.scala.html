@@ -21,11 +21,84 @@ border-color: #b2dba1;
 color:black;
 }
 </style>
+
+
+
+<script>
+
+$('[data-toggle="popover"]').popover();
+
+$('body').on('click', function (e) {
+    $('[data-toggle="popover"]').each(function () {
+        if (!$(this).is(e.target) && $(this).has(e.target).length === 0 && $('.popover').has(e.target).length === 0) {
+            $(this).popover('hide');
+        }
+    });
+});
+    
+
+function submitimagesform(){
+
+$("[data-toggle=popover]").popover('hide');
+
+$('#spinner').addClass( "fa-spin" );
+
+}
+
+function submitbasicform(name){
+
+	$("[data-toggle=popover]").popover('hide');
+
+	$('#spinner-'+name).addClass( "fa-spin" );
+
+	window.location.href='';
+
+}
+
+</script>	
 	
-<div style="background-image:url('/assets/images/cover.png');height:400px;"></div>
-<div class="row" style="margin-top:-150px">
+<div style="background-image:url('/assets/images/cover.png');height:400px;">
+<span data-toggle="popover" data-placement="left" title="Change Background Image" data-html="true" data-content="<form><input type=&quot;file&quot; name=&quot;backgroundimage&quot;> <input type=&quot;hidden&quot; name=&quot;doctorId&quot; value=&quot;doctor.id&quot;> <br><input class=&quot;pull-right btn btn-xs btn-primary&quot; type=&quot;submit&quot; onclick=&quot;submitimagesform();&quot; value=&quot;save&quot;></form>" style="cursor:pointer; position:relative; top:-3px;left:910px; font-size:25px"><i id="spinner" class="fa fa-cog"></i></span>
+</div>
+<div class="row" style="margin-top:-180px">
 <div class="col-md-1"></div>
 <div class="col-md-10" >
+<span data-toggle="modal" data-target="#myModal" style="cursor:pointer; position:relative; top:-3px;left:760px; font-size:25px;">
+  	<i id="spinner2" class="fa fa-cog"></i>
+	</span>
+	<div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+  <div class="modal-dialog" style="padding-left:100px">
+    <div class="modal-content" style="width:400px">
+      <div class="modal-header" style="color: #ffffff;background-color: #008cba;border-color: #008cba;">
+        <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+        <h4 class="modal-title" id="myModalLabel">Profile Images</h4>
+      </div>
+      <div class="modal-body well">
+      <table class="table table-striped">
+      <tr>
+      <td style="width:200px"> <img src="/assets/images/pharmacy1.jpg" width="150" height="75" /> </td>
+      <td> <button class="btn btn-danger btn-xs"><a href="#" style="color:white">Delete</a></button> </td>
+      </tr>
+      <tr>
+      <td style="width:200px"> <img src="/assets/images/pharmacy2.jpg" width="150" height="75" /> </td>
+      <td> <button class="btn btn-danger btn-xs"><a href="#" style="color:white">Delete</a></button> </td>
+      </tr>
+      <tr>
+      <td style="width:200px"> <img src="/assets/images/pharmacy3.jpg" width="150" height="75" /> </td>
+      <td> <button class="btn btn-danger btn-xs"><a href="#" style="color:white">Delete</a></button> </td>
+      </tr>
+      </table>
+      <form>
+      	<div class="form-group">
+    	<label for="exampleInputFile">Add Image</label>
+    	<input type="file" id="exampleInputFile">
+  		</div> 
+      </form>
+      
+      </div>
+    </div>
+  </div>
+</div>
 <div id="carousel-example-generic" class="carousel slide" data-ride="carousel">
   <!-- Indicators -->
   <ol class="carousel-indicators">
@@ -33,9 +106,10 @@ color:black;
     <li data-target="#carousel-example-generic" data-slide-to="1"></li>
     <li data-target="#carousel-example-generic" data-slide-to="2"></li>
   </ol>
-
   <!-- Wrapper for slides -->
   <div class="carousel-inner">
+  
+  
     <div class="item active">
       <img src="/assets/images/pharmacy1.jpg" alt="pharmacy1" />
       <div class="carousel-caption">
@@ -57,11 +131,11 @@ color:black;
   </div>
 
   <!-- Controls -->
-  <a class="left carousel-control" href="#carousel-example-generic" role="button" data-slide="prev">
-    <span class="glyphicon glyphicon-chevron-left"></span>
+  <a class="left carousel-control" href="#carousel-example-generic" role="button" data-slide="prev" style="width:0px">
+    <span class="glyphicon glyphicon-chevron-left" style="margin-left:-40px"></span>
   </a>
-  <a class="right carousel-control" href="#carousel-example-generic" role="button" data-slide="next">
-    <span class="glyphicon glyphicon-chevron-right"></span>
+  <a class="right carousel-control" href="#carousel-example-generic" role="button" data-slide="next" style="width:0px">
+    <span class="glyphicon glyphicon-chevron-right" style="left: 20px;"></span>
   </a>
 </div>
 </div>
@@ -69,6 +143,7 @@ color:black;
 </div>
 <br><br>
 <div class="alert alert-success">
+<span data-toggle="popover" title="Brief Description" data-placement="left" data-html="true" data-content="<textarea id=&quot;new-description&quot; rows=&quot;12&quot; cols=&quot;25&quot; style=&quot;color:#292929; font-weight:bold;&quot; >pharmacy.description</textarea><br><a class=&quot;pull-right btn btn-xs btn-primary&quot; onclick=&quot;submitbasicform('description');&quot; >save</a> " style="cursor:pointer; position:relative; font-size:15px; top:-10px; left:905px;"><i id="spinner-description" class="fa fa-cog"></i></span>
 <h4><b>A small intro about pharmacy in this lines <br><br><br><br></b></h4>
 </div>
 <br><br>	

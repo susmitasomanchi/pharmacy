@@ -1,0 +1,699 @@
+@()
+@import play.i18n._
+@import helper.twitterBootstrap._
+@import helper._
+
+@main("Search Appointments"){
+
+<form class="form-horizontal">
+<div class="row">
+<div class="col-md-6">
+    <label for="from" class="col-sm-2 control-label">From</label>
+    <div class="col-sm-4">
+      <input type="date" class="form-control" id="from" placeholder="From Date">
+    </div>
+    <label for="to" class="col-sm-2 control-label">To</label>
+    <div class="col-sm-4">
+      <input type="date" class="form-control" id="to" placeholder="To Date">
+    </div>
+</div>
+<div class="col-md-6">
+	  <div class="col-md-2">
+      <p> Clinics </p>
+      </div>
+      <div class="col-md-6">
+      <select data-placeholder="Select the medicine" class="chosen-select" multiple="true" style="width:200px;" tabindex="2">
+      <option value=""></option>
+      <option value="ABC">ABC</option>
+      <option value=" XYZ"> XYZ</option>
+      <option value="SAKP">SAKP</option>
+      <option value="Clinic">Clinic</option>
+       </select>
+       <script>
+       $(".chosen-select").chosen();
+       </script>
+      </div>
+      <div class="col-md-4">
+      <button type="submit" class="btn btn-primary btn-sm">Submit</button>
+      </div>
+</div>
+</div>
+</form>
+<br><br>
+<div class="row">
+<ul class="nav nav-pills nav-tabs nav-justified" style="font-size:14px">
+  <li  class="active"><a href="#date1" data-toggle="tab">20-Jun-14</a></li>
+  <li><a href="#date2" data-toggle="tab">Date2</a></li>
+  <li><a href="#date3" data-toggle="tab">Date3</a></li>
+  <li><a href="#date4" data-toggle="tab">Date4</a></li>
+  <li><a href="#date5" data-toggle="tab">Date5</a></li>
+  <li><a href="#date6" data-toggle="tab">Date6</a></li>
+  <li><a href="#date7" data-toggle="tab">Date7</a></li>
+  <li><a href="#date8" data-toggle="tab">Date8</a></li>
+  <li><a href="#date9" data-toggle="tab">Date9</a></li>
+  <li><a href="#date10" data-toggle="tab">Date10</a></li>
+</ul>
+
+<div class="tab-content">
+<div class="tab-pane active" id="date1">	
+<h4 style="text-align:center"> Date1 Appointments </h4><br>
+<div class="col-md-1">
+</div>
+<div class="col-md-10">
+<table  class="table table-bordered" style="border:2px solid black;">
+  <tr>
+    <th>S No</th>
+    <th>Time slot</th>
+    <th>Clinic</th>
+    <th>Username</th>
+    <th>Age</th>
+    <th>Sex</th>
+    <th>Problem Statement</th>
+    <th>Action</th>
+  </tr>
+  <tr>
+    <td>1</td>
+    <td>4:00pm to 4:15pm</td>
+    <td>ABC clinic</td>
+    <td>User 1</td>
+    <td>25 years</td>
+    <td>Male</td>
+    <td>Stomach pain <i class="fa fa-question-circle" style="cursor:pointer" data-toggle="tooltip" data-placement="bottom" title="Severe pain from 2 days"></i></td>
+    <td>
+    <button class="btn btn-success btn-sm"><a href="/doctor/prescription" style="color:white">Prescribe</a></button>
+	<button class="btn btn-default btn-sm"><a href="/doctor/view/appointment" style="color:black">Edit</a></button>
+	<button class="btn btn-danger btn-sm"><a href="#" style="color:white">Delete</a></button>
+	</td>
+  </tr>
+  <tr>
+    <td>2</td>
+    <td>5:00pm to 5:15pm</td>
+    <td>XYZ clinic</td>
+    <td>User 2</td>
+    <td>30 years</td>
+    <td>Female</td>
+    <td>Severe Headache <i class="fa fa-question-circle" style="cursor:pointer" data-toggle="tooltip" data-placement="bottom" title="Getting pain on forehead and feeling so strained"></i></td>
+    <td>
+    <button class="btn btn-success btn-sm"><a href="/doctor/prescription" style="color:white">Prescribe</a></button>
+	<button class="btn btn-default btn-sm"><a href="/doctor/view/appointment" style="color:black">Edit</a></button>
+	<button class="btn btn-danger btn-sm"><a href="#" style="color:white">Delete</a></button>
+	</td>
+  </tr>
+  <tr>
+    <td>3</td>
+    <td>4:30pm to 5:00pm</td>
+    <td>ABC clinic</td>
+    <td>User 3</td>
+    <td>28 years</td>
+    <td>Male</td>
+    <td>Fever <i class="fa fa-question-circle" style="cursor:pointer" data-toggle="tooltip" data-placement="bottom" title="Feeling even cold from 3 days"></i></td>
+    <td>
+    <button class="btn btn-success btn-sm"><a href="/doctor/prescription" style="color:white">Prescribe</a></button>
+	<button class="btn btn-default btn-sm"><a href="/doctor/view/appointment" style="color:black">Edit</a></button>
+	<button class="btn btn-danger btn-sm"><a href="#" style="color:white">Delete</a></button>
+	</td>
+  </tr>
+</table>
+</div>
+<div class="col-md-1">
+</div>
+</div>
+
+<div class="tab-pane" id="date2">
+<h4 style="text-align:center"> Date2 Appointments </h4><br>
+<div class="col-md-1">
+</div>
+<div class="col-md-10">
+<table  class="table table-bordered" style="border:2px solid black;">
+  <tr>
+    <th>S No</th>
+    <th>Time slot</th>
+    <th>Clinic</th>
+    <th>Username</th>
+    <th>Age</th>
+    <th>Sex</th>
+    <th>Problem Statement</th>
+    <th>Action</th>
+  </tr>
+  <tr>
+    <td>1</td>
+    <td>4:00pm to 4:15pm</td>
+    <td>ABC clinic</td>
+    <td>User 1</td>
+    <td>25 years</td>
+    <td>Male</td>
+    <td>Stomach pain <i class="fa fa-question-circle" style="cursor:pointer" data-toggle="tooltip" data-placement="bottom" title="Severe pain from 2 days"></i></td>
+    <td>
+    <button class="btn btn-success btn-sm"><a href="/doctor/prescription" style="color:white">Prescribe</a></button>
+	<button class="btn btn-default btn-sm"><a href="/doctor/view/appointment" style="color:black">Edit</a></button>
+	<button class="btn btn-danger btn-sm"><a href="#" style="color:white">Delete</a></button>
+	</td>
+  </tr>
+  <tr>
+    <td>2</td>
+    <td>5:00pm to 5:15pm</td>
+    <td>XYZ clinic</td>
+    <td>User 2</td>
+    <td>30 years</td>
+    <td>Female</td>
+    <td>Severe Headache <i class="fa fa-question-circle" style="cursor:pointer" data-toggle="tooltip" data-placement="bottom" title="Getting pain on forehead and feeling so strained"></i></td>
+    <td>
+    <button class="btn btn-success btn-sm"><a href="/doctor/prescription" style="color:white">Prescribe</a></button>
+	<button class="btn btn-default btn-sm"><a href="/doctor/view/appointment" style="color:black">Edit</a></button>
+	<button class="btn btn-danger btn-sm"><a href="#" style="color:white">Delete</a></button>
+	</td>
+  </tr>
+  <tr>
+    <td>3</td>
+    <td>4:30pm to 5:00pm</td>
+    <td>ABC clinic</td>
+    <td>User 3</td>
+    <td>28 years</td>
+    <td>Male</td>
+    <td>Fever <i class="fa fa-question-circle" style="cursor:pointer" data-toggle="tooltip" data-placement="bottom" title="Feeling even cold from 3 days"></i></td>
+    <td>
+    <button class="btn btn-success btn-sm"><a href="/doctor/prescription" style="color:white">Prescribe</a></button>
+	<button class="btn btn-default btn-sm"><a href="/doctor/view/appointment" style="color:black">Edit</a></button>
+	<button class="btn btn-danger btn-sm"><a href="#" style="color:white">Delete</a></button>
+	</td>
+  </tr>
+</table>
+</div>
+<div class="col-md-1">
+</div>
+</div>
+
+<div class="tab-pane" id="date3">	
+<h4 style="text-align:center"> Date3 Appointments </h4><br>
+<div class="col-md-1">
+</div>
+<div class="col-md-10">
+<table  class="table table-bordered" style="border:2px solid black;">
+  <tr>
+    <th>S No</th>
+    <th>Time slot</th>
+    <th>Clinic</th>
+    <th>Username</th>
+    <th>Age</th>
+    <th>Sex</th>
+    <th>Problem Statement</th>
+    <th>Action</th>
+  </tr>
+  <tr>
+    <td>1</td>
+    <td>4:00pm to 4:15pm</td>
+    <td>ABC clinic</td>
+    <td>User 1</td>
+    <td>25 years</td>
+    <td>Male</td>
+    <td>Stomach pain <i class="fa fa-question-circle" style="cursor:pointer" data-toggle="tooltip" data-placement="bottom" title="Severe pain from 2 days"></i></td>
+    <td>
+    <button class="btn btn-success btn-sm"><a href="/doctor/prescription" style="color:white">Prescribe</a></button>
+	<button class="btn btn-default btn-sm"><a href="/doctor/view/appointment" style="color:black">Edit</a></button>
+	<button class="btn btn-danger btn-sm"><a href="#" style="color:white">Delete</a></button>
+	</td>
+  </tr>
+  <tr>
+    <td>2</td>
+    <td>5:00pm to 5:15pm</td>
+    <td>XYZ clinic</td>
+    <td>User 2</td>
+    <td>30 years</td>
+    <td>Female</td>
+    <td>Severe Headache <i class="fa fa-question-circle" style="cursor:pointer" data-toggle="tooltip" data-placement="bottom" title="Getting pain on forehead and feeling so strained"></i></td>
+    <td>
+    <button class="btn btn-success btn-sm"><a href="/doctor/prescription" style="color:white">Prescribe</a></button>
+	<button class="btn btn-default btn-sm"><a href="/doctor/view/appointment" style="color:black">Edit</a></button>
+	<button class="btn btn-danger btn-sm"><a href="#" style="color:white">Delete</a></button>
+	</td>
+  </tr>
+  <tr>
+    <td>3</td>
+    <td>4:30pm to 5:00pm</td>
+    <td>ABC clinic</td>
+    <td>User 3</td>
+    <td>28 years</td>
+    <td>Male</td>
+    <td>Fever <i class="fa fa-question-circle" style="cursor:pointer" data-toggle="tooltip" data-placement="bottom" title="Feeling even cold from 3 days"></i></td>
+    <td>
+    <button class="btn btn-success btn-sm"><a href="/doctor/prescription" style="color:white">Prescribe</a></button>
+	<button class="btn btn-default btn-sm"><a href="/doctor/view/appointment" style="color:black">Edit</a></button>
+	<button class="btn btn-danger btn-sm"><a href="#" style="color:white">Delete</a></button>
+	</td>
+  </tr>
+</table>
+</div>
+<div class="col-md-1">
+</div>
+</div>
+
+<div class="tab-pane" id="date4">	
+<h4 style="text-align:center"> Date4 Appointments </h4><br>
+<div class="col-md-1">
+</div>
+<div class="col-md-10">
+<table  class="table table-bordered" style="border:2px solid black;">
+  <tr>
+    <th>S No</th>
+    <th>Time slot</th>
+    <th>Clinic</th>
+    <th>Username</th>
+    <th>Age</th>
+    <th>Sex</th>
+    <th>Problem Statement</th>
+    <th>Action</th>
+  </tr>
+  <tr>
+    <td>1</td>
+    <td>4:00pm to 4:15pm</td>
+    <td>ABC clinic</td>
+    <td>User 1</td>
+    <td>25 years</td>
+    <td>Male</td>
+    <td>Stomach pain <i class="fa fa-question-circle" style="cursor:pointer" data-toggle="tooltip" data-placement="bottom" title="Severe pain from 2 days"></i></td>
+    <td>
+    <button class="btn btn-success btn-sm"><a href="/doctor/prescription" style="color:white">Prescribe</a></button>
+	<button class="btn btn-default btn-sm"><a href="/doctor/view/appointment" style="color:black">Edit</a></button>
+	<button class="btn btn-danger btn-sm"><a href="#" style="color:white">Delete</a></button>
+	</td>
+  </tr>
+  <tr>
+    <td>2</td>
+    <td>5:00pm to 5:15pm</td>
+    <td>XYZ clinic</td>
+    <td>User 2</td>
+    <td>30 years</td>
+    <td>Female</td>
+    <td>Severe Headache <i class="fa fa-question-circle" style="cursor:pointer" data-toggle="tooltip" data-placement="bottom" title="Getting pain on forehead and feeling so strained"></i></td>
+    <td>
+    <button class="btn btn-success btn-sm"><a href="/doctor/prescription" style="color:white">Prescribe</a></button>
+	<button class="btn btn-default btn-sm"><a href="/doctor/view/appointment" style="color:black">Edit</a></button>
+	<button class="btn btn-danger btn-sm"><a href="#" style="color:white">Delete</a></button>
+	</td>
+  </tr>
+  <tr>
+    <td>3</td>
+    <td>4:30pm to 5:00pm</td>
+    <td>ABC clinic</td>
+    <td>User 3</td>
+    <td>28 years</td>
+    <td>Male</td>
+    <td>Fever <i class="fa fa-question-circle" style="cursor:pointer" data-toggle="tooltip" data-placement="bottom" title="Feeling even cold from 3 days"></i></td>
+    <td>
+    <button class="btn btn-success btn-sm"><a href="/doctor/prescription" style="color:white">Prescribe</a></button>
+	<button class="btn btn-default btn-sm"><a href="/doctor/view/appointment" style="color:black">Edit</a></button>
+	<button class="btn btn-danger btn-sm"><a href="#" style="color:white">Delete</a></button>
+	</td>
+  </tr>
+</table>
+</div>
+<div class="col-md-1">
+</div>
+</div>
+
+<div class="tab-pane" id="date5">	
+<h4 style="text-align:center"> Date5 Appointments </h4><br>
+<div class="col-md-1">
+</div>
+<div class="col-md-10">
+<table  class="table table-bordered" style="border:2px solid black;">
+  <tr>
+    <th>S No</th>
+    <th>Time slot</th>
+    <th>Clinic</th>
+    <th>Username</th>
+    <th>Age</th>
+    <th>Sex</th>
+    <th>Problem Statement</th>
+    <th>Action</th>
+  </tr>
+  <tr>
+    <td>1</td>
+    <td>4:00pm to 4:15pm</td>
+    <td>ABC clinic</td>
+    <td>User 1</td>
+    <td>25 years</td>
+    <td>Male</td>
+    <td>Stomach pain <i class="fa fa-question-circle" style="cursor:pointer" data-toggle="tooltip" data-placement="bottom" title="Severe pain from 2 days"></i></td>
+    <td>
+    <button class="btn btn-success btn-sm"><a href="/doctor/prescription" style="color:white">Prescribe</a></button>
+	<button class="btn btn-default btn-sm"><a href="/doctor/view/appointment" style="color:black">Edit</a></button>
+	<button class="btn btn-danger btn-sm"><a href="#" style="color:white">Delete</a></button>
+	</td>
+  </tr>
+  <tr>
+    <td>2</td>
+    <td>5:00pm to 5:15pm</td>
+    <td>XYZ clinic</td>
+    <td>User 2</td>
+    <td>30 years</td>
+    <td>Female</td>
+    <td>Severe Headache <i class="fa fa-question-circle" style="cursor:pointer" data-toggle="tooltip" data-placement="bottom" title="Getting pain on forehead and feeling so strained"></i></td>
+    <td>
+    <button class="btn btn-success btn-sm"><a href="/doctor/prescription" style="color:white">Prescribe</a></button>
+	<button class="btn btn-default btn-sm"><a href="/doctor/view/appointment" style="color:black">Edit</a></button>
+	<button class="btn btn-danger btn-sm"><a href="#" style="color:white">Delete</a></button>
+	</td>
+  </tr>
+  <tr>
+    <td>3</td>
+    <td>4:30pm to 5:00pm</td>
+    <td>ABC clinic</td>
+    <td>User 3</td>
+    <td>28 years</td>
+    <td>Male</td>
+    <td>Fever <i class="fa fa-question-circle" style="cursor:pointer" data-toggle="tooltip" data-placement="bottom" title="Feeling even cold from 3 days"></i></td>
+    <td>
+    <button class="btn btn-success btn-sm"><a href="/doctor/prescription" style="color:white">Prescribe</a></button>
+	<button class="btn btn-default btn-sm"><a href="/doctor/view/appointment" style="color:black">Edit</a></button>
+	<button class="btn btn-danger btn-sm"><a href="#" style="color:white">Delete</a></button>
+	</td>
+  </tr>
+</table>
+</div>
+<div class="col-md-1">
+</div>
+</div>
+
+<div class="tab-pane" id="date6">	
+<h4 style="text-align:center"> Date6 Appointments </h4><br>
+<div class="col-md-1">
+</div>
+<div class="col-md-10">
+<table  class="table table-bordered" style="border:2px solid black;">
+  <tr>
+    <th>S No</th>
+    <th>Time slot</th>
+    <th>Clinic</th>
+    <th>Username</th>
+    <th>Age</th>
+    <th>Sex</th>
+    <th>Problem Statement</th>
+    <th>Action</th>
+  </tr>
+  <tr>
+    <td>1</td>
+    <td>4:00pm to 4:15pm</td>
+    <td>ABC clinic</td>
+    <td>User 1</td>
+    <td>25 years</td>
+    <td>Male</td>
+    <td>Stomach pain <i class="fa fa-question-circle" style="cursor:pointer" data-toggle="tooltip" data-placement="bottom" title="Severe pain from 2 days"></i></td>
+    <td>
+    <button class="btn btn-success btn-sm"><a href="/doctor/prescription" style="color:white">Prescribe</a></button>
+	<button class="btn btn-default btn-sm"><a href="/doctor/view/appointment" style="color:black">Edit</a></button>
+	<button class="btn btn-danger btn-sm"><a href="#" style="color:white">Delete</a></button>
+	</td>
+  </tr>
+  <tr>
+    <td>2</td>
+    <td>5:00pm to 5:15pm</td>
+    <td>XYZ clinic</td>
+    <td>User 2</td>
+    <td>30 years</td>
+    <td>Female</td>
+    <td>Severe Headache <i class="fa fa-question-circle" style="cursor:pointer" data-toggle="tooltip" data-placement="bottom" title="Getting pain on forehead and feeling so strained"></i></td>
+    <td>
+    <button class="btn btn-success btn-sm"><a href="/doctor/prescription" style="color:white">Prescribe</a></button>
+	<button class="btn btn-default btn-sm"><a href="/doctor/view/appointment" style="color:black">Edit</a></button>
+	<button class="btn btn-danger btn-sm"><a href="#" style="color:white">Delete</a></button>
+	</td>
+  </tr>
+  <tr>
+    <td>3</td>
+    <td>4:30pm to 5:00pm</td>
+    <td>ABC clinic</td>
+    <td>User 3</td>
+    <td>28 years</td>
+    <td>Male</td>
+    <td>Fever <i class="fa fa-question-circle" style="cursor:pointer" data-toggle="tooltip" data-placement="bottom" title="Feeling even cold from 3 days"></i></td>
+    <td>
+    <button class="btn btn-success btn-sm"><a href="/doctor/prescription" style="color:white">Prescribe</a></button>
+	<button class="btn btn-default btn-sm"><a href="/doctor/view/appointment" style="color:black">Edit</a></button>
+	<button class="btn btn-danger btn-sm"><a href="#" style="color:white">Delete</a></button>
+	</td>
+  </tr>
+</table>
+</div>
+<div class="col-md-1">
+</div>
+</div>
+
+<div class="tab-pane" id="date7">	
+<h4 style="text-align:center"> Date7 Appointments </h4><br>
+<div class="col-md-1">
+</div>
+<div class="col-md-10">
+<table  class="table table-bordered" style="border:2px solid black;">
+  <tr>
+    <th>S No</th>
+    <th>Time slot</th>
+    <th>Clinic</th>
+    <th>Username</th>
+    <th>Age</th>
+    <th>Sex</th>
+    <th>Problem Statement</th>
+    <th>Action</th>
+  </tr>
+  <tr>
+    <td>1</td>
+    <td>4:00pm to 4:15pm</td>
+    <td>ABC clinic</td>
+    <td>User 1</td>
+    <td>25 years</td>
+    <td>Male</td>
+    <td>Stomach pain <i class="fa fa-question-circle" style="cursor:pointer" data-toggle="tooltip" data-placement="bottom" title="Severe pain from 2 days"></i></td>
+    <td>
+    <button class="btn btn-success btn-sm"><a href="/doctor/prescription" style="color:white">Prescribe</a></button>
+	<button class="btn btn-default btn-sm"><a href="/doctor/view/appointment" style="color:black">Edit</a></button>
+	<button class="btn btn-danger btn-sm"><a href="#" style="color:white">Delete</a></button>
+	</td>
+  </tr>
+  <tr>
+    <td>2</td>
+    <td>5:00pm to 5:15pm</td>
+    <td>XYZ clinic</td>
+    <td>User 2</td>
+    <td>30 years</td>
+    <td>Female</td>
+    <td>Severe Headache <i class="fa fa-question-circle" style="cursor:pointer" data-toggle="tooltip" data-placement="bottom" title="Getting pain on forehead and feeling so strained"></i></td>
+    <td>
+    <button class="btn btn-success btn-sm"><a href="/doctor/prescription" style="color:white">Prescribe</a></button>
+	<button class="btn btn-default btn-sm"><a href="/doctor/view/appointment" style="color:black">Edit</a></button>
+	<button class="btn btn-danger btn-sm"><a href="#" style="color:white">Delete</a></button>
+	</td>
+  </tr>
+  <tr>
+    <td>3</td>
+    <td>4:30pm to 5:00pm</td>
+    <td>ABC clinic</td>
+    <td>User 3</td>
+    <td>28 years</td>
+    <td>Male</td>
+    <td>Fever <i class="fa fa-question-circle" style="cursor:pointer" data-toggle="tooltip" data-placement="bottom" title="Feeling even cold from 3 days"></i></td>
+    <td>
+    <button class="btn btn-success btn-sm"><a href="/doctor/prescription" style="color:white">Prescribe</a></button>
+	<button class="btn btn-default btn-sm"><a href="/doctor/view/appointment" style="color:black">Edit</a></button>
+	<button class="btn btn-danger btn-sm"><a href="#" style="color:white">Delete</a></button>
+	</td>
+  </tr>
+</table>
+</div>
+<div class="col-md-1">
+</div>
+</div>
+
+<div class="tab-pane" id="date8">	
+<h4 style="text-align:center"> Date8 Appointments </h4><br>
+<div class="col-md-1">
+</div>
+<div class="col-md-10">
+<table  class="table table-bordered" style="border:2px solid black;">
+  <tr>
+    <th>S No</th>
+    <th>Time slot</th>
+    <th>Clinic</th>
+    <th>Username</th>
+    <th>Age</th>
+    <th>Sex</th>
+    <th>Problem Statement</th>
+    <th>Action</th>
+  </tr>
+  <tr>
+    <td>1</td>
+    <td>4:00pm to 4:15pm</td>
+    <td>ABC clinic</td>
+    <td>User 1</td>
+    <td>25 years</td>
+    <td>Male</td>
+    <td>Stomach pain <i class="fa fa-question-circle" style="cursor:pointer" data-toggle="tooltip" data-placement="bottom" title="Severe pain from 2 days"></i></td>
+    <td>
+    <button class="btn btn-success btn-sm"><a href="/doctor/prescription" style="color:white">Prescribe</a></button>
+	<button class="btn btn-default btn-sm"><a href="/doctor/view/appointment" style="color:black">Edit</a></button>
+	<button class="btn btn-danger btn-sm"><a href="#" style="color:white">Delete</a></button>
+	</td>
+  </tr>
+  <tr>
+    <td>2</td>
+    <td>5:00pm to 5:15pm</td>
+    <td>XYZ clinic</td>
+    <td>User 2</td>
+    <td>30 years</td>
+    <td>Female</td>
+    <td>Severe Headache <i class="fa fa-question-circle" style="cursor:pointer" data-toggle="tooltip" data-placement="bottom" title="Getting pain on forehead and feeling so strained"></i></td>
+    <td>
+    <button class="btn btn-success btn-sm"><a href="/doctor/prescription" style="color:white">Prescribe</a></button>
+	<button class="btn btn-default btn-sm"><a href="/doctor/view/appointment" style="color:black">Edit</a></button>
+	<button class="btn btn-danger btn-sm"><a href="#" style="color:white">Delete</a></button>
+	</td>
+  </tr>
+  <tr>
+    <td>3</td>
+    <td>4:30pm to 5:00pm</td>
+    <td>ABC clinic</td>
+    <td>User 3</td>
+    <td>28 years</td>
+    <td>Male</td>
+    <td>Fever <i class="fa fa-question-circle" style="cursor:pointer" data-toggle="tooltip" data-placement="bottom" title="Feeling even cold from 3 days"></i></td>
+    <td>
+    <button class="btn btn-success btn-sm"><a href="/doctor/prescription" style="color:white">Prescribe</a></button>
+	<button class="btn btn-default btn-sm"><a href="/doctor/view/appointment" style="color:black">Edit</a></button>
+	<button class="btn btn-danger btn-sm"><a href="#" style="color:white">Delete</a></button>
+	</td>
+  </tr>
+</table>
+</div>
+<div class="col-md-1">
+</div>
+</div>
+
+<div class="tab-pane" id="date9">	
+<h4 style="text-align:center"> Date9 Appointments </h4><br>
+<div class="col-md-1">
+</div>
+<div class="col-md-10">
+<table  class="table table-bordered" style="border:2px solid black;">
+  <tr>
+    <th>S No</th>
+    <th>Time slot</th>
+    <th>Clinic</th>
+    <th>Username</th>
+    <th>Age</th>
+    <th>Sex</th>
+    <th>Problem Statement</th>
+    <th>Action</th>
+  </tr>
+  <tr>
+    <td>1</td>
+    <td>4:00pm to 4:15pm</td>
+    <td>ABC clinic</td>
+    <td>User 1</td>
+    <td>25 years</td>
+    <td>Male</td>
+    <td>Stomach pain <i class="fa fa-question-circle" style="cursor:pointer" data-toggle="tooltip" data-placement="bottom" title="Severe pain from 2 days"></i></td>
+    <td>
+    <button class="btn btn-success btn-sm"><a href="/doctor/prescription" style="color:white">Prescribe</a></button>
+	<button class="btn btn-default btn-sm"><a href="/doctor/view/appointment" style="color:black">Edit</a></button>
+	<button class="btn btn-danger btn-sm"><a href="#" style="color:white">Delete</a></button>
+	</td>
+  </tr>
+  <tr>
+    <td>2</td>
+    <td>5:00pm to 5:15pm</td>
+    <td>XYZ clinic</td>
+    <td>User 2</td>
+    <td>30 years</td>
+    <td>Female</td>
+    <td>Severe Headache <i class="fa fa-question-circle" style="cursor:pointer" data-toggle="tooltip" data-placement="bottom" title="Getting pain on forehead and feeling so strained"></i></td>
+    <td>
+    <button class="btn btn-success btn-sm"><a href="/doctor/prescription" style="color:white">Prescribe</a></button>
+	<button class="btn btn-default btn-sm"><a href="/doctor/view/appointment" style="color:black">Edit</a></button>
+	<button class="btn btn-danger btn-sm"><a href="#" style="color:white">Delete</a></button>
+	</td>
+  </tr>
+  <tr>
+    <td>3</td>
+    <td>4:30pm to 5:00pm</td>
+    <td>ABC clinic</td>
+    <td>User 3</td>
+    <td>28 years</td>
+    <td>Male</td>
+    <td>Fever <i class="fa fa-question-circle" style="cursor:pointer" data-toggle="tooltip" data-placement="bottom" title="Feeling even cold from 3 days"></i></td>
+    <td>
+    <button class="btn btn-success btn-sm"><a href="/doctor/prescription" style="color:white">Prescribe</a></button>
+	<button class="btn btn-default btn-sm"><a href="/doctor/view/appointment" style="color:black">Edit</a></button>
+	<button class="btn btn-danger btn-sm"><a href="#" style="color:white">Delete</a></button>
+	</td>
+  </tr>
+</table>
+</div>
+<div class="col-md-1">
+</div>
+</div>
+
+<div class="tab-pane" id="date10">	
+<h4 style="text-align:center"> Date10 Appointments </h4><br>
+<div class="col-md-1">
+</div>
+<div class="col-md-10">
+<table  class="table table-bordered" style="border:2px solid black;">
+  <tr>
+    <th>S No</th>
+    <th>Time slot</th>
+    <th>Clinic</th>
+    <th>Username</th>
+    <th>Age</th>
+    <th>Sex</th>
+    <th>Problem Statement</th>
+    <th>Action</th>
+  </tr>
+  <tr>
+    <td>1</td>
+    <td>4:00pm to 4:15pm</td>
+    <td>ABC clinic</td>
+    <td>User 1</td>
+    <td>25 years</td>
+    <td>Male</td>
+    <td>Stomach pain <i class="fa fa-question-circle" style="cursor:pointer" data-toggle="tooltip" data-placement="bottom" title="Severe pain from 2 days"></i></td>
+    <td>
+    <button class="btn btn-success btn-sm"><a href="/doctor/prescription" style="color:white">Prescribe</a></button>
+	<button class="btn btn-default btn-sm"><a href="/doctor/view/appointment" style="color:black">Edit</a></button>
+	<button class="btn btn-danger btn-sm"><a href="#" style="color:white">Delete</a></button>
+	</td>
+  </tr>
+  <tr>
+    <td>2</td>
+    <td>5:00pm to 5:15pm</td>
+    <td>XYZ clinic</td>
+    <td>User 2</td>
+    <td>30 years</td>
+    <td>Female</td>
+    <td>Severe Headache <i class="fa fa-question-circle" style="cursor:pointer" data-toggle="tooltip" data-placement="bottom" title="Getting pain on forehead and feeling so strained"></i></td>
+    <td>
+    <button class="btn btn-success btn-sm"><a href="/doctor/prescription" style="color:white">Prescribe</a></button>
+	<button class="btn btn-default btn-sm"><a href="/doctor/view/appointment" style="color:black">Edit</a></button>
+	<button class="btn btn-danger btn-sm"><a href="#" style="color:white">Delete</a></button>
+	</td>
+  </tr>
+  <tr>
+    <td>3</td>
+    <td>4:30pm to 5:00pm</td>
+    <td>ABC clinic</td>
+    <td>User 3</td>
+    <td>28 years</td>
+    <td>Male</td>
+    <td>Fever <i class="fa fa-question-circle" style="cursor:pointer" data-toggle="tooltip" data-placement="bottom" title="Feeling even cold from 3 days"></i></td>
+    <td>
+    <button class="btn btn-success btn-sm"><a href="/doctor/prescription" style="color:white">Prescribe</a></button>
+	<button class="btn btn-default btn-sm"><a href="/doctor/view/appointment" style="color:black">Edit</a></button>
+	<button class="btn btn-danger btn-sm"><a href="#" style="color:white">Delete</a></button>
+	</td>
+  </tr>
+</table>
+</div>
+<div class="col-md-1">
+</div>
+</div>
+</div>
+</div>
+}
