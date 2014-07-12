@@ -5,7 +5,7 @@
 @import helper._
 
 @main("DCR Line Item"){
-        <script type="text/javascript" src="/assets/javascripts/bootstrap.min.js"></script>
+        
         <script src="@routes.Assets.at("javascripts/bootstrap-timepicker.min.js")" type="text/javascript"></script>
 	<link href="/assets/css/bootstrap-timepicker.min.css" rel="stylesheet" type="text/css" />
 	
@@ -15,22 +15,31 @@
 		}
 	</style>
 	<script>
-	var proList = '<option value="" disabled selected style="display:none;">Select Sample</option>@for(product <-productList){<option value="@product.id">@product.medicineName</option>}';
+	var proList = '<option></option>@for(product <-productList){<option value="@product.id">@product.medicineName</option>}';
 	function removeSamples(id){
 	$('#sample'+id).remove();
     }	
 	
 	var i=0;
 	function addSamples(){
-		$('#samplestbl').append('<tr id="sample'+i+'"><td><select id="selsam-'+i+'" class="chzn" style="width:200px;" name="sampleList">'+proList+'</select></td><td><input id="qty" name="qtyList" placeholder="quantity" /></td><td><a class="btn btn-danger btn-xs" onclick="removeSamples('+i+');">-</a></td></tr>');
+		$('#samplestbl').append('<tr id="sample'+i+'"><td><select id="selsam-'+i+'" class="chzn" style="width:200px;" name="sampleList">'+proList+'</select></td><td><input id="qty" class="qty-class numeric-textbox" name="qtyList" placeholder="quantity" /></td><td><a class="btn btn-danger btn-xs" onclick="removeSamples('+i+');">-</a></td></tr>');
 	    $('#selsam-'+i).chosen();
 	    i++;
-	    
+	    numericValidation();
+	    $('.qty-class').bind('copy paste cut',function(e) { 
+	 					e.preventDefault(); //disable cut,copy,paste
+	 				});
 	}
 	
 	</script>
 	<script type="text/javascript">
+				
+	
+	
 				$(document).ready(function() {
+
+					numericValidation();
+					
 				 $('.input-small').bind('copy paste cut',function(e) { 
  					e.preventDefault(); //disable cut,copy,paste
  				});
@@ -79,14 +88,14 @@
 				<tr>
 					<td>
 				  	   	<select id="select-samples" data-placeholder="Select Sample" class="chzn" name="sampleList" style="width:200px;" onchange="changeSample()">
-				  	   	   <option value=""></option>
+				  	   	   <option></option>
 							@for(product <- productList){
 					      	<option value="@product.id">@product.medicineName</option>
 					        }
 			   		    </select>
 					</td>
 					<td>
-						<input id="qty" class="numeric-textbox" name="qtyList" placeholder="quantity"/>
+						<input id="qty" class="qty-class numeric-textbox" name="qtyList" placeholder="quantity"/>
 					</td>
 					<td>
 						&nbsp;
@@ -119,8 +128,8 @@
 	        </div>
         </td>
         
-		<td valign="top"  ><input id="pob" class="numeric-textbox" name="pob" /></td>
-		<td valign="top" ><input name="remarks" type="text" placeholder="Remarks"/></td>
+		<td valign="top"  ><input id="pob" class="numeric-textbox-pob" name="pob" /></td>
+		<td valign="top" ><input id="remarks" name="remarks" type="text" placeholder="Remarks"/></td>
       </tr>
 		
    </tbody>
@@ -207,7 +216,9 @@
 			 return false;
 			  }
 			});
-		$("#qty").keypress(function (evt) {
+
+		function numericValidation(){
+		$(".numeric-textbox").keypress(function (evt) {
 			  var keycode = evt.charCode || evt.keyCode;
 			  if (keycode >=48 && keycode <=57) {
 
@@ -219,6 +230,9 @@
 				 return false;
 			  }
 			});
+		}
+
+		
 		function changeSample(){
 			if($("#select-samples").val() == "") {
 				document.dcrliform.qtyList.value = "";
@@ -250,6 +264,7 @@
 	<script>
 		
 	    function addLineItem(){
+	    	var validFlag = true;
 	    	var docId=$("#selectDoctor").val();
 	    	if($('#selectDoctor').val()== ""){
 	  		  alert('Please, Select a Doctor');
@@ -258,18 +273,29 @@
 				if($("#select-samples").val() == "") {
 				document.dcrliform.qtyList.value = "";
 				}else{
-					if($("#qty").val() == "") {
-					alert("please Mention the quantity");
-					return false;
-					}
+				
+					$('.qty-class').each(function() {
+						if($(this).val() == "") {
+							alert("Please Mention Sample Quantity");
+							validFlag = false;
+							return false;
+						}
+					});
+					
 				}
-			
+				
+				if(validFlag){
 		        $.post('/mr/dcr/add-line-item',$('#dcrliform').serialize(),function(html){
 					$('#dcrLineItemTable').html(html);
 						$('#docid-'+docId).attr('disabled','disabled');
 						$('#selectDoctor').val('').trigger("chosen:updated");
 				});
+				}
 			}
+			document.dcrliform.timepicker1.value = "";
+			document.dcrliform.timepicker2.value = "";
+			document.dcrliform.pob.value = "";
+			document.dcrliform.remarks.value = "";
 		}
 		
 	    function removeLineItem(id, docId){
