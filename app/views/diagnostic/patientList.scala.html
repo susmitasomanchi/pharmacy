@@ -1,0 +1,40 @@
+@(patient: List[models.Patient])
+@main("Diagnostic Centers List") {
+<table class="table table-bordered">
+<thead>
+<tr>
+<th>
+Name
+</th>
+<th>
+Email Id
+</th>
+<th>
+Mobile No
+</th>
+</tr>
+</thead>
+<tbody>
+@for(p <- patient) {
+<tr>
+<td>
+@p.appUser.name
+</td>
+<td>
+@p.appUser.email
+</td>
+<td>
+@p.mbno
+</td>
+<th>
+
+<a href="/test-list/0/@p.id" class="btn btn-xs btn-default">Diagnostic Test</a>
+
+
+@*<a href="/diagnostic-delete/@dc.id" class="btn btn-xs btn-default">Delete</a>*@
+</th>
+</tr>
+}
+</tbody>
+</table>
+}

@@ -11,6 +11,7 @@ import javax.persistence.Id;
 import javax.persistence.ManyToOne;
 
 import models.mr.PharmaceuticalCompany;
+import models.pharmacist.Pharmacy;
 import play.data.validation.Constraints.Required;
 
 @SuppressWarnings("serial")
@@ -42,6 +43,7 @@ public class Product extends BaseEntity {
 
 	public String fullName;
 
+
 	@ManyToOne(cascade=CascadeType.ALL)
 	public PharmaceuticalCompany pharmaceuticalCompany;
 
@@ -50,9 +52,9 @@ public class Product extends BaseEntity {
 
 	public static Finder<Long, Product> find = new Finder<Long, Product>(Long.class, Product.class);
 
-	public static void update(final Long id, final Product product) {
-		product.update(id);
-	}
+	//public static void update(final Long id, final Product product) {
+	//	product.update(id);
+	//}
 
 	public static Map<String, String> options() {
 

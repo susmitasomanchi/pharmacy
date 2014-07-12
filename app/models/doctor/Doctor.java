@@ -38,11 +38,8 @@ public class Doctor extends BaseEntity{
 	@Required
 	public String position;
 
-
 	@Required
 	public String degree;
-
-	public String test;
 
 	//education
 	@OneToMany(cascade=CascadeType.ALL)
@@ -76,23 +73,6 @@ public class Doctor extends BaseEntity{
 	public String doctorType;
 
 	public String experience;
-
-	public String homeFacility;
-
-	public Integer fees;
-
-	public String clinicAddress;
-
-	public String hospitalAddress;
-
-	public String hospitalAddress1;
-
-	@Required
-	public String timings;
-
-	public String categoryOfDoctor;						// homeopathic or ayurvedic or etc.
-
-
 
 	public static Model.Finder<Long,Doctor> find = new Finder<Long, Doctor>(Long.class, Doctor.class);
 

@@ -40,7 +40,7 @@ public class BlogComment extends BaseEntity{
 	@OneToMany(cascade = CascadeType.ALL)
 	public List<BlogCommentReply> replyList = new ArrayList<BlogCommentReply>();
 
-	public static Finder<Long,BlogComment> find = new Finder<>(Long.class, BlogComment.class);
+	public static Finder<Long,BlogComment> find = new Finder<Long,BlogComment>(Long.class, BlogComment.class);
 
 	public List<BlogCommentReply> replyListInOrder(){
 		return BlogCommentReply.find.where().eq("blog_comment_id", this.id).orderBy("date DESC").findList();

@@ -26,12 +26,13 @@ public class LoginController extends Controller {
 	public static Result blogAdminLoginForm(){
 		return ok(views.html.adminlogin.render(loginForm));
 	}
-	
+
 	public static Result processLogin() {
 		final Form<LoginBean> filledForm = loginForm.bindFromRequest();
 		if (filledForm.hasErrors()) {
 			return badRequest(views.html.index.render(filledForm));
-		} else {
+		}
+		else {
 			final LoginBean loginBean = filledForm.get();
 			Logger.info(loginBean.toString());
 			final List<AppUser> appUsers = AppUser.find.where().eq("email", loginBean.email).eq("password", loginBean.password).findList();

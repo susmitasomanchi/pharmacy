@@ -6,8 +6,6 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 
 import play.data.validation.Constraints.Required;
-import play.db.ebean.*;
-import play.db.ebean.Model.Finder;
 
 @Entity
 public class Address extends BaseEntity {
@@ -24,7 +22,9 @@ public class Address extends BaseEntity {
 
 	public String addrressLine3;
 
+	public double lat;
 
+	public double lng;
 	@Required
 	public String city;
 

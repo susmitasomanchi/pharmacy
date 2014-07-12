@@ -6,6 +6,7 @@ window.onload=function(){
 	$(".chzn").chosen({allow_single_deselect: true});
 	$(".boottip").tooltip();
 	$('.datepicker').datepicker();
+	$("[data-toggle=popover]").popover();
 	
 	var nowTemp = new Date();
 	var now = new Date(nowTemp.getFullYear(), nowTemp.getMonth(), nowTemp.getDate(), 0, 0, 0, 0);
@@ -16,6 +17,5 @@ window.onload=function(){
 	}).on('changeDate', function(ev) {
 		$(this).datepicker('hide');
 	});
-	
 }
 

@@ -3,11 +3,11 @@ package controllers;
 
 import java.util.List;
 
-import models.Batch;
-import models.Inventory;
-import models.Pharmacist;
-import models.Pharmacy;
 import models.Product;
+import models.pharmacist.Batch;
+import models.pharmacist.Inventory;
+import models.pharmacist.Pharmacist;
+import models.pharmacist.Pharmacy;
 import play.Logger;
 import play.data.Form;
 import play.mvc.Controller;
@@ -58,7 +58,13 @@ public class PharmacistController extends Controller{
 
 		return ok(products.toString());
 	}
-
+	/*
+	 * @author:
+	 * 
+	 * @url:/edit-product/:id
+	 * 
+	 * @description: editing a product details
+	 */
 
 
 	public static Result editProduct(final Long id) {
@@ -73,6 +79,29 @@ public class PharmacistController extends Controller{
 
 
 	}
+
+	/*
+	 * @autor:
+	 * 
+	 * @url:/remove-product/:id
+	 * 
+	 * @description: removes the product from the pharmacy
+	 */
+
+	public static Result removeProduct(final Long id) {
+		final Pharmacy pharmacy=LoginController.getLoggedInUser().getPharmacist().pharmacy;
+		Logger.info("before=="+pharmacy.productList.size());
+		final Product product  = Product.find.byId(id);
+		pharmacy.productList.remove(product);
+		pharmacy.update();
+
+		//		productForm.fill(product);
+		Logger.info("after=="+pharmacy.productList.size());
+		return redirect(routes.ProductController.displayProduct());
+
+	}
+
+
 
 
 
@@ -97,11 +126,6 @@ public class PharmacistController extends Controller{
 			//return TODO;
 			return badRequest(views.html.pharmacist.addProductToInventory.render(addProductForm, id));
 		}
-		/*if(batchFilledForm.hasErrors()) {
-			Logger.info("bad request");
-
-			return badRequest(views.html.pharmacist.addProductToInventory.render(batchForm));
-		}*/
 		else {
 			final Batch batch=filledForm.get().toBatchEntity();
 			final Inventory inventory=filledForm.get().toInventoryEntity();
@@ -112,18 +136,14 @@ public class PharmacistController extends Controller{
 
 			}
 			else{
-				batch.update();
-				inventory.update();
+				final Pharmacy pharmacy=LoginController.getLoggedInUser().getPharmacist().pharmacy;
+				inventory.batchList.add(batch);
+				pharmacy.inventoryList.add(inventory);
+				pharmacy.update();
 			}
-
 		}
-		//return ok("User Created");
-		//return TODO;
-		//return ok(views.html.dashboard.render(appUser));
 		return redirect(routes.UserActions.dashboard());
 		//return TODO;
-
-
 	}
 
 
@@ -132,6 +152,16 @@ public class PharmacistController extends Controller{
 		final List<Product> products=Product.find.all();
 		return ok(views.html.pharmacist.orderEntry.render(products));
 
+	}
+	
+	public static Result pharmacyProfile() {
+		
+		return ok(views.html.pharmacist.pharmacy_profile.render());
+	}
+	
+	public static Result pharmacyPlaceOrder() {
+		
+		return ok(views.html.pharmacist.place_order.render());
 	}
 
 }
