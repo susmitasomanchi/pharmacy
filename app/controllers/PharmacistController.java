@@ -244,6 +244,38 @@ public class PharmacistController extends Controller {
 		return redirect(routes.UserActions.dashboard());
 	}
 
+
+
+	/**
+	 * @author : lakshmi
+	 * POST	/pharmacy/address-update
+	 * Action to update the address details of Pharmacy
+	 * of the loggedIn ADMIN_PHARMACIST
+	 */
+
+	public static Result pharmacyAddressUpdate() {
+		try{
+			final Map<String, String[]> requestMap = request().body().asFormUrlEncoded();
+			final Pharmacy pharmacy = Pharmacy.find.byId(Long.parseLong(requestMap.get("pharmacyId")[0]));
+
+			if(requestMap.get("name") != null && (requestMap.get("name")[0].trim().compareToIgnoreCase("")!=0)){
+				pharmacy.name = requestMap.get("name")[0];
+			}
+			if(requestMap.get("description") != null && (requestMap.get("description")[0].trim().compareToIgnoreCase("")!=0)){
+				pharmacy.description = requestMap.get("description")[0];
+			}
+
+			pharmacy.update();
+
+		}
+		catch (final Exception e){
+			flash().put("alert", new Alert("alert-danger", "Sorry. Something went wrong. Please try again.").toString());
+		}
+		return redirect(routes.UserActions.dashboard());
+	}
+
+
+
 	/*
 	 * @author : lakshmi
 	 * 

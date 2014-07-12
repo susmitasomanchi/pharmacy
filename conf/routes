@@ -83,6 +83,9 @@ GET    /doctor/today-appointment                   controllers.DoctorController.
 GET	   /doctor/appointments						   controllers.DoctorController.doctorAppointments()
 GET		/doctor/search/appointment					controllers.DoctorController.doctorSearchAppointment()
 
+POST		/doctor/clinic-edit-info					controllers.DoctorController.processUpdateClinicInfo()
+POST		/doctor/clinic-edit-schedule				controllers.DoctorController.processUpdateClinicSchedule()
+
 GET    /userform/assistant/               		controllers.AssistantController.form()
 POST   /userform/assistant/               		controllers.AssistantController.process()
 GET    /scheduleappointment/              		controllers.AppointmentController.form()
@@ -103,6 +106,7 @@ GET   /place-product-order/process              controllers.PharmacistController
 #GET	 /pharmacy/profile							controllers.PharmacistController.pharmacyProfile()
 GET		/edit-pharmacy-details					controllers.PharmacistController.editPharmacyDetails()
 POST	/pharmacy/basic-update					controllers.PharmacistController.pharmacyBasicUpdate()
+POST	/pharmacy/address-update				controllers.PharmacistController.pharmacyAddressUpdate()
 GET		/upload-pharmacy-images					controllers.PharmacistController.uploadPharmacyImage()
 POST	/pharmacy/upload-pharmacy-images					controllers.PharmacistController.uploadPharmacyImageProcess()
 GET		/pharmacy/get-image/:pharmacyId/:fileId				controllers.PharmacistController.getPharmacyImages(pharmacyId: Long,fileId: Long)
