@@ -3,10 +3,9 @@
 
 @main(pharmacy.name) {
 
-/*Script for loading google map*/
 <script src="http://maps.googleapis.com/maps/api/js?sensor=false"></script>
 <script>
-
+/*Script for loading google map*/
 function loadgooglemap(latt, lngt) {
 	var map_canvas = document.getElementById('map_canvas');
 	var map_options = {
@@ -39,9 +38,8 @@ function initialize() {
 }
 
 google.maps.event.addDomListener(window, 'load', initialize); 
-
-</script>
 /*End of Script for loading google map*/
+</script>
 
 <style>
 .container{
@@ -94,7 +92,7 @@ function submitbasicform(id){
 }
 
 <span data-toggle="popover" data-placement="left" title="Change Background Image" data-html="true" data-content="<form action=&quot;/pharmacy/upload-pharmacy-images&quot; enctype=&quot;multipart/form-data&quot; method=&quot;POST&quot;><input type=&quot;file&quot; name=&quot;backgroundImage&quot;> <input type=&quot;hidden&quot; name=&quot;pharmacyId&quot; value=&quot;@pharmacy.id&quot;> <br><input class=&quot;pull-right btn btn-xs btn-primary&quot; type=&quot;submit&quot; onclick=&quot;submitimagesform();&quot; value=&quot;save&quot;></form>" style="cursor:pointer; position:relative; top:-400px;left:910px; font-size:25px">
-<i style="text-shadow:1px 1px 20px #292929, 3px 3px 20px white;" id="spinner" class="fa fa-cog"></i>
+<i style="text-shadow:3px 3px 20px #292929, 3px 3px 20px white;" id="spinner" class="fa fa-cog"></i>
 </span>
 </div>
 <div class="row" style="margin-top:-235px">
