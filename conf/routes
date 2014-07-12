@@ -40,7 +40,6 @@ GET    /logout                            			controllers.LoginController.process
 
 # Remove later (at Beta Launch)
 #GET    /:str		                      controllers.Application.indexX(str: String)
-####################################################################################################
 
 
 # Sign up page
@@ -54,7 +53,6 @@ POST   /doctor/request-appointment        			controllers.DoctorController.reques
 
 
 # doctor actions
-<<<<<<< HEAD
 GET    /doctor/new-assistant              		controllers.DoctorController.newAssistant()
 GET    /doctor/new-clinic                 		controllers.DoctorController.newClinic()
 POST   /doctor/new-clinic                 		controllers.DoctorController.processNewClinic()
@@ -80,34 +78,10 @@ POST   /userform/doctor/                		controllers.DoctorController.process()
 GET    /doctor/prescription						controllers.DoctorController.doctorPrescription()
 GET		/doctor/profile							controllers.DoctorController.doctorProfileS()
 GET		/doctor/addclinic						controllers.DoctorController.doctorAddClinic()
-=======
-GET    /doctor/new-assistant                       controllers.DoctorController.newAssistant()
-GET    /doctor/new-clinic                          controllers.DoctorController.newClinic()
-POST   /doctor/new-clinic                          controllers.DoctorController.processNewClinic()
-GET    /doctor/clinics                             controllers.DoctorController.myClinics()
-GET    /doctor/manage-clinic/:id                   controllers.DoctorController.manageClinic(id:Long)
-GET    /doctor-profile                             controllers.DoctorController.doctorProfile()
-GET    /doctor-experience                          controllers.DoctorController.doctorExperience()
-POST   /doctor-experience                          controllers.DoctorController.processDoctorExperience()
-GET    /doctor-education                           controllers.DoctorController.doctorEducation()
-POST   /doctor-education                           controllers.DoctorController.processDoctorEducation()
-GET    /doctor-award                               controllers.DoctorController.doctorAward()
-POST   /doctor-award                               controllers.DoctorController.processDoctorAward()
-GET    /doctor-language                            controllers.DoctorController.doctorLanguage()
-POST   /doctor-language                            controllers.DoctorController.processDoctorLanguage()
-GET    /doctor-socialwork                          controllers.DoctorController.doctorSocialWork()
-POST   /doctor-socialwork                          controllers.DoctorController.processDoctorSocialWork()
-GET    /doctor-publication                         controllers.DoctorController.doctorPublication()
-POST   /doctor-publication                         controllers.DoctorController.processDoctorPublication()
-GET    /doctor-prescribe/:id                       controllers.DoctorController.showPrescriptionForm(id: Long)
-POST   /doctor-prescribe                           controllers.DoctorController.processPrescriptionForm()
 GET 	/viewappointments							controllers.DoctorController.doctorViewAppointment()
 GET    /doctor/today-appointment                   controllers.DoctorController.viewTodaysAppointment()	
 GET	   /doctor/appointments						   controllers.DoctorController.doctorAppointments()
 GET		/doctor/search/appointment					controllers.DoctorController.doctorSearchAppointment()
-GET    /doctor/prescription							controllers.DoctorController.doctorPrescription()
-GET		/doctor/profile					controllers.DoctorController.doctorProfileS()
-GET		/doctor/addclinic				controllers.DoctorController.doctorAddClinic()
 
 
 GET    /userform/assistant/               		controllers.AssistantController.form()
@@ -123,34 +97,24 @@ GET   /remove-product/:id                      	controllers.PharmacistController
 POST	/addProductToInventory/					controllers.PharmacistController.addProductForm(id: Long)
 POST   /addProductToInventory1/            		controllers.PharmacistController.addToInventory(id:Long)		
 GET		/order									controllers.PharmacistController.orderRecord()
-GET    /doctor/today-appointment                controllers.DoctorController.viewTodaysAppointment()	
-GET	   /doctor/appointments						controllers.DoctorController.doctorAppointments()
 GET    /searchProduct                           controllers.PharmacistController.searchForm()
 POST   /searchProduct                           controllers.PharmacistController.searchProduct(arg: String ?= "")
 GET   /place-product-order                     	controllers.PharmacistController.placeProductOrder()
 GET   /place-product-order/process              controllers.PharmacistController.placeProductOrderProcess()
-GET	 /pharmacy/profile							controllers.PharmacistController.pharmacyProfile()
+#GET	 /pharmacy/profile							controllers.PharmacistController.pharmacyProfile()
 GET		/edit-pharmacy-details					controllers.PharmacistController.editPharmacyDetails()
-POST	/edit-pharmacy-details/save				controllers.PharmacistController.editPharmacyDetailsprocess()
+POST	/pharmacy/basic-update					controllers.PharmacistController.pharmacyBasicUpdate()
 GET		/upload-pharmacy-images					controllers.PharmacistController.uploadPharmacyImage()
-POST	/upload-pharmacy-images					controllers.PharmacistController.uploadPharmacyImageProcess()
-GET	/get-image/:id								controllers.PharmacistController.getProfileImage(id: Long)
-GET	/get-background-image/:id/:index				controllers.PharmacistController.getBackgroundImage(id: Long,index: Integer)
-POST   /addProductToInventory/                     controllers.PharmacistController.addProductForm(id: Long)
-POST   /addProductToInventory1/                    controllers.PharmacistController.addToInventory(id:Long)		
-GET    /order                                      controllers.PharmacistController.orderRecord()
-GET    /new-product                       controllers.ProductController.productForm()
-POST   /new-product/save                       controllers.ProductController.saveProduct()
-GET    /view-products                     controllers.ProductController.displayProduct()
+POST	/pharmacy/upload-pharmacy-images					controllers.PharmacistController.uploadPharmacyImageProcess()
+GET		/pharmacy/get-image/:pharmacyId/:fileId				controllers.PharmacistController.getPharmacyImages(pharmacyId: Long,fileId: Long)
+GET		/pharmacy/remove-image/:pharmacyId/:fileId			controllers.PharmacistController.removeImage(pharmacyId: Long,fileId: Long)
+GET		/pharmacy/update/:id						controllers.PharmacistController.pharmacyDescription(id: Long)
+GET		/pharmacy/order/:id						controllers.PharmacistController.pharmacyPlaceOrder(id: Long)
 
-GET	   /pharmacy/profile						   	controllers.PharmacistController.pharmacyProfile()
-GET		/pharmacy/order								controllers.PharmacistController.pharmacyPlaceOrder()
+GET 	/pharmacy/order									controllers.PharmacistController.orderManagement()
 
 #GET 	/create-Mr-schedule				controllers.DoctorController.createMrSchedule()
 #POST	/create-Mr-appointment 			controllers.DoctorController.createMrAppointment()
->>>>>>> branch 'master' of http://pharmacy.bz/green-software/mednetwork.git
-
-
 
 
 #GET 	/create-Mr-schedule						controllers.DoctorController.createMrSchedule()

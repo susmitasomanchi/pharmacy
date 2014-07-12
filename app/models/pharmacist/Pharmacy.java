@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import javax.persistence.CascadeType;
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -14,6 +15,7 @@ import javax.persistence.OneToOne;
 
 import models.Address;
 import models.BaseEntity;
+import models.FileEntity;
 import models.Product;
 import beans.PharmacyBean;
 
@@ -27,17 +29,23 @@ public class Pharmacy extends BaseEntity {
 
 	public String name;
 
-	@Lob
-	public byte[] profileImage;
+	public String testField;
 
-	public List<byte[]> backgroundImageList = new ArrayList<byte[]>();
+	@Lob
+	public byte[] backgroundImage;
+
+	@OneToMany(cascade=CascadeType.ALL)
+	public List<FileEntity> profileImageList = new ArrayList<FileEntity>();
 
 	@OneToOne
 	public Address address	= new Address();
 
 	public String contactNo;
 
-	public String testField;
+	@Column(columnDefinition="TEXT")
+	public String description;
+
+
 	//@OneToOne
 	//public PharmacyProductInfo pharmacyProductInfo;
 
@@ -75,6 +83,9 @@ public class Pharmacy extends BaseEntity {
 		}
 		if(this.testField != null) {
 			pharmacyBean.testField= this.testField;
+		}
+		if(this.description != null) {
+			pharmacyBean.description= this.description;
 		}
 
 		return pharmacyBean;

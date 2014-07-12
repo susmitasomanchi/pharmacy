@@ -4,6 +4,7 @@
 
 @main("Diagnostic Form"){
 
+@*
      @helper.form(action=routes.PharmacistController.editPharmacyDetailsprocess(),'method -> "post") {
 
 
@@ -17,20 +18,32 @@
 			
 			@helper.inputText(dataForm("addrressLine3"),'class -> "inputs",'_label->"addrressLine3")
 						
-			@helper.inputText(dataForm("city"),'class -> "inputs",'_label->"city")			
+			@helper.inputText(dataForm("city"),'class -> "inputs",'_label->"city")
 			
-			@helper.inputText(dataForm("state"),'class -> "inputs",'_label->"state")
+			@helper.inputText(dataForm("description"),'class -> "inputs",'_label->"Description")
 			
 			@helper.inputText(dataForm("pinCode"),'class -> "inputs",'_label->"pinCode")
-			
-			@helper.inputText(dataForm("country"),'class -> "inputs",'_label->"country")
-			
-			@helper.inputText(dataForm("contactNo"),'class -> "inputs",'_label->"contactNo")
-			
-	<input type="hidden" name="id" value='@dataForm("id").value' >
+			<br>	
+			<select name="state">
+       			 @for(e <- models.State.values()){
+        			<option  name="state" value="@e">@e</option>
+          			     }
+        	</select>   
+        	<br>			
+			<br>
+			<select name="Country">
+        		@for(e <- models.Country.values()){
+        			<option  name="country" value="@e">@e</option>
+              			 }
+        	</select>   
+        	<br>				
+			@helper.inputText(dataForm("contactNo"),'class -> "inputs",'_label->"contactNo")			
+			<input type="hidden" name="id" value='@dataForm("id").value' >
 			<input type="submit" name="submit" value="update profile"/>
 		
 
 
-	}		
+	}	
+	*@
+		
 }

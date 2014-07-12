@@ -6,6 +6,7 @@ import models.Address;
 import models.Country;
 import models.State;
 import models.pharmacist.Pharmacy;
+import play.Logger;
 
 public class PharmacyBean implements Serializable{
 
@@ -26,6 +27,10 @@ public class PharmacyBean implements Serializable{
 	public String addrressLine3;
 
 
+
+	public String description;
+
+
 	//@Required
 	public String city;
 
@@ -40,42 +45,13 @@ public class PharmacyBean implements Serializable{
 	public Country country;
 
 
-	public Address toAddress() {
-		final Address address = new Address();
-		//if(this.id != null){
-		//address.id = this.id;
-		//}
-		if(this.addrressLine1!=null){
-			address.addrressLine1 = this.addrressLine1;
-		}
-		if(this.addrressLine2!=null){
-			address.addrressLine2 = this.addrressLine2;
-		}
-		if(this.addrressLine3!=null){
-			address.addrressLine3 = this.addrressLine3;
-		}
-		if(this.city!=null){
-			address.city = this.city;
-		}
-		if(this.country!=null){
-			address.country = this.country;
-		}
-		if(this.state!=null){
-			address.state = this.state;
-		}
-		if(this.pinCode!=null){
-			address.pinCode = this.pinCode;
-		}
-		if(this.city!=null){
-			address.city = this.city;
-		}
-		return address;
-	}
 
 	public Pharmacy toPharmacy(){
 		//final Pharmacy pharmacy = new Pharmacy();
 
+		Logger.info(""+this.id);
 		final Pharmacy pharmacy = Pharmacy.find.byId(this.id);
+		//		final Pharmacy pharmacy=LoginController.getLoggedInUser().getPharmacist().pharmacy;
 
 		if(this.id != null){
 			pharmacy.id=this.id;
@@ -83,6 +59,9 @@ public class PharmacyBean implements Serializable{
 
 		if(this.name != null) {
 			pharmacy.name= this.name;
+		}
+		if(this.description != null) {
+			pharmacy.description= this.description;
 		}
 
 		//if(this.address != null) {
@@ -104,12 +83,29 @@ public class PharmacyBean implements Serializable{
 		if(oldAddress != null){
 			address.id = oldAddress.id;
 		}
-		address.addrressLine1 = this.addrressLine1;
-		address.addrressLine2 = this.addrressLine2;
-		address.addrressLine3 = this.addrressLine3;
+		if(this.addrressLine1 != null){
+			address.addrressLine1 = this.addrressLine1;
+		}
+		if(this.addrressLine2 != null){
+			address.addrressLine2 = this.addrressLine2;
+		}
+		if(this.addrressLine3 != null){
+			address.addrressLine3 = this.addrressLine3;
+		}
+		if(this.city!=null){
+			address.city = this.city;
+		}
+		if(this.state != null){
+			address.state = this.state;
+		}
+		if(this.country != null){
+			address.country = this.country;
+		}
+		if(this.pinCode != null){
+			address.pinCode = this.pinCode;
+		}
 		pharmacy.address = address;
 		return pharmacy;
-
 	}
 
 
