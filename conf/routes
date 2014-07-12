@@ -59,6 +59,7 @@ POST   /doctor/new-clinic                          controllers.DoctorController.
 GET    /doctor/clinics                             controllers.DoctorController.myClinics()
 POST	/doctor/update-clinic-info						controllers.DoctorController.processUpdateClinicInfo()
 POST 	/doctor/update-clinic-schedule					controllers.DoctorController.processUpdateClinicSchedule()
+GET  	/doctor/delete-clinic/:id  							controllers.DoctorController.deleteClinic(id:Long)
 GET    /doctor/manage-clinic/:id                   controllers.DoctorController.manageClinic(id:Long)
 GET    /doctor-profile                             controllers.DoctorController.doctorProfile()
 GET    /doctor-experience                          controllers.DoctorController.doctorExperience()
