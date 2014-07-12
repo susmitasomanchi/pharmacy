@@ -36,6 +36,8 @@ public class DoctorClinicInfo extends BaseEntity {
 
 	public Integer	slotmr;
 
+	public boolean  active=true;
+
 	@OneToOne
 	public Address address;
 	@OneToMany(cascade=CascadeType.ALL)
@@ -112,9 +114,9 @@ public class DoctorClinicInfo extends BaseEntity {
 			bean.city=this.address.city;
 		}
 
-		bean.lat=this.address.lat;
+		bean.lat=this.address.latitude;
 
-		bean.lng=this.address.lng;
+		bean.lng=this.address.longitude;
 
 
 		return bean;

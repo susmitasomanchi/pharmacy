@@ -290,8 +290,8 @@ public class DoctorController extends Controller {
 			clinicInfoPrevious.address.addrressLine2=clinicInfo.address.addrressLine2;
 			clinicInfoPrevious.address.state=clinicInfo.address.state;
 			clinicInfoPrevious.address.city=clinicInfo.address.city;
-			clinicInfoPrevious.address.lat=clinicInfo.address.lat;
-			clinicInfoPrevious.address.lng=clinicInfo.address.lng;
+			clinicInfoPrevious.address.latitude=clinicInfo.address.latitude;
+			clinicInfoPrevious.address.longitude=clinicInfo.address.longitude;
 			clinicInfoPrevious.address.update();
 			clinicInfoPrevious.update();
 
@@ -315,7 +315,7 @@ public class DoctorController extends Controller {
 			final DoctorClinicInfo clinicInfo =filledForm.get().toDoctorClinicInfo();
 
 			final DoctorClinicInfo clinicInfoPrevious=DoctorClinicInfo.find.byId(clinicInfo.id);
-			for (DaySchedule sc4: clinicInfo.schedulDays) {
+			for (final DaySchedule sc4: clinicInfo.schedulDays) {
 				Logger.info("test day"+sc4.day);
 			}
 			Ebean.delete(clinicInfoPrevious.schedulDays);
@@ -331,33 +331,39 @@ public class DoctorController extends Controller {
 
 	}
 	//Deleting Clinic
-	public static Result deleteClinic(Long id) {
+	public static Result deleteClinic(final Long id) {
 
-		DoctorClinicInfo clinicInfo=DoctorClinicInfo.find.byId(id);
-		Calendar calendar=Calendar.getInstance();
+		final DoctorClinicInfo clinicInfo=DoctorClinicInfo.find.byId(id);
+		final Calendar calendar=Calendar.getInstance();
 		calendar.setTime(new Date());
 		calendar.set(Calendar.HOUR_OF_DAY, 00);
 		calendar.set(Calendar.MINUTE, 00);
 
-		List<Appointment> approvedAppts=Appointment.find.where()
+		final List<Appointment> approvedAppts=Appointment.find.where()
 				.eq("doctor", clinicInfo.doctor)
 				.eq("clinic", clinicInfo.clinic)
 				.eq("appointmentTime", calendar.getTime())
 				.eq("appointmentStatus", AppointmentStatus.APPROVED).findList();
+
 		/*
 		 * Do whatever whith regarding appointments
 		 *
 		 */
+
+
 		Ebean.delete(approvedAppts);
 
-		List<Appointment> availableAppts=Appointment.find.where()
+		final List<Appointment> availableAppts=Appointment.find.where()
 				.eq("doctor", clinicInfo.doctor)
 				.eq("clinic", clinicInfo.clinic)
 				.eq("appointmentStatus", AppointmentStatus.AVAILABLE).findList();
 
 		Ebean.delete(availableAppts);
 
-		clinicInfo.delete();
+		clinicInfo.active=false;
+		clinicInfo.doctor.update();
+		clinicInfo.update();
+
 		flash().put("alert", new Alert("alert-success","Successfully Deleted").toString());
 
 		return redirect(routes.DoctorController.myClinics());
@@ -366,11 +372,8 @@ public class DoctorController extends Controller {
 
 	public static Result myClinics(){
 		final Doctor loggedInDoctor = LoginController.getLoggedInUser().getDoctor();
-		Logger.warn(loggedInDoctor.doctorClinicInfoList.size()+"");
-		for (final DoctorClinicInfo clinicInfo : loggedInDoctor.doctorClinicInfoList) {
-			Logger.warn(clinicInfo.clinic.name);
-		}
-		return ok(views.html.doctor.myClinics.render(loggedInDoctor.doctorClinicInfoList));
+
+		return ok(views.html.doctor.myClinics.render(loggedInDoctor.getActiveClinic()));
 
 	}
 
@@ -391,7 +394,7 @@ public class DoctorController extends Controller {
 
 		final Form<ClinicBean> filledForm = clinicForm.fill(doctorClinicInfo.toBean());
 
-		for (String	 from : bean.fromHrs) {
+		for (final String	 from : bean.fromHrs) {
 			Logger.warn(from);
 		}
 		return ok(views.html.doctor.editClinic.render(filledForm,bean.daysOfWeek,bean.daysOfWeekMr));
@@ -461,10 +464,10 @@ public class DoctorController extends Controller {
 	public static  Result createAppointment(final DoctorClinicInfo docclinicInfo) {
 
 
-		Calendar calendar1=Calendar.getInstance();
-		Calendar calendar2=Calendar.getInstance();
+		final Calendar calendar1=Calendar.getInstance();
+		final Calendar calendar2=Calendar.getInstance();
 
-		SimpleDateFormat dateFormat=new SimpleDateFormat("kk:mm");
+		final SimpleDateFormat dateFormat=new SimpleDateFormat("kk:mm");
 
 		final Doctor doctor=LoginController.getLoggedInUser().getDoctor();
 
@@ -483,12 +486,12 @@ public class DoctorController extends Controller {
 					try {
 						calendar1.setTime(dateFormat.parse(schedule.toTime));
 						calendar2.setTime(dateFormat.parse(schedule.fromTime));
-					} catch (Exception e) {
+					} catch (final Exception e) {
 						e.printStackTrace();
 					}
 
-					int hoursToClinic=calendar1.get(Calendar.HOUR_OF_DAY)-calendar2.get(Calendar.HOUR_OF_DAY);
-					int minutsToClinic=calendar1.get(Calendar.MINUTE)-calendar2.get(Calendar.MINUTE);
+					final int hoursToClinic=calendar1.get(Calendar.HOUR_OF_DAY)-calendar2.get(Calendar.HOUR_OF_DAY);
+					final int minutsToClinic=calendar1.get(Calendar.MINUTE)-calendar2.get(Calendar.MINUTE);
 					Logger.info("total minutes***"+calendar1.get(Calendar.MINUTE));
 
 					calendar.set(Calendar.HOUR_OF_DAY,calendar2.get(Calendar.HOUR_OF_DAY));

@@ -1,17 +1,15 @@
-@()
+@(inventoryList: List[models.pharmacist.Inventory],pharmacy: models.pharmacist.Pharmacy)
 @main("Place the Order"){
 
-<form>
+@helper.form(action=routes.PharmacistController.orderManagement(),'method -> "get"){
       <div class="row" id="order">
       <div class="col-md-5">
       <p> Drug Names </p>
       <select data-placeholder="Select the medicine" class="chosen-select" style="width:200px;" tabindex="2">
       <option value=""></option>
-      <option value="Benadryl">Benadryl</option>
-      <option value=" Cetrizine"> Cetrizine</option>
-      <option value="Crocin">Crocin</option>
-      <option value="Disprin">Disprin</option>
-      <option value="Saridon">Saridon</option>
+      @for(inventory <- inventoryList){
+      <option value="@inventory.product.id">@inventory.product.medicineName</option>
+      }
        </select>
        <script>
        $(".chosen-select").chosen();
@@ -27,8 +25,8 @@
       
       <script>
 			function addOrder(){
-			$("#order").append('<div class="row" id="removeOrder"><div class="col-md-5" style="padding-left:30px"><p> Drug Names </p><select data-placeholder="Select the medicine" class="chosen-select" style="width:200px;" tabindex="2"><option value=""></option><option value="Benadryl">Benadryl</option><option value=" Cetrizine"> Cetrizine</option><option value="Crocin">Crocin</option><option value="Disprin">Disprin</option><option value="Saridon">Saridon</option></select></div><div class="col-md-5"><p> Quantity</p><input type="text" name="quantity" placeholder="Quantity"></div><div class="col-md-2" style="padding-top:10px"><br><a class="btn btn-sm btn-danger" onclick="removeOrder();"> x </a></div></div>')
-			$(".chosen-select").chosen();
+			$("#order").append('<div class="row" id="removeOrder"><div class="col-md-5" style="padding-left:30px"><p> Drug Names </p><select data-placeholder="Select the medicine" class="chosen-select" style="width:200px;" tabindex="2"><option value=""></option>@for(inventory <- inventoryList){<option value="@inventory.product.id">@inventory.product.medicineName</option>}</select></div><div class="col-md-5"><p> Quantity</p><input type="text" name="quantity" placeholder="Quantity"></div><div class="col-md-2" style="padding-top:10px"><br><a class="btn btn-sm btn-danger" onclick="removeOrder();"> x </a></div></div>')
+				$(".chosen-select").chosen();
 			}
 	  </script>
 	  
@@ -42,5 +40,6 @@
       </div>
       <br>
       <button type="submit" class="btn btn-primary btn-sm">Submit</button>
-      </form>
+      }
+
     }			 

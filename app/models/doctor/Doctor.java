@@ -76,4 +76,8 @@ public class Doctor extends BaseEntity{
 
 	public static Model.Finder<Long,Doctor> find = new Finder<Long, Doctor>(Long.class, Doctor.class);
 
+	public List<DoctorClinicInfo> getActiveClinic(){
+		return DoctorClinicInfo.find.where().eq("doctor", this).eq("active", true).findList();
+	}
+
 }

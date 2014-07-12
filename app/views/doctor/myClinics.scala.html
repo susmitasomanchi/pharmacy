@@ -47,12 +47,10 @@
 <script>
 var id;
 $(".delete").click(function(){
-alert(this.id);
 	id=this.id;
 });
 
 $("#del").click(function(){
-alert(id);
 	window.location.href = "/doctor/delete-clinic/"+id;
 	});
 

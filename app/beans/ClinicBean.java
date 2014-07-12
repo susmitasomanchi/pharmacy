@@ -123,8 +123,8 @@ public class ClinicBean implements Serializable {
 			address.state = State.valueOf(this.state);
 		}
 
-		address.lat = this.lat;
-		address.lng = this.lng;
+		address.latitude = this.lat;
+		address.longitude = this.lng;
 		doctorClinicInfo.address = address;
 		doctorClinicInfo.address.save();
 		Logger.info("" + this.lat);
