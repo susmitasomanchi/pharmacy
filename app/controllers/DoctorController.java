@@ -147,10 +147,11 @@ public class DoctorController extends Controller {
 
 
 	/**
-	 * Action to create a new DoctorExperience entity for the loggedIn Doctor
+	 * Action to create or update DoctorExperience entity for the loggedIn Doctor
 	 * POST	/doctor/add-work-experience
 	 */
 	public static Result addWorkExperience(){
+
 		final Map<String, String[]> requestMap = request().body().asFormUrlEncoded();
 		final Doctor doctor = Doctor.find.byId(Long.parseLong(requestMap.get("doctorId")[0]));
 		// Server side validation
@@ -171,11 +172,21 @@ public class DoctorController extends Controller {
 				experience.workedTo = Integer.parseInt(requestMap.get("to")[0]);
 			}
 
+			if(requestMap.get("to")[0] != null && requestMap.get("to")[0].compareToIgnoreCase("")== 0){
+				experience.workedTo = 0;
+			}
+
 			if(requestMap.get("description")[0] != null && requestMap.get("description")[0].compareToIgnoreCase("")!= 0){
 				experience.description = requestMap.get("description")[0];
 			}
-			doctor.doctorExperienceList.add(experience);
-			doctor.update();
+			if(requestMap.get("doctorExperienceId") != null && requestMap.get("doctorExperienceId")[0].compareToIgnoreCase("")!= 0){
+				experience.id = Long.parseLong(requestMap.get("doctorExperienceId")[0]);
+				experience.update();
+			}
+			else{
+				doctor.doctorExperienceList.add(experience);
+				doctor.update();
+			}
 			return redirect(routes.UserActions.dashboard());
 		}
 		catch(final NumberFormatException e){
@@ -214,7 +225,7 @@ public class DoctorController extends Controller {
 
 
 	/**
-	 * Action to create a new Award entity for the loggedIn Doctor
+	 * Action to create / edit an Award entity of the loggedIn Doctor
 	 * POST	/doctor/add-award
 	 */
 	public static Result addAward(){
@@ -243,8 +254,15 @@ public class DoctorController extends Controller {
 			if(requestMap.get("description")[0] != null && requestMap.get("description")[0].compareToIgnoreCase("")!= 0){
 				award.description = requestMap.get("description")[0];
 			}
-			doctor.doctorAwardList.add(award);
-			doctor.update();
+
+			if(requestMap.get("doctorAwardId") != null && requestMap.get("doctorAwardId")[0].compareToIgnoreCase("")!= 0){
+				award.id = Long.parseLong(requestMap.get("doctorAwardId")[0]);
+				award.update();
+			}
+			else{
+				doctor.doctorAwardList.add(award);
+				doctor.update();
+			}
 			return redirect(routes.UserActions.dashboard());
 		}
 		catch(final Exception e){
@@ -277,7 +295,7 @@ public class DoctorController extends Controller {
 
 
 	/**
-	 * Action to create a new DoctorEducation entity for the loggedIn Doctor
+	 * Action to create new/update DoctorEducation entity for the loggedIn Doctor
 	 * POST	/doctor/add-education
 	 */
 	public static Result addEducation(){
@@ -300,12 +318,22 @@ public class DoctorController extends Controller {
 			if(requestMap.get("to")[0] != null && requestMap.get("to")[0].compareToIgnoreCase("")!= 0){
 				education.toYear = Integer.parseInt(requestMap.get("to")[0]);
 			}
-
+			if(requestMap.get("to")[0] != null && requestMap.get("to")[0].compareToIgnoreCase("")== 0){
+				education.toYear = 0;
+			}
 			if(requestMap.get("description")[0] != null && requestMap.get("description")[0].compareToIgnoreCase("")!= 0){
 				education.description = requestMap.get("description")[0];
 			}
-			doctor.doctorEducationList.add(education);
-			doctor.update();
+
+			if(requestMap.get("doctorEducationId") != null && requestMap.get("doctorEducationId")[0].compareToIgnoreCase("")!= 0){
+				education.id = Long.parseLong(requestMap.get("doctorEducationId")[0]);
+				education.update();
+			}
+			else{
+				doctor.doctorEducationList.add(education);
+				doctor.update();
+			}
+
 			return redirect(routes.UserActions.dashboard());
 		}
 		catch(final NumberFormatException e){
@@ -344,7 +372,7 @@ public class DoctorController extends Controller {
 
 
 	/**
-	 * Action to create a new SocialWork entity for the loggedIn Doctor
+	 * Action to create/update a SocialWork entity for the loggedIn Doctor
 	 * POST	/doctor/add-social-work
 	 */
 	public static Result addSocialWork(){
@@ -360,8 +388,15 @@ public class DoctorController extends Controller {
 			socialWork.title = requestMap.get("title")[0];
 			socialWork.description = requestMap.get("description")[0];
 
-			doctor.getDoctorSocialWorkList().add(socialWork);
-			doctor.update();
+			if(requestMap.get("doctorSocialId") != null && requestMap.get("doctorSocialId")[0].compareToIgnoreCase("")!= 0){
+				socialWork.id = Long.parseLong(requestMap.get("doctorSocialId")[0]);
+				socialWork.update();
+			}
+			else{
+				doctor.getDoctorSocialWorkList().add(socialWork);
+				doctor.update();
+			}
+
 			return redirect(routes.UserActions.dashboard());
 		}
 		catch(final Exception e){

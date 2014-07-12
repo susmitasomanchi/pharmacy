@@ -319,7 +319,7 @@ function submitimagesform(name){
 
 
 @if(doctor.backgroundImage != null){
-	<div style="background-image:url('@routes.DoctorController.getImage(doctor.id,"backgroundImage")');background-repeat:no-repeat; height:400px; font-size:40px;">
+	<div style="background-image:url('@routes.DoctorController.getImage(doctor.id,"backgroundImage")');background-repeat:no-repeat; background-size:940px 400px; height:400px; font-size:40px;">
 }else{
 	<div style="background-image:url('/assets/images/sunrise.png'); height:400px; font-size:40px;">
 }
@@ -366,10 +366,18 @@ function submitimagesform(name){
 
 
 <script>
-	function submitworkexform(){
-		if(($('#workexname').val().trim() != '') && ($('#workexfrom').val().trim() != '')){
-			$("[data-toggle=popover]").popover('hide');
-			$('#addworkex').html('&nbsp;<i class="fa fa-cog fa-spin"></i>&nbsp;');
+	function submitworkexform(expid){
+		if(expid == 0){
+			if(($('#workexname').val().trim() != '') && ($('#workexfrom').val().trim() != '')){
+				$("[data-toggle=popover]").popover('hide');
+				$('#addworkex').html('&nbsp;<i class="fa fa-cog fa-spin"></i>&nbsp;');
+			}
+		}
+		else{
+			if(($('#workexnameedit').val().trim() != '') && ($('#workexfromedit').val().trim() != '')){
+				$("[data-toggle=popover]").popover('hide');
+				$('#editworkex-'+expid).html('&nbsp;<i class="fa fa-cog fa-spin"></i>&nbsp;');
+			}
 		}
 	}
 
@@ -379,10 +387,18 @@ function submitimagesform(name){
 	}
 
 
-	function submitawardform(){
-		if($('#awardname').val().trim() != ''){
-			$("[data-toggle=popover]").popover('hide');
-			$('#addaward').html('&nbsp;<i class="fa fa-cog fa-spin"></i>&nbsp;');
+	function submitawardform(awardid){
+		if(expid == 0){
+			if($('#awardname').val().trim() != ''){
+				$("[data-toggle=popover]").popover('hide');
+				$('#addaward').html('&nbsp;<i class="fa fa-cog fa-spin"></i>&nbsp;');
+			}
+		}
+		else{
+			if($('#awardnameedit').val().trim() != ''){
+				$("[data-toggle=popover]").popover('hide');
+				$('#editaward-'+awardid).html('&nbsp;<i class="fa fa-cog fa-spin"></i>&nbsp;');
+			}	
 		}
 	}
 
@@ -391,10 +407,18 @@ function submitimagesform(name){
 			$('#removeaward-'+id).html('&nbsp;<i class="fa fa-cog fa-spin"></i>&nbsp;');
 	}
 
-	function submiteducationform(){
-		if(($('#educationname').val().trim() != '') && ($('#educationfrom').val().trim() != '')){
-			$("[data-toggle=popover]").popover('hide');
-			$('#addeducation').html('&nbsp;<i class="fa fa-cog fa-spin"></i>&nbsp;');
+	function submiteducationform(eduid){
+		if(expid == 0){
+			if(($('#educationname').val().trim() != '') && ($('#educationfrom').val().trim() != '')){
+				$("[data-toggle=popover]").popover('hide');
+				$('#addeducation').html('&nbsp;<i class="fa fa-cog fa-spin"></i>&nbsp;');
+			}
+		}
+		else{
+			if(($('#educationnameedit').val().trim() != '') && ($('#educationfromedit').val().trim() != '')){
+				$("[data-toggle=popover]").popover('hide');
+				$('#editeducation-'+eduid).html('&nbsp;<i class="fa fa-cog fa-spin"></i>&nbsp;');
+			}
 		}
 	}
 
@@ -403,10 +427,18 @@ function submitimagesform(name){
 			$('#removeeducation-'+id).html('&nbsp;<i class="fa fa-cog fa-spin"></i>&nbsp;');
 	}
 
-	function submitsocialform(){
-		if(($('#socialname').val().trim() != '') && ($('#socialdescription').val().trim() != '')){
-			$("[data-toggle=popover]").popover('hide');
-			$('#addsocial').html('&nbsp;<i class="fa fa-cog fa-spin"></i>&nbsp;');
+	function submitsocialform(socid){
+		if(socid == 0){
+			if(($('#socialname').val().trim() != '') && ($('#socialdescription').val().trim() != '')){
+				$("[data-toggle=popover]").popover('hide');
+				$('#addsocial').html('&nbsp;<i class="fa fa-cog fa-spin"></i>&nbsp;');
+			}
+		}
+		else{
+			if(($('#socialnameedit').val().trim() != '') && ($('#socialdescriptionedit').val().trim() != '')){
+				$("[data-toggle=popover]").popover('hide');
+				$('#editsocial-'+socid).html('&nbsp;<i class="fa fa-cog fa-spin"></i>&nbsp;');
+			}	
 		}
 	}
 
@@ -442,8 +474,28 @@ function submitimagesform(name){
 @for(exp <- doctor.getExperienceListInOrder()){
 	<h4>
 		@exp.institutionName
+		<span class="pull-right" data-toggle="popover" title="Edit Experience" data-placement="left" data-html="true" data-content="
+		
+
+		<form id=&quot;workexform&quot; action=&quot;@routes.DoctorController.addWorkExperience()&quot; method=&quot;POST&quot;>
+		<input id=&quot;workexnameedit&quot; style=&quot;width:100%; color:#292929;&quot; placeholder=&quot;Institution Name*&quot; type=&quot;text&quot; name=&quot;name&quot; value=&quot;@exp.institutionName&quot; required>
+		<input style=&quot;width:100%; color:#292929;&quot; placeholder=&quot;Position&quot; type=&quot;text&quot; name=&quot;position&quot; value=&quot;@exp.position&quot;>
+		<input id=&quot;workexfromedit&quot; style=&quot;width:100%; color:#292929;&quot; placeholder=&quot;From (Year)*&quot; type=&quot;text&quot; name=&quot;from&quot; value=&quot;@exp.workedFrom&quot; required>
+		<input style=&quot;width:100%; color:#292929;&quot; placeholder=&quot;To (Year)&quot; type=&quot;text&quot; name=&quot;to&quot; value=&quot;@exp.workedTo&quot;>
+		<textarea placeholder=&quot;Description, Roles, Responsibilities etc.&quot; rows=&quot;12&quot; name=&quot;description&quot; style=&quot;color:#292929; width:100%; font-weight:bold;&quot;>@exp.description</textarea>
+		<input type=&quot;hidden&quot; name=&quot;doctorId&quot; value=&quot;@doctor.id&quot;>
+		<input type=&quot;hidden&quot; name=&quot;doctorExperienceId&quot; value=&quot;@exp.id&quot;>
+		<br>
+		<input class=&quot;pull-right btn btn-xs btn-primary&quot; type=&quot;submit&quot; onclick=&quot;submitworkexform(@exp.id);&quot; value=&quot;save&quot;>
+		</form>
+		
+
+		">
+			<span id="editworkex-@exp.id" style="cursor:pointer;" ><i class="fa fa-cog"></i></span>
+		</span>
+		<br>
 		<span class="pull-right"data-toggle="popover" title="Are You Sure ?" data-placement="left" data-html="true" data-content="<a href=&quot;@routes.DoctorController.removeWorkExperience(doctor.id,exp.id)&quot; class=&quot;btn btn-xs btn-danger&quot; onclick=&quot;deleteworkex('@exp.id');&quot; >Delete</a> ">
-			<a id="removeworkex-@exp.id" class="btn btn-danger btn-xs"><i class="fa fa-minus"></i></a>
+			<span id="removeworkex-@exp.id" style="color:red; cursor:pointer;"><i class="fa fa-trash-o"></i></span>
 		</span>
 	</h4>
 
@@ -473,9 +525,9 @@ function submitimagesform(name){
 <textarea placeholder=&quot;Description, Roles, Responsibilities etc.&quot; rows=&quot;12&quot; name=&quot;description&quot; style=&quot;color:#292929; width:100%; font-weight:bold;&quot;></textarea>
 <input type=&quot;hidden&quot; name=&quot;doctorId&quot; value=&quot;@doctor.id&quot;>
 <br>
-<input class=&quot;pull-right btn btn-xs btn-primary&quot; type=&quot;submit&quot; onclick=&quot;submitworkexform();&quot; value=&quot;save&quot;>
+<input class=&quot;pull-right btn btn-xs btn-primary&quot; type=&quot;submit&quot; onclick=&quot;submitworkexform(0);&quot; value=&quot;save&quot;>
 </form>">
-<a id="addworkex" class="btn btn-success btn-xs"><span style="font-size:15px;">&nbsp;<i class="fa fa-plus"></i>&nbsp;</span></a>
+<span id="addworkex" style="font-size:30px; color:#43ac6a; cursor:pointer;"><i class="fa fa-plus-square"></i>&nbsp;</span>
 </span>
 
 </div>
@@ -492,8 +544,23 @@ function submitimagesform(name){
 @for(award <- doctor.doctorAwardList){
 	<h4>
 		@award.awardName
+		<span class="pull-right" data-placement="left" data-toggle="popover" title="Edit Award/Recognition" data-html="true" data-content=
+		"<form id=&quot;awardform&quot; action=&quot;@routes.DoctorController.addAward()&quot; method=&quot;POST&quot;>
+		<input id=&quot;awardname&quot; style=&quot;width:100%; color:#292929;&quot; placeholder=&quot;Award Name*&quot; type=&quot;text&quot; name=&quot;name&quot; value=&quot;@award.awardName&quot; required>
+		<input style=&quot;width:100%; color:#292929;&quot; placeholder=&quot;Year&quot; type=&quot;text&quot; name=&quot;year&quot; value=&quot;@award.year&quot;>
+		<input style=&quot;width:100%; color:#292929;&quot; placeholder=&quot;Bestowed By&quot; type=&quot;text&quot; name=&quot;by&quot; value=&quot;@award.awardedBy&quot;>
+		<textarea placeholder=&quot;Description of Award/Recognition, Achievements leading to the award etc.&quot; rows=&quot;12&quot; name=&quot;description&quot; style=&quot;color:#292929; width:100%; font-weight:bold;&quot;>@award.description</textarea>
+		<input type=&quot;hidden&quot; name=&quot;doctorId&quot; value=&quot;@doctor.id&quot;>
+		<input type=&quot;hidden&quot; name=&quot;doctorAwardId&quot; value=&quot;@award.id&quot;>
+		<br>
+		<input class=&quot;pull-right btn btn-xs btn-primary&quot; type=&quot;submit&quot; onclick=&quot;submitawardform(@award.id);&quot; value=&quot;save&quot;>
+		</form>">
+			<span id="editaward-@award.id" style="cursor:pointer;" ><i class="fa fa-cog"></i></span>
+		</span>
+
+		<br>
 		<span class="pull-right"data-toggle="popover" title="Are You Sure ?" data-placement="left" data-html="true" data-content="<a href=&quot;@routes.DoctorController.removeAward(doctor.id,award.id)&quot; class=&quot;btn btn-xs btn-danger&quot; onclick=&quot;deleteaward('@award.id');&quot; >Delete</a> ">
-			<a id="removeaward-@award.id" class="btn btn-danger btn-xs"><i class="fa fa-minus"></i></a>
+			<span id="removeaward-@award.id" style="color:red; cursor:pointer;"><i class="fa fa-trash-o"></i></span>
 		</span>
 	</h4>
 
@@ -516,9 +583,9 @@ function submitimagesform(name){
 <textarea placeholder=&quot;Description of Award/Recognition, Achievements leading to the award etc.&quot; rows=&quot;12&quot; name=&quot;description&quot; style=&quot;color:#292929; width:100%; font-weight:bold;&quot;></textarea>
 <input type=&quot;hidden&quot; name=&quot;doctorId&quot; value=&quot;@doctor.id&quot;>
 <br>
-<input class=&quot;pull-right btn btn-xs btn-primary&quot; type=&quot;submit&quot; onclick=&quot;submitawardform();&quot; value=&quot;save&quot;>
+<input class=&quot;pull-right btn btn-xs btn-primary&quot; type=&quot;submit&quot; onclick=&quot;submitawardform(0);&quot; value=&quot;save&quot;>
 </form>">
-<a id="addaward" class="btn btn-success btn-xs"><span style="font-size:15px;">&nbsp;<i class="fa fa-plus"></i>&nbsp;</span></a>
+<span id="addaward" style="font-size:30px; color:#43ac6a; cursor:pointer;"><i class="fa fa-plus-square"></i>&nbsp;</span>
 </span>
 
 
@@ -542,9 +609,27 @@ function submitimagesform(name){
 
 @for(edu <- doctor.getEducationListInOrder()){
 	<h4>
+		
 		@edu.institutionName
+
+		<span class="pull-right" data-placement="left" data-toggle="popover" title="Add Education" data-html="true" data-content=
+		"<form action=&quot;@routes.DoctorController.addEducation()&quot; method=&quot;POST&quot;>
+		<input id=&quot;educationname&quot; style=&quot;width:100%; color:#292929;&quot; placeholder=&quot;Institution Name*&quot; type=&quot;text&quot; name=&quot;name&quot; value=&quot;@edu.institutionName&quot; required>
+		<input style=&quot;width:100%; color:#292929;&quot; placeholder=&quot;Degree&quot; type=&quot;text&quot; name=&quot;degree&quot; value=&quot;@edu.degree&quot;>
+		<input id=&quot;educationfrom&quot; style=&quot;width:100%; color:#292929;&quot; placeholder=&quot;From (Year)*&quot; type=&quot;text&quot; name=&quot;from&quot;  value=&quot;@edu.fromYear&quot; required>
+		<input style=&quot;width:100%; color:#292929;&quot; placeholder=&quot;To (Year)&quot; type=&quot;text&quot; name=&quot;to&quot; value=&quot;@edu.toYear&quot;>
+		<textarea placeholder=&quot;Description, Roles, Responsibilities etc.&quot; rows=&quot;12&quot; name=&quot;description&quot; style=&quot;color:#292929; width:100%; font-weight:bold;&quot;>@edu.description</textarea>
+		<input type=&quot;hidden&quot; name=&quot;doctorId&quot; value=&quot;@doctor.id&quot;>
+		<input type=&quot;hidden&quot; name=&quot;doctorEducationId&quot; value=&quot;@edu.id&quot;>
+		<br>
+		<input class=&quot;pull-right btn btn-xs btn-primary&quot; type=&quot;submit&quot; onclick=&quot;submiteducationform('@edu.id');&quot; value=&quot;save&quot;>
+		</form>">
+			<span id="editeducation-@edu.id" style="cursor:pointer;" ><i class="fa fa-cog"></i></span>
+		</span>		
+		
+		<br>
 		<span class="pull-right"data-toggle="popover" title="Are You Sure ?" data-placement="left" data-html="true" data-content="<a href=&quot;@routes.DoctorController.removeEducation(doctor.id,edu.id)&quot; class=&quot;btn btn-xs btn-danger&quot; onclick=&quot;deleteeducation('@edu.id');&quot; >Delete</a> ">
-			<a id="removeeducation-@edu.id" class="btn btn-danger btn-xs"><i class="fa fa-minus"></i></a>
+			<span id="removeeducation-@edu.id" style="color:red; cursor:pointer;"><i class="fa fa-trash-o"></i></span>
 		</span>
 	</h4>
 
@@ -574,9 +659,9 @@ function submitimagesform(name){
 <textarea placeholder=&quot;Description, Roles, Responsibilities etc.&quot; rows=&quot;12&quot; name=&quot;description&quot; style=&quot;color:#292929; width:100%; font-weight:bold;&quot;></textarea>
 <input type=&quot;hidden&quot; name=&quot;doctorId&quot; value=&quot;@doctor.id&quot;>
 <br>
-<input class=&quot;pull-right btn btn-xs btn-primary&quot; type=&quot;submit&quot; onclick=&quot;submiteducationform();&quot; value=&quot;save&quot;>
+<input class=&quot;pull-right btn btn-xs btn-primary&quot; type=&quot;submit&quot; onclick=&quot;submiteducationform(0);&quot; value=&quot;save&quot;>
 </form>">
-<a id="addeducation" class="btn btn-success btn-xs"><span style="font-size:15px;">&nbsp;<i class="fa fa-plus"></i>&nbsp;</span></a>
+<span id="addeducation" style="font-size:30px; color:#43ac6a; cursor:pointer;"><i class="fa fa-plus-square"></i>&nbsp;</span>
 </span>
 
 </div>
@@ -591,8 +676,21 @@ function submitimagesform(name){
 @for(soc <- doctor.doctorSocialWorkList){
 	<h4>
 		@soc.title
+		
+		<span class="pull-right" data-placement="left" data-toggle="popover" title="Edit Social Work" data-html="true" data-content=
+		"<form action=&quot;@routes.DoctorController.addSocialWork()&quot; method=&quot;POST&quot;>
+		<input id=&quot;socialname&quot; style=&quot;width:100%; color:#292929;&quot; placeholder=&quot;Title*&quot; type=&quot;text&quot; name=&quot;title&quot; value=&quot;@soc.title&quot; required>
+		<textarea id=&quot;socialdescription&quot; placeholder=&quot;Nature and impact of work done etc.&quot; rows=&quot;12&quot; name=&quot;description&quot; style=&quot;color:#292929; width:100%; font-weight:bold;&quot; required>@soc.description</textarea>
+		<input type=&quot;hidden&quot; name=&quot;doctorId&quot; value=&quot;@doctor.id&quot;>
+		<input type=&quot;hidden&quot; name=&quot;doctorSocialId&quot; value=&quot;@soc.id&quot;>
+		<br>
+		<input class=&quot;pull-right btn btn-xs btn-primary&quot; type=&quot;submit&quot; onclick=&quot;submitsocialform(@soc.id);&quot; value=&quot;save&quot;>
+		</form>">
+			<span id="editsocial-@soc.id" style="cursor:pointer;" ><i class="fa fa-cog"></i></span>
+		</span>
+		<br>
 		<span class="pull-right"data-toggle="popover" title="Are You Sure ?" data-placement="left" data-html="true" data-content="<a href=&quot;@routes.DoctorController.removeSocialWork(doctor.id,soc.id)&quot; class=&quot;btn btn-xs btn-danger&quot; onclick=&quot;deletesocial('@soc.id');&quot; >Delete</a> ">
-			<a id="removeeducation-@soc.id" class="btn btn-danger btn-xs"><i class="fa fa-minus"></i></a>
+			<span id="removesocial-@soc.id" style="color:red; cursor:pointer;"><i class="fa fa-trash-o"></i></span>
 		</span>
 	</h4>
 
@@ -610,9 +708,9 @@ function submitimagesform(name){
 <textarea id=&quot;socialdescription&quot; placeholder=&quot;Nature and impact of work done etc.&quot; rows=&quot;12&quot; name=&quot;description&quot; style=&quot;color:#292929; width:100%; font-weight:bold;&quot; required></textarea>
 <input type=&quot;hidden&quot; name=&quot;doctorId&quot; value=&quot;@doctor.id&quot;>
 <br>
-<input class=&quot;pull-right btn btn-xs btn-primary&quot; type=&quot;submit&quot; onclick=&quot;submiteducationform();&quot; value=&quot;save&quot;>
+<input class=&quot;pull-right btn btn-xs btn-primary&quot; type=&quot;submit&quot; onclick=&quot;submitsocialform(0);&quot; value=&quot;save&quot;>
 </form>">
-<a id="addeducation" class="btn btn-success btn-xs"><span style="font-size:15px;">&nbsp;<i class="fa fa-plus"></i>&nbsp;</span></a>
+<span id="addeducation" style="font-size:30px; color:#43ac6a; cursor:pointer;"><i class="fa fa-plus-square"></i>&nbsp;</span>
 </span>
 
 
