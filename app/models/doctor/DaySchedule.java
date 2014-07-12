@@ -16,9 +16,9 @@ public class DaySchedule extends BaseEntity {
 
 	public Day day;
 
-	public Integer fromTime;
+	public String fromTime;
 
-	public Integer toTime;
+	public String toTime;
 
 	public Role requester;
 

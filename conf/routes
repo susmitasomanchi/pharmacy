@@ -1,34 +1,35 @@
 # Routes
 # This file defines all application routes (Higher priority routes first)
 # ~~~~
-
-
 #Blog
 
-
 GET    /blog/create-blog-admin                     controllers.SampleDataController.createBlogAdmin()
+GET    /blog/login                                 controllers.LoginController.blogAdminLoginForm()
 
-GET    /blog                                       controllers.BlogController.blogHome()
-GET    /blog/admin/new-category                    controllers.BlogController.categoryForm()
-POST   /blog/admin/new-category                    controllers.BlogController.processCategoryForm()
-GET    /blog/admin/categories                      controllers.BlogController.categories()
-GET    /blog/admin/edit-category/:id               controllers.BlogController.editCategoryForm(id: Long)
-GET    /blog/admin/new-article                     controllers.BlogController.articleForm()
-POST   /blog/admin/new-article                     controllers.BlogController.processArticleForm()
-GET    /blog/admin/articles/:categoryId            controllers.BlogController.articles(categoryId: Long)
-GET    /blog/admin/edit-article/:id                controllers.BlogController.editArticleForm(id: Long)
-GET    /blog/get-thumbnail/:id                     controllers.BlogController.getThumbnail(id: Long)
-GET    /blog/get-main-image/:id                    controllers.BlogController.getMainImage(id: Long)
+GET		/blog										controllers.BlogController.blogHome()
+GET		/blog/admin/new-category					controllers.BlogController.categoryForm()
+POST	/blog/admin/new-category					controllers.BlogController.processCategoryForm()
+GET		/blog/admin/categories						controllers.BlogController.categories()
+GET		/blog/admin/edit-category/:id				controllers.BlogController.editCategoryForm(id: Long)
+GET		/blog/admin/new-article						controllers.BlogController.articleForm()
+POST	/blog/admin/new-article						controllers.BlogController.processArticleForm()
+GET		/blog/admin/articles/:categoryId			controllers.BlogController.articles(categoryId: Long)
+GET		/blog/admin/edit-article/:id				controllers.BlogController.editArticleForm(id: Long)
+GET		/blog/get-thumbnail/:id						controllers.BlogController.getThumbnail(id: Long)
+GET		/blog/get-main-image/:id					controllers.BlogController.getMainImage(id: Long)
 
-GET    /blog/add-comment/:id/:message              controllers.BlogController.addComment(id: Long, message: String)
-GET    /blog/add-comment-reply/:id/:cid/:message   controllers.BlogController.addCommentReply(id: Long, cid: Long, message: String)
+GET    /blog/add-comment/:id/:message              	controllers.BlogController.addComment(id: Long, message: String)
+GET    /blog/add-comment-reply/:id/:cid/:message   	controllers.BlogController.addCommentReply(id: Long, cid: Long, message: String)
 
-POST   /blog/add-social-comment                    controllers.BlogController.addSocialComment()
-POST   /blog/add-social-comment-reply              controllers.BlogController.addSocialCommentReply()
+POST   /blog/add-social-comment                    	controllers.BlogController.addSocialComment()
+POST   /blog/add-social-comment-reply              	controllers.BlogController.addSocialCommentReply()
 
-GET    /blog/:id/:slug                             controllers.BlogController.showArticle(id: Long, slug: String)
-GET    /blog/:idorslug                             controllers.BlogController.showArticleWithIdOrSlug(idorslug: String)
-GET    /sitemap.xml                                controllers.Application.sitemap()
+GET		/blog/:id/:slug								controllers.BlogController.showArticle(id: Long, slug: String)
+GET		/blog/:idorslug								controllers.BlogController.showArticleWithIdOrSlug(idorslug: String)
+GET		/sitemap.xml								controllers.Application.sitemap()
+
+
+
 
 
 # Home page & Logins
@@ -68,6 +69,36 @@ GET    /:str		                      controllers.Application.indexX(str: String)
 # Sign up page
 #GET    /join                                       controllers.UserController.joinUs()
 #POST   /join                                       controllers.UserController.processJoinUs()
+
+
+#Pharmacy Module
+
+GET   /edit-product/:id                      	controllers.PharmacistController.editProduct(id: Long)
+GET   /remove-product/:id                      	controllers.PharmacistController.removeProduct(id: Long)
+POST	/addProductToInventory/					controllers.PharmacistController.addProductForm(id: Long)
+POST   /addProductToInventory1/            		controllers.PharmacistController.addToInventory(id:Long)		
+GET		/order									controllers.PharmacistController.orderRecord()
+GET    /searchProduct                           controllers.PharmacistController.searchForm()
+POST   /searchProduct                           controllers.PharmacistController.searchProduct(arg: String ?= "")
+GET   /place-product-order                     	controllers.PharmacistController.placeProductOrder()
+GET   /place-product-order/process              controllers.PharmacistController.placeProductOrderProcess()
+#GET	 /pharmacy/profile							controllers.PharmacistController.pharmacyProfile()
+GET		/edit-pharmacy-details					controllers.PharmacistController.editPharmacyDetails()
+POST	/pharmacy/basic-update					controllers.PharmacistController.pharmacyBasicUpdate()
+POST	/pharmacy/address-update				controllers.PharmacistController.pharmacyAddressUpdate()
+GET		/upload-pharmacy-images					controllers.PharmacistController.uploadPharmacyImage()
+POST	/pharmacy/upload-pharmacy-images					controllers.PharmacistController.uploadPharmacyImageProcess()
+GET		/pharmacy/get-image/:pharmacyId/:fileId				controllers.PharmacistController.getPharmacyImages(pharmacyId: Long,fileId: Long)
+GET		/pharmacy/remove-image/:pharmacyId/:fileId			controllers.PharmacistController.removeImage(pharmacyId: Long,fileId: Long)
+GET		/pharmacy/update/:id						controllers.PharmacistController.pharmacyDescription(id: Long)
+GET		/pharmacy/order/:id						controllers.PharmacistController.pharmacyPlaceOrder(id: Long)
+
+GET 	/pharmacy/order									controllers.PharmacistController.orderManagement()
+
+#GET 	/create-Mr-schedule				controllers.DoctorController.createMrSchedule()
+#POST	/create-Mr-appointment 			controllers.DoctorController.createMrAppointment()
+
+
 
 # patient actions
 GET    /user/schedule-appointment                  controllers.PatientController.scheduleAppointment()

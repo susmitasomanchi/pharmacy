@@ -1,0 +1,26 @@
+@* registerPatient Template File *@
+@(dataForm:play.data.Form[models.pharmacist.OrderLineItem])
+@import helper.twitterBootstrap._
+
+@main("Diagnostic Form"){
+
+     @helper.form(action=routes.PharmacistController.placeProductOrder(),'method -> "post") {
+
+
+			
+			@helper.inputText(dataForm("product.medicineName"),'class -> "inputs",'_label->"Product Name")
+			
+				
+			@helper.inputText(dataForm("quantity"),'class -> "inputs",'_label->"Quantity")
+			
+			@*@helper.inputText(dataForm("expiryDate"),'class -> "inputs",'_label->"City")*@
+			
+			@helper.inputText(dataForm("price"),'class -> "inputs",'_label->"Price")
+						
+	<input type="hidden" name="id" value='@dataForm("id").value' >
+			<input type="submit" name="submit" value="place order"/>
+		
+
+
+	}		
+}

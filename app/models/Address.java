@@ -22,6 +22,12 @@ public class Address extends BaseEntity {
 
 	public String addrressLine3;
 
+	public String area;
+
+	public double latitude;
+
+	public double longitude;
+
 	@Required
 	public String city;
 
@@ -32,13 +38,7 @@ public class Address extends BaseEntity {
 
 	public Country country;
 
-
-
-
-
-
-
-	public static Finder<Long, Product> find = new Finder<Long, Product>(Long.class, Product.class);
+	public static Finder<Long, Address> find = new Finder<Long, Address>(Long.class, Address.class);
 
 
 }

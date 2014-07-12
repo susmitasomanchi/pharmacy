@@ -12,8 +12,8 @@ import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 
 import models.BaseEntity;
-import models.DiagnosticTestLineItem;
-import models.MedicineLineItem;
+import models.diagnostic.DiagnosticTestLineItem;
+import models.pharmacist.MedicineLineItem;
 import play.db.ebean.Model;
 
 

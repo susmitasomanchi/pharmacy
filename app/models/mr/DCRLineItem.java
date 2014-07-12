@@ -1,6 +1,7 @@
 package models.mr;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 import javax.persistence.CascadeType;
@@ -33,6 +34,10 @@ public class DCRLineItem extends BaseEntity{
 
 	@ManyToMany(cascade=CascadeType.ALL)
 	public List<Product> promotionList = new ArrayList<Product>();
+
+	public Date inTime;
+
+	public Date outTime;
 
 	public Integer pob;
 

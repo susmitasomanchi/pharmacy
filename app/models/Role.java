@@ -2,6 +2,7 @@ package models;
 
 import java.util.LinkedHashMap;
 import java.util.Map;
+
 import com.avaje.ebean.annotation.EnumValue;
 
 public enum Role {
@@ -27,6 +28,7 @@ public enum Role {
 	DIAGREP,
 	@EnumValue("BLOG_ADMIN")
 	BLOG_ADMIN;
+
 
 	public static Map<String, String> options() {
 		final LinkedHashMap<String, String> vals = new LinkedHashMap<String, String>();

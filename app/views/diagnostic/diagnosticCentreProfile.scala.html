@@ -1,4 +1,4 @@
-@(diagnosticCenter: models.diagnostic.DiagnosticCentre)
+@(diagnosticCenter: models.diagnostic.DiagnosticCentre,patient: models.Patient)
 @main("Diagnostic Centre Profile") {
 <div class="container">
 	<div class="row clearfix">
@@ -17,7 +17,7 @@
 	<h2><b><i>Services Available</i></b></h2><br>
 	
 	<div class="row clearfix">
-		<div class="col-md-12 column">
+		<div class="col-md-12 column">	
 			@helper.form(action=routes.DiagnosticOrderController.receive()){
 			<table class="table table-bordered table-hover">
 					<thead>
@@ -39,6 +39,12 @@
 						}
 					</tbody>
 			</table>
+			
+			<input type="hidden" name="diagnosticCentreId" value='@diagnosticCenter.id' >
+			@if(patient != null){
+			<input type="hidden" name="pateintId" value='@patient.id' >
+			}
+			@*<a href="/place-order/@diagnosticCenter.id" class="btn btn-xs btn-default">place order</a>*@
 			<input type="submit" name="submit" value="place order">
 			}
 		</div>
