@@ -272,6 +272,7 @@ create table doctor_clinic_info (
   doctor_id                 bigint,
   slot                      integer,
   slotmr                    integer,
+  active                    boolean,
   address_id                bigint,
   last_update               timestamp not null,
   constraint pk_doctor_clinic_info primary key (id))

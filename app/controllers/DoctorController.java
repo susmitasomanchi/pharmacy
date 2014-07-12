@@ -344,10 +344,13 @@ public class DoctorController extends Controller {
 				.eq("clinic", clinicInfo.clinic)
 				.eq("appointmentTime", calendar.getTime())
 				.eq("appointmentStatus", AppointmentStatus.APPROVED).findList();
+
 		/*
 		 * Do whatever whith regarding appointments
 		 *
 		 */
+
+
 		Ebean.delete(approvedAppts);
 
 		List<Appointment> availableAppts=Appointment.find.where()
@@ -357,7 +360,10 @@ public class DoctorController extends Controller {
 
 		Ebean.delete(availableAppts);
 
-		clinicInfo.delete();
+		clinicInfo.active=false;
+		clinicInfo.doctor.update();
+		clinicInfo.update();
+
 		flash().put("alert", new Alert("alert-success","Successfully Deleted").toString());
 
 		return redirect(routes.DoctorController.myClinics());
@@ -366,11 +372,8 @@ public class DoctorController extends Controller {
 
 	public static Result myClinics(){
 		final Doctor loggedInDoctor = LoginController.getLoggedInUser().getDoctor();
-		Logger.warn(loggedInDoctor.doctorClinicInfoList.size()+"");
-		for (final DoctorClinicInfo clinicInfo : loggedInDoctor.doctorClinicInfoList) {
-			Logger.warn(clinicInfo.clinic.name);
-		}
-		return ok(views.html.doctor.myClinics.render(loggedInDoctor.doctorClinicInfoList));
+
+		return ok(views.html.doctor.myClinics.render(loggedInDoctor.getActiveClinic()));
 
 	}
 

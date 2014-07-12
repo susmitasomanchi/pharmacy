@@ -36,6 +36,8 @@ public class DoctorClinicInfo extends BaseEntity {
 
 	public Integer	slotmr;
 
+	public boolean  active=true;
+
 	@OneToOne
 	public Address address;
 	@OneToMany(cascade=CascadeType.ALL)
