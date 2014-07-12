@@ -306,9 +306,9 @@
 		
 	    function removeLineItem(id, docId){
 		   $.post('/mr/dcr/delete-line-item/@dcr.id/'+id,function(htmldata){
-		     $('#dcrLineItemTable').html(htmldata);
-		     $('#docid-'+docId).removeAttr('disabled');
-		     $('#selectDoctor').val('').trigger("chosen:updated");
+			     $('#dcrLineItemTable').html(htmldata);
+			     $('#docid-'+docId).removeAttr('disabled');
+			     $('#selectDoctor').val('').trigger("chosen:updated");
 		    });
 	     }
 	</script>

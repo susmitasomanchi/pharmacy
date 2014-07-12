@@ -205,6 +205,7 @@ GET    /mr/dcr-list                                controllers.MRController.list
 POST   /mr/new-dcr                                 controllers.MRController.processNewDCR()
 GET    /mr/show-dcr/:id                            controllers.MRController.addDCRLineItem(id: Long)
 POST   /mr/dcr/add-line-item                       controllers.MRController.processDCRLineItem()
+POST   /mr/dcr/delete-line-item/:dcrid/:lineitemid   controllers.MRController.removeDCRLineItem(dcrid: Long,lineitemid: Long)
 GET    /search                                     controllers.MRController.search()
 GET    /mr/display-appointment/:id                 controllers.MRController.scheduleAppointment(id:String)
 
