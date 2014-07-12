@@ -330,6 +330,39 @@ public class DoctorController extends Controller {
 		}
 
 	}
+	//Deleting Clinic
+	public static Result deleteClinic(Long id) {
+
+		DoctorClinicInfo clinicInfo=DoctorClinicInfo.find.byId(id);
+		Calendar calendar=Calendar.getInstance();
+		calendar.setTime(new Date());
+		calendar.set(Calendar.HOUR_OF_DAY, 00);
+		calendar.set(Calendar.MINUTE, 00);
+
+		List<Appointment> approvedAppts=Appointment.find.where()
+				.eq("doctor", clinicInfo.doctor)
+				.eq("clinic", clinicInfo.clinic)
+				.eq("appointmentTime", calendar.getTime())
+				.eq("appointmentStatus", AppointmentStatus.APPROVED).findList();
+		/*
+		 * Do whatever whith regarding appointments
+		 *
+		 */
+		Ebean.delete(approvedAppts);
+
+		List<Appointment> availableAppts=Appointment.find.where()
+				.eq("doctor", clinicInfo.doctor)
+				.eq("clinic", clinicInfo.clinic)
+				.eq("appointmentStatus", AppointmentStatus.AVAILABLE).findList();
+
+		Ebean.delete(availableAppts);
+
+		clinicInfo.delete();
+		flash().put("alert", new Alert("alert-success","Successfully Deleted").toString());
+
+		return redirect(routes.DoctorController.myClinics());
+
+	}
 
 	public static Result myClinics(){
 		final Doctor loggedInDoctor = LoginController.getLoggedInUser().getDoctor();
