@@ -1,8 +1,6 @@
 # Routes
 # This file defines all application routes (Higher priority routes first)
 # ~~~~
-
-
 #Blog
 
 GET    /blog/create-blog-admin                     controllers.SampleDataController.createBlogAdmin()
@@ -31,14 +29,15 @@ GET		/blog/:idorslug								controllers.BlogController.showArticleWithIdOrSlug(i
 GET		/sitemap.xml								controllers.Application.sitemap()
 
 
+
 # Home page
 GET    /                                 			controllers.Application.index()
 POST   /login                             			controllers.LoginController.processLogin()
 GET    /logout                            			controllers.LoginController.processLogout()
 
 
-
 # Remove later (at Beta Launch)
+#GET    /                                  controllers.Application.index()
 #GET    /:str		                      controllers.Application.indexX(str: String)
 
 
@@ -78,11 +77,11 @@ POST   /userform/doctor/                		controllers.DoctorController.process()
 GET    /doctor/prescription						controllers.DoctorController.doctorPrescription()
 GET		/doctor/profile							controllers.DoctorController.doctorProfileS()
 GET		/doctor/addclinic						controllers.DoctorController.doctorAddClinic()
+
 GET 	/viewappointments							controllers.DoctorController.doctorViewAppointment()
 GET    /doctor/today-appointment                   controllers.DoctorController.viewTodaysAppointment()	
 GET	   /doctor/appointments						   controllers.DoctorController.doctorAppointments()
 GET		/doctor/search/appointment					controllers.DoctorController.doctorSearchAppointment()
-
 
 GET    /userform/assistant/               		controllers.AssistantController.form()
 POST   /userform/assistant/               		controllers.AssistantController.process()
@@ -144,6 +143,7 @@ GET    /patient/remove-diag-centers/:id         controllers.PatientController.re
 
 GET    /answerform                       		 controllers.DoctorController.displayAnswer()
 POST   /ansQuestion/:qaId                 		 controllers.DoctorController.answerQuestion(qaId: Long)
+
 # doctor action
 GET    /dashboard                         			controllers.UserActions.dashboard()
 GET    /register-patient/                 			controllers.DoctorController.registerPatient()
@@ -166,7 +166,6 @@ GET    /diagnosticrep/doctorsearch	         	controllers.DRController.searchProc
 GET    /diagnosticrep/add-doctor/:id      		controllers.DRController.addDoctor(id: Long)
 GET    /diagnosticrep/remove-doctor/:id   		controllers.DRController.removeDoctor(id: Long)
 GET    /diagnostic-centre/all-doctors      		controllers.DRController.displayDiagnosticCentreDoctors()
-
 
 #Diagnostic Test
 GET    /test				            		controllers.DiagnosticController.addTest()

@@ -5,9 +5,23 @@
 
 
 @main("DCR"){
+	<script>
+	$(document).on('keydown',function(e)
+			{ 
+			        e.preventDefault();
+			});
+	</script>
+	<script type="text/javascript">
+				$(document).ready(function() {
+				 $('#forDate').bind('copy paste cut',function(e) { 
+ 					e.preventDefault(); //disable cut,copy,paste
+ 				});
+				});
+	</script>
+	
 	<form id="dcrliform" action="@routes.MRController.processNewDCR()" method="post">
-			<div class="datepicker input-append date" id="dp3"  data-date="12-02-2012" data-date-format="dd-mm-yyyy" >
-		     <input id="forDate" name="forDate" class="span2" size="16" type="text" value="12-02-2012">
+			<div class="datepicker-past input-append date" id="dp3"  data-date="today" data-date-format="dd-mm-yyyy" >
+		     <input id="forDate" name="forDate" class="span2" size="16" type="text" >
 		     <span class="add-on"><i class="icon-th"></i></span>
 	   	    </div>
 	<input type="submit" class="btn btn-primary" value="Create DCR" />
@@ -30,6 +44,7 @@
    </tr>
 	}
 	</tbody>
-	</table>
+	</table
+	
 	
 }

@@ -1,10 +1,12 @@
 package controllers;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 
+import models.Alert;
 import models.AppUser;
 import models.LanguageAppUser;
 import models.Patient;
@@ -80,8 +82,9 @@ public class DoctorController extends Controller {
 
 
 	public static Result newClinic(){
-		return ok(views.html.doctor.newClinic.render(clinicForm,new ArrayList<String>(),new ArrayList<String>()));
+		return ok(views.html.doctor.newClinic.render(clinicForm));
 	}
+
 
 
 	public static Result doctorExperience(){
@@ -249,52 +252,128 @@ public class DoctorController extends Controller {
 
 		final Form<ClinicBean> filledForm = clinicForm.bindFromRequest();
 		if(filledForm.hasErrors()){
-			return ok(views.html.doctor.newClinic.render(clinicForm,new ArrayList<String>(),new ArrayList<String>()));
+
+			return ok(views.html.doctor.newClinic.render(clinicForm));
+
 		}
 		else{
 			final DoctorClinicInfo clinicInfo =filledForm.get().toDoctorClinicInfo();
 
 
-			if (filledForm.get().id!=null) {
-				final DoctorClinicInfo clinicInfoPrevious=DoctorClinicInfo.find.byId(clinicInfo.id);
-				if(!clinicInfo.clinic.name.equals(clinicInfoPrevious.clinic.name)){
-					Logger.info("name test"+clinicInfo.clinic.name);
-					clinicInfoPrevious.clinic.name = clinicInfo.clinic.name;
-					clinicInfoPrevious.clinic.update();
-					clinicInfoPrevious.update();
-				}
-				if(!DoctorController.isListSame(clinicInfo.schedulDays, clinicInfoPrevious.schedulDays)||clinicInfo.slot != clinicInfoPrevious.slot || clinicInfo.slotmr!=clinicInfoPrevious.slotmr){
+			clinicInfo.doctor=LoginController.getLoggedInUser().getDoctor();
+			clinicInfo.save();
+			//Logger.info(""+clinicInfo.lat+" "+clinicInfo.lng);
+			return DoctorController.createAppointment(clinicInfo);
 
-					//clinicInfoPrevious.schedulDays=null;
-					Ebean.delete(clinicInfoPrevious.schedulDays);
-					clinicInfoPrevious.schedulDays = clinicInfo.schedulDays;
-
-					clinicInfoPrevious.slot = clinicInfo.slot;
-					clinicInfoPrevious.slotmr = clinicInfo.slotmr;
-					clinicInfoPrevious.update();
-
-
-					return DoctorController.reCreateAppointment(clinicInfoPrevious);
-				}
-				return redirect(routes.DoctorController.myClinics());
-			}else{
-				clinicInfo.doctor=LoginController.getLoggedInUser().getDoctor();
-				clinicInfo.save();
-				Logger.info(""+clinicInfo.lat+" "+clinicInfo.lng);
-				return DoctorController.createAppointment(clinicInfo);
-			}
 		}
 	}
 
+	public static Result processUpdateClinicInfo() {
+		final Form<ClinicBean> filledForm = clinicForm.bindFromRequest();
 
+		if(filledForm.hasErrors()){
+
+			return ok(views.html.doctor.editClinic.render(clinicForm,new ArrayList<String>(),new ArrayList<String>()));
+
+		}
+		else{
+			final DoctorClinicInfo clinicInfo =filledForm.get().toDoctorClinicInfo();
+
+			final DoctorClinicInfo clinicInfoPrevious=DoctorClinicInfo.find.byId(clinicInfo.id);
+
+			clinicInfoPrevious.clinic.name = clinicInfo.clinic.name;
+			clinicInfoPrevious.clinic.contactNo=clinicInfo.clinic.contactNo;
+			clinicInfoPrevious.clinic.contactPersonName=clinicInfo.clinic.contactPersonName;
+			clinicInfoPrevious.clinic.update();
+			Logger.info(""+clinicInfo.address.addrressLine1);
+			clinicInfoPrevious.address.addrressLine1=clinicInfo.address.addrressLine1;
+			clinicInfoPrevious.address.addrressLine2=clinicInfo.address.addrressLine2;
+			clinicInfoPrevious.address.state=clinicInfo.address.state;
+			clinicInfoPrevious.address.city=clinicInfo.address.city;
+			clinicInfoPrevious.address.lat=clinicInfo.address.lat;
+			clinicInfoPrevious.address.lng=clinicInfo.address.lng;
+			clinicInfoPrevious.address.update();
+			clinicInfoPrevious.update();
+
+			flash().put("alert", new Alert("alert-success","Successfully Updated").toString());
+			return redirect(routes.DoctorController.myClinics());
+
+
+		}
+	}
+
+	public static Result processUpdateClinicSchedule() {
+		final Form<ClinicBean> filledForm = clinicForm.bindFromRequest();
+		if(filledForm.hasErrors()){
+
+			return ok(views.html.doctor.editClinic.render(clinicForm,new ArrayList<String>(),new ArrayList<String>()));
+
+		}
+		else{
+			Logger.warn("enterd in method");
+
+			final DoctorClinicInfo clinicInfo =filledForm.get().toDoctorClinicInfo();
+
+			final DoctorClinicInfo clinicInfoPrevious=DoctorClinicInfo.find.byId(clinicInfo.id);
+			for (DaySchedule sc4: clinicInfo.schedulDays) {
+				Logger.info("test day"+sc4.day);
+			}
+			Ebean.delete(clinicInfoPrevious.schedulDays);
+			clinicInfoPrevious.schedulDays=clinicInfo.schedulDays;
+			clinicInfoPrevious.slot=clinicInfo.slot;
+			clinicInfoPrevious.slotmr=clinicInfo.slotmr;
+
+			clinicInfoPrevious.update();
+			flash().put("alert", new Alert("alert-success","Successfully Updated").toString());
+			return DoctorController.reCreateAppointment(clinicInfoPrevious);
+
+		}
+
+	}
+	//Deleting Clinic
+	public static Result deleteClinic(Long id) {
+
+		DoctorClinicInfo clinicInfo=DoctorClinicInfo.find.byId(id);
+		Calendar calendar=Calendar.getInstance();
+		calendar.setTime(new Date());
+		calendar.set(Calendar.HOUR_OF_DAY, 00);
+		calendar.set(Calendar.MINUTE, 00);
+
+		List<Appointment> approvedAppts=Appointment.find.where()
+				.eq("doctor", clinicInfo.doctor)
+				.eq("clinic", clinicInfo.clinic)
+				.eq("appointmentTime", calendar.getTime())
+				.eq("appointmentStatus", AppointmentStatus.APPROVED).findList();
+
+		/*
+		 * Do whatever whith regarding appointments
+		 *
+		 */
+
+
+		Ebean.delete(approvedAppts);
+
+		List<Appointment> availableAppts=Appointment.find.where()
+				.eq("doctor", clinicInfo.doctor)
+				.eq("clinic", clinicInfo.clinic)
+				.eq("appointmentStatus", AppointmentStatus.AVAILABLE).findList();
+
+		Ebean.delete(availableAppts);
+
+		clinicInfo.active=false;
+		clinicInfo.doctor.update();
+		clinicInfo.update();
+
+		flash().put("alert", new Alert("alert-success","Successfully Deleted").toString());
+
+		return redirect(routes.DoctorController.myClinics());
+
+	}
 
 	public static Result myClinics(){
 		final Doctor loggedInDoctor = LoginController.getLoggedInUser().getDoctor();
-		Logger.warn(loggedInDoctor.doctorClinicInfoList.size()+"");
-		for (final DoctorClinicInfo clinicInfo : loggedInDoctor.doctorClinicInfoList) {
-			Logger.warn(clinicInfo.clinic.name);
-		}
-		return ok(views.html.doctor.myClinics.render(loggedInDoctor.doctorClinicInfoList));
+
+		return ok(views.html.doctor.myClinics.render(loggedInDoctor.getActiveClinic()));
 
 	}
 
@@ -315,9 +394,10 @@ public class DoctorController extends Controller {
 
 		final Form<ClinicBean> filledForm = clinicForm.fill(doctorClinicInfo.toBean());
 
-		//		Logger.info(doctorClinicInfo.toBean().daysOfWeek.size()+" "+doctorClinicInfo.toBean().daysOfWeekMr.size());
-
-		return ok(views.html.doctor.newClinic.render(filledForm,bean.daysOfWeek,bean.daysOfWeekMr));
+		for (String	 from : bean.fromHrs) {
+			Logger.warn(from);
+		}
+		return ok(views.html.doctor.editClinic.render(filledForm,bean.daysOfWeek,bean.daysOfWeekMr));
 
 	}
 
@@ -384,40 +464,42 @@ public class DoctorController extends Controller {
 	public static  Result createAppointment(final DoctorClinicInfo docclinicInfo) {
 
 
+		Calendar calendar1=Calendar.getInstance();
+		Calendar calendar2=Calendar.getInstance();
 
-		for (final DaySchedule schedule : docclinicInfo.schedulDays) {
-			Logger.info(schedule.fromTime.toString());
-			Logger.info(schedule.toTime.toString());
-			Logger.info(schedule.day.toString());
-
-		}
-
+		SimpleDateFormat dateFormat=new SimpleDateFormat("kk:mm");
 
 		final Doctor doctor=LoginController.getLoggedInUser().getDoctor();
 
 		final Calendar calendar = Calendar.getInstance();
-		calendar.setTime(new Date());
-		calendar.set(Calendar.HOUR_OF_DAY,0);
-		calendar.set(Calendar.MINUTE,0);
-		calendar.set(Calendar.SECOND,0);
-		calendar.set(Calendar.MILLISECOND,0);
 
+
+		calendar.setTime(new Date());
 
 		for(int date=0;date<31;date++){
 			for (final DaySchedule schedule : docclinicInfo.schedulDays) {
 
-				Logger.info(schedule.day+ " "+ schedule.fromTime+" "+schedule.toTime);
 
 				if(schedule.day == Day.getDay(calendar.get(Calendar.DAY_OF_WEEK)-1)){
 
 					Logger.info(" "+"Entered");
-					final int hourToClinic = schedule.toTime - schedule.fromTime;
-					calendar.set(Calendar.HOUR_OF_DAY, schedule.fromTime);
-					calendar.set(Calendar.MINUTE, 0);
+					try {
+						calendar1.setTime(dateFormat.parse(schedule.toTime));
+						calendar2.setTime(dateFormat.parse(schedule.fromTime));
+					} catch (Exception e) {
+						e.printStackTrace();
+					}
+
+					int hoursToClinic=calendar1.get(Calendar.HOUR_OF_DAY)-calendar2.get(Calendar.HOUR_OF_DAY);
+					int minutsToClinic=calendar1.get(Calendar.MINUTE)-calendar2.get(Calendar.MINUTE);
+					Logger.info("total minutes***"+calendar1.get(Calendar.MINUTE));
+
+					calendar.set(Calendar.HOUR_OF_DAY,calendar2.get(Calendar.HOUR_OF_DAY));
+					calendar.set(Calendar.MINUTE,calendar2.get(Calendar.MINUTE));
 					calendar.set(Calendar.SECOND,0);
 					calendar.set(Calendar.MILLISECOND,0);
 					if(schedule.requester.equals(Role.PATIENT)){
-						for (int j2 = 0; j2 <((hourToClinic*60)/docclinicInfo.slot); j2++) {
+						for (int j2 = 0; j2 <(((hoursToClinic*60)+minutsToClinic)/docclinicInfo.slot); j2++) {
 							if(Appointment.find.where().eq("doctor",doctor).eq("clinic",docclinicInfo.clinic).eq("appointmentTime", calendar.getTime()).findUnique()==null){
 								Logger.info("  "+calendar.getTime());
 								final Appointment appointment=new Appointment();
@@ -433,7 +515,7 @@ public class DoctorController extends Controller {
 							}
 						}
 					}else {
-						for (int j2 = 0; j2 <((hourToClinic*60)/docclinicInfo.slotmr); j2++) {
+						for (int j2 = 0; j2 <(((hoursToClinic*60)+minutsToClinic)/docclinicInfo.slotmr); j2++) {
 							if(Appointment.find.where().eq("doctor",doctor).eq("clinic",docclinicInfo.clinic).eq("appointmentTime", calendar.getTime()).findUnique()==null){
 								Logger.info("  "+calendar.getTime());
 								final Appointment appointment=new Appointment();
@@ -509,13 +591,13 @@ public class DoctorController extends Controller {
 	public static Result doctorAppointments() {
 
 		return ok(views.html.doctor.doctor_all_appointments.render());
-		
+
 	}
-	
+
 	public static Result doctorSearchAppointment() {
 
 		return ok(views.html.doctor.doctor_search_appointments.render());
-		
+
 	}
 
 	public static Result doctorViewAppointment() {
@@ -570,14 +652,14 @@ public class DoctorController extends Controller {
 
 	}
 
-	
+
 	public static Result doctorProfileS() {
-		
+
 		return ok(views.html.doctor.doctor_profile.render());
 	}
-	
+
 	public static Result doctorAddClinic() {
-		
+
 		return ok(views.html.doctor.doctor_add_clinic.render());
 	}
 }

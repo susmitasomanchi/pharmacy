@@ -8,6 +8,8 @@ create table address (
   addrress_line1            varchar(255),
   addrress_line2            varchar(255),
   addrress_line3            varchar(255),
+  lat                       float,
+  lng                       float,
   city                      varchar(255),
   state                     varchar(35),
   pin_code                  bigint,
@@ -123,6 +125,8 @@ create table blog_comment_reply (
 create table clinic (
   id                        bigint not null,
   name                      varchar(255),
+  contact_person_name       varchar(255),
+  contact_no                varchar(255),
   constraint pk_clinic primary key (id))
 ;
 
@@ -130,6 +134,8 @@ create table dcrline_item (
   id                        bigint not null,
   daily_call_report_id      bigint not null,
   doctor_id                 bigint,
+  in_time                   timestamp,
+  out_time                  timestamp,
   pob                       integer,
   remarks                   varchar(255),
   last_update               timestamp not null,
@@ -156,8 +162,8 @@ create table day_schedule (
   id                        bigint not null,
   doctor_clinic_info_id     bigint not null,
   day                       varchar(9),
-  from_time                 integer,
-  to_time                   integer,
+  from_time                 varchar(255),
+  to_time                   varchar(255),
   requester                 varchar(16),
   last_update               timestamp not null,
   constraint ck_day_schedule_day check (day in ('MONDAY','SUNDAY','WEDNESDAY','THURSDAY','SATURDAY','TUESDAY','FRIDAY')),
@@ -268,8 +274,8 @@ create table doctor_clinic_info (
   doctor_id                 bigint,
   slot                      integer,
   slotmr                    integer,
-  lat                       float,
-  lng                       float,
+  active                    boolean,
+  address_id                bigint,
   last_update               timestamp not null,
   constraint pk_doctor_clinic_info primary key (id))
 ;

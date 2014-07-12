@@ -11,8 +11,10 @@ import javax.persistence.Id;
 import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 
+import models.Address;
 import models.BaseEntity;
 import models.Role;
+import play.Logger;
 import play.db.ebean.Model;
 import beans.ClinicBean;
 
@@ -34,10 +36,10 @@ public class DoctorClinicInfo extends BaseEntity {
 
 	public Integer	slotmr;
 
-	public Double lat;
+	public boolean  active=true;
 
-	public Double lng;
-
+	@OneToOne
+	public Address address;
 	@OneToMany(cascade=CascadeType.ALL)
 	public List<DaySchedule> schedulDays = new ArrayList<DaySchedule>();
 
@@ -52,14 +54,16 @@ public class DoctorClinicInfo extends BaseEntity {
 		}
 		if(this.clinic != null) {
 			bean.name= this.clinic.name;
+			bean.contactPersonName=this.clinic.contactPersonName;
+			bean.contactNo=this.clinic.contactNo;
 		}
-		final List<Integer> fromHrs = new ArrayList<Integer>();
+		final List<String> fromHrs = new ArrayList<String>();
 
-		final List<Integer> toHrs = new ArrayList<Integer>();
+		final List<String> toHrs = new ArrayList<String>();
 
-		final List<Integer> fromHrsMr = new ArrayList<Integer>();
+		final List<String> fromHrsMr = new ArrayList<String>();
 
-		final List<Integer> toHrsMr = new ArrayList<Integer>();
+		final List<String> toHrsMr = new ArrayList<String>();
 
 		final List<String> daysOfWeek	= new ArrayList<String>();
 
@@ -82,14 +86,38 @@ public class DoctorClinicInfo extends BaseEntity {
 			}
 
 		}
+
 		bean.fromHrs=fromHrs;
 		bean.toHrs=toHrs;
 		bean.fromHrsMr=fromHrsMr;
 		bean.toHrsMr=toHrsMr;
 		bean.daysOfWeek=daysOfWeek;
 		bean.daysOfWeekMr=daysOfWeekMr;
-		bean.slot=this.slot;
-		bean.slotmr=this.slotmr;
+		if(this.slot!=null){
+			bean.slot=this.slot;
+
+		}
+		if(this.slot!=null){
+			bean.slotmr=this.slotmr;
+		}
+		Logger.info(this.address+"****");
+		if(this.address.addrressLine1!=null){
+			bean.street=this.address.addrressLine1;
+		}
+		if(this.address.addrressLine2!=null){
+			bean.area=this.address.addrressLine2;
+		}
+		if(this.address.addrressLine1!=null){
+			bean.state=this.address.state.toString();
+		}
+		if(this.address.city!=null){
+			bean.city=this.address.city;
+		}
+
+		bean.lat=this.address.lat;
+
+		bean.lng=this.address.lng;
+
 
 		return bean;
 
