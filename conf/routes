@@ -1,8 +1,6 @@
 # Routes
 # This file defines all application routes (Higher priority routes first)
 # ~~~~
-
-
 #Blog
 
 GET    /blog/create-blog-admin                     controllers.SampleDataController.createBlogAdmin()
@@ -31,26 +29,26 @@ GET    /blog/:idorslug                             controllers.BlogController.sh
 GET    /sitemap.xml                                controllers.Application.sitemap()
 
 
-# Home page
-GET    /                                           controllers.Application.index()
-POST   /login                                      controllers.LoginController.processLogin()
-GET    /logout                                     controllers.LoginController.processLogout()
 
+# Home page
+GET    /                                             controllers.Application.index()
+POST   /login                                        controllers.LoginController.processLogin()
+GET    /logout                                       controllers.LoginController.processLogout()
 
 
 # Remove later (at Beta Launch)
+#GET    /                                  controllers.Application.index()
 #GET    /:str		                      controllers.Application.indexX(str: String)
-####################################################################################################
 
 
 # Sign up page
-GET    /join                                       controllers.UserController.joinUs()
-POST   /join                                       controllers.UserController.processJoinUs()
+GET    /join                                         controllers.UserController.joinUs()
+POST   /join                                         controllers.UserController.processJoinUs()
 
 # patient actions
-GET    /user/schedule-appointment                  controllers.PatientController.scheduleAppointment()
-GET    /user/display-appointment/:id               controllers.PatientController.displayAppointment(id:String)
-POST   /doctor/request-appointment                 controllers.DoctorController.requestAppointment()
+GET    /user/schedule-appointment                    controllers.PatientController.scheduleAppointment()
+GET    /user/display-appointment/:id                 controllers.PatientController.displayAppointment(id:String)
+POST   /doctor/request-appointment                   controllers.DoctorController.requestAppointment()
 
 # doctor actions
 GET    /doctor/new-assistant                       controllers.DoctorController.newAssistant()
@@ -76,6 +74,7 @@ GET    /doctor-publication                         controllers.DoctorController.
 POST   /doctor-publication                         controllers.DoctorController.processDoctorPublication()
 GET    /doctor-prescribe/:id                       controllers.DoctorController.showPrescriptionForm(id: Long)
 POST   /doctor-prescribe                           controllers.DoctorController.processPrescriptionForm()
+
 GET 	/viewappointments							controllers.DoctorController.doctorViewAppointment()
 GET    /doctor/today-appointment                   controllers.DoctorController.viewTodaysAppointment()	
 GET	   /doctor/appointments						   controllers.DoctorController.doctorAppointments()
@@ -83,7 +82,6 @@ GET		/doctor/search/appointment					controllers.DoctorController.doctorSearchApp
 GET    /doctor/prescription							controllers.DoctorController.doctorPrescription()
 GET		/doctor/profile					controllers.DoctorController.doctorProfileS()
 GET		/doctor/addclinic				controllers.DoctorController.doctorAddClinic()
-
 
 POST   /userform/doctor/                           controllers.DoctorController.process()
 GET    /userform/assistant/                        controllers.AssistantController.form()
@@ -96,7 +94,7 @@ POST   /scheduleappointment/                       controllers.AppointmentContro
 GET   /edit-product/:id                      controllers.PharmacistController.editProduct(id: Long)
 GET   /remove-product/:id                      controllers.PharmacistController.removeProduct(id: Long)
 
-POST   /editproduct/                               controllers.PharmacistController.editProduct(id: Long)
+#POST   /editproduct/                               controllers.PharmacistController.editProduct(id: Long)
 
 GET    /searchProduct                              controllers.PharmacistController.searchForm()
 POST   /searchProduct                              controllers.PharmacistController.searchProduct(arg: String ?= "")
@@ -138,10 +136,11 @@ GET    /patient/remove-diag-centers/:id            controllers.PatientController
 
 GET    /answerform                                 controllers.DoctorController.displayAnswer()
 POST   /ansQuestion/:qaId                          controllers.DoctorController.answerQuestion(qaId: Long)
+
 # doctor action
-GET    /dashboard                                  controllers.UserActions.dashboard()
-GET    /register-patient/                          controllers.DoctorController.registerPatient()
-POST   /register-patient-proccess/                 controllers.DoctorController.registerPatientProccess()
+GET    /dashboard                                    controllers.UserActions.dashboard()
+GET    /register-patient/                            controllers.DoctorController.registerPatient()
+POST   /register-patient-proccess/                   controllers.DoctorController.registerPatientProccess()
 
 #Diagnostic module	
 #GET    /diagnosticregistration            		controllers.DiagnosticController.diagnosticCenter()
@@ -168,42 +167,43 @@ POST    /upload-patient-file/save		  		controllers.DiagnosticController.uploadFi
 GET    /download						  		controllers.DiagnosticController.downloadFile()
 #GET    /add-test-done						  	controllers.DiagnosticController.addTestDone()
 
-
 #Diagnostic Test
 GET    /test				            		controllers.DiagnosticController.addTest()
 POST   /test/save					       		controllers.DiagnosticController.addTestProcess()
 #GET    /test-list/:id				            controllers.DiagnosticController.diagnosticTestList(id: Long)																																
 
 POST   /place-order                                controllers.DiagnosticOrderController.receive()		
-#GET    /display-orders/:id                         controllers.DiagnosticOrderController.viewOrders(id: Long)																																		
+#GET    /display-orders/:id                         controllers.DiagnosticOrderController.viewOrders(id: Long)			
+
 #MR Module
-GET    /doctor-list                                controllers.MRController.doctorList()
-GET    /mr/add-doctor/:id                          controllers.MRController.addDoctor(id: Long)
-GET    /mr/remove-doctor/:id                       controllers.MRController.removeDoctor(id: Long)
-GET    /mr/doctor-list                             controllers.MRController.mrDoctorList()
-GET    /mr/add-mr                                  controllers.MRController.addMR()
-GET    /mr/list-mr                                 controllers.MRController.mrList()
-GET    /mr/hq                                      controllers.MRController.headQuarter()
-GET    /mr/dcr-list                                controllers.MRController.listDCR()
-POST   /mr/new-dcr                                 controllers.MRController.processNewDCR()
-GET    /mr/show-dcr/:id                            controllers.MRController.addDCRLineItem(id: Long)
-POST   /mr/dcr/add-line-item                       controllers.MRController.processDCRLineItem()
-GET    /search                                     controllers.MRController.search()
-GET    /mr/display-appointment/:id                 controllers.MRController.scheduleAppointment(id:String)	
+GET    /doctor-list                                  controllers.MRController.doctorList()
+GET    /mr/add-doctor/:id                            controllers.MRController.addDoctor(id: Long)
+GET    /mr/remove-doctor/:id                         controllers.MRController.removeDoctor(id: Long)
+GET    /mr/doctor-list                               controllers.MRController.mrDoctorList()
+GET    /mr/add-mr                                    controllers.MRController.addMR()
+GET    /mr/list-mr                                   controllers.MRController.mrList()
+GET    /mr/hq                                        controllers.MRController.headQuarter()
+GET    /mr/dcr-list                                  controllers.MRController.listDCR()
+POST   /mr/new-dcr                                   controllers.MRController.processNewDCR()
+GET    /mr/show-dcr/:id                              controllers.MRController.addDCRLineItem(id: Long)
+POST   /mr/dcr/add-line-item                         controllers.MRController.processDCRLineItem()
+POST   /mr/dcr/delete-line-item/:dcrid/:lineitemid   controllers.MRController.removeDCRLineItem(dcrid: Long,lineitemid: Long)
+GET    /search                                       controllers.MRController.search()
+GET    /mr/display-appointment/:id                   controllers.MRController.scheduleAppointment(id:String)	
 
 #common module
-GET    /new-product                                controllers.ProductController.productForm()
-POST   /new-product                                controllers.ProductController.saveProduct()
-GET    /view-products                              controllers.ProductController.displayProduct()
-#GET    /edit-product/:id                           controllers.ProductController.editProduct(id: Long)
-#GET    /remove-product/:id                         controllers.ProductController.removeProduct(id: Long)
+#GET    /new-product                                  controllers.ProductController.productForm()
+#POST   /new-product                                  controllers.ProductController.saveProduct()
+#GET    /view-products                                controllers.ProductController.displayProduct()
+#GET    /edit-product/:id                             controllers.ProductController.editProduct(id: Long)
+#GET    /remove-product/:id                           controllers.ProductController.removeProduct(id: Long)
 
 
 # delete later
-GET    /userform/patient/                          controllers.PatientController.form()
-GET    /userform/patient/h/                        controllers.PatientController.enterForm()
-GET    /register/                                  controllers.PatientController.register()
-POST   /register/                                  controllers.PatientController.registerProccess()
+GET    /userform/patient/                            controllers.PatientController.form()
+GET    /userform/patient/h/                          controllers.PatientController.enterForm()
+GET    /register/                                    controllers.PatientController.register()
+POST   /register/                                    controllers.PatientController.registerProccess()
 
 
 #sample data
@@ -212,4 +212,4 @@ POST   /register/                                  controllers.PatientController
 
 
 # Map static resources from the /public folder to the /assets URL path
-GET    /assets/*file                               controllers.Assets.at(path="/public", file)
+GET    /assets/*file                                 controllers.Assets.at(path="/public", file)

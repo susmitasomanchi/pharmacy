@@ -1,12 +1,13 @@
 package controllers;
 
-import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
+import models.Alert;
 import models.HeadQuarter;
 import models.Product;
 import models.doctor.Appointment;
@@ -15,12 +16,17 @@ import models.mr.DCRLineItem;
 import models.mr.DailyCallReport;
 import models.mr.MedicalRepresentative;
 import models.mr.Sample;
+
+import org.joda.time.DateTime;
+import org.joda.time.Days;
+import org.joda.time.format.DateTimeFormat;
+import org.joda.time.format.DateTimeFormatter;
+
 import play.Logger;
 import play.data.DynamicForm;
 import play.data.Form;
 import play.mvc.Controller;
 import play.mvc.Result;
-//import com.google.gson.Gson;
 
 public class MRController extends Controller{
 
@@ -53,8 +59,8 @@ public class MRController extends Controller{
 		final MedicalRepresentative loggedInMr = LoginController.getLoggedInUser().getMedicalRepresentative();
 		if(loggedInMr.doctorList.contains(Doctor.find.byId(id))!=true){
 			loggedInMr.doctorList.add(Doctor.find.byId(id));
+
 		}
-		Logger.info(" logged IN Mr id : "+loggedInMr.appUser.name);
 		loggedInMr.update();
 
 		return redirect(routes.MRController.mrDoctorList());
@@ -62,7 +68,6 @@ public class MRController extends Controller{
 	}
 	public static Result mrDoctorList(){
 		final MedicalRepresentative loggedInMr = LoginController.getLoggedInUser().getMedicalRepresentative();
-		Logger.info(""+loggedInMr.doctorList);
 		return ok(views.html.mr.mrDoctor.render(loggedInMr.doctorList));
 
 	}
@@ -74,9 +79,6 @@ public class MRController extends Controller{
 		for(final Doctor doc:loggedInMr.doctorList){
 			indexOfDoctorList++;
 			if(doctor.appUser.name.equals(doc.appUser.name)){
-				Logger.info("doctor name : "+doc.appUser.name);
-
-				Logger.info("index is : "+indexOfDoctorList);
 				break;
 			}
 		}
@@ -123,75 +125,183 @@ public class MRController extends Controller{
 		return ok(views.html.mr.dcrList.render(loggedInMr.dcrList));
 	}
 
+	/**
+	 * @author anand
+	 * url : /mr/new-dcr
+	 * this method is used to capture date and store into database
+	 * and date related server side validation
+	 * 
+	 * */
 	public static Result processNewDCR(){
+		boolean isExistingDCRDate = false;
 		final MedicalRepresentative loggedInMr = LoginController.getLoggedInUser().getMedicalRepresentative();
 		final Form<DailyCallReport> filledDCRForm = dcrForm.bindFromRequest();
 
 		final DailyCallReport dcr = new DailyCallReport();
 		final DynamicForm requestData = Form.form().bindFromRequest();
 		final String strDate = requestData.get("forDate");
-		Logger.info(strDate);
-		//string to date
-		final SimpleDateFormat sdf=new SimpleDateFormat("dd-mm-yyyy");
-		try {
-			final Date date=sdf.parse(strDate);
-			dcr.forDate=date;
-			//Logger.info(""+date);
-		} catch (final Exception e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-		loggedInMr.dcrList.add(dcr);
-		loggedInMr.update();
+		if(strDate == ""){
+			flash().put("alert", new Alert("alert-danger","Please Enter the Date. ").toString());
+		}else{
+			final DateTimeFormatter formatter = DateTimeFormat.forPattern("dd-MM-yyyy");
+			final DateTime myDate = formatter.parseDateTime(strDate);
 
+			//Logger.info("entered date is : "+myDate);
+
+
+
+
+			final DateTime today = new DateTime();
+			Logger.info("today is : "+today);
+			//Logger.info("mydate  : "+jodaMyDate);
+			final int dayInterval = Days.daysBetween(myDate.withTimeAtStartOfDay() , today.withTimeAtStartOfDay() ).getDays();
+
+			Logger.info("dayInterval : "+dayInterval);
+			if(dayInterval>5){
+				//Logger.info("before 5 days");
+				flash().put("alert", new Alert("alert-danger","You have exceeded your DCR submission date").toString());
+			}else{
+				for(final DailyCallReport dCR : loggedInMr.dcrList){
+					Logger.info("dcr date  is : "+dCR.forDate);
+					if(dCR.forDate.equals(myDate.toDate())){
+						isExistingDCRDate = true;
+						flash().put("alert", new Alert("alert-danger","You have already created DCR for this date").toString());
+						break;
+					}
+				}
+				if(isExistingDCRDate == false){
+					dcr.forDate = myDate.toDate();
+					//Logger.info("within 5 days");
+					loggedInMr.dcrList.add(dcr);
+					loggedInMr.update();
+				}
+			}
+		}
 		return redirect(routes.MRController.listDCR());
 
 	}
+	/**
+	 * @author anand
+	 * url : /mr/show-dcr/:id
+	 * 
+	 * to show dcr-line-item to adding in daily call report
+	 * **/
 	public static Result addDCRLineItem(final Long id){
 		final DailyCallReport dcr = DailyCallReport.find.byId(id);
 		final MedicalRepresentative loggedInMr = LoginController.getLoggedInUser().getMedicalRepresentative();
-		return ok(views.html.mr.dcrLineItem.render(dcr, dcrLineItemForm,loggedInMr.doctorList,loggedInMr.pharmaceuticalCompany.productList));
+		final List<Doctor> disabledDoctorList = new ArrayList<Doctor>();
+		for (final DCRLineItem lineItem : dcr.dcrLineItemList) {
+			disabledDoctorList.add(lineItem.doctor);
+		}
+
+		return ok(views.html.mr.dcrLineItem.render(dcr, dcrLineItemForm,loggedInMr.doctorList,disabledDoctorList,loggedInMr.pharmaceuticalCompany.productList));
 
 	}
 
+	/**
+	 * @author anand
+	 * url : /mr/dcr/add-line-item
+	 * 
+	 * this shows the added dcrlinetime in daily call report of particular mr
+	 */
+	@SuppressWarnings("deprecation")
 	public static Result processDCRLineItem(){
 
 		final MedicalRepresentative loggedInMr = LoginController.getLoggedInUser().getMedicalRepresentative();
 
 		final String dcrId = request().body().asFormUrlEncoded().get("dcrId")[0];
 		final String doctorId = request().body().asFormUrlEncoded().get("doctor")[0];
+
 		final String sampleList[] = request().body().asFormUrlEncoded().get("sampleList");
 		final String qtyList[] = request().body().asFormUrlEncoded().get("qtyList");
 		final String promotionList[] = request().body().asFormUrlEncoded().get("promotionList");
+		final String inTime = request().body().asFormUrlEncoded().get("inTime")[0];
+		final String outTime = request().body().asFormUrlEncoded().get("outTime")[0];
 		final String pob = request().body().asFormUrlEncoded().get("pob")[0];
 		final String remarks = request().body().asFormUrlEncoded().get("remarks")[0];
 
-		final DCRLineItem dcrLineItem = new DCRLineItem();
 
-		Logger.info("1");
+		final DCRLineItem dcrLineItem = new DCRLineItem();
+		final DailyCallReport dcr = DailyCallReport.find.byId(Long.parseLong(dcrId));
+
 		dcrLineItem.doctor=Doctor.find.byId(Long.parseLong(doctorId));
 
+		Logger.info("doctor Id : "+doctorId);
 		for(int i=0;i<sampleList.length;i++){
 			final Sample sample = new Sample();
-			sample.product = Product.find.byId(Long.parseLong(sampleList[i]));
-			sample.quantity = Integer.parseInt(qtyList[i]);
-			dcrLineItem.sampleList.add(sample);
+
+			if((sampleList[i].compareToIgnoreCase("")==0)){
+			}else{
+				sample.product = Product.find.byId(Long.parseLong(sampleList[i]));
+				if(qtyList[i] == ""){
+					sample.quantity = 0;
+				}else{
+					sample.quantity = Integer.parseInt(qtyList[i]);
+				}
+				dcrLineItem.sampleList.add(sample);
+			}
 		}
 
-		for(int i=0;i<promotionList.length;i++){
-			dcrLineItem.promotionList.add(Product.find.byId(Long.parseLong(promotionList[i])));
+		if(promotionList == null){
+		}else{
+			for(int i=0;i<promotionList.length;i++){
+				dcrLineItem.promotionList.add(Product.find.byId(Long.parseLong(promotionList[i])));
+			}
 		}
 
-		dcrLineItem.pob = Integer.parseInt(pob);
+
+		final Date dcrDate = dcr.forDate;
+		final DateTimeFormatter formatter = DateTimeFormat.forPattern("kk:mm");
+
+		final DateTime inDateTime = new DateTime(dcrDate);
+		final DateTime outDateTime = new DateTime(dcrDate);
+		if(inTime.compareToIgnoreCase("")==0 ){
+		}else{
+			final DateTime fromTime=formatter.parseDateTime(inTime);
+			final DateTime inDateTimeHours = inDateTime.plusHours(fromTime.getHourOfDay());
+			final DateTime inDateTimeHoursMin = inDateTimeHours.plusMinutes(fromTime.getMinuteOfDay()-(60*fromTime.getHourOfDay()));
+			dcrLineItem.inTime = inDateTimeHoursMin.toDate();
+		}
+		if(outTime.compareToIgnoreCase("")==0){
+		}else{
+			final DateTime toTime = formatter.parseDateTime(outTime);
+			final DateTime outDateTimeHours = outDateTime.plusHours(toTime.getHourOfDay());
+			final DateTime outDateTimeHoursMin = outDateTimeHours.plusMinutes(toTime.getMinuteOfDay()-(60*toTime.getHourOfDay()));
+			dcrLineItem.outTime = outDateTimeHoursMin.toDate();
+		}
+
+		if(pob==""){
+			dcrLineItem.pob=0;
+		}else{
+			dcrLineItem.pob = Integer.parseInt(pob);
+		}
+
 		dcrLineItem.remarks = remarks;
 
-		Logger.info("2");
-
-		final DailyCallReport dcr = DailyCallReport.find.byId(Long.parseLong(dcrId));
 		dcr.dcrLineItemList.add(dcrLineItem);
+
 		dcr.update();
 
+		return ok(views.html.mr.filledDCRLineItem.render(dcr.dcrLineItemList));
+	}
 
+	/**
+	 * @author anand
+	 * url : /mr/dcr/delete-line-item/:dcrid/:lineitemid
+	 * 
+	 * to remove the added dcr-line-item
+	 * 
+	 * @param dcrId
+	 * @param lineItemId
+	 * @return
+	 */
+	public static Result removeDCRLineItem(final Long dcrId,final Long lineItemId){
+
+		final DailyCallReport dcr = DailyCallReport.find.byId(dcrId);
+		final DCRLineItem lineItem = DCRLineItem.find.byId(lineItemId);
+		dcr.dcrLineItemList.remove(lineItem);
+		lineItem.delete();
+		dcr.update();
 		return ok(views.html.mr.filledDCRLineItem.render(dcr.dcrLineItemList));
 	}
 	//schedule appointment for mr

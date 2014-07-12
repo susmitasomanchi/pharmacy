@@ -45,10 +45,11 @@ public class ProductController extends Controller{
 		}
 		else {
 			final Product filledProduct = productFilledForm.get();
+
 			if(LoginController.getLoggedInUserRole().compareToIgnoreCase(Role.ADMIN_MR.toString()) == 0){
 				Logger.info("pharmaceutical company is : "+loggedInMr.pharmaceuticalCompany.name);
 				if(filledProduct.id == null){
-					//Logger.info("Saving product for MR");.
+					//Logger.info("Saving product for MR");
 					loggedInMr.pharmaceuticalCompany.productList.add(filledProduct);
 					loggedInMr.pharmaceuticalCompany.update();
 				}else{
@@ -59,6 +60,7 @@ public class ProductController extends Controller{
 			}
 			else{
 				if(LoginController.getLoggedInUserRole().compareToIgnoreCase(Role.ADMIN_PHARMACIST.toString()) == 0){
+					Logger.info("pharma company is : "+loggedInPharmacist.pharmacy);
 					if(filledProduct.id == null){
 						Logger.info("Saving product for Pharmacy");
 						loggedInPharmacist.pharmacy.productList.add(filledProduct);

@@ -134,6 +134,8 @@ create table dcrline_item (
   id                        bigint not null,
   daily_call_report_id      bigint not null,
   doctor_id                 bigint,
+  in_time                   timestamp,
+  out_time                  timestamp,
   pob                       integer,
   remarks                   varchar(255),
   last_update               timestamp not null,
