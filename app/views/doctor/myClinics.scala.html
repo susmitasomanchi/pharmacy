@@ -4,6 +4,25 @@
 
 @main(Messages.get("myclinics.label")){
 
+<div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+        <h4 class="modal-title" id="myModalLabel">Modal title</h4>
+      </div>
+      <div class="modal-body">
+        It will delete all your appointments Are you sure	
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+        <button id="del" type="button" class="btn btn-primary">Save changes</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+
 <div class="col-md-6">
 <table class="table table-bordered table-condensed">
 	<thead>
@@ -16,11 +35,27 @@
 		@for(info <- list){
 			<tr>
 				<td>@info.clinic.name</td>
-				<td><a class="btn btn-info btn-xs" href="@routes.DoctorController.manageClinic(info.id)">Manage</a><a class="btn btn-danger btn-xs" href="@routes.DoctorController.deleteClinic(info.id)">Delete</a></td>
+				<td><a class="btn btn-info btn-xs" href="@routes.DoctorController.manageClinic(info.id)">Manage</a>
+				<button id="@info.id" class="btn btn-info btn-xs  delete" data-toggle="modal" data-target="#myModal">
+				Delete
+				</button></td>
 			</tr>
 		}
 	</tbody>
 </table>
 </div>
+<script>
+var id;
+$(".delete").click(function(){
+alert(this.id);
+	id=this.id;
+});
 
+$("#del").click(function(){
+alert(id);
+	window.location.href = "/doctor/delete-clinic/"+id;
+	});
+
+
+</script>
 }
