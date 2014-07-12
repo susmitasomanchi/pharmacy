@@ -1,9 +1,8 @@
 /**
  * 
  */
-
 window.onload=function(){
-	//$(".chzn").chosen();
+	$(".chzn").chosen();
 	$(".boottip").tooltip();
 	
 	

@@ -30,13 +30,20 @@ public class MedicalRepresentative extends BaseEntity{
 	public String regionAlloted;
 
 	public String companyName;
-
-	public String typesOfMedecine;
-	
-	public String noOfDoctorsVisit;
 	
 	public String designation;
-		
+	
+	//public int age;
+	
+	//public String sex;	
+
+	public Long mrAdminId;
+	
+	public boolean isActive=true;
+	
+	public String status;
+	
+	//public Long manager;	
 	@OneToOne
 	public MedicalRepresentative manager;
 
@@ -79,22 +86,24 @@ public class MedicalRepresentative extends BaseEntity{
 			bean.designation=this.designation;
 		}
 		
-		if(this.age == 0){	
+		if(this.status!= null){
+			bean.status=this.status;
+		}
+		
+		/*if(this.age == 0){	
 			bean.age=this.age;
 		}
 		if(this.sex != null){	
 			bean.sex=this.sex;
-		}
+		}*/
 		
 		if(this.companyName!= null){
 			bean.companyName=this.companyName;
 		}
-		if(this.typesOfMedecine!= null){
-			bean.typesOfMedecine=this.typesOfMedecine;
-		}
-		if(this.noOfDoctorsVisit!= null){
-			bean.noOfDoctorsVisit=this.noOfDoctorsVisit;
-		}
+		
+		/*if(this.manager != null){
+			bean.manager=this.manager;
+		}*/
 		return bean;
 	}
 

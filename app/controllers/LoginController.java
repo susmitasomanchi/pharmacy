@@ -1,7 +1,6 @@
 package controllers;
 
 import java.util.List;
-
 import models.AppUser;
 import models.Role;
 import play.Logger;

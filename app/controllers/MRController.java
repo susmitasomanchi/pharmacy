@@ -1,12 +1,15 @@
 package controllers;
 
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.List;
 import java.util.Map;
+import com.avaje.ebean.Ebean;
 import beans.MedicalRepresentativeBean;
 import models.AppUser;
 import models.HeadQuarter;
@@ -15,6 +18,7 @@ import models.doctor.Appointment;
 import models.doctor.Doctor;
 import models.mr.DCRLineItem;
 import models.mr.DailyCallReport;
+import models.mr.Manager;
 import models.mr.MedicalRepresentative;
 import models.mr.Sample;
 import play.Logger;
@@ -27,6 +31,8 @@ import play.mvc.Result;
 
 public class MRController extends Controller {
 
+	public static Map<MedicalRepresentative, List<MedicalRepresentative>> mgrMap=new HashMap<MedicalRepresentative,List<MedicalRepresentative>>();
+
 	public static Form<MedicalRepresentative> medicalRepresentative = Form
 			.form(MedicalRepresentative.class);
 	public static Form<HeadQuarter> headquarter = Form.form(HeadQuarter.class);
@@ -38,12 +44,62 @@ public class MRController extends Controller {
 			.form(MedicalRepresentativeBean.class);
 	static MedicalRepresentative loggedInMR = LoginController.getLoggedInUser()
 			.getMedicalRepresentative();
+	
+	//Displaying hierarchy of medical representative
+	public static Result hierarchy()
+		{
+		int i=0;		
+		List<MedicalRepresentative>mrlist = MedicalRepresentative.find.all();	
+		List<Manager> orderList = Ebean.find(Manager.class).fetch("manager").findList();
+		int managerid[] = new int[mrlist.size()];
+		for (Manager mr : orderList) {
+          // managerid[i]=mr.manager;
+           i++;
+        }
+		
+		Logger.info(managerid[1]+"");
+		return ok();
+	}
+	public static Result test() {		
+		//test1(MedicalRepresentative.find.where().eq("appUser.Role", "MR").findList());
+		test1(loggedInMR);
+		for (MedicalRepresentative mr : mgrMap.keySet()) {
+			Logger.info("test");
+
+			if(mr != null){
+				for (MedicalRepresentative representative : mgrMap.get(mr)) {
+					Logger.warn(mr.id+":"+representative.id);
+				}
+			}			
+		}
+		return ok();
+	}
+	
+	public static List<MedicalRepresentative> test1(MedicalRepresentative mr) {
+		Logger.info("test1 start");
+		List<MedicalRepresentative> mrlist=MedicalRepresentative.find.where().eq("manager", mr).findList();
+		if(mrlist.size()==0){
+			return null;
+		}
+		mgrMap.put(mr,mrlist);
+		for (MedicalRepresentative medicalRepresentative : mrlist) {
+			if(medicalRepresentative!=null){
+			test1(medicalRepresentative);
+			Logger.info("inside loop");
+			}
+		}
+		Logger.info("mrlist"+mrlist);
+		return mrlist;
+	}
 
 	// add MR
 	public static Result addMR() {
 		MedicalRepresentative mr = new MedicalRepresentative();
-		return ok(views.html.mr.medicalRepresentative.render(mrForm));
-
+		final List<MedicalRepresentative> mrList = MedicalRepresentative.find
+				.where().eq("appUser.role", "MR").findList();
+		// final List<AppUser> mrList
+		// =AppUser.find.where().eq("role","MR").findList();
+		return ok(views.html.mr.medicalRepresentative.render(mrForm, mrList));
 	}
 
 	public static Result medicalRepresentativeProccessUpdate(final Long id) {
@@ -52,7 +108,12 @@ public class MRController extends Controller {
 		// AppUser user = AppUser.find.byId(filledForm.get().toAppUser().id);
 		if (filledForm.hasErrors()) {
 			Logger.info("*** user bad request");
-			return badRequest(views.html.mr.medicalRepresentative.render(filledForm));
+			// final List<AppUser> mrList
+			// =AppUser.find.where().eq("role","MR").findList();
+			final List<MedicalRepresentative> mrList = MedicalRepresentative.find
+					.where().eq("appUser.role", "MR").findList();
+			return ok(views.html.mr.medicalRepresentative
+					.render(mrForm, mrList));
 		}
 
 		else {
@@ -60,7 +121,7 @@ public class MRController extends Controller {
 					.getLoggedInUser().getMedicalRepresentative();
 			final MedicalRepresentativeBean medicalRepresentativeBean = filledForm
 					.get();
-			medicalRepresentativeBean.id=id;			
+			medicalRepresentativeBean.id = id;
 			final AppUser appUser = medicalRepresentativeBean.toAppUser();
 			final MedicalRepresentative mr = medicalRepresentativeBean
 					.toMedicalRepresentative();
@@ -79,30 +140,40 @@ public class MRController extends Controller {
 		// AppUser user = AppUser.find.byId(filledForm.get().toAppUser().id);
 		if (filledForm.hasErrors()) {
 			Logger.info("*** user bad request");
-			return badRequest(views.html.mr.medicalRepresentative.render(filledForm));
+			// final List<AppUser> mrList
+			// =AppUser.find.where().eq("role","MR").findList();
+			final List<MedicalRepresentative> mrList = MedicalRepresentative.find
+					.where().eq("appUser.role", "MR").findList();
+			return ok(views.html.mr.medicalRepresentative
+					.render(mrForm, mrList));
 		}
 
 		else {
 			final MedicalRepresentative loggedInMr = LoginController
 					.getLoggedInUser().getMedicalRepresentative();
-			
+
 			final MedicalRepresentativeBean medicalRepresentativeBean = filledForm
 					.get();
 
-			
 			final MedicalRepresentative mr = medicalRepresentativeBean
 					.toMedicalRepresentative();
-			final AppUser appUser = medicalRepresentativeBean.toAppUser();
 
+			final AppUser appUser = medicalRepresentativeBean.toAppUser();
 
 			if (mr.id == null) {
 				mr.appUser = appUser;
+				if(medicalRepresentativeBean.manager!=null)
+				{
+				mr.manager = MedicalRepresentative.find.byId(medicalRepresentativeBean.manager);
+				}
 				mr.mrAdminId = loggedInMr.id;
 				appUser.save();
 				mr.save();
-			}else{
+			} else {
 				Logger.info("not null");
-				mr.appUser=appUser;
+				mr.manager = MedicalRepresentative.find
+						.byId(medicalRepresentativeBean.manager);
+				mr.appUser = appUser;
 				mr.appUser.update();
 				mr.update();
 			}
@@ -121,12 +192,18 @@ public class MRController extends Controller {
 		final List<MedicalRepresentative> mrList = MedicalRepresentative.find
 				.where().eq("mrAdminId", loggedInMR.id).findList();
 		// Logger.info(mrList.);
+		// final List<MedicalRepresentative> mrList =
+		// MedicalRepresentative.find.where().eq("companyName",
+		// loggedInMR.companyName).findList();
+
 		return ok(views.html.mr.mrList.render(mrList));
 	}
 
 	public static Result removeMR(final Long id) {
 
-		MedicalRepresentative.find.byId(id).delete();
+		MedicalRepresentative mr = MedicalRepresentative.find.byId(id);
+		mr.isActive = false;
+		mr.update();
 		final List<MedicalRepresentative> mrList = MedicalRepresentative.find
 				.where().eq("mrAdminId", loggedInMR.id).findList();
 		return ok(views.html.mr.mrList.render(mrList));
@@ -141,7 +218,11 @@ public class MRController extends Controller {
 
 		Form<MedicalRepresentativeBean> editForm = mrForm.fill(filledMr
 				.toBean());
-		return ok(views.html.mr.medicalRepresentative.render(editForm));
+		// final List<AppUser> mrList
+		// =AppUser.find.where().eq("role","MR").findList();
+		final List<MedicalRepresentative> mrList = MedicalRepresentative.find
+				.where().eq("appUser.role", "MR").findList();
+		return ok(views.html.mr.medicalRepresentative.render(editForm, mrList));
 	}
 
 	public static Result doctorList() {

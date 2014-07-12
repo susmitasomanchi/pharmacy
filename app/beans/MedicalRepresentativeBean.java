@@ -1,13 +1,12 @@
 package beans;
 
 import java.io.Serializable;
-import java.util.Date;
 
+import java.util.Date;
 import javax.annotation.Generated;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-
 import models.AppUser;
 import models.Role;
 import models.Sex;
@@ -29,9 +28,9 @@ public class MedicalRepresentativeBean implements Serializable {
 	public String sex;
 	public String regionAlloted;
 	public String companyName;
-	public String typesOfMedecine;
-	public String noOfDoctorsVisit;
 	public Long mrAdminId;
+	public Long manager;
+	public String status;
 
 	public AppUser toAppUser() {
 		final AppUser appUser = new AppUser();
@@ -55,28 +54,31 @@ public class MedicalRepresentativeBean implements Serializable {
 		if(this.designation != null) {
 			mr.designation= this.designation;
 		}
-		if(this.age != 0) {
+		/*if(this.age != 0) {
 			mr.age= this.age;
 		}
 		if(this.sex != null) {
 			mr.sex= this.sex;
-		}
+		}*/
 		if(this.regionAlloted != null) {
 			mr.regionAlloted= this.regionAlloted;
 		}
+		
 		if(this.companyName != null) {
 			mr.companyName= this.companyName;
 		}
 		
-		if(this.typesOfMedecine != null) {
-			mr.typesOfMedecine= this.typesOfMedecine;
+		if(this.status != null) {
+			mr.status= this.status;
 		}
-		if(this.noOfDoctorsVisit != null) {
-			mr.noOfDoctorsVisit= this.noOfDoctorsVisit;
-		}
-		if(this.mrAdminId != null) {
+		
+			
+		/*if(this.manager != null) {
+			mr.manager= this.manager;
+		}*/
+		/*if(this.mrAdminId != null) {
 			mr.mrAdminId= this.mrAdminId;
-		}
+		}*/
 		
 		return mr;
 		

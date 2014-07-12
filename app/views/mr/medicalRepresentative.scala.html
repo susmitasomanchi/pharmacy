@@ -1,9 +1,9 @@
-@(dataForm: play.data.Form[beans.MedicalRepresentativeBean])
+@(dataForm: play.data.Form[beans.MedicalRepresentativeBean],mrList: List[models.mr.MedicalRepresentative])
 @import helper._
 @import helper.twitterBootstrap._
 @main("MedicalRepresentative form") {
 
-@helper.form(action=routes.MRController.medicalRepresentativeProccess()) {
+    @helper.form(action=routes.MRController.medicalRepresentativeProccess()) {
 	
 	@helper.inputText(dataForm("name"),'_label->"Name")
 	@helper.inputText(dataForm("designation"),'_label->"designation")
@@ -15,14 +15,24 @@
 	@helper.inputText(dataForm("age"),'_label->"Age")
 	@helper.inputText(dataForm("companyName"),'_label->"Company Name")
 	@helper.inputText(dataForm("regionAlloted"),'_label->"Region")
-	@helper.inputText(dataForm("typesOfMedicine"),'_label->"Types Of Medicine")
-	@helper.inputText(dataForm("noOfDoctorsVisit"),'_label->"No Of Doctors Visit")
-	
-	
+	Select Manager
+	<select class = "assignedManager chzn" name="manager" placeholder="Manager Assigned">  
+    @for(mr <- mrList){
+      <option value = @mr.id>
+        @mr.appUser.name
+      </option>
+    } 
+    </select>	<br>
+  
+		<select name="status">
+        @for(e <- models.mr.EmploymentStatus.values()){
+        <option  name="@e" value="@e">@e</option>
+               }
+        </select>   <br>
+		
+		
 	<input type="hidden" name="id" value="@dataForm("id").value()">
 	<input type="hidden" name="appid" value="@dataForm("appid").value()">
-	<input type="submit" value="Save mr">
-	
-	
+	<input type="submit" value="Save mr">	
 	}
 	}
