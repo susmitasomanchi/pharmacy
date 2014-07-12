@@ -16,7 +16,7 @@
 		@for(info <- list){
 			<tr>
 				<td>@info.clinic.name</td>
-				<td><a class="btn btn-info btn-xs" href="@routes.DoctorController.manageClinic(info.id)">Manage</a><a class="btn btn-info btn-xs" href="@routes.DoctorController.deleteClinic(info.id)">Delete</a></td>
+				<td><a class="btn btn-info btn-xs" href="@routes.DoctorController.manageClinic(info.id)">Manage</a><a class="btn btn-danger btn-xs" href="@routes.DoctorController.deleteClinic(info.id)">Delete</a></td>
 			</tr>
 		}
 	</tbody>
