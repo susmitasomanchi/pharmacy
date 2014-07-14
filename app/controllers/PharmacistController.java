@@ -8,8 +8,10 @@ import java.util.Map;
 import javax.activation.MimetypesFileTypeMap;
 
 import models.Alert;
+import models.Country;
 import models.FileEntity;
 import models.Product;
+import models.State;
 import models.pharmacist.Batch;
 import models.pharmacist.Inventory;
 import models.pharmacist.OrderLineItem;
@@ -29,7 +31,7 @@ import com.google.common.io.Files;
 @BasicAuth
 public class PharmacistController extends Controller {
 
-	public static Form<PharmacyBean> pharmacyBean = Form
+	public static Form<PharmacyBean> pharmacyBeanForm = Form
 			.form(PharmacyBean.class);
 
 	public static Form<Pharmacist> form = Form.form(Pharmacist.class);
@@ -214,7 +216,7 @@ public class PharmacistController extends Controller {
 	public static Result editPharmacyDetails() {
 		final Pharmacy pharmacy = LoginController.getLoggedInUser()
 				.getPharmacist().pharmacy;
-		final Form<PharmacyBean> filledForm = pharmacyBean.fill(pharmacy
+		final Form<PharmacyBean> filledForm = pharmacyBeanForm.fill(pharmacy
 				.toBean());
 		return ok(views.html.pharmacist.pharmacyDetails.render(filledForm));
 	}
@@ -246,6 +248,7 @@ public class PharmacistController extends Controller {
 
 
 
+
 	/**
 	 * @author : lakshmi
 	 * POST	/pharmacy/address-update
@@ -254,21 +257,52 @@ public class PharmacistController extends Controller {
 	 */
 
 	public static Result pharmacyAddressUpdate() {
+
 		try{
 			final Map<String, String[]> requestMap = request().body().asFormUrlEncoded();
 			final Pharmacy pharmacy = Pharmacy.find.byId(Long.parseLong(requestMap.get("pharmacyId")[0]));
-
-			if(requestMap.get("name") != null && (requestMap.get("name")[0].trim().compareToIgnoreCase("")!=0)){
-				pharmacy.name = requestMap.get("name")[0];
+			Logger.info("map size"+requestMap.toString());
+			if(pharmacy.address.id == null){
+				//pharmacy.address = new Address();
+				pharmacy.address.save();
+				Logger.info("id===="+pharmacy.address.id);
 			}
-			if(requestMap.get("description") != null && (requestMap.get("description")[0].trim().compareToIgnoreCase("")!=0)){
-				pharmacy.description = requestMap.get("description")[0];
+			if(requestMap.get("addressLine1") != null && (requestMap.get("addressLine1")[0].trim().compareToIgnoreCase("")!=0)){
+				pharmacy.address.addrressLine1 = requestMap.get("addressLine1")[0];
 			}
-
+			if(requestMap.get("addressLine2") != null && (requestMap.get("addressLine2")[0].trim().compareToIgnoreCase("")!=0)){
+				pharmacy.address.addrressLine2 = requestMap.get("addressLine2")[0];
+			}
+			if(requestMap.get("city") != null && (requestMap.get("city")[0].trim().compareToIgnoreCase("")!=0)){
+				pharmacy.address.city = requestMap.get("city")[0];
+			}
+			if(requestMap.get("area") != null && (requestMap.get("area")[0].trim().compareToIgnoreCase("")!=0)){
+				pharmacy.address.area = requestMap.get("area")[0];
+			}
+			if(requestMap.get("pincode") != null && (requestMap.get("pincode")[0].trim().compareToIgnoreCase("")!=0)){
+				pharmacy.address.pinCode = requestMap.get("pincode")[0];
+			}
+			if(requestMap.get("state") != null && (requestMap.get("state")[0].trim().compareToIgnoreCase("")!=0)){
+				pharmacy.address.state = Enum.valueOf(State.class,requestMap.get("state")[0]);
+			}
+			if(requestMap.get("country") != null && (requestMap.get("country")[0].trim().compareToIgnoreCase("")!=0)){
+				pharmacy.address.country = Enum.valueOf(Country.class,requestMap.get("country")[0]);
+			}
+			if(requestMap.get("latitude") != null && (requestMap.get("latitude")[0].trim().compareToIgnoreCase("")!=0)){
+				pharmacy.address.latitude = Double.parseDouble(requestMap.get("latitude")[0]);
+			}
+			if(requestMap.get("longitude") != null && (requestMap.get("longitude")[0].trim().compareToIgnoreCase("")!=0)){
+				pharmacy.address.longitude = Double.parseDouble(requestMap.get("longitude")[0]);
+			}
+			if(requestMap.get("contactNo") != null && (requestMap.get("contactNo")[0].trim().compareToIgnoreCase("")!=0)){
+				pharmacy.contactNo = requestMap.get("contactNo")[0];
+			}
+			pharmacy.address.update();
 			pharmacy.update();
 
 		}
 		catch (final Exception e){
+			e.printStackTrace();
 			flash().put("alert", new Alert("alert-danger", "Sorry. Something went wrong. Please try again.").toString());
 		}
 		return redirect(routes.UserActions.dashboard());
@@ -276,17 +310,6 @@ public class PharmacistController extends Controller {
 
 
 
-	/*
-	 * @author : lakshmi
-	 * 
-	 * @url: /upload-pharmacy-images
-	 * 
-	 * descrition:rendering to upload the Pharmacy Images
-	 */
-	public static Result uploadPharmacyImage() {
-		return ok(views.html.pharmacist.uploadPharmacyImages
-				.render(pharmacyForm));
-	}
 
 	/*
 	 * @author : lakshmi
@@ -389,7 +412,7 @@ public class PharmacistController extends Controller {
 	public static Result pharmacyDescription(final Long id){
 		final Map<String, String[]> s = request().body().asFormUrlEncoded();
 		Logger.info("String........"+s);
-		final Form<PharmacyBean> filledForm = pharmacyBean.bindFromRequest();
+		final Form<PharmacyBean> filledForm = pharmacyBeanForm.bindFromRequest();
 		Logger.info("id==="+Pharmacy.find.byId(id));
 		final Pharmacy pharmacy = Pharmacy.find.byId(id);
 

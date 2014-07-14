@@ -38,13 +38,15 @@ public class Pharmacy extends BaseEntity {
 	public List<FileEntity> profileImageList = new ArrayList<FileEntity>();
 
 	@OneToOne
-	public Address address	= new Address();
+	public Address address = new Address();
 
 	public String contactNo;
 
 	@Column(columnDefinition="TEXT")
 	public String description;
 
+	/*@OneToOne
+	public Pharmacist adminPharmacist;*/
 
 	//@OneToOne
 	//public PharmacyProductInfo pharmacyProductInfo;

@@ -107,7 +107,7 @@ GET   /place-product-order/process              controllers.PharmacistController
 GET		/edit-pharmacy-details					controllers.PharmacistController.editPharmacyDetails()
 POST	/pharmacy/basic-update					controllers.PharmacistController.pharmacyBasicUpdate()
 POST	/pharmacy/address-update				controllers.PharmacistController.pharmacyAddressUpdate()
-GET		/upload-pharmacy-images					controllers.PharmacistController.uploadPharmacyImage()
+#GET		/upload-pharmacy-images					controllers.PharmacistController.uploadPharmacyImage()
 POST	/pharmacy/upload-pharmacy-images					controllers.PharmacistController.uploadPharmacyImageProcess()
 GET		/pharmacy/get-image/:pharmacyId/:fileId				controllers.PharmacistController.getPharmacyImages(pharmacyId: Long,fileId: Long)
 GET		/pharmacy/remove-image/:pharmacyId/:fileId			controllers.PharmacistController.removeImage(pharmacyId: Long,fileId: Long)
