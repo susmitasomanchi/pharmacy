@@ -26,12 +26,12 @@
       #map-container { height: 200px }
     	.maptext {
     position:absolute;
-    top:250px;
+    top:200px;
     height:30px;
     font-size:16px;
     font-weight:bolder;
     font-family: 'Dosis', sans-serif;
-    left:40px;
+    left:110px;
     line-height:30px;
     color:#006687;
     /*-webkit-text-stroke: 0.25px;*/
@@ -66,7 +66,7 @@
   			</div>
 		
 			<div class="form-group">
-    			<label for="streetName">Street Name</label>
+    			<label for="streetName">Street Address</label>
     			<input type="text" class="form-control" id="streetName" name="street" value="@clinicForm("street").value"  placeholder="Enter name of the street">
   			</div>
   			
@@ -83,18 +83,17 @@
 			<div class="form-group">
    				 <label for="state">State</label>
     			 <select data-placeholder="Select the state" name="state" class="form-control chosen-select">
-  				 	@for(state <-State.options().keySet()){
-  				 	<option value="@state">@state</option>
+  				 	@for((k,v) <-State.options()){
+  				 	<option value="@k">@v</option>
 					}
 				</select>
 			</div>
 			</div>
 			<div class="col-md-6">
-				<h2>Location </h2>
 				<div id="map_canvas" style="width:520px;height:400px">
 <img src="/assets/images/googlemap1.png" width="520" height="400" style="position:relative"/>
 <div class="maptext">
-<p>Please provide Address details, Area and City to generate map</span></p>
+<p>Please provide area and city to generate map</span></p>
 </div>
 
 				</div>
@@ -109,25 +108,25 @@
    					<table class="table table-striped">
 			<head>
 			<tr>		
-				<th>Day</th>
-				<th>From time</th>
-				<th>To  time</th>
+				<th style="text-align:center;">Day</th>
+				<th style="text-align:center;">From Time</th>
+				<th style="text-align:center;">To Time</th>
 			</tr>
 			</head>
 			<tbody>
 			@for((day,index) <- models.doctor.Day.getList().zipWithIndex){
 				
 					<tr>
-					<td><input class="checkday" id="p-@day" type="checkbox" name="daysOfWeek[]" value="@day.toString()">@day</input></td>
+					<td style="width:20%;"><input class="checkday" id="p-@day" type="checkbox" name="daysOfWeek[]" value="@day.toString()">@day</input></td>
 					<td> 
 						<div class="input-append bootstrap-timepicker">
-							 <input id="p-@day-from" type="text" class="input-small" style="padding-left:20px"  name="fromHrs[]" value="@clinicForm("fromHrs["+index+"]").value" disabled required/>
+							 <input id="p-@day-from" type="text" class="input-small" style="padding-left:20px; width:40%; margin-left:30%;" name="fromHrs[]" value="@clinicForm("fromHrs["+index+"]").value" disabled required/>
            				 	 <span class="add-on"><i class="fa fa-clock-o"></i></span>
       					</div>
 					</td>
 					<td> 
 						<div class="input-append bootstrap-timepicker">
-							<input id="p-@day-to"  type="text" class="input-small" style="padding-left:20px"  name="toHrs[]" value="@clinicForm("toHrs["+index+"]").value" disabled required/>
+							<input id="p-@day-to"  type="text" class="input-small" style="padding-left:20px; width:40%; margin-left:30%;"  name="toHrs[]" value="@clinicForm("toHrs["+index+"]").value" disabled required/>
             				<span class="add-on"><i class="fa fa-clock-o"></i></span>
       					</div>
 					</td>
@@ -138,8 +137,8 @@
 			</tbody>
 			</table>
 			<div class="form-group">
-    <label for="slotp" class="col-md-3" style="padding-left:10px"><br>Slot Timings(in minutes)</label>
-    <input type="text" class="col-md-6" id="slotp" name="slot" value="5" placeholder="Slot Timings for Patient">
+    <label for="slotp" class="col-md-3" style="padding-left:10px">Slot Timings<br>(in minutes)</label>
+    <input type="text" class="col-md-1" id="slotp" name="slot" value="5" placeholder="Slot Timings for Patient">
   </div>	
    					
    		</div>
@@ -206,13 +205,13 @@
 	});
 
 	function validate() {
+		/*
 		var values = $('input:checkbox:checked').map(
 				function() {
-					if ($("#" + this.id + "-from").val() > $(
+					if ($("#" + this.id + "-from").val() < $(
 							"#" + this.id + "-to").val()) {
 						return 1;
 					}
-
 					return 0;
 				}).get();
 
@@ -221,6 +220,7 @@
 			$('#submit').popover('show');
 			return false;
 		}
+		*/
 		return true;
 	}
 </script>			
@@ -278,7 +278,8 @@
 						var streetname=$("#streetName").val();
 						var area=$("#area").val();
 						geocoder.geocode({
-							'address' : streetname+area+this.value
+							//'address' : streetname+area+this.value
+							'address' : area+this.value
 						}, function(results, status) {
 							if (status == google.maps.GeocoderStatus.OK) {
 								//  alert("location : " + results[0].geometry.location.lat() + " " +results[0].geometry.location.lng()); 
@@ -287,7 +288,7 @@
 								lng = results[0].geometry.location.lng();
 								initialize();
 							} else {
-								alert("Something got wrong " + status);
+								//alert("Something got wrong " + status);
 							}
 						});
 

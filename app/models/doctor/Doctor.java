@@ -82,11 +82,7 @@ public class Doctor extends BaseEntity{
 	@ManyToOne
 	public List<DoctorEducation> doctorEducation = new ArrayList<DoctorEducation>();
 
-
-	//government or private
-	public String doctorType;
-
-	public String experience;
+	public Integer experience;
 
 	public static Model.Finder<Long,Doctor> find = new Finder<Long, Doctor>(Long.class, Doctor.class);
 
@@ -102,5 +98,8 @@ public class Doctor extends BaseEntity{
 		return this.doctorSocialWorkList;
 	}
 
+	public List<DoctorClinicInfo> getActiveClinic(){
+		return DoctorClinicInfo.find.where().eq("doctor", this).eq("active", true).findList();
+	}
 
 }

@@ -34,7 +34,9 @@ public class Address extends BaseEntity {
 	@Required
 	public State state;
 
-	public Long pinCode;
+	public String pinCode;
+
+	public String fetchedPinCode;
 
 	public Country country;
 

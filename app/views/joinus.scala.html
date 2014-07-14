@@ -96,7 +96,7 @@
     <div class="form-group">
       <label for="inputPassword" class="col-lg-2 control-label">Password*</label>
       <div class="col-lg-10">
-        <input type="password" class="form-control" name="password" id="inputPassword" placeholder="Password">
+        <input type="password" class="form-control" name="password" id="inputPassword" placeholder="Password" required>
       </div>
     </div>
     
@@ -107,6 +107,38 @@
       </div>
     </div>
     
+    <div class="form-group">
+      <label for="inputRole" class="col-lg-2 control-label">I am a *</label>
+      <div class="col-lg-10">
+        <select class="" name="role" id="inputRole" required>
+        	<option value="DOCTOR">Doctor</option>
+        	<option value="ADMIN_PHARMACIST">Pharmacist</option>
+        </select>
+      </div>
+    </div>
+    
+    <div style="display:none;" id="pharmaNameDiv" class="form-group">
+      <label for="inputPharmacyName" class="col-lg-2 control-label">Name of Pharmacy*</label>
+      <div class="col-lg-10">
+        <input type="text" class="form-control" name="pharmacyName" id="inputPharmacyName" placeholder="Name of Pharmacy">
+      </div>
+    </div>
+    
+    
+    <script>
+		$('#inputRole').on('change', function(){
+			if($('#inputRole').val() == 'ADMIN_PHARMACIST'){
+				$('#inputPharmacyName').attr('required','true');
+				$('#pharmaNameDiv').show();
+			}
+			else{	
+				$('#inputPharmacyName').removeAttr('required');
+					$('#pharmaNameDiv').hide();
+			}
+
+		});
+
+    </script>
     
     @*
     
@@ -167,7 +199,7 @@
     
     <div class="form-group">
       <div class="col-lg-10 col-lg-offset-2">
-        <a onclick="validateAndSubmit();" class="btn btn-primary">Submit</a>
+        <input type="submit" onclick="validateAndSubmit();" class="btn btn-primary" value="Submit" >
       </div>
     </div>
   </fieldset>
@@ -178,13 +210,14 @@
     
 <script>
 
-function validateAndSubmit(){
+function validateAndSubmit(e){
 	if(
 		($('#inputConfirmPassword').val() == $('#inputPassword').val())
 		){
-		$('#doctorForm').submit();			
+		//$('#doctorForm').submit();			
 	}
 	else{
+		e.preventDefault();
 		alert('Passwords Do Not Match!');
 	}
 }

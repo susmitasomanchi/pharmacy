@@ -10,6 +10,7 @@ import models.State;
 import models.doctor.Clinic;
 import models.doctor.Day;
 import models.doctor.DaySchedule;
+import models.doctor.Doctor;
 import models.doctor.DoctorClinicInfo;
 import play.Logger;
 
@@ -17,6 +18,8 @@ import play.Logger;
 public class ClinicBean implements Serializable {
 
 	public Long id;
+
+	public Long doctorId;
 
 	public String name;
 
@@ -59,6 +62,11 @@ public class ClinicBean implements Serializable {
 		if (this.id != null) {
 			doctorClinicInfo.id = this.id;
 		}
+
+		if(this.doctorId != null){
+			doctorClinicInfo.doctor = Doctor.find.byId(this.doctorId);
+		}
+
 		Logger.info("" + this.id);
 		Logger.info("name null");
 
@@ -67,7 +75,6 @@ public class ClinicBean implements Serializable {
 		clinic.contactNo = this.contactNo;
 		clinic.contactPersonName = this.contactPersonName;
 		doctorClinicInfo.clinic = clinic;
-		clinic.save();
 
 		Logger.info(doctorClinicInfo.clinic.name);
 		Logger.info("from hrs" + this.fromHrs.size());
@@ -114,7 +121,7 @@ public class ClinicBean implements Serializable {
 
 		}
 		if (this.area != null) {
-			address.addrressLine2 = this.area;
+			address.area = this.area;
 		}
 		if (this.city != null) {
 			address.city = this.city;
@@ -125,8 +132,9 @@ public class ClinicBean implements Serializable {
 
 		address.latitude = this.lat;
 		address.longitude = this.lng;
-		doctorClinicInfo.address = address;
-		doctorClinicInfo.address.save();
+		doctorClinicInfo.clinic.address = address;
+		doctorClinicInfo.clinic.address.save();
+		clinic.save();
 		Logger.info("" + this.lat);
 		return doctorClinicInfo;
 	}

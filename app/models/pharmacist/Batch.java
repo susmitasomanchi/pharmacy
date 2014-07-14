@@ -14,6 +14,7 @@ import models.Product;
 import play.data.validation.Constraints.Required;
 
 
+@SuppressWarnings("serial")
 @Entity
 public class Batch extends BaseEntity {
 

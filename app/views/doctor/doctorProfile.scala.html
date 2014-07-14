@@ -729,6 +729,174 @@ function submitimagesform(name){
 
 
 
+<div class="well">
+<h3 style="color:#006687;font-weight:bold">Clinics</h3>
+
+<ul class="nav nav-tabs">
+  @for((clinicInfo, index) <- doctor.getActiveClinic().zipWithIndex){
+  	@if(index == 0){
+  		<li onclick="addMarker('@clinicInfo.clinic.address.latitude','@clinicInfo.clinic.address.longitude');" class="active"><a href="#clinic@clinicInfo.id" data-toggle="tab">@clinicInfo.clinic.name</a></li>
+  	}else{
+		<li onclick="addMarker('@clinicInfo.clinic.address.latitude','@clinicInfo.clinic.address.longitude');"><a href="#clinic@clinicInfo.id" data-toggle="tab">@clinicInfo.clinic.name</a></li>  	
+  	}
+  }
+</ul>
+<div class="tab-content">
+@for((clinicInfo, index) <- doctor.getActiveClinic().zipWithIndex){
+@if(index == 0){
+	<div class="tab-pane active" id="clinic@clinicInfo.id">
+}else{
+	<div class="tab-pane" id="clinic@clinicInfo.id">  	
+}
+
+
+<div class="row" style="padding-left:20px">
+<br>
+<div class="col-md-6">
+<h4><b><a href="#" >@clinicInfo.clinic.name</a></b></h4>
+<h5>
+@clinicInfo.clinic.contactPersonName
+<br>
+@clinicInfo.clinic.address.addrressLine1
+<br>
+@clinicInfo.clinic.address.area
+<br>
+@clinicInfo.clinic.address.city
+<br>
+@clinicInfo.clinic.contactNo
+</h5>
+</div>
+<div class="col-md-6">
+<h4>Timings</h4>
+<h4><b>Weekdays:</b><br><br>
+<div class="row" style="padding-left:20px">
+<span class="badge col-md-2" style="font-size:20px">Mon</span>
+<span class="badge col-md-2" style="font-size:20px">Tue</span>
+<span class="col-md-2" style="font-size:20px">Wed</span>
+<span class="badge col-md-2" style="font-size:20px">Thu</span>
+<span class="col-md-2" style="font-size:20px">Fri</span>
+</div>
+</h4>
+<div class="row" style="padding-left:20px">
+<span class="col-md-2" style="font-size:12px;padding-right:0px">9am-9pm</span>
+<span class="col-md-2" style="font-size:12px;padding-right:0px">9am-9pm</span>
+<span class="col-md-2" style="font-size:12px;padding-right:0px"></span>
+<span class="col-md-2" style="font-size:12px;padding-right:0px">9am-9pm</span>
+<span class="col-md-2" style="font-size:12px;padding-right:0px"></span>
+</div>
+<br>
+<h4><b>Weekends:</b><br><br>
+<div class="row" style="padding-left:20px">
+<span class="badge col-md-2" style="font-size:20px">Sat</span>
+<span class="col-md-2" style="font-size:20px">Sun</span>
+</div>
+</h4>
+<div class="row" style="padding-left:20px">
+<span class="col-md-2" style="font-size:12px;padding-right:0px">9am-9pm</span>
+<span class="col-md-2" style="font-size:12px;padding-right:0px"></span>
+</div>
+</div>
+</div>
+</div>
+
+}
+
+
+
+@*
+<div class="tab-pane" id="clinic2">
+<div class="row">
+<br>
+<div class="col-md-6">
+<h2><b><a href="#" >ABC Clinic</a></b></h2>
+<h4>Flat no<br>
+Address<br>
+Place<br>
+Phone nos: 04023456789, 9876543210</h4>
+</div>
+<div class="col-md-6">
+<h4>Timings</h4>
+<h4><b>Weekdays:</b><br><br>
+<div class="row" style="padding-left:20px">
+<span class="badge col-md-2" style="font-size:20px">Mon</span>
+<span class="col-md-2" style="font-size:20px">Tue</span>
+<span class="badge col-md-2" style="font-size:20px">Wed</span>
+<span class="col-md-2" style="font-size:20px">Thu</span>
+<span class="badge col-md-2" style="font-size:20px">Fri</span>
+</div>
+</h4>
+<div class="row" style="padding-left:20px">
+<span class="col-md-2" style="font-size:12px;padding-right:0px">9am-9pm</span>
+<span class="col-md-2" style="font-size:12px;padding-right:0px"></span>
+<span class="col-md-2" style="font-size:12px;padding-right:0px">9am-9pm</span>
+<span class="col-md-2" style="font-size:12px;padding-right:0px"></span>
+<span class="col-md-2" style="font-size:12px;padding-right:0px">9am-9pm</span>
+</div>
+<br>
+<h4><b>Weekends:</b><br><br>
+<div class="row" style="padding-left:20px">
+<span class="badge col-md-2" style="font-size:20px">Sat</span>
+<span class="col-md-2" style="font-size:20px">Sun</span>
+</div>
+</h4>
+<div class="row" style="padding-left:20px">
+<span class="col-md-2" style="font-size:12px;padding-right:0px">9am-9pm</span>
+<span class="col-md-2" style="font-size:12px;padding-right:0px"></span>
+</div>
+</div>
+</div>
+</div>
+
+<div class="tab-pane" id="clinic3">
+<div class="row">
+<br>
+<div class="col-md-6">
+<h2><b><a href="#" >SAKP Clinic</a></b></h2>
+<h4>Flat no<br>
+Address<br>
+Place<br>
+Phone nos: 04023456789, 9876543210</h4>
+</div>
+<div class="col-md-6">
+<h4>Timings</h4>
+<h4><b>Weekdays:</b><br><br>
+<div class="row" style="padding-left:20px">
+<span class="badge col-md-2" style="font-size:20px">Mon</span>
+<span class="badge col-md-2" style="font-size:20px">Tue</span>
+<span class="badge col-md-2" style="font-size:20px">Wed</span>
+<span class="col-md-2" style="font-size:20px">Thu</span>
+<span class="col-md-2" style="font-size:20px">Fri</span>
+</div>
+</h4>
+<div class="row" style="padding-left:20px">
+<span class="col-md-2" style="font-size:12px;padding-right:0px">9am-9pm</span>
+<span class="col-md-2" style="font-size:12px;padding-right:0px">9am-9pm</span>
+<span class="col-md-2" style="font-size:12px;padding-right:0px">9am-9pm</span>
+<span class="col-md-2" style="font-size:12px;padding-right:0px"></span>
+<span class="col-md-2" style="font-size:12px;padding-right:0px"></span>
+</div>
+<br>
+<h4><b>Weekends:</b><br><br>
+<div class="row" style="padding-left:20px">
+<span class="badge col-md-2" style="font-size:20px">Sat</span>
+<span class="col-md-2" style="font-size:20px">Sun</span>
+</div>
+</h4>
+<div class="row" style="padding-left:20px">
+<span class="col-md-2" style="font-size:12px;padding-right:0px">9am-9pm</span>
+<span class="col-md-2" style="font-size:12px;padding-right:0px"></span>
+</div>
+</div>
+</div>
+</div>
+*@
+
+
+
+</div>
+</div>
+<br>
+<div id="map_canvas" style="width:100%;height:300px"> </div>
 
 
 
@@ -736,8 +904,7 @@ function submitimagesform(name){
 
 
 
-
-
+@*
 
 <h4 style="color:#006687;font-weight:bold">Clinics</h4>
 <div id="clinics-carousel" class="row-fluid" style="padding-left:20px;padding-right:15px">
@@ -894,6 +1061,19 @@ Phone nos: 04023456789, 9876543210</h6>
 <div class="clearfix"></div>  
 <a class="prev" id="clinics-carousel_prev" href="#"><img class="navigators" src="/assets/blog/images/previcon.png" width="15" height="15"/></a>
 <a class="next" id="clinics-carousel_next" href="#"><img class="navigators" src="/assets/blog/images/nexticon.png" width="15" height="15"/></a>
+
+
+
+*@
+
+
+
+
+
+
+
+
+
 
 
 
@@ -1188,6 +1368,39 @@ $("#content-"+id).hide();
 
 
 
+
+@if(doctor.getActiveClinic().size()>0){
+<script>
+var initLat = @doctor.getActiveClinic().get(0).clinic.address.latitude;
+var initLng = @doctor.getActiveClinic().get(0).clinic.address.longitude;
+var map;
+var marker;
+
+function initialize() {
+	var map_canvas = document.getElementById('map_canvas');
+	var map_options = {
+	center : new google.maps.LatLng(initLat,initLng),
+	zoom : 14,
+	mapTypeId : google.maps.MapTypeId.ROADMAP
+	};
+	map = new google.maps.Map(map_canvas, map_options);
+
+	marker = new google.maps.Marker({
+	position : new google.maps.LatLng(initLat,initLng),
+	map : map
+	});
+
+}
+
+	google.maps.event.addDomListener(window, 'load', initialize);
+	
+	function addMarker(lat,lng){
+    	marker.setPosition( new google.maps.LatLng(lat,lng ) );
+    	map.panTo(new google.maps.LatLng(lat,lng));
+	};
+	
+</script>
+}
 
 
 
