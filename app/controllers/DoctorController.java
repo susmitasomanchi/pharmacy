@@ -282,7 +282,6 @@ public class DoctorController extends Controller {
 		if(doctor.id.longValue() != LoginController.getLoggedInUser().getDoctor().id.longValue()){
 			return redirect(routes.LoginController.processLogout());
 		}
-
 		final DoctorAward award = DoctorAward.find.byId(id);
 		doctor.doctorAwardList.remove(award);
 		award.delete();
@@ -303,7 +302,6 @@ public class DoctorController extends Controller {
 		if(doctor.id.longValue() != LoginController.getLoggedInUser().getDoctor().id.longValue()){
 			return redirect(routes.LoginController.processLogout());
 		}
-
 		try{
 			final DoctorEducation education = new DoctorEducation();
 			education.institutionName = requestMap.get("name")[0];
@@ -331,7 +329,6 @@ public class DoctorController extends Controller {
 				doctor.doctorEducationList.add(education);
 				doctor.update();
 			}
-
 			return redirect(routes.UserActions.dashboard());
 		}
 		catch(final NumberFormatException e){
@@ -359,7 +356,6 @@ public class DoctorController extends Controller {
 		if(doctor.id.longValue() != LoginController.getLoggedInUser().getDoctor().id.longValue()){
 			return redirect(routes.LoginController.processLogout());
 		}
-
 		final DoctorEducation education = DoctorEducation.find.byId(id);
 		doctor.doctorEducationList.remove(education);
 		education.delete();
@@ -380,7 +376,6 @@ public class DoctorController extends Controller {
 		if(doctor.id.longValue() != LoginController.getLoggedInUser().getDoctor().id.longValue()){
 			return redirect(routes.LoginController.processLogout());
 		}
-
 		try{
 			final DoctorSocialWork socialWork = new DoctorSocialWork();
 			socialWork.title = requestMap.get("title")[0];
@@ -394,7 +389,6 @@ public class DoctorController extends Controller {
 				doctor.getDoctorSocialWorkList().add(socialWork);
 				doctor.update();
 			}
-
 			return redirect(routes.UserActions.dashboard());
 		}
 		catch(final Exception e){
@@ -423,19 +417,6 @@ public class DoctorController extends Controller {
 		doctor.update();
 		return redirect(routes.UserActions.dashboard());
 	}
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 	/**
