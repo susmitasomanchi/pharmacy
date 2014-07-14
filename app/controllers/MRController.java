@@ -27,7 +27,9 @@ import play.data.DynamicForm;
 import play.data.Form;
 import play.mvc.Controller;
 import play.mvc.Result;
+import actions.BasicAuth;
 
+@BasicAuth
 public class MRController extends Controller{
 
 	public static Form<MedicalRepresentative> medicalRepresentative=Form.form(MedicalRepresentative.class);
@@ -296,7 +298,6 @@ public class MRController extends Controller{
 	 * @return
 	 */
 	public static Result removeDCRLineItem(final Long dcrId,final Long lineItemId){
-
 		final DailyCallReport dcr = DailyCallReport.find.byId(dcrId);
 		final DCRLineItem lineItem = DCRLineItem.find.byId(lineItemId);
 		dcr.dcrLineItemList.remove(lineItem);

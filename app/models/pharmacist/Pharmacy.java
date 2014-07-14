@@ -4,14 +4,20 @@ import java.util.ArrayList;
 import java.util.List;
 
 import javax.persistence.CascadeType;
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.Lob;
 import javax.persistence.OneToMany;
+import javax.persistence.OneToOne;
 
+import models.Address;
 import models.BaseEntity;
+import models.FileEntity;
 import models.Product;
+import beans.PharmacyBean;
 
 @SuppressWarnings("serial")
 @Entity
@@ -23,11 +29,24 @@ public class Pharmacy extends BaseEntity {
 
 	public String name;
 
-	public String address;
+	public String testField;
+
+	@Lob
+	public byte[] backgroundImage;
+
+	@OneToMany(cascade=CascadeType.ALL)
+	public List<FileEntity> profileImageList = new ArrayList<FileEntity>();
+
+	@OneToOne
+	public Address address = new Address();
 
 	public String contactNo;
 
-	public String testField;
+	@Column(columnDefinition="TEXT")
+	public String description;
+
+	/*@OneToOne
+	public Pharmacist adminPharmacist;*/
 
 	//@OneToOne
 	//public PharmacyProductInfo pharmacyProductInfo;
@@ -45,5 +64,34 @@ public class Pharmacy extends BaseEntity {
 
 
 	public static Finder<Long, Pharmacy> find = new Finder<Long, Pharmacy>(Long.class, Pharmacy.class);
+
+
+
+
+	public PharmacyBean toBean(){
+
+		final PharmacyBean pharmacyBean = new PharmacyBean();
+		pharmacyBean.id = this.id;
+
+
+		if(this.name != null) {
+			pharmacyBean.name= this.name;
+		}
+		if(this.address != null) {
+			pharmacyBean.address= this.address;
+		}
+		if(this.contactNo != null) {
+			pharmacyBean.contactNo= this.contactNo;
+		}
+		if(this.testField != null) {
+			pharmacyBean.testField= this.testField;
+		}
+		if(this.description != null) {
+			pharmacyBean.description= this.description;
+		}
+
+		return pharmacyBean;
+	}
+
 
 }

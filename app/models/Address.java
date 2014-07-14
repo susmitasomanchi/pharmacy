@@ -7,6 +7,7 @@ import javax.persistence.Id;
 
 import play.data.validation.Constraints.Required;
 
+@SuppressWarnings("serial")
 @Entity
 public class Address extends BaseEntity {
 
@@ -17,32 +18,24 @@ public class Address extends BaseEntity {
 	@Required
 	public String addrressLine1;
 
-
 	public String addrressLine2;
 
 	public String addrressLine3;
 
-	public double lat;
+	public String area;
 
-	public double lng;
+	public double latitude;
+
+	public double longitude;
+
 	@Required
 	public String city;
 
-
-	@Required
 	public State state;
 
-	@Required
-	public Long pinCode;
+	public String pinCode;
 
-	@Required
 	public Country country;
-
-
-
-
-
-
 
 	public static Finder<Long, Product> find = new Finder<Long, Product>(Long.class, Product.class);
 
