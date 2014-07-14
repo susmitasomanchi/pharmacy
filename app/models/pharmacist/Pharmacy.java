@@ -46,15 +46,17 @@ public class Pharmacy extends BaseEntity {
 	public String description;
 
 
+	@OneToOne
+	public Pharmacist adminPharmacist;
+
+	@OneToMany(cascade=CascadeType.ALL)
+	public List<Pharmacist> pharmacistList = new ArrayList<Pharmacist>();
+
 	//@OneToOne
 	//public PharmacyProductInfo pharmacyProductInfo;
 
 	@OneToMany(cascade=CascadeType.ALL)
 	public List<Product> productList = new ArrayList<Product>();
-
-
-	@OneToMany(cascade=CascadeType.ALL)
-	public List<Pharmacist> pharmacistList = new ArrayList<Pharmacist>();
 
 	@OneToMany(cascade=CascadeType.ALL)
 	public List<Inventory> inventoryList = new ArrayList<Inventory>();

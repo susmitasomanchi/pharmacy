@@ -7,11 +7,14 @@ PLEASE DO NOT MODIFY IT BY HAND
  *****/
 package controllers;
 
+import models.Alert;
 import models.AppUser;
 import models.Role;
 import models.diagnostic.DiagnosticRepresentative;
 import models.doctor.Doctor;
 import models.mr.MedicalRepresentative;
+import models.pharmacist.Pharmacist;
+import models.pharmacist.Pharmacy;
 import play.data.Form;
 import play.mvc.Controller;
 import play.mvc.Result;
@@ -34,11 +37,61 @@ public class UserController extends Controller {
 		return ok(views.html.joinus.render());
 	}
 
+
+
 	/**
+	 * Action to onboard a new AppUser along with its Role's entity
+	 * POST   /join
+	 */
+	public static Result processJoinUs(){
+		final AppUser appUser = new AppUser();
+		appUser.name = request().body().asFormUrlEncoded().get("fullname")[0].trim();
+		appUser.email = request().body().asFormUrlEncoded().get("email")[0].trim();
+		appUser.password = request().body().asFormUrlEncoded().get("password")[0].trim();
+		appUser.role = Role.valueOf(request().body().asFormUrlEncoded().get("role")[0]);
+
+		if(AppUser.find.where().eq("email", appUser.email).findRowCount()>0){
+			flash().put("alert", new Alert("alert-danger", "Sorry! User with email id "+appUser.email.trim()+" already exists!").toString());
+			return redirect(routes.UserController.joinUs());
+		}
+
+		appUser.save();
+
+		if(appUser.role.equals(Role.DOCTOR)){
+			final Doctor doctor = new Doctor();
+			doctor.specialization = "Specialization";
+			doctor.degree = "Degree";
+			doctor.appUser = appUser;
+			doctor.save();
+		}
+
+		if(appUser.role.equals(Role.ADMIN_PHARMACIST)){
+			final Pharmacist pharmacist = new Pharmacist();
+			pharmacist.appUser = appUser;
+			pharmacist.save();
+
+			final Pharmacy pharmacy = new Pharmacy();
+			pharmacy.name = request().body().asFormUrlEncoded().get("pharmacyName")[0];
+			pharmacy.adminPharmacist = pharmacist;
+			pharmacy.save();
+			pharmacist.pharmacy = pharmacy;
+			pharmacist.update();
+		}
+
+		session().clear();
+		session(Constants.LOGGED_IN_USER_ID, appUser.id + "");
+		session(Constants.LOGGED_IN_USER_ROLE, appUser.role+ "");
+
+		return redirect(routes.UserActions.dashboard());
+	}
+
+	/**
+	 * **************************** DEPRICATED ON 14 JUL 2014 ****************************
+	 * @deprecated Use UserController.processJoinUs() instead which is generic for all AppUser roles
 	 * Action to onboard a new Doctor by creating a models.Doctor and a models.AppUser
 	 * POST   /join
 	 */
-
+	@Deprecated
 	public static Result processDoctorJoinUs(){
 		final AppUser appUser = new AppUser();
 		appUser.name = request().body().asFormUrlEncoded().get("fullname")[0];

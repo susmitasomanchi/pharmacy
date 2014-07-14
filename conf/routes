@@ -41,7 +41,7 @@ GET    /logout                                     controllers.LoginController.p
 
 # Sign up page
 GET    /join                                       controllers.UserController.joinUs()
-POST   /join                                       controllers.UserController.processDoctorJoinUs()
+POST   /join                                       controllers.UserController.processJoinUs()
 
 
 # Doctor's Profile
