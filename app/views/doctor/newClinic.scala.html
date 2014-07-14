@@ -208,7 +208,7 @@
 	function validate() {
 		var values = $('input:checkbox:checked').map(
 				function() {
-					if ($("#" + this.id + "-from").val() > $(
+					if ($("#" + this.id + "-from").val() < $(
 							"#" + this.id + "-to").val()) {
 						return 1;
 					}
@@ -219,6 +219,8 @@
 		if ($.inArray(1, values) != -1) {
 			$('#submit').popover('enable');
 			$('#submit').popover('show');
+			$('#submit').popover('disable');
+			
 			return false;
 		}
 		return true;
