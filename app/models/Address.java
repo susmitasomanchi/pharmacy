@@ -25,15 +25,15 @@ public class Address extends BaseEntity {
 	public String area;
 
 	public double latitude;
-	
+
 	public double longitude;
-		
+
 	@Required
 	public String city;
 
 	public State state;
 
-	public Long pinCode;
+	public String pinCode;
 
 	public Country country;
 

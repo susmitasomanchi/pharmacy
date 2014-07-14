@@ -3,45 +3,12 @@
 
 @main(pharmacy.name) {
 
-/*Script for loading google map*/
+@*Script for loading google map*@
 <script src="http://maps.googleapis.com/maps/api/js?sensor=false"></script>
-<script>
 
-function loadgooglemap(latt, lngt) {
-	var map_canvas = document.getElementById('map_canvas');
-	var map_options = {
-		center : new google.maps.LatLng(latt, lngt),
-		zoom : 17,
-		mapTypeId : google.maps.MapTypeId.ROADMAP
-	};
-	var map = new google.maps.Map(map_canvas, map_options);
 
-	var marker = new google.maps.Marker({
-		position : new google.maps.LatLng(latt, lngt),
-		map : map
-	});
-	google.maps.event.addDomListener(window, 'load', initialize);
-}
 
-function initialize() {
-	var map_canvas = document.getElementById('map_canvas');
-	var map_options = {
-		center : new google.maps.LatLng(17.445735,78.349828),
-		zoom : 18,
-		mapTypeId : google.maps.MapTypeId.ROADMAP
-	};
-	var map = new google.maps.Map(map_canvas, map_options);
-
-	var marker = new google.maps.Marker({
-		position : new google.maps.LatLng(17.445735,78.349828),
-		map : map
-	});
-}
-
-google.maps.event.addDomListener(window, 'load', initialize); 
-
-</script>
-/*End of Script for loading google map*/
+@*End of Script for loading google map*@
 
 <style>
 .container{
@@ -218,7 +185,85 @@ style="color:#006687; font-size:20px; position:relative; top:-20px; cursor:point
 <div>
 
 </div>
-<h2 style="position:reative; margin-top:0px;">Contact</h2>
+<h2 style="position:reative; margin-top:0px;">Contact<span data-toggle="modal" data-target="#myaddrModal" style="cursor:pointer; position:relative; top:-3px;left:-150px; font-size:20px;"><i id="spinner2" class="fa fa-cog"></i></span></h2>
+<div class="modal fade" id="myaddrModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+  <div class="modal-dialog" style="width:820px">
+    <div class="modal-content" >
+      <div class="modal-header" style="color: #ffffff;background-color: #008cba;border-color: #008cba;">
+        <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+        <h4 class="modal-title" id="myModalLabel">Change Address Details</h4>
+      </div>
+      <div class="modal-body well">
+     	<div class="row">
+			<div class="col-md-4">
+			<form action=@routes.PharmacistController.pharmacyAddressUpdate() role="form" method="POST">
+			<div ><input type="hidden" name="lat" id="lat1"></div>
+			<div ><input type="hidden" name="lng" id="lng1"></div>
+  			<div class="form-group">
+   				 <label for="addressLine1">Address Line1</label>
+   				 <input type="text" class="form-control" name="addressLine1" value="@pharmacy.address.addrressLine1" id="addressLine1" placeholder="Enter Address Line1">
+ 			</div>
+  			<div class="form-group">
+    			<label for="addressLine2">Address Line2</label>
+    			<input type="text" class="form-control" name="addressLine2" value="@pharmacy.address.addrressLine2" id="addressLine2" placeholder="Enter Address Line2">
+  			</div>
+  			<div class="form-group">
+    			<label for="city">City</label>
+    			<input type="text" class="form-control" name="city" value="@pharmacy.address.city" id="city" placeholder="Enter City">
+  			</div>
+  			<div class="form-group">
+    			<label for="city">Area</label>
+    			<input type="text" class="form-control" name="area" value="@pharmacy.address.area" id="area" placeholder="Enter Area">
+  			</div>
+  			<div class="form-group">
+    			<label for="pincode">Pincode</label>
+    			<input type="text" class="form-control" name="pincode" value="@pharmacy.address.pinCode" id="pincode" placeholder="Enter Pincode">
+  			</div>
+  			<div class="form-group">
+    			<label for="state">State</label><br>
+				<select data-placeholder="Select the state" name="state" value="@pharmacy.address.state">
+    				<option value=""></option>	
+     				@for(state <- models.State.values()){
+        			<option  name="state" value="@state">@state</option>
+          			     }
+    			</select>
+  			</div>
+  			<div class="form-group">
+    			<label for="state">Country</label><br>
+    			<select data-placeholder="Select the country" name="country" value="@pharmacy.address.country">
+    				<option value=""></option>	
+     				@for(country <- models.Country.values()){
+        			<option  name="country" value="@country">@country</option>
+          			     }
+    			</select>
+  			</div>
+  
+  			<div class="form-group">
+    			<label for="phone">Phone Number</label>
+    			<input type="text" name="contactNo" value="@pharmacy.contactNo" id="phone" class="form-control" placeholder="Enter phone number">
+  			</div>
+  			<div class="col-md-6">
+				<h2>Location </h2>
+				<div id="map_canvas" style="width:520px;height:400px">
+				</div>
+			</div>
+  			<br>
+  			<input type="hidden" name="pharmacyId" value='@pharmacy.id' >
+			<button type="submit" class="btn btn-primary btn-sm">Submit</button>
+		</form>
+	</div>	
+<div class="col-md-8">
+<br><br>
+<img src="/assets/images/googlemap1.png" width="520" height="400" style="position:relative" />
+<div class="maptext" style="text-align:center">
+<p>Please provide Area and City to generate the map</span></p>
+</div>
+</div>
+</div>
+      </div>
+    </div>
+  </div>
+</div></h2>
 @if(pharmacy.address != null){
 <h5>@pharmacy.name</h5>
 <h5>@pharmacy.address.addrressLine1</h5>
@@ -231,23 +276,21 @@ style="color:#006687; font-size:20px; position:relative; top:-20px; cursor:point
 <h5>Phones nos:@pharmacy.contactNo</h5>
 </div>	
 <div class="col-md-8">
-@*
-<h2>Location Map</h2>
-*@
 <div id="map_canvas" style="width:500px;height:300px"> </div>
 </div>
 </div>
 
-<span style="font-size:20px; cursor:pointer; position:relative; top:-10px;">
-<i id="spinner-address" class="fa fa-cog"></i>
-</span>
+@*<span style="font-size:20px; cursor:pointer; position:relative; top:-10px;">
+<i id="spinner-address" class="fa fa-cog"></i>*@
 
 <div class="col-md-1">
 </div>
 </div>
 <br><br>
 
-@*
+ 
+				</script>
+  @*
 <table class="table table-bordered">
 <tr>
 <th> S No </th>
@@ -265,5 +308,98 @@ style="color:#006687; font-size:20px; position:relative; top:-20px; cursor:point
 <br>
 <button class="btn btn-success btn-lg"><a href="/pharmacy/order/@pharmacy.id" style="color:white">Place your order</a></button>
 *@
+
+
+
+
+
+
+<script type="text/javascript"> 
+				console.log("enterd");
+
+   					var lng, lat, marker;
+					var dbclk = false;
+					var map, myLatLng;
+					function initialize() {
+						var mapOptions = {
+							center : new google.maps.LatLng(lat, lng),
+							zoom : 15
+						};
+						map = new google.maps.Map(document
+								.getElementById("map_canvas", mapOptions));
+
+						//  map.set("disableDoubleClickZoom", false);
+
+						marker = new google.maps.Marker({
+							position : myLatLng,
+							draggable : true,
+							animation : google.maps.Animation.DROP,
+							map : map
+						});
+
+						$("#lat1").val(lat);
+						$("#lng1").val(lng);
+
+						//On click event of map markershould be relocate
+						google.maps.event.addListener(map, 'click', function(
+								event) {
+
+							marker.setPosition(event.latLng);
+
+							$("#lat1").val(event.latLng.lat());
+
+							$("#lng1").val(event.latLng.lng());
+
+						});
+						// After dragging of marker finished
+						google.maps.event.addListener(marker, 'dragend',
+								function(event) {
+
+									$("#lat1").val(event.latLng.lat());
+
+									$("#lng1").val(event.latLng.lng());
+								});
+						google.maps.event.addDomListener(window, 'load', initialize);
+
+					}
+
+					$("#city").blur(function() {
+						$("#map_canvas").html('');
+						var geocoder = new google.maps.Geocoder();
+						var area=$("#area").val();
+						geocoder.geocode({
+							'address' : area+this.value
+						}, function(results, status) {
+							if (status == google.maps.GeocoderStatus.OK) {
+								//  alert("location : " + results[0].geometry.location.lat() + " " +results[0].geometry.location.lng()); 
+								myLatLng = results[0].geometry.location;
+								lat = results[0].geometry.location.lat();
+								lng = results[0].geometry.location.lng();
+								initialize();
+							} else {
+								alert("Something got wrong " + status);
+							}
+						});
+
+						// google.maps.event.addDomListener(window, 'load', initialize);
+					});
+					
+					
+					
+				$( document ).ready(function() {
+					@if(pharmacy.address != null){
+					lat=@pharmacy.address.latitude
+					lng=@pharmacy.address.longitude
+					myLatLng= new google.maps.LatLng(lat, lng),
+					initialize();
+				}
+			});
+				
+</script>
+
+
+
+
+
 
 }
