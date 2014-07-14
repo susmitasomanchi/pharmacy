@@ -24,9 +24,9 @@ public class Address extends BaseEntity {
 
 	public String area;
 
-	public double latitude;
+	public String latitude;
 
-	public double longitude;
+	public String longitude;
 
 	@Required
 	public String city;

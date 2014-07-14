@@ -753,7 +753,7 @@ function submitimagesform(name){
 <div class="row" style="padding-left:20px">
 <br>
 <div class="col-md-6">
-<h4><b><a href="#" >@clinicInfo.clinic.name</a></b></h4>
+<h3 style="color:#006687;"><b>@clinicInfo.clinic.name</b></h3>
 <h5>
 @clinicInfo.clinic.contactPersonName
 <br>
@@ -767,33 +767,114 @@ function submitimagesform(name){
 </h5>
 </div>
 <div class="col-md-6">
-<h4>Timings</h4>
 <h4><b>Weekdays:</b><br><br>
 <div class="row" style="padding-left:20px">
-<span class="badge col-md-2" style="font-size:20px">Mon</span>
-<span class="badge col-md-2" style="font-size:20px">Tue</span>
-<span class="col-md-2" style="font-size:20px">Wed</span>
-<span class="badge col-md-2" style="font-size:20px">Thu</span>
-<span class="col-md-2" style="font-size:20px">Fri</span>
+
+@if(clinicInfo.getScheduleMap().get("MONDAY") != null){
+	<span class="badge col-md-2" style="font-size:20px">Mon</span>
+}else{
+	<span class="col-md-2" style="font-size:20px">Mon</span>
+}
+
+@if(clinicInfo.getScheduleMap().get("TUESDAY") != null){
+	<span class="badge col-md-2" style="font-size:20px">Tue</span>
+}else{
+	<span class="col-md-2" style="font-size:20px">Tue</span>
+}
+
+@if(clinicInfo.getScheduleMap().get("WEDNESDAY") != null){
+	<span class="badge col-md-2" style="font-size:20px">Wed</span>
+}else{
+	<span class="col-md-2" style="font-size:20px">Wed</span>
+}
+
+@if(clinicInfo.getScheduleMap().get("THURSDAY") != null){
+	<span class="badge col-md-2" style="font-size:20px">Thu</span>
+}else{
+	<span class="col-md-2" style="font-size:20px">Thu</span>
+}
+
+@if(clinicInfo.getScheduleMap().get("FRIDAY") != null){
+	<span class="badge col-md-2" style="font-size:20px">Fri</span>
+}else{
+	<span class="col-md-2" style="font-size:20px">Fri</span>
+}
+
 </div>
 </h4>
 <div class="row" style="padding-left:20px">
-<span class="col-md-2" style="font-size:12px;padding-right:0px">9am-9pm</span>
-<span class="col-md-2" style="font-size:12px;padding-right:0px">9am-9pm</span>
-<span class="col-md-2" style="font-size:12px;padding-right:0px"></span>
-<span class="col-md-2" style="font-size:12px;padding-right:0px">9am-9pm</span>
-<span class="col-md-2" style="font-size:12px;padding-right:0px"></span>
+
+
+@if(clinicInfo.getScheduleMap().get("MONDAY") != null){
+	<span class="col-md-3" style="width:75px; font-size:11px;padding-right:0px; margin:0px; margin-left:-7px;">@clinicInfo.getScheduleMap().get("MONDAY")</span>
+}else{
+	<span class="col-md-3" style="width:75px; font-size:11px;padding-right:0px; margin:0px; margin-left:-7px;"></span>
+}
+
+@if(clinicInfo.getScheduleMap().get("TUESDAY") != null){
+	<span class="col-md-3" style="width:75px; font-size:11px;padding-right:0px; margin:0px; margin-left:-7px;">@clinicInfo.getScheduleMap().get("TUESDAY")</span>
+}else{
+	<span class="col-md-3" style="width:75px; font-size:11px;padding-right:0px; margin:0px; margin-left:-7px;"></span>
+}
+
+@if(clinicInfo.getScheduleMap().get("WEDNESDAY") != null){
+	<span class="col-md-3" style="width:75px; font-size:11px;padding-right:0px; margin:0px; margin-left:-7px;">@clinicInfo.getScheduleMap().get("WEDNESDAY")</span>
+}else{
+	<span class="col-md-3" style="width:75px; font-size:11px;padding-right:0px; margin:0px; margin-left:-7px;"></span>
+}
+
+@if(clinicInfo.getScheduleMap().get("THURSDAY") != null){
+	<span class="col-md-3" style="width:75px; font-size:11px;padding-right:0px; margin:0px; margin-left:5px;">@clinicInfo.getScheduleMap().get("THURSDAY")</span>
+}else{
+	<span class="col-md-3" style="width:75px; font-size:11px;padding-right:0px; margin:0px; margin-left:5px;"></span>
+}
+
+@if(clinicInfo.getScheduleMap().get("FRIDAY") != null){ 
+	<span class="col-md-3" style="width:75px; font-size:11px;padding-right:0px; margin:0px;">@clinicInfo.getScheduleMap().get("FRIDAY")</span>
+}else{
+	<span class="col-md-3" style="width:75px; font-size:11px;padding-right:0px; margin:0px; "></span>
+}
+
+
+
 </div>
 <br>
 <h4><b>Weekends:</b><br><br>
 <div class="row" style="padding-left:20px">
-<span class="badge col-md-2" style="font-size:20px">Sat</span>
-<span class="col-md-2" style="font-size:20px">Sun</span>
+
+
+@if(clinicInfo.getScheduleMap().get("SATURDAY") != null){
+	<span class="badge col-md-2" style="font-size:20px">Sat</span>
+}else{
+	<span class="col-md-2" style="font-size:20px">Sat</span>
+}
+
+@if(clinicInfo.getScheduleMap().get("SUNDAY") != null){
+	<span class="badge col-md-2" style="font-size:20px">Sun</span>
+}else{
+	<span class="col-md-2" style="font-size:20px">Sun</span>
+}
+
+
 </div>
 </h4>
 <div class="row" style="padding-left:20px">
-<span class="col-md-2" style="font-size:12px;padding-right:0px">9am-9pm</span>
-<span class="col-md-2" style="font-size:12px;padding-right:0px"></span>
+
+
+
+@if(clinicInfo.getScheduleMap().get("SATURDAY") != null){
+	<span class="col-md-3" style="width:75px; font-size:11px;padding-right:0px; margin:0px; margin-left:-5px;">@clinicInfo.getScheduleMap().get("SATURDAY")</span>
+}else{
+	<span class="col-md-3" style="width:75px; font-size:11px;padding-right:0px; margin:0px; margin-left:5px;"></span>
+}
+
+@if(clinicInfo.getScheduleMap().get("SUNDAY") != null){ 
+	<span class="col-md-3" style="width:75px; font-size:11px;padding-right:0px; margin-left:0px;">@clinicInfo.getScheduleMap().get("SUNDAY")</span>
+}else{
+	<span class="col-md-3" style="width:75px; font-size:11px;padding-right:0px; margin:0px; "></span>
+}
+
+
 </div>
 </div>
 </div>

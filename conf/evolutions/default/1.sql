@@ -9,8 +9,8 @@ create table address (
   addrress_line2            varchar(255),
   addrress_line3            varchar(255),
   area                      varchar(255),
-  latitude                  float,
-  longitude                 float,
+  latitude                  varchar(255),
+  longitude                 varchar(255),
   city                      varchar(255),
   state                     varchar(35),
   pin_code                  varchar(255),
@@ -151,14 +151,6 @@ create table daily_call_report (
   for_date                  timestamp,
   last_update               timestamp not null,
   constraint pk_daily_call_report primary key (id))
-;
-
-create table day_of_the_week (
-  id                        bigint not null,
-  day                       varchar(9),
-  last_update               timestamp not null,
-  constraint ck_day_of_the_week_day check (day in ('MONDAY','SUNDAY','WEDNESDAY','THURSDAY','SATURDAY','TUESDAY','FRIDAY')),
-  constraint pk_day_of_the_week primary key (id))
 ;
 
 create table day_schedule (
@@ -580,8 +572,6 @@ create sequence dcrline_item_seq;
 
 create sequence daily_call_report_seq;
 
-create sequence day_of_the_week_seq;
-
 create sequence day_schedule_seq;
 
 create sequence diagnostic_centre_seq;
@@ -803,8 +793,6 @@ drop table if exists dcrline_item_product cascade;
 
 drop table if exists daily_call_report cascade;
 
-drop table if exists day_of_the_week cascade;
-
 drop table if exists day_schedule cascade;
 
 drop table if exists diagnostic_centre cascade;
@@ -902,8 +890,6 @@ drop sequence if exists clinic_seq;
 drop sequence if exists dcrline_item_seq;
 
 drop sequence if exists daily_call_report_seq;
-
-drop sequence if exists day_of_the_week_seq;
 
 drop sequence if exists day_schedule_seq;
 

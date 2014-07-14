@@ -1,4 +1,4 @@
-@(clinicForm:play.data.Form[beans.ClinicBean],list:List[String],listmr:List[String])
+@(clinicForm:play.data.Form[beans.DoctorClinicInfoBean],list:List[String],listmr:List[String])
 
 @import play.i18n._
 @import helper.twitterBootstrap._
@@ -88,6 +88,8 @@
    		<br><br>
    		<input type="hidden" name="id" value="@clinicForm("id").value">
    		<input type="hidden" name="doctorId" value="@clinicForm("doctorId").value">
+   		<input type="hidden" name="clinicId" value="@clinicForm("clinicId").value">
+   		<input type="hidden" name="addressId" value="@clinicForm("addressId").value">
 		<button type="submit" class="btn btn-primary btn-sm">Update</button>
    		</form>
    		<form action="@routes.DoctorController.processUpdateClinicSchedule()" method="post" onsubmit="return validate()"  >
@@ -208,6 +210,8 @@
 </div>
 <input type="hidden" name="id" value="@clinicForm("id").value">
 <input type="hidden" name="doctorId" value="@clinicForm("doctorId").value">
+<input type="hidden" name="clinicId" value="@clinicForm("clinicId").value">
+<input type="hidden" name="addressId" value="@clinicForm("addressId").value">
 
 <button id="submit" type="submit" class="btn btn-primary btn-sm " data-toggle="popover" title="Data Incorrect" data-content="Check From and To values">Update</button>
 
@@ -312,7 +316,7 @@
 								lng = results[0].geometry.location.lng();
 								initialize();
 							} else {
-								alert("Something got wrong " + status);
+								//alert("Something got wrong " + status);
 							}
 						});
 

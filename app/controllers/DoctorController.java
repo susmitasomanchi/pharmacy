@@ -29,7 +29,7 @@ import play.mvc.Controller;
 import play.mvc.Http.MultipartFormData;
 import play.mvc.Result;
 import actions.BasicAuth;
-import beans.ClinicBean;
+import beans.DoctorClinicInfoBean;
 import beans.DoctorDetailBean;
 import beans.PatientBean;
 import beans.QuestionAndAnswerBean;
@@ -43,7 +43,7 @@ public class DoctorController extends Controller {
 
 	public static Form<Doctor> form = Form.form(Doctor.class);
 	public static Form<PatientBean> patientForm = Form.form(PatientBean.class);
-	public static Form<ClinicBean> clinicForm = Form.form(ClinicBean.class);
+	public static Form<DoctorClinicInfoBean> clinicForm = Form.form(DoctorClinicInfoBean.class);
 	public static Form<DoctorExperience> experienceForm = Form.form(DoctorExperience.class);
 	public static Form<DoctorEducation> educationForm = Form.form(DoctorEducation.class);
 	public static Form<DoctorSocialWork> socialWorkForm = Form.form(DoctorSocialWork.class);
@@ -456,7 +456,7 @@ public class DoctorController extends Controller {
 	 * POST /doctor/new-clinic
 	 */
 	public static Result processNewClinic(){
-		final Form<ClinicBean> filledForm = clinicForm.bindFromRequest();
+		final Form<DoctorClinicInfoBean> filledForm = clinicForm.bindFromRequest();
 		if(filledForm.hasErrors()){
 			return ok(views.html.doctor.newClinic.render(clinicForm));
 		}
@@ -488,7 +488,7 @@ public class DoctorController extends Controller {
 			final Calendar calendar = Calendar.getInstance();
 			calendar.setTime(new Date());
 			for(int date=0;date<31;date++){
-				for (final DaySchedule schedule : docClinicInfo.schedulDays) {
+				for (final DaySchedule schedule : docClinicInfo.scheduleDays) {
 					if(schedule.day == Day.getDay(calendar.get(Calendar.DAY_OF_WEEK)-1)){
 						try {
 							calendar1.setTime(dateFormat.parse(schedule.toTime));
@@ -577,8 +577,8 @@ public class DoctorController extends Controller {
 		if(doctorClinicInfo.doctor.id.longValue() != LoginController.getLoggedInUser().id.longValue()){
 			return redirect(routes.LoginController.processLogout());
 		}
-		final ClinicBean bean = doctorClinicInfo.toBean();
-		final Form<ClinicBean> filledForm = clinicForm.fill(doctorClinicInfo.toBean());
+		final DoctorClinicInfoBean bean = doctorClinicInfo.toBean();
+		final Form<DoctorClinicInfoBean> filledForm = clinicForm.fill(doctorClinicInfo.toBean());
 		for (final String from : bean.fromHrs) {
 			Logger.warn(from);
 		}
@@ -592,7 +592,7 @@ public class DoctorController extends Controller {
 	 * POST   /doctor/update-clinic
 	 */
 	public static Result processUpdateClinicInfo() {
-		final Form<ClinicBean> filledForm = clinicForm.bindFromRequest();
+		final Form<DoctorClinicInfoBean> filledForm = clinicForm.bindFromRequest();
 		if(filledForm.hasErrors()){
 			return ok(views.html.doctor.editClinic.render(clinicForm,new ArrayList<String>(),new ArrayList<String>()));
 		}
@@ -606,7 +606,7 @@ public class DoctorController extends Controller {
 			clinicInfoPrevious.clinic.name = clinicInfo.clinic.name;
 			clinicInfoPrevious.clinic.contactNo=clinicInfo.clinic.contactNo;
 			clinicInfoPrevious.clinic.contactPersonName=clinicInfo.clinic.contactPersonName;
-			clinicInfoPrevious.clinic.update();
+			//clinicInfoPrevious.clinic.update();
 			clinicInfoPrevious.clinic.address.addrressLine1=clinicInfo.clinic.address.addrressLine1;
 			clinicInfoPrevious.clinic.address.area=clinicInfo.clinic.address.area;
 			clinicInfoPrevious.clinic.address.state=clinicInfo.clinic.address.state;
@@ -627,7 +627,7 @@ public class DoctorController extends Controller {
 	 * POST   /doctor/update-clinic-schedule
 	 */
 	public static Result processUpdateClinicSchedule() {
-		final Form<ClinicBean> filledForm = clinicForm.bindFromRequest();
+		final Form<DoctorClinicInfoBean> filledForm = clinicForm.bindFromRequest();
 		if(filledForm.hasErrors()){
 			return ok(views.html.doctor.editClinic.render(clinicForm,new ArrayList<String>(),new ArrayList<String>()));
 		}
@@ -638,11 +638,11 @@ public class DoctorController extends Controller {
 				return redirect(routes.LoginController.processLogout());
 			}
 			final DoctorClinicInfo clinicInfoPrevious=DoctorClinicInfo.find.byId(clinicInfo.id);
-			for (final DaySchedule sc4: clinicInfo.schedulDays) {
+			for (final DaySchedule sc4: clinicInfo.scheduleDays) {
 				Logger.info("test day"+sc4.day);
 			}
-			Ebean.delete(clinicInfoPrevious.schedulDays);
-			clinicInfoPrevious.schedulDays=clinicInfo.schedulDays;
+			Ebean.delete(clinicInfoPrevious.scheduleDays);
+			clinicInfoPrevious.scheduleDays=clinicInfo.scheduleDays;
 			clinicInfoPrevious.slot=clinicInfo.slot;
 			clinicInfoPrevious.slotmr=clinicInfo.slotmr;
 			clinicInfoPrevious.update();
