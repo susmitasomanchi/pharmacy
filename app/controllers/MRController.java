@@ -51,12 +51,23 @@ public class MRController extends Controller{
 		final List<MedicalRepresentative> mrList = MedicalRepresentative.find.where().eq("mrAdminId",LoginController.getLoggedInUser().id).findList();
 		return ok(views.html.mr.mrList.render(mrList));
 	}
-
+	/**
+	 * @author anand
+	 * url : GET    /doctor-list
+	 * 
+	 * @description: It shows all the doctor which is join through this application
+	 * */
 	public static Result doctorList(){
 		final List<Doctor> doctorList = Doctor.find.all();
 		return ok(views.html.mr.doctorList.render(doctorList));
 	}
 
+	/**
+	 * @author anand
+	 * url : GET    /mr/add-doctor/:id
+	 * 
+	 * @description: this method is used to add the doctor in particular Admin mr from avilable doctor in this appps
+	 * */
 	public static Result addDoctor(final Long id){
 		final MedicalRepresentative loggedInMr = LoginController.getLoggedInUser().getMedicalRepresentative();
 		if(loggedInMr.doctorList.contains(Doctor.find.byId(id))!=true){
@@ -68,12 +79,24 @@ public class MRController extends Controller{
 		return redirect(routes.MRController.mrDoctorList());
 
 	}
+	/**
+	 * @author anand
+	 * url : GET    /mr/doctor-list
+	 * 
+	 * @description: whatever the doctor added to the admin mr ,It shows all of them.
+	 * */
 	public static Result mrDoctorList(){
 		final MedicalRepresentative loggedInMr = LoginController.getLoggedInUser().getMedicalRepresentative();
 		return ok(views.html.mr.mrDoctor.render(loggedInMr.doctorList));
 
 	}
-	//delete doctor from mr list
+	/**
+	 * @author anand
+	 * url : GET    /mr/remove-doctor/:id
+	 * 
+	 * @description:this method is used to remove the doctor which belongs to Admin mr
+	 * 
+	 * */
 	public static Result removeDoctor(final Long id){
 		final MedicalRepresentative loggedInMr = LoginController.getLoggedInUser().getMedicalRepresentative();
 		int indexOfDoctorList=-1;
@@ -93,7 +116,12 @@ public class MRController extends Controller{
 
 	}
 
-	//for searching doctor
+	/**
+	 * @author anand
+	 * url : GET    /search
+	 * 
+	 * @description: to search the doctor for Admin mr.
+	 * */
 	public static Result search(){
 
 		final DynamicForm requestData = Form.form().bindFromRequest();
@@ -121,7 +149,12 @@ public class MRController extends Controller{
 
 	}
 
-	//DCR Form
+	/**
+	 * @author anand
+	 * url : GET    /mr/dcr-list
+	 * @description: this method shows list of all dcr date wise for particular Admin Mr
+	 * 
+	 * */
 	public static Result listDCR(){
 		final MedicalRepresentative loggedInMr = LoginController.getLoggedInUser().getMedicalRepresentative();
 		return ok(views.html.mr.dcrList.render(loggedInMr.dcrList));
@@ -129,8 +162,8 @@ public class MRController extends Controller{
 
 	/**
 	 * @author anand
-	 * url : /mr/new-dcr
-	 * this method is used to capture date and store into database
+	 * url : POST   /mr/new-dcr
+	 * @description: this method is used to capture date and store into database
 	 * and date related server side validation
 	 * 
 	 * */
@@ -184,9 +217,9 @@ public class MRController extends Controller{
 	}
 	/**
 	 * @author anand
-	 * url : /mr/show-dcr/:id
+	 * url : GET    /mr/show-dcr/:id
 	 * 
-	 * to show dcr-line-item to adding in daily call report
+	 * @description: to show dcr-line-item to adding in daily call report
 	 * **/
 	public static Result addDCRLineItem(final Long id){
 		final DailyCallReport dcr = DailyCallReport.find.byId(id);
@@ -202,9 +235,10 @@ public class MRController extends Controller{
 
 	/**
 	 * @author anand
-	 * url : /mr/dcr/add-line-item
+	 * url : POST   /mr/dcr/add-line-item
 	 * 
-	 * this shows the added dcrlinetime in daily call report of particular mr
+	 * @description: this shows the added dcrlinetime in daily call report of particular mr
+	 * 
 	 */
 	@SuppressWarnings("deprecation")
 	public static Result processDCRLineItem(){
@@ -289,9 +323,9 @@ public class MRController extends Controller{
 
 	/**
 	 * @author anand
-	 * url : /mr/dcr/delete-line-item/:dcrid/:lineitemid
+	 * url : POST   /mr/dcr/delete-line-item/:dcrid/:lineitemid
 	 * 
-	 * to remove the added dcr-line-item
+	 * @description: to remove the added dcr-line-item
 	 * 
 	 * @param dcrId
 	 * @param lineItemId

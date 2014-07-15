@@ -14,10 +14,10 @@ import play.mvc.Result;
 public class ProductController extends Controller{
 
 	public static Form<Product> productForm = Form.form(Product.class);
-	/*
+	/**
 	 * @autor:
 	 * 
-	 * @url: /new-product
+	 * @url: GET    /new-product
 	 * 
 	 * @description: rendering to the createProduct scala to create a new product
 	 */
@@ -26,10 +26,10 @@ public class ProductController extends Controller{
 		return ok(views.html.common.createProduct.render(productForm));
 	}
 
-	/*
+	/**
 	 * @autor:
 	 * 
-	 * @url: /new-product/save
+	 * @url: POST   /new-product
 	 * 
 	 * @description: saving or updating a product pharmacy and pharmaceuticalCompany based on incoming id
 	 */
@@ -75,11 +75,9 @@ public class ProductController extends Controller{
 
 		}
 
-
-		//return redirect(routes.ProductController.viewProducts());
 	}
 
-	/*
+	/**
 	 * @autor:
 	 * 
 	 * @url: /view-products

@@ -73,7 +73,7 @@
 	<tr>
 		
 		<td valign="top" >
-		<select id="selectDoctor" data-placeholder="Selsect Doctor" class="chzn" name="doctor" style="width:200px;" >
+		<select id="selectDoctor" data-placeholder="Select Doctor" class="chzn" name="doctor" style="width:200px;" >
 		   <option></option>
 			@for(doctor <- doctorList){
 				@if(disabledDoctorList.contains(doctor)){
@@ -207,7 +207,7 @@
 	   	}
 	   	
 		<td>@dcrLineItem.remarks</td>
-		<td ><a class="btn btn-danger btn-xs center-block" onclick="removeLineItem('@dcrLineItem.id','@dcrLineItem.doctor.id');">Remove</a></td>
+		<td><a class="btn btn-danger btn-xs center-block" onclick="removeLineItem('@dcrLineItem.id','@dcrLineItem.doctor.id');">Remove</a></td>
      </tr>
      }
    </tbody>

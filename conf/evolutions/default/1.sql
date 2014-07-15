@@ -392,6 +392,17 @@ create table medicine_line_item (
   last_update               timestamp not null)
 ;
 
+create table monthly_tour_plan (
+  id                        bigint not null,
+  sr_no                     integer,
+  for_month                 timestamp,
+  status                    varchar(9),
+  submit_date               timestamp,
+  last_update               timestamp not null,
+  constraint ck_monthly_tour_plan_status check (status in ('REJECTED','DRAFT','APPROVED','REOPENED','SUBMITTED')),
+  constraint pk_monthly_tour_plan primary key (id))
+;
+
 create table order_line_item (
   id                        bigint not null,
   pharmacy_order_id         bigint not null,
@@ -611,6 +622,8 @@ create sequence inventory_seq;
 create sequence language_app_user_seq;
 
 create sequence medical_representative_seq;
+
+create sequence monthly_tour_plan_seq;
 
 create sequence order_line_item_seq;
 
@@ -845,6 +858,8 @@ drop table if exists medical_representative_doctor cascade;
 
 drop table if exists medicine_line_item cascade;
 
+drop table if exists monthly_tour_plan cascade;
+
 drop table if exists order_line_item cascade;
 
 drop table if exists patient cascade;
@@ -934,6 +949,8 @@ drop sequence if exists inventory_seq;
 drop sequence if exists language_app_user_seq;
 
 drop sequence if exists medical_representative_seq;
+
+drop sequence if exists monthly_tour_plan_seq;
 
 drop sequence if exists order_line_item_seq;
 

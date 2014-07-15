@@ -9,11 +9,8 @@
 	<div class="container">
 @helper.form(action=routes.ProductController.saveProduct(),'method -> "post") {
 
-
-
 			
 			@helper.inputText(dataForm("medicineName"),'class -> "inputs",'_label->"Medicine Name")
-			
 			
 			@helper.inputText(dataForm("brandName"),'class -> "inputs",'_label->"Brand Name")
 			
@@ -22,7 +19,6 @@
 			@helper.inputText(dataForm("strength"),'class -> "inputs",'_label->"Strength")
 						
 			@helper.inputText(dataForm("typeOfMedicine"),'class -> "inputs",'_label->"Type of Medicine")
-			
 
 			@helper.inputText(dataForm("description"),'class -> "inputs",'_label->"Description")
 			
