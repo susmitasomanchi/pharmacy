@@ -110,7 +110,7 @@ GET   /place-product-order/process              controllers.PharmacistController
 GET		/edit-pharmacy-details					controllers.PharmacistController.editPharmacyDetails()
 POST	/pharmacy/basic-update					controllers.PharmacistController.pharmacyBasicUpdate()
 POST	/pharmacy/address-update				controllers.PharmacistController.pharmacyAddressUpdate()
-GET		/upload-pharmacy-images					controllers.PharmacistController.uploadPharmacyImage()
+#GET		/upload-pharmacy-images					controllers.PharmacistController.uploadPharmacyImage()
 POST	/pharmacy/upload-pharmacy-images					controllers.PharmacistController.uploadPharmacyImageProcess()
 GET		/pharmacy/get-image/:pharmacyId/:fileId				controllers.PharmacistController.getPharmacyImages(pharmacyId: Long,fileId: Long)
 GET		/pharmacy/remove-image/:pharmacyId/:fileId			controllers.PharmacistController.removeImage(pharmacyId: Long,fileId: Long)
@@ -146,6 +146,7 @@ GET    /patient/diagnostics               		controllers.PatientController.diagno
 GET    /add-diagnostic-center/:id               controllers.PatientController.saveDiagnosticCenter(id: Long)
 GET    /patient/my-diag-centers               	controllers.PatientController.myDiagnosticCenters()
 GET    /patient/remove-diag-centers/:id         controllers.PatientController.removePatientDiagnoCenter(id: Long)
+GET    /patient/favdoctors						controllers.PatientController.patientMyFavDoctors()
 
 
 GET    /answerform                       		 controllers.DoctorController.displayAnswer()
@@ -208,6 +209,7 @@ GET    /mr/dcr-list                                controllers.MRController.list
 POST   /mr/new-dcr                                 controllers.MRController.processNewDCR()
 GET    /mr/show-dcr/:id                            controllers.MRController.addDCRLineItem(id: Long)
 POST   /mr/dcr/add-line-item                       controllers.MRController.processDCRLineItem()
+POST   /mr/dcr/delete-line-item/:dcrid/:lineitemid   controllers.MRController.removeDCRLineItem(dcrid: Long,lineitemid: Long)
 GET    /search                                     controllers.MRController.search()
 GET    /mr/display-appointment/:id                 controllers.MRController.scheduleAppointment(id:String)
 
