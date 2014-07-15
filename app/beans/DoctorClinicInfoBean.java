@@ -10,19 +10,26 @@ import models.State;
 import models.doctor.Clinic;
 import models.doctor.Day;
 import models.doctor.DaySchedule;
+import models.doctor.Doctor;
 import models.doctor.DoctorClinicInfo;
 import play.Logger;
 
 @SuppressWarnings("serial")
-public class ClinicBean implements Serializable {
+public class DoctorClinicInfoBean implements Serializable {
 
 	public Long id;
+
+	public Long doctorId;
+
+	public Long clinicId;
 
 	public String name;
 
 	public String contactPersonName;
 
 	public String contactNo;
+
+	public Long addressId;
 
 	public String street;
 
@@ -44,9 +51,9 @@ public class ClinicBean implements Serializable {
 
 	public List<String> daysOfWeekMr = new ArrayList<String>();
 
-	public double lat;
+	public String lat;
 
-	public double lng;
+	public String lng;
 
 	public Integer slot;
 
@@ -59,6 +66,12 @@ public class ClinicBean implements Serializable {
 		if (this.id != null) {
 			doctorClinicInfo.id = this.id;
 		}
+
+		if(this.doctorId != null){
+			doctorClinicInfo.doctor = Doctor.find.byId(this.doctorId);
+		}
+
+
 		Logger.info("" + this.id);
 		Logger.info("name null");
 
@@ -66,8 +79,10 @@ public class ClinicBean implements Serializable {
 		clinic.name = this.name;
 		clinic.contactNo = this.contactNo;
 		clinic.contactPersonName = this.contactPersonName;
+		if(this.clinicId != null){
+			clinic.id = this.clinicId;
+		}
 		doctorClinicInfo.clinic = clinic;
-		clinic.save();
 
 		Logger.info(doctorClinicInfo.clinic.name);
 		Logger.info("from hrs" + this.fromHrs.size());
@@ -83,7 +98,7 @@ public class ClinicBean implements Serializable {
 				schedule.day = Day.valueOf(this.daysOfWeek.get(index));
 				Logger.info(schedule.day.toString());
 				schedule.requester = Role.PATIENT;
-				doctorClinicInfo.schedulDays.add(schedule);
+				doctorClinicInfo.scheduleDays.add(schedule);
 			}
 		}
 
@@ -96,7 +111,7 @@ public class ClinicBean implements Serializable {
 				schedule.toTime = this.toHrsMr.get(index);
 				schedule.requester = Role.MR;
 				schedule.day = Day.valueOf(this.daysOfWeekMr.get(index));
-				doctorClinicInfo.schedulDays.add(schedule);
+				doctorClinicInfo.scheduleDays.add(schedule);
 			}
 		}
 
@@ -109,12 +124,17 @@ public class ClinicBean implements Serializable {
 		}
 
 		final Address address = new Address();
+
+		if(this.addressId != null){
+			address.id = this.addressId;
+		}
+
 		if (this.street != null) {
 			address.addrressLine1 = this.street;
 
 		}
 		if (this.area != null) {
-			address.addrressLine2 = this.area;
+			address.area = this.area;
 		}
 		if (this.city != null) {
 			address.city = this.city;
@@ -123,11 +143,27 @@ public class ClinicBean implements Serializable {
 			address.state = State.valueOf(this.state);
 		}
 
-		address.latitude = this.lat;
-		address.longitude = this.lng;
-		doctorClinicInfo.address = address;
-		doctorClinicInfo.address.save();
-		Logger.info("" + this.lat);
+		if(this.lat != null){
+			address.latitude = this.lat;
+		}
+		if(this.lng != null){
+			address.longitude = this.lng;
+		}
+
+		doctorClinicInfo.clinic.address = address;
+		if(doctorClinicInfo.clinic.address.id == null){
+			doctorClinicInfo.clinic.address.save();
+		}
+		else{
+			doctorClinicInfo.clinic.address.update();
+		}
+		if(clinic.id == null){
+			clinic.save();
+		}
+		else{
+			clinic.update();
+		}
+
 		return doctorClinicInfo;
 	}
 }

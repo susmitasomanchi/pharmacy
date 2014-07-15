@@ -45,8 +45,8 @@ public class Pharmacy extends BaseEntity {
 	@Column(columnDefinition="TEXT")
 	public String description;
 
-	/*@OneToOne
-	public Pharmacist adminPharmacist;*/
+	@OneToOne
+	public Pharmacist adminPharmacist;
 
 	//@OneToOne
 	//public PharmacyProductInfo pharmacyProductInfo;
@@ -54,19 +54,13 @@ public class Pharmacy extends BaseEntity {
 	@OneToMany(cascade=CascadeType.ALL)
 	public List<Product> productList = new ArrayList<Product>();
 
-
 	@OneToMany(cascade=CascadeType.ALL)
 	public List<Pharmacist> pharmacistList = new ArrayList<Pharmacist>();
 
 	@OneToMany(cascade=CascadeType.ALL)
 	public List<Inventory> inventoryList = new ArrayList<Inventory>();
 
-
-
 	public static Finder<Long, Pharmacy> find = new Finder<Long, Pharmacy>(Long.class, Pharmacy.class);
-
-
-
 
 	public PharmacyBean toBean(){
 

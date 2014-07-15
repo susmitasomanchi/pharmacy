@@ -13,15 +13,15 @@ PLEASE DO NOT MODIFY IT BY HAND
 	
 	<br>
 <div class="container"> 
-
+@*
 @helper.form(action=routes.DoctorController.processDoctorLanguage(),'method -> "post") {
 
 
-@*<select name="languageAppUsers" multiple>
+<select name="languageAppUsers" multiple>
 @for(language <- LanguageAppUser.find.all()){
 <option value="@language">@language.language </option>
 }
-</select>*@
+</select> 
 	@helper.select(dataForm("languageAppUser"),options=helper.options(Language.options),'_label->"Collaborate",'multiple->"multiple", 'class->"chzn col-sm-6")
 
 			
@@ -38,6 +38,7 @@ PLEASE DO NOT MODIFY IT BY HAND
 			
 
 }
+*@
 </div>
 
 			
