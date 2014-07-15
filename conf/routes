@@ -3,6 +3,9 @@
 # ~~~~
 #Blog
 
+
+GET    /test	                                   controllers.SampleDataController.test()
+
 GET    /blog/create-blog-admin                     controllers.SampleDataController.createBlogAdmin()
 GET    /blog/login                                 controllers.LoginController.blogAdminLoginForm()
 
