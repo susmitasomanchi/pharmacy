@@ -226,4 +226,7 @@ public class PatientController extends Controller {
 
 	}
 
+	public static Result patientMyFavDoctors() {
+		return ok(views.html.patient.fav_doctors.render());
+	}
 }
