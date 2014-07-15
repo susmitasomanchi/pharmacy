@@ -201,27 +201,27 @@ style="color:#006687; font-size:20px; position:relative; top:-20px; cursor:point
 			<div ><input type="hidden" name="lng" id="lng1"></div>
   			<div class="form-group">
    				 <label for="addressLine1">Address Line1</label>
-   				 <input type="text" class="form-control" name="addressLine1" value="@pharmacy.address.addrressLine1" id="addressLine1" placeholder="Enter Address Line1">
+   				 <input type="text" class="form-control" name="addressLine1" @if(pharmacy.address!=null){value="@pharmacy.address.addrressLine1"} id="addressLine1" placeholder="Enter Address Line1">
  			</div>
   			<div class="form-group">
     			<label for="addressLine2">Address Line2</label>
-    			<input type="text" class="form-control" name="addressLine2" value="@pharmacy.address.addrressLine2" id="addressLine2" placeholder="Enter Address Line2">
+    			<input type="text" class="form-control" name="addressLine2" @if(pharmacy.address!=null){value="@pharmacy.address.addrressLine2"} id="addressLine2" placeholder="Enter Address Line2">
   			</div>
   			<div class="form-group">
     			<label for="city">City</label>
-    			<input type="text" class="form-control" name="city" value="@pharmacy.address.city" id="city" placeholder="Enter City">
+    			<input type="text" class="form-control" name="city" @if(pharmacy.address!=null){value="@pharmacy.address.city"} id="city" placeholder="Enter City">
   			</div>
   			<div class="form-group">
     			<label for="city">Area</label>
-    			<input type="text" class="form-control" name="area" value="@pharmacy.address.area" id="area" placeholder="Enter Area">
+    			<input type="text" class="form-control" name="area" @if(pharmacy.address!=null){value="@pharmacy.address.area"} id="area" placeholder="Enter Area">
   			</div>
   			<div class="form-group">
     			<label for="pincode">Pincode</label>
-    			<input type="text" class="form-control" name="pincode" value="@pharmacy.address.pinCode" id="pincode" placeholder="Enter Pincode">
+    			<input type="text" class="form-control" name="pincode" @if(pharmacy.address!=null){value="@pharmacy.address.pinCode"} id="pincode" placeholder="Enter Pincode">
   			</div>
   			<div class="form-group">
     			<label for="state">State</label><br>
-				<select data-placeholder="Select the state" name="state" value="@pharmacy.address.state">
+				<select data-placeholder="Select the state" name="state" @if(pharmacy.address!=null){value="@pharmacy.address.state"}>
     				<option value=""></option>	
      				@for(state <- models.State.values()){
         			<option  name="state" value="@state">@state</option>
@@ -230,7 +230,7 @@ style="color:#006687; font-size:20px; position:relative; top:-20px; cursor:point
   			</div>
   			<div class="form-group">
     			<label for="state">Country</label><br>
-    			<select data-placeholder="Select the country" name="country" value="@pharmacy.address.country">
+    			<select data-placeholder="Select the country" name="country" @if(pharmacy.address!=null){value="@pharmacy.address.country"}>
     				<option value=""></option>	
      				@for(country <- models.Country.values()){
         			<option  name="country" value="@country">@country</option>
@@ -396,10 +396,5 @@ style="color:#006687; font-size:20px; position:relative; top:-20px; cursor:point
 			});
 				
 </script>
-
-
-
-
-
 
 }

@@ -103,7 +103,7 @@ GET    /searchProduct                           controllers.PharmacistController
 POST   /searchProduct                           controllers.PharmacistController.searchProduct(arg: String ?= "")
 GET   /place-product-order                     	controllers.PharmacistController.placeProductOrder()
 GET   /place-product-order/process              controllers.PharmacistController.placeProductOrderProcess()
-#GET	 /pharmacy/profile							controllers.PharmacistController.pharmacyProfile()
+GET	 /pharmacy/profile							controllers.PharmacistController.pharmacyProfile()
 GET		/edit-pharmacy-details					controllers.PharmacistController.editPharmacyDetails()
 POST	/pharmacy/basic-update					controllers.PharmacistController.pharmacyBasicUpdate()
 POST	/pharmacy/address-update				controllers.PharmacistController.pharmacyAddressUpdate()
