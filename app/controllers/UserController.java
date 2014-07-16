@@ -29,6 +29,7 @@ public class UserController extends Controller {
 	public static Form<MedicalRepresentative> mrForm = Form.form(MedicalRepresentative.class);
 
 
+
 	/**
 	 * Action to render the joinUs page (for Doctors)
 	 * GET    /join
@@ -77,6 +78,7 @@ public class UserController extends Controller {
 			pharmacist.pharmacy = pharmacy;
 			pharmacist.update();
 		}
+
 
 		session().clear();
 		session(Constants.LOGGED_IN_USER_ID, appUser.id + "");
@@ -161,6 +163,7 @@ public class UserController extends Controller {
 				final Doctor doctor = new Doctor();
 				doctor.appUser = appUser;
 				doctor.save();
+
 			}
 
 			if(appUser.role == Role.ADMIN_PHARMACIST){

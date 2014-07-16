@@ -141,6 +141,7 @@ create table dcrline_item (
   in_time                   timestamp,
   out_time                  timestamp,
   pob                       integer,
+  head_quater_id            bigint,
   remarks                   varchar(255),
   last_update               timestamp not null,
   constraint pk_dcrline_item primary key (id))
@@ -170,8 +171,10 @@ create table day_schedule (
 create table diagnostic_centre (
   id                        bigint not null,
   name                      varchar(255),
-  address                   varchar(255),
+  address_id                bigint,
   mobile_no                 varchar(255),
+  description               TEXT,
+  backgroud_image           bytea,
   email_id                  varchar(255),
   website_name              varchar(255),
   diagnostic_rep_admin_id   bigint,
@@ -342,19 +345,22 @@ create table doctors_prescription (
 
 create table file_entity (
   id                        bigint not null,
-  pharmacy_id               bigint not null,
   file_name                 varchar(255),
   mime_type                 varchar(255),
   byte_content              bytea,
+  pharmacy_id               bigint,
   last_update               timestamp not null,
   constraint pk_file_entity primary key (id))
 ;
 
 create table head_quarter (
+  id                        bigint not null,
+  medical_representative_id bigint not null,
   state                     varchar(35),
   name                      varchar(255),
   last_update               timestamp not null,
-  constraint ck_head_quarter_state check (state in ('DADRA_AND_NAGAR_HAVELI','KERALA','WEST_BENGAL','JAMMU_AND_KASHMIR','HIMACHAL_PRADESH','MANIPUR','MIZORAM','MAHARASHTRA','JHARKHAND','ASSAM','UTTARAKHAND','SIKKIM','KARNATAKA','CHHATTISGARH','ANDHRA_PRADESH','NATIONAL_CAPITAL_TERRITORY_OF_DELHI','UTTAR_PRADESH','PUDUCHERRY','ANDAMAN_AND_NICOBAR_ISLANDS','TRIPURA','GOA','DAMAN_AND_DIU','NAGALAND','ODISHA','TAMIL_NADU','BIHAR','RAJASTHAN','LAKSHADWEEP','HARYANA','MEGHALAYA','PUNJAB','ARUNACHAL_PRADESH','GUJARAT','TELANGANA','MADHYA_PRADESH','CHNADIGARH')))
+  constraint ck_head_quarter_state check (state in ('DADRA_AND_NAGAR_HAVELI','KERALA','WEST_BENGAL','JAMMU_AND_KASHMIR','HIMACHAL_PRADESH','MANIPUR','MIZORAM','MAHARASHTRA','JHARKHAND','ASSAM','UTTARAKHAND','SIKKIM','KARNATAKA','CHHATTISGARH','ANDHRA_PRADESH','NATIONAL_CAPITAL_TERRITORY_OF_DELHI','UTTAR_PRADESH','PUDUCHERRY','ANDAMAN_AND_NICOBAR_ISLANDS','TRIPURA','GOA','DAMAN_AND_DIU','NAGALAND','ODISHA','TAMIL_NADU','BIHAR','RAJASTHAN','LAKSHADWEEP','HARYANA','MEGHALAYA','PUNJAB','ARUNACHAL_PRADESH','GUJARAT','TELANGANA','MADHYA_PRADESH','CHNADIGARH')),
+  constraint pk_head_quarter primary key (id))
 ;
 
 create table inventory (
@@ -394,6 +400,16 @@ create table medicine_line_item (
   frequency                 varchar(255),
   remarks                   varchar(255),
   last_update               timestamp not null)
+;
+
+create table monthly_tour_plan (
+  id                        bigint not null,
+  for_month                 timestamp,
+  status                    varchar(9),
+  submit_date               timestamp,
+  last_update               timestamp not null,
+  constraint ck_monthly_tour_plan_status check (status in ('REJECTED','DRAFT','APPROVED','REOPENED','SUBMITTED')),
+  constraint pk_monthly_tour_plan primary key (id))
 ;
 
 create table order_line_item (
@@ -437,6 +453,21 @@ create table pharmaceutical_company (
   constraint pk_pharmaceutical_company primary key (id))
 ;
 
+create table pharmaceutical_product (
+  id                        bigint not null,
+  medicine_name             varchar(255),
+  brand_name                varchar(255),
+  salt                      varchar(255),
+  strength                  varchar(255),
+  type_of_medicine          varchar(255),
+  description               varchar(255),
+  units_per_pack            bigint,
+  full_name                 varchar(255),
+  pharmaceutical_company_id bigint,
+  last_update               timestamp not null,
+  constraint pk_pharmaceutical_product primary key (id))
+;
+
 create table pharmacist (
   id                        bigint not null,
   app_user_id               bigint,
@@ -467,6 +498,21 @@ create table pharmacy_order (
   last_update               timestamp not null,
   constraint ck_pharmacy_order_order_status check (order_status in ('DRAFT','DELIVERED','READY')),
   constraint pk_pharmacy_order primary key (id))
+;
+
+create table pharmacy_product (
+  id                        bigint not null,
+  medicine_name             varchar(255),
+  brand_name                varchar(255),
+  salt                      varchar(255),
+  strength                  varchar(255),
+  type_of_medicine          varchar(255),
+  description               varchar(255),
+  units_per_pack            bigint,
+  full_name                 varchar(255),
+  pharmacy_id               bigint,
+  last_update               timestamp not null,
+  constraint pk_pharmacy_product primary key (id))
 ;
 
 create table prescription (
@@ -516,6 +562,16 @@ create table sample (
   constraint pk_sample primary key (id))
 ;
 
+create table show_cased_product (
+  id                        bigint not null,
+  pharmacy_id               bigint not null,
+  name                      varchar(255),
+  description               TEXT,
+  mrp                       float,
+  last_update               timestamp not null,
+  constraint pk_show_cased_product primary key (id))
+;
+
 create table sig_code (
   code                      varchar(255),
   description               varchar(255),
@@ -544,6 +600,12 @@ create table dcrline_item_product (
   constraint pk_dcrline_item_product primary key (dcrline_item_id, product_id))
 ;
 
+create table diagnostic_centre_file_entity (
+  diagnostic_centre_id           bigint not null,
+  file_entity_id                 bigint not null,
+  constraint pk_diagnostic_centre_file_entity primary key (diagnostic_centre_id, file_entity_id))
+;
+
 create table doctor_doctor_language (
   doctor_id                      bigint not null,
   doctor_language_id             bigint not null,
@@ -560,6 +622,12 @@ create table patient_diagnostic_centre (
   patient_id                     bigint not null,
   diagnostic_centre_id           bigint not null,
   constraint pk_patient_diagnostic_centre primary key (patient_id, diagnostic_centre_id))
+;
+
+create table pharmaceutical_company_product (
+  pharmaceutical_company_id      bigint not null,
+  product_id                     bigint not null,
+  constraint pk_pharmaceutical_company_product primary key (pharmaceutical_company_id, product_id))
 ;
 create sequence address_seq;
 
@@ -617,11 +685,15 @@ create sequence doctors_prescription_seq;
 
 create sequence file_entity_seq;
 
+create sequence head_quarter_seq;
+
 create sequence inventory_seq;
 
 create sequence language_app_user_seq;
 
 create sequence medical_representative_seq;
+
+create sequence monthly_tour_plan_seq;
 
 create sequence order_line_item_seq;
 
@@ -631,11 +703,15 @@ create sequence patient_doctor_info_seq;
 
 create sequence pharmaceutical_company_seq;
 
+create sequence pharmaceutical_product_seq;
+
 create sequence pharmacist_seq;
 
 create sequence pharmacy_seq;
 
 create sequence pharmacy_order_seq;
+
+create sequence pharmacy_product_seq;
 
 create sequence prescription_seq;
 
@@ -644,6 +720,8 @@ create sequence product_seq;
 create sequence question_and_answer_seq;
 
 create sequence sample_seq;
+
+create sequence show_cased_product_seq;
 
 create sequence social_user_seq;
 
@@ -774,6 +852,10 @@ alter table dcrline_item_product add constraint fk_dcrline_item_product_dcrli_01
 
 alter table dcrline_item_product add constraint fk_dcrline_item_product_produ_02 foreign key (product_id) references product (id);
 
+alter table diagnostic_centre_file_entity add constraint fk_diagnostic_centre_file_ent_01 foreign key (diagnostic_centre_id) references diagnostic_centre (id);
+
+alter table diagnostic_centre_file_entity add constraint fk_diagnostic_centre_file_ent_02 foreign key (file_entity_id) references file_entity (id);
+
 alter table doctor_doctor_language add constraint fk_doctor_doctor_language_doc_01 foreign key (doctor_id) references doctor (id);
 
 alter table doctor_doctor_language add constraint fk_doctor_doctor_language_doc_02 foreign key (doctor_language_id) references doctor_language (id);
@@ -785,6 +867,10 @@ alter table medical_representative_doctor add constraint fk_medical_representati
 alter table patient_diagnostic_centre add constraint fk_patient_diagnostic_centre__01 foreign key (patient_id) references patient (id);
 
 alter table patient_diagnostic_centre add constraint fk_patient_diagnostic_centre__02 foreign key (diagnostic_centre_id) references diagnostic_centre (id);
+
+alter table pharmaceutical_company_product add constraint fk_pharmaceutical_company_pro_01 foreign key (pharmaceutical_company_id) references pharmaceutical_company (id);
+
+alter table pharmaceutical_company_product add constraint fk_pharmaceutical_company_pro_02 foreign key (product_id) references product (id);
 
 # --- !Downs
 
@@ -815,6 +901,8 @@ drop table if exists daily_call_report cascade;
 drop table if exists day_schedule cascade;
 
 drop table if exists diagnostic_centre cascade;
+
+drop table if exists diagnostic_centre_file_entity cascade;
 
 drop table if exists diagnostic_order cascade;
 
@@ -862,6 +950,8 @@ drop table if exists medical_representative_doctor cascade;
 
 drop table if exists medicine_line_item cascade;
 
+drop table if exists monthly_tour_plan cascade;
+
 drop table if exists order_line_item cascade;
 
 drop table if exists patient cascade;
@@ -872,11 +962,17 @@ drop table if exists patient_doctor_info cascade;
 
 drop table if exists pharmaceutical_company cascade;
 
+drop table if exists pharmaceutical_company_product cascade;
+
+drop table if exists pharmaceutical_product cascade;
+
 drop table if exists pharmacist cascade;
 
 drop table if exists pharmacy cascade;
 
 drop table if exists pharmacy_order cascade;
+
+drop table if exists pharmacy_product cascade;
 
 drop table if exists prescription cascade;
 
@@ -885,6 +981,8 @@ drop table if exists product cascade;
 drop table if exists question_and_answer cascade;
 
 drop table if exists sample cascade;
+
+drop table if exists show_cased_product cascade;
 
 drop table if exists sig_code cascade;
 
@@ -946,11 +1044,15 @@ drop sequence if exists doctors_prescription_seq;
 
 drop sequence if exists file_entity_seq;
 
+drop sequence if exists head_quarter_seq;
+
 drop sequence if exists inventory_seq;
 
 drop sequence if exists language_app_user_seq;
 
 drop sequence if exists medical_representative_seq;
+
+drop sequence if exists monthly_tour_plan_seq;
 
 drop sequence if exists order_line_item_seq;
 
@@ -960,11 +1062,15 @@ drop sequence if exists patient_doctor_info_seq;
 
 drop sequence if exists pharmaceutical_company_seq;
 
+drop sequence if exists pharmaceutical_product_seq;
+
 drop sequence if exists pharmacist_seq;
 
 drop sequence if exists pharmacy_seq;
 
 drop sequence if exists pharmacy_order_seq;
+
+drop sequence if exists pharmacy_product_seq;
 
 drop sequence if exists prescription_seq;
 
@@ -973,6 +1079,8 @@ drop sequence if exists product_seq;
 drop sequence if exists question_and_answer_seq;
 
 drop sequence if exists sample_seq;
+
+drop sequence if exists show_cased_product_seq;
 
 drop sequence if exists social_user_seq;
 

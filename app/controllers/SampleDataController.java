@@ -139,6 +139,24 @@ public class SampleDataController extends Controller {
 
 
 
+	public static Result mrSampleData(){
+		final AppUser appUser = new AppUser();
+		appUser.name = "anand1";
+		appUser.email = "anand1@gmail.com";
+		appUser.password = "123";
+		appUser.role = Role.ADMIN_MR;
+		appUser.save();
+		final MedicalRepresentative mr = new MedicalRepresentative();
+		mr.appUser = appUser;
+		final PharmaceuticalCompany company = new PharmaceuticalCompany();
+		company.name="green pharma";
+		company.save();
+		mr.pharmaceuticalCompany = company;
+		mr.save();
+		return ok();
+
+	}
+
 }
 
 
