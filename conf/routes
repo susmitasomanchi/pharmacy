@@ -92,18 +92,19 @@ GET    /scheduleappointment/              		controllers.AppointmentController.fo
 POST   /scheduleappointment/              		controllers.AppointmentController.process()			
 
 
+
 #Pharmacy Module
 
-GET   /edit-product/:id                      	controllers.PharmacistController.editProduct(id: Long)
-GET   /remove-product/:id                      	controllers.PharmacistController.removeProduct(id: Long)
+GET   	/edit-product/:id                      	controllers.PharmacistController.editProduct(id: Long)
+GET     /remove-product/:id                      	controllers.PharmacistController.removeProduct(id: Long)
 POST	/addProductToInventory/					controllers.PharmacistController.addProductForm(id: Long)
-POST   /addProductToInventory1/            		controllers.PharmacistController.addToInventory(id:Long)		
+POST    /addProductToInventory1/            		controllers.PharmacistController.addToInventory(id:Long)		
 GET		/order									controllers.PharmacistController.orderRecord()
-GET    /searchProduct                           controllers.PharmacistController.searchForm()
-POST   /searchProduct                           controllers.PharmacistController.searchProduct(arg: String ?= "")
-GET   /place-product-order                     	controllers.PharmacistController.placeProductOrder()
-GET   /place-product-order/process              controllers.PharmacistController.placeProductOrderProcess()
-GET	 /pharmacy/profile							controllers.PharmacistController.pharmacyProfile()
+GET     /searchProduct                           controllers.PharmacistController.searchForm()
+POST  	/searchProduct                           controllers.PharmacistController.searchProduct(arg: String ?= "")
+GET   	/place-product-order                     	controllers.PharmacistController.placeProductOrder()
+GET   	/place-product-order/process              controllers.PharmacistController.placeProductOrderProcess()
+GET	 	/pharmacy/profile							controllers.PharmacistController.pharmacyProfile()
 GET		/edit-pharmacy-details					controllers.PharmacistController.editPharmacyDetails()
 POST	/pharmacy/basic-update					controllers.PharmacistController.pharmacyBasicUpdate()
 POST	/pharmacy/address-update				controllers.PharmacistController.pharmacyAddressUpdate()
@@ -132,7 +133,7 @@ POST   /diagRepProccess/                  		controllers.Application.diagnosticRe
 GET    /sampledata/populate               		controllers.SampleDataController.populate()
 GET    /sampledata/cleanup                		controllers.SampleDataController.cleanUp()
 GET    /sampledata/temp                   		controllers.SampleDataController.temp()
-
+GET		/sampledata/create-patdoc				controllers.SampleDataController.createSamplePatientDoctor()
 #POST   /userform/patientproccess/       		controllers.PatientController.process()
 
 GET    /home/                             		controllers.Application.homePage()
@@ -144,8 +145,8 @@ GET    /add-diagnostic-center/:id               controllers.PatientController.sa
 GET    /patient/my-diag-centers               	controllers.PatientController.myDiagnosticCenters()
 GET    /patient/remove-diag-centers/:id         controllers.PatientController.removePatientDiagnoCenter(id: Long)
 GET    /patient/favdoctors						controllers.PatientController.patientMyFavDoctors()
-
-
+GET 	/patient/delete-fav-doc/:id					controllers.PatientController.deleteMyFavDoctors(id:Long)
+GET		/patient/search-doctors/:query					controllers.PatientController.searchDoctors(query:String)
 GET    /answerform                       		 controllers.DoctorController.displayAnswer()
 POST   /ansQuestion/:qaId                 		 controllers.DoctorController.answerQuestion(qaId: Long)
 

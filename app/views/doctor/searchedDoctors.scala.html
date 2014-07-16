@@ -1,0 +1,11 @@
+@(list	: List[models.doctor.Doctor])
+@main("Doctors"){
+@if(list.size() == 0){
+	
+}else{
+
+}
+@for(doctor <- list){
+	@doctor
+}
+}

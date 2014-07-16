@@ -35,6 +35,6 @@ public class DaySchedule extends BaseEntity {
 		}
 	};
 
-	public static Model.Finder<Long, DayOfTheWeek> find = new Finder<Long, DayOfTheWeek>(Long.class, DayOfTheWeek.class);
+	public static Model.Finder<Long, DaySchedule> find = new Finder<Long, DaySchedule>(Long.class, DaySchedule.class);
 
 }

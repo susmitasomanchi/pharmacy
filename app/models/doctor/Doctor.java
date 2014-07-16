@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import javax.persistence.CascadeType;
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -68,16 +69,44 @@ public class Doctor extends BaseEntity{
 	@ManyToOne
 	public List<DoctorEducation> doctorEducation = new ArrayList<DoctorEducation>();
 
-
-	//government or private
-	public String doctorType;
-
 	public String experience;
+
+	@Column(columnDefinition="TEXT")
+	public String searchIndex;
 
 	public static Model.Finder<Long,Doctor> find = new Finder<Long, Doctor>(Long.class, Doctor.class);
 
 	public List<DoctorClinicInfo> getActiveClinic(){
 		return DoctorClinicInfo.find.where().eq("doctor", this).eq("active", true).findList();
 	}
+
+
+	@Override
+	public void save(){
+
+		final StringBuilder stringBuilder=new StringBuilder();
+		for (final DoctorClinicInfo clinicInfo : this.doctorClinicInfoList) {
+			stringBuilder.append(clinicInfo.clinic.name.toLowerCase());
+
+		}
+		stringBuilder.append(this.appUser.name.toLowerCase()).append(this.experience);
+		this.searchIndex = stringBuilder.toString();
+		super.save();
+	}
+
+
+	@Override
+	public void update() {
+		final StringBuilder stringBuilder=new StringBuilder();
+		for (final DoctorClinicInfo clinicInfo : this.doctorClinicInfoList) {
+			stringBuilder.append(clinicInfo.clinic.name.toLowerCase());
+
+		}
+		stringBuilder.append(this.appUser.name.toLowerCase()).append(this.experience);
+		this.searchIndex = stringBuilder.toString();
+		super.update();
+	}
+
+
 
 }

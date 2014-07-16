@@ -34,14 +34,18 @@ public class AppUser extends BaseEntity {
 
 	public String username;
 
+	public String mobileno;
+
 	@Email
 	public String email;
+
 
 	public String password;
 
 	public Sex sex;
 
 	public Date dob;
+
 
 	public Role role;
 

@@ -1,11 +1,14 @@
 package controllers;
 
 
+import java.util.Date;
 import java.util.List;
 
 import models.AppUser;
+import models.Patient;
 import models.Role;
 import models.doctor.Doctor;
+import models.patient.PatientDoctorInfo;
 import play.mvc.Controller;
 import play.mvc.Result;
 
@@ -73,6 +76,44 @@ public class SampleDataController extends Controller {
 		appUser.password = "med2014blog";
 		appUser.save();
 		return redirect(routes.Application.index());
+	}
+
+	/**
+	 * @author Mitesh
+	 * Action to create dummy PatientDoctorInfo
+	 * GET /sampledata/create-patdoc
+	 */
+	public static Result createSamplePatientDoctor() {
+
+		final Patient patient=LoginController.getLoggedInUser().getPatient();
+
+		for(int i=0;i<10;i++){
+			final PatientDoctorInfo patDocInfo=new PatientDoctorInfo();
+			patDocInfo.patient=patient;
+
+
+			final AppUser appUser=new AppUser();
+			appUser.name="Test Doctor"+i;
+			appUser.dob=new Date();
+			appUser.email="test@doctor.com"+i;
+			appUser.password="1";
+			appUser.save();
+
+			final Doctor doctor=new Doctor();
+			doctor.appUser=appUser;
+			doctor.degree="Deegree"+i;
+			doctor.experience="experience"+i;
+
+			doctor.save();
+
+			patDocInfo.doctor=doctor;
+
+			patient.patientDoctorInfos.add(patDocInfo);
+		}
+
+		patient.save();
+
+		return ok("Created");
 	}
 
 }
