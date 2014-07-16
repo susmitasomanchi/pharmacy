@@ -19,6 +19,7 @@ import play.data.validation.Constraints.Required;
 import play.db.ebean.*;
 import play.db.ebean.Model.Finder;
 
+@SuppressWarnings("serial")
 @Entity
 public class Inventory extends BaseEntity {
 
@@ -31,13 +32,11 @@ public class Inventory extends BaseEntity {
 
 	public String shelfNo;
 
-
 	@OneToMany(cascade=CascadeType.ALL)
 	public List<Batch> batchList = new ArrayList<Batch>();
 
 	//	@Required
 	//	public ProductInventoryStatus productInventoryStatus;
-
 
 	public Integer productQuantity;
 

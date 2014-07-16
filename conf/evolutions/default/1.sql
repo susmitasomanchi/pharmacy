@@ -9,11 +9,12 @@ create table address (
   addrress_line2            varchar(255),
   addrress_line3            varchar(255),
   area                      varchar(255),
-  latitude                  float,
-  longitude                 float,
+  latitude                  varchar(255),
+  longitude                 varchar(255),
   city                      varchar(255),
   state                     varchar(35),
   pin_code                  varchar(255),
+  fetched_pin_code          varchar(255),
   country                   varchar(27),
   last_update               timestamp not null,
   constraint ck_address_state check (state in ('DADRA_AND_NAGAR_HAVELI','KERALA','WEST_BENGAL','JAMMU_AND_KASHMIR','HIMACHAL_PRADESH','MANIPUR','MIZORAM','MAHARASHTRA','JHARKHAND','ASSAM','UTTARAKHAND','SIKKIM','KARNATAKA','CHHATTISGARH','ANDHRA_PRADESH','NATIONAL_CAPITAL_TERRITORY_OF_DELHI','UTTAR_PRADESH','PUDUCHERRY','ANDAMAN_AND_NICOBAR_ISLANDS','TRIPURA','GOA','DAMAN_AND_DIU','NAGALAND','ODISHA','TAMIL_NADU','BIHAR','RAJASTHAN','LAKSHADWEEP','HARYANA','MEGHALAYA','PUNJAB','ARUNACHAL_PRADESH','GUJARAT','TELANGANA','MADHYA_PRADESH','CHNADIGARH')),
@@ -128,6 +129,7 @@ create table clinic (
   name                      varchar(255),
   contact_person_name       varchar(255),
   contact_no                varchar(255),
+  address_id                bigint,
   constraint pk_clinic primary key (id))
 ;
 
@@ -149,14 +151,6 @@ create table daily_call_report (
   for_date                  timestamp,
   last_update               timestamp not null,
   constraint pk_daily_call_report primary key (id))
-;
-
-create table day_of_the_week (
-  id                        bigint not null,
-  day                       varchar(9),
-  last_update               timestamp not null,
-  constraint ck_day_of_the_week_day check (day in ('MONDAY','SUNDAY','WEDNESDAY','THURSDAY','SATURDAY','TUESDAY','FRIDAY')),
-  constraint pk_day_of_the_week primary key (id))
 ;
 
 create table day_schedule (
@@ -240,11 +234,14 @@ create table diagnostic_test_line_item (
 create table doctor (
   id                        bigint not null,
   app_user_id               bigint,
+  registration_number       varchar(255),
   specialization            varchar(255),
   position                  varchar(255),
   degree                    varchar(255),
-  doctor_type               varchar(255),
-  experience                varchar(255),
+  description               TEXT,
+  background_image          bytea,
+  profile_image             bytea,
+  experience                integer,
   last_update               timestamp not null,
   constraint pk_doctor primary key (id))
 ;
@@ -262,9 +259,10 @@ create table doctor_award (
   id                        bigint not null,
   doctor_id                 bigint not null,
   award_name                varchar(255),
-  award_for                 varchar(255),
+  awarded_by                varchar(255),
   year                      varchar(255),
-  comment_for_awards        varchar(255),
+  description               TEXT,
+  position                  integer,
   last_update               timestamp not null,
   constraint pk_doctor_award primary key (id))
 ;
@@ -276,7 +274,6 @@ create table doctor_clinic_info (
   slot                      integer,
   slotmr                    integer,
   active                    boolean,
-  address_id                bigint,
   last_update               timestamp not null,
   constraint pk_doctor_clinic_info primary key (id))
 ;
@@ -284,10 +281,11 @@ create table doctor_clinic_info (
 create table doctor_education (
   id                        bigint not null,
   doctor_id                 bigint not null,
-  college_name              varchar(255),
+  institution_name          varchar(255),
   degree                    varchar(255),
   from_year                 integer,
   to_year                   integer,
+  description               TEXT,
   last_update               timestamp not null,
   constraint pk_doctor_education primary key (id))
 ;
@@ -295,9 +293,9 @@ create table doctor_education (
 create table doctor_experience (
   id                        bigint not null,
   doctor_id                 bigint not null,
-  previous_hospital_name    varchar(255),
-  worked_as                 varchar(255),
-  location                  varchar(255),
+  institution_name          varchar(255),
+  position                  varchar(255),
+  description               TEXT,
   worked_from               integer,
   worked_to                 integer,
   last_update               timestamp not null,
@@ -313,10 +311,14 @@ create table doctor_language (
 create table doctor_publication (
   id                        bigint not null,
   doctor_id                 bigint not null,
-  article_name              varchar(255),
+  name                      varchar(255),
   article_for               varchar(255),
   year                      varchar(255),
-  comment_for_article       varchar(255),
+  position                  integer,
+  brief_description         TEXT,
+  content                   TEXT,
+  image                     bytea,
+  file                      bytea,
   last_update               timestamp not null,
   constraint pk_doctor_publication primary key (id))
 ;
@@ -324,8 +326,8 @@ create table doctor_publication (
 create table doctor_social_work (
   id                        bigint not null,
   doctor_id                 bigint not null,
-  social_work_tittle        varchar(255),
-  comment_social_work       varchar(255),
+  title                     varchar(255),
+  description               TEXT,
   last_update               timestamp not null,
   constraint pk_doctor_social_work primary key (id))
 ;
@@ -442,6 +444,7 @@ create table pharmacy (
   address_id                bigint,
   contact_no                varchar(255),
   description               TEXT,
+  admin_pharmacist_id       bigint,
   last_update               timestamp not null,
   constraint pk_pharmacy primary key (id))
 ;
@@ -570,8 +573,6 @@ create sequence dcrline_item_seq;
 
 create sequence daily_call_report_seq;
 
-create sequence day_of_the_week_seq;
-
 create sequence day_schedule_seq;
 
 create sequence diagnostic_centre_seq;
@@ -660,46 +661,46 @@ alter table blog_comment_reply add constraint fk_blog_comment_reply_by_12 foreig
 create index ix_blog_comment_reply_by_12 on blog_comment_reply (by_id);
 alter table blog_comment_reply add constraint fk_blog_comment_reply_socialB_13 foreign key (social_by_id) references social_user (id);
 create index ix_blog_comment_reply_socialB_13 on blog_comment_reply (social_by_id);
-alter table dcrline_item add constraint fk_dcrline_item_daily_call_re_14 foreign key (daily_call_report_id) references daily_call_report (id);
-create index ix_dcrline_item_daily_call_re_14 on dcrline_item (daily_call_report_id);
-alter table dcrline_item add constraint fk_dcrline_item_doctor_15 foreign key (doctor_id) references doctor (id);
-create index ix_dcrline_item_doctor_15 on dcrline_item (doctor_id);
-alter table daily_call_report add constraint fk_daily_call_report_medical__16 foreign key (medical_representative_id) references medical_representative (id);
-create index ix_daily_call_report_medical__16 on daily_call_report (medical_representative_id);
-alter table day_schedule add constraint fk_day_schedule_doctor_clinic_17 foreign key (doctor_clinic_info_id) references doctor_clinic_info (id);
-create index ix_day_schedule_doctor_clinic_17 on day_schedule (doctor_clinic_info_id);
-alter table diagnostic_centre add constraint fk_diagnostic_centre_diagnost_18 foreign key (diagnostic_rep_admin_id) references diagnostic_representative (id);
-create index ix_diagnostic_centre_diagnost_18 on diagnostic_centre (diagnostic_rep_admin_id);
-alter table diagnostic_order add constraint fk_diagnostic_order_diagnosti_19 foreign key (diagnostic_centre_id) references diagnostic_centre (id);
-create index ix_diagnostic_order_diagnosti_19 on diagnostic_order (diagnostic_centre_id);
-alter table diagnostic_order add constraint fk_diagnostic_order_patient_20 foreign key (patient_id) references patient (id);
-create index ix_diagnostic_order_patient_20 on diagnostic_order (patient_id);
-alter table diagnostic_report add constraint fk_diagnostic_report_diagnost_21 foreign key (diagnostic_order_id) references diagnostic_order (id);
-create index ix_diagnostic_report_diagnost_21 on diagnostic_report (diagnostic_order_id);
-alter table diagnostic_report add constraint fk_diagnostic_report_diagnost_22 foreign key (diagnostic_test_id) references diagnostic_test (id);
-create index ix_diagnostic_report_diagnost_22 on diagnostic_report (diagnostic_test_id);
-alter table diagnostic_representative add constraint fk_diagnostic_representative__23 foreign key (app_user_id) references app_user (id);
-create index ix_diagnostic_representative__23 on diagnostic_representative (app_user_id);
-alter table diagnostic_representative add constraint fk_diagnostic_representative__24 foreign key (patient_id) references patient (id);
-create index ix_diagnostic_representative__24 on diagnostic_representative (patient_id);
-alter table diagnostic_representative add constraint fk_diagnostic_representative__25 foreign key (diagnostic_centre_id) references diagnostic_centre (id);
-create index ix_diagnostic_representative__25 on diagnostic_representative (diagnostic_centre_id);
-alter table diagnostic_test add constraint fk_diagnostic_test_diagnostic_26 foreign key (diagnostic_centre_id) references diagnostic_centre (id);
-create index ix_diagnostic_test_diagnostic_26 on diagnostic_test (diagnostic_centre_id);
-alter table diagnostic_test_line_item add constraint fk_diagnostic_test_line_item__27 foreign key (prescription_id) references prescription (id);
-create index ix_diagnostic_test_line_item__27 on diagnostic_test_line_item (prescription_id);
-alter table doctor add constraint fk_doctor_appUser_28 foreign key (app_user_id) references app_user (id);
-create index ix_doctor_appUser_28 on doctor (app_user_id);
-alter table doctor_assistant add constraint fk_doctor_assistant_appUser_29 foreign key (app_user_id) references app_user (id);
-create index ix_doctor_assistant_appUser_29 on doctor_assistant (app_user_id);
-alter table doctor_award add constraint fk_doctor_award_doctor_30 foreign key (doctor_id) references doctor (id);
-create index ix_doctor_award_doctor_30 on doctor_award (doctor_id);
-alter table doctor_clinic_info add constraint fk_doctor_clinic_info_clinic_31 foreign key (clinic_id) references clinic (id);
-create index ix_doctor_clinic_info_clinic_31 on doctor_clinic_info (clinic_id);
-alter table doctor_clinic_info add constraint fk_doctor_clinic_info_doctor_32 foreign key (doctor_id) references doctor (id);
-create index ix_doctor_clinic_info_doctor_32 on doctor_clinic_info (doctor_id);
-alter table doctor_clinic_info add constraint fk_doctor_clinic_info_address_33 foreign key (address_id) references address (id);
-create index ix_doctor_clinic_info_address_33 on doctor_clinic_info (address_id);
+alter table clinic add constraint fk_clinic_address_14 foreign key (address_id) references address (id);
+create index ix_clinic_address_14 on clinic (address_id);
+alter table dcrline_item add constraint fk_dcrline_item_daily_call_re_15 foreign key (daily_call_report_id) references daily_call_report (id);
+create index ix_dcrline_item_daily_call_re_15 on dcrline_item (daily_call_report_id);
+alter table dcrline_item add constraint fk_dcrline_item_doctor_16 foreign key (doctor_id) references doctor (id);
+create index ix_dcrline_item_doctor_16 on dcrline_item (doctor_id);
+alter table daily_call_report add constraint fk_daily_call_report_medical__17 foreign key (medical_representative_id) references medical_representative (id);
+create index ix_daily_call_report_medical__17 on daily_call_report (medical_representative_id);
+alter table day_schedule add constraint fk_day_schedule_doctor_clinic_18 foreign key (doctor_clinic_info_id) references doctor_clinic_info (id);
+create index ix_day_schedule_doctor_clinic_18 on day_schedule (doctor_clinic_info_id);
+alter table diagnostic_centre add constraint fk_diagnostic_centre_diagnost_19 foreign key (diagnostic_rep_admin_id) references diagnostic_representative (id);
+create index ix_diagnostic_centre_diagnost_19 on diagnostic_centre (diagnostic_rep_admin_id);
+alter table diagnostic_order add constraint fk_diagnostic_order_diagnosti_20 foreign key (diagnostic_centre_id) references diagnostic_centre (id);
+create index ix_diagnostic_order_diagnosti_20 on diagnostic_order (diagnostic_centre_id);
+alter table diagnostic_order add constraint fk_diagnostic_order_patient_21 foreign key (patient_id) references patient (id);
+create index ix_diagnostic_order_patient_21 on diagnostic_order (patient_id);
+alter table diagnostic_report add constraint fk_diagnostic_report_diagnost_22 foreign key (diagnostic_order_id) references diagnostic_order (id);
+create index ix_diagnostic_report_diagnost_22 on diagnostic_report (diagnostic_order_id);
+alter table diagnostic_report add constraint fk_diagnostic_report_diagnost_23 foreign key (diagnostic_test_id) references diagnostic_test (id);
+create index ix_diagnostic_report_diagnost_23 on diagnostic_report (diagnostic_test_id);
+alter table diagnostic_representative add constraint fk_diagnostic_representative__24 foreign key (app_user_id) references app_user (id);
+create index ix_diagnostic_representative__24 on diagnostic_representative (app_user_id);
+alter table diagnostic_representative add constraint fk_diagnostic_representative__25 foreign key (patient_id) references patient (id);
+create index ix_diagnostic_representative__25 on diagnostic_representative (patient_id);
+alter table diagnostic_representative add constraint fk_diagnostic_representative__26 foreign key (diagnostic_centre_id) references diagnostic_centre (id);
+create index ix_diagnostic_representative__26 on diagnostic_representative (diagnostic_centre_id);
+alter table diagnostic_test add constraint fk_diagnostic_test_diagnostic_27 foreign key (diagnostic_centre_id) references diagnostic_centre (id);
+create index ix_diagnostic_test_diagnostic_27 on diagnostic_test (diagnostic_centre_id);
+alter table diagnostic_test_line_item add constraint fk_diagnostic_test_line_item__28 foreign key (prescription_id) references prescription (id);
+create index ix_diagnostic_test_line_item__28 on diagnostic_test_line_item (prescription_id);
+alter table doctor add constraint fk_doctor_appUser_29 foreign key (app_user_id) references app_user (id);
+create index ix_doctor_appUser_29 on doctor (app_user_id);
+alter table doctor_assistant add constraint fk_doctor_assistant_appUser_30 foreign key (app_user_id) references app_user (id);
+create index ix_doctor_assistant_appUser_30 on doctor_assistant (app_user_id);
+alter table doctor_award add constraint fk_doctor_award_doctor_31 foreign key (doctor_id) references doctor (id);
+create index ix_doctor_award_doctor_31 on doctor_award (doctor_id);
+alter table doctor_clinic_info add constraint fk_doctor_clinic_info_clinic_32 foreign key (clinic_id) references clinic (id);
+create index ix_doctor_clinic_info_clinic_32 on doctor_clinic_info (clinic_id);
+alter table doctor_clinic_info add constraint fk_doctor_clinic_info_doctor_33 foreign key (doctor_id) references doctor (id);
+create index ix_doctor_clinic_info_doctor_33 on doctor_clinic_info (doctor_id);
 alter table doctor_education add constraint fk_doctor_education_doctor_34 foreign key (doctor_id) references doctor (id);
 create index ix_doctor_education_doctor_34 on doctor_education (doctor_id);
 alter table doctor_experience add constraint fk_doctor_experience_doctor_35 foreign key (doctor_id) references doctor (id);
@@ -734,20 +735,22 @@ alter table pharmacist add constraint fk_pharmacist_pharmacy_49 foreign key (pha
 create index ix_pharmacist_pharmacy_49 on pharmacist (pharmacy_id);
 alter table pharmacy add constraint fk_pharmacy_address_50 foreign key (address_id) references address (id);
 create index ix_pharmacy_address_50 on pharmacy (address_id);
-alter table prescription add constraint fk_prescription_appointment_51 foreign key (appointment_id) references appointment (id);
-create index ix_prescription_appointment_51 on prescription (appointment_id);
-alter table product add constraint fk_product_pharmaceuticalComp_52 foreign key (pharmaceutical_company_id) references pharmaceutical_company (id);
-create index ix_product_pharmaceuticalComp_52 on product (pharmaceutical_company_id);
-alter table product add constraint fk_product_pharmacy_53 foreign key (pharmacy_id) references pharmacy (id);
-create index ix_product_pharmacy_53 on product (pharmacy_id);
-alter table question_and_answer add constraint fk_question_and_answer_questi_54 foreign key (question_by_id) references app_user (id);
-create index ix_question_and_answer_questi_54 on question_and_answer (question_by_id);
-alter table question_and_answer add constraint fk_question_and_answer_answer_55 foreign key (answer_by_id) references app_user (id);
-create index ix_question_and_answer_answer_55 on question_and_answer (answer_by_id);
-alter table sample add constraint fk_sample_dcrline_item_56 foreign key (dcrline_item_id) references dcrline_item (id);
-create index ix_sample_dcrline_item_56 on sample (dcrline_item_id);
-alter table sample add constraint fk_sample_product_57 foreign key (product_id) references product (id);
-create index ix_sample_product_57 on sample (product_id);
+alter table pharmacy add constraint fk_pharmacy_adminPharmacist_51 foreign key (admin_pharmacist_id) references pharmacist (id);
+create index ix_pharmacy_adminPharmacist_51 on pharmacy (admin_pharmacist_id);
+alter table prescription add constraint fk_prescription_appointment_52 foreign key (appointment_id) references appointment (id);
+create index ix_prescription_appointment_52 on prescription (appointment_id);
+alter table product add constraint fk_product_pharmaceuticalComp_53 foreign key (pharmaceutical_company_id) references pharmaceutical_company (id);
+create index ix_product_pharmaceuticalComp_53 on product (pharmaceutical_company_id);
+alter table product add constraint fk_product_pharmacy_54 foreign key (pharmacy_id) references pharmacy (id);
+create index ix_product_pharmacy_54 on product (pharmacy_id);
+alter table question_and_answer add constraint fk_question_and_answer_questi_55 foreign key (question_by_id) references app_user (id);
+create index ix_question_and_answer_questi_55 on question_and_answer (question_by_id);
+alter table question_and_answer add constraint fk_question_and_answer_answer_56 foreign key (answer_by_id) references app_user (id);
+create index ix_question_and_answer_answer_56 on question_and_answer (answer_by_id);
+alter table sample add constraint fk_sample_dcrline_item_57 foreign key (dcrline_item_id) references dcrline_item (id);
+create index ix_sample_dcrline_item_57 on sample (dcrline_item_id);
+alter table sample add constraint fk_sample_product_58 foreign key (product_id) references product (id);
+create index ix_sample_product_58 on sample (product_id);
 
 
 
@@ -792,8 +795,6 @@ drop table if exists dcrline_item cascade;
 drop table if exists dcrline_item_product cascade;
 
 drop table if exists daily_call_report cascade;
-
-drop table if exists day_of_the_week cascade;
 
 drop table if exists day_schedule cascade;
 
@@ -892,8 +893,6 @@ drop sequence if exists clinic_seq;
 drop sequence if exists dcrline_item_seq;
 
 drop sequence if exists daily_call_report_seq;
-
-drop sequence if exists day_of_the_week_seq;
 
 drop sequence if exists day_schedule_seq;
 

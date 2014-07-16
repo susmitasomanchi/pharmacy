@@ -289,10 +289,10 @@ public class PharmacistController extends Controller {
 				pharmacy.address.country = Enum.valueOf(Country.class,requestMap.get("country")[0]);
 			}
 			if(requestMap.get("latitude") != null && (requestMap.get("latitude")[0].trim().compareToIgnoreCase("")!=0)){
-				pharmacy.address.latitude = Double.parseDouble(requestMap.get("latitude")[0]);
+				pharmacy.address.latitude = requestMap.get("latitude")[0];
 			}
 			if(requestMap.get("longitude") != null && (requestMap.get("longitude")[0].trim().compareToIgnoreCase("")!=0)){
-				pharmacy.address.longitude = Double.parseDouble(requestMap.get("longitude")[0]);
+				pharmacy.address.longitude = requestMap.get("longitude")[0];
 			}
 			if(requestMap.get("contactNo") != null && (requestMap.get("contactNo")[0].trim().compareToIgnoreCase("")!=0)){
 				pharmacy.contactNo = requestMap.get("contactNo")[0];

@@ -97,7 +97,12 @@ function confSubmit(){
 }
 </script>
 
-<form id="datetimeform" style="display:none;" action="@routes.DoctorController.requestAppointment()" method="POST" onsubmit="return confSubmit();">
+
+@*
+action="@routes.DoctorController.requestAppointment()"
+*@
+
+<form id="datetimeform" style="display:none;" action="" method="POST" onsubmit="return confSubmit();">
 	<input type="hidden"  id="formremark" name="datetime" value="">
 		<input type="hidden" id="aptid"  name="datetime" value="">
 	

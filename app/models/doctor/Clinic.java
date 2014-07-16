@@ -4,6 +4,7 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.OneToOne;
 
 import models.Address;
 import play.db.ebean.Model;
@@ -22,7 +23,8 @@ public class Clinic extends Model{
 
 	public String contactNo;
 
-	public Address clinicAddress;
+	@OneToOne
+	public Address address;
 
 
 	public static Model.Finder<Long, Clinic> find = new Finder<Long, Clinic>(Long.class, Clinic.class);

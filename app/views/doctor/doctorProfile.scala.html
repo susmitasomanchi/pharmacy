@@ -1,14 +1,16 @@
-@()
+@(doctor :models.doctor.Doctor)
 @import play.i18n._
 @import helper.twitterBootstrap._
 @import helper._
 
-@main("Dr. doctor.appUser.name"){
+@main("Dr. "+doctor.appUser.name){
 	
 <script src="http://maps.googleapis.com/maps/api/js?sensor=false"></script>
 <script src="@routes.Assets.at("blog/jquery.carouFredSel-6.2.1-packed.js")" type="text/javascript"></script>
-<!--<script src="@routes.Assets.at("javascripts/carousel.js")" type="text/javascript"></script>-->
-<script src="@routes.Assets.at("javascripts/googlemaps3.js")" type="text/javascript"></script>
+<!--
+<script src="@routes.Assets.at("javascripts/carousel.js")" type="text/javascript"></script>
+<script src="@routes.Assets.at("javascripts/googlemaps.js")" type="text/javascript"></script>
+-->
 <link href='http://fonts.googleapis.com/css?family=Muli|Dosis' rel='stylesheet' type='text/css'>
 <style>
 .ptxt1 {
@@ -250,7 +252,7 @@ a.prev span, a.next span {
 
 </style>
 
-@*
+
 <form style="display:none" id="basicinfoform">
 <input type="hidden" name="doctorId" value="@doctor.id">
 <input id="fullname" type="hidden" name="fullname" value="">
@@ -264,12 +266,12 @@ a.prev span, a.next span {
 <input id="profileimage" type="file" name="profileimage">
 <input id="backgroundimage" type="file" name="backgroundimage">
 </form>
-*@
+
 
 
 <script>
 
-@*
+
 $(document).ready(function(){
 	$("#clinics-carousel").carouFredSel({
 					items: 4,
@@ -286,7 +288,7 @@ $(document).ready(function(){
             			duration: 1000,                        
         			}
 				});
-});*@
+});
 
 
 $('body').on('click', function (e) {
@@ -302,11 +304,11 @@ function submitbasicform(name){
 	$('#spinner-'+name).addClass( "fa-spin" );
 	$('#'+name).val($('#new-'+name).val());
 
-	@*$.post("@routes.DoctorController.basicUpdate()",$('#basicinfoform').serialize(),function(data){*@
+	$.post("@routes.DoctorController.basicUpdate()",$('#basicinfoform').serialize(),function(data){
 		if(data == 0){
 			window.location.href='';
 		}
-	@*});*@
+	});
 }
 
 function submitimagesform(name){
@@ -316,29 +318,29 @@ function submitimagesform(name){
 </script>
 
 
-@*@if(doctor.backgroundImage != null){
-	<div style="background-image:url('@routes.DoctorController.getImage(doctor.id,"backgroundImage")');background-repeat:no-repeat; height:400px; font-size:40px;">
-}else{*@
+@if(doctor.backgroundImage != null){
+	<div style="background-image:url('@routes.DoctorController.getImage(doctor.id,"backgroundImage")');background-repeat:no-repeat; background-size:940px 400px; height:400px; font-size:40px;">
+}else{
 	<div style="background-image:url('/assets/images/sunrise.png'); height:400px; font-size:40px;">
-@*}*@
-<span data-toggle="popover" data-placement="left" title="Change Background Image" data-html="true" data-content="<form @* action=&quot;@routes.DoctorController.imagesUpdate()&quot; enctype=&quot;multipart/form-data&quot; method=&quot;POST&quot;*@ ><input type=&quot;file&quot; name=&quot;backgroundimage&quot;> <input type=&quot;hidden&quot; name=&quot;doctorId&quot; value=&quot;doctor.id&quot;> <br><input class=&quot;pull-right btn btn-xs btn-primary&quot; type=&quot;submit&quot; onclick=&quot;submitimagesform('backgroundimage');&quot; value=&quot;save&quot;></form>" style="cursor:pointer; position:relative; top:-5px; left:900px;"><i id="spinner-backgroundimage" class="fa fa-cog"></i></span>
+}
+<span data-toggle="popover" data-placement="left" title="Change Background Image" data-html="true" data-content="<form action=&quot;@routes.DoctorController.imagesUpdate()&quot; enctype=&quot;multipart/form-data&quot; method=&quot;POST&quot;><input type=&quot;file&quot; name=&quot;backgroundimage&quot;> <input type=&quot;hidden&quot; name=&quot;doctorId&quot; value=&quot;@doctor.id&quot;> <br><input class=&quot;pull-right btn btn-xs btn-primary&quot; type=&quot;submit&quot; onclick=&quot;submitimagesform('backgroundimage');&quot; value=&quot;save&quot;></form>" style="cursor:pointer; position:relative; top:-5px; left:900px;"><i id="spinner-backgroundimage" class="fa fa-cog"></i></span>
 </div>
 <div class="row" style="margin-top:-150px">
 <div class="col-md-1" style="width:5%"></div>
 <div class="col-md-4" >
 <br>
-@*@if(doctor.profileImage != null){
+@if(doctor.profileImage != null){
 	<img src="@routes.DoctorController.getImage(doctor.id,"profileImage")" style="width:250px; height:275px;" class="thumbnail"/>
-}else{*@
+}else{
 	<img src="/assets/images/doctor.png" style="width:250px; height:275px;" class="thumbnail"/>
-@*}*@
+}
 
-<span data-toggle="popover" title="Change Profile Pic" data-html="true" data-content="<form @*action=&quot;@routes.DoctorController.imagesUpdate()&quot; enctype=&quot;multipart/form-data&quot; method=&quot;POST&quot;*@><input type=&quot;file&quot; name=&quot;profileimage&quot;> <input type=&quot;hidden&quot; name=&quot;doctorId&quot; value=&quot;doctor.id&quot;> <br><input class=&quot;pull-right btn btn-xs btn-primary&quot; type=&quot;submit&quot; onclick=&quot;submitimagesform('profileimage');&quot; value=&quot;save&quot;></form>" style="font-size:20px; position:relative; top:-295px; left:228px; cursor:pointer;"><i id="spinner-profileimage" class="fa fa-cog"></i></span>
+<span data-toggle="popover" title="Change Profile Pic" data-html="true" data-content="<form action=&quot;@routes.DoctorController.imagesUpdate()&quot; enctype=&quot;multipart/form-data&quot; method=&quot;POST&quot;><input type=&quot;file&quot; name=&quot;profileimage&quot;> <input type=&quot;hidden&quot; name=&quot;doctorId&quot; value=&quot;@doctor.id&quot;> <br><input class=&quot;pull-right btn btn-xs btn-primary&quot; type=&quot;submit&quot; onclick=&quot;submitimagesform('profileimage');&quot; value=&quot;save&quot;></form>" style="font-size:20px; position:relative; top:-295px; left:228px; cursor:pointer;"><i id="spinner-profileimage" class="fa fa-cog"></i></span>
 </div>
 <div class="col-md-6">
-<h2><span style="text-shadow:1px 1px 20px #292929, 3px 3px 20px white;"><b> Dr. doctor.appUser.name </b></span><span data-toggle="popover" title="Edit Name" data-html="true" data-content="<input id=&quot;new-fullname&quot; style=&quot;color:#292929; font-weight:bold;&quot; type=&quot;text&quot; value=&quot;doctor.appUser.name&quot;><br><a class=&quot;pull-right btn btn-xs btn-primary&quot; onclick=&quot;submitbasicform('fullname');&quot; >save</a> " style="cursor:pointer; position:relative; font-size:15px; top:-15px;"><i id="spinner-fullname" class="fa fa-cog"></i></span></h2>
-<h3><span style="text-shadow:1px 1px 20px #292929, 3px 3px 20px white;">doctor.specialization</span><span data-toggle="popover" title="Edit Specialization" data-html="true" data-content="<input id=&quot;new-specialization&quot; style=&quot;color:#292929; font-weight:bold;&quot; type=&quot;text&quot; value=&quot;doctor.specialization&quot;><br><a class=&quot;pull-right btn btn-xs btn-primary&quot; onclick=&quot;submitbasicform('specialization');&quot; >save</a> " style="cursor:pointer; position:relative; font-size:15px; top:-10px;"><i id="spinner-specialization" class="fa fa-cog"></i></span></h3>
-<h4><span style="text-shadow:1px 1px 20px #292929, 3px 3px 20px white;">doctor.degree</span><span data-toggle="popover" title="Edit Degree" data-html="true" data-content="<input id=&quot;new-degree&quot; style=&quot;color:#292929; font-weight:bold;&quot; type=&quot;text&quot; value=&quot;doctor.degree&quot;><br><a class=&quot;pull-right btn btn-xs btn-primary&quot; onclick=&quot;submitbasicform('degree');&quot; >save</a> " style="cursor:pointer; position:relative; font-size:15px; top:-10px;"><i id="spinner-degree" class="fa fa-cog"></i></span></h4>
+<h2><span style="text-shadow:1px 1px 20px #292929, 3px 3px 20px white;"><b> Dr. @doctor.appUser.name </b></span><span data-toggle="popover" title="Edit Name" data-html="true" data-content="<input id=&quot;new-fullname&quot; style=&quot;color:#292929; font-weight:bold;&quot; type=&quot;text&quot; value=&quot;@doctor.appUser.name&quot;><br><a class=&quot;pull-right btn btn-xs btn-primary&quot; onclick=&quot;submitbasicform('fullname');&quot; >save</a> " style="cursor:pointer; position:relative; font-size:15px; top:-15px;"><i id="spinner-fullname" class="fa fa-cog"></i></span></h2>
+<h3><span style="text-shadow:1px 1px 20px #292929, 3px 3px 20px white;">@doctor.specialization</span><span data-toggle="popover" title="Edit Specialization" data-html="true" data-content="<input id=&quot;new-specialization&quot; style=&quot;color:#292929; font-weight:bold;&quot; type=&quot;text&quot; value=&quot;@doctor.specialization&quot;><br><a class=&quot;pull-right btn btn-xs btn-primary&quot; onclick=&quot;submitbasicform('specialization');&quot; >save</a> " style="cursor:pointer; position:relative; font-size:15px; top:-10px;"><i id="spinner-specialization" class="fa fa-cog"></i></span></h3>
+<h4><span style="text-shadow:1px 1px 20px #292929, 3px 3px 20px white;">@doctor.degree</span><span data-toggle="popover" title="Edit Degree" data-html="true" data-content="<input id=&quot;new-degree&quot; style=&quot;color:#292929; font-weight:bold;&quot; type=&quot;text&quot; value=&quot;@doctor.degree&quot;><br><a class=&quot;pull-right btn btn-xs btn-primary&quot; onclick=&quot;submitbasicform('degree');&quot; >save</a> " style="cursor:pointer; position:relative; font-size:15px; top:-10px;"><i id="spinner-degree" class="fa fa-cog"></i></span></h4>
 <br>
 
 <!--
@@ -355,20 +357,27 @@ function submitimagesform(name){
 <div class="col-md-1"></div>
 </div>	
 <div class="alert alert-success">
-<span data-toggle="popover" title="Brief Professional Description" data-placement="left" data-html="true" data-content="<textarea placeholder=&quot;I am...&quot; id=&quot;new-description&quot; rows=&quot;12&quot; cols=&quot;25&quot; style=&quot;color:#292929; font-weight:bold;&quot; >doctor.description</textarea><br><a class=&quot;pull-right btn btn-xs btn-primary&quot; onclick=&quot;submitbasicform('description');&quot; >save</a> " style="cursor:pointer; position:relative; font-size:15px; top:-10px; left:905px;"><i id="spinner-description" class="fa fa-cog"></i></span>
+<span data-toggle="popover" title="Brief Professional Description" data-placement="left" data-html="true" data-content="<textarea placeholder=&quot;I am...&quot; id=&quot;new-description&quot; rows=&quot;12&quot; cols=&quot;25&quot; style=&quot;color:#292929; font-weight:bold;&quot; >@doctor.description</textarea><br><a class=&quot;pull-right btn btn-xs btn-primary&quot; onclick=&quot;submitbasicform('description');&quot; >save</a> " style="cursor:pointer; position:relative; font-size:15px; top:-10px; left:905px;"><i id="spinner-description" class="fa fa-cog"></i></span>
 <p style="font-size:1.5em; align:justify; margin-top:-20px;">
-	doctor.description
+	@doctor.description
 </p>
 
 </div>
 
-@*
 
 <script>
-	function submitworkexform(){
-		if(($('#workexname').val().trim() != '') && ($('#workexfrom').val().trim() != '')){
-			$("[data-toggle=popover]").popover('hide');
-			$('#addworkex').html('&nbsp;<i class="fa fa-cog fa-spin"></i>&nbsp;');
+	function submitworkexform(expid){
+		if(expid == 0){
+			if(($('#workexname').val().trim() != '') && ($('#workexfrom').val().trim() != '')){
+				$("[data-toggle=popover]").popover('hide');
+				$('#addworkex').html('&nbsp;<i class="fa fa-cog fa-spin"></i>&nbsp;');
+			}
+		}
+		else{
+			if(($('#workexnameedit').val().trim() != '') && ($('#workexfromedit').val().trim() != '')){
+				$("[data-toggle=popover]").popover('hide');
+				$('#editworkex-'+expid).html('&nbsp;<i class="fa fa-cog fa-spin"></i>&nbsp;');
+			}
 		}
 	}
 
@@ -378,10 +387,18 @@ function submitimagesform(name){
 	}
 
 
-	function submitawardform(){
-		if($('#awardname').val().trim() != ''){
-			$("[data-toggle=popover]").popover('hide');
-			$('#addaward').html('&nbsp;<i class="fa fa-cog fa-spin"></i>&nbsp;');
+	function submitawardform(awardid){
+		if(expid == 0){
+			if($('#awardname').val().trim() != ''){
+				$("[data-toggle=popover]").popover('hide');
+				$('#addaward').html('&nbsp;<i class="fa fa-cog fa-spin"></i>&nbsp;');
+			}
+		}
+		else{
+			if($('#awardnameedit').val().trim() != ''){
+				$("[data-toggle=popover]").popover('hide');
+				$('#editaward-'+awardid).html('&nbsp;<i class="fa fa-cog fa-spin"></i>&nbsp;');
+			}	
 		}
 	}
 
@@ -390,10 +407,18 @@ function submitimagesform(name){
 			$('#removeaward-'+id).html('&nbsp;<i class="fa fa-cog fa-spin"></i>&nbsp;');
 	}
 
-	function submiteducationform(){
-		if(($('#educationname').val().trim() != '') && ($('#educationfrom').val().trim() != '')){
-			$("[data-toggle=popover]").popover('hide');
-			$('#addeducation').html('&nbsp;<i class="fa fa-cog fa-spin"></i>&nbsp;');
+	function submiteducationform(eduid){
+		if(expid == 0){
+			if(($('#educationname').val().trim() != '') && ($('#educationfrom').val().trim() != '')){
+				$("[data-toggle=popover]").popover('hide');
+				$('#addeducation').html('&nbsp;<i class="fa fa-cog fa-spin"></i>&nbsp;');
+			}
+		}
+		else{
+			if(($('#educationnameedit').val().trim() != '') && ($('#educationfromedit').val().trim() != '')){
+				$("[data-toggle=popover]").popover('hide');
+				$('#editeducation-'+eduid).html('&nbsp;<i class="fa fa-cog fa-spin"></i>&nbsp;');
+			}
 		}
 	}
 
@@ -402,10 +427,18 @@ function submitimagesform(name){
 			$('#removeeducation-'+id).html('&nbsp;<i class="fa fa-cog fa-spin"></i>&nbsp;');
 	}
 
-	function submitsocialform(){
-		if(($('#socialname').val().trim() != '') && ($('#socialdescription').val().trim() != '')){
-			$("[data-toggle=popover]").popover('hide');
-			$('#addsocial').html('&nbsp;<i class="fa fa-cog fa-spin"></i>&nbsp;');
+	function submitsocialform(socid){
+		if(socid == 0){
+			if(($('#socialname').val().trim() != '') && ($('#socialdescription').val().trim() != '')){
+				$("[data-toggle=popover]").popover('hide');
+				$('#addsocial').html('&nbsp;<i class="fa fa-cog fa-spin"></i>&nbsp;');
+			}
+		}
+		else{
+			if(($('#socialnameedit').val().trim() != '') && ($('#socialdescriptionedit').val().trim() != '')){
+				$("[data-toggle=popover]").popover('hide');
+				$('#editsocial-'+socid).html('&nbsp;<i class="fa fa-cog fa-spin"></i>&nbsp;');
+			}	
 		}
 	}
 
@@ -441,8 +474,28 @@ function submitimagesform(name){
 @for(exp <- doctor.getExperienceListInOrder()){
 	<h4>
 		@exp.institutionName
+		<span class="pull-right" data-toggle="popover" title="Edit Experience" data-placement="left" data-html="true" data-content="
+		
+
+		<form id=&quot;workexform&quot; action=&quot;@routes.DoctorController.addWorkExperience()&quot; method=&quot;POST&quot;>
+		<input id=&quot;workexnameedit&quot; style=&quot;width:100%; color:#292929;&quot; placeholder=&quot;Institution Name*&quot; type=&quot;text&quot; name=&quot;name&quot; value=&quot;@exp.institutionName&quot; required>
+		<input style=&quot;width:100%; color:#292929;&quot; placeholder=&quot;Position&quot; type=&quot;text&quot; name=&quot;position&quot; value=&quot;@exp.position&quot;>
+		<input id=&quot;workexfromedit&quot; style=&quot;width:100%; color:#292929;&quot; placeholder=&quot;From (Year)*&quot; type=&quot;text&quot; name=&quot;from&quot; value=&quot;@exp.workedFrom&quot; required>
+		<input style=&quot;width:100%; color:#292929;&quot; placeholder=&quot;To (Year)&quot; type=&quot;text&quot; name=&quot;to&quot; value=&quot;@exp.workedTo&quot;>
+		<textarea placeholder=&quot;Description, Roles, Responsibilities etc.&quot; rows=&quot;12&quot; name=&quot;description&quot; style=&quot;color:#292929; width:100%; font-weight:bold;&quot;>@exp.description</textarea>
+		<input type=&quot;hidden&quot; name=&quot;doctorId&quot; value=&quot;@doctor.id&quot;>
+		<input type=&quot;hidden&quot; name=&quot;doctorExperienceId&quot; value=&quot;@exp.id&quot;>
+		<br>
+		<input class=&quot;pull-right btn btn-xs btn-primary&quot; type=&quot;submit&quot; onclick=&quot;submitworkexform(@exp.id);&quot; value=&quot;save&quot;>
+		</form>
+		
+
+		">
+			<span id="editworkex-@exp.id" style="cursor:pointer;" ><i class="fa fa-cog"></i></span>
+		</span>
+		<br>
 		<span class="pull-right"data-toggle="popover" title="Are You Sure ?" data-placement="left" data-html="true" data-content="<a href=&quot;@routes.DoctorController.removeWorkExperience(doctor.id,exp.id)&quot; class=&quot;btn btn-xs btn-danger&quot; onclick=&quot;deleteworkex('@exp.id');&quot; >Delete</a> ">
-			<a id="removeworkex-@exp.id" class="btn btn-danger btn-xs"><i class="fa fa-minus"></i></a>
+			<span id="removeworkex-@exp.id" style="color:red; cursor:pointer;"><i class="fa fa-trash-o"></i></span>
 		</span>
 	</h4>
 
@@ -472,9 +525,9 @@ function submitimagesform(name){
 <textarea placeholder=&quot;Description, Roles, Responsibilities etc.&quot; rows=&quot;12&quot; name=&quot;description&quot; style=&quot;color:#292929; width:100%; font-weight:bold;&quot;></textarea>
 <input type=&quot;hidden&quot; name=&quot;doctorId&quot; value=&quot;@doctor.id&quot;>
 <br>
-<input class=&quot;pull-right btn btn-xs btn-primary&quot; type=&quot;submit&quot; onclick=&quot;submitworkexform();&quot; value=&quot;save&quot;>
+<input class=&quot;pull-right btn btn-xs btn-primary&quot; type=&quot;submit&quot; onclick=&quot;submitworkexform(0);&quot; value=&quot;save&quot;>
 </form>">
-<a id="addworkex" class="btn btn-success btn-xs"><span style="font-size:15px;">&nbsp;<i class="fa fa-plus"></i>&nbsp;</span></a>
+<span id="addworkex" style="font-size:30px; color:#43ac6a; cursor:pointer;"><i class="fa fa-plus-square"></i>&nbsp;</span>
 </span>
 
 </div>
@@ -491,8 +544,23 @@ function submitimagesform(name){
 @for(award <- doctor.doctorAwardList){
 	<h4>
 		@award.awardName
+		<span class="pull-right" data-placement="left" data-toggle="popover" title="Edit Award/Recognition" data-html="true" data-content=
+		"<form id=&quot;awardform&quot; action=&quot;@routes.DoctorController.addAward()&quot; method=&quot;POST&quot;>
+		<input id=&quot;awardname&quot; style=&quot;width:100%; color:#292929;&quot; placeholder=&quot;Award Name*&quot; type=&quot;text&quot; name=&quot;name&quot; value=&quot;@award.awardName&quot; required>
+		<input style=&quot;width:100%; color:#292929;&quot; placeholder=&quot;Year&quot; type=&quot;text&quot; name=&quot;year&quot; value=&quot;@award.year&quot;>
+		<input style=&quot;width:100%; color:#292929;&quot; placeholder=&quot;Bestowed By&quot; type=&quot;text&quot; name=&quot;by&quot; value=&quot;@award.awardedBy&quot;>
+		<textarea placeholder=&quot;Description of Award/Recognition, Achievements leading to the award etc.&quot; rows=&quot;12&quot; name=&quot;description&quot; style=&quot;color:#292929; width:100%; font-weight:bold;&quot;>@award.description</textarea>
+		<input type=&quot;hidden&quot; name=&quot;doctorId&quot; value=&quot;@doctor.id&quot;>
+		<input type=&quot;hidden&quot; name=&quot;doctorAwardId&quot; value=&quot;@award.id&quot;>
+		<br>
+		<input class=&quot;pull-right btn btn-xs btn-primary&quot; type=&quot;submit&quot; onclick=&quot;submitawardform(@award.id);&quot; value=&quot;save&quot;>
+		</form>">
+			<span id="editaward-@award.id" style="cursor:pointer;" ><i class="fa fa-cog"></i></span>
+		</span>
+
+		<br>
 		<span class="pull-right"data-toggle="popover" title="Are You Sure ?" data-placement="left" data-html="true" data-content="<a href=&quot;@routes.DoctorController.removeAward(doctor.id,award.id)&quot; class=&quot;btn btn-xs btn-danger&quot; onclick=&quot;deleteaward('@award.id');&quot; >Delete</a> ">
-			<a id="removeaward-@award.id" class="btn btn-danger btn-xs"><i class="fa fa-minus"></i></a>
+			<span id="removeaward-@award.id" style="color:red; cursor:pointer;"><i class="fa fa-trash-o"></i></span>
 		</span>
 	</h4>
 
@@ -515,9 +583,9 @@ function submitimagesform(name){
 <textarea placeholder=&quot;Description of Award/Recognition, Achievements leading to the award etc.&quot; rows=&quot;12&quot; name=&quot;description&quot; style=&quot;color:#292929; width:100%; font-weight:bold;&quot;></textarea>
 <input type=&quot;hidden&quot; name=&quot;doctorId&quot; value=&quot;@doctor.id&quot;>
 <br>
-<input class=&quot;pull-right btn btn-xs btn-primary&quot; type=&quot;submit&quot; onclick=&quot;submitawardform();&quot; value=&quot;save&quot;>
+<input class=&quot;pull-right btn btn-xs btn-primary&quot; type=&quot;submit&quot; onclick=&quot;submitawardform(0);&quot; value=&quot;save&quot;>
 </form>">
-<a id="addaward" class="btn btn-success btn-xs"><span style="font-size:15px;">&nbsp;<i class="fa fa-plus"></i>&nbsp;</span></a>
+<span id="addaward" style="font-size:30px; color:#43ac6a; cursor:pointer;"><i class="fa fa-plus-square"></i>&nbsp;</span>
 </span>
 
 
@@ -541,9 +609,27 @@ function submitimagesform(name){
 
 @for(edu <- doctor.getEducationListInOrder()){
 	<h4>
+		
 		@edu.institutionName
+
+		<span class="pull-right" data-placement="left" data-toggle="popover" title="Add Education" data-html="true" data-content=
+		"<form action=&quot;@routes.DoctorController.addEducation()&quot; method=&quot;POST&quot;>
+		<input id=&quot;educationname&quot; style=&quot;width:100%; color:#292929;&quot; placeholder=&quot;Institution Name*&quot; type=&quot;text&quot; name=&quot;name&quot; value=&quot;@edu.institutionName&quot; required>
+		<input style=&quot;width:100%; color:#292929;&quot; placeholder=&quot;Degree&quot; type=&quot;text&quot; name=&quot;degree&quot; value=&quot;@edu.degree&quot;>
+		<input id=&quot;educationfrom&quot; style=&quot;width:100%; color:#292929;&quot; placeholder=&quot;From (Year)*&quot; type=&quot;text&quot; name=&quot;from&quot;  value=&quot;@edu.fromYear&quot; required>
+		<input style=&quot;width:100%; color:#292929;&quot; placeholder=&quot;To (Year)&quot; type=&quot;text&quot; name=&quot;to&quot; value=&quot;@edu.toYear&quot;>
+		<textarea placeholder=&quot;Description, Roles, Responsibilities etc.&quot; rows=&quot;12&quot; name=&quot;description&quot; style=&quot;color:#292929; width:100%; font-weight:bold;&quot;>@edu.description</textarea>
+		<input type=&quot;hidden&quot; name=&quot;doctorId&quot; value=&quot;@doctor.id&quot;>
+		<input type=&quot;hidden&quot; name=&quot;doctorEducationId&quot; value=&quot;@edu.id&quot;>
+		<br>
+		<input class=&quot;pull-right btn btn-xs btn-primary&quot; type=&quot;submit&quot; onclick=&quot;submiteducationform('@edu.id');&quot; value=&quot;save&quot;>
+		</form>">
+			<span id="editeducation-@edu.id" style="cursor:pointer;" ><i class="fa fa-cog"></i></span>
+		</span>		
+		
+		<br>
 		<span class="pull-right"data-toggle="popover" title="Are You Sure ?" data-placement="left" data-html="true" data-content="<a href=&quot;@routes.DoctorController.removeEducation(doctor.id,edu.id)&quot; class=&quot;btn btn-xs btn-danger&quot; onclick=&quot;deleteeducation('@edu.id');&quot; >Delete</a> ">
-			<a id="removeeducation-@edu.id" class="btn btn-danger btn-xs"><i class="fa fa-minus"></i></a>
+			<span id="removeeducation-@edu.id" style="color:red; cursor:pointer;"><i class="fa fa-trash-o"></i></span>
 		</span>
 	</h4>
 
@@ -573,9 +659,9 @@ function submitimagesform(name){
 <textarea placeholder=&quot;Description, Roles, Responsibilities etc.&quot; rows=&quot;12&quot; name=&quot;description&quot; style=&quot;color:#292929; width:100%; font-weight:bold;&quot;></textarea>
 <input type=&quot;hidden&quot; name=&quot;doctorId&quot; value=&quot;@doctor.id&quot;>
 <br>
-<input class=&quot;pull-right btn btn-xs btn-primary&quot; type=&quot;submit&quot; onclick=&quot;submiteducationform();&quot; value=&quot;save&quot;>
+<input class=&quot;pull-right btn btn-xs btn-primary&quot; type=&quot;submit&quot; onclick=&quot;submiteducationform(0);&quot; value=&quot;save&quot;>
 </form>">
-<a id="addeducation" class="btn btn-success btn-xs"><span style="font-size:15px;">&nbsp;<i class="fa fa-plus"></i>&nbsp;</span></a>
+<span id="addeducation" style="font-size:30px; color:#43ac6a; cursor:pointer;"><i class="fa fa-plus-square"></i>&nbsp;</span>
 </span>
 
 </div>
@@ -590,8 +676,21 @@ function submitimagesform(name){
 @for(soc <- doctor.doctorSocialWorkList){
 	<h4>
 		@soc.title
+		
+		<span class="pull-right" data-placement="left" data-toggle="popover" title="Edit Social Work" data-html="true" data-content=
+		"<form action=&quot;@routes.DoctorController.addSocialWork()&quot; method=&quot;POST&quot;>
+		<input id=&quot;socialname&quot; style=&quot;width:100%; color:#292929;&quot; placeholder=&quot;Title*&quot; type=&quot;text&quot; name=&quot;title&quot; value=&quot;@soc.title&quot; required>
+		<textarea id=&quot;socialdescription&quot; placeholder=&quot;Nature and impact of work done etc.&quot; rows=&quot;12&quot; name=&quot;description&quot; style=&quot;color:#292929; width:100%; font-weight:bold;&quot; required>@soc.description</textarea>
+		<input type=&quot;hidden&quot; name=&quot;doctorId&quot; value=&quot;@doctor.id&quot;>
+		<input type=&quot;hidden&quot; name=&quot;doctorSocialId&quot; value=&quot;@soc.id&quot;>
+		<br>
+		<input class=&quot;pull-right btn btn-xs btn-primary&quot; type=&quot;submit&quot; onclick=&quot;submitsocialform(@soc.id);&quot; value=&quot;save&quot;>
+		</form>">
+			<span id="editsocial-@soc.id" style="cursor:pointer;" ><i class="fa fa-cog"></i></span>
+		</span>
+		<br>
 		<span class="pull-right"data-toggle="popover" title="Are You Sure ?" data-placement="left" data-html="true" data-content="<a href=&quot;@routes.DoctorController.removeSocialWork(doctor.id,soc.id)&quot; class=&quot;btn btn-xs btn-danger&quot; onclick=&quot;deletesocial('@soc.id');&quot; >Delete</a> ">
-			<a id="removeeducation-@soc.id" class="btn btn-danger btn-xs"><i class="fa fa-minus"></i></a>
+			<span id="removesocial-@soc.id" style="color:red; cursor:pointer;"><i class="fa fa-trash-o"></i></span>
 		</span>
 	</h4>
 
@@ -609,9 +708,9 @@ function submitimagesform(name){
 <textarea id=&quot;socialdescription&quot; placeholder=&quot;Nature and impact of work done etc.&quot; rows=&quot;12&quot; name=&quot;description&quot; style=&quot;color:#292929; width:100%; font-weight:bold;&quot; required></textarea>
 <input type=&quot;hidden&quot; name=&quot;doctorId&quot; value=&quot;@doctor.id&quot;>
 <br>
-<input class=&quot;pull-right btn btn-xs btn-primary&quot; type=&quot;submit&quot; onclick=&quot;submiteducationform();&quot; value=&quot;save&quot;>
+<input class=&quot;pull-right btn btn-xs btn-primary&quot; type=&quot;submit&quot; onclick=&quot;submitsocialform(0);&quot; value=&quot;save&quot;>
 </form>">
-<a id="addeducation" class="btn btn-success btn-xs"><span style="font-size:15px;">&nbsp;<i class="fa fa-plus"></i>&nbsp;</span></a>
+<span id="addeducation" style="font-size:30px; color:#43ac6a; cursor:pointer;"><i class="fa fa-plus-square"></i>&nbsp;</span>
 </span>
 
 
@@ -623,60 +722,169 @@ function submitimagesform(name){
 
 </div>
 
-*@
+
+
+
+
+
+
 
 <div class="well">
-<h4 style="color:#006687;font-weight:bold">Clinics</h4>
-<ul class="nav nav-tabs">
-  <li  class="active"><a href="#clinic1" data-toggle="tab">XYZ Clinic</a></li>
-  <li id="map1"><a href="#clinic2" data-toggle="tab">ABC Clinic</a></li>
-  <li  id="map2"><a href="#clinic3" data-toggle="tab">SAKP Clinic</a></li>
-</ul>
+<h3 style="color:#006687;font-weight:bold">Clinics</h3>
 
+<ul class="nav nav-tabs">
+  @for((clinicInfo, index) <- doctor.getActiveClinic().zipWithIndex){
+  	@if(index == 0){
+  		<li onclick="addMarker('@clinicInfo.clinic.address.latitude','@clinicInfo.clinic.address.longitude');" class="active"><a href="#clinic@clinicInfo.id" data-toggle="tab">@clinicInfo.clinic.name</a></li>
+  	}else{
+		<li onclick="addMarker('@clinicInfo.clinic.address.latitude','@clinicInfo.clinic.address.longitude');"><a href="#clinic@clinicInfo.id" data-toggle="tab">@clinicInfo.clinic.name</a></li>  	
+  	}
+  }
+</ul>
 <div class="tab-content">
-<div class="tab-pane active" id="clinic1">
+@for((clinicInfo, index) <- doctor.getActiveClinic().zipWithIndex){
+@if(index == 0){
+	<div class="tab-pane active" id="clinic@clinicInfo.id">
+}else{
+	<div class="tab-pane" id="clinic@clinicInfo.id">  	
+}
+
+
 <div class="row" style="padding-left:20px">
 <br>
 <div class="col-md-6">
-<h2><b><a href="#" >XYZ Clinic</a></b></h2>
-<h4>Flat no<br>
-Address<br>
-Place<br>
-Phone nos: 04023456789, 9876543210</h4>
+<h3 style="color:#006687;"><b>@clinicInfo.clinic.name</b></h3>
+<h5>
+@clinicInfo.clinic.contactPersonName
+<br>
+@clinicInfo.clinic.address.addrressLine1
+<br>
+@clinicInfo.clinic.address.area
+<br>
+@clinicInfo.clinic.address.city
+<br>
+@clinicInfo.clinic.contactNo
+</h5>
 </div>
 <div class="col-md-6">
-<h4>Timings</h4>
 <h4><b>Weekdays:</b><br><br>
 <div class="row" style="padding-left:20px">
-<span class="badge col-md-2" style="font-size:20px">Mon</span>
-<span class="badge col-md-2" style="font-size:20px">Tue</span>
-<span class="col-md-2" style="font-size:20px">Wed</span>
-<span class="badge col-md-2" style="font-size:20px">Thu</span>
-<span class="col-md-2" style="font-size:20px">Fri</span>
+
+@if(clinicInfo.getScheduleMap().get("MONDAY") != null){
+	<span class="badge col-md-2" style="font-size:20px">Mon</span>
+}else{
+	<span class="col-md-2" style="font-size:20px">Mon</span>
+}
+
+@if(clinicInfo.getScheduleMap().get("TUESDAY") != null){
+	<span class="badge col-md-2" style="font-size:20px">Tue</span>
+}else{
+	<span class="col-md-2" style="font-size:20px">Tue</span>
+}
+
+@if(clinicInfo.getScheduleMap().get("WEDNESDAY") != null){
+	<span class="badge col-md-2" style="font-size:20px">Wed</span>
+}else{
+	<span class="col-md-2" style="font-size:20px">Wed</span>
+}
+
+@if(clinicInfo.getScheduleMap().get("THURSDAY") != null){
+	<span class="badge col-md-2" style="font-size:20px">Thu</span>
+}else{
+	<span class="col-md-2" style="font-size:20px">Thu</span>
+}
+
+@if(clinicInfo.getScheduleMap().get("FRIDAY") != null){
+	<span class="badge col-md-2" style="font-size:20px">Fri</span>
+}else{
+	<span class="col-md-2" style="font-size:20px">Fri</span>
+}
+
 </div>
 </h4>
 <div class="row" style="padding-left:20px">
-<span class="col-md-2" style="font-size:12px;padding-right:0px">9am-9pm</span>
-<span class="col-md-2" style="font-size:12px;padding-right:0px">9am-9pm</span>
-<span class="col-md-2" style="font-size:12px;padding-right:0px"></span>
-<span class="col-md-2" style="font-size:12px;padding-right:0px">9am-9pm</span>
-<span class="col-md-2" style="font-size:12px;padding-right:0px"></span>
+
+
+@if(clinicInfo.getScheduleMap().get("MONDAY") != null){
+	<span class="col-md-3" style="width:75px; font-size:11px;padding-right:0px; margin:0px; margin-left:-7px;">@clinicInfo.getScheduleMap().get("MONDAY")</span>
+}else{
+	<span class="col-md-3" style="width:75px; font-size:11px;padding-right:0px; margin:0px; margin-left:-7px;"></span>
+}
+
+@if(clinicInfo.getScheduleMap().get("TUESDAY") != null){
+	<span class="col-md-3" style="width:75px; font-size:11px;padding-right:0px; margin:0px; margin-left:-7px;">@clinicInfo.getScheduleMap().get("TUESDAY")</span>
+}else{
+	<span class="col-md-3" style="width:75px; font-size:11px;padding-right:0px; margin:0px; margin-left:-7px;"></span>
+}
+
+@if(clinicInfo.getScheduleMap().get("WEDNESDAY") != null){
+	<span class="col-md-3" style="width:75px; font-size:11px;padding-right:0px; margin:0px; margin-left:-7px;">@clinicInfo.getScheduleMap().get("WEDNESDAY")</span>
+}else{
+	<span class="col-md-3" style="width:75px; font-size:11px;padding-right:0px; margin:0px; margin-left:-7px;"></span>
+}
+
+@if(clinicInfo.getScheduleMap().get("THURSDAY") != null){
+	<span class="col-md-3" style="width:75px; font-size:11px;padding-right:0px; margin:0px; margin-left:5px;">@clinicInfo.getScheduleMap().get("THURSDAY")</span>
+}else{
+	<span class="col-md-3" style="width:75px; font-size:11px;padding-right:0px; margin:0px; margin-left:5px;"></span>
+}
+
+@if(clinicInfo.getScheduleMap().get("FRIDAY") != null){ 
+	<span class="col-md-3" style="width:75px; font-size:11px;padding-right:0px; margin:0px;">@clinicInfo.getScheduleMap().get("FRIDAY")</span>
+}else{
+	<span class="col-md-3" style="width:75px; font-size:11px;padding-right:0px; margin:0px; "></span>
+}
+
+
+
 </div>
 <br>
 <h4><b>Weekends:</b><br><br>
 <div class="row" style="padding-left:20px">
-<span class="badge col-md-2" style="font-size:20px">Sat</span>
-<span class="col-md-2" style="font-size:20px">Sun</span>
+
+
+@if(clinicInfo.getScheduleMap().get("SATURDAY") != null){
+	<span class="badge col-md-2" style="font-size:20px">Sat</span>
+}else{
+	<span class="col-md-2" style="font-size:20px">Sat</span>
+}
+
+@if(clinicInfo.getScheduleMap().get("SUNDAY") != null){
+	<span class="badge col-md-2" style="font-size:20px">Sun</span>
+}else{
+	<span class="col-md-2" style="font-size:20px">Sun</span>
+}
+
+
 </div>
 </h4>
 <div class="row" style="padding-left:20px">
-<span class="col-md-2" style="font-size:12px;padding-right:0px">9am-9pm</span>
-<span class="col-md-2" style="font-size:12px;padding-right:0px"></span>
+
+
+
+@if(clinicInfo.getScheduleMap().get("SATURDAY") != null){
+	<span class="col-md-3" style="width:75px; font-size:11px;padding-right:0px; margin:0px; margin-left:-5px;">@clinicInfo.getScheduleMap().get("SATURDAY")</span>
+}else{
+	<span class="col-md-3" style="width:75px; font-size:11px;padding-right:0px; margin:0px; margin-left:5px;"></span>
+}
+
+@if(clinicInfo.getScheduleMap().get("SUNDAY") != null){ 
+	<span class="col-md-3" style="width:75px; font-size:11px;padding-right:0px; margin-left:0px;">@clinicInfo.getScheduleMap().get("SUNDAY")</span>
+}else{
+	<span class="col-md-3" style="width:75px; font-size:11px;padding-right:0px; margin:0px; "></span>
+}
+
+
 </div>
 </div>
 </div>
 </div>
 
+}
+
+
+
+@*
 <div class="tab-pane" id="clinic2">
 <div class="row">
 <br>
@@ -762,45 +970,44 @@ Phone nos: 04023456789, 9876543210</h4>
 </div>
 </div>
 </div>
+*@
+
+
 
 </div>
 </div>
 <br>
 <div id="map_canvas" style="width:100%;height:300px"> </div>
 
-<script>
 
-$("#map1").click(function(){
-	initialize1();
 
-});
-
-$("#map2").click(function(){
-	initialize2();
-
-});
-</script>
 
 
 
 
 @*
-<div style="padding-left:75px">
-<div id="carousel-example-generic" class="carousel slide" data-ride="carousel">
-  
-  <!-- Wrapper for slides -->
-  <div class="carousel-inner">
-  <script>
-  $('#carousel-example-generic').on('slid.bs.carousel', function() {
-	  alert("Slided the carousel");
-	  });
-  initialize('map_canvas',17.445735,78.349828);
-  </script>
-  
-    <div class="item active">
-<div class="slide alert alert-info" style="width:800px;height:350pxx">
-<div class="col-md-4">
-<h4><b><a href="#" >XYZ Clinic</a></b></h4>
+
+<h4 style="color:#006687;font-weight:bold">Clinics</h4>
+<div id="clinics-carousel" class="row-fluid" style="padding-left:20px;padding-right:15px">
+
+<div class="slide col-md-3 alert alert-info" style="width:200px;">
+<h4><b><a href="#" data-toggle="modal" data-target="#myModal" data-toggle="tooltip" data-placement="right" title="Click for Location">XYZ Clinic</a></b></h4>
+
+<div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+     	<h4 class="modal-title" id="myModalLabel">Location Map</h4>
+      </div>
+      <div class="modal-body">
+       <div id="map_canvas" style="width:400px;height:300px"> </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+
 <h6>Flat no<br>
 Address<br>
 Place<br>
@@ -811,17 +1018,25 @@ Phone nos: 04023456789, 9876543210</h6>
 <span class="badge">Th</span> - 9am - 9pm<br</h6>
 <h6>Weekends:<br><br><span class="badge"> Sa </span> - 11am - 5pm</h6>
 </div>
-<div class="col-md-8">
-<div id="map_canvas" style="width:500px;height:300px"> </div>
-</div>
-</div>
 
+<!--
+<div class="col-md-1" style="width:1%"></div>
+-->
+<div class="slide col-md-3 alert alert-info" style="width:200px;">
+<h4><b><a href="#" data-toggle="modal" data-target="#myModal1" data-toggle="tooltip" data-placement="right" title="Click for Location">ABC Clinic</a></b></h4>
+<div class="modal fade" id="myModal1" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+     	<h4 class="modal-title" id="myModalLabel">Location Map</h4>
+      </div>
+      <div class="modal-body">
+       <div id="map_canvas" style="width:400px;height:300px"> </div>
+      </div>
     </div>
-    
-    <div class="item">
-      <div class="slide alert alert-info" style="width:800px;height:350px">
-      <div class="col-md-4">
-<h4><b><a href="#">ABC Clinic</a></b></h4>
+  </div>
+</div>
 <h6>Flat no<br>
 Address<br>
 Place<br>
@@ -832,16 +1047,26 @@ Phone nos: 04023456789, 9876543210</h6>
 <span class="badge">F</span> - 9am to 9pm<br></h6>
 <h6>Weekends:<br><br><span class="badge"> Sa </span> - 11am - 5pm</h6></h6>
 </div>
-<div class="col-md-8">
-<div id="map_canvas2" style="width:500px;height:300px"> </div>
-</div>
-</div>
+
+<!--
+<div class="col-md-1" style="width:1%"></div>
+-->
+
+<div class="slide col-md-3 alert alert-info" style="width:200px;">
+<h4><b><a href="#" data-toggle="modal" data-target="#myModal2" data-toggle="tooltip" data-placement="right" title="Click for Location">SAKP Clinic</a></b></h4>
+<div class="modal fade" id="myModal2" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+     	<h4 class="modal-title" id="myModalLabel">Location Map</h4>
+      </div>
+      <div class="modal-body">
+       <div id="map_canvas" style="width:400px;height:300px"> </div>
+      </div>
     </div>
-    
-    <div class="item">
-      <div class="slide alert alert-info" style="width:800px;height:350px">
-      <div class="col-md-4">
-<h4><b><a href="#">SAKP Clinic</a></b></h4>
+  </div>
+</div>
 <h6>Flat no<br>
 Address<br>
 Place<br>
@@ -852,47 +1077,6 @@ Phone nos: 04023456789, 9876543210</h6>
 <span class="badge">W</span> - 9am to 9pm<br></h6>
 <h6>Weekends:<br><br><span class="badge"> Sa </span> - 11am - 5pm</h6>
 </div>
-<div class="col-md-8">
-<div id="map_canvas3" style="width:500px;height:300px"> </div>
-</div>
-</div>
-    </div>
-  </div>
-
-  <!-- Controls -->
-  <a class="left carousel-control" href="#carousel-example-generic" role="button" data-slide="prev" style="width:0px">
-    <span class="glyphicon glyphicon-chevron-left" style="margin-left:-40px"></span>
-  </a>
-  <a class="right carousel-control" href="#carousel-example-generic" role="button" data-slide="next" style="width:0px">
-    <span class="glyphicon glyphicon-chevron-right" style="left: 20px;"></span>
-  </a>
-</div>
-</div>
-*@
-
-
-
-
-
-
-
-
-
-
-
-@*
-
-<div id="clinics-carousel" class="row-fluid" style="padding-left:20px;padding-right:15px">
-
-
-
-<!--
-<div class="col-md-1" style="width:1%"></div>
--->
-
-<!--
-<div class="col-md-1" style="width:1%"></div>
--->
 
 <!--
 <div class="col-md-1" style="width:1%"></div>
@@ -958,7 +1142,20 @@ Phone nos: 04023456789, 9876543210</h6>
 <div class="clearfix"></div>  
 <a class="prev" id="clinics-carousel_prev" href="#"><img class="navigators" src="/assets/blog/images/previcon.png" width="15" height="15"/></a>
 <a class="next" id="clinics-carousel_next" href="#"><img class="navigators" src="/assets/blog/images/nexticon.png" width="15" height="15"/></a>
+
+
+
 *@
+
+
+
+
+
+
+
+
+
+
 
 
 
@@ -1253,6 +1450,40 @@ $("#content-"+id).hide();
 
 
 
+@if(doctor.getActiveClinic().size()>0){
+<script>
+var initLat = @doctor.getActiveClinic().get(0).clinic.address.latitude;
+var initLng = @doctor.getActiveClinic().get(0).clinic.address.longitude;
+var map;
+var marker;
+
+function initialize() {
+	var map_canvas = document.getElementById('map_canvas');
+	var map_options = {
+	center : new google.maps.LatLng(initLat,initLng),
+	zoom : 14,
+	mapTypeId : google.maps.MapTypeId.ROADMAP
+	};
+	map = new google.maps.Map(map_canvas, map_options);
+
+	marker = new google.maps.Marker({
+	position : new google.maps.LatLng(initLat,initLng),
+	map : map
+	});
+
+}
+
+	google.maps.event.addDomListener(window, 'load', initialize);
+	
+	function addMarker(lat,lng){
+    	marker.setPosition( new google.maps.LatLng(lat,lng ) );
+    	map.panTo(new google.maps.LatLng(lat,lng));
+	};
+	
+</script>
+}
+
 
 
 }
+
