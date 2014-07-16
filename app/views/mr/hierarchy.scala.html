@@ -1,0 +1,13 @@
+@(mrList: List[models.mr.MedicalRepresentative])
+
+@import play.i18n._
+@import helper.twitterBootstrap._
+@import helper._
+@main("hierarchy"){	
+<script type="text/javascript">
+    $(document).ready(function () {
+        var jsArr = @play.libs.Json.toJson(mrList);
+          });
+</script>
+
+}
