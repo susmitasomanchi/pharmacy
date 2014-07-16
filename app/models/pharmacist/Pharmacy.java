@@ -34,11 +34,11 @@ public class Pharmacy extends BaseEntity {
 	@Lob
 	public byte[] backgroundImage;
 
-	@OneToMany
+	@OneToMany(cascade=CascadeType.ALL)
 	public List<FileEntity> profileImageList = new ArrayList<FileEntity>();
 
 	@OneToOne
-	public Address address = new Address();
+	public Address address;
 
 	public String contactNo;
 
@@ -47,12 +47,6 @@ public class Pharmacy extends BaseEntity {
 
 	@OneToOne
 	public Pharmacist adminPharmacist;
-<<<<<<< HEAD
-=======
-
-	//@OneToOne
-	//public PharmacyProductInfo pharmacyProductInfo;
->>>>>>> branch 'master' of http://pharmacy.bz/green-software/mednetwork.git
 
 	@OneToMany(cascade=CascadeType.ALL)
 	public List<PharmacyProduct> pharmacyProductList = new ArrayList<PharmacyProduct>();

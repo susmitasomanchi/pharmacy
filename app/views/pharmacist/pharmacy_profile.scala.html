@@ -14,10 +14,9 @@
 		i++;
 		$("#files")
 				.append(
-						'<div class="row" id="file'+i+'"><br><input type="file" name="file'+i+'" id="inputfile'+i+'" onchange="checkfile('+i+');"/><div class="col-md-4"><div id="insertfn-'+i+'"></div><a class="btn btn-xs btn-danger" onclick="removebut(\'file'
-								+i+'\');">remove</a></div></div>');
+						'<div class="row" id="file'+i+'"><br><div class="col-md-5"><input type="file" name="file'+i+'" id="inputfile'+i+'" onchange="checkfile('+i+');"/></div><div class="col-md-7"><a class="btn btn-xs btn-danger" onclick="removebut(\'file'
+								+i+'\');">x</a></div></div>');
 		$("#inputfile"+i).trigger('click');
-		$("#addfiles").html(' Add More Files ');
 	}
 
 	function checkfile(id){
@@ -27,6 +26,7 @@
 	function removebut(id) {
 		$('#'+id).remove();
 	}
+
 </script>
 
 <style>
@@ -261,11 +261,7 @@ style="color:#006687; font-size:20px; position:relative; top:-20px; cursor:point
     			<label for="phone">Phone Number</label>
     			<input type="text" name="contactNo" value="@pharmacy.contactNo" id="phone" class="form-control" placeholder="Enter phone number">
   			</div>
-  			<div class="col-md-6">
-				<h2>Location </h2>
-				<div id="map_canvas" style="width:520px;height:400px">
-				</div>
-			</div>
+  			
   			<br>
   			<input type="hidden" name="pharmacyId" value='@pharmacy.id' >
 			<button type="submit" class="btn btn-primary btn-sm">Submit</button>
@@ -275,6 +271,7 @@ style="color:#006687; font-size:20px; position:relative; top:-20px; cursor:point
 <br><br>
 <img src="/assets/images/googlemap1.png" width="520" height="400" style="position:relative" />
 <div class="maptext" style="text-align:center">
+
 <p>Please provide Area and City to generate the map</span></p>
 </div>
 </div>
@@ -326,14 +323,18 @@ style="color:#006687; font-size:20px; position:relative; top:-20px; cursor:point
   			<div >
 			<textarea name="description" rows=5  placeholder="Write Some Description" ></textarea>
 			</div>
-			<div>
+			<div class="row">
+      <div class="col-md-5">
 			<label for="image">Upload Images</label>
-			<input type="file" name="file">
-			<a class="btn btn-xs btn-success" onclick="addfiles();" id="addfiles"> Add File </a>
-			
-			
-		    <div id="files"></div>
-			</div>
+			<input type="file"  name="file">
+      </div>
+      <div class=" col-md-7">
+      <br>
+			<a class="btn btn-xs btn-success" onclick="addfiles();" id="addfiles"> + </a>
+      </div>
+      </div>
+      <div id="files"></div>
+      <br>
 			<div >
     			<label for="MRP">MRP</label>
     			<input type="text" class="form-control" name="mrp" id="mrp" placeholder="Price Of Prroduct">

@@ -8,6 +8,7 @@ import java.util.Map;
 
 import javax.activation.MimetypesFileTypeMap;
 
+import models.Address;
 import models.Alert;
 import models.Country;
 import models.FileEntity;
@@ -266,10 +267,10 @@ public class PharmacistController extends Controller {
 			final Map<String, String[]> requestMap = request().body().asFormUrlEncoded();
 			final Pharmacy pharmacy = Pharmacy.find.byId(Long.parseLong(requestMap.get("pharmacyId")[0]));
 			Logger.info("map size"+requestMap.toString());
-			if(pharmacy.address.id == null){
-				//pharmacy.address = new Address();
-				pharmacy.address.save();
-				Logger.info("id===="+pharmacy.address.id);
+			if(pharmacy.address == null){
+				final Address address = new Address();
+				address.save();
+				pharmacy.address = address;
 			}
 			if(requestMap.get("addressLine1") != null && (requestMap.get("addressLine1")[0].trim().compareToIgnoreCase("")!=0)){
 				pharmacy.address.addrressLine1 = requestMap.get("addressLine1")[0];
@@ -323,7 +324,7 @@ public class PharmacistController extends Controller {
 	 * descrition:uploading the Pharmacy Images process
 	 */
 
-	public static Result uploadPharmacyImageProcess() throws IOException {
+	public static Result uploadPharmacyImageProcess()  {
 		final Pharmacy pharmacy = LoginController.getLoggedInUser()
 				.getPharmacist().pharmacy;
 		final FileEntity fileEntity = new FileEntity();
@@ -331,16 +332,29 @@ public class PharmacistController extends Controller {
 		if (request().body().asMultipartFormData().getFile("backgroundImage") != null) {
 			final File image = request().body().asMultipartFormData().getFile("backgroundImage").getFile();
 
-			pharmacy.backgroundImage = Files.toByteArray(image);
+			try {
+				pharmacy.backgroundImage = Files.toByteArray(image);
+			} catch (final IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
 
 		}
 
 		if (request().body().asMultipartFormData().getFile("profileImage") != null) {
+			Logger.info("inside 1");
 			final File image = request().body().asMultipartFormData().getFile("profileImage").getFile();
 			fileEntity.fileName = image.getName();
 			fileEntity.mimeType = new MimetypesFileTypeMap().getContentType(image);
-			fileEntity.byteContent = Files.toByteArray(image);
+			try {
+				fileEntity.byteContent = Files.toByteArray(image);
+			} catch (final IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+			Logger.info("inside 2");
 			pharmacy.profileImageList.add(fileEntity);
+			Logger.info("inside 3");
 
 		} else {
 			Logger.info("BG IMAGE NULL");
