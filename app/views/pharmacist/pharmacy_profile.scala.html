@@ -3,45 +3,31 @@
 
 @main(pharmacy.name) {
 
-/*Script for loading google map*/
+@*Script for loading google map*@
 <script src="http://maps.googleapis.com/maps/api/js?sensor=false"></script>
+
+
+@*End of Script for loading google map*@
 <script>
+	var i = 0;
+	function addfiles() {
+		i++;
+		$("#files")
+				.append(
+						'<div class="row" id="file'+i+'"><br><div class="col-md-5"><input type="file" name="file'+i+'" id="inputfile'+i+'" onchange="checkfile('+i+');"/></div><div class="col-md-7"><a class="btn btn-xs btn-danger" onclick="removebut(\'file'
+								+i+'\');">x</a></div></div>');
+		$("#inputfile"+i).trigger('click');
+	}
 
-function loadgooglemap(latt, lngt) {
-	var map_canvas = document.getElementById('map_canvas');
-	var map_options = {
-		center : new google.maps.LatLng(latt, lngt),
-		zoom : 17,
-		mapTypeId : google.maps.MapTypeId.ROADMAP
-	};
-	var map = new google.maps.Map(map_canvas, map_options);
+	function checkfile(id){
+		$('#insertfn-'+id).html($("#inputfile"+id).val().trim());
+	}
 
-	var marker = new google.maps.Marker({
-		position : new google.maps.LatLng(latt, lngt),
-		map : map
-	});
-	google.maps.event.addDomListener(window, 'load', initialize);
-}
-
-function initialize() {
-	var map_canvas = document.getElementById('map_canvas');
-	var map_options = {
-		center : new google.maps.LatLng(17.445735,78.349828),
-		zoom : 18,
-		mapTypeId : google.maps.MapTypeId.ROADMAP
-	};
-	var map = new google.maps.Map(map_canvas, map_options);
-
-	var marker = new google.maps.Marker({
-		position : new google.maps.LatLng(17.445735,78.349828),
-		map : map
-	});
-}
-
-google.maps.event.addDomListener(window, 'load', initialize); 
+	function removebut(id) {
+		$('#'+id).remove();
+	}
 
 </script>
-/*End of Script for loading google map*/
 
 <style>
 .container{
@@ -218,7 +204,82 @@ style="color:#006687; font-size:20px; position:relative; top:-20px; cursor:point
 <div>
 
 </div>
-<h2 style="position:reative; margin-top:0px;">Contact</h2>
+<h2 style="position:reative; margin-top:0px;">Contact<span data-toggle="modal" data-target="#myaddrModal" style="cursor:pointer; position:relative; top:-3px;left:-150px; font-size:20px;"><i id="spinner2" class="fa fa-cog"></i></span></h2>
+<div class="modal fade" id="myaddrModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+  <div class="modal-dialog" style="width:820px">
+    <div class="modal-content" >
+      <div class="modal-header" style="color: #ffffff;background-color: #008cba;border-color: #008cba;">
+        <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+        <h4 class="modal-title" id="myModalLabel">Change Address Details</h4>
+      </div>
+      <div class="modal-body well">
+     	<div class="row">
+			<div class="col-md-4">
+			<form action=@routes.PharmacistController.pharmacyAddressUpdate() role="form" method="POST">
+			<div ><input type="hidden" name="lat" id="lat1"></div>
+			<div ><input type="hidden" name="lng" id="lng1"></div>
+  			<div class="form-group">
+   				 <label for="addressLine1">Address Line1</label>
+   				 <input type="text" class="form-control" name="addressLine1" @if(pharmacy.address!=null){value="@pharmacy.address.addrressLine1"} id="addressLine1" placeholder="Enter Address Line1">
+ 			</div>
+  			<div class="form-group">
+    			<label for="addressLine2">Address Line2</label>
+    			<input type="text" class="form-control" name="addressLine2" @if(pharmacy.address!=null){value="@pharmacy.address.addrressLine2"} id="addressLine2" placeholder="Enter Address Line2">
+  			</div>
+  			<div class="form-group">
+    			<label for="city">City</label>
+    			<input type="text" class="form-control" name="city" @if(pharmacy.address!=null){value="@pharmacy.address.city"} id="city" placeholder="Enter City">
+  			</div>
+  			<div class="form-group">
+    			<label for="city">Area</label>
+    			<input type="text" class="form-control" name="area" @if(pharmacy.address!=null){value="@pharmacy.address.area"} id="area" placeholder="Enter Area">
+  			</div>
+  			<div class="form-group">
+    			<label for="pincode">Pincode</label>
+    			<input type="text" class="form-control" name="pincode" @if(pharmacy.address!=null){value="@pharmacy.address.pinCode"} id="pincode" placeholder="Enter Pincode">
+  			</div>
+  			<div class="form-group">
+    			<label for="state">State</label><br>
+				<select data-placeholder="Select the state" name="state" @if(pharmacy.address!=null){value="@pharmacy.address.state"}>
+    				<option value=""></option>	
+     				@for(state <- models.State.values()){
+        			<option  name="state" value="@state">@state</option>
+          			     }
+    			</select>
+  			</div>
+  			<div class="form-group">
+    			<label for="state">Country</label><br>
+    			<select data-placeholder="Select the country" name="country" @if(pharmacy.address!=null){value="@pharmacy.address.country"}>
+    				<option value=""></option>	
+     				@for(country <- models.Country.values()){
+        			<option  name="country" value="@country">@country</option>
+          			     }
+    			</select>
+  			</div>
+  
+  			<div class="form-group">
+    			<label for="phone">Phone Number</label>
+    			<input type="text" name="contactNo" value="@pharmacy.contactNo" id="phone" class="form-control" placeholder="Enter phone number">
+  			</div>
+  			
+  			<br>
+  			<input type="hidden" name="pharmacyId" value='@pharmacy.id' >
+			<button type="submit" class="btn btn-primary btn-sm">Submit</button>
+		</form>
+	</div>	
+<div class="col-md-8">
+<br><br>
+<img src="/assets/images/googlemap1.png" width="520" height="400" style="position:relative" />
+<div class="maptext" style="text-align:center">
+
+<p>Please provide Area and City to generate the map</span></p>
+</div>
+</div>
+</div>
+      </div>
+    </div>
+  </div>
+</div></h2>
 @if(pharmacy.address != null){
 <h5>@pharmacy.name</h5>
 <h5>@pharmacy.address.addrressLine1</h5>
@@ -231,39 +292,84 @@ style="color:#006687; font-size:20px; position:relative; top:-20px; cursor:point
 <h5>Phones nos:@pharmacy.contactNo</h5>
 </div>	
 <div class="col-md-8">
-@*
-<h2>Location Map</h2>
-*@
 <div id="map_canvas" style="width:500px;height:300px"> </div>
 </div>
 </div>
 
-<span style="font-size:20px; cursor:pointer; position:relative; top:-10px;">
-<i id="spinner-address" class="fa fa-cog"></i>
-</span>
+@*<span style="font-size:20px; cursor:pointer; position:relative; top:-10px;">
+<i id="spinner-address" class="fa fa-cog"></i>*@
 
 <div class="col-md-1">
 </div>
 </div>
 <br><br>
+<h2>ShowCase List</h2>
+<span data-toggle="modal" data-target="#mydrugModal" style="cursor:pointer; position:relative; top:2px;left:940px; font-size:15px;"><i id="spinner2" class="fa fa-cog"></i></span>
+<div class="modal fade" id="mydrugModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header" style="color: #ffffff;background-color: #008cba;border-color: #008cba;">
+        <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+        <h4 class="modal-title" id="myModalLabel">Change Drug Names</h4>
+      </div>
+      <div class="modal-body well">
+      
+      <form action=@routes.PharmacistController.addShowCasedProduct() enctype="multipart/form-data" method="POST">	
+      <div >
+    			<label for="name">Product Name</label>
+    			<input type="text" class="form-control" name="name" id="name" placeholder="Enter Product Name">
+  			</div>
+  			<br>
+  			<div >
+			<textarea name="description" rows=5  placeholder="Write Some Description" ></textarea>
+			</div>
+			<div class="row">
+      <div class="col-md-5">
+			<label for="image">Upload Images</label>
+			<input type="file"  name="file">
+      </div>
+      <div class=" col-md-7">
+      <br>
+			<a class="btn btn-xs btn-success" onclick="addfiles();" id="addfiles"> + </a>
+      </div>
+      </div>
+      <div id="files"></div>
+      <br>
+			<div >
+    			<label for="MRP">MRP</label>
+    			<input type="text" class="form-control" name="mrp" id="mrp" placeholder="Price Of Prroduct">
+  			</div>
+  			<br>
+  			<input type="hidden" name="pharmacyId" value="@pharmacy.id"/>
+  			<input type="submit" value="Add Product" />
 
-@*
+	</form>
+     
+	  </div>
+    </div>
+  </div>
+</div>
 <table class="table table-bordered">
 <tr>
 <th> S No </th>
 <th> Drug Name </th>
 <th> Purpose</th>
 </tr>
-@for((inventory,index) <- inventoryList.zipWithIndex){
+@if(pharmacy.showCaseProductList.size != 0){
+@for((showCaseProduct,index)<- pharmacy.showCaseProductList.zipWithIndex){
 <tr>
 <td> @{index+1} </td>
-<td> @inventory.product.medicineName</td>
-<td> @inventory.product.description <i class="fa fa-question-circle" style="cursor:pointer" data-toggle="tooltip" data-placement="bottom" title="For the relief of mild to severe headaches, relief of pain such as headache, toothache, menstrual discomfort, postoperative and rheumatic pain, and for pain and fever associated with colds and flu."></i></td>
+<td> @showCaseProduct.name</td>
+<td> @showCaseProduct.description </td>
+<th>
+<a href="/pharmacy/remove-product-from-showcase/@showCaseProduct.id" class="btn btn-xs btn-danger">Remove</a>
+</th>
 </tr>
 }
+}
 </table>
+
 <br>
 <button class="btn btn-success btn-lg"><a href="/pharmacy/order/@pharmacy.id" style="color:white">Place your order</a></button>
-*@
 
 }

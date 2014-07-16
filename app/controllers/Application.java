@@ -97,8 +97,14 @@ public class Application extends Controller {
 		return ok(views.html.home.render());
 	}
 
+
+	/**
+	 * Renders sitemap xml
+	 * url: /sitemap.xml
+	 * */
 	public static Result sitemap(){
 		return ok(views.xml.sitemap.render("http://"));
 	}
+
 
 }

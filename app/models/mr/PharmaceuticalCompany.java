@@ -38,4 +38,5 @@ public class PharmaceuticalCompany extends BaseEntity {
 
 	public static Finder<Long,PharmaceuticalCompany> find = new Finder<Long,PharmaceuticalCompany>(Long.class,PharmaceuticalCompany.class);
 
+
 }

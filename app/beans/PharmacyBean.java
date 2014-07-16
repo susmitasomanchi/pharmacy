@@ -8,6 +8,7 @@ import models.State;
 import models.pharmacist.Pharmacy;
 import play.Logger;
 
+@SuppressWarnings("serial")
 public class PharmacyBean implements Serializable{
 
 	public  Long id;
@@ -39,7 +40,7 @@ public class PharmacyBean implements Serializable{
 	public State state;
 
 	//	@Required
-	public Long pinCode;
+	public String pinCode;
 
 	//	@Required
 	public Country country;
