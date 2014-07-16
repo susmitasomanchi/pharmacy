@@ -157,6 +157,9 @@ GET    /diagnostic-test-list                       controllers.DiagnosticControl
 POST   /place-order                                controllers.DiagnosticOrderController.receive()		
 GET    /display-orders/:id                         controllers.DiagnosticOrderController.viewOrders(id: Long)																																		
 #MR Module
+
+GET		/mr/hierarchy							   controllers.MRController.viewHierarchy()
+
 GET    /doctor-list                                controllers.MRController.doctorList()
 GET    /mr/add-doctor/:id                          controllers.MRController.addDoctor(id: Long)
 GET    /mr/remove-doctor/:id                       controllers.MRController.removeDoctor(id: Long)
@@ -174,8 +177,7 @@ POST    /mr/add                                    controllers.MRController.medi
 #POST    /mr/editmr                                 controllers.MRController.medicalRepresentativeProccessUpdate()
 GET     /mr/del	                                   controllers.MRController.removeMR(id: Long)
 GET     /mr/edit/:id	                           controllers.MRController.editMR(id: Long)
-GET     /mr/hierarchy	                           controllers.MRController.hierarchy()
-GET     /mr/te	                                   controllers.MRController.test()
+
 
 
 #common module

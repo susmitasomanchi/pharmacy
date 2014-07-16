@@ -37,8 +37,6 @@ public class UserController extends Controller {
 
 	public static Result processJoinUs(){
 		final Form<JoinUsBean> filledForm = joinUsForm.bindFromRequest();
-		final Form<MedicalRepresentative> mR = mrForm.bindFromRequest();
-		final Form<DiagnosticRepresentative> dr = drForm.bindFromRequest();
 		if(filledForm.hasErrors()) {
 			Logger.info("Form Errors");
 			Logger.error(filledForm.errors().toString());
@@ -73,19 +71,19 @@ public class UserController extends Controller {
 				pharmacist.update();
 			}
 
-			
-			
+
+
 			if(appUser.role == Role.ADMIN_MR){
+
 				final MedicalRepresentative medicalRepresentative = new MedicalRepresentative();
-				final PharmaceuticalCompany pharmaCompany = new PharmaceuticalCompany();
+				final PharmaceuticalCompany pharmaceuticalCompany = new PharmaceuticalCompany();
 				medicalRepresentative.appUser = appUser;
 				medicalRepresentative.save();
-				pharmaCompany.name = filledForm.get().pharmaceuticalCompanyName;
-
-				pharmaCompany.mrList.add(medicalRepresentative);
-				pharmaCompany.appuserid=appUser.id;
-				pharmaCompany.save();
-				medicalRepresentative.pharmaceuticalCompany = pharmaCompany;
+				pharmaceuticalCompany.name = filledForm.get().pharmaceuticalCompanyName;
+				pharmaceuticalCompany.mrList.add(medicalRepresentative);
+				pharmaceuticalCompany.adminMR = medicalRepresentative;
+				pharmaceuticalCompany.save();
+				medicalRepresentative.pharmaceuticalCompany = pharmaceuticalCompany;
 				medicalRepresentative.update();
 
 			}

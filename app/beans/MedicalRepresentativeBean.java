@@ -2,22 +2,16 @@ package beans;
 
 import java.io.Serializable;
 
-import java.util.Date;
-import javax.annotation.Generated;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
 import models.AppUser;
 import models.Role;
-import models.Sex;
 import models.mr.MedicalRepresentative;
 
 @SuppressWarnings("serial")
 public class MedicalRepresentativeBean implements Serializable {
 
-	@Id
-	public Long id;
-	public Long appid;
+
+	public Long   id;
+	public Long   appid;
 	public String name;
 	public String designation;
 	public String username;
@@ -33,24 +27,37 @@ public class MedicalRepresentativeBean implements Serializable {
 	public String status;
 
 	public AppUser toAppUser() {
-		final AppUser appUser = new AppUser();
-		appUser.id=this.appid;
-		appUser.name = this.name;
-		appUser.email = this.email;
-		appUser.password = this.password;
-		appUser.role = Role.MR;
-		// appUser.sex = Sex.valueOf(this.sex);
-		appUser.username = this.username;
-		return appUser;
+		if(this.appid==null){
+			final AppUser appUser = new AppUser();
+			//appUser.id=this.appid;
+			appUser.name = this.name;
+			appUser.email = this.email;
+			appUser.password = this.password;
+			appUser.role = Role.MR;
+			// appUser.sex = Sex.valueOf(this.sex);
+			appUser.username = this.username;
+			return appUser;
+		}
+		else{
+			final AppUser appUser=AppUser.find.byId(this.appid);
+			appUser.name = this.name;
+			appUser.email = this.email;
+			appUser.password = this.password;
+			appUser.role = Role.MR;
+			// appUser.sex = Sex.valueOf(this.sex);
+			appUser.username = this.username;
+			return appUser;
+		}
 	}
-	
+
+
 	public MedicalRepresentative toMedicalRepresentative(){
 		final  MedicalRepresentative mr = new MedicalRepresentative();
 
 		if(this.id != null){
-		mr.id=this.id;
+			mr.id=this.id;
 		}
-		
+
 		if(this.designation != null) {
 			mr.designation= this.designation;
 		}
@@ -63,25 +70,22 @@ public class MedicalRepresentativeBean implements Serializable {
 		if(this.regionAlloted != null) {
 			mr.regionAlloted= this.regionAlloted;
 		}
-		
-		if(this.companyName != null) {
-			mr.companyName= this.companyName;
-		}
-		
+
+
 		if(this.status != null) {
 			mr.status= this.status;
 		}
-		
-			
+
+
 		/*if(this.manager != null) {
 			mr.manager= this.manager;
 		}*/
 		/*if(this.mrAdminId != null) {
 			mr.mrAdminId= this.mrAdminId;
 		}*/
-		
+
 		return mr;
-		
+
 	}
 
 }

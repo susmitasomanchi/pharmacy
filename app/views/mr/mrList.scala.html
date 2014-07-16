@@ -5,7 +5,7 @@
 	<table class="table table-bordered table-condensed col-md-2">
 	<thead>
 	<th>MR name</th>
-	<th>Company Name</th>
+	<th>ManagerName</th>
 	<th>UserName</th>
 	<th>Email</th>
 	<th>Region Alotted</th>
@@ -18,12 +18,20 @@
 	
 	@for(mr <-mrList){
 		<tr>
-		<td>@mr.appUser.name</td>
-		<td>@mr.companyName</td>
-		<td>@mr.appUser.username</td>
-		<td>@mr.appUser.email</td>
-		<td>@mr.regionAlloted</td>
-		<td>@mr.status</td>
+		<td>@if(mr.appUser!=null){
+		@mr.appUser.name}</td>
+		<td>@if(mr.manager!=null){
+			@mr.manager.appUser.name
+		}
+		</td>
+		<td>@if(mr.appUser!=null){
+		@mr.appUser.username}</td>
+		<td>@if(mr.appUser!=null){
+		@mr.appUser.email}</td>
+		<td>@if(mr.appUser!=null){
+		@mr.regionAlloted}</td>
+		<td>@if(mr.appUser!=null){
+		@mr.status}`</td>
 		<td>
 		<a class="btn btn-primary btn-xs" href="@routes.MRController.removeMR(mr.id)">Delete MR</a>
 		</td>
