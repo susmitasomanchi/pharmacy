@@ -41,10 +41,23 @@ GET    /logout                            			controllers.LoginController.process
 GET    /join                              			controllers.UserController.joinUs()
 POST   /join                              			controllers.UserController.processJoinUs()
 
+# Doctor's Profile
+GET		/dashboard                                  controllers.UserActions.dashboard()
+POST	/doctor/doctor-basic-update					controllers.DoctorController.basicUpdate()
+POST	/doctor/doctor-images-update				controllers.DoctorController.imagesUpdate()
+GET    	/doctor/get-image/:id/:type                 controllers.DoctorController.getImage(id: Long, type :String)
+POST	/doctor/add-work-experience					controllers.DoctorController.addWorkExperience()
+GET		/doctor/remove-work-experience/:docId/:id	controllers.DoctorController.removeWorkExperience(docId: Long, id: Long)
+POST	/doctor/add-award							controllers.DoctorController.addAward()
+GET		/doctor/remove-award/:docId/:id				controllers.DoctorController.removeAward(docId: Long, id: Long)
+POST	/doctor/add-education						controllers.DoctorController.addEducation()
+GET		/doctor/remove-education/:docId/:id			controllers.DoctorController.removeEducation(docId: Long, id: Long)
+POST	/doctor/add-social-work						controllers.DoctorController.addSocialWork()
+GET		/doctor/remove-social-work/:docId/:id		controllers.DoctorController.removeSocialWork(docId: Long, id: Long)
+
 # patient actions
 GET    /user/schedule-appointment         			controllers.PatientController.scheduleAppointment()
 GET    /user/display-appointment/:id      			controllers.PatientController.displayAppointment(id:String)
-POST   /doctor/request-appointment        			controllers.DoctorController.requestAppointment()
 
 
 # Doctor's Clinics
@@ -52,34 +65,18 @@ GET    /doctor/new-clinic                 		controllers.DoctorController.newClin
 POST   /doctor/new-clinic                 		controllers.DoctorController.processNewClinic()
 GET    /doctor/clinics                    		controllers.DoctorController.myClinics()
 GET   	/doctor/manage-clinic/:id				controllers.DoctorController.manageClinic(id:Long)
-GET    /doctor-profile                    		controllers.DoctorController.doctorProfile()
-GET    /doctor-experience                 		controllers.DoctorController.doctorExperience()
-POST   /doctor-experience                 		controllers.DoctorController.processDoctorExperience()
-GET    /doctor-education                  		controllers.DoctorController.doctorEducation()
-POST   /doctor-education                  		controllers.DoctorController.processDoctorEducation()
-GET    /doctor-award                      		controllers.DoctorController.doctorAward()
-POST   /doctor-award                      		controllers.DoctorController.processDoctorAward()
-GET		/doctor-language						controllers.DoctorController.doctorLanguage()
-POST	/doctor-language						controllers.DoctorController.processDoctorLanguage()
-GET		/doctor-socialwork						controllers.DoctorController.doctorSocialWork()
-POST	/doctor-socialwork						controllers.DoctorController.processDoctorSocialWork()
-GET		/doctor-publication						controllers.DoctorController.doctorPublication()
-POST	/doctor-publication						controllers.DoctorController.processDoctorPublication()
 GET		/doctor-prescribe/:id					controllers.DoctorController.showPrescriptionForm(id: Long)
 POST	/doctor-prescribe						controllers.DoctorController.processPrescriptionForm()
-POST   /userform/doctor/                		controllers.DoctorController.process()
 
 GET    /doctor/prescription						controllers.DoctorController.doctorPrescription()
-GET		/doctor/profile							controllers.DoctorController.doctorProfileS()
-GET		/doctor/addclinic						controllers.DoctorController.doctorAddClinic()
 
 GET 	/viewappointments							controllers.DoctorController.doctorViewAppointment()
-GET    /doctor/today-appointment                   controllers.DoctorController.viewTodaysAppointment()	
-GET	   /doctor/appointments						   controllers.DoctorController.doctorAppointments()
+GET	   	/doctor/appointments						   controllers.DoctorController.doctorAppointments()
 GET		/doctor/search/appointment					controllers.DoctorController.doctorSearchAppointment()
 
 POST		/doctor/clinic-edit-info					controllers.DoctorController.processUpdateClinicInfo()
 POST		/doctor/clinic-edit-schedule				controllers.DoctorController.processUpdateClinicSchedule()
+GET			/doctor/delete-clinic/:id					controllers.DoctorController.deleteClinic(id:Long)
 
 GET    /userform/assistant/               		controllers.AssistantController.form()
 POST   /userform/assistant/               		controllers.AssistantController.process()

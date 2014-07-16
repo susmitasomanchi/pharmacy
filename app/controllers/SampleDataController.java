@@ -104,7 +104,7 @@ public class SampleDataController extends Controller {
 			final Doctor doctor=new Doctor();
 			doctor.appUser=appUser;
 			doctor.degree="Deegree"+i;
-			doctor.experience="experience"+i;
+			doctor.experience=i;
 
 			doctor.save();
 
