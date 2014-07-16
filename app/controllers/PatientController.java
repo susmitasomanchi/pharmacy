@@ -245,5 +245,12 @@ public class PatientController extends Controller {
 		patientDoctorInfo.delete();
 		return PatientController.patientMyFavDoctors();
 	}
+	public static Result staticPatientMyFavDoctors() {
+		return ok(views.html.patient.static_fav_doctors.render());
+	}
+	
+	public static Result staticPatientNewAppointment() {
+		return ok(views.html.patient.static_patient_new_appointment.render());
+	}
 
 }

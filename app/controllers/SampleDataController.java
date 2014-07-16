@@ -8,6 +8,8 @@ import models.AppUser;
 import models.Patient;
 import models.Role;
 import models.doctor.Doctor;
+import models.mr.MedicalRepresentative;
+import models.mr.PharmaceuticalCompany;
 import models.patient.PatientDoctorInfo;
 import play.mvc.Controller;
 import play.mvc.Result;
@@ -16,7 +18,7 @@ public class SampleDataController extends Controller {
 
 	public static Result populate() {
 
-		final Doctor doctor = new Doctor();
+		//final Doctor doctor = new Doctor();
 		//doctor.name = "Test Admin";
 		/*doctor.name = "Test Admin";
 		//final Doctor doctor = new Doctor();
@@ -50,8 +52,8 @@ public class SampleDataController extends Controller {
 		}
 
 		return ok();
-
 	}
+
 	public static Result temp() {
 		/*final AppUser user=new AppUser();
 		user.email="mitesh@ukate.com";
@@ -115,6 +117,27 @@ public class SampleDataController extends Controller {
 
 		return ok("Created");
 	}
+
+	public static Result test(){
+		final PharmaceuticalCompany company = PharmaceuticalCompany.find.byId(1L);
+		for(int i=0; i<10; i++){
+			final AppUser appUser = new AppUser();
+			appUser.name = "Anand"+i;
+			appUser.email = "anand"+i+"@gmail.com";
+			appUser.password = "1111";
+			appUser.role = Role.MR;
+			appUser.save();
+			final MedicalRepresentative mr = new MedicalRepresentative();
+			mr.appUser = appUser;
+			mr.pharmaceuticalCompany = company;
+			mr.save();
+			company.mrList.add(mr);
+			company.update();
+		}
+		return ok();
+	}
+
+
 
 }
 

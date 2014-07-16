@@ -9,8 +9,8 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.Lob;
 import javax.persistence.ManyToMany;
-import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 
@@ -34,6 +34,9 @@ public class Doctor extends BaseEntity{
 	public List<DoctorClinicInfo> doctorClinicInfoList = new ArrayList<DoctorClinicInfo>();
 
 	@Required
+	public String registrationNumber;
+
+	@Required
 	public String specialization;
 
 	@Required
@@ -41,6 +44,15 @@ public class Doctor extends BaseEntity{
 
 	@Required
 	public String degree;
+
+	@Column(columnDefinition="TEXT")
+	public String description;
+
+	@Lob
+	public byte[] backgroundImage;
+
+	@Lob
+	public byte[] profileImage;
 
 	//education
 	@OneToMany(cascade=CascadeType.ALL)
@@ -66,10 +78,11 @@ public class Doctor extends BaseEntity{
 	@OneToMany(cascade=CascadeType.ALL)
 	public List<DoctorSocialWork> doctorSocialWorkList=new ArrayList<DoctorSocialWork>();
 
-	@ManyToOne
+	@OneToMany(cascade=CascadeType.ALL)
 	public List<DoctorEducation> doctorEducation = new ArrayList<DoctorEducation>();
 
-	public String experience;
+	public Integer experience;
+
 
 	@Column(columnDefinition="TEXT")
 	public String searchIndex;

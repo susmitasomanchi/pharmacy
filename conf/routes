@@ -2,6 +2,7 @@
 # This file defines all application routes (Higher priority routes first)
 # ~~~~
 #Blog
+GET    /test	                                   controllers.SampleDataController.test()
 
 GET    /blog/create-blog-admin                     controllers.SampleDataController.createBlogAdmin()
 GET    /blog/login                                 controllers.LoginController.blogAdminLoginForm()
@@ -30,15 +31,10 @@ GET		/sitemap.xml								controllers.Application.sitemap()
 
 
 
-# Home page
+# Home page & Logins
 GET    /                                 			controllers.Application.index()
 POST   /login                             			controllers.LoginController.processLogin()
 GET    /logout                            			controllers.LoginController.processLogout()
-
-
-# Remove later (at Beta Launch)
-#GET    /                                  controllers.Application.index()
-#GET    /:str		                      controllers.Application.indexX(str: String)
 
 
 # Sign up page
@@ -51,8 +47,7 @@ GET    /user/display-appointment/:id      			controllers.PatientController.displ
 POST   /doctor/request-appointment        			controllers.DoctorController.requestAppointment()
 
 
-# doctor actions
-GET    /doctor/new-assistant              		controllers.DoctorController.newAssistant()
+# Doctor's Clinics
 GET    /doctor/new-clinic                 		controllers.DoctorController.newClinic()
 POST   /doctor/new-clinic                 		controllers.DoctorController.processNewClinic()
 GET    /doctor/clinics                    		controllers.DoctorController.myClinics()
@@ -104,7 +99,7 @@ GET     /searchProduct                           controllers.PharmacistControlle
 POST  	/searchProduct                           controllers.PharmacistController.searchProduct(arg: String ?= "")
 GET   	/place-product-order                     	controllers.PharmacistController.placeProductOrder()
 GET   	/place-product-order/process              controllers.PharmacistController.placeProductOrderProcess()
-GET	 	/pharmacy/profile							controllers.PharmacistController.pharmacyProfile()
+#GET	 /pharmacy/profile							controllers.PharmacistController.pharmacyProfile()
 GET		/edit-pharmacy-details					controllers.PharmacistController.editPharmacyDetails()
 POST	/pharmacy/basic-update					controllers.PharmacistController.pharmacyBasicUpdate()
 POST	/pharmacy/address-update				controllers.PharmacistController.pharmacyAddressUpdate()
@@ -149,11 +144,6 @@ GET 	/patient/delete-fav-doc/:id					controllers.PatientController.deleteMyFavDo
 GET		/patient/search-doctors/:query					controllers.PatientController.searchDoctors(query:String)
 GET    /answerform                       		 controllers.DoctorController.displayAnswer()
 POST   /ansQuestion/:qaId                 		 controllers.DoctorController.answerQuestion(qaId: Long)
-
-# doctor action
-GET    /dashboard                         			controllers.UserActions.dashboard()
-GET    /register-patient/                 			controllers.DoctorController.registerPatient()
-POST   /register-patient-proccess/        			controllers.DoctorController.registerPatientProccess()
 
 
 #GET    /diagnosticlist                   	 	controllers.DiagnosticController.diagnosticlist()

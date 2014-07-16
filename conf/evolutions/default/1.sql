@@ -154,14 +154,6 @@ create table daily_call_report (
   constraint pk_daily_call_report primary key (id))
 ;
 
-create table day_of_the_week (
-  id                        bigint not null,
-  day                       varchar(9),
-  last_update               timestamp not null,
-  constraint ck_day_of_the_week_day check (day in ('MONDAY','SUNDAY','WEDNESDAY','THURSDAY','SATURDAY','TUESDAY','FRIDAY')),
-  constraint pk_day_of_the_week primary key (id))
-;
-
 create table day_schedule (
   id                        bigint not null,
   doctor_clinic_info_id     bigint not null,
@@ -243,10 +235,16 @@ create table diagnostic_test_line_item (
 create table doctor (
   id                        bigint not null,
   app_user_id               bigint,
+  registration_number       varchar(255),
   specialization            varchar(255),
   position                  varchar(255),
   degree                    varchar(255),
   experience                varchar(255),
+
+  description               TEXT,
+  background_image          bytea,
+  profile_image             bytea,
+  experience                integer,
   search_index              TEXT,
   last_update               timestamp not null,
   constraint pk_doctor primary key (id))
@@ -265,9 +263,10 @@ create table doctor_award (
   id                        bigint not null,
   doctor_id                 bigint not null,
   award_name                varchar(255),
-  award_for                 varchar(255),
+  awarded_by                varchar(255),
   year                      varchar(255),
-  comment_for_awards        varchar(255),
+  description               TEXT,
+  position                  integer,
   last_update               timestamp not null,
   constraint pk_doctor_award primary key (id))
 ;
@@ -286,10 +285,11 @@ create table doctor_clinic_info (
 create table doctor_education (
   id                        bigint not null,
   doctor_id                 bigint not null,
-  college_name              varchar(255),
+  institution_name          varchar(255),
   degree                    varchar(255),
   from_year                 integer,
   to_year                   integer,
+  description               TEXT,
   last_update               timestamp not null,
   constraint pk_doctor_education primary key (id))
 ;
@@ -297,9 +297,9 @@ create table doctor_education (
 create table doctor_experience (
   id                        bigint not null,
   doctor_id                 bigint not null,
-  previous_hospital_name    varchar(255),
-  worked_as                 varchar(255),
-  location                  varchar(255),
+  institution_name          varchar(255),
+  position                  varchar(255),
+  description               TEXT,
   worked_from               integer,
   worked_to                 integer,
   last_update               timestamp not null,
@@ -315,10 +315,14 @@ create table doctor_language (
 create table doctor_publication (
   id                        bigint not null,
   doctor_id                 bigint not null,
-  article_name              varchar(255),
+  name                      varchar(255),
   article_for               varchar(255),
   year                      varchar(255),
-  comment_for_article       varchar(255),
+  position                  integer,
+  brief_description         TEXT,
+  content                   TEXT,
+  image                     bytea,
+  file                      bytea,
   last_update               timestamp not null,
   constraint pk_doctor_publication primary key (id))
 ;
@@ -326,8 +330,8 @@ create table doctor_publication (
 create table doctor_social_work (
   id                        bigint not null,
   doctor_id                 bigint not null,
-  social_work_tittle        varchar(255),
-  comment_social_work       varchar(255),
+  title                     varchar(255),
+  description               TEXT,
   last_update               timestamp not null,
   constraint pk_doctor_social_work primary key (id))
 ;
@@ -452,6 +456,7 @@ create table pharmacy (
   address_id                bigint,
   contact_no                varchar(255),
   description               TEXT,
+  admin_pharmacist_id       bigint,
   last_update               timestamp not null,
   constraint pk_pharmacy primary key (id))
 ;
@@ -579,8 +584,6 @@ create sequence clinic_seq;
 create sequence dcrline_item_seq;
 
 create sequence daily_call_report_seq;
-
-create sequence day_of_the_week_seq;
 
 create sequence day_schedule_seq;
 
@@ -809,8 +812,6 @@ drop table if exists dcrline_item_product cascade;
 
 drop table if exists daily_call_report cascade;
 
-drop table if exists day_of_the_week cascade;
-
 drop table if exists day_schedule cascade;
 
 drop table if exists diagnostic_centre cascade;
@@ -910,8 +911,6 @@ drop sequence if exists clinic_seq;
 drop sequence if exists dcrline_item_seq;
 
 drop sequence if exists daily_call_report_seq;
-
-drop sequence if exists day_of_the_week_seq;
 
 drop sequence if exists day_schedule_seq;
 
