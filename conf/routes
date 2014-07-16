@@ -143,8 +143,8 @@ GET    /patient/diagnostics               		controllers.PatientController.diagno
 GET    /add-diagnostic-center/:id               controllers.PatientController.saveDiagnosticCenter(id: Long)
 GET    /patient/my-diag-centers               	controllers.PatientController.myDiagnosticCenters()
 GET    /patient/remove-diag-centers/:id         controllers.PatientController.removePatientDiagnoCenter(id: Long)
-GET    /patient/favdoctors						controllers.PatientController.patientMyFavDoctors()
-
+GET    /static/patient/favdoctors						controllers.PatientController.staticPatientMyFavDoctors()
+GET		/static/patient/new/appointment				controllers.PatientController.staticPatientNewAppointment()
 
 GET    /answerform                       		 controllers.DoctorController.displayAnswer()
 POST   /ansQuestion/:qaId                 		 controllers.DoctorController.answerQuestion(qaId: Long)
