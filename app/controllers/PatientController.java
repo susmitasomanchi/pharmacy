@@ -226,7 +226,11 @@ public class PatientController extends Controller {
 
 	}
 
-	public static Result patientMyFavDoctors() {
-		return ok(views.html.patient.fav_doctors.render());
+	public static Result staticPatientMyFavDoctors() {
+		return ok(views.html.patient.static_fav_doctors.render());
+	}
+	
+	public static Result staticPatientNewAppointment() {
+		return ok(views.html.patient.static_patient_new_appointment.render());
 	}
 }

@@ -1,0 +1,1102 @@
+@()
+@import play.i18n._
+@import helper.twitterBootstrap._
+@import helper._
+
+@main("Favorite Doctors"){
+	
+<style>
+.badge{
+color:#000000;
+background-color:#cccccc;
+}
+#coverborder {
+    opacity: 0.4;
+    filter: alpha(opacity=40); /* For IE8 and earlier */
+}
+
+</style>	
+	
+<table class="table table-bordered">
+<tr>
+<td>
+<div class="row" style="padding-left:20px;padding-right:20px">
+<div style="cursor:pointer" onclick="location.href='/doctor/profile';"><img src="/assets/images/sunrise.png" width="525" height="200" style="position:absolute" />
+<img id="coverborder" src="/assets/images/bordercover.png" style="position:relative;top:135px"/>
+</div>
+<div class="row" style="margin-top:55px;padding-left:20px">
+<div style="cursor:pointer" onclick="location.href='/doctor/profile';" class="col-md-3">
+<br>
+<img src="/assets/images/doctor.png" class="thumbnail" width="120" height="120"  />
+</div>
+<div style="cursor:pointer" onclick="location.href='/doctor/profile';" class="col-md-5">
+<h3><b>Dr Name</b></h3>
+<h4><b>Specialization</b></h4>
+<h5>Degree</h5>
+<h5>Experience</h5>
+<br>
+</div>
+<div class="col-md-4" style="padding-left:16px;padding-top:85px">
+<a class="btn btn-primary btn-xs" href="#">Ask Query</a>
+<button class="btn btn-danger btn-xs" data-toggle="modal" data-target="#myModal1">Remove</button>
+<div class="modal fade" id="myModal1" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+  <div class="modal-dialog" style="padding-top:200px">
+    <div class="modal-content" style="padding-left:20px">
+      <h4>Are you to confirm to remove1</h4>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-default btn-xs" data-dismiss="modal">Close</button>
+        <button type="button" class="btn btn-primary btn-xs">Confirm</button>
+      </div>
+    </div>
+  </div>
+</div>
+</div>
+</div>
+<div class="well">
+<h4 style="color:#006687;font-weight:bold">Clinics</h4>
+<ul class="nav nav-tabs">
+  <li  class="active"><a href="#clinic1" data-toggle="tab">XYZ Clinic</a></li>
+  <li><a href="#clinic2" data-toggle="tab">ABC Clinic</a></li>
+  <li><a href="#clinic3" data-toggle="tab">SAKP Clinic</a></li>
+</ul>
+
+<div class="tab-content">
+<div class="tab-pane active" id="clinic1">
+<div class="row">
+<br>
+<div class="col-md-4">
+<h5><b><a href="#" >XYZ Clinic</a></b></h5>
+<h6>Flat no<br>
+Address<br>
+Place<br>
+Phone nos: 04023456789, 9876543210</h6>
+</div>
+<div class="col-md-8" style="padding-left:10px">
+<br>
+<h5>
+<div class="row" style="padding-left:10px">
+<span class="badge col-md-2" style="font-size:16px;width:20%">Mon</span>
+<span class="col-md-2" style="font-size:16px;width:20%">Tue</span>
+<span class="badge col-md-2" style="font-size:16px;width:20%">Wed</span>
+<span class="col-md-2" style="font-size:16px;width:20%">Thu</span>
+<span class="badge col-md-2" style="font-size:16px;width:20%">Fri</span>
+</div>
+</h5>
+<div class="row" style="padding-left:10px">
+<span class="col-md-2" style="font-size:10px;padding-right:0px;padding-left:10px;width:20%">9:00 - 21:00</span>
+<span class="col-md-2" style="font-size:10px;padding-right:0px;padding-left:10px;width:20%"></span>
+<span class="col-md-2" style="font-size:10px;padding-right:0px;padding-left:10px;width:20%">9:00 - 21:00</span>
+<span class="col-md-2" style="font-size:10px;padding-right:0px;padding-left:10px;width:20%"></span>
+<span class="col-md-2" style="font-size:10px;padding-right:0px;padding-left:10px;width:20%">9:00 - 21:00</span>
+</div>
+<br>
+<h5>
+<div class="row" style="padding-left:10px">
+<span class="badge col-md-2" style="font-size:16px;width:20%">Sat</span>
+<span class="col-md-2" style="font-size:16px;width:20%">Sun</span>
+</div>
+</h5>
+<div class="row" style="padding-left:10px">
+<span class="col-md-2" style="font-size:10px;padding-right:0px;padding-left:10px;width:20%">9:00 - 21:00</span>
+<span class="col-md-2" style="font-size:10px;padding-right:0px;padding-left:10px;width:20%"></span>
+</div>
+</div>
+</div>
+<a class="btn btn-success btn-sm" href="/patient/new/appointment">Book Appointment</a>
+
+</div>
+
+<div class="tab-pane" id="clinic2">
+<div class="row">
+<br>
+<div class="col-md-4">
+<h5><b><a href="#" >ABC Clinic</a></b></h5>
+<h6>Flat no<br>
+Address<br>
+Place<br>
+Phone nos: 04023456789, 9876543210</h6>
+</div>
+<div class="col-md-8" style="padding-left:10px">
+<br>
+<h5>
+<div class="row" style="padding-left:10px">
+<span class="badge col-md-2" style="font-size:16px;width:20%">Mon</span>
+<span class="col-md-2" style="font-size:16px;width:20%">Tue</span>
+<span class="badge col-md-2" style="font-size:16px;width:20%">Wed</span>
+<span class="col-md-2" style="font-size:16px;width:20%">Thu</span>
+<span class="badge col-md-2" style="font-size:16px;width:20%">Fri</span>
+</div>
+</h5>
+<div class="row" style="padding-left:10px">
+<span class="col-md-2" style="font-size:10px;padding-right:0px;padding-left:10px;width:20%">9:00 - 21:00</span>
+<span class="col-md-2" style="font-size:10px;padding-right:0px;padding-left:10px;width:20%"></span>
+<span class="col-md-2" style="font-size:10px;padding-right:0px;padding-left:10px;width:20%">9:00 - 21:00</span>
+<span class="col-md-2" style="font-size:10px;padding-right:0px;padding-left:10px;width:20%"></span>
+<span class="col-md-2" style="font-size:10px;padding-right:0px;padding-left:10px;width:20%">9:00 - 21:00</span>
+</div>
+<br>
+<h5>
+<div class="row" style="padding-left:10px">
+<span class="badge col-md-2" style="font-size:16px;width:20%">Sat</span>
+<span class="col-md-2" style="font-size:16px;width:20%">Sun</span>
+</div>
+</h5>
+<div class="row" style="padding-left:10px">
+<span class="col-md-2" style="font-size:10px;padding-right:0px;padding-left:10px;width:20%">9:00 - 21:00</span>
+<span class="col-md-2" style="font-size:10px;padding-right:0px;padding-left:10px;width:20%"></span>
+</div>
+</div>
+</div>
+<a class="btn btn-success btn-sm" href="/patient/new/appointment">Book Appointment</a>
+</div>
+
+<div class="tab-pane" id="clinic3">
+<div class="row">
+<br>
+<div class="col-md-4">
+<h5><b><a href="#" >SAKP Clinic</a></b></h5>
+<h6>Flat no<br>
+Address<br>
+Place<br>
+Phone nos: 04023456789, 9876543210</h6>
+</div>
+<div class="col-md-8" style="padding-left:10px">
+<br><h5>
+<div class="row" style="padding-left:10px">
+<span class="badge col-md-2" style="font-size:16px;width:20%">Mon</span>
+<span class="badge col-md-2" style="font-size:16px;width:20%">Tue</span>
+<span class="badge col-md-2" style="font-size:16px;width:20%">Wed</span>
+<span class="col-md-2" style="font-size:16px;width:20%">Thu</span>
+<span class="col-md-2" style="font-size:16px;width:20%">Fri</span>
+</div>
+</h5>
+<div class="row" style="padding-left:10px">
+<span class="col-md-2" style="font-size:10px;padding-right:0px;padding-left:10px;width:20%">9:00 - 21:00</span>
+<span class="col-md-2" style="font-size:10px;padding-right:0px;padding-left:10px;width:20%">9:00 - 21:00</span>
+<span class="col-md-2" style="font-size:10px;padding-right:0px;padding-left:10px;width:20%">9:00 - 21:00</span>
+<span class="col-md-2" style="font-size:10px;padding-right:0px;padding-left:10px;width:20%"></span>
+<span class="col-md-2" style="font-size:10px;padding-right:0px;padding-left:10px;width:20%"></span>
+</div>
+<br>
+<h5>
+<div class="row" style="padding-left:10px">
+<span class="badge col-md-2" style="font-size:16px;width:20%">Sat</span>
+<span class="col-md-2" style="font-size:16px;width:20%">Sun</span>
+</div>
+</h5>
+<div class="row" style="padding-left:10px">
+<span class="col-md-2" style="font-size:10px;padding-right:0px;padding-left:10px;width:20%">9:00 - 21:00</span>
+<span class="col-md-2" style="font-size:10px;padding-right:0px;padding-left:10px;width:20%"></span>
+</div>
+</div>
+</div>
+<a class="btn btn-success btn-sm" href="/patient/new/appointment">Book Appointment</a>
+</div>
+
+</div>
+</div>
+<br>
+</div>
+</td>
+<td>
+<div class="row" style="padding-left:20px;padding-right:20px">
+<div style="cursor:pointer" onclick="location.href='/doctor/profile';"><img src="/assets/images/sunrise.png" width="525" height="200" style="position:absolute" />
+<img id="coverborder" src="/assets/images/bordercover.png" style="position:relative;top:135px"/>
+</div>
+<div class="row" style="margin-top:55px;padding-left:20px">
+<div style="cursor:pointer" onclick="location.href='/doctor/profile';" class="col-md-3">
+<br>
+<img src="/assets/images/doctor.png" class="thumbnail" width="120" height="120"  />
+</div>
+<div style="cursor:pointer" onclick="location.href='/doctor/profile';" class="col-md-5">
+<h3><b>Dr Name</b></h3>
+<h4><b>Specialization</b></h4>
+<h5>Degree</h5>
+<h5>Experience</h5>
+<br>
+</div>
+<div class="col-md-4" style="padding-left:16px;padding-top:85px">
+<a class="btn btn-primary btn-xs" href="#">Ask Query</a>
+<button class="btn btn-danger btn-xs" data-toggle="modal" data-target="#myModal2">Remove</button>
+<div class="modal fade" id="myModal2" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+  <div class="modal-dialog" style="padding-top:200px">
+    <div class="modal-content" style="padding-left:20px">
+      <h4>Are you to confirm to remove2</h4>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-default btn-xs" data-dismiss="modal">Close</button>
+        <button type="button" class="btn btn-primary btn-xs">Confirm</button>
+      </div>
+    </div>
+  </div>
+</div>
+</div>
+</div>
+<div class="well">
+<h4 style="color:#006687;font-weight:bold">Clinics</h4>
+<ul class="nav nav-tabs">
+  <li  class="active"><a href="#clinic11" data-toggle="tab">XYZ Clinic</a></li>
+  <li><a href="#clinic12" data-toggle="tab">ABC Clinic</a></li>
+  <li><a href="#clinic13" data-toggle="tab">SAKP Clinic</a></li>
+</ul>
+
+<div class="tab-content">
+<div class="tab-pane active" id="clinic11">
+<div class="row">
+<br>
+<div class="col-md-4">
+<h5><b><a href="#" >XYZ Clinic</a></b></h5>
+<h6>Flat no<br>
+Address<br>
+Place<br>
+Phone nos: 04023456789, 9876543210</h6>
+</div>
+<div class="col-md-8" style="padding-left:10px">
+<br>
+<h5>
+<div class="row" style="padding-left:10px">
+<span class="badge col-md-2" style="font-size:16px;width:20%">Mon</span>
+<span class="col-md-2" style="font-size:16px;width:20%">Tue</span>
+<span class="badge col-md-2" style="font-size:16px;width:20%">Wed</span>
+<span class="col-md-2" style="font-size:16px;width:20%">Thu</span>
+<span class="badge col-md-2" style="font-size:16px;width:20%">Fri</span>
+</div>
+</h5>
+<div class="row" style="padding-left:10px">
+<span class="col-md-2" style="font-size:10px;padding-right:0px;padding-left:10px;width:20%">9:00 - 21:00</span>
+<span class="col-md-2" style="font-size:10px;padding-right:0px;padding-left:10px;width:20%"></span>
+<span class="col-md-2" style="font-size:10px;padding-right:0px;padding-left:10px;width:20%">9:00 - 21:00</span>
+<span class="col-md-2" style="font-size:10px;padding-right:0px;padding-left:10px;width:20%"></span>
+<span class="col-md-2" style="font-size:10px;padding-right:0px;padding-left:10px;width:20%">9:00 - 21:00</span>
+</div>
+<br>
+<h5>
+<div class="row" style="padding-left:10px">
+<span class="badge col-md-2" style="font-size:16px;width:20%">Sat</span>
+<span class="col-md-2" style="font-size:16px;width:20%">Sun</span>
+</div>
+</h5>
+<div class="row" style="padding-left:10px">
+<span class="col-md-2" style="font-size:10px;padding-right:0px;padding-left:10px;width:20%">9:00 - 21:00</span>
+<span class="col-md-2" style="font-size:10px;padding-right:0px;padding-left:10px;width:20%"></span>
+</div>
+</div>
+</div>
+<a class="btn btn-success btn-sm" href="/patient/new/appointment">Book Appointment</a>
+
+</div>
+
+<div class="tab-pane" id="clinic12">
+<div class="row">
+<br>
+<div class="col-md-4">
+<h5><b><a href="#" >ABC Clinic</a></b></h5>
+<h6>Flat no<br>
+Address<br>
+Place<br>
+Phone nos: 04023456789, 9876543210</h6>
+</div>
+<div class="col-md-8" style="padding-left:10px">
+<br>
+<h5>
+<div class="row" style="padding-left:10px">
+<span class="badge col-md-2" style="font-size:16px;width:20%">Mon</span>
+<span class="col-md-2" style="font-size:16px;width:20%">Tue</span>
+<span class="badge col-md-2" style="font-size:16px;width:20%">Wed</span>
+<span class="col-md-2" style="font-size:16px;width:20%">Thu</span>
+<span class="badge col-md-2" style="font-size:16px;width:20%">Fri</span>
+</div>
+</h5>
+<div class="row" style="padding-left:10px">
+<span class="col-md-2" style="font-size:10px;padding-right:0px;padding-left:10px;width:20%">9:00 - 21:00</span>
+<span class="col-md-2" style="font-size:10px;padding-right:0px;padding-left:10px;width:20%"></span>
+<span class="col-md-2" style="font-size:10px;padding-right:0px;padding-left:10px;width:20%">9:00 - 21:00</span>
+<span class="col-md-2" style="font-size:10px;padding-right:0px;padding-left:10px;width:20%"></span>
+<span class="col-md-2" style="font-size:10px;padding-right:0px;padding-left:10px;width:20%">9:00 - 21:00</span>
+</div>
+<br>
+<h5>
+<div class="row" style="padding-left:10px">
+<span class="badge col-md-2" style="font-size:16px;width:20%">Sat</span>
+<span class="col-md-2" style="font-size:16px;width:20%">Sun</span>
+</div>
+</h5>
+<div class="row" style="padding-left:10px">
+<span class="col-md-2" style="font-size:10px;padding-right:0px;padding-left:10px;width:20%">9:00 - 21:00</span>
+<span class="col-md-2" style="font-size:10px;padding-right:0px;padding-left:10px;width:20%"></span>
+</div>
+</div>
+</div>
+<a class="btn btn-success btn-sm" href="/patient/new/appointment">Book Appointment</a>
+</div>
+
+<div class="tab-pane" id="clinic13">
+<div class="row">
+<br>
+<div class="col-md-4">
+<h5><b><a href="#" >SAKP Clinic</a></b></h5>
+<h6>Flat no<br>
+Address<br>
+Place<br>
+Phone nos: 04023456789, 9876543210</h6>
+</div>
+<div class="col-md-8" style="padding-left:10px">
+<br><h5>
+<div class="row" style="padding-left:10px">
+<span class="badge col-md-2" style="font-size:16px;width:20%">Mon</span>
+<span class="badge col-md-2" style="font-size:16px;width:20%">Tue</span>
+<span class="badge col-md-2" style="font-size:16px;width:20%">Wed</span>
+<span class="col-md-2" style="font-size:16px;width:20%">Thu</span>
+<span class="col-md-2" style="font-size:16px;width:20%">Fri</span>
+</div>
+</h5>
+<div class="row" style="padding-left:10px">
+<span class="col-md-2" style="font-size:10px;padding-right:0px;padding-left:10px;width:20%">9:00 - 21:00</span>
+<span class="col-md-2" style="font-size:10px;padding-right:0px;padding-left:10px;width:20%">9:00 - 21:00</span>
+<span class="col-md-2" style="font-size:10px;padding-right:0px;padding-left:10px;width:20%">9:00 - 21:00</span>
+<span class="col-md-2" style="font-size:10px;padding-right:0px;padding-left:10px;width:20%"></span>
+<span class="col-md-2" style="font-size:10px;padding-right:0px;padding-left:10px;width:20%"></span>
+</div>
+<br>
+<h5>
+<div class="row" style="padding-left:10px">
+<span class="badge col-md-2" style="font-size:16px;width:20%">Sat</span>
+<span class="col-md-2" style="font-size:16px;width:20%">Sun</span>
+</div>
+</h5>
+<div class="row" style="padding-left:10px">
+<span class="col-md-2" style="font-size:10px;padding-right:0px;padding-left:10px;width:20%">9:00 - 21:00</span>
+<span class="col-md-2" style="font-size:10px;padding-right:0px;padding-left:10px;width:20%"></span>
+</div>
+</div>
+</div>
+<a class="btn btn-success btn-sm" href="/patient/new/appointment">Book Appointment</a>
+</div>
+
+</div>
+</div>
+<br>
+</div>
+</td>
+</tr>
+<tr>
+<td>
+<div class="row" style="padding-left:20px;padding-right:20px">
+<div style="cursor:pointer" onclick="location.href='/doctor/profile';"><img src="/assets/images/sunrise.png" width="525" height="200" style="position:absolute" />
+<img id="coverborder" src="/assets/images/bordercover.png" style="position:relative;top:135px"/>
+</div>
+<div class="row" style="margin-top:55px;padding-left:20px">
+<div style="cursor:pointer" onclick="location.href='/doctor/profile';" class="col-md-3">
+<br>
+<img src="/assets/images/doctor.png" class="thumbnail" width="120" height="120"  />
+</div>
+<div style="cursor:pointer" onclick="location.href='/doctor/profile';" class="col-md-5">
+<h3><b>Dr Name</b></h3>
+<h4><b>Specialization</b></h4>
+<h5>Degree</h5>
+<h5>Experience</h5>
+<br>
+</div>
+<div class="col-md-4" style="padding-left:16px;padding-top:85px">
+<a class="btn btn-primary btn-xs" href="#">Ask Query</a>
+<button class="btn btn-danger btn-xs" data-toggle="modal" data-target="#myModal3">Remove</button>
+<div class="modal fade" id="myModal3" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+  <div class="modal-dialog" style="padding-top:200px">
+    <div class="modal-content" style="padding-left:20px">
+      <h4>Are you to confirm to remove3</h4>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-default btn-xs" data-dismiss="modal">Close</button>
+        <button type="button" class="btn btn-primary btn-xs">Confirm</button>
+      </div>
+    </div>
+  </div>
+</div>
+</div>
+</div>
+<div class="well">
+<h4 style="color:#006687;font-weight:bold">Clinics</h4>
+<ul class="nav nav-tabs">
+  <li  class="active"><a href="#clinic21" data-toggle="tab">XYZ Clinic</a></li>
+  <li><a href="#clinic22" data-toggle="tab">ABC Clinic</a></li>
+  <li><a href="#clinic23" data-toggle="tab">SAKP Clinic</a></li>
+</ul>
+
+<div class="tab-content">
+<div class="tab-pane active" id="clinic21">
+<div class="row">
+<br>
+<div class="col-md-4">
+<h5><b><a href="#" >XYZ Clinic</a></b></h5>
+<h6>Flat no<br>
+Address<br>
+Place<br>
+Phone nos: 04023456789, 9876543210</h6>
+</div>
+<div class="col-md-8" style="padding-left:10px">
+<br>
+<h5>
+<div class="row" style="padding-left:10px">
+<span class="badge col-md-2" style="font-size:16px;width:20%">Mon</span>
+<span class="col-md-2" style="font-size:16px;width:20%">Tue</span>
+<span class="badge col-md-2" style="font-size:16px;width:20%">Wed</span>
+<span class="col-md-2" style="font-size:16px;width:20%">Thu</span>
+<span class="badge col-md-2" style="font-size:16px;width:20%">Fri</span>
+</div>
+</h5>
+<div class="row" style="padding-left:10px">
+<span class="col-md-2" style="font-size:10px;padding-right:0px;padding-left:10px;width:20%">9:00 - 21:00</span>
+<span class="col-md-2" style="font-size:10px;padding-right:0px;padding-left:10px;width:20%"></span>
+<span class="col-md-2" style="font-size:10px;padding-right:0px;padding-left:10px;width:20%">9:00 - 21:00</span>
+<span class="col-md-2" style="font-size:10px;padding-right:0px;padding-left:10px;width:20%"></span>
+<span class="col-md-2" style="font-size:10px;padding-right:0px;padding-left:10px;width:20%">9:00 - 21:00</span>
+</div>
+<br>
+<h5>
+<div class="row" style="padding-left:10px">
+<span class="badge col-md-2" style="font-size:16px;width:20%">Sat</span>
+<span class="col-md-2" style="font-size:16px;width:20%">Sun</span>
+</div>
+</h5>
+<div class="row" style="padding-left:10px">
+<span class="col-md-2" style="font-size:10px;padding-right:0px;padding-left:10px;width:20%">9:00 - 21:00</span>
+<span class="col-md-2" style="font-size:10px;padding-right:0px;padding-left:10px;width:20%"></span>
+</div>
+</div>
+</div>
+<a class="btn btn-success btn-sm" href="/patient/new/appointment">Book Appointment</a>
+
+</div>
+
+<div class="tab-pane" id="clinic22">
+<div class="row">
+<br>
+<div class="col-md-4">
+<h5><b><a href="#" >ABC Clinic</a></b></h5>
+<h6>Flat no<br>
+Address<br>
+Place<br>
+Phone nos: 04023456789, 9876543210</h6>
+</div>
+<div class="col-md-8" style="padding-left:10px">
+<br>
+<h5>
+<div class="row" style="padding-left:10px">
+<span class="badge col-md-2" style="font-size:16px;width:20%">Mon</span>
+<span class="col-md-2" style="font-size:16px;width:20%">Tue</span>
+<span class="badge col-md-2" style="font-size:16px;width:20%">Wed</span>
+<span class="col-md-2" style="font-size:16px;width:20%">Thu</span>
+<span class="badge col-md-2" style="font-size:16px;width:20%">Fri</span>
+</div>
+</h5>
+<div class="row" style="padding-left:10px">
+<span class="col-md-2" style="font-size:10px;padding-right:0px;padding-left:10px;width:20%">9:00 - 21:00</span>
+<span class="col-md-2" style="font-size:10px;padding-right:0px;padding-left:10px;width:20%"></span>
+<span class="col-md-2" style="font-size:10px;padding-right:0px;padding-left:10px;width:20%">9:00 - 21:00</span>
+<span class="col-md-2" style="font-size:10px;padding-right:0px;padding-left:10px;width:20%"></span>
+<span class="col-md-2" style="font-size:10px;padding-right:0px;padding-left:10px;width:20%">9:00 - 21:00</span>
+</div>
+<br>
+<h5>
+<div class="row" style="padding-left:10px">
+<span class="badge col-md-2" style="font-size:16px;width:20%">Sat</span>
+<span class="col-md-2" style="font-size:16px;width:20%">Sun</span>
+</div>
+</h5>
+<div class="row" style="padding-left:10px">
+<span class="col-md-2" style="font-size:10px;padding-right:0px;padding-left:10px;width:20%">9:00 - 21:00</span>
+<span class="col-md-2" style="font-size:10px;padding-right:0px;padding-left:10px;width:20%"></span>
+</div>
+</div>
+</div>
+<a class="btn btn-success btn-sm" href="/patient/new/appointment">Book Appointment</a>
+</div>
+
+<div class="tab-pane" id="clinic23">
+<div class="row">
+<br>
+<div class="col-md-4">
+<h5><b><a href="#" >SAKP Clinic</a></b></h5>
+<h6>Flat no<br>
+Address<br>
+Place<br>
+Phone nos: 04023456789, 9876543210</h6>
+</div>
+<div class="col-md-8" style="padding-left:10px">
+<br><h5>
+<div class="row" style="padding-left:10px">
+<span class="badge col-md-2" style="font-size:16px;width:20%">Mon</span>
+<span class="badge col-md-2" style="font-size:16px;width:20%">Tue</span>
+<span class="badge col-md-2" style="font-size:16px;width:20%">Wed</span>
+<span class="col-md-2" style="font-size:16px;width:20%">Thu</span>
+<span class="col-md-2" style="font-size:16px;width:20%">Fri</span>
+</div>
+</h5>
+<div class="row" style="padding-left:10px">
+<span class="col-md-2" style="font-size:10px;padding-right:0px;padding-left:10px;width:20%">9:00 - 21:00</span>
+<span class="col-md-2" style="font-size:10px;padding-right:0px;padding-left:10px;width:20%">9:00 - 21:00</span>
+<span class="col-md-2" style="font-size:10px;padding-right:0px;padding-left:10px;width:20%">9:00 - 21:00</span>
+<span class="col-md-2" style="font-size:10px;padding-right:0px;padding-left:10px;width:20%"></span>
+<span class="col-md-2" style="font-size:10px;padding-right:0px;padding-left:10px;width:20%"></span>
+</div>
+<br>
+<h5>
+<div class="row" style="padding-left:10px">
+<span class="badge col-md-2" style="font-size:16px;width:20%">Sat</span>
+<span class="col-md-2" style="font-size:16px;width:20%">Sun</span>
+</div>
+</h5>
+<div class="row" style="padding-left:10px">
+<span class="col-md-2" style="font-size:10px;padding-right:0px;padding-left:10px;width:20%">9:00 - 21:00</span>
+<span class="col-md-2" style="font-size:10px;padding-right:0px;padding-left:10px;width:20%"></span>
+</div>
+</div>
+</div>
+<a class="btn btn-success btn-sm" href="/patient/new/appointment">Book Appointment</a>
+</div>
+
+</div>
+</div>
+<br>
+</div>
+</td>
+<td>
+<div class="row" style="padding-left:20px;padding-right:20px">
+<div style="cursor:pointer" onclick="location.href='/doctor/profile';"><img src="/assets/images/sunrise.png" width="525" height="200" style="position:absolute" />
+<img id="coverborder" src="/assets/images/bordercover.png" style="position:relative;top:135px"/>
+</div>
+<div class="row" style="margin-top:55px;padding-left:20px">
+<div style="cursor:pointer" onclick="location.href='/doctor/profile';" class="col-md-3">
+<br>
+<img src="/assets/images/doctor.png" class="thumbnail" width="120" height="120"  />
+</div>
+<div style="cursor:pointer" onclick="location.href='/doctor/profile';" class="col-md-5">
+<h3><b>Dr Name</b></h3>
+<h4><b>Specialization</b></h4>
+<h5>Degree</h5>
+<h5>Experience</h5>
+<br>
+</div>
+<div class="col-md-4" style="padding-left:16px;padding-top:85px">
+<a class="btn btn-primary btn-xs" href="#">Ask Query</a>
+<button class="btn btn-danger btn-xs" data-toggle="modal" data-target="#myModal4">Remove</button>
+<div class="modal fade" id="myModal4" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+  <div class="modal-dialog" style="padding-top:200px">
+    <div class="modal-content" style="padding-left:20px">
+      <h4>Are you to confirm to remove4</h4>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-default btn-xs" data-dismiss="modal">Close</button>
+        <button type="button" class="btn btn-primary btn-xs">Confirm</button>
+      </div>
+    </div>
+  </div>
+</div>
+</div>
+</div>
+<div class="well">
+<h4 style="color:#006687;font-weight:bold">Clinics</h4>
+<ul class="nav nav-tabs">
+  <li  class="active"><a href="#clinic221" data-toggle="tab">XYZ Clinic</a></li>
+  <li><a href="#clinic222" data-toggle="tab">ABC Clinic</a></li>
+  <li><a href="#clinic223" data-toggle="tab">SAKP Clinic</a></li>
+</ul>
+
+<div class="tab-content">
+<div class="tab-pane active" id="clinic221">
+<div class="row">
+<br>
+<div class="col-md-4">
+<h5><b><a href="#" >XYZ Clinic</a></b></h5>
+<h6>Flat no<br>
+Address<br>
+Place<br>
+Phone nos: 04023456789, 9876543210</h6>
+</div>
+<div class="col-md-8" style="padding-left:10px">
+<br>
+<h5>
+<div class="row" style="padding-left:10px">
+<span class="badge col-md-2" style="font-size:16px;width:20%">Mon</span>
+<span class="col-md-2" style="font-size:16px;width:20%">Tue</span>
+<span class="badge col-md-2" style="font-size:16px;width:20%">Wed</span>
+<span class="col-md-2" style="font-size:16px;width:20%">Thu</span>
+<span class="badge col-md-2" style="font-size:16px;width:20%">Fri</span>
+</div>
+</h5>
+<div class="row" style="padding-left:10px">
+<span class="col-md-2" style="font-size:10px;padding-right:0px;padding-left:10px;width:20%">9:00 - 21:00</span>
+<span class="col-md-2" style="font-size:10px;padding-right:0px;padding-left:10px;width:20%"></span>
+<span class="col-md-2" style="font-size:10px;padding-right:0px;padding-left:10px;width:20%">9:00 - 21:00</span>
+<span class="col-md-2" style="font-size:10px;padding-right:0px;padding-left:10px;width:20%"></span>
+<span class="col-md-2" style="font-size:10px;padding-right:0px;padding-left:10px;width:20%">9:00 - 21:00</span>
+</div>
+<br>
+<h5>
+<div class="row" style="padding-left:10px">
+<span class="badge col-md-2" style="font-size:16px;width:20%">Sat</span>
+<span class="col-md-2" style="font-size:16px;width:20%">Sun</span>
+</div>
+</h5>
+<div class="row" style="padding-left:10px">
+<span class="col-md-2" style="font-size:10px;padding-right:0px;padding-left:10px;width:20%">9:00 - 21:00</span>
+<span class="col-md-2" style="font-size:10px;padding-right:0px;padding-left:10px;width:20%"></span>
+</div>
+</div>
+</div>
+<a class="btn btn-success btn-sm" href="/patient/new/appointment">Book Appointment</a>
+
+</div>
+
+<div class="tab-pane" id="clinic222">
+<div class="row">
+<br>
+<div class="col-md-4">
+<h5><b><a href="#" >ABC Clinic</a></b></h5>
+<h6>Flat no<br>
+Address<br>
+Place<br>
+Phone nos: 04023456789, 9876543210</h6>
+</div>
+<div class="col-md-8" style="padding-left:10px">
+<br>
+<h5>
+<div class="row" style="padding-left:10px">
+<span class="badge col-md-2" style="font-size:16px;width:20%">Mon</span>
+<span class="col-md-2" style="font-size:16px;width:20%">Tue</span>
+<span class="badge col-md-2" style="font-size:16px;width:20%">Wed</span>
+<span class="col-md-2" style="font-size:16px;width:20%">Thu</span>
+<span class="badge col-md-2" style="font-size:16px;width:20%">Fri</span>
+</div>
+</h5>
+<div class="row" style="padding-left:10px">
+<span class="col-md-2" style="font-size:10px;padding-right:0px;padding-left:10px;width:20%">9:00 - 21:00</span>
+<span class="col-md-2" style="font-size:10px;padding-right:0px;padding-left:10px;width:20%"></span>
+<span class="col-md-2" style="font-size:10px;padding-right:0px;padding-left:10px;width:20%">9:00 - 21:00</span>
+<span class="col-md-2" style="font-size:10px;padding-right:0px;padding-left:10px;width:20%"></span>
+<span class="col-md-2" style="font-size:10px;padding-right:0px;padding-left:10px;width:20%">9:00 - 21:00</span>
+</div>
+<br>
+<h5>
+<div class="row" style="padding-left:10px">
+<span class="badge col-md-2" style="font-size:16px;width:20%">Sat</span>
+<span class="col-md-2" style="font-size:16px;width:20%">Sun</span>
+</div>
+</h5>
+<div class="row" style="padding-left:10px">
+<span class="col-md-2" style="font-size:10px;padding-right:0px;padding-left:10px;width:20%">9:00 - 21:00</span>
+<span class="col-md-2" style="font-size:10px;padding-right:0px;padding-left:10px;width:20%"></span>
+</div>
+</div>
+</div>
+<a class="btn btn-success btn-sm" href="/patient/new/appointment">Book Appointment</a>
+</div>
+
+<div class="tab-pane" id="clinic223">
+<div class="row">
+<br>
+<div class="col-md-4">
+<h5><b><a href="#" >SAKP Clinic</a></b></h5>
+<h6>Flat no<br>
+Address<br>
+Place<br>
+Phone nos: 04023456789, 9876543210</h6>
+</div>
+<div class="col-md-8" style="padding-left:10px">
+<br><h5>
+<div class="row" style="padding-left:10px">
+<span class="badge col-md-2" style="font-size:16px;width:20%">Mon</span>
+<span class="badge col-md-2" style="font-size:16px;width:20%">Tue</span>
+<span class="badge col-md-2" style="font-size:16px;width:20%">Wed</span>
+<span class="col-md-2" style="font-size:16px;width:20%">Thu</span>
+<span class="col-md-2" style="font-size:16px;width:20%">Fri</span>
+</div>
+</h5>
+<div class="row" style="padding-left:10px">
+<span class="col-md-2" style="font-size:10px;padding-right:0px;padding-left:10px;width:20%">9:00 - 21:00</span>
+<span class="col-md-2" style="font-size:10px;padding-right:0px;padding-left:10px;width:20%">9:00 - 21:00</span>
+<span class="col-md-2" style="font-size:10px;padding-right:0px;padding-left:10px;width:20%">9:00 - 21:00</span>
+<span class="col-md-2" style="font-size:10px;padding-right:0px;padding-left:10px;width:20%"></span>
+<span class="col-md-2" style="font-size:10px;padding-right:0px;padding-left:10px;width:20%"></span>
+</div>
+<br>
+<h5>
+<div class="row" style="padding-left:10px">
+<span class="badge col-md-2" style="font-size:16px;width:20%">Sat</span>
+<span class="col-md-2" style="font-size:16px;width:20%">Sun</span>
+</div>
+</h5>
+<div class="row" style="padding-left:10px">
+<span class="col-md-2" style="font-size:10px;padding-right:0px;padding-left:10px;width:20%">9:00 - 21:00</span>
+<span class="col-md-2" style="font-size:10px;padding-right:0px;padding-left:10px;width:20%"></span>
+</div>
+</div>
+</div>
+<a class="btn btn-success btn-sm" href="/patient/new/appointment">Book Appointment</a>
+</div>
+
+</div>
+</div>
+<br>
+</div>
+</td>
+</tr>
+<tr>
+<td>
+<div class="row" style="padding-left:20px;padding-right:20px">
+<div style="cursor:pointer" onclick="location.href='/doctor/profile';"><img src="/assets/images/sunrise.png" width="525" height="200" style="position:absolute" />
+<img id="coverborder" src="/assets/images/bordercover.png" style="position:relative;top:135px"/>
+</div>
+<div class="row" style="margin-top:55px;padding-left:20px">
+<div style="cursor:pointer" onclick="location.href='/doctor/profile';" class="col-md-3">
+<br>
+<img src="/assets/images/doctor.png" class="thumbnail" width="120" height="120"  />
+</div>
+<div style="cursor:pointer" onclick="location.href='/doctor/profile';" class="col-md-5">
+<h3><b>Dr Name</b></h3>
+<h4><b>Specialization</b></h4>
+<h5>Degree</h5>
+<h5>Experience</h5>
+<br>
+</div>
+<div class="col-md-4" style="padding-left:16px;padding-top:85px">
+<a class="btn btn-primary btn-xs" href="#">Ask Query</a>
+<button class="btn btn-danger btn-xs" data-toggle="modal" data-target="#myModal5">Remove</button>
+<div class="modal fade" id="myModal5" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+  <div class="modal-dialog" style="padding-top:200px">
+    <div class="modal-content" style="padding-left:20px">
+      <h4>Are you to confirm to remove5</h4>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-default btn-xs" data-dismiss="modal">Close</button>
+        <button type="button" class="btn btn-primary btn-xs">Confirm</button>
+      </div>
+    </div>
+  </div>
+</div>
+</div>
+</div>
+<div class="well">
+<h4 style="color:#006687;font-weight:bold">Clinics</h4>
+<ul class="nav nav-tabs">
+  <li  class="active"><a href="#clinic31" data-toggle="tab">XYZ Clinic</a></li>
+  <li><a href="#clinic32" data-toggle="tab">ABC Clinic</a></li>
+  <li><a href="#clinic33" data-toggle="tab">SAKP Clinic</a></li>
+</ul>
+
+<div class="tab-content">
+<div class="tab-pane active" id="clinic31">
+<div class="row">
+<br>
+<div class="col-md-4">
+<h5><b><a href="#" >XYZ Clinic</a></b></h5>
+<h6>Flat no<br>
+Address<br>
+Place<br>
+Phone nos: 04023456789, 9876543210</h6>
+</div>
+<div class="col-md-8" style="padding-left:10px">
+<br>
+<h5>
+<div class="row" style="padding-left:10px">
+<span class="badge col-md-2" style="font-size:16px;width:20%">Mon</span>
+<span class="col-md-2" style="font-size:16px;width:20%">Tue</span>
+<span class="badge col-md-2" style="font-size:16px;width:20%">Wed</span>
+<span class="col-md-2" style="font-size:16px;width:20%">Thu</span>
+<span class="badge col-md-2" style="font-size:16px;width:20%">Fri</span>
+</div>
+</h5>
+<div class="row" style="padding-left:10px">
+<span class="col-md-2" style="font-size:10px;padding-right:0px;padding-left:10px;width:20%">9:00 - 21:00</span>
+<span class="col-md-2" style="font-size:10px;padding-right:0px;padding-left:10px;width:20%"></span>
+<span class="col-md-2" style="font-size:10px;padding-right:0px;padding-left:10px;width:20%">9:00 - 21:00</span>
+<span class="col-md-2" style="font-size:10px;padding-right:0px;padding-left:10px;width:20%"></span>
+<span class="col-md-2" style="font-size:10px;padding-right:0px;padding-left:10px;width:20%">9:00 - 21:00</span>
+</div>
+<br>
+<h5>
+<div class="row" style="padding-left:10px">
+<span class="badge col-md-2" style="font-size:16px;width:20%">Sat</span>
+<span class="col-md-2" style="font-size:16px;width:20%">Sun</span>
+</div>
+</h5>
+<div class="row" style="padding-left:10px">
+<span class="col-md-2" style="font-size:10px;padding-right:0px;padding-left:10px;width:20%">9:00 - 21:00</span>
+<span class="col-md-2" style="font-size:10px;padding-right:0px;padding-left:10px;width:20%"></span>
+</div>
+</div>
+</div>
+<a class="btn btn-success btn-sm" href="/patient/new/appointment">Book Appointment</a>
+
+</div>
+
+<div class="tab-pane" id="clinic32">
+<div class="row">
+<br>
+<div class="col-md-4">
+<h5><b><a href="#" >ABC Clinic</a></b></h5>
+<h6>Flat no<br>
+Address<br>
+Place<br>
+Phone nos: 04023456789, 9876543210</h6>
+</div>
+<div class="col-md-8" style="padding-left:10px">
+<br>
+<h5>
+<div class="row" style="padding-left:10px">
+<span class="badge col-md-2" style="font-size:16px;width:20%">Mon</span>
+<span class="col-md-2" style="font-size:16px;width:20%">Tue</span>
+<span class="badge col-md-2" style="font-size:16px;width:20%">Wed</span>
+<span class="col-md-2" style="font-size:16px;width:20%">Thu</span>
+<span class="badge col-md-2" style="font-size:16px;width:20%">Fri</span>
+</div>
+</h5>
+<div class="row" style="padding-left:10px">
+<span class="col-md-2" style="font-size:10px;padding-right:0px;padding-left:10px;width:20%">9:00 - 21:00</span>
+<span class="col-md-2" style="font-size:10px;padding-right:0px;padding-left:10px;width:20%"></span>
+<span class="col-md-2" style="font-size:10px;padding-right:0px;padding-left:10px;width:20%">9:00 - 21:00</span>
+<span class="col-md-2" style="font-size:10px;padding-right:0px;padding-left:10px;width:20%"></span>
+<span class="col-md-2" style="font-size:10px;padding-right:0px;padding-left:10px;width:20%">9:00 - 21:00</span>
+</div>
+<br>
+<h5>
+<div class="row" style="padding-left:10px">
+<span class="badge col-md-2" style="font-size:16px;width:20%">Sat</span>
+<span class="col-md-2" style="font-size:16px;width:20%">Sun</span>
+</div>
+</h5>
+<div class="row" style="padding-left:10px">
+<span class="col-md-2" style="font-size:10px;padding-right:0px;padding-left:10px;width:20%">9:00 - 21:00</span>
+<span class="col-md-2" style="font-size:10px;padding-right:0px;padding-left:10px;width:20%"></span>
+</div>
+</div>
+</div>
+<a class="btn btn-success btn-sm" href="/patient/new/appointment">Book Appointment</a>
+</div>
+
+<div class="tab-pane" id="clinic33">
+<div class="row">
+<br>
+<div class="col-md-4">
+<h5><b><a href="#" >SAKP Clinic</a></b></h5>
+<h6>Flat no<br>
+Address<br>
+Place<br>
+Phone nos: 04023456789, 9876543210</h6>
+</div>
+<div class="col-md-8" style="padding-left:10px">
+<br><h5>
+<div class="row" style="padding-left:10px">
+<span class="badge col-md-2" style="font-size:16px;width:20%">Mon</span>
+<span class="badge col-md-2" style="font-size:16px;width:20%">Tue</span>
+<span class="badge col-md-2" style="font-size:16px;width:20%">Wed</span>
+<span class="col-md-2" style="font-size:16px;width:20%">Thu</span>
+<span class="col-md-2" style="font-size:16px;width:20%">Fri</span>
+</div>
+</h5>
+<div class="row" style="padding-left:10px">
+<span class="col-md-2" style="font-size:10px;padding-right:0px;padding-left:10px;width:20%">9:00 - 21:00</span>
+<span class="col-md-2" style="font-size:10px;padding-right:0px;padding-left:10px;width:20%">9:00 - 21:00</span>
+<span class="col-md-2" style="font-size:10px;padding-right:0px;padding-left:10px;width:20%">9:00 - 21:00</span>
+<span class="col-md-2" style="font-size:10px;padding-right:0px;padding-left:10px;width:20%"></span>
+<span class="col-md-2" style="font-size:10px;padding-right:0px;padding-left:10px;width:20%"></span>
+</div>
+<br>
+<h5>
+<div class="row" style="padding-left:10px">
+<span class="badge col-md-2" style="font-size:16px;width:20%">Sat</span>
+<span class="col-md-2" style="font-size:16px;width:20%">Sun</span>
+</div>
+</h5>
+<div class="row" style="padding-left:10px">
+<span class="col-md-2" style="font-size:10px;padding-right:0px;padding-left:10px;width:20%">9:00 - 21:00</span>
+<span class="col-md-2" style="font-size:10px;padding-right:0px;padding-left:10px;width:20%"></span>
+</div>
+</div>
+</div>
+<a class="btn btn-success btn-sm" href="/patient/new/appointment">Book Appointment</a>
+</div>
+
+</div>
+</div>
+<br>
+</div>
+</td>
+<td>
+<div class="row" style="padding-left:20px;padding-right:20px">
+<div style="cursor:pointer" onclick="location.href='/doctor/profile';"><img src="/assets/images/sunrise.png" width="525" height="200" style="position:absolute" />
+<img id="coverborder" src="/assets/images/bordercover.png" style="position:relative;top:135px"/>
+</div>
+<div class="row" style="margin-top:55px;padding-left:20px">
+<div style="cursor:pointer" onclick="location.href='/doctor/profile';" class="col-md-3">
+<br>
+<img src="/assets/images/doctor.png" class="thumbnail" width="120" height="120"  />
+</div>
+<div style="cursor:pointer" onclick="location.href='/doctor/profile';" class="col-md-5">
+<h3><b>Dr Name</b></h3>
+<h4><b>Specialization</b></h4>
+<h5>Degree</h5>
+<h5>Experience</h5>
+<br>
+</div>
+<div class="col-md-4" style="padding-left:16px;padding-top:85px">
+<a class="btn btn-primary btn-xs" href="#">Ask Query</a>
+<button class="btn btn-danger btn-xs" data-toggle="modal" data-target="#myModal6">Remove</button>
+<div class="modal fade" id="myModal6" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+  <div class="modal-dialog" style="padding-top:200px">
+    <div class="modal-content" style="padding-left:20px">
+      <h4>Are you to confirm to remove6</h4>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-default btn-xs" data-dismiss="modal">Close</button>
+        <button type="button" class="btn btn-primary btn-xs">Confirm</button>
+      </div>
+    </div>
+  </div>
+</div>
+</div>
+</div>
+<div class="well">
+<h4 style="color:#006687;font-weight:bold">Clinics</h4>
+<ul class="nav nav-tabs">
+  <li  class="active"><a href="#clinic331" data-toggle="tab">XYZ Clinic</a></li>
+  <li><a href="#clinic332" data-toggle="tab">ABC Clinic</a></li>
+  <li><a href="#clinic333" data-toggle="tab">SAKP Clinic</a></li>
+</ul>
+
+<div class="tab-content">
+<div class="tab-pane active" id="clinic331">
+<div class="row">
+<br>
+<div class="col-md-4">
+<h5><b><a href="#" >XYZ Clinic</a></b></h5>
+<h6>Flat no<br>
+Address<br>
+Place<br>
+Phone nos: 04023456789, 9876543210</h6>
+</div>
+<div class="col-md-8" style="padding-left:10px">
+<br>
+<h5>
+<div class="row" style="padding-left:10px">
+<span class="badge col-md-2" style="font-size:16px;width:20%">Mon</span>
+<span class="col-md-2" style="font-size:16px;width:20%">Tue</span>
+<span class="badge col-md-2" style="font-size:16px;width:20%">Wed</span>
+<span class="col-md-2" style="font-size:16px;width:20%">Thu</span>
+<span class="badge col-md-2" style="font-size:16px;width:20%">Fri</span>
+</div>
+</h5>
+<div class="row" style="padding-left:10px">
+<span class="col-md-2" style="font-size:10px;padding-right:0px;padding-left:10px;width:20%">9:00 - 21:00</span>
+<span class="col-md-2" style="font-size:10px;padding-right:0px;padding-left:10px;width:20%"></span>
+<span class="col-md-2" style="font-size:10px;padding-right:0px;padding-left:10px;width:20%">9:00 - 21:00</span>
+<span class="col-md-2" style="font-size:10px;padding-right:0px;padding-left:10px;width:20%"></span>
+<span class="col-md-2" style="font-size:10px;padding-right:0px;padding-left:10px;width:20%">9:00 - 21:00</span>
+</div>
+<br>
+<h5>
+<div class="row" style="padding-left:10px">
+<span class="badge col-md-2" style="font-size:16px;width:20%">Sat</span>
+<span class="col-md-2" style="font-size:16px;width:20%">Sun</span>
+</div>
+</h5>
+<div class="row" style="padding-left:10px">
+<span class="col-md-2" style="font-size:10px;padding-right:0px;padding-left:10px;width:20%">9:00 - 21:00</span>
+<span class="col-md-2" style="font-size:10px;padding-right:0px;padding-left:10px;width:20%"></span>
+</div>
+</div>
+</div>
+<a class="btn btn-success btn-sm" href="/patient/new/appointment">Book Appointment</a>
+
+</div>
+
+<div class="tab-pane" id="clinic332">
+<div class="row">
+<br>
+<div class="col-md-4">
+<h5><b><a href="#" >ABC Clinic</a></b></h5>
+<h6>Flat no<br>
+Address<br>
+Place<br>
+Phone nos: 04023456789, 9876543210</h6>
+</div>
+<div class="col-md-8" style="padding-left:10px">
+<br>
+<h5>
+<div class="row" style="padding-left:10px">
+<span class="badge col-md-2" style="font-size:16px;width:20%">Mon</span>
+<span class="col-md-2" style="font-size:16px;width:20%">Tue</span>
+<span class="badge col-md-2" style="font-size:16px;width:20%">Wed</span>
+<span class="col-md-2" style="font-size:16px;width:20%">Thu</span>
+<span class="badge col-md-2" style="font-size:16px;width:20%">Fri</span>
+</div>
+</h5>
+<div class="row" style="padding-left:10px">
+<span class="col-md-2" style="font-size:10px;padding-right:0px;padding-left:10px;width:20%">9:00 - 21:00</span>
+<span class="col-md-2" style="font-size:10px;padding-right:0px;padding-left:10px;width:20%"></span>
+<span class="col-md-2" style="font-size:10px;padding-right:0px;padding-left:10px;width:20%">9:00 - 21:00</span>
+<span class="col-md-2" style="font-size:10px;padding-right:0px;padding-left:10px;width:20%"></span>
+<span class="col-md-2" style="font-size:10px;padding-right:0px;padding-left:10px;width:20%">9:00 - 21:00</span>
+</div>
+<br>
+<h5>
+<div class="row" style="padding-left:10px">
+<span class="badge col-md-2" style="font-size:16px;width:20%">Sat</span>
+<span class="col-md-2" style="font-size:16px;width:20%">Sun</span>
+</div>
+</h5>
+<div class="row" style="padding-left:10px">
+<span class="col-md-2" style="font-size:10px;padding-right:0px;padding-left:10px;width:20%">9:00 - 21:00</span>
+<span class="col-md-2" style="font-size:10px;padding-right:0px;padding-left:10px;width:20%"></span>
+</div>
+</div>
+</div>
+<a class="btn btn-success btn-sm" href="/patient/new/appointment">Book Appointment</a>
+</div>
+
+<div class="tab-pane" id="clinic333">
+<div class="row">
+<br>
+<div class="col-md-4">
+<h5><b><a href="#" >SAKP Clinic</a></b></h5>
+<h6>Flat no<br>
+Address<br>
+Place<br>
+Phone nos: 04023456789, 9876543210</h6>
+</div>
+<div class="col-md-8" style="padding-left:10px">
+<br><h5>
+<div class="row" style="padding-left:10px">
+<span class="badge col-md-2" style="font-size:16px;width:20%">Mon</span>
+<span class="badge col-md-2" style="font-size:16px;width:20%">Tue</span>
+<span class="badge col-md-2" style="font-size:16px;width:20%">Wed</span>
+<span class="col-md-2" style="font-size:16px;width:20%">Thu</span>
+<span class="col-md-2" style="font-size:16px;width:20%">Fri</span>
+</div>
+</h5>
+<div class="row" style="padding-left:10px">
+<span class="col-md-2" style="font-size:10px;padding-right:0px;padding-left:10px;width:20%">9:00 - 21:00</span>
+<span class="col-md-2" style="font-size:10px;padding-right:0px;padding-left:10px;width:20%">9:00 - 21:00</span>
+<span class="col-md-2" style="font-size:10px;padding-right:0px;padding-left:10px;width:20%">9:00 - 21:00</span>
+<span class="col-md-2" style="font-size:10px;padding-right:0px;padding-left:10px;width:20%"></span>
+<span class="col-md-2" style="font-size:10px;padding-right:0px;padding-left:10px;width:20%"></span>
+</div>
+<br>
+<h5>
+<div class="row" style="padding-left:10px">
+<span class="badge col-md-2" style="font-size:16px;width:20%">Sat</span>
+<span class="col-md-2" style="font-size:16px;width:20%">Sun</span>
+</div>
+</h5>
+<div class="row" style="padding-left:10px">
+<span class="col-md-2" style="font-size:10px;padding-right:0px;padding-left:10px;width:20%">9:00 - 21:00</span>
+<span class="col-md-2" style="font-size:10px;padding-right:0px;padding-left:10px;width:20%"></span>
+</div>
+</div>
+</div>
+<a class="btn btn-success btn-sm" href="/patient/new/appointment">Book Appointment</a>
+</div>
+
+</div>
+</div>
+<br>
+</div>
+</td>
+</tr>
+</table>
+}
