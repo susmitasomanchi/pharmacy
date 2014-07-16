@@ -107,11 +107,12 @@ GET   /place-product-order/process              controllers.PharmacistController
 GET		/edit-pharmacy-details					controllers.PharmacistController.editPharmacyDetails()
 POST	/pharmacy/basic-update					controllers.PharmacistController.pharmacyBasicUpdate()
 POST	/pharmacy/address-update				controllers.PharmacistController.pharmacyAddressUpdate()
-#GET		/upload-pharmacy-images					controllers.PharmacistController.uploadPharmacyImage()
+#GET		/pharmacy/search-product				controllers.PharmacistController.productSearchProcess()	
+POST		/pharmacy/add-product-to-showcase		controllers.PharmacistController.addShowCasedProduct()
+GET		/pharmacy/remove-product-from-showcase/:id		controllers.PharmacistController.removeProductFromShowcaseList(id: Long)
 POST	/pharmacy/upload-pharmacy-images					controllers.PharmacistController.uploadPharmacyImageProcess()
 GET		/pharmacy/get-image/:pharmacyId/:fileId				controllers.PharmacistController.getPharmacyImages(pharmacyId: Long,fileId: Long)
 GET		/pharmacy/remove-image/:pharmacyId/:fileId			controllers.PharmacistController.removeImage(pharmacyId: Long,fileId: Long)
-GET		/pharmacy/update/:id						controllers.PharmacistController.pharmacyDescription(id: Long)
 GET		/pharmacy/order/:id						controllers.PharmacistController.pharmacyPlaceOrder(id: Long)
 
 GET 	/pharmacy/order									controllers.PharmacistController.orderManagement()
@@ -180,7 +181,13 @@ GET    /upload-patient-file/:id					controllers.DiagnosticController.uploadFile(
 POST   /upload-patient-file/save		  		controllers.DiagnosticController.uploadFileProcess()
 GET    /download						  		controllers.DiagnosticController.downloadFile()
 #GET   /add-test-done						  	controllers.DiagnosticController.addTestDone()
-#GET    /test-list/:id				            controllers.DiagnosticController.diagnosticCentreTestList(id: Long)																																
+#GET    /test-list/:id				            controllers.DiagnosticController.diagnosticCentreTestList(id: Long)
+POST	/diagnostic/upload-diagnostic-images					controllers.DiagnosticController.uploadDiagnosticImageProcess()
+GET		/diagnostic/get-image/:diagnosticId/:fileId				controllers.DiagnosticController.getDiagnosticImages(diagnosticId: Long,fileId: Long)
+POST	/diagnostic/basic-update								controllers.DiagnosticController.diagnosticBasicUpdate()
+POST	/diagnostic/address-update				controllers.DiagnosticController.diagnosticAddressUpdate()
+GET		/diagnostic/remove-image/:diagnosticId/:fileId			controllers.DiagnosticController.removeDiagnosticImage(diagnosticId: Long,fileId: Long)
+																																
 
 
 

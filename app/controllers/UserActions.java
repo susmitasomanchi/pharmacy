@@ -14,6 +14,9 @@ public class UserActions extends Controller {
 		if(appUser.role.equals(Role.ADMIN_PHARMACIST)){
 			return ok(views.html.pharmacist.pharmacy_profile.render(appUser.getPharmacist().pharmacy));
 		}
+		if(appUser.role.equals(Role.ADMIN_DIAGREP)){
+			return ok(views.html.diagnostic.diagnostic_centre_profile.render(appUser.getDiagnosticRepresentative().diagnosticCentre));
+		}
 		return ok(views.html.dashboard.render(appUser));
 	}
 

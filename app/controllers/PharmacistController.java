@@ -2,6 +2,7 @@ package controllers;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
@@ -17,9 +18,12 @@ import models.pharmacist.Inventory;
 import models.pharmacist.OrderLineItem;
 import models.pharmacist.Pharmacist;
 import models.pharmacist.Pharmacy;
+import models.pharmacist.ShowCasedProduct;
 import play.Logger;
 import play.data.Form;
 import play.mvc.Controller;
+import play.mvc.Http.MultipartFormData;
+import play.mvc.Http.MultipartFormData.FilePart;
 import play.mvc.Result;
 import actions.BasicAuth;
 import beans.AddProductToInventoryBean;
@@ -97,13 +101,13 @@ public class PharmacistController extends Controller {
 	public static Result removeProduct(final Long id) {
 		final Pharmacy pharmacy = LoginController.getLoggedInUser()
 				.getPharmacist().pharmacy;
-		Logger.info("before==" + pharmacy.productList.size());
+		Logger.info("before==" + pharmacy.pharmacyProductList.size());
 		final Product product = Product.find.byId(id);
-		pharmacy.productList.remove(product);
+		pharmacy.pharmacyProductList.remove(product);
 		pharmacy.update();
 
 		// productForm.fill(product);
-		Logger.info("after==" + pharmacy.productList.size());
+		Logger.info("after==" + pharmacy.pharmacyProductList.size());
 		return redirect(routes.ProductController.displayProduct());
 
 	}
@@ -289,10 +293,10 @@ public class PharmacistController extends Controller {
 				pharmacy.address.country = Enum.valueOf(Country.class,requestMap.get("country")[0]);
 			}
 			if(requestMap.get("latitude") != null && (requestMap.get("latitude")[0].trim().compareToIgnoreCase("")!=0)){
-				pharmacy.address.latitude = Double.parseDouble(requestMap.get("latitude")[0]);
+				pharmacy.address.latitude = requestMap.get("latitude")[0];
 			}
 			if(requestMap.get("longitude") != null && (requestMap.get("longitude")[0].trim().compareToIgnoreCase("")!=0)){
-				pharmacy.address.longitude = Double.parseDouble(requestMap.get("longitude")[0]);
+				pharmacy.address.longitude = requestMap.get("longitude")[0];
 			}
 			if(requestMap.get("contactNo") != null && (requestMap.get("contactNo")[0].trim().compareToIgnoreCase("")!=0)){
 				pharmacy.contactNo = requestMap.get("contactNo")[0];
@@ -402,26 +406,75 @@ public class PharmacistController extends Controller {
 		return redirect(routes.UserActions.dashboard());
 	}
 
-	/*
-	 * @author : lakshmi
-	 * 
-	 * @url:
-	 * 
-	 * descrition: pharmacy Description Updation
-	 */
-	public static Result pharmacyDescription(final Long id){
-		final Map<String, String[]> s = request().body().asFormUrlEncoded();
-		Logger.info("String........"+s);
-		final Form<PharmacyBean> filledForm = pharmacyBeanForm.bindFromRequest();
-		Logger.info("id==="+Pharmacy.find.byId(id));
-		final Pharmacy pharmacy = Pharmacy.find.byId(id);
 
-		pharmacy.description = pharmacyForm.get().description;
+	public static Result addShowCasedProduct(){
+		try{
+			final Map<String, String[]> requestMap = request().body().asMultipartFormData().asFormUrlEncoded();
+			final Pharmacy pharmacy = Pharmacy.find.byId(Long.parseLong(requestMap.get("pharmacyId")[0]));
+			Logger.info("map size"+requestMap);
+			final ShowCasedProduct showCasedProduct = new ShowCasedProduct();
+			if(requestMap.get("name") != null && (requestMap.get("name")[0].trim().compareToIgnoreCase("")!=0)){
+				showCasedProduct.name = requestMap.get("name")[0];
+			}
+			if(requestMap.get("description") != null && (requestMap.get("description")[0].trim().compareToIgnoreCase("")!=0)){
+				showCasedProduct.description = requestMap.get("description")[0];
+			}
+			if(requestMap.get("mrp") != null && (requestMap.get("mrp")[0].trim().compareToIgnoreCase("")!=0)){
+				showCasedProduct.mrp = Double.parseDouble(requestMap.get("mrp")[0]);
+			}
+			if (request().body().asMultipartFormData().getFiles().size() != 0) {
 
+				final List<Long> ids = new ArrayList<>();
+				final MultipartFormData body = request().body().asMultipartFormData();
+				final List<FilePart> listOfImages = body.getFiles();
+				for (final FilePart filePart : listOfImages) {
+					final FileEntity fileEntity = new FileEntity();
+					if (filePart != null) {
+						final File imageFile = filePart.getFile();
+						fileEntity.fileName = filePart.getFilename();
+						fileEntity.mimeType = filePart.getContentType();
+						fileEntity.byteContent = Files.toByteArray(imageFile);
+						fileEntity.save();
+						ids.add(fileEntity.id);
+						Logger.info(" ater id==="+fileEntity.id);
+
+					}
+				}
+				for (final Long id : ids) {
+					final FileEntity fileEntity2 = FileEntity.find.byId(id);
+					showCasedProduct.showcasedImagesList.add(fileEntity2);
+
+				}
+				Logger.info("list size() "+showCasedProduct.showcasedImagesList.size());
+
+
+
+			}
+			pharmacy.showCaseProductList.add(showCasedProduct);
+			pharmacy.update();
+		}catch(final Exception e){
+			e.printStackTrace();
+			flash().put("alert", new Alert("alert-danger", "Sorry. Something went wrong. Please try again.").toString());
+		}
+
+		return redirect(routes.UserActions.dashboard());
+		//return ok();
+
+	}
+	public static Result removeProductFromShowcaseList(final Long showCaseProductId){
+		Logger.info("inside");
+		final Pharmacy pharmacy = LoginController.getLoggedInUser().getPharmacist().pharmacy;
+		final ShowCasedProduct showCasedProduct  = ShowCasedProduct.find.byId(showCaseProductId);
+		//		showCasedProduct.delete();
+		pharmacy.showCaseProductList.remove(showCasedProduct);
+
+		Logger.info("size()==="+pharmacy.showCaseProductList.size());
 		pharmacy.update();
-		//		return ok(views.html.pharmacist.pharmacy_profile.render(pharmacy.inventoryList, pharmacy));
+		showCasedProduct.delete();
 		return redirect(routes.UserActions.dashboard());
 
 	}
+
+
 
 }

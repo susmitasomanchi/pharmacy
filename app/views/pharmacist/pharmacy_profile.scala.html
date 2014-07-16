@@ -7,8 +7,27 @@
 <script src="http://maps.googleapis.com/maps/api/js?sensor=false"></script>
 
 
-
 @*End of Script for loading google map*@
+<script>
+	var i = 0;
+	function addfiles() {
+		i++;
+		$("#files")
+				.append(
+						'<div class="row" id="file'+i+'"><br><input type="file" name="file'+i+'" id="inputfile'+i+'" onchange="checkfile('+i+');"/><div class="col-md-4"><div id="insertfn-'+i+'"></div><a class="btn btn-xs btn-danger" onclick="removebut(\'file'
+								+i+'\');">remove</a></div></div>');
+		$("#inputfile"+i).trigger('click');
+		$("#addfiles").html(' Add More Files ');
+	}
+
+	function checkfile(id){
+		$('#insertfn-'+id).html($("#inputfile"+id).val().trim());
+	}
+
+	function removebut(id) {
+		$('#'+id).remove();
+	}
+</script>
 
 <style>
 .container{
@@ -201,27 +220,27 @@ style="color:#006687; font-size:20px; position:relative; top:-20px; cursor:point
 			<div ><input type="hidden" name="lng" id="lng1"></div>
   			<div class="form-group">
    				 <label for="addressLine1">Address Line1</label>
-   				 <input type="text" class="form-control" name="addressLine1" value="@pharmacy.address.addrressLine1" id="addressLine1" placeholder="Enter Address Line1">
+   				 <input type="text" class="form-control" name="addressLine1" @if(pharmacy.address!=null){value="@pharmacy.address.addrressLine1"} id="addressLine1" placeholder="Enter Address Line1">
  			</div>
   			<div class="form-group">
     			<label for="addressLine2">Address Line2</label>
-    			<input type="text" class="form-control" name="addressLine2" value="@pharmacy.address.addrressLine2" id="addressLine2" placeholder="Enter Address Line2">
+    			<input type="text" class="form-control" name="addressLine2" @if(pharmacy.address!=null){value="@pharmacy.address.addrressLine2"} id="addressLine2" placeholder="Enter Address Line2">
   			</div>
   			<div class="form-group">
     			<label for="city">City</label>
-    			<input type="text" class="form-control" name="city" value="@pharmacy.address.city" id="city" placeholder="Enter City">
+    			<input type="text" class="form-control" name="city" @if(pharmacy.address!=null){value="@pharmacy.address.city"} id="city" placeholder="Enter City">
   			</div>
   			<div class="form-group">
     			<label for="city">Area</label>
-    			<input type="text" class="form-control" name="area" value="@pharmacy.address.area" id="area" placeholder="Enter Area">
+    			<input type="text" class="form-control" name="area" @if(pharmacy.address!=null){value="@pharmacy.address.area"} id="area" placeholder="Enter Area">
   			</div>
   			<div class="form-group">
     			<label for="pincode">Pincode</label>
-    			<input type="text" class="form-control" name="pincode" value="@pharmacy.address.pinCode" id="pincode" placeholder="Enter Pincode">
+    			<input type="text" class="form-control" name="pincode" @if(pharmacy.address!=null){value="@pharmacy.address.pinCode"} id="pincode" placeholder="Enter Pincode">
   			</div>
   			<div class="form-group">
     			<label for="state">State</label><br>
-				<select data-placeholder="Select the state" name="state" value="@pharmacy.address.state">
+				<select data-placeholder="Select the state" name="state" @if(pharmacy.address!=null){value="@pharmacy.address.state"}>
     				<option value=""></option>	
      				@for(state <- models.State.values()){
         			<option  name="state" value="@state">@state</option>
@@ -230,7 +249,7 @@ style="color:#006687; font-size:20px; position:relative; top:-20px; cursor:point
   			</div>
   			<div class="form-group">
     			<label for="state">Country</label><br>
-    			<select data-placeholder="Select the country" name="country" value="@pharmacy.address.country">
+    			<select data-placeholder="Select the country" name="country" @if(pharmacy.address!=null){value="@pharmacy.address.country"}>
     				<option value=""></option>	
      				@for(country <- models.Country.values()){
         			<option  name="country" value="@country">@country</option>
@@ -287,119 +306,69 @@ style="color:#006687; font-size:20px; position:relative; top:-20px; cursor:point
 </div>
 </div>
 <br><br>
+<h2>ShowCase List</h2>
+<span data-toggle="modal" data-target="#mydrugModal" style="cursor:pointer; position:relative; top:2px;left:940px; font-size:15px;"><i id="spinner2" class="fa fa-cog"></i></span>
+<div class="modal fade" id="mydrugModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header" style="color: #ffffff;background-color: #008cba;border-color: #008cba;">
+        <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+        <h4 class="modal-title" id="myModalLabel">Change Drug Names</h4>
+      </div>
+      <div class="modal-body well">
+      
+      <form action=@routes.PharmacistController.addShowCasedProduct() enctype="multipart/form-data" method="POST">	
+      <div >
+    			<label for="name">Product Name</label>
+    			<input type="text" class="form-control" name="name" id="name" placeholder="Enter Product Name">
+  			</div>
+  			<br>
+  			<div >
+			<textarea name="description" rows=5  placeholder="Write Some Description" ></textarea>
+			</div>
+			<div>
+			<label for="image">Upload Images</label>
+			<input type="file" name="file">
+			<a class="btn btn-xs btn-success" onclick="addfiles();" id="addfiles"> Add File </a>
+			
+			
+		    <div id="files"></div>
+			</div>
+			<div >
+    			<label for="MRP">MRP</label>
+    			<input type="text" class="form-control" name="mrp" id="mrp" placeholder="Price Of Prroduct">
+  			</div>
+  			<br>
+  			<input type="hidden" name="pharmacyId" value="@pharmacy.id"/>
+  			<input type="submit" value="Add Product" />
 
- 
-				</script>
-  @*
+	</form>
+     
+	  </div>
+    </div>
+  </div>
+</div>
 <table class="table table-bordered">
 <tr>
 <th> S No </th>
 <th> Drug Name </th>
 <th> Purpose</th>
 </tr>
-@for((inventory,index) <- inventoryList.zipWithIndex){
+@if(pharmacy.showCaseProductList.size != 0){
+@for((showCaseProduct,index)<- pharmacy.showCaseProductList.zipWithIndex){
 <tr>
 <td> @{index+1} </td>
-<td> @inventory.product.medicineName</td>
-<td> @inventory.product.description <i class="fa fa-question-circle" style="cursor:pointer" data-toggle="tooltip" data-placement="bottom" title="For the relief of mild to severe headaches, relief of pain such as headache, toothache, menstrual discomfort, postoperative and rheumatic pain, and for pain and fever associated with colds and flu."></i></td>
+<td> @showCaseProduct.name</td>
+<td> @showCaseProduct.description </td>
+<th>
+<a href="/pharmacy/remove-product-from-showcase/@showCaseProduct.id" class="btn btn-xs btn-danger">Remove</a>
+</th>
 </tr>
 }
+}
 </table>
+
 <br>
 <button class="btn btn-success btn-lg"><a href="/pharmacy/order/@pharmacy.id" style="color:white">Place your order</a></button>
-*@
-
-
-
-
-
-
-<script type="text/javascript"> 
-				console.log("enterd");
-
-   					var lng, lat, marker;
-					var dbclk = false;
-					var map, myLatLng;
-					function initialize() {
-						var mapOptions = {
-							center : new google.maps.LatLng(lat, lng),
-							zoom : 15
-						};
-						map = new google.maps.Map(document
-								.getElementById("map_canvas", mapOptions));
-
-						//  map.set("disableDoubleClickZoom", false);
-
-						marker = new google.maps.Marker({
-							position : myLatLng,
-							draggable : true,
-							animation : google.maps.Animation.DROP,
-							map : map
-						});
-
-						$("#lat1").val(lat);
-						$("#lng1").val(lng);
-
-						//On click event of map markershould be relocate
-						google.maps.event.addListener(map, 'click', function(
-								event) {
-
-							marker.setPosition(event.latLng);
-
-							$("#lat1").val(event.latLng.lat());
-
-							$("#lng1").val(event.latLng.lng());
-
-						});
-						// After dragging of marker finished
-						google.maps.event.addListener(marker, 'dragend',
-								function(event) {
-
-									$("#lat1").val(event.latLng.lat());
-
-									$("#lng1").val(event.latLng.lng());
-								});
-						google.maps.event.addDomListener(window, 'load', initialize);
-
-					}
-
-					$("#city").blur(function() {
-						$("#map_canvas").html('');
-						var geocoder = new google.maps.Geocoder();
-						var area=$("#area").val();
-						geocoder.geocode({
-							'address' : area+this.value
-						}, function(results, status) {
-							if (status == google.maps.GeocoderStatus.OK) {
-								//  alert("location : " + results[0].geometry.location.lat() + " " +results[0].geometry.location.lng()); 
-								myLatLng = results[0].geometry.location;
-								lat = results[0].geometry.location.lat();
-								lng = results[0].geometry.location.lng();
-								initialize();
-							} else {
-								alert("Something got wrong " + status);
-							}
-						});
-
-						// google.maps.event.addDomListener(window, 'load', initialize);
-					});
-					
-					
-					
-				$( document ).ready(function() {
-					@if(pharmacy.address != null){
-					lat=@pharmacy.address.latitude
-					lng=@pharmacy.address.longitude
-					myLatLng= new google.maps.LatLng(lat, lng),
-					initialize();
-				}
-			});
-				
-</script>
-
-
-
-
-
 
 }

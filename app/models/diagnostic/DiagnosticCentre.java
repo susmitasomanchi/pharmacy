@@ -3,14 +3,19 @@ import java.util.ArrayList;
 import java.util.List;
 
 import javax.persistence.CascadeType;
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.Lob;
+import javax.persistence.ManyToMany;
 import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 
+import models.Address;
 import models.BaseEntity;
+import models.FileEntity;
 import models.doctor.Doctor;
 import play.data.validation.Constraints.Email;
 import play.data.validation.Constraints.Required;
@@ -30,9 +35,18 @@ public class DiagnosticCentre extends BaseEntity {
 	@Required
 	public String name;
 
-	public String address;
+	@OneToOne
+	public Address address;
 
 	public String mobileNo;
+
+	@Column(columnDefinition="TEXT")
+	public String description;
+	@Lob
+	public byte[] backgroudImage;
+
+	@ManyToMany(cascade = CascadeType.ALL)
+	public List<FileEntity> profileImageList = new ArrayList<FileEntity>();
 
 	@Email
 	@Required

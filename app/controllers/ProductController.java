@@ -1,11 +1,15 @@
 package controllers;
 
 import java.util.List;
+import java.util.Map;
 
+import models.Alert;
 import models.Product;
 import models.Role;
 import models.mr.MedicalRepresentative;
 import models.pharmacist.Pharmacist;
+import models.pharmacist.Pharmacy;
+import models.pharmacist.PharmacyProduct;
 import play.Logger;
 import play.data.Form;
 import play.mvc.Controller;
@@ -36,7 +40,6 @@ public class ProductController extends Controller{
 	public static Result saveProduct(){
 		//PharmaceuticalCompany pharmaceuticalCompany = new PharmaceuticalCompany();
 		final MedicalRepresentative loggedInMr = LoginController.getLoggedInUser().getMedicalRepresentative();
-		final Pharmacist loggedInPharmacist = LoginController.getLoggedInUser().getPharmacist();
 		final Form<Product> productFilledForm = productForm.bindFromRequest();
 
 		if(productFilledForm.hasErrors()) {
@@ -60,14 +63,49 @@ public class ProductController extends Controller{
 			}
 			else{
 				if(LoginController.getLoggedInUserRole().compareToIgnoreCase(Role.ADMIN_PHARMACIST.toString()) == 0){
-					Logger.info("pharma company is : "+loggedInPharmacist.pharmacy);
-					if(filledProduct.id == null){
-						Logger.info("Saving product for Pharmacy");
-						loggedInPharmacist.pharmacy.productList.add(filledProduct);
-						loggedInPharmacist.pharmacy.update();
-					}else{
-						final Product product=Product.find.byId(filledProduct.id);
-						product.update();
+					try{
+						final Map<String, String[]> requestMap = request().body().asFormUrlEncoded();
+						final Pharmacy pharmacy = LoginController.getLoggedInUser().getPharmacist().pharmacy;
+						final PharmacyProduct product =new PharmacyProduct();
+						/*if(requestMap.get("productId")[0] == null){
+							product = new Product();
+							product.save();
+						}
+						else{
+							product = Product.find.byId(Long.parseLong(requestMap.get("productId")[0]));
+						}*/
+						Logger.info("map size"+requestMap.toString());
+						if(requestMap.get("medicineName") != null && (requestMap.get("medicineName")[0].trim().compareToIgnoreCase("")!=0)){
+							product.medicineName = requestMap.get("medicineName")[0];
+						}
+						if(requestMap.get("brandName") != null && (requestMap.get("brandName")[0].trim().compareToIgnoreCase("")!=0)){
+							product.brandName = requestMap.get("brandName")[0];
+						}
+						if(requestMap.get("salt") != null && (requestMap.get("salt")[0].trim().compareToIgnoreCase("")!=0)){
+							product.salt = requestMap.get("salt")[0];
+						}
+						if(requestMap.get("strength") != null && (requestMap.get("strength")[0].trim().compareToIgnoreCase("")!=0)){
+							product.strength = requestMap.get("strength")[0];
+						}
+						if(requestMap.get("typeOfMedicine") != null && (requestMap.get("typeOfMedicine")[0].trim().compareToIgnoreCase("")!=0)){
+							product.typeOfMedicine = requestMap.get("typeOfMedicine")[0];
+						}
+						if(requestMap.get("description") != null && (requestMap.get("description")[0].trim().compareToIgnoreCase("")!=0)){
+							product.description = requestMap.get("description")[0];
+						}
+						if(requestMap.get("unitsPerPack") != null && (requestMap.get("unitsPerPack")[0].trim().compareToIgnoreCase("")!=0)){
+							product.unitsPerPack = Long.parseLong(requestMap.get("unitsPerPack")[0]);
+						}
+						if(requestMap.get("fullName") != null && (requestMap.get("fullName")[0].trim().compareToIgnoreCase("")!=0)){
+							product.fullName = requestMap.get("fullName")[0];
+						}
+						//product.save();
+						pharmacy.pharmacyProductList.add(product);
+						pharmacy.update();
+					}
+					catch (final Exception e){
+						e.printStackTrace();
+						flash().put("alert", new Alert("alert-danger", "Sorry. Something went wrong. Please try again.").toString());
 					}
 				}
 				return redirect(routes.UserActions.dashboard());
@@ -97,8 +135,9 @@ public class ProductController extends Controller{
 			return ok(views.html.common.products.render(productList));
 		}
 		if("ADMIN_PHARMACIST".equals(role)){
-			final List<Product> productList = loggedInPharmacist.pharmacy.productList;
-			return ok(views.html.common.products.render(productList));
+			final List<PharmacyProduct> productList = loggedInPharmacist.pharmacy.pharmacyProductList;
+			//return ok(views.html.common.products.render(productList));
+			return ok();
 		}
 		return TODO;
 

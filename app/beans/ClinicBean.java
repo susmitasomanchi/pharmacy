@@ -44,9 +44,9 @@ public class ClinicBean implements Serializable {
 
 	public List<String> daysOfWeekMr = new ArrayList<String>();
 
-	public double lat;
+	public String lat;
 
-	public double lng;
+	public String lng;
 
 	public Integer slot;
 
