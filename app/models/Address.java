@@ -31,13 +31,16 @@ public class Address extends BaseEntity {
 	@Required
 	public String city;
 
+	@Required
 	public State state;
 
 	public String pinCode;
 
+	public String fetchedPinCode;
+
 	public Country country;
 
-	public static Finder<Long, Product> find = new Finder<Long, Product>(Long.class, Product.class);
+	public static Finder<Long, Address> find = new Finder<Long, Address>(Long.class, Address.class);
 
 
 }

@@ -47,6 +47,12 @@ public class Pharmacy extends BaseEntity {
 
 	@OneToOne
 	public Pharmacist adminPharmacist;
+<<<<<<< HEAD
+=======
+
+	//@OneToOne
+	//public PharmacyProductInfo pharmacyProductInfo;
+>>>>>>> branch 'master' of http://pharmacy.bz/green-software/mednetwork.git
 
 	@OneToMany(cascade=CascadeType.ALL)
 	public List<PharmacyProduct> pharmacyProductList = new ArrayList<PharmacyProduct>();
@@ -54,19 +60,13 @@ public class Pharmacy extends BaseEntity {
 	@OneToMany(cascade=CascadeType.ALL)
 	public List<ShowCasedProduct> showCaseProductList = new ArrayList<ShowCasedProduct>();
 
-
 	@OneToMany(cascade=CascadeType.ALL)
 	public List<Pharmacist> pharmacistList = new ArrayList<Pharmacist>();
 
 	@OneToMany(cascade=CascadeType.ALL)
 	public List<Inventory> inventoryList = new ArrayList<Inventory>();
 
-
-
 	public static Finder<Long, Pharmacy> find = new Finder<Long, Pharmacy>(Long.class, Pharmacy.class);
-
-
-
 
 	public PharmacyBean toBean(){
 

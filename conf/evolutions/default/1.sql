@@ -14,6 +14,7 @@ create table address (
   city                      varchar(255),
   state                     varchar(35),
   pin_code                  varchar(255),
+  fetched_pin_code          varchar(255),
   country                   varchar(27),
   last_update               timestamp not null,
   constraint ck_address_state check (state in ('DADRA_AND_NAGAR_HAVELI','KERALA','WEST_BENGAL','JAMMU_AND_KASHMIR','HIMACHAL_PRADESH','MANIPUR','MIZORAM','MAHARASHTRA','JHARKHAND','ASSAM','UTTARAKHAND','SIKKIM','KARNATAKA','CHHATTISGARH','ANDHRA_PRADESH','NATIONAL_CAPITAL_TERRITORY_OF_DELHI','UTTAR_PRADESH','PUDUCHERRY','ANDAMAN_AND_NICOBAR_ISLANDS','TRIPURA','GOA','DAMAN_AND_DIU','NAGALAND','ODISHA','TAMIL_NADU','BIHAR','RAJASTHAN','LAKSHADWEEP','HARYANA','MEGHALAYA','PUNJAB','ARUNACHAL_PRADESH','GUJARAT','TELANGANA','MADHYA_PRADESH','CHNADIGARH')),
@@ -128,6 +129,7 @@ create table clinic (
   name                      varchar(255),
   contact_person_name       varchar(255),
   contact_no                varchar(255),
+  address_id                bigint,
   constraint pk_clinic primary key (id))
 ;
 
@@ -149,14 +151,6 @@ create table daily_call_report (
   for_date                  timestamp,
   last_update               timestamp not null,
   constraint pk_daily_call_report primary key (id))
-;
-
-create table day_of_the_week (
-  id                        bigint not null,
-  day                       varchar(9),
-  last_update               timestamp not null,
-  constraint ck_day_of_the_week_day check (day in ('MONDAY','SUNDAY','WEDNESDAY','THURSDAY','SATURDAY','TUESDAY','FRIDAY')),
-  constraint pk_day_of_the_week primary key (id))
 ;
 
 create table day_schedule (
@@ -242,11 +236,14 @@ create table diagnostic_test_line_item (
 create table doctor (
   id                        bigint not null,
   app_user_id               bigint,
+  registration_number       varchar(255),
   specialization            varchar(255),
   position                  varchar(255),
   degree                    varchar(255),
-  doctor_type               varchar(255),
-  experience                varchar(255),
+  description               TEXT,
+  background_image          bytea,
+  profile_image             bytea,
+  experience                integer,
   last_update               timestamp not null,
   constraint pk_doctor primary key (id))
 ;
@@ -264,9 +261,10 @@ create table doctor_award (
   id                        bigint not null,
   doctor_id                 bigint not null,
   award_name                varchar(255),
-  award_for                 varchar(255),
+  awarded_by                varchar(255),
   year                      varchar(255),
-  comment_for_awards        varchar(255),
+  description               TEXT,
+  position                  integer,
   last_update               timestamp not null,
   constraint pk_doctor_award primary key (id))
 ;
@@ -278,7 +276,6 @@ create table doctor_clinic_info (
   slot                      integer,
   slotmr                    integer,
   active                    boolean,
-  address_id                bigint,
   last_update               timestamp not null,
   constraint pk_doctor_clinic_info primary key (id))
 ;
@@ -286,10 +283,11 @@ create table doctor_clinic_info (
 create table doctor_education (
   id                        bigint not null,
   doctor_id                 bigint not null,
-  college_name              varchar(255),
+  institution_name          varchar(255),
   degree                    varchar(255),
   from_year                 integer,
   to_year                   integer,
+  description               TEXT,
   last_update               timestamp not null,
   constraint pk_doctor_education primary key (id))
 ;
@@ -297,9 +295,9 @@ create table doctor_education (
 create table doctor_experience (
   id                        bigint not null,
   doctor_id                 bigint not null,
-  previous_hospital_name    varchar(255),
-  worked_as                 varchar(255),
-  location                  varchar(255),
+  institution_name          varchar(255),
+  position                  varchar(255),
+  description               TEXT,
   worked_from               integer,
   worked_to                 integer,
   last_update               timestamp not null,
@@ -315,10 +313,14 @@ create table doctor_language (
 create table doctor_publication (
   id                        bigint not null,
   doctor_id                 bigint not null,
-  article_name              varchar(255),
+  name                      varchar(255),
   article_for               varchar(255),
   year                      varchar(255),
-  comment_for_article       varchar(255),
+  position                  integer,
+  brief_description         TEXT,
+  content                   TEXT,
+  image                     bytea,
+  file                      bytea,
   last_update               timestamp not null,
   constraint pk_doctor_publication primary key (id))
 ;
@@ -326,8 +328,8 @@ create table doctor_publication (
 create table doctor_social_work (
   id                        bigint not null,
   doctor_id                 bigint not null,
-  social_work_tittle        varchar(255),
-  comment_social_work       varchar(255),
+  title                     varchar(255),
+  description               TEXT,
   last_update               timestamp not null,
   constraint pk_doctor_social_work primary key (id))
 ;
@@ -604,8 +606,6 @@ create sequence dcrline_item_seq;
 
 create sequence daily_call_report_seq;
 
-create sequence day_of_the_week_seq;
-
 create sequence day_schedule_seq;
 
 create sequence diagnostic_centre_seq;
@@ -843,8 +843,6 @@ drop table if exists dcrline_item_product cascade;
 
 drop table if exists daily_call_report cascade;
 
-drop table if exists day_of_the_week cascade;
-
 drop table if exists day_schedule cascade;
 
 drop table if exists diagnostic_centre cascade;
@@ -948,8 +946,6 @@ drop sequence if exists clinic_seq;
 drop sequence if exists dcrline_item_seq;
 
 drop sequence if exists daily_call_report_seq;
-
-drop sequence if exists day_of_the_week_seq;
 
 drop sequence if exists day_schedule_seq;
 

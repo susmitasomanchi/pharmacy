@@ -6,7 +6,9 @@ import models.Address;
 import models.Country;
 import models.State;
 import models.pharmacist.Pharmacy;
+import play.Logger;
 
+@SuppressWarnings("serial")
 public class PharmacyBean implements Serializable{
 
 	public  Long id;
@@ -46,10 +48,10 @@ public class PharmacyBean implements Serializable{
 
 
 	public Pharmacy toPharmacy(){
-		final Pharmacy pharmacy = new Pharmacy();
+		//final Pharmacy pharmacy = new Pharmacy();
 
-		//		Logger.info(""+this.id);
-		//		final Pharmacy pharmacy = Pharmacy.find.byId(this.id);
+		Logger.info(""+this.id);
+		final Pharmacy pharmacy = Pharmacy.find.byId(this.id);
 		//		final Pharmacy pharmacy=LoginController.getLoggedInUser().getPharmacist().pharmacy;
 
 		if(this.id != null){
@@ -76,34 +78,34 @@ public class PharmacyBean implements Serializable{
 			pharmacy.testField= this.testField;
 		}
 
-		//final Address address = new Address();
+		final Address address = new Address();
 		final Address oldAddress = Pharmacy.find.byId(this.id).address;
 		//	Logger.info("OldAddress"+oldAddress.toString());
 		if(oldAddress != null){
-			this.address.id = oldAddress.id;
+			address.id = oldAddress.id;
 		}
 		if(this.addrressLine1 != null){
-			this.address.addrressLine1 = this.addrressLine1;
+			address.addrressLine1 = this.addrressLine1;
 		}
 		if(this.addrressLine2 != null){
-			this.address.addrressLine2 = this.addrressLine2;
+			address.addrressLine2 = this.addrressLine2;
 		}
 		if(this.addrressLine3 != null){
-			this.address.addrressLine3 = this.addrressLine3;
+			address.addrressLine3 = this.addrressLine3;
 		}
 		if(this.city!=null){
-			this.address.city = this.city;
+			address.city = this.city;
 		}
 		if(this.state != null){
-			this.address.state = this.state;
+			address.state = this.state;
 		}
 		if(this.country != null){
-			this.address.country = this.country;
+			address.country = this.country;
 		}
 		if(this.pinCode != null){
-			this.address.pinCode = this.pinCode;
+			address.pinCode = this.pinCode;
 		}
-		pharmacy.address = this.address;
+		pharmacy.address = address;
 		return pharmacy;
 	}
 

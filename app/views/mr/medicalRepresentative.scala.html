@@ -3,26 +3,5 @@
 @import helper.twitterBootstrap._
 @main("MedicalRepresentative form") {
 
-@helper.form(action=routes.UserController.processJoinUs(),'_method->"post") {
-	
-	@helper.inputText(medicalRepresentative("name"),'_label->"Name")
-	@helper.inputText(medicalRepresentative("username"),'_label->"User Name")
-	@helper.inputText(medicalRepresentative("email"),'_label->"Email")
-	@helper.inputPassword(medicalRepresentative("password"),'_label->"PassWord")
-	@helper.inputPassword(medicalRepresentative("confirmPassword"),'_label->"Confirm PassWord")
-	@helper.select(medicalRepresentative("role"),options=helper.options(Role.options),'class -> "inputs chzn",'_label->"Role")
-	
-	Male<input type="radio" name="gender" value="false">
-	Female<input type="radio" name="gender" value="false">
-	@helper.inputText(medicalRepresentative("age"),'_label->"Age")
-	@helper.inputText(medicalRepresentative("companyName"),'_label->"Company Name")
-	
-	
-	@helper.inputText(medicalRepresentative("regionAlloted"),'_label->"Region")
-	@helper.inputText(medicalRepresentative("typesOfMedecine"),'_label->"Types Of Medicine")
-	
-	<input type="submit" value="Add MR">
-	
-	
-	}
+
 	}
