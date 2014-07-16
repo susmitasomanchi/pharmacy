@@ -21,13 +21,13 @@
 		@if(LoginController.getLoggedInUserRole().equals(Role.PATIENT.toString())){
 		<li class="dropdown">
           <a href="#" class="dropdown-toggle" data-toggle="dropdown">
-          Doctors
+        	Doctors
           <b class="caret"></b></a>
           <ul class="dropdown-menu">
             <li><a href="">Search Doctors</a></li>
             <li><a href="">My Doctors</a></li>
             <li class="divider"></li>
-            <li><a href="@routes.PatientController.scheduleAppointment()">Schedule an Appointment</a></li>
+            <li><a href="">Schedule an Appointment</a></li>
           </ul>
         </li>
         <li><a href="">Today</a></li>
@@ -44,8 +44,8 @@
           Diagnostic Centers
           <b class="caret"></b></a>
         <ul class="dropdown-menu">
-            <li><a href="/diagnosticlist">View Diagnostic Centers</a></li>
-            <li><a href="/diagnosticrep/list">view Diagnostic Representators</a></li>
+            <li><a href="/diagnostic-search">search Diagnostic Center</a></li>
+            <li><a href="/patient/my-diag-centers">My Diagnostic Centers</a></li>
             
           </ul>
           </li>
@@ -59,17 +59,11 @@
           Orders
           <b class="caret"></b></a>
           <ul class="dropdown-menu">
-            <li><a href="">Products</a></li>
-            <li><a href="">Create new product</a></li>
-            <li class="divider"></li>
             <li><a href="/order">Order Entry</a></li>
-            <li><a href="">Add Product to Inventory</a></li>
+            <li class="divider"></li>
+            <li><a href="/place-product-order">Place Order</a></li>
           </ul>
-        </li>	
-		
-		
-		
-		
+        </li>			
 		<li class="dropdown">
           <a href="#" class="dropdown-toggle" data-toggle="dropdown">
           Inventory
@@ -82,7 +76,18 @@
             <li><a href="/searchProduct">Add Product to Inventory</a></li>
           </ul>
         </li>
-        
+        <li class="dropdown">
+          <a href="#" class="dropdown-toggle" data-toggle="dropdown">
+          Pharmacy
+          <b class="caret"></b></a>
+          <ul class="dropdown-menu">
+            <li><a href="/edit-pharmacy-details">Edit Pahrmacy Details</a></li>
+            <li><a href="/upload-pharmacy-images">Upload Image</a></li>
+           
+            <li class="divider"></li>
+            <li><a href="/searchProduct">Add Product to Inventory</a></li>
+          </ul>
+        </li>
        
 		}
 		
@@ -93,8 +98,8 @@
           Appointments
           <b class="caret"></b></a>
           <ul class="dropdown-menu">
-            <li><a href="/doctor/today-appointment">Today</a></li>
-            <li><a href="">All</a></li>
+            <li><a href="/doctor/appointments">Today</a></li>
+            <li><a href="/doctor/search/appointment">Search</a></li>
           </ul>
         </li>
     
@@ -115,7 +120,7 @@
 	            <li><a href="">Search Clinics</a></li>
 	            <li><a href="@routes.DoctorController.myClinics()">My Clinics</a></li>
 	            <li><a href="@routes.DoctorController.newClinic()">Add a Clinic</a></li>
-    	        <li><a href="@routes.DoctorController.newAssistant()">New Assistant</a></li>
+    	        <li><a href="">New Assistant</a></li>
           </ul>
         </li>
         }
@@ -162,15 +167,7 @@
              <li><a href="">List</a></li>
           </ul>
         </li>
-        <li class="dropdown">
-          <a href="#" class="dropdown-toggle" data-toggle="dropdown">
-          product
-          <b class="caret"></b></a>
-          <ul class="dropdown-menu">
-            <li><a href="/new-product">Create New Product</a></li>
-            <li><a href="/view-products">View All Product</a></li>
-          </ul>
-        </li>
+        
         <li class="dropdown">
           <a href="#" class="dropdown-toggle" data-toggle="dropdown">
           product
@@ -211,8 +208,6 @@
           <li><a href="/diagnosticlist">View Profile</a></li> 
             <li><a href="@routes.DRController.addDiagRep()">Add Diagnostic Representative</a></li> 
             <li><a href="/diagnosticrep/list">All Diagnostic Representatives</a></li>   
-             <li><a href="/display-orders/@LoginController.getLoggedInUser().id">View Diagnostic Orders</a></li>      
-              <li><a href="/upload-patient-file">Upload Report</a></li>      
           </ul>
         </li> 
          <li class="dropdown">
@@ -220,8 +215,18 @@
           Diagnostic Tests
           <b class="caret"></b></a>
           <ul class="dropdown-menu">
-          <li><a href="/test">add Test</a></li> 
-            <li><a href="/diagnostic-test-list">All Tests</a></li> 
+          <li><a href="/test">Add Diagnostic Test</a></li> 
+            <li><a href="/diagnostic-test-list">All Diagnostic Tests</a></li> 
+            
+          </ul>
+        </li> 
+        <li class="dropdown">
+          <a href="#" class="dropdown-toggle" data-toggle="dropdown">
+          Diagnostic Orders
+          <b class="caret"></b></a>
+          <ul class="dropdown-menu">
+          <li><a href="/display-orders">View Diagnostic Orders</a></li> 
+            <li><a href="patient-search">Search Patient</a></li> 
             
           </ul>
         </li> 

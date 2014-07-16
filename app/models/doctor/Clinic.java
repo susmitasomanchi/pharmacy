@@ -4,6 +4,7 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.OneToOne;
 
 import models.Address;
 import play.db.ebean.Model;
@@ -18,9 +19,30 @@ public class Clinic extends Model{
 
 	public String name;
 
-	public Address clinicAddress;
+	public String contactPersonName;
+
+	public String contactNo;
+
+	@OneToOne
+	public Address address;
 
 
 	public static Model.Finder<Long, Clinic> find = new Finder<Long, Clinic>(Long.class, Clinic.class);
+
+	@Override
+	public boolean equals(final Object arg0) {
+		if(!this.name.equals(((Clinic)arg0).name)){
+			return this.name.equals(((Clinic)arg0).name);
+		}
+		if(!this.contactPersonName.equals(((Clinic)arg0).contactPersonName)){
+			return this.contactPersonName.equals(((Clinic)arg0).contactPersonName);
+		}
+
+		if(!this.contactNo.equals(((Clinic)arg0).contactNo)){
+			return this.contactNo.equals(((Clinic)arg0).contactNo);
+		}
+
+		return super.equals(arg0);
+	}
 
 }

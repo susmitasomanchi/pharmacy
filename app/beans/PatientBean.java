@@ -26,11 +26,8 @@ public class PatientBean implements Serializable{
 	public String username;
 
 
-
 	@Email
 	public String email;
-
-
 
 
 	public String password;

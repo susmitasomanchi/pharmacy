@@ -1,8 +1,7 @@
 package models;
 
-import java.util.LinkedHashMap;
-
 import java.util.Map;
+import java.util.TreeMap;
 
 import com.avaje.ebean.annotation.EnumValue;
 
@@ -46,7 +45,6 @@ public enum State {
 
 	@EnumValue("KERALA")
 	KERALA,
-
 
 	@EnumValue("MADHYA_PRADESH")
 	MADHYA_PRADESH,
@@ -119,9 +117,9 @@ public enum State {
 	PUDUCHERRY;
 
 	public static Map<String, String> options() {
-		final LinkedHashMap<String, String> vals = new LinkedHashMap<String, String>();
+		final TreeMap<String, String> vals = new TreeMap<String, String>();
 		for (final State val : State.values()) {
-			vals.put(val.toString(), val.toString().replace("_", " "));
+			vals.put(val.toString(), val.toString().replaceAll("_", " "));
 		}
 		return vals;
 	}

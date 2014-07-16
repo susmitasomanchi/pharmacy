@@ -13,6 +13,7 @@ import javax.persistence.Lob;
 import models.diagnostic.DiagnosticRepresentative;
 import models.doctor.Doctor;
 import models.mr.MedicalRepresentative;
+import models.pharmacist.Pharmacist;
 import play.data.validation.Constraints.Email;
 import play.db.ebean.Model;
 

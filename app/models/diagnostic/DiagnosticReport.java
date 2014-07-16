@@ -7,10 +7,12 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Lob;
+import javax.persistence.OneToOne;
 
 import models.BaseEntity;
 import play.db.ebean.Model;
 
+@SuppressWarnings("serial")
 @Entity
 public class DiagnosticReport extends BaseEntity {
 	@Id
@@ -21,7 +23,8 @@ public class DiagnosticReport extends BaseEntity {
 
 	@Lob
 	public byte[] fileContent;
-
+    
+	@OneToOne
 	public DiagnosticTest diagnosticTest;
 
 	public DiagnosticReportStatus reportStatus = DiagnosticReportStatus.SAMPLE_NOT_COLLECTED;

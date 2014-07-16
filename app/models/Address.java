@@ -5,9 +5,8 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import play.data.validation.Constraints.Required;
-import play.db.ebean.*;
-import play.db.ebean.Model.Finder;
 
+@SuppressWarnings("serial")
 @Entity
 public class Address extends BaseEntity {
 
@@ -18,32 +17,29 @@ public class Address extends BaseEntity {
 	@Required
 	public String addrressLine1;
 
-
 	public String addrressLine2;
 
 	public String addrressLine3;
 
+	public String area;
+
+	public String latitude;
+
+	public String longitude;
 
 	@Required
 	public String city;
 
-
 	@Required
 	public State state;
 
-	@Required
-	public Long pinCode;
+	public String pinCode;
 
-	@Required
+	public String fetchedPinCode;
+
 	public Country country;
 
-
-
-
-
-
-
-	public static Finder<Long, Product> find = new Finder<Long, Product>(Long.class, Product.class);
+	public static Finder<Long, Address> find = new Finder<Long, Address>(Long.class, Address.class);
 
 
 }

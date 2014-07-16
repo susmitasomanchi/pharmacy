@@ -18,7 +18,7 @@ public class Application extends Controller {
 	public static Form<MedicalRepresentative> mrForm=Form.form(MedicalRepresentative.class);
 
 	public static Result index() {
-		return ok(views.html.index.render(loginForm));
+		return ok(views.html.comingsoon.render(loginForm));
 	}
 
 	public static Result indexX(final String str) {
@@ -97,8 +97,14 @@ public class Application extends Controller {
 		return ok(views.html.home.render());
 	}
 
+
+	/**
+	 * Renders sitemap xml
+	 * url: /sitemap.xml
+	 * */
 	public static Result sitemap(){
 		return ok(views.xml.sitemap.render("http://"));
 	}
+
 
 }

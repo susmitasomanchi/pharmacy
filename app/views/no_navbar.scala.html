@@ -17,7 +17,14 @@
         <link href="//netdna.bootstrapcdn.com/bootswatch/3.1.1/yeti/bootstrap.min.css" rel="stylesheet">
         <link href="//netdna.bootstrapcdn.com/font-awesome/4.1.0/css/font-awesome.min.css" rel="stylesheet">
      </head>
-    <body>
+    <body>		
+    
+    			@if(flash().get("alert") != null){
+  				<div class="alert @flash().get("alert").split("~")(0)">
+  					<button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
+  					<big>@flash().get("alert").split("~")(1)</big>
+  				</div>
+  				}
     			@content
     </body>
 </html>

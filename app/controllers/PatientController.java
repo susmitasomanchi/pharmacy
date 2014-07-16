@@ -1,19 +1,15 @@
 package controllers;
 
-import java.util.Calendar;
 import java.util.Date;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import models.AppUser;
-import models.diagnostic.DiagnosticCentre;
 import models.Patient;
+import models.diagnostic.DiagnosticCentre;
 import models.doctor.Appointment;
-import models.doctor.DaySchedule;
 import models.doctor.Doctor;
-import models.doctor.DoctorClinicInfo;
 import models.doctor.QuestionAndAnswer;
-import play.Logger;
 import play.data.Form;
 import play.mvc.Controller;
 import play.mvc.Result;
@@ -32,12 +28,13 @@ public class PatientController extends Controller {
 
 	public static Result displayAppointment(final String id) {
 		List<Appointment> listAppointments = null;
+		int slots=1000;
+
 		final Map<Date, List<Appointment>> appointmentMap = new LinkedHashMap<Date, List<Appointment>>();
-		final Doctor doctor = Doctor.find.byId(Long.parseLong(id));
+		/*final Doctor doctor = Doctor.find.byId(Long.parseLong(id));
 		final Calendar calendar = Calendar.getInstance();
 		calendar.setTime(new Date());
 
-		int slots=1000;
 		for (int i = 0; i <4 ; i++) {
 			for (DoctorClinicInfo clinicInfo: doctor.doctorClinicInfoList) {
 
@@ -61,8 +58,8 @@ public class PatientController extends Controller {
 			}
 		}
 		Logger.warn(""+listAppointments.size());
-		return ok(views.html.patient.scheduleAppointment.render(appointmentMap,
-				slots));
+		 */		return ok(views.html.patient.scheduleAppointment.render(appointmentMap,
+				 slots));
 	}
 
 	public static Result processAppointment() {
@@ -228,4 +225,11 @@ public class PatientController extends Controller {
 
 	}
 
+	public static Result staticPatientMyFavDoctors() {
+		return ok(views.html.patient.static_fav_doctors.render());
+	}
+	
+	public static Result staticPatientNewAppointment() {
+		return ok(views.html.patient.static_patient_new_appointment.render());
+	}
 }

@@ -23,10 +23,11 @@ import play.data.DynamicForm;
 import play.data.Form;
 import play.mvc.Controller;
 import play.mvc.Result;
+import actions.BasicAuth;
 import beans.MedicalRepresentativeBean;
 
-//import com.google.gson.Gson;
 
+@BasicAuth
 public class MRController extends Controller {
 
 	public static Map<MedicalRepresentative, List<MedicalRepresentative>> mgrMap = new HashMap<MedicalRepresentative, List<MedicalRepresentative>>();
@@ -326,9 +327,7 @@ public class MRController extends Controller {
 		final DailyCallReport dcr = DailyCallReport.find.byId(id);
 		final MedicalRepresentative loggedInMr = LoginController
 				.getLoggedInUser().getMedicalRepresentative();
-		return ok(views.html.mr.dcrLineItem.render(dcr, dcrLineItemForm,
-				loggedInMr.doctorList,
-				loggedInMr.pharmaceuticalCompany.productList));
+		return ok(views.html.mr.dcrLineItem.render(dcr, dcrLineItemForm,loggedInMr.doctorList,loggedInMr.pharmaceuticalCompany.productList));
 
 	}
 

@@ -14,6 +14,16 @@ public class LoginController extends Controller {
 
 	public static final Form<LoginBean> loginForm = Form.form(LoginBean.class);
 
+
+	/**
+	 * 
+	 */
+	public static Result blogAdminLoginForm(){
+		return ok(views.html.adminlogin.render(loginForm));
+	}
+
+
+
 	//	public static Result loginForm() {
 	//		if (LoginController.isLoggedIn()) {
 	//			return redirect(routes.UserActions.dashboard());
@@ -22,14 +32,16 @@ public class LoginController extends Controller {
 	//		}
 	//	}
 
-	public static Result blogAdminLoginForm(){
-		return ok(views.html.adminlogin.render(loginForm));
-	}
+
+	/**
+	 *	Action to process login and redirecting to respective user's dashboard
+	 *	POST   /login
+	 */
 
 	public static Result processLogin() {
 		final Form<LoginBean> filledForm = loginForm.bindFromRequest();
 		if (filledForm.hasErrors()) {
-			return badRequest(views.html.index.render(filledForm));
+			return badRequest(views.html.adminlogin.render(filledForm));
 		}
 		else {
 			final LoginBean loginBean = filledForm.get();
@@ -38,7 +50,8 @@ public class LoginController extends Controller {
 			Logger.info("found users " + appUsers.toString());
 			if(appUsers.size() < 1) {
 				// return invalid login/password
-				return badRequest(views.html.index.render(filledForm));
+				Logger.error("Invalid username/password");
+				return badRequest(views.html.adminlogin.render(filledForm));
 			}
 			if(appUsers.size() == 1) {
 				session().clear();
@@ -49,7 +62,7 @@ public class LoginController extends Controller {
 				}
 				session(Constants.LOGGED_IN_USER_ID, appUsers.get(0).id + "");
 				session(Constants.LOGGED_IN_USER_ROLE, appUsers.get(0).role+ "");
-				
+
 				return redirect(routes.UserActions.dashboard());
 
 			}

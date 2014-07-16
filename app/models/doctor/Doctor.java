@@ -4,12 +4,13 @@ import java.util.ArrayList;
 import java.util.List;
 
 import javax.persistence.CascadeType;
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.Lob;
 import javax.persistence.ManyToMany;
-import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 
@@ -33,6 +34,9 @@ public class Doctor extends BaseEntity{
 	public List<DoctorClinicInfo> doctorClinicInfoList = new ArrayList<DoctorClinicInfo>();
 
 	@Required
+	public String registrationNumber;
+
+	@Required
 	public String specialization;
 
 	@Required
@@ -41,39 +45,60 @@ public class Doctor extends BaseEntity{
 	@Required
 	public String degree;
 
+	@Column(columnDefinition="TEXT")
+	public String description;
+
+	@Lob
+	public byte[] backgroundImage;
+
+	@Lob
+	public byte[] profileImage;
+
 	//education
 	@OneToMany(cascade=CascadeType.ALL)
-	public List<DoctorEducation> doctorEducationList=new ArrayList<DoctorEducation>();
+	public List<DoctorEducation> doctorEducationList = new ArrayList<DoctorEducation>();
 
 	//experience
 	@OneToMany(cascade=CascadeType.ALL)
-	public List<DoctorExperience> doctorExperienceList=new ArrayList<DoctorExperience>();
+	public List<DoctorExperience> doctorExperienceList = new ArrayList<DoctorExperience>();
 
 	//publications
 	@OneToMany(cascade=CascadeType.ALL)
-	public List<DoctorPublication> doctorPublicationList=new ArrayList<DoctorPublication>();
+	public List<DoctorPublication> doctorPublicationList = new ArrayList<DoctorPublication>();
 
 	//awards
 	@OneToMany(cascade=CascadeType.ALL)
-	public List<DoctorAward> doctorAwardList=new ArrayList<DoctorAward>();
+	public List<DoctorAward> doctorAwardList = new ArrayList<DoctorAward>();
 
 	//language
 	@ManyToMany(cascade=CascadeType.ALL)
-	public List<DoctorLanguage> doctorLanguageList=new ArrayList<DoctorLanguage>();
+	public List<DoctorLanguage> doctorLanguageList = new ArrayList<DoctorLanguage>();
 
 	//socialwork
 	@OneToMany(cascade=CascadeType.ALL)
-	public List<DoctorSocialWork> doctorSocialWorkList=new ArrayList<DoctorSocialWork>();
+	public List<DoctorSocialWork> doctorSocialWorkList = new ArrayList<DoctorSocialWork>();
 
-	@ManyToOne
+	@OneToMany(cascade=CascadeType.ALL)
 	public List<DoctorEducation> doctorEducation = new ArrayList<DoctorEducation>();
 
-
-	//government or private
-	public String doctorType;
-
-	public String experience;
+	public Integer experience;
 
 	public static Model.Finder<Long,Doctor> find = new Finder<Long, Doctor>(Long.class, Doctor.class);
+
+	public List<DoctorExperience> getExperienceListInOrder(){
+		return DoctorExperience.find.where().eq("doctor_id", this.id).orderBy("workedFrom DESC").findList();
+	}
+
+	public List<DoctorEducation> getEducationListInOrder(){
+		return DoctorEducation.find.where().eq("doctor_id", this.id).orderBy("fromYear DESC").findList();
+	}
+
+	public List<DoctorSocialWork> getDoctorSocialWorkList() {
+		return this.doctorSocialWorkList;
+	}
+
+	public List<DoctorClinicInfo> getActiveClinic(){
+		return DoctorClinicInfo.find.where().eq("doctor", this).eq("active", true).findList();
+	}
 
 }

@@ -10,8 +10,11 @@
 	   <th>Doctors</th>
 	   <th>Samples (Qty)</th>
 	   <th>Promotions</th>
+	   <th>InTime</th>
+	   <th>OutTime</th>
 	   <th>POB</th>
 	   <th>Remarks</th>
+	   <th>Actions</th>
 	</tr>   
 	</thead>
 	<tbody>
@@ -21,24 +24,47 @@
 		<td>@dcrLineItem.doctor.appUser.name</td>
 		<td>
 			@for(sample <- dcrLineItem.sampleList){
+				@if(sample != null){
 				@sample.product.medicineName (@sample.quantity)
 				<br>
+				}
 			}
 	   	</td>
 	   	<td valign="top">
 			<div id="samplesdiv">
 			      <table> 	
 				  	@for(promotedProduct <- dcrLineItem.promotionList){
+				  		@if(promotedProduct != null){
 					  <tr>
 						 <td>@promotedProduct.medicineName</td>
 					  </tr>
+					  }
 					 }
 			      </table>
 			</div>   
 	   	</td>
-	    <td>@dcrLineItem.pob</td>
+	   	
+	   	@if(dcrLineItem.inTime == null){
+	   		<td>&nbsp;</td>
+	   		}else{
+	   		<td>@dcrLineItem.inTime.format("kk:mm")</td>
+	   		}
+	   	@if(dcrLineItem.outTime == null){
+	   		<td>&nbsp;</td>
+	   		}else{
+	   		<td>@dcrLineItem.outTime.format("kk:mm")</td>
+	   		}
+	   	
+	   	@if(dcrLineItem.pob==0){
+	   		<td>&nbsp;</td>
+	   	}else{
+	   	<td>@dcrLineItem.pob</td>
+	   	}
+	   	
 		<td>@dcrLineItem.remarks</td>
+		<td><a class="btn btn-danger btn-xs center-block" onclick="removeLineItem('@dcrLineItem.id','@dcrLineItem.doctor.id');">Remove</a></td>
      </tr>
      }
    </tbody>
   </table>
+  

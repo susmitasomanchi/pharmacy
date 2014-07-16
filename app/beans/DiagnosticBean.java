@@ -1,40 +1,29 @@
 package beans;
 
-import java.util.Date;
-
-import javax.persistence.CascadeType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Lob;
-import javax.persistence.ManyToOne;
-import javax.persistence.OneToOne;
 
-import controllers.LoginController;
-import play.Logger;
+import models.Address;
+import models.diagnostic.DiagnosticCentre;
 import play.data.validation.Constraints.Email;
 import play.data.validation.Constraints.Required;
-import models.Address;
-import models.AppUser;
-import models.Patient;
-import models.Role;
-import models.Sex;
-import models.diagnostic.DiagnosticCentre;
-import models.diagnostic.DiagnosticRepresentative;
+import controllers.LoginController;
 
 public class DiagnosticBean {
-	
+
 
 	@GeneratedValue(strategy=GenerationType.AUTO)
 	@Id
 	public Long id;
 
 	@Lob
-	public byte[] file;	
+	public byte[] file;
 
 	public String name;
 
-	public String address;
+	public Address address;
 
 	public String mobileNo;
 
@@ -43,12 +32,12 @@ public class DiagnosticBean {
 	public String emailId;
 
 	public String websiteName;
-	
-	
+
+
 	public DiagnosticCentre toDiagnosticCentre(){
 
-	final DiagnosticCentre diagnosticCentre = LoginController.getLoggedInUser().getDiagnosticRepresentative().diagnosticCentre;
-		
+		final DiagnosticCentre diagnosticCentre = LoginController.getLoggedInUser().getDiagnosticRepresentative().diagnosticCentre;
+
 		if(this.name != null) {
 			diagnosticCentre.name= this.name;
 		}
@@ -64,9 +53,9 @@ public class DiagnosticBean {
 		if(this.websiteName != null) {
 			diagnosticCentre.websiteName= this.websiteName;
 		}
-		
-		
-		
+
+
+
 		return diagnosticCentre;
 
 	}

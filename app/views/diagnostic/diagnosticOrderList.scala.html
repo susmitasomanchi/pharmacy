@@ -1,0 +1,48 @@
+@(list: List[models.diagnostic.DiagnosticOrder])
+@main("Diagnostic Order List") {
+<table class="table table-bordered">
+<thead>
+<tr>
+<th>
+Patient Name
+</th>
+<th>
+Email Id
+</th>
+<th>
+Order Status
+</th>
+<th>
+Ordered Date
+</th>
+</tr>
+</thead>
+
+<tbody>
+
+@for(diagnosticOrder <- list) {
+<tr>
+<td>
+@diagnosticOrder.patient.appUser.name
+</td>
+<td>
+@diagnosticOrder.patient.appUser.email
+</td>
+<td>
+@diagnosticOrder.diagnosticOrderStatus
+</td>
+<td>
+@diagnosticOrder.receivedDate
+</td>
+<th>
+<a href="/received-tests/@diagnosticOrder.id" class="btn btn-xs btn-default">View Received Test</a>
+<a href="/diagnostic-edit/@diagnosticOrder.id" class="btn btn-xs btn-default">Upload Report</a>
+<a href="/remove-order/@diagnosticOrder.id" class="btn btn-xs btn-default">Remove Order</a>
+</th>
+}
+</tr>
+
+
+</tbody>
+</table>
+}

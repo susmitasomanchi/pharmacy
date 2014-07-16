@@ -1,3 +1,178 @@
+@* viewTodaysAppointment Template File *@
+@(appointments:List[models.doctor.Appointment])
+@import play.i18n._
+
+@main("Today' Appointments"){
+	
+	<div class="container">
+	
+		<ul class="nav nav-tabs" role="tablist" id="my-tab">
+  			<li  class="active"><a href="#all"  data-toggle="tab">Home</a></li>
+  			@for( a <-  appointments.get(0).doctor.doctorClinicInfoList){
+  				
+ 			 <li><a href="#@a.clinic.id" data-toggle="tab">@a.clinic.name</a></li>
+  				
+  			}
+  			
+  			
+		</ul>
+	<div id="myTabContent" class="tab-content">
+		
+		<div class="tab-pane fade in active" id="all">
+			<table class="table">
+			<thead>
+			<tr>
+			<div class="row clearfix">
+				<th><div class="col-md-3 column">
+				Patient
+				</div></th>
+				<th><div class="col-md-3 column">
+				Age
+				</div></th>
+				<th><div class="col-md-3 column">
+				Time
+				</div></th>
+				<th><div class="col-md-3 column">
+				Sex
+				</div></th>
+				<th><div class="col-md-3 column">
+				Appointment
+				</div></th>
+			</div>
+			</tr>
+			</thead>
+			@for(appointment <- appointments){
+			<tr class="success">
+			<div class="row clearfix">
+				<div class="col-md-3 column">
+				<td>@*@appointment.requestedBy.name*@</td>
+				</div>
+				<div class="col-md-3 column">
+				<td>@*@appointment.requestedBy.dob*@</td>
+				</div>
+				<div class="col-md-3 column">
+				<td>@*@appointment.requestedBy.dob*@</td>
+				</div>
+				<div class="col-md-3 column">
+				<td>@*@appointment.requestedBy.sex*@</td>
+				</div>
+				<div class="col-md-3 column">
+				<td><a href="http://www.google.com" class="btn btn-primary btn-success"  role="button">Prescription</a>
+				<a href="http://www.google.com" class="btn btn-primary btn-default"  role="button">Delete</a>
+				<a href="http://www.google.com" class="btn btn-primary btn-danger"  role="button">Edit</a></td>
+				</div>
+			</div>
+			</tr>
+			}
+		</table>
+		</div>
+		@for( a <-  appointments.get(0).doctor.doctorClinicInfoList){
+			<div class="tab-pane fade" id="@a.id">
+				<table class="table">
+			<thead>
+			<tr>
+			<div class="row clearfix">
+				<th><div class="col-md-3 column">
+				Patient
+				</div></th>
+				<th><div class="col-md-3 column">
+				Age
+				</div></th>
+				<th><div class="col-md-3 column">
+				Sex
+				</div></th>
+				<th><div class="col-md-3 column">
+				Appointment
+				</div></th>
+			</div>
+			</tr>
+			</thead>
+			@for(appointment <- appointments){
+			<tr class="success">
+			<div class="row clearfix">
+				<div class="col-md-3 column">
+				<td>@*@appointment.requestedBy.name*@</td>
+				</div>
+				<div class="col-md-3 column">
+				<td>@a@*@appointment.requestedBy.dob*@</td>
+				</div>
+				<div class="col-md-3 column">
+				<td>@*@appointment.requestedBy.sex*@</td>
+				</div>
+				<div class="col-md-3 column">
+				<td><a href="http://www.google.com" class="btn btn-primary btn-success"  role="button">Prescription</a>
+				<a href="http://www.google.com" class="btn btn-primary btn-default"  role="button">Delete</a>
+				<a href="http://www.google.com" class="btn btn-primary btn-danger"  role="button">Edit</a></td>
+				</div>
+			</div>
+			</tr>
+			}
+		</table>
+			
+			</div>
+			}
+		
+	</div>
+</div>
+	
+	
+	<script>
+	$('#my-tab a').click(function (e) {
+		  //e.preventDefault()
+		  $(this).tab('show')
+		})
+	</script>
+	
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+@*
+
 @()
 @import play.i18n._
 @import helper.twitterBootstrap._
@@ -59,4 +234,4 @@
 <img src="/assets/images/next.png" width="15" height="15"/>
 </div>
 </div>
-}
+}*@

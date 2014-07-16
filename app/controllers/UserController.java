@@ -9,7 +9,6 @@ package controllers;
 
 import models.AppUser;
 import models.Patient;
-import models.Pharmacist;
 import models.Pharmacy;
 import models.Role;
 import models.diagnostic.DiagnosticCentre;
@@ -17,6 +16,7 @@ import models.diagnostic.DiagnosticRepresentative;
 import models.doctor.Doctor;
 import models.mr.MedicalRepresentative;
 import models.mr.PharmaceuticalCompany;
+import models.pharmacist.Pharmacist;
 import play.Logger;
 import play.data.Form;
 import play.mvc.Controller;
@@ -37,6 +37,8 @@ public class UserController extends Controller {
 
 	public static Result processJoinUs(){
 		final Form<JoinUsBean> filledForm = joinUsForm.bindFromRequest();
+		final Form<MedicalRepresentative> mR = mrForm.bindFromRequest();
+		final Form<DiagnosticRepresentative> dr = drForm.bindFromRequest();
 		if(filledForm.hasErrors()) {
 			Logger.info("Form Errors");
 			Logger.error(filledForm.errors().toString());
@@ -74,30 +76,21 @@ public class UserController extends Controller {
 
 
 			if(appUser.role == Role.ADMIN_MR){
-
 				final MedicalRepresentative medicalRepresentative = new MedicalRepresentative();
-				final PharmaceuticalCompany pharmaceuticalCompany = new PharmaceuticalCompany();
+				final PharmaceuticalCompany pharmaCompany = new PharmaceuticalCompany();
 				medicalRepresentative.appUser = appUser;
 				medicalRepresentative.save();
-				pharmaceuticalCompany.name = filledForm.get().pharmaceuticalCompanyName;
-				pharmaceuticalCompany.mrList.add(medicalRepresentative);
-				pharmaceuticalCompany.adminMR = medicalRepresentative;
-				pharmaceuticalCompany.save();
-				medicalRepresentative.pharmaceuticalCompany = pharmaceuticalCompany;
+				pharmaCompany.name = filledForm.get().pharmaceuticalCompanyName;
+
+				pharmaCompany.mrList.add(medicalRepresentative);
+				pharmaCompany.appuserid=appUser.id;
+				pharmaCompany.save();
+				medicalRepresentative.pharmaceuticalCompany = pharmaCompany;
 				medicalRepresentative.update();
 
 			}
 
-			/*if(appUser.role == Role.MR){
-				//				final MedicalRepresentative medicalRepresentative = new MedicalRepresentative();
-				//				medicalRepresentative.appUser = appUser;
-				//				medicalRepresentative.regionAlloted=mR.regionAlloted;
-				//				medicalRepresentative.save();
-				final MedicalRepresentative medicalRepresentative = mR.get();
-				medicalRepresentative.appUser = appUser;
-				medicalRepresentative.mrAdminId =  LoginController.getLoggedInUser().id;
-				medicalRepresentative.save();
-			}*/
+
 
 
 

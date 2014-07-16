@@ -8,9 +8,13 @@ create table address (
   addrress_line1            varchar(255),
   addrress_line2            varchar(255),
   addrress_line3            varchar(255),
+  area                      varchar(255),
+  latitude                  varchar(255),
+  longitude                 varchar(255),
   city                      varchar(255),
   state                     varchar(35),
-  pin_code                  bigint,
+  pin_code                  varchar(255),
+  fetched_pin_code          varchar(255),
   country                   varchar(27),
   last_update               timestamp not null,
   constraint ck_address_state check (state in ('DADRA_AND_NAGAR_HAVELI','KERALA','WEST_BENGAL','JAMMU_AND_KASHMIR','HIMACHAL_PRADESH','MANIPUR','MIZORAM','MAHARASHTRA','JHARKHAND','ASSAM','UTTARAKHAND','SIKKIM','KARNATAKA','CHHATTISGARH','ANDHRA_PRADESH','NATIONAL_CAPITAL_TERRITORY_OF_DELHI','UTTAR_PRADESH','PUDUCHERRY','ANDAMAN_AND_NICOBAR_ISLANDS','TRIPURA','GOA','DAMAN_AND_DIU','NAGALAND','ODISHA','TAMIL_NADU','BIHAR','RAJASTHAN','LAKSHADWEEP','HARYANA','MEGHALAYA','PUNJAB','ARUNACHAL_PRADESH','GUJARAT','TELANGANA','MADHYA_PRADESH','CHNADIGARH')),
@@ -86,11 +90,11 @@ create table batch (
   product_id                bigint,
   batch_no                  varchar(255),
   mrp                       float,
-  expiry_date               timestamp,
   quantity                  integer,
   tax                       float,
   discount                  float,
   last_update               timestamp not null,
+  expiry_date               timestamp not null,
   constraint pk_batch primary key (id))
 ;
 
@@ -123,6 +127,9 @@ create table blog_comment_reply (
 create table clinic (
   id                        bigint not null,
   name                      varchar(255),
+  contact_person_name       varchar(255),
+  contact_no                varchar(255),
+  address_id                bigint,
   constraint pk_clinic primary key (id))
 ;
 
@@ -130,6 +137,8 @@ create table dcrline_item (
   id                        bigint not null,
   daily_call_report_id      bigint not null,
   doctor_id                 bigint,
+  in_time                   timestamp,
+  out_time                  timestamp,
   pob                       integer,
   remarks                   varchar(255),
   last_update               timestamp not null,
@@ -137,6 +146,7 @@ create table dcrline_item (
 ;
 
 create table daily_call_report (
+<<<<<<< HEAD
   id                        bigint not null,
   medical_representative_id bigint not null,
   for_date                  timestamp,
@@ -145,19 +155,21 @@ create table daily_call_report (
 ;
 
 create table day_of_the_week (
+=======
+>>>>>>> branch 'master' of http://pharmacy.bz/green-software/mednetwork.git
   id                        bigint not null,
-  day                       varchar(9),
+  medical_representative_id bigint not null,
+  for_date                  timestamp,
   last_update               timestamp not null,
-  constraint ck_day_of_the_week_day check (day in ('MONDAY','SUNDAY','WEDNESDAY','THURSDAY','SATURDAY','TUESDAY','FRIDAY')),
-  constraint pk_day_of_the_week primary key (id))
+  constraint pk_daily_call_report primary key (id))
 ;
 
 create table day_schedule (
   id                        bigint not null,
   doctor_clinic_info_id     bigint not null,
   day                       varchar(9),
-  from_time                 integer,
-  to_time                   integer,
+  from_time                 varchar(255),
+  to_time                   varchar(255),
   requester                 varchar(16),
   last_update               timestamp not null,
   constraint ck_day_schedule_day check (day in ('MONDAY','SUNDAY','WEDNESDAY','THURSDAY','SATURDAY','TUESDAY','FRIDAY')),
@@ -168,8 +180,14 @@ create table day_schedule (
 create table diagnostic_centre (
   id                        bigint not null,
   name                      varchar(255),
+<<<<<<< HEAD
   address                   varchar(255),
+=======
+  address_id                bigint,
+>>>>>>> branch 'master' of http://pharmacy.bz/green-software/mednetwork.git
   mobile_no                 varchar(255),
+  description               TEXT,
+  backgroud_image           bytea,
   email_id                  varchar(255),
   website_name              varchar(255),
   diagnostic_rep_admin_id   bigint,
@@ -180,6 +198,10 @@ create table diagnostic_centre (
 create table diagnostic_order (
   id                        bigint not null,
   diagnostic_centre_id      bigint not null,
+<<<<<<< HEAD
+=======
+  patient_id                bigint,
+>>>>>>> branch 'master' of http://pharmacy.bz/green-software/mednetwork.git
   diagnostic_order_status   varchar(9),
   received_date             timestamp,
   confirmed_date            timestamp,
@@ -190,8 +212,10 @@ create table diagnostic_order (
 
 create table diagnostic_report (
   id                        bigint not null,
+  diagnostic_order_id       bigint not null,
   file_name                 varchar(255),
   file_content              bytea,
+  diagnostic_test_id        bigint,
   report_status             varchar(20),
   sample_collection_date    timestamp,
   report_generation_date    timestamp,
@@ -230,11 +254,14 @@ create table diagnostic_test_line_item (
 create table doctor (
   id                        bigint not null,
   app_user_id               bigint,
+  registration_number       varchar(255),
   specialization            varchar(255),
   position                  varchar(255),
   degree                    varchar(255),
-  doctor_type               varchar(255),
-  experience                varchar(255),
+  description               TEXT,
+  background_image          bytea,
+  profile_image             bytea,
+  experience                integer,
   last_update               timestamp not null,
   constraint pk_doctor primary key (id))
 ;
@@ -252,9 +279,10 @@ create table doctor_award (
   id                        bigint not null,
   doctor_id                 bigint not null,
   award_name                varchar(255),
-  award_for                 varchar(255),
+  awarded_by                varchar(255),
   year                      varchar(255),
-  comment_for_awards        varchar(255),
+  description               TEXT,
+  position                  integer,
   last_update               timestamp not null,
   constraint pk_doctor_award primary key (id))
 ;
@@ -265,6 +293,7 @@ create table doctor_clinic_info (
   doctor_id                 bigint,
   slot                      integer,
   slotmr                    integer,
+  active                    boolean,
   last_update               timestamp not null,
   constraint pk_doctor_clinic_info primary key (id))
 ;
@@ -272,10 +301,11 @@ create table doctor_clinic_info (
 create table doctor_education (
   id                        bigint not null,
   doctor_id                 bigint not null,
-  college_name              varchar(255),
+  institution_name          varchar(255),
   degree                    varchar(255),
   from_year                 integer,
   to_year                   integer,
+  description               TEXT,
   last_update               timestamp not null,
   constraint pk_doctor_education primary key (id))
 ;
@@ -283,9 +313,9 @@ create table doctor_education (
 create table doctor_experience (
   id                        bigint not null,
   doctor_id                 bigint not null,
-  previous_hospital_name    varchar(255),
-  worked_as                 varchar(255),
-  location                  varchar(255),
+  institution_name          varchar(255),
+  position                  varchar(255),
+  description               TEXT,
   worked_from               integer,
   worked_to                 integer,
   last_update               timestamp not null,
@@ -301,10 +331,14 @@ create table doctor_language (
 create table doctor_publication (
   id                        bigint not null,
   doctor_id                 bigint not null,
-  article_name              varchar(255),
+  name                      varchar(255),
   article_for               varchar(255),
   year                      varchar(255),
-  comment_for_article       varchar(255),
+  position                  integer,
+  brief_description         TEXT,
+  content                   TEXT,
+  image                     bytea,
+  file                      bytea,
   last_update               timestamp not null,
   constraint pk_doctor_publication primary key (id))
 ;
@@ -312,10 +346,26 @@ create table doctor_publication (
 create table doctor_social_work (
   id                        bigint not null,
   doctor_id                 bigint not null,
-  social_work_tittle        varchar(255),
-  comment_social_work       varchar(255),
+  title                     varchar(255),
+  description               TEXT,
   last_update               timestamp not null,
   constraint pk_doctor_social_work primary key (id))
+;
+
+create table doctors_prescription (
+  doctors_prescription_id   bigint not null,
+  last_update               timestamp not null,
+  constraint pk_doctors_prescription primary key (doctors_prescription_id))
+;
+
+create table file_entity (
+  id                        bigint not null,
+  file_name                 varchar(255),
+  mime_type                 varchar(255),
+  byte_content              bytea,
+  pharmacy_id               bigint,
+  last_update               timestamp not null,
+  constraint pk_file_entity primary key (id))
 ;
 
 create table doctors_prescription (
@@ -418,9 +468,15 @@ create table pharmacist (
 create table pharmacy (
   id                        bigint not null,
   name                      varchar(255),
-  address                   varchar(255),
-  contact_no                varchar(255),
   test_field                varchar(255),
+<<<<<<< HEAD
+=======
+  background_image          bytea,
+  address_id                bigint,
+  contact_no                varchar(255),
+  description               TEXT,
+  admin_pharmacist_id       bigint,
+>>>>>>> branch 'master' of http://pharmacy.bz/green-software/mednetwork.git
   last_update               timestamp not null,
   constraint pk_pharmacy primary key (id))
 ;
@@ -433,6 +489,21 @@ create table pharmacy_order (
   last_update               timestamp not null,
   constraint ck_pharmacy_order_order_status check (order_status in ('DRAFT','DELIVERED','READY')),
   constraint pk_pharmacy_order primary key (id))
+;
+
+create table pharmacy_product (
+  id                        bigint not null,
+  medicine_name             varchar(255),
+  brand_name                varchar(255),
+  salt                      varchar(255),
+  strength                  varchar(255),
+  type_of_medicine          varchar(255),
+  description               varchar(255),
+  units_per_pack            bigint,
+  full_name                 varchar(255),
+  pharmacy_id               bigint,
+  last_update               timestamp not null,
+  constraint pk_pharmacy_product primary key (id))
 ;
 
 create table prescription (
@@ -480,6 +551,19 @@ create table sample (
   quantity                  integer,
   last_update               timestamp not null,
   constraint pk_sample primary key (id))
+<<<<<<< HEAD
+=======
+;
+
+create table show_cased_product (
+  id                        bigint not null,
+  pharmacy_id               bigint not null,
+  name                      varchar(255),
+  description               TEXT,
+  mrp                       float,
+  last_update               timestamp not null,
+  constraint pk_show_cased_product primary key (id))
+>>>>>>> branch 'master' of http://pharmacy.bz/green-software/mednetwork.git
 ;
 
 create table sig_code (
@@ -509,6 +593,15 @@ create table dcrline_item_product (
   product_id                     bigint not null,
   constraint pk_dcrline_item_product primary key (dcrline_item_id, product_id))
 ;
+<<<<<<< HEAD
+=======
+
+create table diagnostic_centre_file_entity (
+  diagnostic_centre_id           bigint not null,
+  file_entity_id                 bigint not null,
+  constraint pk_diagnostic_centre_file_entity primary key (diagnostic_centre_id, file_entity_id))
+;
+>>>>>>> branch 'master' of http://pharmacy.bz/green-software/mednetwork.git
 
 create table doctor_doctor_language (
   doctor_id                      bigint not null,
@@ -548,8 +641,11 @@ create sequence clinic_seq;
 create sequence dcrline_item_seq;
 
 create sequence daily_call_report_seq;
+<<<<<<< HEAD
 
 create sequence day_of_the_week_seq;
+=======
+>>>>>>> branch 'master' of http://pharmacy.bz/green-software/mednetwork.git
 
 create sequence day_schedule_seq;
 
@@ -583,6 +679,11 @@ create sequence doctor_social_work_seq;
 
 create sequence doctors_prescription_seq;
 
+<<<<<<< HEAD
+=======
+create sequence file_entity_seq;
+
+>>>>>>> branch 'master' of http://pharmacy.bz/green-software/mednetwork.git
 create sequence inventory_seq;
 
 create sequence language_app_user_seq;
@@ -601,6 +702,8 @@ create sequence pharmacy_seq;
 
 create sequence pharmacy_order_seq;
 
+create sequence pharmacy_product_seq;
+
 create sequence prescription_seq;
 
 create sequence product_seq;
@@ -608,6 +711,11 @@ create sequence product_seq;
 create sequence question_and_answer_seq;
 
 create sequence sample_seq;
+<<<<<<< HEAD
+=======
+
+create sequence show_cased_product_seq;
+>>>>>>> branch 'master' of http://pharmacy.bz/green-software/mednetwork.git
 
 create sequence social_user_seq;
 
@@ -637,6 +745,7 @@ alter table blog_comment_reply add constraint fk_blog_comment_reply_by_12 foreig
 create index ix_blog_comment_reply_by_12 on blog_comment_reply (by_id);
 alter table blog_comment_reply add constraint fk_blog_comment_reply_socialB_13 foreign key (social_by_id) references social_user (id);
 create index ix_blog_comment_reply_socialB_13 on blog_comment_reply (social_by_id);
+<<<<<<< HEAD
 alter table dcrline_item add constraint fk_dcrline_item_daily_call_re_14 foreign key (daily_call_report_id) references daily_call_report (id);
 create index ix_dcrline_item_daily_call_re_14 on dcrline_item (daily_call_report_id);
 alter table dcrline_item add constraint fk_dcrline_item_doctor_15 foreign key (doctor_id) references doctor (id);
@@ -717,12 +826,117 @@ alter table sample add constraint fk_sample_dcrline_item_52 foreign key (dcrline
 create index ix_sample_dcrline_item_52 on sample (dcrline_item_id);
 alter table sample add constraint fk_sample_product_53 foreign key (product_id) references product (id);
 create index ix_sample_product_53 on sample (product_id);
+=======
+alter table clinic add constraint fk_clinic_address_14 foreign key (address_id) references address (id);
+create index ix_clinic_address_14 on clinic (address_id);
+alter table dcrline_item add constraint fk_dcrline_item_daily_call_re_15 foreign key (daily_call_report_id) references daily_call_report (id);
+create index ix_dcrline_item_daily_call_re_15 on dcrline_item (daily_call_report_id);
+alter table dcrline_item add constraint fk_dcrline_item_doctor_16 foreign key (doctor_id) references doctor (id);
+create index ix_dcrline_item_doctor_16 on dcrline_item (doctor_id);
+alter table daily_call_report add constraint fk_daily_call_report_medical__17 foreign key (medical_representative_id) references medical_representative (id);
+create index ix_daily_call_report_medical__17 on daily_call_report (medical_representative_id);
+alter table day_schedule add constraint fk_day_schedule_doctor_clinic_18 foreign key (doctor_clinic_info_id) references doctor_clinic_info (id);
+create index ix_day_schedule_doctor_clinic_18 on day_schedule (doctor_clinic_info_id);
+alter table diagnostic_centre add constraint fk_diagnostic_centre_address_19 foreign key (address_id) references address (id);
+create index ix_diagnostic_centre_address_19 on diagnostic_centre (address_id);
+alter table diagnostic_centre add constraint fk_diagnostic_centre_diagnost_20 foreign key (diagnostic_rep_admin_id) references diagnostic_representative (id);
+create index ix_diagnostic_centre_diagnost_20 on diagnostic_centre (diagnostic_rep_admin_id);
+alter table diagnostic_order add constraint fk_diagnostic_order_diagnosti_21 foreign key (diagnostic_centre_id) references diagnostic_centre (id);
+create index ix_diagnostic_order_diagnosti_21 on diagnostic_order (diagnostic_centre_id);
+alter table diagnostic_order add constraint fk_diagnostic_order_patient_22 foreign key (patient_id) references patient (id);
+create index ix_diagnostic_order_patient_22 on diagnostic_order (patient_id);
+alter table diagnostic_report add constraint fk_diagnostic_report_diagnost_23 foreign key (diagnostic_order_id) references diagnostic_order (id);
+create index ix_diagnostic_report_diagnost_23 on diagnostic_report (diagnostic_order_id);
+alter table diagnostic_report add constraint fk_diagnostic_report_diagnost_24 foreign key (diagnostic_test_id) references diagnostic_test (id);
+create index ix_diagnostic_report_diagnost_24 on diagnostic_report (diagnostic_test_id);
+alter table diagnostic_representative add constraint fk_diagnostic_representative__25 foreign key (app_user_id) references app_user (id);
+create index ix_diagnostic_representative__25 on diagnostic_representative (app_user_id);
+alter table diagnostic_representative add constraint fk_diagnostic_representative__26 foreign key (patient_id) references patient (id);
+create index ix_diagnostic_representative__26 on diagnostic_representative (patient_id);
+alter table diagnostic_representative add constraint fk_diagnostic_representative__27 foreign key (diagnostic_centre_id) references diagnostic_centre (id);
+create index ix_diagnostic_representative__27 on diagnostic_representative (diagnostic_centre_id);
+alter table diagnostic_test add constraint fk_diagnostic_test_diagnostic_28 foreign key (diagnostic_centre_id) references diagnostic_centre (id);
+create index ix_diagnostic_test_diagnostic_28 on diagnostic_test (diagnostic_centre_id);
+alter table diagnostic_test_line_item add constraint fk_diagnostic_test_line_item__29 foreign key (prescription_id) references prescription (id);
+create index ix_diagnostic_test_line_item__29 on diagnostic_test_line_item (prescription_id);
+alter table doctor add constraint fk_doctor_appUser_30 foreign key (app_user_id) references app_user (id);
+create index ix_doctor_appUser_30 on doctor (app_user_id);
+alter table doctor_assistant add constraint fk_doctor_assistant_appUser_31 foreign key (app_user_id) references app_user (id);
+create index ix_doctor_assistant_appUser_31 on doctor_assistant (app_user_id);
+alter table doctor_award add constraint fk_doctor_award_doctor_32 foreign key (doctor_id) references doctor (id);
+create index ix_doctor_award_doctor_32 on doctor_award (doctor_id);
+alter table doctor_clinic_info add constraint fk_doctor_clinic_info_clinic_33 foreign key (clinic_id) references clinic (id);
+create index ix_doctor_clinic_info_clinic_33 on doctor_clinic_info (clinic_id);
+alter table doctor_clinic_info add constraint fk_doctor_clinic_info_doctor_34 foreign key (doctor_id) references doctor (id);
+create index ix_doctor_clinic_info_doctor_34 on doctor_clinic_info (doctor_id);
+alter table doctor_education add constraint fk_doctor_education_doctor_35 foreign key (doctor_id) references doctor (id);
+create index ix_doctor_education_doctor_35 on doctor_education (doctor_id);
+alter table doctor_experience add constraint fk_doctor_experience_doctor_36 foreign key (doctor_id) references doctor (id);
+create index ix_doctor_experience_doctor_36 on doctor_experience (doctor_id);
+alter table doctor_publication add constraint fk_doctor_publication_doctor_37 foreign key (doctor_id) references doctor (id);
+create index ix_doctor_publication_doctor_37 on doctor_publication (doctor_id);
+alter table doctor_social_work add constraint fk_doctor_social_work_doctor_38 foreign key (doctor_id) references doctor (id);
+create index ix_doctor_social_work_doctor_38 on doctor_social_work (doctor_id);
+alter table file_entity add constraint fk_file_entity_pharmacy_39 foreign key (pharmacy_id) references pharmacy (id);
+create index ix_file_entity_pharmacy_39 on file_entity (pharmacy_id);
+alter table inventory add constraint fk_inventory_pharmacy_40 foreign key (pharmacy_id) references pharmacy (id);
+create index ix_inventory_pharmacy_40 on inventory (pharmacy_id);
+alter table inventory add constraint fk_inventory_product_41 foreign key (product_id) references product (id);
+create index ix_inventory_product_41 on inventory (product_id);
+alter table language_app_user add constraint fk_language_app_user_doctor_l_42 foreign key (doctor_language_id) references doctor_language (id);
+create index ix_language_app_user_doctor_l_42 on language_app_user (doctor_language_id);
+alter table medical_representative add constraint fk_medical_representative_app_43 foreign key (app_user_id) references app_user (id);
+create index ix_medical_representative_app_43 on medical_representative (app_user_id);
+alter table medical_representative add constraint fk_medical_representative_pha_44 foreign key (pharmaceutical_company_id) references pharmaceutical_company (id);
+create index ix_medical_representative_pha_44 on medical_representative (pharmaceutical_company_id);
+alter table medicine_line_item add constraint fk_medicine_line_item_prescri_45 foreign key (prescription_id) references prescription (id);
+create index ix_medicine_line_item_prescri_45 on medicine_line_item (prescription_id);
+alter table order_line_item add constraint fk_order_line_item_pharmacy_o_46 foreign key (pharmacy_order_id) references pharmacy_order (id);
+create index ix_order_line_item_pharmacy_o_46 on order_line_item (pharmacy_order_id);
+alter table order_line_item add constraint fk_order_line_item_product_47 foreign key (product_id) references product (id);
+create index ix_order_line_item_product_47 on order_line_item (product_id);
+alter table patient add constraint fk_patient_appUser_48 foreign key (app_user_id) references app_user (id);
+create index ix_patient_appUser_48 on patient (app_user_id);
+alter table pharmacist add constraint fk_pharmacist_appUser_49 foreign key (app_user_id) references app_user (id);
+create index ix_pharmacist_appUser_49 on pharmacist (app_user_id);
+alter table pharmacist add constraint fk_pharmacist_pharmacy_50 foreign key (pharmacy_id) references pharmacy (id);
+create index ix_pharmacist_pharmacy_50 on pharmacist (pharmacy_id);
+alter table pharmacy add constraint fk_pharmacy_address_51 foreign key (address_id) references address (id);
+create index ix_pharmacy_address_51 on pharmacy (address_id);
+alter table pharmacy add constraint fk_pharmacy_adminPharmacist_52 foreign key (admin_pharmacist_id) references pharmacist (id);
+create index ix_pharmacy_adminPharmacist_52 on pharmacy (admin_pharmacist_id);
+alter table pharmacy_product add constraint fk_pharmacy_product_pharmacy_53 foreign key (pharmacy_id) references pharmacy (id);
+create index ix_pharmacy_product_pharmacy_53 on pharmacy_product (pharmacy_id);
+alter table prescription add constraint fk_prescription_appointment_54 foreign key (appointment_id) references appointment (id);
+create index ix_prescription_appointment_54 on prescription (appointment_id);
+alter table product add constraint fk_product_pharmaceuticalComp_55 foreign key (pharmaceutical_company_id) references pharmaceutical_company (id);
+create index ix_product_pharmaceuticalComp_55 on product (pharmaceutical_company_id);
+alter table product add constraint fk_product_pharmacy_56 foreign key (pharmacy_id) references pharmacy (id);
+create index ix_product_pharmacy_56 on product (pharmacy_id);
+alter table question_and_answer add constraint fk_question_and_answer_questi_57 foreign key (question_by_id) references app_user (id);
+create index ix_question_and_answer_questi_57 on question_and_answer (question_by_id);
+alter table question_and_answer add constraint fk_question_and_answer_answer_58 foreign key (answer_by_id) references app_user (id);
+create index ix_question_and_answer_answer_58 on question_and_answer (answer_by_id);
+alter table sample add constraint fk_sample_dcrline_item_59 foreign key (dcrline_item_id) references dcrline_item (id);
+create index ix_sample_dcrline_item_59 on sample (dcrline_item_id);
+alter table sample add constraint fk_sample_product_60 foreign key (product_id) references product (id);
+create index ix_sample_product_60 on sample (product_id);
+alter table show_cased_product add constraint fk_show_cased_product_pharmac_61 foreign key (pharmacy_id) references pharmacy (id);
+create index ix_show_cased_product_pharmac_61 on show_cased_product (pharmacy_id);
+>>>>>>> branch 'master' of http://pharmacy.bz/green-software/mednetwork.git
 
 
 
 alter table dcrline_item_product add constraint fk_dcrline_item_product_dcrli_01 foreign key (dcrline_item_id) references dcrline_item (id);
 
 alter table dcrline_item_product add constraint fk_dcrline_item_product_produ_02 foreign key (product_id) references product (id);
+<<<<<<< HEAD
+=======
+
+alter table diagnostic_centre_file_entity add constraint fk_diagnostic_centre_file_ent_01 foreign key (diagnostic_centre_id) references diagnostic_centre (id);
+
+alter table diagnostic_centre_file_entity add constraint fk_diagnostic_centre_file_ent_02 foreign key (file_entity_id) references file_entity (id);
+>>>>>>> branch 'master' of http://pharmacy.bz/green-software/mednetwork.git
 
 alter table doctor_doctor_language add constraint fk_doctor_doctor_language_doc_01 foreign key (doctor_id) references doctor (id);
 
@@ -762,11 +976,15 @@ drop table if exists dcrline_item_product cascade;
 
 drop table if exists daily_call_report cascade;
 
-drop table if exists day_of_the_week cascade;
+drop table if exists dcrline_item_product cascade;
+
+drop table if exists daily_call_report cascade;
 
 drop table if exists day_schedule cascade;
 
 drop table if exists diagnostic_centre cascade;
+
+drop table if exists diagnostic_centre_file_entity cascade;
 
 drop table if exists diagnostic_order cascade;
 
@@ -800,6 +1018,11 @@ drop table if exists doctor_social_work cascade;
 
 drop table if exists doctors_prescription cascade;
 
+<<<<<<< HEAD
+=======
+drop table if exists file_entity cascade;
+
+>>>>>>> branch 'master' of http://pharmacy.bz/green-software/mednetwork.git
 drop table if exists head_quarter cascade;
 
 drop table if exists inventory cascade;
@@ -826,11 +1049,17 @@ drop table if exists pharmacy cascade;
 
 drop table if exists pharmacy_order cascade;
 
+drop table if exists pharmacy_product cascade;
+
 drop table if exists prescription cascade;
 
 drop table if exists product cascade;
 
 drop table if exists question_and_answer cascade;
+
+drop table if exists sample cascade;
+
+drop table if exists show_cased_product cascade;
 
 drop table if exists sample cascade;
 
@@ -860,7 +1089,7 @@ drop sequence if exists dcrline_item_seq;
 
 drop sequence if exists daily_call_report_seq;
 
-drop sequence if exists day_of_the_week_seq;
+drop sequence if exists daily_call_report_seq;
 
 drop sequence if exists day_schedule_seq;
 
@@ -894,6 +1123,11 @@ drop sequence if exists doctor_social_work_seq;
 
 drop sequence if exists doctors_prescription_seq;
 
+<<<<<<< HEAD
+=======
+drop sequence if exists file_entity_seq;
+
+>>>>>>> branch 'master' of http://pharmacy.bz/green-software/mednetwork.git
 drop sequence if exists inventory_seq;
 
 drop sequence if exists language_app_user_seq;
@@ -912,6 +1146,8 @@ drop sequence if exists pharmacy_seq;
 
 drop sequence if exists pharmacy_order_seq;
 
+drop sequence if exists pharmacy_product_seq;
+
 drop sequence if exists prescription_seq;
 
 drop sequence if exists product_seq;
@@ -920,5 +1156,10 @@ drop sequence if exists question_and_answer_seq;
 
 drop sequence if exists sample_seq;
 
+<<<<<<< HEAD
+=======
+drop sequence if exists show_cased_product_seq;
+
+>>>>>>> branch 'master' of http://pharmacy.bz/green-software/mednetwork.git
 drop sequence if exists social_user_seq;
 

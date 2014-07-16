@@ -19,7 +19,7 @@ import models.Product;
 @Entity
 public class PharmaceuticalCompany extends BaseEntity {
 
-	@GeneratedValue(strategy=GenerationType.AUTO)
+	@GeneratedValue(strategy = GenerationType.AUTO)
 	@Id
 	public Long id;
 
@@ -30,16 +30,13 @@ public class PharmaceuticalCompany extends BaseEntity {
 	@OneToOne
 	public MedicalRepresentative adminMR;
 
-	@OneToMany(cascade=CascadeType.ALL)
+	@OneToMany(cascade = CascadeType.ALL)
 	public List<Product> productList = new ArrayList<Product>();
 
-	@OneToMany(cascade=CascadeType.ALL)
+	@OneToMany(cascade = CascadeType.ALL)
 	public List<MedicalRepresentative> mrList = new ArrayList<MedicalRepresentative>();
 
-
-
-	public static Finder<Long,PharmaceuticalCompany> find = new Finder<Long,PharmaceuticalCompany>(Long.class,PharmaceuticalCompany.class);
-
-
+	public static Finder<Long, PharmaceuticalCompany> find = new Finder<Long, PharmaceuticalCompany>(
+			Long.class, PharmaceuticalCompany.class);
 
 }
