@@ -8,12 +8,12 @@ import java.util.List;
 import java.util.Map;
 
 import models.Alert;
-import models.HeadQuarter;
 import models.Product;
 import models.doctor.Appointment;
 import models.doctor.Doctor;
 import models.mr.DCRLineItem;
 import models.mr.DailyCallReport;
+import models.mr.HeadQuarter;
 import models.mr.MedicalRepresentative;
 import models.mr.Sample;
 
@@ -33,7 +33,7 @@ import actions.BasicAuth;
 public class MRController extends Controller{
 
 	public static Form<MedicalRepresentative> medicalRepresentative=Form.form(MedicalRepresentative.class);
-	public static Form<HeadQuarter> headquarter=Form.form(HeadQuarter.class);
+	public static Form<HeadQuarter> headQuarter=Form.form(HeadQuarter.class);
 	public static Form<DCRLineItem> dcrLineItemForm = Form.form(DCRLineItem.class);
 	public static Form<DailyCallReport> dcrForm = Form.form(DailyCallReport.class);
 
@@ -42,9 +42,41 @@ public class MRController extends Controller{
 		return ok(views.html.mr.medicalRepresentative.render(medicalRepresentative));
 
 	}
-
+	/**
+	 * @author anand
+	 * 
+	 * @discription: this method is rendering to headQuarter for mentioning the headQuarter name
+	 * 
+	 * url :	GET  /mr/head-quarter
+	 * 
+	 * */
 	public static Result headQuarter(){
-		return ok(views.html.mr.headQuarter.render(headquarter));
+		return ok(views.html.mr.headQuarter.render(headQuarter));
+	}
+
+	/**
+	 * @author anand
+	 * 
+	 * @discription : this method is saving the headQuarter
+	 * 
+	 * url :	POST  POST   /mr/add-head-quarter
+	 * 
+	 * 
+	 * */
+	public static Result addHeadQuarter(){
+		final MedicalRepresentative loggedInMr = LoginController.getLoggedInUser().getMedicalRepresentative();
+
+		final Form<HeadQuarter> filledHeadQuarterForm = headQuarter.bindFromRequest();
+
+		if(filledHeadQuarterForm.hasErrors()){
+			return ok(views.html.mr.headQuarter.render(filledHeadQuarterForm));
+		}else{
+			final HeadQuarter headQuarter = filledHeadQuarterForm.get();
+			loggedInMr.headQuarterList.add(headQuarter);
+			loggedInMr.update();
+
+		}
+		return ok();
 	}
 
 	public static Result mrList(){
@@ -53,9 +85,11 @@ public class MRController extends Controller{
 	}
 	/**
 	 * @author anand
+	 * 
 	 * url : GET    /doctor-list
 	 * 
 	 * @description: It shows all the doctor which is join through this application
+	 * 
 	 * */
 	public static Result doctorList(){
 		final List<Doctor> doctorList = Doctor.find.all();
@@ -64,6 +98,7 @@ public class MRController extends Controller{
 
 	/**
 	 * @author anand
+	 * 
 	 * url : GET    /mr/add-doctor/:id
 	 * 
 	 * @description: this method is used to add the doctor in particular Admin mr from avilable doctor in this appps
@@ -81,6 +116,7 @@ public class MRController extends Controller{
 	}
 	/**
 	 * @author anand
+	 * 
 	 * url : GET    /mr/doctor-list
 	 * 
 	 * @description: whatever the doctor added to the admin mr ,It shows all of them.
@@ -92,6 +128,7 @@ public class MRController extends Controller{
 	}
 	/**
 	 * @author anand
+	 * 
 	 * url : GET    /mr/remove-doctor/:id
 	 * 
 	 * @description:this method is used to remove the doctor which belongs to Admin mr
@@ -118,9 +155,11 @@ public class MRController extends Controller{
 
 	/**
 	 * @author anand
-	 * url : GET    /search
 	 * 
 	 * @description: to search the doctor for Admin mr.
+	 * 
+	 * url : GET    /search
+	 * 
 	 * */
 	public static Result search(){
 
@@ -151,20 +190,27 @@ public class MRController extends Controller{
 
 	/**
 	 * @author anand
+	 * 
 	 * url : GET    /mr/dcr-list
+	 * 
 	 * @description: this method shows list of all dcr date wise for particular Admin Mr
 	 * 
 	 * */
 	public static Result listDCR(){
 		final MedicalRepresentative loggedInMr = LoginController.getLoggedInUser().getMedicalRepresentative();
-		return ok(views.html.mr.dcrList.render(loggedInMr.dcrList));
+		for (final HeadQuarter quarter : loggedInMr.headQuarterList) {
+			Logger.info("Quarter is : "+quarter);
+		}
+		return ok(views.html.mr.dcrList.render(loggedInMr.dcrList,loggedInMr.headQuarterList));
 	}
 
 	/**
 	 * @author anand
-	 * url : POST   /mr/new-dcr
+	 * 
 	 * @description: this method is used to capture date and store into database
 	 * and date related server side validation
+	 * 
+	 * url : POST   /mr/new-dcr
 	 * 
 	 * */
 	public static Result processNewDCR(){
@@ -217,6 +263,7 @@ public class MRController extends Controller{
 	}
 	/**
 	 * @author anand
+	 * 
 	 * url : GET    /mr/show-dcr/:id
 	 * 
 	 * @description: to show dcr-line-item to adding in daily call report
@@ -235,6 +282,7 @@ public class MRController extends Controller{
 
 	/**
 	 * @author anand
+	 * 
 	 * url : POST   /mr/dcr/add-line-item
 	 * 
 	 * @description: this shows the added dcrlinetime in daily call report of particular mr

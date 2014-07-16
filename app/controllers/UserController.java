@@ -30,6 +30,7 @@ public class UserController extends Controller {
 	public static Form<JoinUsBean> joinUsForm = Form.form(JoinUsBean.class);
 	public static Form<DiagnosticRepresentative> drForm = Form.form(DiagnosticRepresentative.class);
 	public static Form<MedicalRepresentative> mrForm = Form.form(MedicalRepresentative.class);
+
 	public static Result joinUs(){
 		return ok(views.html.joinus.render(joinUsForm));
 	}
@@ -57,7 +58,7 @@ public class UserController extends Controller {
 				final Doctor doctor = new Doctor();
 				doctor.appUser = appUser;
 				doctor.save();
-				
+
 			}
 
 			if(appUser.role == Role.ADMIN_PHARMACIST){

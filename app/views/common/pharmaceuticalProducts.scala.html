@@ -1,0 +1,29 @@
+@(products: List[models.mr.PharmaceuticalProduct])
+ @main("productS"){
+
+<table class="table table-bordered">
+<thead>
+<tr>
+<th>Products</th>
+<th>Products Brand</th>
+</thead>
+
+<tbody>
+
+
+	@for(product <- products){
+		<tr>
+		<td>@product.medicineName</td>
+		<td>@product.brandName</td>
+	<th>
+<a class="btn btn-primary btn-xs" href="/edit-product/@product.id">Edit</a>
+<a class="btn btn-primary btn-xs" href="/remove-product/@product.id">Remove</a>
+</th>
+}
+</tr>
+
+
+</tbody>
+</table>
+}
+

@@ -29,6 +29,7 @@ public class DailyCallReport extends BaseEntity{
 
 	//public DCRStatus dcrStatus;
 
+	public HeadQuarter headQuater;
 
 	@OneToMany(cascade=CascadeType.ALL)
 	public List<DCRLineItem> dcrLineItemList = new ArrayList<DCRLineItem>();

@@ -8,6 +8,7 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.ManyToMany;
 import javax.persistence.OneToMany;
 
 import models.Address;
@@ -26,14 +27,15 @@ public class PharmaceuticalCompany extends BaseEntity {
 
 	public Address address;
 
-	@OneToMany(cascade=CascadeType.ALL)
-	public List<Product> productList = new ArrayList<Product>();
+	@ManyToMany(cascade=CascadeType.ALL)
+	public List<Product> masterProductList = new ArrayList<Product>();
 
 	@OneToMany(cascade=CascadeType.ALL)
 	public List<MedicalRepresentative> mrList = new ArrayList<MedicalRepresentative>();
 
+	@OneToMany(cascade=CascadeType.ALL)
+	public List<PharmaceuticalProduct> productList = new ArrayList<PharmaceuticalProduct>();
+
 	public static Finder<Long,PharmaceuticalCompany> find = new Finder<Long,PharmaceuticalCompany>(Long.class,PharmaceuticalCompany.class);
-
-
 
 }

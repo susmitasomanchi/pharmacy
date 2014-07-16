@@ -35,7 +35,7 @@ public class PharmacistController extends Controller {
 	public static Form<Pharmacist> form = Form.form(Pharmacist.class);
 	// public static Form<UserPreferenceBean> prefForm =
 	// Form.form(UserPreferenceBean.class);
-	// public static Form<Product> productForm = Form.form(Product.class);
+	//public static Form<Product> productForm = Form.form(Product.class);
 
 	public static Form<Pharmacy> pharmacyForm = Form.form(Pharmacy.class);
 
@@ -67,20 +67,17 @@ public class PharmacistController extends Controller {
 
 	/**
 	 * @author:
-	 * 
 	 * @url:/edit-product/:id
-	 * 
 	 * editing a product details
 	 */
 
 	public static Result editProduct(final Long id) {
 
 		final Product product = Product.find.byId(id);
-		final Form<Product> editForm = ProductController.productForm
-				.fill(product);
+		final Form<Product> editForm = ProductController.pharmacyProductForm.fill(product);
 
 		// productForm.fill(product);
-		return ok(views.html.common.createProduct.render(editForm));
+		return ok(views.html.common.createPharmacyProduct.render(editForm));
 
 	}
 

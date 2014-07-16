@@ -200,7 +200,6 @@ GET    /mr/remove-doctor/:id                         controllers.MRController.re
 GET    /mr/doctor-list                               controllers.MRController.mrDoctorList()
 GET    /mr/add-mr                                    controllers.MRController.addMR()
 GET    /mr/list-mr                                   controllers.MRController.mrList()
-GET    /mr/hq                                        controllers.MRController.headQuarter()
 GET    /mr/dcr-list                                  controllers.MRController.listDCR()
 POST   /mr/new-dcr                                   controllers.MRController.processNewDCR()
 GET    /mr/show-dcr/:id                              controllers.MRController.addDCRLineItem(id: Long)
@@ -208,11 +207,12 @@ POST   /mr/dcr/add-line-item                         controllers.MRController.pr
 POST   /mr/dcr/delete-line-item/:dcrid/:lineitemid   controllers.MRController.removeDCRLineItem(dcrid: Long,lineitemid: Long)
 GET    /search                                       controllers.MRController.search()
 GET    /mr/display-appointment/:id                   controllers.MRController.scheduleAppointment(id:String)
-
+GET    /mr/head-quarter                              controllers.MRController.headQuarter()
+POST   /mr/add-head-quarter                          controllers.MRController.addHeadQuarter()
 
 #common module
-GET    /new-product                                  controllers.ProductController.productForm()
-POST   /new-product                                  controllers.ProductController.saveProduct()
+GET    /new-product                                  controllers.ProductController.pharmaceuticalProductForm()
+POST   /new-product                                  controllers.ProductController.savePharmceuticalProduct()
 GET    /view-products                                controllers.ProductController.displayProduct()
 #GET    /edit-product/:id                             controllers.ProductController.editProduct(id: Long)
 #GET    /remove-product/:id                           controllers.ProductController.removeProduct(id: Long)

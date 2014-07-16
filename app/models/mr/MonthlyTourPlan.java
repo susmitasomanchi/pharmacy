@@ -18,8 +18,6 @@ public class MonthlyTourPlan extends BaseEntity{
 	@Id
 	public Long id;
 
-	public Integer srNo;
-
 	public Date forMonth;
 
 	public MedicalRepresentative submitter;
