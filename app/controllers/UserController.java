@@ -9,6 +9,7 @@ package controllers;
 
 import models.Alert;
 import models.AppUser;
+import models.Patient;
 import models.Role;
 import models.diagnostic.DiagnosticRepresentative;
 import models.doctor.Doctor;
@@ -79,6 +80,11 @@ public class UserController extends Controller {
 			pharmacist.update();
 		}
 
+		if(appUser.role.equals(Role.PATIENT)){
+			final Patient patient= new Patient();
+			patient.appUser = appUser;
+			patient.save();
+		}
 
 		session().clear();
 		session(Constants.LOGGED_IN_USER_ID, appUser.id + "");
