@@ -44,7 +44,7 @@ background-color:#cccccc;
 				
 				</div>
 				<a class="btn btn-primary btn-xs pull-right" href="#">Ask Query</a>
-				<button class="btn btn-danger btn-xs pull-right" onclick="window.location.href='/patient/delete-fav-doc/@patDoc.id';"data-toggle="modal" data-target="#myModal2">Remove</button>
+				<button id="@patDoc.id" class="btn btn-danger btn-xs pull-right" data-toggle="modal" data-target="#myModal">Remove</button>
 				@*<a class="btn btn-danger btn-sm" href="@routes.PatientController.deleteMyFavDoctors(patDoc.id)">Remove</a>*@
 				
 				<br>
@@ -151,8 +151,7 @@ background-color:#cccccc;
 			}else{
 			
 			
-
-				<td>
+<td>
 				<div class="row" style="padding-left:20px;padding-right:20px">
 				<div style="cursor:pointer" onclick="location.href='/doctor/profile';"><img src="/assets/images/sunrise.png" width="525" height="200" />
 				<img id="coverborder" src="/assets/images/bordercover.png" style="position:relative;top:-65px"/>
@@ -171,7 +170,7 @@ background-color:#cccccc;
 				
 				</div>
 				<a class="btn btn-primary btn-xs pull-right" href="#">Ask Query</a>
-				<button class="btn btn-danger btn-xs pull-right" data-toggle="modal" data-target="#myModal2">Remove</button>
+				<button id="@patDoc.id" class="btn btn-danger btn-xs pull-right" data-toggle="modal" data-target="#myModal">Remove</button>
 				@*<a class="btn btn-danger btn-sm" href="@routes.PatientController.deleteMyFavDoctors(patDoc.id)">Remove</a>*@
 				
 				<br>
@@ -276,11 +275,34 @@ background-color:#cccccc;
 			}
 		}
 		
-	
 }
 </table>	
+	<div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+  <div class="modal-dialog" style="padding-top:200px">
+  
+    <div class="modal-content" style="padding-left:20px">
+	<h4 class="modal-title">Delete Doctor</h4>
+	 <div class="modal-body">
+        <p>Are you to confirm to remove1</p>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-default btn-xs" data-dismiss="modal">Close</button>
+        <button id="del" onclick=window.location.href="/patient/delete-fav-doc/"+docid; type="button" class="btn btn-primary btn-xs">Confirm</button>
+      </div>
+    </div>
+  </div>
+</div>
 	
-	}
+	
+<script>
+var docid;
+$('#myModal').on('show.bs.modal', function (e) {
+	  docid= $(e.relatedTarget).attr("id");
+	});
+
+	
+</script>	
+}
 	
 	
 	

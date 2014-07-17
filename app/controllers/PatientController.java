@@ -5,6 +5,7 @@ import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
+import models.Alert;
 import models.AppUser;
 import models.Patient;
 import models.diagnostic.DiagnosticCentre;
@@ -243,12 +244,13 @@ public class PatientController extends Controller {
 
 		final PatientDoctorInfo patientDoctorInfo=PatientDoctorInfo.find.byId(patDocid);
 		patientDoctorInfo.delete();
-		return PatientController.patientMyFavDoctors();
+		flash().put("alert", new Alert("alert-success","Successfully Deleted:"+patientDoctorInfo.doctor.appUser.name).toString());
+		return redirect(routes.PatientController.patientMyFavDoctors());
 	}
 	public static Result staticPatientMyFavDoctors() {
 		return ok(views.html.patient.static_fav_doctors.render());
 	}
-	
+
 	public static Result staticPatientNewAppointment() {
 		return ok(views.html.patient.static_patient_new_appointment.render());
 	}
