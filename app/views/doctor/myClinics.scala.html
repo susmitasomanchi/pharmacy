@@ -37,8 +37,9 @@
 		@for(info <- list){
 			<tr>
 				<td>@info.clinic.name</td>
-				<td><a class="btn btn-info btn-xs" href="@routes.DoctorController.manageClinic(info.id)">Manage</a>
-				<button id="@info.id" class="btn btn-info btn-xs  delete" data-toggle="modal" data-target="#myModal">
+				<td><a class="btn btn-info btn-xs" href="@routes.DoctorController.editClinicInfo(info.id)">Edit Info</a>
+				<a class="btn btn-info btn-xs" href="@routes.DoctorController.editClinicSchedule(info.id)">Edit Schedule</a>
+				<button id="@info.id" class="btn btn-info btn-xs btn-danger  delete" data-toggle="modal" data-target="#myModal">
 				Delete
 				</button></td>
 			</tr>

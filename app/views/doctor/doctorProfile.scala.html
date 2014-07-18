@@ -750,9 +750,12 @@ function submitimagesform(name){
 }
 
 
+
 <div class="row" style="padding-left:20px">
 <br>
 <div class="col-md-6">
+<span  class="pull-right" style="padding-right:60px" ><i  id="info/@clinicInfo.id"  class="fa fa-cog editInfo"></i></span>
+<br>
 <h3 style="color:#006687;"><b>@clinicInfo.clinic.name</b></h3>
 <h5>
 @clinicInfo.clinic.contactPersonName
@@ -766,7 +769,9 @@ function submitimagesform(name){
 @clinicInfo.clinic.contactNo
 </h5>
 </div>
+
 <div class="col-md-6">
+<span class="pull-right"  style="padding-right:60px" ><i id="schedule/@clinicInfo.id"  class="fa fa-cog editSchedule"></i></span>
 <h4><b>Weekdays:</b><br><br>
 <div class="row" style="padding-left:20px">
 
@@ -1481,8 +1486,20 @@ function initialize() {
 	};
 	
 </script>
-}
 
+
+}
+<script>
+$(".editInfo").click(function(){
+	$(this).addClass( "fa-spin" );
+	window.location.href = "/doctor/edit-clinic-"+this.id;
+	});
+
+$(".editSchedule").click(function(){
+	$(this).addClass( "fa-spin" );
+	window.location.href = "/doctor/edit-clinic-"+this.id;
+});
+</script>
 
 
 }

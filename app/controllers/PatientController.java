@@ -5,6 +5,7 @@ import java.util.Date;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
+
 import models.Alert;
 import models.AppUser;
 import models.Patient;

@@ -1,0 +1,284 @@
+@(doctorList	: List[models.doctor.Doctor])
+@import play.i18n._
+@import helper.twitterBootstrap._
+@import helper._
+
+@main("Search Doctor"){
+	@if(doctorList.size()==0){
+		No List is created yet
+	}else{
+	<style>
+.badge{
+color:#000000;
+background-color:#cccccc;
+}
+#coverborder {
+    opacity: 0.4;
+    filter: alpha(opacity=40); /* For IE8 and earlier */
+}
+
+</style>
+
+		<table class="table table-bordered">
+		@for((doctor,index) <- doctorList.zipWithIndex){
+			@if(index % 2 == 0){
+				
+				<tr>
+
+				<td>
+				<div class="row" style="padding-left:20px;padding-right:20px">
+				<div style="cursor:pointer" onclick="location.href='/doctor/profile';"><img src="/assets/images/sunrise.png" width="525" height="200" />
+				<img id="coverborder" src="/assets/images/bordercover.png" style="position:relative;top:-65px"/>
+				</div>
+				<div class="row" style="margin-top:-145px;padding-left:20px"><div style="cursor:pointer" onclick="location.href='/doctor/profile';" class="col-md-3">
+				<br>
+				<img src="/assets/images/doctor.png" class="thumbnail" width="120" height="120"  />
+				</div>
+				<div style="cursor:pointer" onclick="location.href='/doctor/profile';" class="col-md-5">
+				<h3>@doctor.appUser.name</h3>
+				<h4>@doctor.specialization</h4>
+				<h5>@doctor.degree</h5>
+				<h5>@doctor.experience</h5>
+				<br>
+				</div>
+				
+				</div>
+				<a class="btn btn-primary btn-xs pull-right" href="#">Ask Query</a>
+				@*<a class="btn btn-danger btn-sm" href="@routes.PatientController.deleteMyFavDoctors(doctor.id)">Remove</a>*@
+				
+				<br>
+				<br>
+					<div class="row">
+				<div class="well">
+				<h4 style="color:#006687;font-weight:bold">Clinics</h4>
+				<ul class="nav nav-tabs">			
+				@if(doctor.doctorClinicInfoList.size()==0){
+					No clinic created yet
+				}
+				<ul class="nav nav-tabs">
+				@for(docclinic <- doctor.doctorClinicInfoList){
+					@if( doctor.doctorClinicInfoList.indexOf(docclinic)==0){
+					  <li  class="active"><a href="#clinic11" data-toggle="tab">XYZ Clinic</a></li>
+					}else{
+					 <li><a href="#clinic12" data-toggle="tab">ABC Clinic</a></li>
+					}
+				} 
+				</ul>
+				
+				<div class="tab-content">
+				@for(docclinic <- doctor.doctorClinicInfoList){
+					@if( doctor.doctorClinicInfoList.indexOf(docclinic)==0){
+				<div class="tab-pane active" id="clinic13">
+				<div class="row">
+				<br>
+				<div class="col-md-4">
+				<h5><b><a href="#" >@docclinic.clinic.name</a></b></h5>
+				<h6>@docclinic.clinic.address.addrressLine1<br>
+				@docclinic.clinic.address.area<br>
+				@docclinic.clinic.address.city<br>
+				@docclinic.clinic.contactNo</h6>
+				</div>
+				<div class="col-md-9">
+				<h5><b>Timings</b><br><br>
+				<div class="row" style="padding-left:10px">
+				@for(schedule <- docclinic.scheduleDays){
+					
+					<span class="col-md-2" style="font-size:16px;width:20%">@schedule.day</span>
+				}
+				
+				</div>
+				
+				</h5>
+				<div class="row" style="padding-left:10px">
+				@for(schedule <- docclinic.scheduleDays){
+				<span class="col-md-2" style="font-size:10px;padding-right:0px;padding-left:10px;width:20%">@schedule.fromTime-@schedule.toTime</span>
+				}
+				</div>
+				
+				</div>
+				</div>
+				
+				<a class="btn btn-success btn-sm" href="/patient/new/appointment">Book Appointment</a>
+				</div>					
+				}else{
+				
+				<div class="tab-pane" id="clinic13">
+				<div class="row">
+				<br>
+				<div class="col-md-3">
+				<h5><b><a href="#" >@docclinic.clinic.name</a></b></h5>
+				<h6>@docclinic.clinic.address.addrressLine1<br>
+				@docclinic.clinic.address.area<br>
+				@docclinic.clinic.address.city<br>
+				@docclinic.clinic.contactNo</h6>
+				</div>
+				<div class="col-md-9">
+				<h5><b>Timings</b><br><br>
+				<div class="row" style="padding-left:10px">
+				@for(schedule <- docclinic.scheduleDays){
+					
+						<span class="col-md-2" style="font-size:16px;width:14%">@schedule.day</span>
+				}
+				
+				</div>
+				
+				</h5>
+				<div class="row" style="padding-left:10px">
+				@for(schedule <- docclinic.scheduleDays){
+				<span class="col-md-2" style="font-size:10px;padding-right:0px;width:14%"">@schedule.fromTime-@schedule.toTime</span>
+				}
+				</div>
+				
+				</div>
+				</div>
+				<a class="btn btn-success btn-sm" href="/patient/new/appointment">Book Appointment</a>
+				</div>					
+				}
+				} 
+				
+				</div>
+				</div>
+			</div>
+				<br>
+				</div>
+			</td>
+				
+				@if(index == doctorList.size()-1){
+						</tr>
+					}
+				
+			}else{
+			
+			
+
+				<td>
+				<div class="row" style="padding-left:20px;padding-right:20px">
+				<div style="cursor:pointer" onclick="location.href='/doctor/profile';"><img src="/assets/images/sunrise.png" width="525" height="200" />
+				<img id="coverborder" src="/assets/images/bordercover.png" style="position:relative;top:-65px"/>
+				</div>
+				<div class="row" style="margin-top:-145px;padding-left:20px"><div style="cursor:pointer" onclick="location.href='/doctor/profile';" class="col-md-3">
+				<br>
+				<img src="/assets/images/doctor.png" class="thumbnail" width="120" height="120"  />
+				</div>
+				<div style="cursor:pointer" onclick="location.href='/doctor/profile';" class="col-md-5">
+				<h3>@doctor.appUser.name</h3>
+				<h4>@doctor.specialization</h4>
+				<h5>@doctor.degree</h5>
+				<h5>@doctor.experience</h5>
+				<br>
+				</div>
+				
+				</div>
+				<a class="btn btn-primary btn-xs pull-right" href="#">Ask Query</a>
+				@*<a class="btn btn-danger btn-sm" href="@routes.PatientController.deleteMyFavDoctors(doctor.id)">Remove</a>*@
+				
+				<br>
+				<br>
+					<div class="row">
+				<div class="well">
+				<h4 style="color:#006687;font-weight:bold">Clinics</h4>
+				<ul class="nav nav-tabs">			
+				@if(doctor.doctorClinicInfoList.size()==0){
+					No clinic created yet
+				}
+				<ul class="nav nav-tabs">
+				@for(docclinic <- doctor.doctorClinicInfoList){
+					@if( doctor.doctorClinicInfoList.indexOf(docclinic)==0){
+					  <li  class="active"><a href="#clinic11" data-toggle="tab">XYZ Clinic</a></li>
+					}else{
+					 <li><a href="#clinic12" data-toggle="tab">ABC Clinic</a></li>
+					}
+				} 
+				</ul>
+				
+				<div class="tab-content">
+				@for(docclinic <- doctor.doctorClinicInfoList){
+					@if( doctor.doctorClinicInfoList.indexOf(docclinic)==0){
+				<div class="tab-pane active" id="clinic13">
+				<div class="row">
+				<br>
+				<div class="col-md-4">
+				<h5><b><a href="#" >@docclinic.clinic.name</a></b></h5>
+				<h6>@docclinic.clinic.address.addrressLine1<br>
+				@docclinic.clinic.address.area<br>
+				@docclinic.clinic.address.city<br>
+				@docclinic.clinic.contactNo</h6>
+				</div>
+				<div class="col-md-9">
+				<h5><b>Timings</b><br><br>
+				<div class="row" style="padding-left:10px">
+				@for(schedule <- docclinic.scheduleDays){
+					
+					<span class="col-md-2" style="font-size:16px;width:20%">@schedule.day</span>
+				}
+				
+				</div>
+				
+				</h5>
+				<div class="row" style="padding-left:10px">
+				@for(schedule <- docclinic.scheduleDays){
+				<span class="col-md-2" style="font-size:10px;padding-right:0px;padding-left:10px;width:20%">@schedule.fromTime-@schedule.toTime</span>
+				}
+				</div>
+				
+				</div>
+				</div>
+				
+				<a class="btn btn-success btn-sm" href="/patient/new/appointment">Book Appointment</a>
+				</div>					
+				}else{
+				
+				<div class="tab-pane" id="clinic13">
+				<div class="row">
+				<br>
+				<div class="col-md-3">
+				<h5><b><a href="#" >@docclinic.clinic.name</a></b></h5>
+				<h6>@docclinic.clinic.address.addrressLine1<br>
+				@docclinic.clinic.address.area<br>
+				@docclinic.clinic.address.city<br>
+				@docclinic.clinic.contactNo</h6>
+				</div>
+				<div class="col-md-9">
+				<h5><b>Timings</b><br><br>
+				<div class="row" style="padding-left:10px">
+				@for(schedule <- docclinic.scheduleDays){
+					
+						<span class="col-md-2" style="font-size:16px;width:14%">@schedule.day</span>
+				}
+				
+				</div>
+				
+				</h5>
+				<div class="row" style="padding-left:10px">
+				@for(schedule <- docclinic.scheduleDays){
+				<span class="col-md-2" style="font-size:10px;padding-right:0px;width:14%"">@schedule.fromTime-@schedule.toTime</span>
+				}
+				</div>
+				
+				</div>
+				</div>
+				<a class="btn btn-success btn-sm" href="/patient/new/appointment">Book Appointment</a>
+				</div>					
+				}
+				} 
+				
+				</div>
+				</div>
+			</div>
+				<br>
+				</div>
+			</td>
+					
+				</tr>
+		
+			}
+		}
+		
+	
+}
+</table>	
+	
+	}
+	
+	
+	
