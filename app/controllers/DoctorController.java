@@ -447,7 +447,7 @@ public class DoctorController extends Controller {
 	 */
 	private static Result createAppointment(final DoctorClinicInfo docClinicInfo) {
 		// Server side validation
-		if(docClinicInfo.doctor.id.longValue() != LoginController.getLoggedInUser().id.longValue()){
+		if(docClinicInfo.doctor.id.longValue() != LoginController.getLoggedInUser().getDoctor().id.longValue()){
 			return redirect(routes.LoginController.processLogout());
 		}
 		try{
@@ -544,7 +544,7 @@ public class DoctorController extends Controller {
 	public static Result manageClinic(final Long docClinicId) {
 		final DoctorClinicInfo doctorClinicInfo = DoctorClinicInfo.find.byId(docClinicId);
 		//server-side check
-		if(doctorClinicInfo.doctor.id.longValue() != LoginController.getLoggedInUser().id.longValue()){
+		if(doctorClinicInfo.doctor.id.longValue() != LoginController.getLoggedInUser().getDoctor().id.longValue()){
 			return redirect(routes.LoginController.processLogout());
 		}
 		final DoctorClinicInfoBean bean = doctorClinicInfo.toBean();
@@ -569,7 +569,7 @@ public class DoctorController extends Controller {
 		else{
 			final DoctorClinicInfo clinicInfo = filledForm.get().toDoctorClinicInfo();
 			//server-side check
-			if(clinicInfo.doctor.id.longValue() != LoginController.getLoggedInUser().id.longValue()){
+			if(clinicInfo.doctor.id.longValue() != LoginController.getLoggedInUser().getDoctor().id.longValue()){
 				return redirect(routes.LoginController.processLogout());
 			}
 			final DoctorClinicInfo clinicInfoPrevious=DoctorClinicInfo.find.byId(clinicInfo.id);

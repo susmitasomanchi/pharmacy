@@ -95,8 +95,8 @@ public class SampleDataController extends Controller {
 
 	public static Result mrSampleData(){
 		final AppUser appUser = new AppUser();
-		appUser.name = "anand1";
-		appUser.email = "anand1@gmail.com";
+		appUser.name = "anand";
+		appUser.email = "anand@gmail.com";
 		appUser.password = "123";
 		appUser.role = Role.ADMIN_MR;
 		appUser.save();

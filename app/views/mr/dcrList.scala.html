@@ -1,4 +1,4 @@
-@(dcrList:List[models.mr.DailyCallReport],headQuarterList: List[models.mr.HeadQuarter])
+@(dcrList:List[models.mr.DailyCallReport],headQuarterMap:Map[models.State,List[models.mr.HeadQuarter]])
 @import play.i18n._
 @import helper.twitterBootstrap._
 @import helper._
@@ -25,11 +25,15 @@
 		     <span class="add-on"><i class="icon-th"></i></span>
 	   	    </div>
 	   	    
-		   	    <select id="headQuarter" data-placeholder="Select headQuarter" class="chzn" name="headQuarter" style="width:200px;" >
+		   	    <select id="headQuarter" data-placeholder="Select Head Quarter" class="chzn" name="headQuarter" style="width:200px;" >
 				   <option></option>
-					@for(quarter <- headQuarterList){
-							<option>@quarter.name</option>
-			        }
+					@for((state,quarterlist)<-headQuarterMap){
+						<optgroup label="@state">
+						@for(quarter <- quarterlist){
+							<option value='@quarter.id'>@quarter.name</option>
+						}
+						</optgroup>
+					}
 			        
 		       </select>
 		       
@@ -46,7 +50,7 @@
 	@for(dcr<-dcrList){
 	<tr>
 		<td>
-		@dcr.forDate
+		@dcr.forDate.format("dd-MMM-yyyy")
 		</td>
 		<td>
 		<a class="btn btn-primary btn-xs" href="@routes.MRController.addDCRLineItem(dcr.id)">Add Line Item</a>
