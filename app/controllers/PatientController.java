@@ -228,7 +228,7 @@ public class PatientController extends Controller {
 	/**
 	 * @author Mitesh
 	 * Action to display currently logged in Patient'Doctor List
-	 *  GET
+	 *  GET /patient/favdoctors
 	 */
 	public static Result patientMyFavDoctors() {
 		final Patient patient=LoginController.getLoggedInUser().getPatient();
@@ -254,5 +254,5 @@ public class PatientController extends Controller {
 	public static Result staticPatientNewAppointment() {
 		return ok(views.html.patient.static_patient_new_appointment.render());
 	}
-	
+
 }
