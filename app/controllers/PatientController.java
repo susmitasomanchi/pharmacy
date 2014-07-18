@@ -1,14 +1,11 @@
 package controllers;
 
 import java.util.Date;
+
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
-<<<<<<< HEAD
-=======
-
 import models.Alert;
->>>>>>> branch 'master' of http://pharmacy.bz/green-software/mednetwork.git
 import models.AppUser;
 import models.Patient;
 import models.diagnostic.DiagnosticCentre;
