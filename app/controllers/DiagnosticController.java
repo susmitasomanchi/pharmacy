@@ -300,4 +300,8 @@ public class DiagnosticController extends Controller {
 		return ok(file);
 	}
 
+	public static Result staticDiagnosticProfile(){
+		
+		return ok(views.html.diagnostic.static_diagnostic_profile.render());
+	}
 }

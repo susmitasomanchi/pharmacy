@@ -160,6 +160,7 @@ GET    /diagnosticrep/doctorsearch	         	controllers.DRController.searchProc
 GET    /diagnosticrep/add-doctor/:id      		controllers.DRController.addDoctor(id: Long)
 GET    /diagnosticrep/remove-doctor/:id   		controllers.DRController.removeDoctor(id: Long)
 GET    /diagnostic-centre/all-doctors      		controllers.DRController.displayDiagnosticCentreDoctors()
+GET		/static/diagnostic/profile				controllers.DiagnosticController.staticDiagnosticProfile()
 
 #Diagnostic Test
 GET    /test				            		controllers.DiagnosticController.addTest()
