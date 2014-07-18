@@ -52,9 +52,6 @@ public class Product extends BaseEntity {
 
 	public static Finder<Long, Product> find = new Finder<Long, Product>(Long.class, Product.class);
 
-	//public static void update(final Long id, final Product product) {
-	//	product.update(id);
-	//}
 
 	public static Map<String, String> options() {
 
