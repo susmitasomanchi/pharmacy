@@ -2,11 +2,13 @@ package controllers;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
 import javax.activation.MimetypesFileTypeMap;
 
+import models.Address;
 import models.Alert;
 import models.Country;
 import models.FileEntity;
@@ -17,9 +19,12 @@ import models.pharmacist.Inventory;
 import models.pharmacist.OrderLineItem;
 import models.pharmacist.Pharmacist;
 import models.pharmacist.Pharmacy;
+import models.pharmacist.ShowCasedProduct;
 import play.Logger;
 import play.data.Form;
 import play.mvc.Controller;
+import play.mvc.Http.MultipartFormData;
+import play.mvc.Http.MultipartFormData.FilePart;
 import play.mvc.Result;
 import actions.BasicAuth;
 import beans.AddProductToInventoryBean;
@@ -37,7 +42,7 @@ public class PharmacistController extends Controller {
 	public static Form<Pharmacist> form = Form.form(Pharmacist.class);
 	// public static Form<UserPreferenceBean> prefForm =
 	// Form.form(UserPreferenceBean.class);
-	// public static Form<Product> productForm = Form.form(Product.class);
+	//public static Form<Product> productForm = Form.form(Product.class);
 
 	public static Form<Pharmacy> pharmacyForm = Form.form(Pharmacy.class);
 
@@ -69,17 +74,14 @@ public class PharmacistController extends Controller {
 
 	/**
 	 * @author:
-	 * 
 	 * @url:/edit-product/:id
-	 * 
 	 * editing a product details
 	 */
 
 	public static Result editProduct(final Long id) {
 
 		final Product product = Product.find.byId(id);
-		final Form<Product> editForm = ProductController.productForm
-				.fill(product);
+		final Form<Product> editForm = ProductController.productForm.fill(product);
 
 		// productForm.fill(product);
 		return ok(views.html.common.createProduct.render(editForm));
@@ -97,13 +99,13 @@ public class PharmacistController extends Controller {
 	public static Result removeProduct(final Long id) {
 		final Pharmacy pharmacy = LoginController.getLoggedInUser()
 				.getPharmacist().pharmacy;
-		Logger.info("before==" + pharmacy.productList.size());
+		Logger.info("before==" + pharmacy.pharmacyProductList.size());
 		final Product product = Product.find.byId(id);
-		pharmacy.productList.remove(product);
+		pharmacy.pharmacyProductList.remove(product);
 		pharmacy.update();
 
 		// productForm.fill(product);
-		Logger.info("after==" + pharmacy.productList.size());
+		Logger.info("after==" + pharmacy.pharmacyProductList.size());
 		return redirect(routes.ProductController.displayProduct());
 
 	}
@@ -262,10 +264,10 @@ public class PharmacistController extends Controller {
 			final Map<String, String[]> requestMap = request().body().asFormUrlEncoded();
 			final Pharmacy pharmacy = Pharmacy.find.byId(Long.parseLong(requestMap.get("pharmacyId")[0]));
 			Logger.info("map size"+requestMap.toString());
-			if(pharmacy.address.id == null){
-				//pharmacy.address = new Address();
-				pharmacy.address.save();
-				Logger.info("id===="+pharmacy.address.id);
+			if(pharmacy.address == null){
+				final Address address = new Address();
+				address.save();
+				pharmacy.address = address;
 			}
 			if(requestMap.get("addressLine1") != null && (requestMap.get("addressLine1")[0].trim().compareToIgnoreCase("")!=0)){
 				pharmacy.address.addrressLine1 = requestMap.get("addressLine1")[0];
@@ -319,7 +321,7 @@ public class PharmacistController extends Controller {
 	 * descrition:uploading the Pharmacy Images process
 	 */
 
-	public static Result uploadPharmacyImageProcess() throws IOException {
+	public static Result uploadPharmacyImageProcess()  {
 		final Pharmacy pharmacy = LoginController.getLoggedInUser()
 				.getPharmacist().pharmacy;
 		final FileEntity fileEntity = new FileEntity();
@@ -327,16 +329,29 @@ public class PharmacistController extends Controller {
 		if (request().body().asMultipartFormData().getFile("backgroundImage") != null) {
 			final File image = request().body().asMultipartFormData().getFile("backgroundImage").getFile();
 
-			pharmacy.backgroundImage = Files.toByteArray(image);
+			try {
+				pharmacy.backgroundImage = Files.toByteArray(image);
+			} catch (final IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
 
 		}
 
 		if (request().body().asMultipartFormData().getFile("profileImage") != null) {
+			Logger.info("inside 1");
 			final File image = request().body().asMultipartFormData().getFile("profileImage").getFile();
 			fileEntity.fileName = image.getName();
 			fileEntity.mimeType = new MimetypesFileTypeMap().getContentType(image);
-			fileEntity.byteContent = Files.toByteArray(image);
+			try {
+				fileEntity.byteContent = Files.toByteArray(image);
+			} catch (final IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+			Logger.info("inside 2");
 			pharmacy.profileImageList.add(fileEntity);
+			Logger.info("inside 3");
 
 		} else {
 			Logger.info("BG IMAGE NULL");
@@ -402,26 +417,75 @@ public class PharmacistController extends Controller {
 		return redirect(routes.UserActions.dashboard());
 	}
 
-	/*
-	 * @author : lakshmi
-	 * 
-	 * @url:
-	 * 
-	 * descrition: pharmacy Description Updation
-	 */
-	public static Result pharmacyDescription(final Long id){
-		final Map<String, String[]> s = request().body().asFormUrlEncoded();
-		Logger.info("String........"+s);
-		final Form<PharmacyBean> filledForm = pharmacyBeanForm.bindFromRequest();
-		Logger.info("id==="+Pharmacy.find.byId(id));
-		final Pharmacy pharmacy = Pharmacy.find.byId(id);
 
-		pharmacy.description = pharmacyForm.get().description;
+	public static Result addShowCasedProduct(){
+		try{
+			final Map<String, String[]> requestMap = request().body().asMultipartFormData().asFormUrlEncoded();
+			final Pharmacy pharmacy = Pharmacy.find.byId(Long.parseLong(requestMap.get("pharmacyId")[0]));
+			Logger.info("map size"+requestMap);
+			final ShowCasedProduct showCasedProduct = new ShowCasedProduct();
+			if(requestMap.get("name") != null && (requestMap.get("name")[0].trim().compareToIgnoreCase("")!=0)){
+				showCasedProduct.name = requestMap.get("name")[0];
+			}
+			if(requestMap.get("description") != null && (requestMap.get("description")[0].trim().compareToIgnoreCase("")!=0)){
+				showCasedProduct.description = requestMap.get("description")[0];
+			}
+			if(requestMap.get("mrp") != null && (requestMap.get("mrp")[0].trim().compareToIgnoreCase("")!=0)){
+				showCasedProduct.mrp = Double.parseDouble(requestMap.get("mrp")[0]);
+			}
+			if (request().body().asMultipartFormData().getFiles().size() != 0) {
 
+				final List<Long> ids = new ArrayList<>();
+				final MultipartFormData body = request().body().asMultipartFormData();
+				final List<FilePart> listOfImages = body.getFiles();
+				for (final FilePart filePart : listOfImages) {
+					final FileEntity fileEntity = new FileEntity();
+					if (filePart != null) {
+						final File imageFile = filePart.getFile();
+						fileEntity.fileName = filePart.getFilename();
+						fileEntity.mimeType = filePart.getContentType();
+						fileEntity.byteContent = Files.toByteArray(imageFile);
+						fileEntity.save();
+						ids.add(fileEntity.id);
+						Logger.info(" ater id==="+fileEntity.id);
+
+					}
+				}
+				for (final Long id : ids) {
+					final FileEntity fileEntity2 = FileEntity.find.byId(id);
+					showCasedProduct.showcasedImagesList.add(fileEntity2);
+
+				}
+				Logger.info("list size() "+showCasedProduct.showcasedImagesList.size());
+
+
+
+			}
+			pharmacy.showCaseProductList.add(showCasedProduct);
+			pharmacy.update();
+		}catch(final Exception e){
+			e.printStackTrace();
+			flash().put("alert", new Alert("alert-danger", "Sorry. Something went wrong. Please try again.").toString());
+		}
+
+		return redirect(routes.UserActions.dashboard());
+		//return ok();
+
+	}
+	public static Result removeProductFromShowcaseList(final Long showCaseProductId){
+		Logger.info("inside");
+		final Pharmacy pharmacy = LoginController.getLoggedInUser().getPharmacist().pharmacy;
+		final ShowCasedProduct showCasedProduct  = ShowCasedProduct.find.byId(showCaseProductId);
+		//		showCasedProduct.delete();
+		pharmacy.showCaseProductList.remove(showCasedProduct);
+
+		Logger.info("size()==="+pharmacy.showCaseProductList.size());
 		pharmacy.update();
-		//		return ok(views.html.pharmacist.pharmacy_profile.render(pharmacy.inventoryList, pharmacy));
+		showCasedProduct.delete();
 		return redirect(routes.UserActions.dashboard());
 
 	}
+
+
 
 }

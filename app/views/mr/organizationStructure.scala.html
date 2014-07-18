@@ -1,0 +1,53 @@
+@(mrList:List[models.mr.MedicalRepresentative])
+@no_navbar("Org Str"){
+
+ <link rel="stylesheet" media="screen" href="@routes.Assets.at("stylesheets/jquery.orgchart.css")">
+         <script src="@routes.Assets.at("javascripts/jquery-orgchart.js")" type="text/javascript"></script>
+ 
+<ul id="organization">
+
+<script>
+var map = new Object()
+</script>
+
+@for(mr <- mrList){
+
+	@if(mr.id != 1){
+	<li id="li-id-@mr.id">MR-@mr.id<ul  id="ul-id-@mr.id"></ul></li>
+	}
+	<script>
+		@if(mr.manager != null){
+			map['li-id-@mr.id'] = 'ul-id-@mr.manager.appUser.id';
+		}else{
+			map['li-id-@mr.id'] = 'null';
+		}
+	</script>
+}
+
+</ul>
+
+
+
+
+<div id='chart-container'></div>
+
+
+<script>
+
+window.onload=function(){
+	
+	
+	$.each(map, function( index, value ) {
+		  if(value != 'null'){
+			  $('#'+index).detach().appendTo('#'+value);
+		  }
+	});
+	
+	$('#organization').orgChart({container: $('#chart-container')});
+	
+};
+	
+	
+</script>
+
+}

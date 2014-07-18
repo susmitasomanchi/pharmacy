@@ -16,16 +16,24 @@ import models.BaseEntity;
 @SuppressWarnings("serial")
 @Entity
 public class DailyCallReport extends BaseEntity{
-	
+
 	@GeneratedValue(strategy=GenerationType.AUTO)
 	@Id
 	public Long id;
-	
+
 	public Date forDate;
-	
+
+	//public MedicalRepresentative submitter;
+
+	//public MedicalRepresentative approver;
+
+	//public DCRStatus dcrStatus;
+
+	public HeadQuarter headQuater;
+
 	@OneToMany(cascade=CascadeType.ALL)
-	public List<DCRLineItem> dcrLineItemList = new ArrayList<DCRLineItem>(); 
-	
+	public List<DCRLineItem> dcrLineItemList = new ArrayList<DCRLineItem>();
+
 	public static Finder<Long, DailyCallReport> find = new Finder<Long, DailyCallReport>(Long.class, DailyCallReport.class);
 
 }

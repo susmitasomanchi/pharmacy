@@ -16,7 +16,6 @@ import javax.persistence.OneToOne;
 import models.Address;
 import models.BaseEntity;
 import models.FileEntity;
-import models.Product;
 import beans.PharmacyBean;
 
 @SuppressWarnings("serial")
@@ -31,6 +30,7 @@ public class Pharmacy extends BaseEntity {
 
 	public String testField;
 
+
 	@Lob
 	public byte[] backgroundImage;
 
@@ -38,7 +38,7 @@ public class Pharmacy extends BaseEntity {
 	public List<FileEntity> profileImageList = new ArrayList<FileEntity>();
 
 	@OneToOne
-	public Address address = new Address();
+	public Address address;
 
 	public String contactNo;
 
@@ -48,11 +48,11 @@ public class Pharmacy extends BaseEntity {
 	@OneToOne
 	public Pharmacist adminPharmacist;
 
-	//@OneToOne
-	//public PharmacyProductInfo pharmacyProductInfo;
+	@OneToMany(cascade=CascadeType.ALL)
+	public List<PharmacyProduct> pharmacyProductList = new ArrayList<PharmacyProduct>();
 
 	@OneToMany(cascade=CascadeType.ALL)
-	public List<Product> productList = new ArrayList<Product>();
+	public List<ShowCasedProduct> showCaseProductList = new ArrayList<ShowCasedProduct>();
 
 	@OneToMany(cascade=CascadeType.ALL)
 	public List<Pharmacist> pharmacistList = new ArrayList<Pharmacist>();

@@ -3,16 +3,22 @@
 
 THIS IS AN AUTO GENERATED CODE
 PLEASE DO NOT MODIFY IT BY HAND
+ *****/
+/*****
 
+THIS IS AN AUTO GENERATED CODE
+PLEASE DO NOT MODIFY IT BY HAND
  *****/
 package controllers;
 
 import models.Alert;
 import models.AppUser;
+import models.Patient;
 import models.Role;
 import models.diagnostic.DiagnosticRepresentative;
 import models.doctor.Doctor;
 import models.mr.MedicalRepresentative;
+import models.mr.PharmaceuticalCompany;
 import models.pharmacist.Pharmacist;
 import models.pharmacist.Pharmacy;
 import play.data.Form;
@@ -27,6 +33,7 @@ public class UserController extends Controller {
 	public static Form<JoinUsBean> joinUsForm = Form.form(JoinUsBean.class);
 	public static Form<DiagnosticRepresentative> drForm = Form.form(DiagnosticRepresentative.class);
 	public static Form<MedicalRepresentative> mrForm = Form.form(MedicalRepresentative.class);
+
 
 
 	/**
@@ -57,6 +64,22 @@ public class UserController extends Controller {
 
 		appUser.save();
 
+		if(appUser.role == Role.ADMIN_MR){
+
+			final MedicalRepresentative medicalRepresentative = new MedicalRepresentative();
+			final PharmaceuticalCompany pharmaCompany = new PharmaceuticalCompany();
+			medicalRepresentative.appUser = appUser;
+			medicalRepresentative.save();
+			pharmaCompany.name = request().body().asFormUrlEncoded().get("pharmaceuticalCompanyName")[0].trim();
+			pharmaCompany.mrList.add(medicalRepresentative);
+			//pharmaCompany.appuserid=appUser.id;
+			pharmaCompany.save();
+			medicalRepresentative.pharmaceuticalCompany = pharmaCompany;
+			medicalRepresentative.update();
+
+		}
+
+
 		if(appUser.role.equals(Role.DOCTOR)){
 			final Doctor doctor = new Doctor();
 			doctor.specialization = "Specialization";
@@ -76,6 +99,12 @@ public class UserController extends Controller {
 			pharmacy.save();
 			pharmacist.pharmacy = pharmacy;
 			pharmacist.update();
+		}
+
+		if(appUser.role.equals(Role.PATIENT)){
+			final Patient patient= new Patient();
+			patient.appUser = appUser;
+			patient.save();
 		}
 
 		session().clear();
@@ -138,6 +167,7 @@ public class UserController extends Controller {
 
 
 
+
 	/*
 	public static Result processJoinUs(){
 		final Form<JoinUsBean> filledForm = joinUsForm.bindFromRequest();
@@ -161,6 +191,7 @@ public class UserController extends Controller {
 				final Doctor doctor = new Doctor();
 				doctor.appUser = appUser;
 				doctor.save();
+
 			}
 
 			if(appUser.role == Role.ADMIN_PHARMACIST){

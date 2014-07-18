@@ -1,4 +1,4 @@
-@(dcr: models.mr.DailyCallReport, dcrLineItemForm:play.data.Form[models.mr.DCRLineItem],doctorList: List[models.doctor.Doctor],disabledDoctorList: List[models.doctor.Doctor],productList: List[Product])
+@(dcr: models.mr.DailyCallReport, dcrLineItemForm:play.data.Form[models.mr.DCRLineItem],doctorList: List[models.doctor.Doctor],disabledDoctorList: List[models.doctor.Doctor],productList: List[models.mr.PharmaceuticalProduct])
 
 @import play.i18n._
 @import helper.twitterBootstrap._
@@ -73,7 +73,7 @@
 	<tr>
 		
 		<td valign="top" >
-		<select id="selectDoctor" data-placeholder="Selsect Doctor" class="chzn" name="doctor" style="width:200px;" >
+		<select id="selectDoctor" data-placeholder="Select Doctor" class="chzn" name="doctor" style="width:200px;" >
 		   <option></option>
 			@for(doctor <- doctorList){
 				@if(disabledDoctorList.contains(doctor)){
@@ -134,8 +134,10 @@
 	        </div>
         </td>
         
-		<td valign="top"  ><input id="pob" class="numeric-textbox-pob" name="pob" style="width:50px;height:24px"/></td>
+		<td valign="top" ><input id="pob" class="numeric-textbox-pob" name="pob" style="width:50px;height:24px"/></td>
+		
 		<td valign="top" ><input id="remarks" name="remarks" type="text" placeholder="Remarks" style="width:150px;height:24px"/></td>
+      
       </tr>
 		
    </tbody>
@@ -207,7 +209,7 @@
 	   	}
 	   	
 		<td>@dcrLineItem.remarks</td>
-		<td ><a class="btn btn-danger btn-xs center-block" onclick="removeLineItem('@dcrLineItem.id','@dcrLineItem.doctor.id');">Remove</a></td>
+		<td><a class="btn btn-danger btn-xs center-block" onclick="removeLineItem('@dcrLineItem.id','@dcrLineItem.doctor.id');">Remove</a></td>
      </tr>
      }
    </tbody>
