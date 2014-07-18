@@ -19,6 +19,7 @@ import models.State;
 import models.diagnostic.DiagnosticCentre;
 import models.diagnostic.DiagnosticReport;
 import models.diagnostic.DiagnosticTest;
+import models.diagnostic.ShowCasedService;
 
 import org.apache.commons.io.FileUtils;
 
@@ -26,6 +27,7 @@ import play.Logger;
 import play.data.DynamicForm;
 import play.data.Form;
 import play.mvc.Controller;
+import play.mvc.Http.MultipartFormData;
 import play.mvc.Http.MultipartFormData.FilePart;
 import play.mvc.Result;
 import beans.DiagnosticBean;
@@ -42,9 +44,9 @@ public class DiagnosticController extends Controller {
 	/**
 	 * @author : lakshmi
 	 * 
-	 * @url: /diagnosticlist
+	 * GET /diagnosticlist
 	 * 
-	 * descrition: list out all diagnostic centers from diagnostic center table
+	 * Action to list out all diagnostic centers from diagnostic center table
 	 */
 	public static Result diagnosticList() {
 		final Long id = LoginController.getLoggedInUser().getDiagnosticRepresentative().id;
@@ -53,12 +55,12 @@ public class DiagnosticController extends Controller {
 
 	}
 
-	/*
+	/**
 	 * @author : lakshmi
 	 * 
-	 * @url: /diagnostic-delete/:id
+	 * GET /diagnostic-delete/:id
 	 * 
-	 * descrition: deleting diagnostic center from table based on id
+	 * Action for deleting diagnostic center from table based on id
 	 */
 	public static Result deleteCenter(final Long id) {
 		final DiagnosticCentre dc = DiagnosticCentre.find.byId(id);
@@ -66,12 +68,12 @@ public class DiagnosticController extends Controller {
 		return ok("deleted successfully");
 	}
 
-	/*
+	/**
 	 * @author : lakshmi
 	 * 
-	 * @url: /diagnostic-edit/:id
+	 * GET /diagnostic-edit/:id
 	 * 
-	 * descrition: getting the filled form to edit diagnostic centre details
+	 * Action for getting the filled form to edit diagnostic centre details
 	 */
 	public static Result editDiagnosticDetails(final Long id) {
 		final DiagnosticCentre dc = DiagnosticCentre.find.byId(id);
@@ -79,12 +81,12 @@ public class DiagnosticController extends Controller {
 		return ok(views.html.diagnostic.diagnosticReg.render(filledForm));
 	}
 
-	/*
+	/**
 	 * @author : lakshmi
 	 * 
-	 * @url: /diagnostic-edit
+	 * POST /diagnostic-edit
 	 * 
-	 * descrition: updating the diagnostic centre with edit information
+	 *Action for updating the diagnostic centre with edit information
 	 */
 
 	public static Result diagnosticEditprocess() {
@@ -98,10 +100,10 @@ public class DiagnosticController extends Controller {
 		return ok("updated successfully");
 	}
 
-	/*
+	/**
 	 * @author : lakshmi
 	 * 
-	 * @url:/diagnostic-search
+	 * GET/diagnostic-search
 	 * 
 	 * descrition: rendering to search form
 	 */
@@ -110,12 +112,12 @@ public class DiagnosticController extends Controller {
 		return ok(views.html.diagnostic.diagnosticSearch.render());
 	}
 
-	/*
+	/**
 	 * @author : lakshmi
 	 * 
-	 * @url: /diagnostic-search/list
+	 * POST: /diagnostic-search/list
 	 * 
-	 * descrition: searching the diagnostic center by name ,mobile no &email id
+	 * Action for searching the diagnostic center by name ,mobile no &email id
 	 */
 	public static Result diagnosticSearchProcess() {
 		final DynamicForm requestData = Form.form().bindFromRequest();
@@ -149,24 +151,24 @@ public class DiagnosticController extends Controller {
 
 	}
 
-	/*
+	/**
 	 * @author : lakshmi
 	 * 
-	 * @url:/test
+	 * GET/test
 	 * 
-	 * descrition: rendering to addDiagnosticTest scala to add test to the diagnostic center
+	 * Action for rendering to addDiagnosticTest scala to add test to the diagnostic center
 	 */
 
 	public static Result addTest() {
 		return ok(views.html.diagnostic.addDiagnosticTest.render(diagnosticTestForm));
 	}
 
-	/*
+	/**
 	 * @author : lakshmi
 	 * 
-	 * @url:/test/save
+	 * POST /test/save
 	 * 
-	 * descrition: updating diagnostic centre with added test
+	 * Action for updating diagnostic centre with added test
 	 */
 
 	public static Result addTestProcess() {
@@ -197,12 +199,12 @@ public class DiagnosticController extends Controller {
 	}
 	 */
 
-	/*
+	/**
 	 * @author : lakshmi
 	 * 
-	 * @url:/test-list/:diagnosticCentreId/:patientId
+	 * GET /test-list/:diagnosticCentreId/:patientId
 	 * 
-	 * descrition: displaying all the tests available for incoming diagnosticCentreId & PatientId
+	 * Action for displaying all the tests available for incoming diagnosticCentreId & PatientId
 	 */
 	public static Result diagnosticTestList(final Long diagnosticCentreId,final Long PatientId) {
 		if (PatientId != 0 && diagnosticCentreId == 0) {
@@ -219,12 +221,12 @@ public class DiagnosticController extends Controller {
 		}
 	}
 
-	/*
+	/**
 	 * @author : lakshmi
 	 * 
-	 * @url:/diagnostic-test-list
+	 *GET/diagnostic-test-list
 	 * 
-	 * description: displaying all the tests belonging to the diagnostic centre
+	 * Action for displaying all the tests belonging to the diagnostic centre
 	 */
 	public static Result diagnosticCentreTestList() {
 		final DiagnosticCentre dc = LoginController.getLoggedInUser().getDiagnosticRepresentative().diagnosticCentre;
@@ -309,6 +311,14 @@ public class DiagnosticController extends Controller {
 		}
 		return ok(file);
 	}
+	/**
+	 * @author lakshmi
+	 * 
+	 * Action for uploading DiagnosticCentre backgroundImages and profile
+	 * Images
+	 * 
+	 * POST	/diagnostic/upload-diagnostic-images
+	 */
 	public static Result uploadDiagnosticImageProcess() throws IOException {
 		//final DiagnosticCentre diagnosticCentre = DiagnosticCentre.find.byId(Long.parseLong(request().body().asFormUrlEncoded().get("diagnosticId")[0]));
 		final DiagnosticCentre diagnosticCentre = LoginController.getLoggedInUser().getDiagnosticRepresentative().diagnosticCentre;
@@ -317,25 +327,19 @@ public class DiagnosticController extends Controller {
 
 		if (request().body().asMultipartFormData().getFile("backgroundImage") != null) {
 			final File image = request().body().asMultipartFormData().getFile("backgroundImage").getFile();
-
 			diagnosticCentre.backgroudImage = Files.toByteArray(image);
 			diagnosticCentre.update();
 		}
 
 		if (request().body().asMultipartFormData().getFile("profileImage") != null) {
 			final FileEntity fileEntity = new FileEntity();
-			Logger.info("profile 1");
 			final File image = request().body().asMultipartFormData().getFile("profileImage").getFile();
-			Logger.info("profile 2"+image);
 			fileEntity.fileName = image.getName();
 			fileEntity.mimeType = new MimetypesFileTypeMap().getContentType(image);
 			fileEntity.byteContent = Files.toByteArray(image);
 			fileEntity.save();
 			final Long imageId=fileEntity.id;
-			Logger.info("image id"+imageId);
 			diagnosticCentre.profileImageList.add(FileEntity.find.byId(imageId));
-			Logger.info("added");
-			Logger.info("diagnosticCentre.profileImageList"+diagnosticCentre.profileImageList.size());
 			diagnosticCentre.update();
 		} else {
 			Logger.info("BG IMAGE NULL");
@@ -346,14 +350,28 @@ public class DiagnosticController extends Controller {
 		return redirect(routes.UserActions.dashboard());
 
 	}
-	public static Result getDiagnosticImages(final Long diagnosticId,final Long imageId) {
+	/**
+	 * @author : lakshmi
+	 * 
+	 *  Action for getting byte data as image
+	 * 
+	 * GET		/diagnostic/get-image/:diagnosticId/:fileId
+	 */
+	public static Result getDiagnosticImages(final Long diagnosticId,final Long imageId,final Long diagnosticServiceId,final Long diagnosticServiceImageID) {
 		byte[] byteContent = null;
-		if(imageId == 0){
+		if(diagnosticId != 0){
 			byteContent=DiagnosticCentre.find.byId(diagnosticId).backgroudImage;
 		}
-		else{
+		if(diagnosticId != 0 && imageId != 0){
 			for (final FileEntity file : DiagnosticCentre.find.byId(diagnosticId).profileImageList) {
 				if(file.id == imageId){
+					byteContent = file.byteContent;
+				}
+			}
+		}
+		if(diagnosticServiceId != 0 && diagnosticServiceImageID != 0){
+			for (final FileEntity file : ShowCasedService.find.byId(diagnosticServiceId).showcasedImagesList) {
+				if(file.id == diagnosticServiceImageID){
 					byteContent = file.byteContent;
 				}
 			}
@@ -364,13 +382,16 @@ public class DiagnosticController extends Controller {
 
 	/**
 	 * @author : lakshmi
+	 * 
 	 * POST	/diagnostic/basic-update
+	 * 
 	 * Action to update the basic details(like name & brief description etc) of DiagnosticCentre
 	 * of the loggedIn ADMIN_DIAGREP
 	 */
 
 	public static Result diagnosticBasicUpdate() {
 		try{
+			Thread.sleep(500);
 			final Map<String, String[]> requestMap = request().body().asFormUrlEncoded();
 			final DiagnosticCentre diagnosticCentre = DiagnosticCentre.find.byId(Long.parseLong(requestMap.get("diagnosticId")[0]));
 			if(requestMap.get("name") != null && (requestMap.get("name")[0].trim().compareToIgnoreCase("")!=0)){
@@ -390,7 +411,9 @@ public class DiagnosticController extends Controller {
 
 	/**
 	 * @author : lakshmi
+	 * 
 	 * POST	/diagnostic/address-update
+	 * 
 	 * Action to update the address details of DiagnosticCentre
 	 * of the loggedIn ADMIN_DIAGREP
 	 */
@@ -446,7 +469,13 @@ public class DiagnosticController extends Controller {
 		}
 		return redirect(routes.UserActions.dashboard());
 	}
-
+	/**
+	 * @author lakshmi
+	 * 
+	 * Action for removing diagnostic profileImage from the diagnostic profileImageList
+	 * 
+	 * GET		/diagnostic/remove-image/:diagnosticId/:fileId
+	 */
 	public static Result removeDiagnosticImage(final Long diagnosticId,final Long imageId){
 		final DiagnosticCentre diagnosticCentre = DiagnosticCentre.find.byId(diagnosticId);
 		Logger.info("before list size="+diagnosticCentre.profileImageList.size());
@@ -460,6 +489,99 @@ public class DiagnosticController extends Controller {
 		//		return ok(views.html.pharmacist.pharmacy_profile.render(pharmacy.inventoryList, pharmacy));
 		return redirect(routes.UserActions.dashboard());
 	}
+
+
+	/**
+	 * @author lakshmi
+	 * Action to add and update a ShowCasedProduct to the pharmacy showCasedList
+	 * POST	/pharmacy/add-product-to-showcase
+	 */
+
+	public static Result addShowCasedService(){
+		try{
+			final Map<String, String[]> requestMap = request().body().asMultipartFormData().asFormUrlEncoded();
+			final DiagnosticCentre diagnosticCentre = DiagnosticCentre.find.byId(Long.parseLong(requestMap.get("diagnosticId")[0]));
+			Logger.info("map size"+requestMap);
+			ShowCasedService showCasedService;
+			if(Long.parseLong(requestMap.get("showCaseServiceId")[0]) != 0){
+				showCasedService = ShowCasedService.find.byId(Long.parseLong(requestMap.get("showCaseServiceId")[0]));
+
+			}else{
+				showCasedService = new ShowCasedService();
+
+			}
+			if(requestMap.get("name") != null && (requestMap.get("name")[0].trim().compareToIgnoreCase("")!=0)){
+				showCasedService.name = requestMap.get("name")[0];
+			}
+			if(requestMap.get("description") != null && (requestMap.get("description")[0].trim().compareToIgnoreCase("")!=0)){
+				showCasedService.description = requestMap.get("description")[0];
+			}
+			if(requestMap.get("cost") != null && (requestMap.get("cost")[0].trim().compareToIgnoreCase("")!=0)){
+				showCasedService.cost = Double.parseDouble(requestMap.get("cost")[0]);
+			}
+			if (request().body().asMultipartFormData().getFiles().size() != 0) {
+				final MultipartFormData body = request().body().asMultipartFormData();
+				final List<FilePart> listOfImages = body.getFiles();
+				for (final FilePart filePart : listOfImages) {
+					final FileEntity fileEntity = new FileEntity();
+					if (filePart != null) {
+						final File imageFile = filePart.getFile();
+						fileEntity.fileName = filePart.getFilename();
+						fileEntity.mimeType = filePart.getContentType();
+						fileEntity.byteContent = Files.toByteArray(imageFile);
+						fileEntity.save();
+						showCasedService.showcasedImagesList.add(fileEntity);
+						Logger.info(" fileEntity id==="+fileEntity.id);
+					}
+				}
+				Logger.info("image list size() "+showCasedService.showcasedImagesList.size());
+			}
+
+
+			if(showCasedService.id == null){
+				diagnosticCentre.showCasedServiceList.add(showCasedService);
+			}
+			else{
+				diagnosticCentre.showCasedServiceList.remove(ShowCasedService.find.byId(showCasedService.id));
+				diagnosticCentre.showCasedServiceList.add(showCasedService);
+			}
+			diagnosticCentre.update();
+			Logger.info("diag centre ID=="+diagnosticCentre.id);
+
+			Logger.info("ShowcasedProduct list size=="+diagnosticCentre.showCasedServiceList.size());
+			Logger.info("showcased product image list=="+diagnosticCentre.showCasedServiceList.get(0).showcasedImagesList.size());
+			Logger.info("Showcase Product Id=="+showCasedService.id);
+			Logger.info("*******************************************************************");
+		}catch(final Exception e){
+			e.printStackTrace();
+			flash().put("alert", new Alert("alert-danger", "Sorry. Something went wrong. Please try again.").toString());
+		}
+
+		return redirect(routes.UserActions.dashboard());
+		//return ok();
+
+	}
+	/**
+	 * @author lakshmi
+	 * 
+	 * remove ShowcasedProduct from the pharmacy showcasedProductList
+	 * 
+	 * GET		/pharmacy/remove-product-from-showcase/:id
+	 */
+	public static Result removeServiceFromShowcaseList(final Long showCaseserviceId){
+		Logger.info("inside");
+		final DiagnosticCentre diagnosticCentre = LoginController.getLoggedInUser().getDiagnosticRepresentative().diagnosticCentre;
+		final ShowCasedService showCasedService  = ShowCasedService.find.byId(showCaseserviceId);
+		//		showCasedProduct.delete();
+		diagnosticCentre.showCasedServiceList.remove(showCasedService);
+
+		Logger.info("size()==="+diagnosticCentre.showCasedServiceList.size());
+		diagnosticCentre.update();
+		showCasedService.delete();
+		return redirect(routes.UserActions.dashboard());
+
+	}
+
 
 
 

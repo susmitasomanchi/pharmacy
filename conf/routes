@@ -89,7 +89,6 @@ POST   /scheduleappointment/              		controllers.AppointmentController.pr
 #Pharmacy Module
 
 GET   /edit-product/:id                      				controllers.PharmacistController.editProduct(id: Long)
-GET   /remove-product/:id                      				controllers.PharmacistController.removeProduct(id: Long)
 POST	/addProductToInventory/								controllers.PharmacistController.addProductForm(id: Long)
 POST   /addProductToInventory1/            					controllers.PharmacistController.addToInventory(id:Long)		
 GET		/order												controllers.PharmacistController.orderRecord()
@@ -98,7 +97,6 @@ POST   /searchProduct                           			controllers.PharmacistControl
 GET   /place-product-order                     				controllers.PharmacistController.placeProductOrder()
 GET   /place-product-order/process              			controllers.PharmacistController.placeProductOrderProcess()
 #GET	 /pharmacy/profile									controllers.PharmacistController.pharmacyProfile()
-GET		/edit-pharmacy-details								controllers.PharmacistController.editPharmacyDetails()
 POST	/pharmacy/basic-update								controllers.PharmacistController.pharmacyBasicUpdate()
 POST	/pharmacy/address-update							controllers.PharmacistController.pharmacyAddressUpdate()
 #GET	/pharmacy/search-product							controllers.PharmacistController.productSearchProcess()	
@@ -108,7 +106,8 @@ POST	/pharmacy/upload-pharmacy-images					controllers.PharmacistController.uploa
 GET		/pharmacy/get-image/:pharmacyId/:fileId				controllers.PharmacistController.getPharmacyImages(pharmacyId: Long,fileId: Long)
 GET		/pharmacy/remove-image/:pharmacyId/:fileId			controllers.PharmacistController.removeImage(pharmacyId: Long,fileId: Long)
 GET		/pharmacy/order/:id									controllers.PharmacistController.pharmacyPlaceOrder(id: Long)
-
+GET		/pharmacy/get-dummy-image/:showcaseID/:fileId				controllers.PharmacistController.getShowPharmacyImages(showcaseID: Long,fileId: Long)
+GET		/display-image										controllers.PharmacistController.displayImage()
 GET 	/pharmacy/order									controllers.PharmacistController.orderManagement()
 
 #GET 	/create-Mr-schedule				controllers.DoctorController.createMrSchedule()
@@ -173,10 +172,13 @@ GET    /download						  						controllers.DiagnosticController.downloadFile()
 #GET   /add-test-done						  					controllers.DiagnosticController.addTestDone()
 #GET    /test-list/:id				            				controllers.DiagnosticController.diagnosticCentreTestList(id: Long)
 POST	/diagnostic/upload-diagnostic-images					controllers.DiagnosticController.uploadDiagnosticImageProcess()
-GET		/diagnostic/get-image/:diagnosticId/:fileId				controllers.DiagnosticController.getDiagnosticImages(diagnosticId: Long,fileId: Long)
+GET		/diagnostic/get-image/:diagnosticId/:fileId/:serviceId/:serviceImageId				controllers.DiagnosticController.getDiagnosticImages(diagnosticId: Long,fileId: Long,serviceId: Long,serviceImageId: Long)
 POST	/diagnostic/basic-update								controllers.DiagnosticController.diagnosticBasicUpdate()
 POST	/diagnostic/address-update								controllers.DiagnosticController.diagnosticAddressUpdate()
 GET		/diagnostic/remove-image/:diagnosticId/:fileId			controllers.DiagnosticController.removeDiagnosticImage(diagnosticId: Long,fileId: Long)
+POST	/diagnostic/add-service-to-showcase						controllers.DiagnosticController.addShowCasedService()
+GET		/diagnostic/remove-service-from-showcase/:id			controllers.DiagnosticController.removeServiceFromShowcaseList(id: Long)
+
 																																
 
 

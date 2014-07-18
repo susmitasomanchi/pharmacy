@@ -10,6 +10,7 @@ package controllers;
 import models.Alert;
 import models.AppUser;
 import models.Role;
+import models.diagnostic.DiagnosticCentre;
 import models.diagnostic.DiagnosticRepresentative;
 import models.doctor.Doctor;
 import models.mr.MedicalRepresentative;
@@ -76,6 +77,18 @@ public class UserController extends Controller {
 			pharmacy.save();
 			pharmacist.pharmacy = pharmacy;
 			pharmacist.update();
+		}
+		if(appUser.role.equals(Role.ADMIN_DIAGREP)){
+			final DiagnosticRepresentative diagnosticRepresentative = new DiagnosticRepresentative();
+			diagnosticRepresentative.appUser = appUser;
+			diagnosticRepresentative.save();
+
+			final DiagnosticCentre diagnosticCentre = new DiagnosticCentre();
+			diagnosticCentre.name = request().body().asFormUrlEncoded().get("diagnosticCentreName")[0];
+			diagnosticCentre.diagnosticRepAdmin = diagnosticRepresentative;
+			diagnosticCentre.save();
+			diagnosticRepresentative.diagnosticCentre = diagnosticCentre;
+			diagnosticRepresentative.update();
 		}
 
 		session().clear();

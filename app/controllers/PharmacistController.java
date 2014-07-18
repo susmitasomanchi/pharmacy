@@ -91,27 +91,7 @@ public class PharmacistController extends Controller {
 
 	}
 
-	/*
-	 * @autor:
-	 * 
-	 * @url:/remove-product/:id
-	 * 
-	 * @description: removes the product from the pharmacy
-	 */
 
-	public static Result removeProduct(final Long id) {
-		final Pharmacy pharmacy = LoginController.getLoggedInUser()
-				.getPharmacist().pharmacy;
-		Logger.info("before==" + pharmacy.pharmacyProductList.size());
-		final Product product = Product.find.byId(id);
-		pharmacy.pharmacyProductList.remove(product);
-		pharmacy.update();
-
-		// productForm.fill(product);
-		Logger.info("after==" + pharmacy.pharmacyProductList.size());
-		return redirect(routes.ProductController.displayProduct());
-
-	}
 
 	public static Result addProductForm(final Long id) {
 
@@ -197,35 +177,6 @@ public class PharmacistController extends Controller {
 		}
 
 	}
-
-
-	/*
-	public static Result pharmacyProfile() {
-		final Pharmacy pharmacy = LoginController.getLoggedInUser()
-				.getPharmacist().pharmacy;
-		return ok(views.html.pharmacist.pharmacy_profile.render(
-				pharmacy.inventoryList, pharmacy));
-
-	}
-
-	 */
-
-
-	/*
-	 * @author : lakshmi
-	 * 
-	 * @url: /edit-pharmacy-details
-	 * 
-	 * descrition: getting the filled form to edit Pharmacy details
-	 */
-	public static Result editPharmacyDetails() {
-		final Pharmacy pharmacy = LoginController.getLoggedInUser()
-				.getPharmacist().pharmacy;
-		final Form<PharmacyBean> filledForm = pharmacyBeanForm.fill(pharmacy
-				.toBean());
-		return ok(views.html.pharmacist.pharmacyDetails.render(filledForm));
-	}
-
 	/**
 	 * @author : lakshmi
 	 * POST	/pharmacy/basic-update
@@ -316,12 +267,12 @@ public class PharmacistController extends Controller {
 
 
 
-	/*
+	/**
 	 * @author : lakshmi
 	 * 
-	 * @url: /upload-pharmacy-images
+	 * ACTION for uploading the Pharmacy Images process
 	 * 
-	 * descrition:uploading the Pharmacy Images process
+	 * POST /upload-pharmacy-images
 	 */
 
 	public static Result uploadPharmacyImageProcess()  {
@@ -365,12 +316,12 @@ public class PharmacistController extends Controller {
 		return redirect(routes.UserActions.dashboard());
 
 	}
-	/*
+	/**
 	 * @author : lakshmi
 	 * 
-	 * @url: /pharmacy/get-image/:pharmacyId/:fileId
+	 *  Action for getting byte data as image
 	 * 
-	 * descrition: method for getting byte data as image
+	 * GET /pharmacy/get-image/:pharmacyId/:fileId
 	 */
 
 	public static Result getPharmacyImages(final Long pharmacyId,final Long imageId) {
@@ -388,7 +339,7 @@ public class PharmacistController extends Controller {
 		return ok(byteContent).as("image/jpeg");
 
 	}
-	/*
+	/**
 	 * @author : lakshmi
 	 * 
 	 * @url:
@@ -399,12 +350,12 @@ public class PharmacistController extends Controller {
 	public static Result orderManagement(){
 		return ok();
 	}
-	/*
+	/**
 	 * @author : lakshmi
 	 * 
-	 * @url:
+	 * Action to remove image from pharmacy profile list
 	 * 
-	 * descrition: removing pharmacy images from list
+	 * GET		/pharmacy/remove-image/:pharmacyId/:fileId
 	 */
 	public static Result removeImage(final Long pharmacyId,final Long imageId){
 		final Pharmacy pharmacy = Pharmacy.find.byId(pharmacyId);
@@ -419,6 +370,78 @@ public class PharmacistController extends Controller {
 		//		return ok(views.html.pharmacist.pharmacy_profile.render(pharmacy.inventoryList, pharmacy));
 		return redirect(routes.UserActions.dashboard());
 	}
+	/**
+	 * @author lakshmi
+	 * 
+	 * adding a ShowCasedProduct to the pharmacy showCasedList
+	 * 
+	 * POST	/pharmacy/add-product-to-showcase
+	 * @return
+	 */
+
+	/*	public static Result addShowCasedProduct(){
+		try{
+			final Map<String, String[]> requestMap = request().body().asMultipartFormData().asFormUrlEncoded();
+			final Pharmacy pharmacy = Pharmacy.find.byId(Long.parseLong(requestMap.get("pharmacyId")[0]));
+			Logger.info("map size"+requestMap);
+			final ShowCasedProduct showCasedProduct = new ShowCasedProduct();
+			if(requestMap.get("name") != null && (requestMap.get("name")[0].trim().compareToIgnoreCase("")!=0)){
+				showCasedProduct.name = requestMap.get("name")[0];
+			}
+			if(requestMap.get("description") != null && (requestMap.get("description")[0].trim().compareToIgnoreCase("")!=0)){
+				showCasedProduct.description = requestMap.get("description")[0];
+			}
+			if(requestMap.get("mrp") != null && (requestMap.get("mrp")[0].trim().compareToIgnoreCase("")!=0)){
+				showCasedProduct.mrp = Double.parseDouble(requestMap.get("mrp")[0]);
+			}
+			if (request().body().asMultipartFormData().getFiles().size() != 0) {
+
+				final List<Long> ids = new ArrayList<>();
+				final MultipartFormData body = request().body().asMultipartFormData();
+				final List<FilePart> listOfImages = body.getFiles();
+				for (final FilePart filePart : listOfImages) {
+					final FileEntity fileEntity = new FileEntity();
+					if (filePart != null) {
+						final File imageFile = filePart.getFile();
+						fileEntity.fileName = filePart.getFilename();
+						fileEntity.mimeType = filePart.getContentType();
+						fileEntity.byteContent = Files.toByteArray(imageFile);
+						fileEntity.save();
+						ids.add(fileEntity.id);
+						Logger.info(" fileEntity id==="+fileEntity.id);
+
+					}
+				}
+				for (final Long id : ids) {
+					final FileEntity fileEntity2 = FileEntity.find.byId(id);
+					showCasedProduct.showcasedImagesList.add(id);
+					//					showCasedProduct.update();
+
+				}
+				//				showCasedProduct.update();
+				Logger.info("image list size() "+showCasedProduct.showcasedImagesList.size());
+
+
+
+			}
+			pharmacy.showCaseProductList.add(showCasedProduct);
+
+			pharmacy.update();
+			Logger.info("pharmacy ID=="+pharmacy.id);
+
+			Logger.info("ShowcasedProduct list size=="+pharmacy.showCaseProductList.size());
+			Logger.info("showcased product image list=="+pharmacy.showCaseProductList.get(0).showcasedImagesList.size());
+			Logger.info("Showcase Product Id=="+showCasedProduct.id);
+			Logger.info("*******************************************************************");
+		}catch(final Exception e){
+			e.printStackTrace();
+			flash().put("alert", new Alert("alert-danger", "Sorry. Something went wrong. Please try again.").toString());
+		}
+
+		return redirect(routes.UserActions.dashboard());
+		//return ok();
+
+	}*/
 
 
 	public static Result addShowCasedProduct(){
@@ -450,22 +473,31 @@ public class PharmacistController extends Controller {
 						fileEntity.byteContent = Files.toByteArray(imageFile);
 						fileEntity.save();
 						ids.add(fileEntity.id);
-						Logger.info(" ater id==="+fileEntity.id);
+						Logger.info(" fileEntity id==="+fileEntity.id);
 
 					}
 				}
 				for (final Long id : ids) {
 					final FileEntity fileEntity2 = FileEntity.find.byId(id);
 					showCasedProduct.showcasedImagesList.add(fileEntity2);
+					//					showCasedProduct.update();
 
 				}
-				Logger.info("list size() "+showCasedProduct.showcasedImagesList.size());
+				//				showCasedProduct.update();
+				Logger.info("image list size() "+showCasedProduct.showcasedImagesList.size());
 
 
 
 			}
 			pharmacy.showCaseProductList.add(showCasedProduct);
+
 			pharmacy.update();
+			Logger.info("pharmacy ID=="+pharmacy.id);
+
+			Logger.info("ShowcasedProduct list size=="+pharmacy.showCaseProductList.size());
+			Logger.info("showcased product image list=="+pharmacy.showCaseProductList.get(0).showcasedImagesList.size());
+			Logger.info("Showcase Product Id=="+showCasedProduct.id);
+			Logger.info("*******************************************************************");
 		}catch(final Exception e){
 			e.printStackTrace();
 			flash().put("alert", new Alert("alert-danger", "Sorry. Something went wrong. Please try again.").toString());
@@ -475,6 +507,13 @@ public class PharmacistController extends Controller {
 		//return ok();
 
 	}
+	/**
+	 * @author lakshmi
+	 * 
+	 * remove ShowcasedProduct from the pharmacy showcasedProductList
+	 * 
+	 * GET		/pharmacy/remove-product-from-showcase/:id
+	 */
 	public static Result removeProductFromShowcaseList(final Long showCaseProductId){
 		Logger.info("inside");
 		final Pharmacy pharmacy = LoginController.getLoggedInUser().getPharmacist().pharmacy;
@@ -486,6 +525,29 @@ public class PharmacistController extends Controller {
 		pharmacy.update();
 		showCasedProduct.delete();
 		return redirect(routes.UserActions.dashboard());
+
+	}
+	public static Result displayImage(){
+		final Pharmacy pharmacy = LoginController.getLoggedInUser().getPharmacist().pharmacy;
+		Logger.info("PharmacyId=="+pharmacy.id);
+		final ShowCasedProduct showCasedProduct = pharmacy.showCaseProductList.get(0);
+		Logger.info("showCasedProduct id=="+showCasedProduct.id);
+		Logger.info("showcasedImagesList size()=="+showCasedProduct.showcasedImagesList.size());
+		return ok(views.html.pharmacist.displayImage.render(showCasedProduct));
+	}
+
+	public static Result getShowPharmacyImages(final Long showcaseId,final Long imageId) {
+		Logger.info("showcaseId=="+showcaseId);
+		Logger.info("image Id=="+imageId);
+		byte[] byteContent = null;
+		for (final FileEntity file : ShowCasedProduct.find.byId(showcaseId).showcasedImagesList) {
+			if(file.id == imageId){
+
+				byteContent = FileEntity.find.byId(file.id).byteContent;
+			}
+		}
+
+		return ok(byteContent).as("image/jpeg");
 
 	}
 

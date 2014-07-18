@@ -1,17 +1,12 @@
-@(pharmacy : models.pharmacist.Pharmacy)
+@(showcase : models.pharmacist.ShowCasedProduct)
 @main("display image"){
-<div>
-      <img src="pharmacy/get-image/@pharmacy.id/0" alt="pharmacy1" />
-      
-    </div>
+	
     
-
-    }		
-    
-    <div>
-   @for(profileImages <- pharmacy.profileImageList){
-      <img src="/pharmacy/get-image/@pharmacy.id/@profileImages.id" alt="pharmacy1" style="height:300px; width:800px;"/>
+   
+   @for(image <- showcase.showcasedImagesList){
+      <img src="/pharmacy/get-dummy-image/@showcase.id/@image.id" alt="pharmacy1" style="height:300px; width:800px;"/>
 
      
     }
-    </div>	 
+   	 
+    }

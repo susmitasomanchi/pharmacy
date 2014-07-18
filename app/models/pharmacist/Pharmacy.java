@@ -10,6 +10,7 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Lob;
+import javax.persistence.ManyToMany;
 import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 
@@ -34,7 +35,7 @@ public class Pharmacy extends BaseEntity {
 	@Lob
 	public byte[] backgroundImage;
 
-	@OneToMany(cascade=CascadeType.ALL)
+	@ManyToMany(cascade=CascadeType.ALL)
 	public List<FileEntity> profileImageList = new ArrayList<FileEntity>();
 
 	@OneToOne
