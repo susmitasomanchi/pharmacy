@@ -196,15 +196,16 @@ public class PharmacistController extends Controller {
 	}
 
 
-
+	/*
 	public static Result pharmacyProfile() {
 		final Pharmacy pharmacy = LoginController.getLoggedInUser()
 				.getPharmacist().pharmacy;
-		return ok(views.html.pharmacist.pharmacy_profile.render(pharmacy));
+		return ok(views.html.pharmacist.pharmacy_profile.render(
+				pharmacy.inventoryList, pharmacy));
 
 	}
 
-
+	 */
 
 
 	/*

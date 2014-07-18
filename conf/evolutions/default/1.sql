@@ -27,7 +27,6 @@ create table app_user (
   image                     bytea,
   name                      varchar(255),
   username                  varchar(255),
-  mobileno                  varchar(255),
   email                     varchar(255),
   password                  varchar(255),
   sex                       varchar(6),
@@ -246,7 +245,6 @@ create table doctor (
   background_image          bytea,
   profile_image             bytea,
   experience                integer,
-  search_index              TEXT,
   last_update               timestamp not null,
   constraint pk_doctor primary key (id))
 ;
@@ -388,8 +386,10 @@ create table medical_representative (
   app_user_id               bigint,
   region_alloted            varchar(255),
   company_name              varchar(255),
-  types_of_medecine         varchar(255),
-  mr_admin_id               bigint,
+  designation               varchar(255),
+  is_active                 boolean,
+  status                    varchar(255),
+  manager_id                bigint,
   pharmaceutical_company_id bigint,
   last_update               timestamp not null,
   constraint pk_medical_representative primary key (id))
@@ -438,17 +438,10 @@ create table patient (
   constraint pk_patient primary key (id))
 ;
 
-create table patient_doctor_info (
-  id                        bigint not null,
-  doctor_id                 bigint,
-  patient_id                bigint,
-  last_update               timestamp not null,
-  constraint pk_patient_doctor_info primary key (id))
-;
-
 create table pharmaceutical_company (
   id                        bigint not null,
   name                      varchar(255),
+  admin_mr_id               bigint,
   last_update               timestamp not null,
   constraint pk_pharmaceutical_company primary key (id))
 ;
@@ -699,8 +692,6 @@ create sequence order_line_item_seq;
 
 create sequence patient_seq;
 
-create sequence patient_doctor_info_seq;
-
 create sequence pharmaceutical_company_seq;
 
 create sequence pharmaceutical_product_seq;
@@ -815,20 +806,20 @@ alter table language_app_user add constraint fk_language_app_user_doctor_l_44 fo
 create index ix_language_app_user_doctor_l_44 on language_app_user (doctor_language_id);
 alter table medical_representative add constraint fk_medical_representative_app_45 foreign key (app_user_id) references app_user (id);
 create index ix_medical_representative_app_45 on medical_representative (app_user_id);
-alter table medical_representative add constraint fk_medical_representative_pha_46 foreign key (pharmaceutical_company_id) references pharmaceutical_company (id);
-create index ix_medical_representative_pha_46 on medical_representative (pharmaceutical_company_id);
-alter table medicine_line_item add constraint fk_medicine_line_item_prescri_47 foreign key (prescription_id) references prescription (id);
-create index ix_medicine_line_item_prescri_47 on medicine_line_item (prescription_id);
-alter table order_line_item add constraint fk_order_line_item_pharmacy_o_48 foreign key (pharmacy_order_id) references pharmacy_order (id);
-create index ix_order_line_item_pharmacy_o_48 on order_line_item (pharmacy_order_id);
-alter table order_line_item add constraint fk_order_line_item_product_49 foreign key (product_id) references product (id);
-create index ix_order_line_item_product_49 on order_line_item (product_id);
-alter table patient add constraint fk_patient_appUser_50 foreign key (app_user_id) references app_user (id);
-create index ix_patient_appUser_50 on patient (app_user_id);
-alter table patient_doctor_info add constraint fk_patient_doctor_info_doctor_51 foreign key (doctor_id) references doctor (id);
-create index ix_patient_doctor_info_doctor_51 on patient_doctor_info (doctor_id);
-alter table patient_doctor_info add constraint fk_patient_doctor_info_patien_52 foreign key (patient_id) references patient (id);
-create index ix_patient_doctor_info_patien_52 on patient_doctor_info (patient_id);
+alter table medical_representative add constraint fk_medical_representative_man_46 foreign key (manager_id) references medical_representative (id);
+create index ix_medical_representative_man_46 on medical_representative (manager_id);
+alter table medical_representative add constraint fk_medical_representative_pha_47 foreign key (pharmaceutical_company_id) references pharmaceutical_company (id);
+create index ix_medical_representative_pha_47 on medical_representative (pharmaceutical_company_id);
+alter table medicine_line_item add constraint fk_medicine_line_item_prescri_48 foreign key (prescription_id) references prescription (id);
+create index ix_medicine_line_item_prescri_48 on medicine_line_item (prescription_id);
+alter table order_line_item add constraint fk_order_line_item_pharmacy_o_49 foreign key (pharmacy_order_id) references pharmacy_order (id);
+create index ix_order_line_item_pharmacy_o_49 on order_line_item (pharmacy_order_id);
+alter table order_line_item add constraint fk_order_line_item_product_50 foreign key (product_id) references product (id);
+create index ix_order_line_item_product_50 on order_line_item (product_id);
+alter table patient add constraint fk_patient_appUser_51 foreign key (app_user_id) references app_user (id);
+create index ix_patient_appUser_51 on patient (app_user_id);
+alter table pharmaceutical_company add constraint fk_pharmaceutical_company_adm_52 foreign key (admin_mr_id) references medical_representative (id);
+create index ix_pharmaceutical_company_adm_52 on pharmaceutical_company (admin_mr_id);
 alter table pharmaceutical_product add constraint fk_pharmaceutical_product_pha_53 foreign key (pharmaceutical_company_id) references pharmaceutical_company (id);
 create index ix_pharmaceutical_product_pha_53 on pharmaceutical_product (pharmaceutical_company_id);
 alter table pharmacist add constraint fk_pharmacist_appUser_54 foreign key (app_user_id) references app_user (id);
@@ -970,8 +961,6 @@ drop table if exists patient cascade;
 
 drop table if exists patient_diagnostic_centre cascade;
 
-drop table if exists patient_doctor_info cascade;
-
 drop table if exists pharmaceutical_company cascade;
 
 drop table if exists pharmaceutical_company_product cascade;
@@ -1069,8 +1058,6 @@ drop sequence if exists monthly_tour_plan_seq;
 drop sequence if exists order_line_item_seq;
 
 drop sequence if exists patient_seq;
-
-drop sequence if exists patient_doctor_info_seq;
 
 drop sequence if exists pharmaceutical_company_seq;
 

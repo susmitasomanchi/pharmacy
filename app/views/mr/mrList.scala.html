@@ -2,25 +2,47 @@
 
 @main("doctor list"){
 	
-	<form name="searchform" action="@routes.MRController.search()" method="GET">	
-	<input type="text" name="searchStr">
-	
-	<input type="submit" value="Search MR">
-	</form>
-	
-	<table>
+	<table class="table table-bordered table-condensed col-md-2">
 	<thead>
 	<th>MR name</th>
+	<th>ManagerName</th>
+	<th>UserName</th>
+	<th>Email</th>
+	<th>Region Alotted</th>
+	<th>Employment Status</th>
+	<th>Delete MR</th>
+	<th>Edit MR</th>
+	
 	</thead>
 	<tbody>
 	
 	@for(mr <-mrList){
 		<tr>
-		<td>@mr.appUser.name</td>
-		<td>@mr.companyName</td>		
+		<td>@if(mr.appUser!=null){
+		@mr.appUser.name}</td>
+		<td>@if(mr.manager!=null){
+			@mr.manager.appUser.name
+		}
+		</td>
+		<td>@if(mr.appUser!=null){
+		@mr.appUser.username}</td>
+		<td>@if(mr.appUser!=null){
+		@mr.appUser.email}</td>
+		<td>@if(mr.appUser!=null){
+		@mr.regionAlloted}</td>
+		<td>@if(mr.appUser!=null){
+		@mr.status}`</td>
+		<td>
+		<a class="btn btn-primary btn-xs" href="@routes.MRController.removeMR(mr.id)">Delete MR</a>
+		</td>
+		<td>
+		<a class="btn btn-primary btn-xs" href="@routes.MRController.editMR(mr.id)">Edit MR</a>
+		</td>
+				
 		</tr>
-		<tr></tr>
+		
 	}
+	
 	</tbody>
 	</table>
 	

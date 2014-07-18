@@ -24,10 +24,7 @@ public class UserActions extends Controller {
 			final Doctor doctor = LoginController.getLoggedInUser().getDoctor();
 			return ok(views.html.doctor.doctorProfile.render(doctor));
 		}
-		if(appUser.role.equals(Role.PATIENT)){
-			return ok(views.html.dashboard.render(appUser));
-		}
-		return ok("Not implemented yet");
+		return ok();
 	}
 
 }
