@@ -27,6 +27,7 @@ create table app_user (
   image                     bytea,
   name                      varchar(255),
   username                  varchar(255),
+  mobileno                  varchar(255),
   email                     varchar(255),
   password                  varchar(255),
   sex                       varchar(6),
@@ -437,6 +438,14 @@ create table patient (
   constraint pk_patient primary key (id))
 ;
 
+create table patient_doctor_info (
+  id                        bigint not null,
+  doctor_id                 bigint,
+  patient_id                bigint,
+  last_update               timestamp not null,
+  constraint pk_patient_doctor_info primary key (id))
+;
+
 create table pharmaceutical_company (
   id                        bigint not null,
   name                      varchar(255),
@@ -713,6 +722,8 @@ create sequence order_line_item_seq;
 
 create sequence patient_seq;
 
+create sequence patient_doctor_info_seq;
+
 create sequence pharmaceutical_company_seq;
 
 create sequence pharmaceutical_product_seq;
@@ -933,6 +944,7 @@ alter table order_line_item add constraint fk_order_line_item_product_50 foreign
 create index ix_order_line_item_product_50 on order_line_item (product_id);
 alter table patient add constraint fk_patient_appUser_51 foreign key (app_user_id) references app_user (id);
 create index ix_patient_appUser_51 on patient (app_user_id);
+<<<<<<< HEAD
 alter table pharmaceutical_company add constraint fk_pharmaceutical_company_adm_52 foreign key (admin_mr_id) references medical_representative (id);
 create index ix_pharmaceutical_company_adm_52 on pharmaceutical_company (admin_mr_id);
 alter table pharmaceutical_product add constraint fk_pharmaceutical_product_pha_53 foreign key (pharmaceutical_company_id) references pharmaceutical_company (id);
@@ -963,6 +975,42 @@ alter table sample add constraint fk_sample_product_65 foreign key (product_id) 
 create index ix_sample_product_65 on sample (product_id);
 alter table show_cased_product add constraint fk_show_cased_product_pharmac_66 foreign key (pharmacy_id) references pharmacy (id);
 create index ix_show_cased_product_pharmac_66 on show_cased_product (pharmacy_id);
+>>>>>>> branch 'master' of http://pharmacy.bz/green-software/mednetwork.git
+=======
+alter table patient_doctor_info add constraint fk_patient_doctor_info_doctor_52 foreign key (doctor_id) references doctor (id);
+create index ix_patient_doctor_info_doctor_52 on patient_doctor_info (doctor_id);
+alter table patient_doctor_info add constraint fk_patient_doctor_info_patien_53 foreign key (patient_id) references patient (id);
+create index ix_patient_doctor_info_patien_53 on patient_doctor_info (patient_id);
+alter table pharmaceutical_company add constraint fk_pharmaceutical_company_adm_54 foreign key (admin_mr_id) references medical_representative (id);
+create index ix_pharmaceutical_company_adm_54 on pharmaceutical_company (admin_mr_id);
+alter table pharmaceutical_product add constraint fk_pharmaceutical_product_pha_55 foreign key (pharmaceutical_company_id) references pharmaceutical_company (id);
+create index ix_pharmaceutical_product_pha_55 on pharmaceutical_product (pharmaceutical_company_id);
+alter table pharmacist add constraint fk_pharmacist_appUser_56 foreign key (app_user_id) references app_user (id);
+create index ix_pharmacist_appUser_56 on pharmacist (app_user_id);
+alter table pharmacist add constraint fk_pharmacist_pharmacy_57 foreign key (pharmacy_id) references pharmacy (id);
+create index ix_pharmacist_pharmacy_57 on pharmacist (pharmacy_id);
+alter table pharmacy add constraint fk_pharmacy_address_58 foreign key (address_id) references address (id);
+create index ix_pharmacy_address_58 on pharmacy (address_id);
+alter table pharmacy add constraint fk_pharmacy_adminPharmacist_59 foreign key (admin_pharmacist_id) references pharmacist (id);
+create index ix_pharmacy_adminPharmacist_59 on pharmacy (admin_pharmacist_id);
+alter table pharmacy_product add constraint fk_pharmacy_product_pharmacy_60 foreign key (pharmacy_id) references pharmacy (id);
+create index ix_pharmacy_product_pharmacy_60 on pharmacy_product (pharmacy_id);
+alter table prescription add constraint fk_prescription_appointment_61 foreign key (appointment_id) references appointment (id);
+create index ix_prescription_appointment_61 on prescription (appointment_id);
+alter table product add constraint fk_product_pharmaceuticalComp_62 foreign key (pharmaceutical_company_id) references pharmaceutical_company (id);
+create index ix_product_pharmaceuticalComp_62 on product (pharmaceutical_company_id);
+alter table product add constraint fk_product_pharmacy_63 foreign key (pharmacy_id) references pharmacy (id);
+create index ix_product_pharmacy_63 on product (pharmacy_id);
+alter table question_and_answer add constraint fk_question_and_answer_questi_64 foreign key (question_by_id) references app_user (id);
+create index ix_question_and_answer_questi_64 on question_and_answer (question_by_id);
+alter table question_and_answer add constraint fk_question_and_answer_answer_65 foreign key (answer_by_id) references app_user (id);
+create index ix_question_and_answer_answer_65 on question_and_answer (answer_by_id);
+alter table sample add constraint fk_sample_dcrline_item_66 foreign key (dcrline_item_id) references dcrline_item (id);
+create index ix_sample_dcrline_item_66 on sample (dcrline_item_id);
+alter table sample add constraint fk_sample_product_67 foreign key (product_id) references product (id);
+create index ix_sample_product_67 on sample (product_id);
+alter table show_cased_product add constraint fk_show_cased_product_pharmac_68 foreign key (pharmacy_id) references pharmacy (id);
+create index ix_show_cased_product_pharmac_68 on show_cased_product (pharmacy_id);
 >>>>>>> branch 'master' of http://pharmacy.bz/green-software/mednetwork.git
 
 
@@ -1089,6 +1137,8 @@ drop table if exists patient cascade;
 
 drop table if exists patient_diagnostic_centre cascade;
 
+drop table if exists patient_doctor_info cascade;
+
 drop table if exists pharmaceutical_company cascade;
 
 drop table if exists pharmaceutical_company_product cascade;
@@ -1192,6 +1242,8 @@ drop sequence if exists monthly_tour_plan_seq;
 drop sequence if exists order_line_item_seq;
 
 drop sequence if exists patient_seq;
+
+drop sequence if exists patient_doctor_info_seq;
 
 drop sequence if exists pharmaceutical_company_seq;
 

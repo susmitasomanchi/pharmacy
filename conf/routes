@@ -60,6 +60,8 @@ GET		/doctor/remove-social-work/:docId/:id		controllers.DoctorController.removeS
 GET	   /doctor/new-clinic  							controllers.DoctorController.newClinic()
 POST   /doctor/new-clinic                          controllers.DoctorController.processNewClinic()
 GET    /doctor/clinics                             controllers.DoctorController.myClinics()
+GET    /doctor/edit-clinic-info/:id                    controllers.DoctorController.editClinicInfo(id:Long)
+GET    /doctor/edit-clinic-schedule/:id                 controllers.DoctorController.editClinicSchedule(id:Long)
 GET    /doctor/edit-clinic/:id	                   controllers.DoctorController.manageClinic(id:Long)
 POST   /doctor/update-clinic						controllers.DoctorController.processUpdateClinicInfo()
 POST   /doctor/update-clinic-schedule				controllers.DoctorController.processUpdateClinicSchedule()
