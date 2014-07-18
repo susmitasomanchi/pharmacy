@@ -77,43 +77,7 @@ public class MRController extends Controller{
 		}
 		return ok();
 	}
-	/*public static Result addHeadQuarter(){
-		final MedicalRepresentative loggedInMr = LoginController.getLoggedInUser().getMedicalRepresentative();
-		//final Map<State, List<HeadQuarter>> headQuarterMap = new HashMap<State, List<HeadQuarter>>();
 
-		final Form<HeadQuarter> filledHeadQuarterForm = headQuarter.bindFromRequest();
-		Logger.info("control is coming here");
-		if(filledHeadQuarterForm.hasErrors()){
-			return ok(views.html.mr.headQuarter.render(filledHeadQuarterForm));
-		}else{
-			final HeadQuarter headQuarter = filledHeadQuarterForm.get();
-			headQuarter.save();
-			//loggedInMr.headQuarterList.add(headQuarter);
-			//loggedInMr.update();
-			boolean flag = false;
-			if(loggedInMr.headQuarterMap == null){
-				final List<HeadQuarter> headQuarterList = new ArrayList<HeadQuarter>();
-				headQuarterList.add(headQuarter);
-				loggedInMr.headQuarterMap.put(headQuarter.state, headQuarterList);
-
-			}else{
-				for(final Map.Entry<State, List<HeadQuarter>> entry : loggedInMr.headQuarterMap.entrySet()){
-					if(headQuarter.state.compareTo(entry.getKey()) == 0){
-						loggedInMr.headQuarterMap.get(entry.getKey()).add(headQuarter);
-						flag=true;
-						break;
-					}
-				}
-				if(flag==false){
-					final List<HeadQuarter> headQuarterList = new ArrayList<HeadQuarter>();
-					headQuarterList.add(headQuarter);
-					loggedInMr.headQuarterMap.put(headQuarter.state, headQuarterList);
-				}
-			}
-			loggedInMr.update();
-		}
-		return ok();
-	}*/
 
 	public static Result mrList(){
 		final List<MedicalRepresentative> mrList = MedicalRepresentative.find.where().eq("mrAdminId",LoginController.getLoggedInUser().id).findList();

@@ -24,7 +24,7 @@ public class DailyCallReport extends BaseEntity{
 
 	public Date forDate;
 
-	/*public MedicalRepresentative submitter;
+	public MedicalRepresentative submitter;
 
 	public MedicalRepresentative approver;
 
@@ -37,7 +37,7 @@ public class DailyCallReport extends BaseEntity{
 	public Date rejectedDate;
 
 	public Date reOpenedDate;
-	 */
+
 	@OneToOne
 	public HeadQuarter headQuarter = new HeadQuarter();
 

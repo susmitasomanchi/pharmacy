@@ -44,6 +44,8 @@
 	<table class="table table-bordered table-condensed col-md-3">
 	<thead>
 	<th>Date</th>
+	<th>Approver</th>
+	<th>SubmitDate</th>
 	<th>Action</th>
 	</thead>
 	<tbody>
@@ -52,6 +54,7 @@
 		<td>
 		@dcr.forDate.format("dd-MMM-yyyy")
 		</td>
+		
 		<td>
 		<a class="btn btn-primary btn-xs" href="@routes.MRController.addDCRLineItem(dcr.id)">Add Line Item</a>
 		</td>
