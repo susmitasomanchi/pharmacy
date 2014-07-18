@@ -60,6 +60,9 @@ public class MedicalRepresentative extends BaseEntity{
 	@OneToMany(cascade=CascadeType.ALL)
 	public List<DailyCallReport> dcrList = new ArrayList<DailyCallReport>();
 
+    @OneToMany(cascade=CascadeType.ALL)
+	public List<HeadQuarter> headQuarterList = new ArrayList<HeadQuarter>();
+
 	public List<MedicalRepresentative> getSubordinates(){
 		return MedicalRepresentative.find.where().eq("manager_id", this.id).findList();
 	}

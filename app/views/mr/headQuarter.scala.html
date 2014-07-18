@@ -1,17 +1,18 @@
-@(headQuarter: play.data.Form[HeadQuarter])
+@(headQuarter: play.data.Form[models.mr.HeadQuarter])
 
 @import play.i18n._
 @import helper.twitterBootstrap._
 @import helper._
 
-@main("HeadQuarter form") {
-
-
+@main("Head Quarter") {
 	
+	@helper.form(action=routes.MRController.addHeadQuarter(),'method -> "post") {
+		
 	@select(headQuarter("state"), options=helper.options(models.State.options()), '_label->"State")
+	
 	@helper.inputText(headQuarter("name"),'class -> "inputs",'_label->"Name")
+	
 	<input type="submit" value="Submit">
 	
-	
-	
+		}
 	}
