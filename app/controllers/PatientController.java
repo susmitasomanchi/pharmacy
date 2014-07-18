@@ -255,5 +255,5 @@ public class PatientController extends Controller {
 	public static Result staticPatientNewAppointment() {
 		return ok(views.html.patient.static_patient_new_appointment.render());
 	}
-
+	
 }
