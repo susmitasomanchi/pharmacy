@@ -1,5 +1,5 @@
 @* createProduct Template File *@
-@(dataForm:play.data.Form[models.Product])
+@(dataForm:play.data.Form[models.mr.PharmaceuticalProduct])
 
 @import play.i18n._
 
@@ -7,13 +7,10 @@
 	
 	<br>
 	<div class="container">
-@helper.form(action=routes.ProductController.saveProduct(),'method -> "post") {
-
-
+@helper.form(action=routes.ProductController.savePharmceuticalProduct(),'method -> "post") {
 
 			
 			@helper.inputText(dataForm("medicineName"),'class -> "inputs",'_label->"Medicine Name")
-			
 			
 			@helper.inputText(dataForm("brandName"),'class -> "inputs",'_label->"Brand Name")
 			
@@ -22,7 +19,6 @@
 			@helper.inputText(dataForm("strength"),'class -> "inputs",'_label->"Strength")
 						
 			@helper.inputText(dataForm("typeOfMedicine"),'class -> "inputs",'_label->"Type of Medicine")
-			
 
 			@helper.inputText(dataForm("description"),'class -> "inputs",'_label->"Description")
 			
@@ -31,7 +27,7 @@
 			@helper.inputText(dataForm("fullName"),'class -> "inputs",'_label->"Full Name")
 			
 			<br>
-			<input type="hidden" name="productId" value='@dataForm("id").value' >
+			<input type="hidden" name="id" value='@dataForm("id").value' >
 			<input type="submit" class="submit" value="Save">
 			
 				

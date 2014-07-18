@@ -1,1154 +1,308 @@
-@()
+@(favDocs : List[models.patient.PatientDoctorInfo])
 @import play.i18n._
 @import helper.twitterBootstrap._
 @import helper._
 
 @main("Favorite Doctors"){
-	
-<style>
+	@if(favDocs.size()==0){
+		No List is created yet
+	}else{
+	<style>
 .badge{
 color:#000000;
 background-color:#cccccc;
 }
-</style>	
-	
-<table class="table table-bordered">
-<tr>
-<td>
-<div class="row" style="padding-left:20px;padding-right:20px">
-<div class="row">
-<div class="col-md-3">
-<br>
-<img src="/assets/images/doctor.png" class="thumbnail" width="120" height="120" />
-</div>
-<div class="col-md-9">
-<h3>Dr Name</h3>
-<h4>Specialization</h4>
-<h5>Degree</h5>
-<h5>Experience</h5>
-<br>
-<a class="btn btn-primary btn-sm" href="#">Ask Query</a>
-<a class="btn btn-success btn-sm" href="#">Book Appointment</a>
-<a class="btn btn-danger btn-sm" href="#">Remove</a>
-</div>
-</div>
-<br>
-<div class="well">
-<h4 style="color:#006687;font-weight:bold">Clinics</h4>
-<ul class="nav nav-tabs">
-  <li  class="active"><a href="#clinic1" data-toggle="tab">XYZ Clinic</a></li>
-  <li><a href="#clinic2" data-toggle="tab">ABC Clinic</a></li>
-  <li><a href="#clinic3" data-toggle="tab">SAKP Clinic</a></li>
-</ul>
-
-<div class="tab-content">
-<div class="tab-pane active" id="clinic1">
-<div class="row">
-<br>
-<div class="col-md-3">
-<h5><b><a href="#" >XYZ Clinic</a></b></h5>
-<h6>Flat no<br>
-Address<br>
-Place<br>
-Phone nos: 04023456789, 9876543210</h6>
-</div>
-<div class="col-md-9">
-<h5><b>Timings</b><br><br>
-<div class="row" style="padding-left:20px">
-<span class="badge col-md-2" style="font-size:16px;width:14%">Mon</span>
-<span class="badge col-md-2" style="font-size:16px;width:14%">Tue</span>
-<span class="col-md-2" style="font-size:16px;width:14%">Wed</span>
-<span class="badge col-md-2" style="font-size:16px;width:14%">Thu</span>
-<span class="col-md-2" style="font-size:16px;width:14%">Fri</span>
-<span class="badge col-md-2" style="font-size:16px;width:14%">Sat</span>
-<span class="col-md-2" style="font-size:16px;width:14%">Sun</span>
-</div>
-</h5>
-<div class="row" style="padding-left:20px">
-<span class="col-md-2" style="font-size:10px;padding-right:0px;width:14%">9am-9pm</span>
-<span class="col-md-2" style="font-size:10px;padding-right:0px;width:14%">9am-9pm</span>
-<span class="col-md-2" style="font-size:10px;padding-right:0px;width:14%"></span>
-<span class="col-md-2" style="font-size:10px;padding-right:0px;width:14%">9am-9pm</span>
-<span class="col-md-2" style="font-size:10px;padding-right:0px;width:14%"></span>
-<span class="col-md-2" style="font-size:10px;padding-right:0px;width:14%">9am-9pm</span>
-<span class="col-md-2" style="font-size:10px;padding-right:0px;width:14%"></span>
-</div>
-
-</div>
-</div>
-</div>
-
-<div class="tab-pane" id="clinic2">
-<div class="row">
-<br>
-<div class="col-md-3">
-<h5><b><a href="#" >ABC Clinic</a></b></h5>
-<h6>Flat no<br>
-Address<br>
-Place<br>
-Phone nos: 04023456789, 9876543210</h6>
-</div>
-<div class="col-md-9">
-<h5><b>Timings</b><br><br>
-<div class="row" style="padding-left:10px">
-<span class="badge col-md-2" style="font-size:16px;width:14%">Mon</span>
-<span class="col-md-2" style="font-size:16px;width:14%">Tue</span>
-<span class="badge col-md-2" style="font-size:16px;width:14%">Wed</span>
-<span class="col-md-2" style="font-size:16px;width:14%">Thu</span>
-<span class="badge col-md-2" style="font-size:16px;width:14%">Fri</span>
-<span class="badge col-md-2" style="font-size:16px;width:14%">Sat</span>
-<span class="col-md-2" style="font-size:16px;width:14%">Sun</span>
-</div>
-</h5>
-<div class="row" style="padding-left:20px">
-<span class="col-md-2" style="font-size:10px;padding-right:0px;width:14%">9am-9pm</span>
-<span class="col-md-2" style="font-size:10px;padding-right:0px;width:14%"></span>
-<span class="col-md-2" style="font-size:10px;padding-right:0px;width:14%">9am-9pm</span>
-<span class="col-md-2" style="font-size:10px;padding-right:0px;width:14%"></span>
-<span class="col-md-2" style="font-size:10px;padding-right:0px;width:14%">9am-9pm</span>
-<span class="col-md-2" style="font-size:10px;padding-right:0px;width:14%">9am-9pm</span>
-<span class="col-md-2" style="font-size:10px;padding-right:0px;width:14%"></span>
-</div>
-
-</div>
-</div>
-</div>
-
-<div class="tab-pane" id="clinic3">
-<div class="row">
-<br>
-<div class="col-md-3">
-<h5><b><a href="#" >SAKP Clinic</a></b></h5>
-<h6>Flat no<br>
-Address<br>
-Place<br>
-Phone nos: 04023456789, 9876543210</h6>
-</div>
-<div class="col-md-9">
-<h5><b>Timings</b><br><br>
-<div class="row" style="padding-left:10px">
-<span class="badge col-md-2" style="font-size:16px;width:14%">Mon</span>
-<span class="badge col-md-2" style="font-size:16px;width:14%">Tue</span>
-<span class="badge col-md-2" style="font-size:16px;width:14%">Wed</span>
-<span class="col-md-2" style="font-size:16px;width:14%">Thu</span>
-<span class="col-md-2" style="font-size:16px;width:14%">Fri</span>
-<span class="badge col-md-2" style="font-size:16px;width:14%">Sat</span>
-<span class="col-md-2" style="font-size:16px;width:14%">Sun</span>
-</div>
-</h5>
-<div class="row" style="padding-left:10px">
-<span class="col-md-2" style="font-size:10px;padding-right:0px;width:14%"">9am-9pm</span>
-<span class="col-md-2" style="font-size:10px;padding-right:0px;width:14%"">9am-9pm</span>
-<span class="col-md-2" style="font-size:10px;padding-right:0px;width:14%"">9am-9pm</span>
-<span class="col-md-2" style="font-size:10px;padding-right:0px;width:14%""></span>
-<span class="col-md-2" style="font-size:10px;padding-right:0px;width:14%""></span>
-<span class="col-md-4" style="font-size:10px;padding-right:0px;width:14%"">9am-9pm</span>
-<span class="col-md-4" style="font-size:10px;padding-right:0px;width:14%""></span>
-</div>
-
-</div>
-</div>
-</div>
-
-</div>
-</div>
-<br>
-</div>
-</td>
-<td>
-<div class="row" style="padding-left:20px;padding-right:20px">
-<div class="row">
-<div class="col-md-3">
-<br>
-<img src="/assets/images/doctor.png" class="thumbnail" width="120" height="120" />
-</div>
-<div class="col-md-9">
-<h3>Dr Name</h3>
-<h4>Specialization</h4>
-<h5>Degree</h5>
-<h5>Experience</h5>
-<br>
-<a class="btn btn-primary btn-sm" href="#">Ask Query</a>
-<a class="btn btn-success btn-sm" href="#">Book Appointment</a>
-<a class="btn btn-danger btn-sm" href="#">Remove</a>
-</div>
-</div>
-<br>
-<div class="well">
-<h4 style="color:#006687;font-weight:bold">Clinics</h4>
-<ul class="nav nav-tabs">
-  <li  class="active"><a href="#clinic11" data-toggle="tab">XYZ Clinic</a></li>
-  <li><a href="#clinic12" data-toggle="tab">ABC Clinic</a></li>
-  <li><a href="#clinic13" data-toggle="tab">SAKP Clinic</a></li>
-</ul>
-
-<div class="tab-content">
-<div class="tab-pane active" id="clinic11">
-<div class="row">
-<br>
-<div class="col-md-3">
-<h5><b><a href="#" >XYZ Clinic</a></b></h5>
-<h6>Flat no<br>
-Address<br>
-Place<br>
-Phone nos: 04023456789, 9876543210</h6>
-</div>
-<div class="col-md-9">
-<h5><b>Timings</b><br><br>
-<div class="row" style="padding-left:20px">
-<span class="badge col-md-2" style="font-size:16px;width:14%">Mon</span>
-<span class="badge col-md-2" style="font-size:16px;width:14%">Tue</span>
-<span class="col-md-2" style="font-size:16px;width:14%">Wed</span>
-<span class="badge col-md-2" style="font-size:16px;width:14%">Thu</span>
-<span class="col-md-2" style="font-size:16px;width:14%">Fri</span>
-<span class="badge col-md-2" style="font-size:16px;width:14%">Sat</span>
-<span class="col-md-2" style="font-size:16px;width:14%">Sun</span>
-</div>
-</h5>
-<div class="row" style="padding-left:20px">
-<span class="col-md-2" style="font-size:10px;padding-right:0px;width:14%">9am-9pm</span>
-<span class="col-md-2" style="font-size:10px;padding-right:0px;width:14%">9am-9pm</span>
-<span class="col-md-2" style="font-size:10px;padding-right:0px;width:14%"></span>
-<span class="col-md-2" style="font-size:10px;padding-right:0px;width:14%">9am-9pm</span>
-<span class="col-md-2" style="font-size:10px;padding-right:0px;width:14%"></span>
-<span class="col-md-2" style="font-size:10px;padding-right:0px;width:14%">9am-9pm</span>
-<span class="col-md-2" style="font-size:10px;padding-right:0px;width:14%"></span>
-</div>
-
-</div>
-</div>
-</div>
-
-<div class="tab-pane" id="clinic12">
-<div class="row">
-<br>
-<div class="col-md-3">
-<h5><b><a href="#" >ABC Clinic</a></b></h5>
-<h6>Flat no<br>
-Address<br>
-Place<br>
-Phone nos: 04023456789, 9876543210</h6>
-</div>
-<div class="col-md-9">
-<h5><b>Timings</b><br><br>
-<div class="row" style="padding-left:10px">
-<span class="badge col-md-2" style="font-size:16px;width:14%">Mon</span>
-<span class="col-md-2" style="font-size:16px;width:14%">Tue</span>
-<span class="badge col-md-2" style="font-size:16px;width:14%">Wed</span>
-<span class="col-md-2" style="font-size:16px;width:14%">Thu</span>
-<span class="badge col-md-2" style="font-size:16px;width:14%">Fri</span>
-<span class="badge col-md-2" style="font-size:16px;width:14%">Sat</span>
-<span class="col-md-2" style="font-size:16px;width:14%">Sun</span>
-</div>
-</h5>
-<div class="row" style="padding-left:20px">
-<span class="col-md-2" style="font-size:10px;padding-right:0px;width:14%">9am-9pm</span>
-<span class="col-md-2" style="font-size:10px;padding-right:0px;width:14%"></span>
-<span class="col-md-2" style="font-size:10px;padding-right:0px;width:14%">9am-9pm</span>
-<span class="col-md-2" style="font-size:10px;padding-right:0px;width:14%"></span>
-<span class="col-md-2" style="font-size:10px;padding-right:0px;width:14%">9am-9pm</span>
-<span class="col-md-2" style="font-size:10px;padding-right:0px;width:14%">9am-9pm</span>
-<span class="col-md-2" style="font-size:10px;padding-right:0px;width:14%"></span>
-</div>
-
-</div>
-</div>
-</div>
-
-<div class="tab-pane" id="clinic13">
-<div class="row">
-<br>
-<div class="col-md-3">
-<h5><b><a href="#" >SAKP Clinic</a></b></h5>
-<h6>Flat no<br>
-Address<br>
-Place<br>
-Phone nos: 04023456789, 9876543210</h6>
-</div>
-<div class="col-md-9">
-<h5><b>Timings</b><br><br>
-<div class="row" style="padding-left:10px">
-<span class="badge col-md-2" style="font-size:16px;width:14%">Mon</span>
-<span class="badge col-md-2" style="font-size:16px;width:14%">Tue</span>
-<span class="badge col-md-2" style="font-size:16px;width:14%">Wed</span>
-<span class="col-md-2" style="font-size:16px;width:14%">Thu</span>
-<span class="col-md-2" style="font-size:16px;width:14%">Fri</span>
-<span class="badge col-md-2" style="font-size:16px;width:14%">Sat</span>
-<span class="col-md-2" style="font-size:16px;width:14%">Sun</span>
-</div>
-</h5>
-<div class="row" style="padding-left:10px">
-<span class="col-md-2" style="font-size:10px;padding-right:0px;width:14%"">9am-9pm</span>
-<span class="col-md-2" style="font-size:10px;padding-right:0px;width:14%"">9am-9pm</span>
-<span class="col-md-2" style="font-size:10px;padding-right:0px;width:14%"">9am-9pm</span>
-<span class="col-md-2" style="font-size:10px;padding-right:0px;width:14%""></span>
-<span class="col-md-2" style="font-size:10px;padding-right:0px;width:14%""></span>
-<span class="col-md-4" style="font-size:10px;padding-right:0px;width:14%"">9am-9pm</span>
-<span class="col-md-4" style="font-size:10px;padding-right:0px;width:14%""></span>
-</div>
-
-</div>
-</div>
-</div>
-
-</div>
-</div>
-<br>
-</div>
-</td>
-</tr>
-<tr>
-<td>
-<div class="row" style="padding-left:20px;padding-right:20px">
-<div class="row">
-<div class="col-md-3">
-<br>
-<img src="/assets/images/doctor.png" class="thumbnail" width="120" height="120" />
-</div>
-<div class="col-md-9">
-<h3>Dr Name</h3>
-<h4>Specialization</h4>
-<h5>Degree</h5>
-<h5>Experience</h5>
-<br>
-<a class="btn btn-primary btn-sm" href="#">Ask Query</a>
-<a class="btn btn-success btn-sm" href="#">Book Appointment</a>
-<a class="btn btn-danger btn-sm" href="#">Remove</a>
-</div>
-</div>
-<br>
-<div class="well">
-<h4 style="color:#006687;font-weight:bold">Clinics</h4>
-<ul class="nav nav-tabs">
-  <li  class="active"><a href="#clinic21" data-toggle="tab">XYZ Clinic</a></li>
-  <li><a href="#clinic22" data-toggle="tab">ABC Clinic</a></li>
-  <li><a href="#clinic23" data-toggle="tab">SAKP Clinic</a></li>
-</ul>
-
-<div class="tab-content">
-<div class="tab-pane active" id="clinic21">
-<div class="row">
-<br>
-<div class="col-md-3">
-<h5><b><a href="#" >XYZ Clinic</a></b></h5>
-<h6>Flat no<br>
-Address<br>
-Place<br>
-Phone nos: 04023456789, 9876543210</h6>
-</div>
-<div class="col-md-9">
-<h5><b>Timings</b><br><br>
-<div class="row" style="padding-left:20px">
-<span class="badge col-md-2" style="font-size:16px;width:14%">Mon</span>
-<span class="badge col-md-2" style="font-size:16px;width:14%">Tue</span>
-<span class="col-md-2" style="font-size:16px;width:14%">Wed</span>
-<span class="badge col-md-2" style="font-size:16px;width:14%">Thu</span>
-<span class="col-md-2" style="font-size:16px;width:14%">Fri</span>
-<span class="badge col-md-2" style="font-size:16px;width:14%">Sat</span>
-<span class="col-md-2" style="font-size:16px;width:14%">Sun</span>
-</div>
-</h5>
-<div class="row" style="padding-left:20px">
-<span class="col-md-2" style="font-size:10px;padding-right:0px;width:14%">9am-9pm</span>
-<span class="col-md-2" style="font-size:10px;padding-right:0px;width:14%">9am-9pm</span>
-<span class="col-md-2" style="font-size:10px;padding-right:0px;width:14%"></span>
-<span class="col-md-2" style="font-size:10px;padding-right:0px;width:14%">9am-9pm</span>
-<span class="col-md-2" style="font-size:10px;padding-right:0px;width:14%"></span>
-<span class="col-md-2" style="font-size:10px;padding-right:0px;width:14%">9am-9pm</span>
-<span class="col-md-2" style="font-size:10px;padding-right:0px;width:14%"></span>
-</div>
-
-</div>
-</div>
-</div>
-
-<div class="tab-pane" id="clinic22">
-<div class="row">
-<br>
-<div class="col-md-3">
-<h5><b><a href="#" >ABC Clinic</a></b></h5>
-<h6>Flat no<br>
-Address<br>
-Place<br>
-Phone nos: 04023456789, 9876543210</h6>
-</div>
-<div class="col-md-9">
-<h5><b>Timings</b><br><br>
-<div class="row" style="padding-left:10px">
-<span class="badge col-md-2" style="font-size:16px;width:14%">Mon</span>
-<span class="col-md-2" style="font-size:16px;width:14%">Tue</span>
-<span class="badge col-md-2" style="font-size:16px;width:14%">Wed</span>
-<span class="col-md-2" style="font-size:16px;width:14%">Thu</span>
-<span class="badge col-md-2" style="font-size:16px;width:14%">Fri</span>
-<span class="badge col-md-2" style="font-size:16px;width:14%">Sat</span>
-<span class="col-md-2" style="font-size:16px;width:14%">Sun</span>
-</div>
-</h5>
-<div class="row" style="padding-left:20px">
-<span class="col-md-2" style="font-size:10px;padding-right:0px;width:14%">9am-9pm</span>
-<span class="col-md-2" style="font-size:10px;padding-right:0px;width:14%"></span>
-<span class="col-md-2" style="font-size:10px;padding-right:0px;width:14%">9am-9pm</span>
-<span class="col-md-2" style="font-size:10px;padding-right:0px;width:14%"></span>
-<span class="col-md-2" style="font-size:10px;padding-right:0px;width:14%">9am-9pm</span>
-<span class="col-md-2" style="font-size:10px;padding-right:0px;width:14%">9am-9pm</span>
-<span class="col-md-2" style="font-size:10px;padding-right:0px;width:14%"></span>
-</div>
-
-</div>
-</div>
-</div>
-
-<div class="tab-pane" id="clinic23">
-<div class="row">
-<br>
-<div class="col-md-3">
-<h5><b><a href="#" >SAKP Clinic</a></b></h5>
-<h6>Flat no<br>
-Address<br>
-Place<br>
-Phone nos: 04023456789, 9876543210</h6>
-</div>
-<div class="col-md-9">
-<h5><b>Timings</b><br><br>
-<div class="row" style="padding-left:10px">
-<span class="badge col-md-2" style="font-size:16px;width:14%">Mon</span>
-<span class="badge col-md-2" style="font-size:16px;width:14%">Tue</span>
-<span class="badge col-md-2" style="font-size:16px;width:14%">Wed</span>
-<span class="col-md-2" style="font-size:16px;width:14%">Thu</span>
-<span class="col-md-2" style="font-size:16px;width:14%">Fri</span>
-<span class="badge col-md-2" style="font-size:16px;width:14%">Sat</span>
-<span class="col-md-2" style="font-size:16px;width:14%">Sun</span>
-</div>
-</h5>
-<div class="row" style="padding-left:10px">
-<span class="col-md-2" style="font-size:10px;padding-right:0px;width:14%"">9am-9pm</span>
-<span class="col-md-2" style="font-size:10px;padding-right:0px;width:14%"">9am-9pm</span>
-<span class="col-md-2" style="font-size:10px;padding-right:0px;width:14%"">9am-9pm</span>
-<span class="col-md-2" style="font-size:10px;padding-right:0px;width:14%""></span>
-<span class="col-md-2" style="font-size:10px;padding-right:0px;width:14%""></span>
-<span class="col-md-4" style="font-size:10px;padding-right:0px;width:14%"">9am-9pm</span>
-<span class="col-md-4" style="font-size:10px;padding-right:0px;width:14%""></span>
-</div>
-
-</div>
-</div>
-</div>
-
-</div>
-</div>
-<br>
-</div>
-</td>
-<td>
-<div class="row" style="padding-left:20px;padding-right:20px">
-<div class="row">
-<div class="col-md-3">
-<br>
-<img src="/assets/images/doctor.png" class="thumbnail" width="120" height="120" />
-</div>
-<div class="col-md-9">
-<h3>Dr Name</h3>
-<h4>Specialization</h4>
-<h5>Degree</h5>
-<h5>Experience</h5>
-<br>
-<a class="btn btn-primary btn-sm" href="#">Ask Query</a>
-<a class="btn btn-success btn-sm" href="#">Book Appointment</a>
-<a class="btn btn-danger btn-sm" href="#">Remove</a>
-</div>
-</div>
-<br>
-<div class="well">
-<h4 style="color:#006687;font-weight:bold">Clinics</h4>
-<ul class="nav nav-tabs">
-  <li  class="active"><a href="#clinic221" data-toggle="tab">XYZ Clinic</a></li>
-  <li><a href="#clinic222" data-toggle="tab">ABC Clinic</a></li>
-  <li><a href="#clinic223" data-toggle="tab">SAKP Clinic</a></li>
-</ul>
-
-<div class="tab-content">
-<div class="tab-pane active" id="clinic221">
-<div class="row">
-<br>
-<div class="col-md-3">
-<h5><b><a href="#" >XYZ Clinic</a></b></h5>
-<h6>Flat no<br>
-Address<br>
-Place<br>
-Phone nos: 04023456789, 9876543210</h6>
-</div>
-<div class="col-md-9">
-<h5><b>Timings</b><br><br>
-<div class="row" style="padding-left:20px">
-<span class="badge col-md-2" style="font-size:16px;width:14%">Mon</span>
-<span class="badge col-md-2" style="font-size:16px;width:14%">Tue</span>
-<span class="col-md-2" style="font-size:16px;width:14%">Wed</span>
-<span class="badge col-md-2" style="font-size:16px;width:14%">Thu</span>
-<span class="col-md-2" style="font-size:16px;width:14%">Fri</span>
-<span class="badge col-md-2" style="font-size:16px;width:14%">Sat</span>
-<span class="col-md-2" style="font-size:16px;width:14%">Sun</span>
-</div>
-</h5>
-<div class="row" style="padding-left:20px">
-<span class="col-md-2" style="font-size:10px;padding-right:0px;width:14%">9am-9pm</span>
-<span class="col-md-2" style="font-size:10px;padding-right:0px;width:14%">9am-9pm</span>
-<span class="col-md-2" style="font-size:10px;padding-right:0px;width:14%"></span>
-<span class="col-md-2" style="font-size:10px;padding-right:0px;width:14%">9am-9pm</span>
-<span class="col-md-2" style="font-size:10px;padding-right:0px;width:14%"></span>
-<span class="col-md-2" style="font-size:10px;padding-right:0px;width:14%">9am-9pm</span>
-<span class="col-md-2" style="font-size:10px;padding-right:0px;width:14%"></span>
-</div>
-
-</div>
-</div>
-</div>
-
-<div class="tab-pane" id="clinic222">
-<div class="row">
-<br>
-<div class="col-md-3">
-<h5><b><a href="#" >ABC Clinic</a></b></h5>
-<h6>Flat no<br>
-Address<br>
-Place<br>
-Phone nos: 04023456789, 9876543210</h6>
-</div>
-<div class="col-md-9">
-<h5><b>Timings</b><br><br>
-<div class="row" style="padding-left:10px">
-<span class="badge col-md-2" style="font-size:16px;width:14%">Mon</span>
-<span class="col-md-2" style="font-size:16px;width:14%">Tue</span>
-<span class="badge col-md-2" style="font-size:16px;width:14%">Wed</span>
-<span class="col-md-2" style="font-size:16px;width:14%">Thu</span>
-<span class="badge col-md-2" style="font-size:16px;width:14%">Fri</span>
-<span class="badge col-md-2" style="font-size:16px;width:14%">Sat</span>
-<span class="col-md-2" style="font-size:16px;width:14%">Sun</span>
-</div>
-</h5>
-<div class="row" style="padding-left:20px">
-<span class="col-md-2" style="font-size:10px;padding-right:0px;width:14%">9am-9pm</span>
-<span class="col-md-2" style="font-size:10px;padding-right:0px;width:14%"></span>
-<span class="col-md-2" style="font-size:10px;padding-right:0px;width:14%">9am-9pm</span>
-<span class="col-md-2" style="font-size:10px;padding-right:0px;width:14%"></span>
-<span class="col-md-2" style="font-size:10px;padding-right:0px;width:14%">9am-9pm</span>
-<span class="col-md-2" style="font-size:10px;padding-right:0px;width:14%">9am-9pm</span>
-<span class="col-md-2" style="font-size:10px;padding-right:0px;width:14%"></span>
-</div>
-
-</div>
-</div>
-</div>
-
-<div class="tab-pane" id="clinic223">
-<div class="row">
-<br>
-<div class="col-md-3">
-<h5><b><a href="#" >SAKP Clinic</a></b></h5>
-<h6>Flat no<br>
-Address<br>
-Place<br>
-Phone nos: 04023456789, 9876543210</h6>
-</div>
-<div class="col-md-9">
-<h5><b>Timings</b><br><br>
-<div class="row" style="padding-left:10px">
-<span class="badge col-md-2" style="font-size:16px;width:14%">Mon</span>
-<span class="badge col-md-2" style="font-size:16px;width:14%">Tue</span>
-<span class="badge col-md-2" style="font-size:16px;width:14%">Wed</span>
-<span class="col-md-2" style="font-size:16px;width:14%">Thu</span>
-<span class="col-md-2" style="font-size:16px;width:14%">Fri</span>
-<span class="badge col-md-2" style="font-size:16px;width:14%">Sat</span>
-<span class="col-md-2" style="font-size:16px;width:14%">Sun</span>
-</div>
-</h5>
-<div class="row" style="padding-left:10px">
-<span class="col-md-2" style="font-size:10px;padding-right:0px;width:14%"">9am-9pm</span>
-<span class="col-md-2" style="font-size:10px;padding-right:0px;width:14%"">9am-9pm</span>
-<span class="col-md-2" style="font-size:10px;padding-right:0px;width:14%"">9am-9pm</span>
-<span class="col-md-2" style="font-size:10px;padding-right:0px;width:14%""></span>
-<span class="col-md-2" style="font-size:10px;padding-right:0px;width:14%""></span>
-<span class="col-md-4" style="font-size:10px;padding-right:0px;width:14%"">9am-9pm</span>
-<span class="col-md-4" style="font-size:10px;padding-right:0px;width:14%""></span>
-</div>
-
-</div>
-</div>
-</div>
-
-</div>
-</div>
-<br>
-</div>
-</td>
-</tr>
-<tr>
-<td>
-<div class="row" style="padding-left:20px;padding-right:20px">
-<div class="row">
-<div class="col-md-3">
-<br>
-<img src="/assets/images/doctor.png" class="thumbnail" width="120" height="120" />
-</div>
-<div class="col-md-9">
-<h3>Dr Name</h3>
-<h4>Specialization</h4>
-<h5>Degree</h5>
-<h5>Experience</h5>
-<br>
-<a class="btn btn-primary btn-sm" href="#">Ask Query</a>
-<a class="btn btn-success btn-sm" href="#">Book Appointment</a>
-<a class="btn btn-danger btn-sm" href="#">Remove</a>
-</div>
-</div>
-<br>
-<div class="well">
-<h4 style="color:#006687;font-weight:bold">Clinics</h4>
-<ul class="nav nav-tabs">
-  <li  class="active"><a href="#clinic31" data-toggle="tab">XYZ Clinic</a></li>
-  <li><a href="#clinic32" data-toggle="tab">ABC Clinic</a></li>
-  <li><a href="#clinic33" data-toggle="tab">SAKP Clinic</a></li>
-</ul>
-
-<div class="tab-content">
-<div class="tab-pane active" id="clinic31">
-<div class="row">
-<br>
-<div class="col-md-3">
-<h5><b><a href="#" >XYZ Clinic</a></b></h5>
-<h6>Flat no<br>
-Address<br>
-Place<br>
-Phone nos: 04023456789, 9876543210</h6>
-</div>
-<div class="col-md-9">
-<h5><b>Timings</b><br><br>
-<div class="row" style="padding-left:20px">
-<span class="badge col-md-2" style="font-size:16px;width:14%">Mon</span>
-<span class="badge col-md-2" style="font-size:16px;width:14%">Tue</span>
-<span class="col-md-2" style="font-size:16px;width:14%">Wed</span>
-<span class="badge col-md-2" style="font-size:16px;width:14%">Thu</span>
-<span class="col-md-2" style="font-size:16px;width:14%">Fri</span>
-<span class="badge col-md-2" style="font-size:16px;width:14%">Sat</span>
-<span class="col-md-2" style="font-size:16px;width:14%">Sun</span>
-</div>
-</h5>
-<div class="row" style="padding-left:20px">
-<span class="col-md-2" style="font-size:10px;padding-right:0px;width:14%">9am-9pm</span>
-<span class="col-md-2" style="font-size:10px;padding-right:0px;width:14%">9am-9pm</span>
-<span class="col-md-2" style="font-size:10px;padding-right:0px;width:14%"></span>
-<span class="col-md-2" style="font-size:10px;padding-right:0px;width:14%">9am-9pm</span>
-<span class="col-md-2" style="font-size:10px;padding-right:0px;width:14%"></span>
-<span class="col-md-2" style="font-size:10px;padding-right:0px;width:14%">9am-9pm</span>
-<span class="col-md-2" style="font-size:10px;padding-right:0px;width:14%"></span>
-</div>
-
-</div>
-</div>
-</div>
-
-<div class="tab-pane" id="clinic32">
-<div class="row">
-<br>
-<div class="col-md-3">
-<h5><b><a href="#" >ABC Clinic</a></b></h5>
-<h6>Flat no<br>
-Address<br>
-Place<br>
-Phone nos: 04023456789, 9876543210</h6>
-</div>
-<div class="col-md-9">
-<h5><b>Timings</b><br><br>
-<div class="row" style="padding-left:10px">
-<span class="badge col-md-2" style="font-size:16px;width:14%">Mon</span>
-<span class="col-md-2" style="font-size:16px;width:14%">Tue</span>
-<span class="badge col-md-2" style="font-size:16px;width:14%">Wed</span>
-<span class="col-md-2" style="font-size:16px;width:14%">Thu</span>
-<span class="badge col-md-2" style="font-size:16px;width:14%">Fri</span>
-<span class="badge col-md-2" style="font-size:16px;width:14%">Sat</span>
-<span class="col-md-2" style="font-size:16px;width:14%">Sun</span>
-</div>
-</h5>
-<div class="row" style="padding-left:20px">
-<span class="col-md-2" style="font-size:10px;padding-right:0px;width:14%">9am-9pm</span>
-<span class="col-md-2" style="font-size:10px;padding-right:0px;width:14%"></span>
-<span class="col-md-2" style="font-size:10px;padding-right:0px;width:14%">9am-9pm</span>
-<span class="col-md-2" style="font-size:10px;padding-right:0px;width:14%"></span>
-<span class="col-md-2" style="font-size:10px;padding-right:0px;width:14%">9am-9pm</span>
-<span class="col-md-2" style="font-size:10px;padding-right:0px;width:14%">9am-9pm</span>
-<span class="col-md-2" style="font-size:10px;padding-right:0px;width:14%"></span>
-</div>
-
-</div>
-</div>
-</div>
-
-<div class="tab-pane" id="clinic33">
-<div class="row">
-<br>
-<div class="col-md-3">
-<h5><b><a href="#" >SAKP Clinic</a></b></h5>
-<h6>Flat no<br>
-Address<br>
-Place<br>
-Phone nos: 04023456789, 9876543210</h6>
-</div>
-<div class="col-md-9">
-<h5><b>Timings</b><br><br>
-<div class="row" style="padding-left:10px">
-<span class="badge col-md-2" style="font-size:16px;width:14%">Mon</span>
-<span class="badge col-md-2" style="font-size:16px;width:14%">Tue</span>
-<span class="badge col-md-2" style="font-size:16px;width:14%">Wed</span>
-<span class="col-md-2" style="font-size:16px;width:14%">Thu</span>
-<span class="col-md-2" style="font-size:16px;width:14%">Fri</span>
-<span class="badge col-md-2" style="font-size:16px;width:14%">Sat</span>
-<span class="col-md-2" style="font-size:16px;width:14%">Sun</span>
-</div>
-</h5>
-<div class="row" style="padding-left:10px">
-<span class="col-md-2" style="font-size:10px;padding-right:0px;width:14%"">9am-9pm</span>
-<span class="col-md-2" style="font-size:10px;padding-right:0px;width:14%"">9am-9pm</span>
-<span class="col-md-2" style="font-size:10px;padding-right:0px;width:14%"">9am-9pm</span>
-<span class="col-md-2" style="font-size:10px;padding-right:0px;width:14%""></span>
-<span class="col-md-2" style="font-size:10px;padding-right:0px;width:14%""></span>
-<span class="col-md-4" style="font-size:10px;padding-right:0px;width:14%"">9am-9pm</span>
-<span class="col-md-4" style="font-size:10px;padding-right:0px;width:14%""></span>
-</div>
-
-</div>
-</div>
-</div>
-
-</div>
-</div>
-<br>
-</div>
-</td>
-<td>
-<div class="row" style="padding-left:20px;padding-right:20px">
-<div class="row">
-<div class="col-md-3">
-<br>
-<img src="/assets/images/doctor.png" class="thumbnail" width="120" height="120" />
-</div>
-<div class="col-md-9">
-<h3>Dr Name</h3>
-<h4>Specialization</h4>
-<h5>Degree</h5>
-<h5>Experience</h5>
-<br>
-<a class="btn btn-primary btn-sm" href="#">Ask Query</a>
-<a class="btn btn-success btn-sm" href="#">Book Appointment</a>
-<a class="btn btn-danger btn-sm" href="#">Remove</a>
-</div>
-</div>
-<br>
-<div class="well">
-<h4 style="color:#006687;font-weight:bold">Clinics</h4>
-<ul class="nav nav-tabs">
-  <li  class="active"><a href="#clinic331" data-toggle="tab">XYZ Clinic</a></li>
-  <li><a href="#clinic332" data-toggle="tab">ABC Clinic</a></li>
-  <li><a href="#clinic333" data-toggle="tab">SAKP Clinic</a></li>
-</ul>
-
-<div class="tab-content">
-<div class="tab-pane active" id="clinic331">
-<div class="row">
-<br>
-<div class="col-md-3">
-<h5><b><a href="#" >XYZ Clinic</a></b></h5>
-<h6>Flat no<br>
-Address<br>
-Place<br>
-Phone nos: 04023456789, 9876543210</h6>
-</div>
-<div class="col-md-9">
-<h5><b>Timings</b><br><br>
-<div class="row" style="padding-left:20px">
-<span class="badge col-md-2" style="font-size:16px;width:14%">Mon</span>
-<span class="badge col-md-2" style="font-size:16px;width:14%">Tue</span>
-<span class="col-md-2" style="font-size:16px;width:14%">Wed</span>
-<span class="badge col-md-2" style="font-size:16px;width:14%">Thu</span>
-<span class="col-md-2" style="font-size:16px;width:14%">Fri</span>
-<span class="badge col-md-2" style="font-size:16px;width:14%">Sat</span>
-<span class="col-md-2" style="font-size:16px;width:14%">Sun</span>
-</div>
-</h5>
-<div class="row" style="padding-left:20px">
-<span class="col-md-2" style="font-size:10px;padding-right:0px;width:14%">9am-9pm</span>
-<span class="col-md-2" style="font-size:10px;padding-right:0px;width:14%">9am-9pm</span>
-<span class="col-md-2" style="font-size:10px;padding-right:0px;width:14%"></span>
-<span class="col-md-2" style="font-size:10px;padding-right:0px;width:14%">9am-9pm</span>
-<span class="col-md-2" style="font-size:10px;padding-right:0px;width:14%"></span>
-<span class="col-md-2" style="font-size:10px;padding-right:0px;width:14%">9am-9pm</span>
-<span class="col-md-2" style="font-size:10px;padding-right:0px;width:14%"></span>
-</div>
-
-</div>
-</div>
-</div>
-
-<div class="tab-pane" id="clinic332">
-<div class="row">
-<br>
-<div class="col-md-3">
-<h5><b><a href="#" >ABC Clinic</a></b></h5>
-<h6>Flat no<br>
-Address<br>
-Place<br>
-Phone nos: 04023456789, 9876543210</h6>
-</div>
-<div class="col-md-9">
-<h5><b>Timings</b><br><br>
-<div class="row" style="padding-left:10px">
-<span class="badge col-md-2" style="font-size:16px;width:14%">Mon</span>
-<span class="col-md-2" style="font-size:16px;width:14%">Tue</span>
-<span class="badge col-md-2" style="font-size:16px;width:14%">Wed</span>
-<span class="col-md-2" style="font-size:16px;width:14%">Thu</span>
-<span class="badge col-md-2" style="font-size:16px;width:14%">Fri</span>
-<span class="badge col-md-2" style="font-size:16px;width:14%">Sat</span>
-<span class="col-md-2" style="font-size:16px;width:14%">Sun</span>
-</div>
-</h5>
-<div class="row" style="padding-left:20px">
-<span class="col-md-2" style="font-size:10px;padding-right:0px;width:14%">9am-9pm</span>
-<span class="col-md-2" style="font-size:10px;padding-right:0px;width:14%"></span>
-<span class="col-md-2" style="font-size:10px;padding-right:0px;width:14%">9am-9pm</span>
-<span class="col-md-2" style="font-size:10px;padding-right:0px;width:14%"></span>
-<span class="col-md-2" style="font-size:10px;padding-right:0px;width:14%">9am-9pm</span>
-<span class="col-md-2" style="font-size:10px;padding-right:0px;width:14%">9am-9pm</span>
-<span class="col-md-2" style="font-size:10px;padding-right:0px;width:14%"></span>
-</div>
-
-</div>
-</div>
-</div>
-
-<div class="tab-pane" id="clinic333">
-<div class="row">
-<br>
-<div class="col-md-3">
-<h5><b><a href="#" >SAKP Clinic</a></b></h5>
-<h6>Flat no<br>
-Address<br>
-Place<br>
-Phone nos: 04023456789, 9876543210</h6>
-</div>
-<div class="col-md-9">
-<h5><b>Timings</b><br><br>
-<div class="row" style="padding-left:10px">
-<span class="badge col-md-2" style="font-size:16px;width:14%">Mon</span>
-<span class="badge col-md-2" style="font-size:16px;width:14%">Tue</span>
-<span class="badge col-md-2" style="font-size:16px;width:14%">Wed</span>
-<span class="col-md-2" style="font-size:16px;width:14%">Thu</span>
-<span class="col-md-2" style="font-size:16px;width:14%">Fri</span>
-<span class="badge col-md-2" style="font-size:16px;width:14%">Sat</span>
-<span class="col-md-2" style="font-size:16px;width:14%">Sun</span>
-</div>
-</h5>
-<div class="row" style="padding-left:10px">
-<span class="col-md-2" style="font-size:10px;padding-right:0px;width:14%"">9am-9pm</span>
-<span class="col-md-2" style="font-size:10px;padding-right:0px;width:14%"">9am-9pm</span>
-<span class="col-md-2" style="font-size:10px;padding-right:0px;width:14%"">9am-9pm</span>
-<span class="col-md-2" style="font-size:10px;padding-right:0px;width:14%""></span>
-<span class="col-md-2" style="font-size:10px;padding-right:0px;width:14%""></span>
-<span class="col-md-4" style="font-size:10px;padding-right:0px;width:14%"">9am-9pm</span>
-<span class="col-md-4" style="font-size:10px;padding-right:0px;width:14%""></span>
-</div>
-
-</div>
-</div>
-</div>
-
-</div>
-</div>
-<br>
-</div>
-</td>
-</tr>
-<tr>
-<td>
-<div class="row" style="padding-left:20px;padding-right:20px">
-<div class="row">
-<div class="col-md-3">
-<br>
-<img src="/assets/images/doctor.png" class="thumbnail" width="120" height="120" />
-</div>
-<div class="col-md-9">
-<h3>Dr Name</h3>
-<h4>Specialization</h4>
-<h5>Degree</h5>
-<h5>Experience</h5>
-<br>
-<a class="btn btn-primary btn-sm" href="#">Ask Query</a>
-<a class="btn btn-success btn-sm" href="#">Book Appointment</a>
-<a class="btn btn-danger btn-sm" href="#">Remove</a>
-</div>
-</div>
-<br>
-<div class="well">
-<h4 style="color:#006687;font-weight:bold">Clinics</h4>
-<ul class="nav nav-tabs">
-  <li  class="active"><a href="#clinic41" data-toggle="tab">XYZ Clinic</a></li>
-  <li><a href="#clinic42" data-toggle="tab">ABC Clinic</a></li>
-  <li><a href="#clinic43" data-toggle="tab">SAKP Clinic</a></li>
-</ul>
-
-<div class="tab-content">
-<div class="tab-pane active" id="clinic41">
-<div class="row">
-<br>
-<div class="col-md-3">
-<h5><b><a href="#" >XYZ Clinic</a></b></h5>
-<h6>Flat no<br>
-Address<br>
-Place<br>
-Phone nos: 04023456789, 9876543210</h6>
-</div>
-<div class="col-md-9">
-<h5><b>Timings</b><br><br>
-<div class="row" style="padding-left:20px">
-<span class="badge col-md-2" style="font-size:16px;width:14%">Mon</span>
-<span class="badge col-md-2" style="font-size:16px;width:14%">Tue</span>
-<span class="col-md-2" style="font-size:16px;width:14%">Wed</span>
-<span class="badge col-md-2" style="font-size:16px;width:14%">Thu</span>
-<span class="col-md-2" style="font-size:16px;width:14%">Fri</span>
-<span class="badge col-md-2" style="font-size:16px;width:14%">Sat</span>
-<span class="col-md-2" style="font-size:16px;width:14%">Sun</span>
-</div>
-</h5>
-<div class="row" style="padding-left:20px">
-<span class="col-md-2" style="font-size:10px;padding-right:0px;width:14%">9am-9pm</span>
-<span class="col-md-2" style="font-size:10px;padding-right:0px;width:14%">9am-9pm</span>
-<span class="col-md-2" style="font-size:10px;padding-right:0px;width:14%"></span>
-<span class="col-md-2" style="font-size:10px;padding-right:0px;width:14%">9am-9pm</span>
-<span class="col-md-2" style="font-size:10px;padding-right:0px;width:14%"></span>
-<span class="col-md-2" style="font-size:10px;padding-right:0px;width:14%">9am-9pm</span>
-<span class="col-md-2" style="font-size:10px;padding-right:0px;width:14%"></span>
-</div>
-
-</div>
-</div>
-</div>
-
-<div class="tab-pane" id="clinic42">
-<div class="row">
-<br>
-<div class="col-md-3">
-<h5><b><a href="#" >ABC Clinic</a></b></h5>
-<h6>Flat no<br>
-Address<br>
-Place<br>
-Phone nos: 04023456789, 9876543210</h6>
-</div>
-<div class="col-md-9">
-<h5><b>Timings</b><br><br>
-<div class="row" style="padding-left:10px">
-<span class="badge col-md-2" style="font-size:16px;width:14%">Mon</span>
-<span class="col-md-2" style="font-size:16px;width:14%">Tue</span>
-<span class="badge col-md-2" style="font-size:16px;width:14%">Wed</span>
-<span class="col-md-2" style="font-size:16px;width:14%">Thu</span>
-<span class="badge col-md-2" style="font-size:16px;width:14%">Fri</span>
-<span class="badge col-md-2" style="font-size:16px;width:14%">Sat</span>
-<span class="col-md-2" style="font-size:16px;width:14%">Sun</span>
-</div>
-</h5>
-<div class="row" style="padding-left:20px">
-<span class="col-md-2" style="font-size:10px;padding-right:0px;width:14%">9am-9pm</span>
-<span class="col-md-2" style="font-size:10px;padding-right:0px;width:14%"></span>
-<span class="col-md-2" style="font-size:10px;padding-right:0px;width:14%">9am-9pm</span>
-<span class="col-md-2" style="font-size:10px;padding-right:0px;width:14%"></span>
-<span class="col-md-2" style="font-size:10px;padding-right:0px;width:14%">9am-9pm</span>
-<span class="col-md-2" style="font-size:10px;padding-right:0px;width:14%">9am-9pm</span>
-<span class="col-md-2" style="font-size:10px;padding-right:0px;width:14%"></span>
-</div>
-
-</div>
-</div>
-</div>
-
-<div class="tab-pane" id="clinic43">
-<div class="row">
-<br>
-<div class="col-md-3">
-<h5><b><a href="#" >SAKP Clinic</a></b></h5>
-<h6>Flat no<br>
-Address<br>
-Place<br>
-Phone nos: 04023456789, 9876543210</h6>
-</div>
-<div class="col-md-9">
-<h5><b>Timings</b><br><br>
-<div class="row" style="padding-left:10px">
-<span class="badge col-md-2" style="font-size:16px;width:14%">Mon</span>
-<span class="badge col-md-2" style="font-size:16px;width:14%">Tue</span>
-<span class="badge col-md-2" style="font-size:16px;width:14%">Wed</span>
-<span class="col-md-2" style="font-size:16px;width:14%">Thu</span>
-<span class="col-md-2" style="font-size:16px;width:14%">Fri</span>
-<span class="badge col-md-2" style="font-size:16px;width:14%">Sat</span>
-<span class="col-md-2" style="font-size:16px;width:14%">Sun</span>
-</div>
-</h5>
-<div class="row" style="padding-left:10px">
-<span class="col-md-2" style="font-size:10px;padding-right:0px;width:14%"">9am-9pm</span>
-<span class="col-md-2" style="font-size:10px;padding-right:0px;width:14%"">9am-9pm</span>
-<span class="col-md-2" style="font-size:10px;padding-right:0px;width:14%"">9am-9pm</span>
-<span class="col-md-2" style="font-size:10px;padding-right:0px;width:14%""></span>
-<span class="col-md-2" style="font-size:10px;padding-right:0px;width:14%""></span>
-<span class="col-md-4" style="font-size:10px;padding-right:0px;width:14%"">9am-9pm</span>
-<span class="col-md-4" style="font-size:10px;padding-right:0px;width:14%""></span>
-</div>
-
-</div>
-</div>
-</div>
-
-</div>
-</div>
-<br>
-</div>
-</td>
-<td>
-<div class="row" style="padding-left:20px;padding-right:20px">
-<div class="row">
-<div class="col-md-3">
-<br>
-<img src="/assets/images/doctor.png" class="thumbnail" width="120" height="120" />
-</div>
-<div class="col-md-9">
-<h3>Dr Name</h3>
-<h4>Specialization</h4>
-<h5>Degree</h5>
-<h5>Experience</h5>
-<br>
-<a class="btn btn-primary btn-sm" href="#">Ask Query</a>
-<a class="btn btn-success btn-sm" href="#">Book Appointment</a>
-<a class="btn btn-danger btn-sm" href="#">Remove</a>
-</div>
-</div>
-<br>
-<div class="well">
-<h4 style="color:#006687;font-weight:bold">Clinics</h4>
-<ul class="nav nav-tabs">
-  <li  class="active"><a href="#clinic441" data-toggle="tab">XYZ Clinic</a></li>
-  <li><a href="#clinic442" data-toggle="tab">ABC Clinic</a></li>
-  <li><a href="#clinic443" data-toggle="tab">SAKP Clinic</a></li>
-</ul>
-
-<div class="tab-content">
-<div class="tab-pane active" id="clinic441">
-<div class="row">
-<br>
-<div class="col-md-3">
-<h5><b><a href="#" >XYZ Clinic</a></b></h5>
-<h6>Flat no<br>
-Address<br>
-Place<br>
-Phone nos: 04023456789, 9876543210</h6>
-</div>
-<div class="col-md-9">
-<h5><b>Timings</b><br><br>
-<div class="row" style="padding-left:20px">
-<span class="badge col-md-2" style="font-size:16px;width:14%">Mon</span>
-<span class="badge col-md-2" style="font-size:16px;width:14%">Tue</span>
-<span class="col-md-2" style="font-size:16px;width:14%">Wed</span>
-<span class="badge col-md-2" style="font-size:16px;width:14%">Thu</span>
-<span class="col-md-2" style="font-size:16px;width:14%">Fri</span>
-<span class="badge col-md-2" style="font-size:16px;width:14%">Sat</span>
-<span class="col-md-2" style="font-size:16px;width:14%">Sun</span>
-</div>
-</h5>
-<div class="row" style="padding-left:20px">
-<span class="col-md-2" style="font-size:10px;padding-right:0px;width:14%">9am-9pm</span>
-<span class="col-md-2" style="font-size:10px;padding-right:0px;width:14%">9am-9pm</span>
-<span class="col-md-2" style="font-size:10px;padding-right:0px;width:14%"></span>
-<span class="col-md-2" style="font-size:10px;padding-right:0px;width:14%">9am-9pm</span>
-<span class="col-md-2" style="font-size:10px;padding-right:0px;width:14%"></span>
-<span class="col-md-2" style="font-size:10px;padding-right:0px;width:14%">9am-9pm</span>
-<span class="col-md-2" style="font-size:10px;padding-right:0px;width:14%"></span>
-</div>
-
-</div>
-</div>
-</div>
-
-<div class="tab-pane" id="clinic442">
-<div class="row">
-<br>
-<div class="col-md-3">
-<h5><b><a href="#" >ABC Clinic</a></b></h5>
-<h6>Flat no<br>
-Address<br>
-Place<br>
-Phone nos: 04023456789, 9876543210</h6>
-</div>
-<div class="col-md-9">
-<h5><b>Timings</b><br><br>
-<div class="row" style="padding-left:10px">
-<span class="badge col-md-2" style="font-size:16px;width:14%">Mon</span>
-<span class="col-md-2" style="font-size:16px;width:14%">Tue</span>
-<span class="badge col-md-2" style="font-size:16px;width:14%">Wed</span>
-<span class="col-md-2" style="font-size:16px;width:14%">Thu</span>
-<span class="badge col-md-2" style="font-size:16px;width:14%">Fri</span>
-<span class="badge col-md-2" style="font-size:16px;width:14%">Sat</span>
-<span class="col-md-2" style="font-size:16px;width:14%">Sun</span>
-</div>
-</h5>
-<div class="row" style="padding-left:20px">
-<span class="col-md-2" style="font-size:10px;padding-right:0px;width:14%">9am-9pm</span>
-<span class="col-md-2" style="font-size:10px;padding-right:0px;width:14%"></span>
-<span class="col-md-2" style="font-size:10px;padding-right:0px;width:14%">9am-9pm</span>
-<span class="col-md-2" style="font-size:10px;padding-right:0px;width:14%"></span>
-<span class="col-md-2" style="font-size:10px;padding-right:0px;width:14%">9am-9pm</span>
-<span class="col-md-2" style="font-size:10px;padding-right:0px;width:14%">9am-9pm</span>
-<span class="col-md-2" style="font-size:10px;padding-right:0px;width:14%"></span>
-</div>
-
-</div>
-</div>
-</div>
-
-<div class="tab-pane" id="clinic443">
-<div class="row">
-<br>
-<div class="col-md-3">
-<h5><b><a href="#" >SAKP Clinic</a></b></h5>
-<h6>Flat no<br>
-Address<br>
-Place<br>
-Phone nos: 04023456789, 9876543210</h6>
-</div>
-<div class="col-md-9">
-<h5><b>Timings</b><br><br>
-<div class="row" style="padding-left:10px">
-<span class="badge col-md-2" style="font-size:16px;width:14%">Mon</span>
-<span class="badge col-md-2" style="font-size:16px;width:14%">Tue</span>
-<span class="badge col-md-2" style="font-size:16px;width:14%">Wed</span>
-<span class="col-md-2" style="font-size:16px;width:14%">Thu</span>
-<span class="col-md-2" style="font-size:16px;width:14%">Fri</span>
-<span class="badge col-md-2" style="font-size:16px;width:14%">Sat</span>
-<span class="col-md-2" style="font-size:16px;width:14%">Sun</span>
-</div>
-</h5>
-<div class="row" style="padding-left:10px">
-<span class="col-md-2" style="font-size:10px;padding-right:0px;width:14%"">9am-9pm</span>
-<span class="col-md-2" style="font-size:10px;padding-right:0px;width:14%"">9am-9pm</span>
-<span class="col-md-2" style="font-size:10px;padding-right:0px;width:14%"">9am-9pm</span>
-<span class="col-md-2" style="font-size:10px;padding-right:0px;width:14%""></span>
-<span class="col-md-2" style="font-size:10px;padding-right:0px;width:14%""></span>
-<span class="col-md-4" style="font-size:10px;padding-right:0px;width:14%"">9am-9pm</span>
-<span class="col-md-4" style="font-size:10px;padding-right:0px;width:14%""></span>
-</div>
-
-</div>
-</div>
-</div>
-
-</div>
-</div>
-<br>
-</div>
-</td>
-</tr>
-
-</table>
+#coverborder {
+    opacity: 0.4;
+    filter: alpha(opacity=40); /* For IE8 and earlier */
 }
+
+</style>
+
+		<table class="table table-bordered">
+		@for((patDoc,index) <- favDocs.zipWithIndex){
+			@if(index % 2 == 0){
+				
+				<tr>
+
+				<td>
+				<div class="row" style="padding-left:20px;padding-right:20px">
+				<div style="cursor:pointer" onclick="location.href='/doctor/profile';"><img src="/assets/images/sunrise.png" width="525" height="200" />
+				<img id="coverborder" src="/assets/images/bordercover.png" style="position:relative;top:-65px"/>
+				</div>
+				<div class="row" style="margin-top:-145px;padding-left:20px"><div style="cursor:pointer" onclick="location.href='/doctor/profile';" class="col-md-3">
+				<br>
+				<img src="/assets/images/doctor.png" class="thumbnail" width="120" height="120"  />
+				</div>
+				<div style="cursor:pointer" onclick="location.href='/doctor/profile';" class="col-md-5">
+				<h3>@patDoc.doctor.appUser.name</h3>
+				<h4>@patDoc.doctor.specialization</h4>
+				<h5>@patDoc.doctor.degree</h5>
+				<h5>@patDoc.doctor.experience</h5>
+				<br>
+				</div>
+				
+				</div>
+				<a class="btn btn-primary btn-xs pull-right" href="#">Ask Query</a>
+				<button id="@patDoc.id" class="btn btn-danger btn-xs pull-right" data-toggle="modal" data-target="#myModal">Remove</button>
+				@*<a class="btn btn-danger btn-sm" href="@routes.PatientController.deleteMyFavDoctors(patDoc.id)">Remove</a>*@
+				
+				<br>
+				<br>
+					<div class="row">
+				<div class="well">
+				<h4 style="color:#006687;font-weight:bold">Clinics</h4>
+				<ul class="nav nav-tabs">			
+				@if(patDoc.doctor.doctorClinicInfoList.size()==0){
+					No clinic created yet
+				}
+				<ul class="nav nav-tabs">
+				@for(docclinic <- patDoc.doctor.doctorClinicInfoList){
+					@if( patDoc.doctor.doctorClinicInfoList.indexOf(docclinic)==0){
+					  <li  class="active"><a href="#clinic11" data-toggle="tab">XYZ Clinic</a></li>
+					}else{
+					 <li><a href="#clinic12" data-toggle="tab">ABC Clinic</a></li>
+					}
+				} 
+				</ul>
+				
+				<div class="tab-content">
+				@for(docclinic <- patDoc.doctor.doctorClinicInfoList){
+					@if( patDoc.doctor.doctorClinicInfoList.indexOf(docclinic)==0){
+				<div class="tab-pane active" id="clinic13">
+				<div class="row">
+				<br>
+				<div class="col-md-4">
+				<h5><b><a href="#" >@docclinic.clinic.name</a></b></h5>
+				<h6>@docclinic.clinic.address.addrressLine1<br>
+				@docclinic.clinic.address.area<br>
+				@docclinic.clinic.address.city<br>
+				@docclinic.clinic.contactNo</h6>
+				</div>
+				<div class="col-md-9">
+				<h5><b>Timings</b><br><br>
+				<div class="row" style="padding-left:10px">
+				@for(schedule <- docclinic.scheduleDays){
+					
+					<span class="col-md-2" style="font-size:16px;width:20%">@schedule.day</span>
+				}
+				
+				</div>
+				
+				</h5>
+				<div class="row" style="padding-left:10px">
+				@for(schedule <- docclinic.scheduleDays){
+				<span class="col-md-2" style="font-size:10px;padding-right:0px;padding-left:10px;width:20%">@schedule.fromTime-@schedule.toTime</span>
+				}
+				</div>
+				
+				</div>
+				</div>
+				
+				<a class="btn btn-success btn-sm" href="/patient/new/appointment">Book Appointment</a>
+				</div>					
+				}else{
+				
+				<div class="tab-pane" id="clinic13">
+				<div class="row">
+				<br>
+				<div class="col-md-3">
+				<h5><b><a href="#" >@docclinic.clinic.name</a></b></h5>
+				<h6>@docclinic.clinic.address.addrressLine1<br>
+				@docclinic.clinic.address.area<br>
+				@docclinic.clinic.address.city<br>
+				@docclinic.clinic.contactNo</h6>
+				</div>
+				<div class="col-md-9">
+				<h5><b>Timings</b><br><br>
+				<div class="row" style="padding-left:10px">
+				@for(schedule <- docclinic.scheduleDays){
+					
+						<span class="col-md-2" style="font-size:16px;width:14%">@schedule.day</span>
+				}
+				
+				</div>
+				
+				</h5>
+				<div class="row" style="padding-left:10px">
+				@for(schedule <- docclinic.scheduleDays){
+				<span class="col-md-2" style="font-size:10px;padding-right:0px;width:14%"">@schedule.fromTime-@schedule.toTime</span>
+				}
+				</div>
+				
+				</div>
+				</div>
+				<a class="btn btn-success btn-sm" href="/patient/new/appointment">Book Appointment</a>
+				</div>					
+				}
+				} 
+				
+				</div>
+				</div>
+			</div>
+				<br>
+				</div>
+			</td>
+				
+				@if(index == favDocs.size()-1){
+						</tr>
+					}
+				
+			}else{
+			
+			
+<td>
+				<div class="row" style="padding-left:20px;padding-right:20px">
+				<div style="cursor:pointer" onclick="location.href='/doctor/profile';"><img src="/assets/images/sunrise.png" width="525" height="200" />
+				<img id="coverborder" src="/assets/images/bordercover.png" style="position:relative;top:-65px"/>
+				</div>
+				<div class="row" style="margin-top:-145px;padding-left:20px"><div style="cursor:pointer" onclick="location.href='/doctor/profile';" class="col-md-3">
+				<br>
+				<img src="/assets/images/doctor.png" class="thumbnail" width="120" height="120"  />
+				</div>
+				<div style="cursor:pointer" onclick="location.href='/doctor/profile';" class="col-md-5">
+				<h3>@patDoc.doctor.appUser.name</h3>
+				<h4>@patDoc.doctor.specialization</h4>
+				<h5>@patDoc.doctor.degree</h5>
+				<h5>@patDoc.doctor.experience</h5>
+				<br>
+				</div>
+				
+				</div>
+				<a class="btn btn-primary btn-xs pull-right" href="#">Ask Query</a>
+				<button id="@patDoc.id" class="btn btn-danger btn-xs pull-right" data-toggle="modal" data-target="#myModal">Remove</button>
+				@*<a class="btn btn-danger btn-sm" href="@routes.PatientController.deleteMyFavDoctors(patDoc.id)">Remove</a>*@
+				
+				<br>
+				<br>
+					<div class="row">
+				<div class="well">
+				<h4 style="color:#006687;font-weight:bold">Clinics</h4>
+				<ul class="nav nav-tabs">			
+				@if(patDoc.doctor.doctorClinicInfoList.size()==0){
+					No clinic created yet
+				}
+				<ul class="nav nav-tabs">
+				@for(docclinic <- patDoc.doctor.doctorClinicInfoList){
+					@if( patDoc.doctor.doctorClinicInfoList.indexOf(docclinic)==0){
+					  <li  class="active"><a href="#clinic11" data-toggle="tab">XYZ Clinic</a></li>
+					}else{
+					 <li><a href="#clinic12" data-toggle="tab">ABC Clinic</a></li>
+					}
+				} 
+				</ul>
+				
+				<div class="tab-content">
+				@for(docclinic <- patDoc.doctor.doctorClinicInfoList){
+					@if( patDoc.doctor.doctorClinicInfoList.indexOf(docclinic)==0){
+				<div class="tab-pane active" id="clinic13">
+				<div class="row">
+				<br>
+				<div class="col-md-4">
+				<h5><b><a href="#" >@docclinic.clinic.name</a></b></h5>
+				<h6>@docclinic.clinic.address.addrressLine1<br>
+				@docclinic.clinic.address.area<br>
+				@docclinic.clinic.address.city<br>
+				@docclinic.clinic.contactNo</h6>
+				</div>
+				<div class="col-md-9">
+				<h5><b>Timings</b><br><br>
+				<div class="row" style="padding-left:10px">
+				@for(schedule <- docclinic.scheduleDays){
+					
+					<span class="col-md-2" style="font-size:16px;width:20%">@schedule.day</span>
+				}
+				
+				</div>
+				
+				</h5>
+				<div class="row" style="padding-left:10px">
+				@for(schedule <- docclinic.scheduleDays){
+				<span class="col-md-2" style="font-size:10px;padding-right:0px;padding-left:10px;width:20%">@schedule.fromTime-@schedule.toTime</span>
+				}
+				</div>
+				
+				</div>
+				</div>
+				
+				<a class="btn btn-success btn-sm" href="/patient/new/appointment">Book Appointment</a>
+				</div>					
+				}else{
+				
+				<div class="tab-pane" id="clinic13">
+				<div class="row">
+				<br>
+				<div class="col-md-3">
+				<h5><b><a href="#" >@docclinic.clinic.name</a></b></h5>
+				<h6>@docclinic.clinic.address.addrressLine1<br>
+				@docclinic.clinic.address.area<br>
+				@docclinic.clinic.address.city<br>
+				@docclinic.clinic.contactNo</h6>
+				</div>
+				<div class="col-md-9">
+				<h5><b>Timings</b><br><br>
+				<div class="row" style="padding-left:10px">
+				@for(schedule <- docclinic.scheduleDays){
+					
+						<span class="col-md-2" style="font-size:16px;width:14%">@schedule.day</span>
+				}
+				
+				</div>
+				
+				</h5>
+				<div class="row" style="padding-left:10px">
+				@for(schedule <- docclinic.scheduleDays){
+				<span class="col-md-2" style="font-size:10px;padding-right:0px;width:14%"">@schedule.fromTime-@schedule.toTime</span>
+				}
+				</div>
+				
+				</div>
+				</div>
+				<a class="btn btn-success btn-sm" href="/patient/new/appointment">Book Appointment</a>
+				</div>					
+				}
+				} 
+				
+				</div>
+				</div>
+			</div>
+				<br>
+				</div>
+			</td>
+					
+				</tr>
+		
+			}
+		}
+		
+}
+</table>	
+	<div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+  <div class="modal-dialog" style="padding-top:200px">
+  
+    <div class="modal-content" style="padding-left:20px">
+	<h4 class="modal-title">Delete Doctor</h4>
+	 <div class="modal-body">
+        <p>Are you to confirm to remove1</p>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-default btn-xs" data-dismiss="modal">Close</button>
+        <button id="del" onclick=window.location.href="/patient/delete-fav-doc/"+docid; type="button" class="btn btn-primary btn-xs">Confirm</button>
+      </div>
+    </div>
+  </div>
+</div>
+	
+	
+<script>
+var docid;
+$('#myModal').on('show.bs.modal', function (e) {
+	  docid= $(e.relatedTarget).attr("id");
+	});
+
+	
+</script>	
+}
+	
+	
+	

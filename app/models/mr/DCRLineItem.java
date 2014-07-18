@@ -41,6 +41,9 @@ public class DCRLineItem extends BaseEntity{
 
 	public Integer pob;
 
+	@OneToOne
+	public HeadQuarter headQuater;
+
 	public String remarks;
 
 	public static Finder<Long, DCRLineItem> find = new Finder<Long, DCRLineItem>(Long.class, DCRLineItem.class);

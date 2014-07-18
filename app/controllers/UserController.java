@@ -9,6 +9,7 @@ package controllers;
 
 import models.Alert;
 import models.AppUser;
+import models.Patient;
 import models.Role;
 import models.diagnostic.DiagnosticRepresentative;
 import models.doctor.Doctor;
@@ -27,6 +28,7 @@ public class UserController extends Controller {
 	public static Form<JoinUsBean> joinUsForm = Form.form(JoinUsBean.class);
 	public static Form<DiagnosticRepresentative> drForm = Form.form(DiagnosticRepresentative.class);
 	public static Form<MedicalRepresentative> mrForm = Form.form(MedicalRepresentative.class);
+
 
 
 	/**
@@ -76,6 +78,12 @@ public class UserController extends Controller {
 			pharmacy.save();
 			pharmacist.pharmacy = pharmacy;
 			pharmacist.update();
+		}
+
+		if(appUser.role.equals(Role.PATIENT)){
+			final Patient patient= new Patient();
+			patient.appUser = appUser;
+			patient.save();
 		}
 
 		session().clear();
@@ -161,6 +169,7 @@ public class UserController extends Controller {
 				final Doctor doctor = new Doctor();
 				doctor.appUser = appUser;
 				doctor.save();
+
 			}
 
 			if(appUser.role == Role.ADMIN_PHARMACIST){

@@ -1,4 +1,4 @@
-package models;
+package models.mr;
 
 import java.util.LinkedHashMap;
 import java.util.Map;
@@ -10,13 +10,12 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.ManyToOne;
 
-import models.mr.PharmaceuticalCompany;
-import models.pharmacist.Pharmacy;
+import models.BaseEntity;
 import play.data.validation.Constraints.Required;
 
 @SuppressWarnings("serial")
 @Entity
-public class Product extends BaseEntity {
+public class PharmaceuticalProduct extends BaseEntity{
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO)
@@ -47,16 +46,13 @@ public class Product extends BaseEntity {
 	@ManyToOne(cascade=CascadeType.ALL)
 	public PharmaceuticalCompany pharmaceuticalCompany;
 
-	@ManyToOne(cascade=CascadeType.ALL)
-	public Pharmacy pharmacy;
-
-	public static Finder<Long, Product> find = new Finder<Long, Product>(Long.class, Product.class);
+	public static Finder<Long, PharmaceuticalProduct> find = new Finder<Long, PharmaceuticalProduct>(Long.class, PharmaceuticalProduct.class);
 
 
 	public static Map<String, String> options() {
 
 		final LinkedHashMap<String, String> vals = new LinkedHashMap<String, String>();
-		for (final Product val : Product.find.all()) {
+		for (final PharmaceuticalProduct val : PharmaceuticalProduct.find.all()) {
 			vals.put(val.toString(), val.toString());
 		}
 		return vals;

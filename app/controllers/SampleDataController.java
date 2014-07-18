@@ -1,12 +1,16 @@
 package controllers;
 
 
+import java.util.Date;
 import java.util.List;
 
 import models.AppUser;
+import models.Patient;
 import models.Role;
+import models.doctor.Doctor;
 import models.mr.MedicalRepresentative;
 import models.mr.PharmaceuticalCompany;
+import models.patient.PatientDoctorInfo;
 import play.mvc.Controller;
 import play.mvc.Result;
 
@@ -41,10 +45,12 @@ public class SampleDataController extends Controller {
 	}
 
 	public static Result cleanUp() {
+
 		final List<AppUser> users = AppUser.find.all();
 		for (final AppUser user : users) {
 			user.delete();
 		}
+
 		return ok();
 	}
 
@@ -74,6 +80,44 @@ public class SampleDataController extends Controller {
 		return redirect(routes.Application.index());
 	}
 
+	/**
+	 * @author Mitesh
+	 * Action to create dummy PatientDoctorInfo
+	 * GET /sampledata/create-patdoc
+	 */
+	public static Result createSamplePatientDoctor() {
+
+		final Patient patient=LoginController.getLoggedInUser().getPatient();
+
+		for(int i=0;i<10;i++){
+			final PatientDoctorInfo patDocInfo=new PatientDoctorInfo();
+			patDocInfo.patient=patient;
+
+
+			final AppUser appUser=new AppUser();
+			appUser.name="Test Doctor"+i;
+			appUser.dob=new Date();
+			appUser.email="test@doctor.com"+i;
+			appUser.password="1";
+			appUser.save();
+
+			final Doctor doctor=new Doctor();
+			doctor.appUser=appUser;
+			doctor.degree="Deegree"+i;
+			doctor.experience=i;
+
+			doctor.save();
+
+			patDocInfo.doctor=doctor;
+
+			patient.patientDoctorInfos.add(patDocInfo);
+		}
+
+		patient.save();
+
+		return ok("Created");
+	}
+
 	public static Result test(){
 		final PharmaceuticalCompany company = PharmaceuticalCompany.find.byId(1L);
 		for(int i=0; i<10; i++){
@@ -91,6 +135,26 @@ public class SampleDataController extends Controller {
 			company.update();
 		}
 		return ok();
+	}
+
+
+
+	public static Result mrSampleData(){
+		final AppUser appUser = new AppUser();
+		appUser.name = "anand1";
+		appUser.email = "anand1@gmail.com";
+		appUser.password = "123";
+		appUser.role = Role.ADMIN_MR;
+		appUser.save();
+		final MedicalRepresentative mr = new MedicalRepresentative();
+		mr.appUser = appUser;
+		final PharmaceuticalCompany company = new PharmaceuticalCompany();
+		company.name="green pharma";
+		company.save();
+		mr.pharmaceuticalCompany = company;
+		mr.save();
+		return ok();
+
 	}
 
 }

@@ -45,6 +45,9 @@ public class MedicalRepresentative extends BaseEntity{
 	@OneToMany(cascade=CascadeType.ALL)
 	public List<DailyCallReport> dcrList = new ArrayList<DailyCallReport>();
 
+	@OneToMany(cascade=CascadeType.ALL)
+	public List<HeadQuarter> headQuarterList = new ArrayList<HeadQuarter>();
+
 	public static Finder<Long, MedicalRepresentative> find = new Finder<Long, MedicalRepresentative>(Long.class, MedicalRepresentative.class);
 
 }
