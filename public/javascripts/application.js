@@ -1,9 +1,8 @@
 /**
  * 
  */
-
 window.onload=function(){
-	$(".chzn").chosen({allow_single_deselect: true});
+	$(".chzn").chosen();
 	$(".boottip").tooltip();
 	$('.datepicker').datepicker();
 	$("[data-toggle=popover]").popover();

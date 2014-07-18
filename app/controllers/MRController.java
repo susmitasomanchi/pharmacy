@@ -3,11 +3,13 @@ package controllers;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
 import models.Alert;
+import models.AppUser;
 import models.Product;
 import models.State;
 import models.doctor.Appointment;
@@ -16,6 +18,7 @@ import models.mr.DCRLineItem;
 import models.mr.DailyCallReport;
 import models.mr.HeadQuarter;
 import models.mr.MedicalRepresentative;
+import models.mr.PharmaceuticalCompany;
 import models.mr.Sample;
 
 import org.joda.time.DateTime;
@@ -23,34 +26,115 @@ import org.joda.time.Days;
 import org.joda.time.format.DateTimeFormat;
 import org.joda.time.format.DateTimeFormatter;
 
+import play.Logger;
 import play.data.DynamicForm;
 import play.data.Form;
 import play.mvc.Controller;
 import play.mvc.Result;
 import actions.BasicAuth;
+import beans.MedicalRepresentativeBean;
+
 
 @BasicAuth
-public class MRController extends Controller{
+public class MRController extends Controller {
+
+	public static Map<MedicalRepresentative, List<MedicalRepresentative>> mgrMap = new HashMap<MedicalRepresentative, List<MedicalRepresentative>>();
 
 	public static Form<MedicalRepresentative> medicalRepresentative=Form.form(MedicalRepresentative.class);
 	public static Form<HeadQuarter> headQuarter=Form.form(HeadQuarter.class);
 	public static Form<DCRLineItem> dcrLineItemForm = Form.form(DCRLineItem.class);
+	public static Form<HeadQuarter> headquarter = Form.form(HeadQuarter.class);
+	public static Form<DailyCallReport> dcrForm = Form.form(DailyCallReport.class);
+	public static Form<MedicalRepresentativeBean> mrForm = Form.form(MedicalRepresentativeBean.class);
 
-	//add MR
-	public static Result addMR(){
-		return ok(views.html.mr.medicalRepresentative.render(medicalRepresentative));
 
-	}
 	/**
-	 * @author anand
 	 * 
-	 * @discription: this method is rendering to headQuarter for mentioning the headQuarter name
+	 * @author Dibesh
 	 * 
-	 * url :	GET  /mr/head-quarter
+	 *         This method redirects to add medical representative page
 	 * 
-	 * */
-	public static Result headQuarter(){
-		return ok(views.html.mr.headQuarter.render(headQuarter));
+	 *         GET /mr/add-mr controllers.MRController.addMR()
+	 */
+
+	public static Result addMR() {
+		final MedicalRepresentative mr = new MedicalRepresentative();
+		final List<MedicalRepresentative> mrList = MedicalRepresentative.find
+				.where().eq("appUser.role", "MR").findList();
+		return ok(views.html.mr.medicalRepresentative.render(mrForm, mrList));
+	}
+
+	/**
+	 * 
+	 * @author Dibesh
+	 * 
+	 *         This method persists the medical representative data as well as
+	 *         update mr
+	 * 
+	 *         POST /mr/add
+	 *         controllers.MRController.medicalRepresentativeProccess()
+	 */
+
+	public static Result medicalRepresentativeProccess() {
+
+		final Form<MedicalRepresentativeBean> filledForm = mrForm
+				.bindFromRequest();
+		if (filledForm.hasErrors()) {
+			Logger.info("*** user bad request");
+			final List<MedicalRepresentative> mrList = MedicalRepresentative.find
+					.where().eq("appUser.role", "MR").findList();
+			return ok(views.html.mr.medicalRepresentative.render(mrForm, mrList));
+		}
+
+		else {
+
+			final MedicalRepresentativeBean medicalRepresentativeBean = filledForm
+					.get();
+
+			final MedicalRepresentative mr = medicalRepresentativeBean
+					.toMedicalRepresentative();
+
+			final AppUser appUser = medicalRepresentativeBean.toAppUser();
+
+			final PharmaceuticalCompany company = LoginController
+					.getLoggedInUser().getMedicalRepresentative().pharmaceuticalCompany;
+
+			final MedicalRepresentative adminMr = LoginController
+					.getLoggedInUser().getMedicalRepresentative();
+			if (mr.id == null) {
+				appUser.save();
+				mr.pharmaceuticalCompany = company;
+				mr.appUser = appUser;
+				if (medicalRepresentativeBean.manager != null) {
+					mr.manager = MedicalRepresentative.find
+							.byId(medicalRepresentativeBean.manager);
+				}
+
+				mr.save();
+				adminMr.pharmaceuticalCompany.mrList.add(mr);
+				adminMr.pharmaceuticalCompany.update();
+
+			} else {
+				Logger.info("not null");
+
+				appUser.update();
+
+				mr.pharmaceuticalCompany = company;
+				mr.appUser = appUser;
+				mr.manager = MedicalRepresentative.find
+						.byId(medicalRepresentativeBean.manager);
+				mr.update();
+				adminMr.pharmaceuticalCompany.mrList.add(mr);
+				adminMr.pharmaceuticalCompany.update();
+
+			}
+
+		}
+		return redirect(routes.MRController.mrList());
+	}
+
+	public static Result headQuarter() {
+		return ok(views.html.mr.headQuarter.render(headquarter));
 	}
 
 
@@ -66,7 +150,7 @@ public class MRController extends Controller{
 	public static Result addHeadQuarter(){
 		final MedicalRepresentative loggedInMr = LoginController.getLoggedInUser().getMedicalRepresentative();
 
-		final Form<HeadQuarter> filledHeadQuarterForm = headQuarter.bindFromRequest();
+		final Form<HeadQuarter> filledHeadQuarterForm = headquarter.bindFromRequest();
 
 		if(filledHeadQuarterForm.hasErrors()){
 			return ok(views.html.mr.headQuarter.render(filledHeadQuarterForm));
@@ -80,10 +164,77 @@ public class MRController extends Controller{
 	}
 
 
-	public static Result mrList(){
-		final List<MedicalRepresentative> mrList = MedicalRepresentative.find.where().eq("mrAdminId",LoginController.getLoggedInUser().id).findList();
-		return ok(views.html.mr.mrList.render(mrList));
+	/**
+	 * 
+	 * @author Dibesh
+	 * 
+	 *         This method displays the all the mr present under the logged in
+	 *         mr
+	 * 
+	 *         GET /mr/list-mr controllers.MRController.mrList()
+	 */
+
+	public static Result mrList() {
+		final MedicalRepresentative loggedInMR = LoginController
+				.getLoggedInUser().getMedicalRepresentative();
+		// Logger.info(mrList.);
+		// final List<MedicalRepresentative> mrList =
+		// MedicalRepresentative.find.where().eq("companyName",
+		// loggedInMR.companyName).findList();
+		return ok(views.html.mr.mrList.render(MedicalRepresentative.find.where().eq("pharmaceutical_company_id",LoginController.getLoggedInUser().getMedicalRepresentative().pharmaceuticalCompany.id)
+				.findList()));
 	}
+
+	/**
+	 * 
+	 * @author Dibesh
+	 * 
+	 *         This method changes the status of mr
+	 * 
+	 *         GET /mr/del controllers.MRController.removeMR(id: Long)
+	 */
+
+	public static Result removeMR(final Long id) {
+		final MedicalRepresentative loggedInMR = LoginController
+				.getLoggedInUser().getMedicalRepresentative();
+		final MedicalRepresentative mr = MedicalRepresentative.find.byId(id);
+		mr.isActive = false;
+		mr.update();
+		return ok(views.html.mr.mrList
+				.render(MedicalRepresentative.find
+						.where()
+						.eq("pharmaceutical_company_id",
+								LoginController.getLoggedInUser()
+								.getMedicalRepresentative().pharmaceuticalCompany.id)
+								.findList()));
+
+	}
+
+	/**
+	 * 
+	 * @author Dibesh
+	 * 
+	 *         This method includes functionality to edit mr
+	 * 
+	 *         GET /mr/edit/:id controllers.MRController.editMR(id: Long)
+	 */
+
+	public static Result editMR(final Long id) {
+
+		final MedicalRepresentative filledMr = MedicalRepresentative.find
+				.byId(id);
+
+		Logger.info("filled mr id is : " + filledMr.id);
+
+		final Form<MedicalRepresentativeBean> editForm = mrForm.fill(filledMr
+				.toBean());
+		// final List<AppUser> mrList
+		// =AppUser.find.where().eq("role","MR").findList();
+		final List<MedicalRepresentative> mrList = MedicalRepresentative.find
+				.where().eq("appUser.role", "MR").findList();
+		return ok(views.html.mr.medicalRepresentative.render(editForm, mrList));
+	}
+
 	/**
 	 * @author anand
 	 * 
@@ -426,5 +577,22 @@ public class MRController extends Controller{
 			System.out.print(calendar.getTime());
 		}
 		return ok(views.html.patient.scheduleAppointment.render(appointmentMap,size));
+	}
+
+
+	/**
+	 * 
+	 * @author Dibesh
+	 * 
+	 *         This method displays hierarchy of MR
+	 * 
+	 *         GET /mr/hierarchy controllers.MRController.viewHierarchy()
+	 */
+	public static Result viewHierarchy() {
+
+		final List<MedicalRepresentative> mrList = MedicalRepresentative.find.where().eq("pharmaceutical_company_id",LoginController.getLoggedInUser().getMedicalRepresentative().pharmaceuticalCompany.id).findList();
+		Logger.info(mrList.toString());
+		return ok(views.html.mr.organizationStructure.render(mrList));
+
 	}
 }
