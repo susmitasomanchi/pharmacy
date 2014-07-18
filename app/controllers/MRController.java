@@ -11,6 +11,7 @@ import java.util.Map;
 import models.Alert;
 import models.AppUser;
 import models.Product;
+import models.Role;
 import models.doctor.Appointment;
 import models.doctor.Doctor;
 import models.mr.DCRLineItem;
@@ -49,6 +50,12 @@ public class MRController extends Controller {
 	public static Form<MedicalRepresentativeBean> mrForm = Form
 			.form(MedicalRepresentativeBean.class);
 
+	
+	
+	
+	
+	
+	
 	/**
 	 * 
 	 * @author Dibesh

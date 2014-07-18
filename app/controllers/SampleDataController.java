@@ -92,6 +92,64 @@ public class SampleDataController extends Controller {
 		}
 		return ok();
 	}
+	
+	/**
+	 * 
+	 * @author Dibesh
+	 * 
+	 *         Dummy data
+	 * 
+	 *         GET /mr/add-value controllers.MRController.values()
+	 */
+	
+	public static Result values() {
+		for (int i=1;i<=15;i++)
+		{
+			if(i==1)
+			{
+				MedicalRepresentative mr = new MedicalRepresentative();
+				AppUser appUser = new AppUser();
+				
+				appUser.name = "admin";
+				appUser.username = "admin";
+				appUser.email="admin@gmail.com";
+				appUser.password="admin";
+				appUser.role = Role.ADMIN_MR;
+				appUser.save();
+				mr.appUser = appUser;
+				mr.companyName = "hello";
+				PharmaceuticalCompany pc = new PharmaceuticalCompany();
+				pc.name = mr.companyName;
+				pc.mrList.add(mr);
+				pc.adminMR = LoginController.getLoggedInUser().getMedicalRepresentative();
+				pc.save();
+				mr.pharmaceuticalCompany = pc;
+				mr.save();
+				
+			}
+			MedicalRepresentative mr = new MedicalRepresentative();
+			AppUser appUser = new AppUser();
+			appUser.name = "sam"+i;
+			appUser.username = "sam"+i;
+			appUser.email="sam@gmail.com";
+			appUser.password="sam";
+			appUser.role = Role.MR;
+			appUser.save();
+			mr.appUser = appUser;
+			mr.companyName = "hello";
+			PharmaceuticalCompany pc = new PharmaceuticalCompany();
+			pc.name = mr.companyName;
+			pc.mrList.add(mr);
+			pc.adminMR = LoginController.getLoggedInUser().getMedicalRepresentative();
+			pc.save();	
+			mr.pharmaceuticalCompany = LoginController
+					.getLoggedInUser().getMedicalRepresentative().pharmaceuticalCompany;
+			//mr.manager = MedicalRepresentative.find.where().eq("companyName", mr.companyName).findUnique();
+			mr.save();
+		}
+		
+		return ok();
+	}
 
 	public static Result mrSampleData(){
 		final AppUser appUser = new AppUser();
