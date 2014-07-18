@@ -53,6 +53,7 @@ public class MRController extends Controller{
 		return ok(views.html.mr.headQuarter.render(headQuarter));
 	}
 
+
 	/**
 	 * @author anand
 	 * 
