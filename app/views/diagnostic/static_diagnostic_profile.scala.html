@@ -1,0 +1,225 @@
+@()
+
+@main("Diagostic Profile"){
+
+<script>
+
+$('[data-toggle="popover"]').popover();
+
+$('body').on('click', function (e) {
+    $('[data-toggle="popover"]').each(function () {
+        if (!$(this).is(e.target) && $(this).has(e.target).length === 0 && $('.popover').has(e.target).length === 0) {
+            $(this).popover('hide');
+        }
+    });
+});
+
+function submitbasicform(){
+
+	$("[data-toggle=popover]").popover('hide');
+
+	$('#spinner-test').addClass( "fa-spin" );
+
+	window.location.href='';
+
+}
+</script>
+<div style="padding:15px">
+<div class="row">
+<div class="panel panel-primary">
+<div class="panel-heading">
+<h4 class="panel-title">Name: Diagnostic Test Name<span data-toggle="popover" title="Edit Test Details" data-html="true" data-content="<input id=&quot;new-fullname&quot; style=&quot;color:#292929; font-weight:bold;&quot; type=&quot;text&quot; value=&quot;Test Name &quot;><br><input id=&quot;price&quot; style=&quot;color:#292929; font-weight:bold;&quot; type=&quot;text&quot; value=&quot;Test Price &quot;><a class=&quot;pull-right btn btn-xs btn-primary&quot; onclick=&quot;submitbasicform();&quot; >save</a> " style="cursor:pointer; position:relative; font-size:15px; float:right">Price:5000/- &nbsp;&nbsp;&nbsp;<i id="spinner-test" class="fa fa-cog"></i></span></h4>
+</div>
+
+<div class="panel-body">
+<br>
+<div class="col-md-3" style="width:20%">
+<img src="/assets/images/doctor.png" class="thumbnail" width="180" height="200" style="float:left;cursor:pointer" data-toggle="modal" data-target="#myModal1" />
+<div class="modal fade" id="myModal1" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" >
+  <div class="modal-dialog" style="width:950px;height:620px;box-shadow: 1px 1px 10px 10px #222222;padding-bottom:0px">
+    <div class="modal-content" >
+      <div class="modal-body">
+      <div id="carousel-example-generic1" class="carousel slide" data-ride="carousel">
+  <!-- Indicators -->
+  <ol class="carousel-indicators">
+    <li data-target="#carousel-example-generic1" data-slide-to="0" class="active"></li>
+    <li data-target="#carousel-example-generic1" data-slide-to="1"></li>
+    <li data-target="#carousel-example-generic1" data-slide-to="2"></li>
+  </ol>
+
+  <!-- Wrapper for slides -->
+  <div class="carousel-inner">
+    <div class="item active">
+      <img src="/assets/images/medical1.png" width="940" height="600" />
+    </div>
+    <div class="item">
+      <img src="/assets/images/medical2.jpg" width="940" height="600" />
+    </div>
+    <div class="item">
+      <img src="/assets/images/medical3.jpg"width="940" height="600"  />
+    </div>
+  </div>
+
+  <!-- Controls -->
+  <a class="left carousel-control" href="#carousel-example-generic1" role="button" data-slide="prev">
+    <span class="glyphicon glyphicon-chevron-left"></span>
+  </a>
+  <a class="right carousel-control" href="#carousel-example-generic1" role="button" data-slide="next">
+    <span class="glyphicon glyphicon-chevron-right"></span>
+  </a>
+</div>
+      </div>
+    </div>
+  </div>
+</div>
+</div>
+<div class="col-md-6" style="padding-left:0px;text-align:justify;width:60%">
+<p> Test Description Test Description Test Description Test Description Test Description Test Description Test Description Test Description 
+Test Description Test Description Test Description Test Description Test Description Test Description Test Description </p>
+<p> Test Description Test Description Test Description Test Description Test Description Test Description Test Description Test Description 
+Test Description Test Description Test Description Test Description Test Description Test Description Test Description </p>
+<p> Test Description Test Description Test Description Test Description Test Description Test Description Test Description Test Description 
+Test Description Test Description Test Description Test Description Test Description Test Description Test Description </p>
+</div>
+<div class="col-md-3" style="width:20%">
+<button class="btn btn-danger btn-sm" style="float:right">Remove</button>
+</div>
+</div>
+<div>
+
+</div>
+</div>
+</div>
+<br><br>
+<div class="row">
+<div class="panel panel-primary">
+<div class="panel-heading">
+<h4 class="panel-title">Name: Diagnostic Test Name<span style="float:right">Price:5000/- </span></h4>
+</div>
+
+<div class="panel-body">
+<br>
+<div style="padding-left:15px">
+<img src="/assets/images/doctor.png" class="thumbnail" width="180" height="200" style="float:left;cursor:pointer" data-toggle="modal" data-target="#myModal2" />
+<div class="modal fade" id="myModal2" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+  <div class="modal-dialog" style="width:950px;height:650px">
+    <div class="modal-content">
+      <div class="modal-body">
+      <div id="carousel-example-generic2" class="carousel slide" data-ride="carousel">
+  <!-- Indicators -->
+  <ol class="carousel-indicators">
+    <li data-target="#carousel-example-generic2" data-slide-to="0" class="active"></li>
+    <li data-target="#carousel-example-generic2" data-slide-to="1"></li>
+    <li data-target="#carousel-example-generic2" data-slide-to="2"></li>
+  </ol>
+
+  <!-- Wrapper for slides -->
+  <div class="carousel-inner">
+    <div class="item active">
+      <img src="/assets/images/medical1.png" width="940" height="600" />
+    </div>
+    <div class="item">
+      <img src="/assets/images/medical2.jpg" width="940" height="600" />
+    </div>
+    <div class="item">
+      <img src="/assets/images/medical3.jpg"width="940" height="600"  />
+    </div>
+  </div>
+
+  <!-- Controls -->
+  <a class="left carousel-control" href="#carousel-example-generic2" role="button" data-slide="prev">
+    <span class="glyphicon glyphicon-chevron-left"></span>
+  </a>
+  <a class="right carousel-control" href="#carousel-example-generic2" role="button" data-slide="next">
+    <span class="glyphicon glyphicon-chevron-right"></span>
+  </a>
+</div>
+      </div>
+    </div>
+  </div>
+</div>
+<div>
+<p> Test Description Test Description Test Description Test Description Test Description Test Description Test Description Test Description 
+Test Description Test Description Test Description Test Description Test Description Test Description Test Description </p>
+<p> Test Description Test Description Test Description Test Description Test Description Test Description Test Description Test Description 
+Test Description Test Description Test Description Test Description Test Description Test Description Test Description </p>
+<p> Test Description Test Description Test Description Test Description Test Description Test Description Test Description Test Description 
+Test Description Test Description Test Description Test Description Test Description Test Description Test Description </p>
+<p> Test Description Test Description Test Description Test Description Test Description Test Description Test Description Test Description 
+Test Description Test Description Test Description Test Description Test Description Test Description Test Description </p>
+</div>
+</div>
+</div>
+<div>
+
+</div>
+</div>
+</div>
+<br><br>
+<div class="row">
+<div class="panel panel-primary">
+<div class="panel-heading">
+<h4 class="panel-title">Name: Diagnostic Test Name<span style="float:right">Price:5000/- </span></h4>
+</div>
+
+<div class="panel-body">
+<br>
+<div style="padding-left:15px">
+<img src="/assets/images/doctor.png" class="thumbnail" width="180" height="200" style="float:left;cursor:pointer" data-toggle="modal" data-target="#myModal3" />
+<div class="modal fade" id="myModal3" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+  <div class="modal-dialog" style="width:950px;height:650px">
+    <div class="modal-content" >
+      <div class="modal-body">
+      <div id="carousel-example-generic3" class="carousel slide" data-ride="carousel">
+  <!-- Indicators -->
+  <ol class="carousel-indicators">
+    <li data-target="#carousel-example-generic3" data-slide-to="0" class="active"></li>
+    <li data-target="#carousel-example-generic3" data-slide-to="1"></li>
+    <li data-target="#carousel-example-generic3" data-slide-to="2"></li>
+  </ol>
+
+  <!-- Wrapper for slides -->
+  <div class="carousel-inner">
+    <div class="item active">
+      <img src="/assets/images/medical1.png" width="940" height="600" />
+    </div>
+    <div class="item">
+      <img src="/assets/images/medical2.jpg" width="940" height="600" />
+    </div>
+    <div class="item">
+      <img src="/assets/images/medical3.jpg"width="940" height="600"  />
+    </div>
+  </div>
+
+  <!-- Controls -->
+  <a class="left carousel-control" href="#carousel-example-generic3" role="button" data-slide="prev">
+    <span class="glyphicon glyphicon-chevron-left"></span>
+  </a>
+  <a class="right carousel-control" href="#carousel-example-generic3" role="button" data-slide="next">
+    <span class="glyphicon glyphicon-chevron-right"></span>
+  </a>
+</div>
+      </div>
+    </div>
+  </div>
+</div>
+<div>
+<p> Test Description Test Description Test Description Test Description Test Description Test Description Test Description Test Description 
+Test Description Test Description Test Description Test Description Test Description Test Description Test Description </p>
+<p> Test Description Test Description Test Description Test Description Test Description Test Description Test Description Test Description 
+Test Description Test Description Test Description Test Description Test Description Test Description Test Description </p>
+<p> Test Description Test Description Test Description Test Description Test Description Test Description Test Description Test Description 
+Test Description Test Description Test Description Test Description Test Description Test Description Test Description </p>
+<p> Test Description Test Description Test Description Test Description Test Description Test Description Test Description Test Description 
+Test Description Test Description Test Description Test Description Test Description Test Description Test Description </p>
+</div>
+</div>
+</div>
+<div>
+
+</div>
+</div>
+</div>
+<br>
+</div>
+}
