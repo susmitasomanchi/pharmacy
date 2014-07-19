@@ -587,7 +587,9 @@ public class DoctorController extends Controller {
 	 * @author Mitesh
 	 * Action to show form to edit one of loggedIn doctor's clinic
 	 * GET /doctor/edit-clinic/:id
+	 * Depricated on 18th July 2014. Use DoctorController.editClinicInfo(Long docClinicId) and DoctorController.editClinicSchedule(Long docClinicId) instead.
 	 */
+	@Deprecated
 	public static Result manageClinic(final Long docClinicId) {
 		final DoctorClinicInfo doctorClinicInfo = DoctorClinicInfo.find.byId(docClinicId);
 		// Server side validation
@@ -604,6 +606,43 @@ public class DoctorController extends Controller {
 			Logger.warn(from);
 		}
 		return ok(views.html.doctor.editClinic.render(filledForm,bean.daysOfWeek,bean.daysOfWeekMr));
+	}
+
+
+	/**
+	 * @author Mitesh
+	 * Action to show form to edit one of loggedIn doctor's clinic information
+	 * GET /doctor/edit-clinic-info/:id
+	 */
+	public static Result editClinicInfo(final Long docClinicId) {
+
+		final DoctorClinicInfo doctorClinicInfo=DoctorClinicInfo.find.byId(docClinicId);
+		//server-side check
+		if(doctorClinicInfo.doctor.id.longValue() != LoginController.getLoggedInUser().getDoctor().id.longValue()){
+			return redirect(routes.LoginController.processLogout());
+		}
+		final DoctorClinicInfoBean bean = doctorClinicInfo.toBean();
+		final Form<DoctorClinicInfoBean> filledForm = clinicForm.fill(doctorClinicInfo.toBean());
+		return ok(views.html.doctor.editClinicInfo.render(filledForm));
+
+
+	}
+
+	/**
+	 * @author Mitesh
+	 * Action to show form to edit one of loggedIn doctor's clinic schedule
+	 * GET /doctor/edit-clinic-schedule/:id
+	 */
+	public static Result editClinicSchedule(final Long docClinicId) {
+		final DoctorClinicInfo doctorClinicInfo=DoctorClinicInfo.find.byId(docClinicId);
+		//server-side check
+		if(doctorClinicInfo.doctor.id.longValue() != LoginController.getLoggedInUser().getDoctor().id.longValue()){
+			return redirect(routes.LoginController.processLogout());
+		}
+		final DoctorClinicInfoBean bean = doctorClinicInfo.toBean();
+		final Form<DoctorClinicInfoBean> filledForm = clinicForm.fill(doctorClinicInfo.toBean());
+		return ok(views.html.doctor.editClinicSchedule.render(filledForm,bean.daysOfWeek,bean.daysOfWeekMr));
+
 	}
 
 
