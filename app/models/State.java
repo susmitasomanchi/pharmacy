@@ -3,6 +3,8 @@ package models;
 import java.util.Map;
 import java.util.TreeMap;
 
+import org.apache.commons.lang3.text.WordUtils;
+
 import com.avaje.ebean.annotation.EnumValue;
 
 public enum State {
@@ -119,8 +121,9 @@ public enum State {
 	public static Map<String, String> options() {
 		final TreeMap<String, String> vals = new TreeMap<String, String>();
 		for (final State val : State.values()) {
-			vals.put(val.toString(), val.toString().replaceAll("_", " "));
+			vals.put(val.toString(), WordUtils.capitalizeFully(val.toString().replaceAll("_", " ")));
 		}
 		return vals;
 	}
+
 }

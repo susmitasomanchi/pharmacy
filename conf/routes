@@ -2,10 +2,9 @@
 # This file defines all application routes (Higher priority routes first)
 # ~~~~
 #Blog
-GET    /test	                                   controllers.SampleDataController.test()
 
 GET    /blog/create-blog-admin                     controllers.SampleDataController.createBlogAdmin()
-GET    /login                                 controllers.LoginController.blogAdminLoginForm()
+GET    /login	                                 controllers.LoginController.blogAdminLoginForm()
 
 GET		/blog										controllers.BlogController.blogHome()
 GET		/blog/admin/new-category					controllers.BlogController.categoryForm()

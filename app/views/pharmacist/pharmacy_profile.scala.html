@@ -271,30 +271,43 @@ function initialize(mapdiv) {
 
 	//  map.set("disableDoubleClickZoom", false);
 
-	marker = new google.maps.Marker({
-		position : myLatLng,
-		draggable : true,
-		animation : google.maps.Animation.DROP,
-		map : map
-	});
+	
+	if(mapdiv == 'map_canvas'){
+		marker = new google.maps.Marker({
+			position : myLatLng,
+			draggable : true,
+			animation : google.maps.Animation.DROP,
+			map : map
+		});
 
-	$("#lat1").val(lat);
-	$("#lng1").val(lng);
+		$("#lat1").val(lat);
+		$("#lng1").val(lng);
 
-	//On click event of map marker should get relocated
-	google.maps.event.addListener(map, 'click', function(
-			event) {
-		marker.setPosition(event.latLng);
-		$("#lat1").val(event.latLng.lat());
-		$("#lng1").val(event.latLng.lng());
-	});
-	// After dragging the marker
-	google.maps.event.addListener(marker, 'dragend',
-			function(event) {
-				$("#lat1").val(event.latLng.lat());
-				$("#lng1").val(event.latLng.lng());
-			});
+		//On click event of map marker should get relocated
+		google.maps.event.addListener(map, 'click', function(
+				event) {
+			marker.setPosition(event.latLng);
+			$("#lat1").val(event.latLng.lat());
+			$("#lng1").val(event.latLng.lng());
+		});
+		// After dragging the marker
+		google.maps.event.addListener(marker, 'dragend',
+				function(event) {
+					$("#lat1").val(event.latLng.lat());
+					$("#lng1").val(event.latLng.lng());
+		});
+	}
 
+	if(mapdiv == 'profile_map_canvas'){
+		marker = new google.maps.Marker({
+			position : myLatLng,
+			draggable : false,
+			animation : google.maps.Animation.DROP,
+			map : map
+		});
+	}
+
+	
 }
 
 
@@ -382,7 +395,7 @@ $("#city").blur(function() {
 				<select id="statesel" style="width:100%;" data-placeholder="Select State" name="state">
     				<option value=""></option>	
      				@for((k,v) <- models.State.options()){
-     					@if(pharmacy.address!=null && pharmacy.address.state != null && pharmacy.address.state.equals(pharmacy.address.state)){
+     					@if(pharmacy.address != null && pharmacy.address.state != null && pharmacy.address.state == k){
 							<option  name="state" value="@k" selected>@v</option>
 						}else{
         					<option  name="state" value="@k">@v</option>
