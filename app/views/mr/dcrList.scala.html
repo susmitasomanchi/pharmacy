@@ -40,28 +40,75 @@
 	       
 		<input type="submit" class="btn btn-primary" value="Create DCR" />
 	</form>
-	
+	<br>
+	@main("my DcrS"){
 	<table class="table table-bordered table-condensed col-md-3">
 	<thead>
-	<th>Date</th>
+	<th>Sr. No.</th>
+	<th>ForDate</th>
+	<th>Status</th>
 	<th>Approver</th>
 	<th>SubmitDate</th>
 	<th>Action</th>
 	</thead>
 	<tbody>
 	@for(dcr<-dcrList){
+	
 	<tr>
+		<td></td>
 		<td>
 		@dcr.forDate.format("dd-MMM-yyyy")
 		</td>
-		
+		<td>@dcr.dcrStatus</td>
+		<td>&nbsp;</td>
+		@if(dcr.submittedDate != null){
+		<td>@dcr.submittedDate.format("dd-MMM-yyyy")</td>
+		}else{
+		<td>&nbsp;</td>
+		}
 		<td>
-		<a class="btn btn-primary btn-xs" href="@routes.MRController.addDCRLineItem(dcr.id)">Add Line Item</a>
+		<a class="btn btn-primary btn-xs" href="@routes.MRController.addDCRLineItem(dcr.id)">View Line Item</a>
 		</td>
    </tr>
 	}
 	</tbody>
-	</table
+	</table>
+	}
+	
+	<br>
+	@main("Team's DcrS"){
+	<table class="table table-bordered table-condensed col-md-3">
+	<thead>
+	<th>Sr. No.</th>
+	<th>ForDate</th>
+	<th>Status</th>
+	<th>Approver</th>
+	<th>SubmitDate</th>
+	<th>Action</th>
+	</thead>
+	<tbody>
+	@for(dcr<-dcrList){
+	
+	<tr>
+		<td></td>
+		<td>
+		@dcr.forDate.format("dd-MMM-yyyy")
+		</td>
+		<td>@dcr.dcrStatus</td>
+		<td>&nbsp;</td>
+		@if(dcr.submittedDate != null){
+		<td>@dcr.submittedDate.format("dd-MMM-yyyy")</td>
+		}else{
+		<td>&nbsp;</td>
+		}
+		<td>
+		<a class="btn btn-primary btn-xs" href="@routes.MRController.addDCRLineItem(dcr.id)">View Line Item</a>
+		</td>
+   </tr>
+	}
+	</tbody>
+	</table>
+	}
 	
 	
 }
