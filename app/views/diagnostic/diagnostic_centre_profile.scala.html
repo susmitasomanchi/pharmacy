@@ -189,20 +189,22 @@ function submitbasicform(id){
 <div class="col-md-1"></div>
 </div>
 <br>
-<h1 style="text-align:center;font-weight:bold;color:#006687">
+
+<h1 style="text-shadow:10px 10px 10px white, 3px 3px 20px white; position:relative; top:-400px; text-align:center;font-weight:bold;color:#006687">
 @diagnosticCentre.name
-<span data-toggle="popover" title="Edit DiagnosticCentre Name" data-html="true" data-content="
+<span 
+
+data-toggle="popover" title="Edit Pharmacy Name" data-html="true" data-content="
 <form style=&quot;color:#000000; font-weight:bold;&quot; action=&quot;@routes.DiagnosticController.diagnosticBasicUpdate()&quot; method=&quot;POST&quot;>
-<input type=&quot;text&quot; rows=&quot;3&quot; name=&quot;name&quot; value=&quot;@diagnosticCentre.name&quot;>
+<input type=&quot;text&quot; name=&quot;name&quot; value=&quot;@diagnosticCentre.name&quot;>
 <input type=&quot;hidden&quot; name=&quot;diagnosticId&quot; value=&quot;@diagnosticCentre.id&quot;>
 <br>
 <input class=&quot;pull-right btn btn-xs btn-primary&quot; type=&quot;submit&quot; onclick=&quot;submitbasicform('spinner-name');&quot; value=&quot;save&quot;>
 </form>"
 
-style="color:#006687; font-size:15px; position:relative; top:-20px; cursor:pointer;"><i id="spinner-name" class="fa fa-cog"></i></span>
+style="color:#006687; font-size:20px; position:relative; top:-20px; cursor:pointer;"><i id="spinner-name" class="fa fa-cog"></i></span>
    
 </h1>
-<br><br>
 <div class="alert alert-success">
 <span data-toggle="popover" title="Brief Description" data-placement="left" data-html="true" data-content="
 <form action=&quot;@routes.DiagnosticController.diagnosticBasicUpdate()&quot;method=&quot;POST&quot;>
@@ -313,6 +315,7 @@ style="color:#006687; font-size:15px; position:relative; top:-20px; cursor:point
 </div>
 </div>
 <br><br>
+@*
 <div class="col-md-1">
 </div>
 </div>
@@ -615,6 +618,7 @@ function submitbasicform(){
 
 }
 </script>
+*@
 
 
 }

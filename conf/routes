@@ -94,7 +94,6 @@ POST   /scheduleappointment/              		controllers.AppointmentController.pr
 
 
 GET   	/edit-product/:id                      	controllers.PharmacistController.editProduct(id: Long)
-GET     /remove-product/:id                      	controllers.PharmacistController.removeProduct(id: Long)
 POST	/addProductToInventory/					controllers.PharmacistController.addProductForm(id: Long)
 POST    /addProductToInventory1/            		controllers.PharmacistController.addToInventory(id:Long)		
 GET		/order									controllers.PharmacistController.orderRecord()
@@ -103,7 +102,6 @@ POST  	/searchProduct                           controllers.PharmacistController
 GET   	/place-product-order                     	controllers.PharmacistController.placeProductOrder()
 GET   	/place-product-order/process              controllers.PharmacistController.placeProductOrderProcess()
 #GET	 /pharmacy/profile							controllers.PharmacistController.pharmacyProfile()
-GET		/edit-pharmacy-details					controllers.PharmacistController.editPharmacyDetails()
 POST	/pharmacy/basic-update					controllers.PharmacistController.pharmacyBasicUpdate()
 POST	/pharmacy/address-update				controllers.PharmacistController.pharmacyAddressUpdate()
 #GET	/pharmacy/search-product							controllers.PharmacistController.productSearchProcess()	
