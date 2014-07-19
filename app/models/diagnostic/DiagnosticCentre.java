@@ -35,6 +35,8 @@ public class DiagnosticCentre extends BaseEntity {
 	@Required
 	public String name;
 
+	public String contactPerson;
+
 	@OneToOne
 	public Address address;
 

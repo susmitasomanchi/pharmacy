@@ -1,15 +1,17 @@
-
 @(diagnosticCentre: models.diagnostic.DiagnosticCentre)
 
-@main("Diagnostic Profile") {
+
+@main(diagnosticCentre.name) {
 
 <script src="http://maps.googleapis.com/maps/api/js?sensor=false"></script>
-<script src="@routes.Assets.at("javascripts/googlemaps2.js")" type="text/javascript"></script>
+
 <script>
 	var i = 0;
-	function addFiles() {
+	function addfiles() {
 		i++;
-		$("#files").append('<div class="row" id="file'+i+'"><br><div class="col-md-5"><input type="file" name="file'+i+'" id="inputfile'+i+'" onchange="checkfile('+i+');"/></div><div class="col-md-7"><a class="btn btn-xs btn-danger" onclick="removebut(\'file'
+		$("#files")
+				.append(
+						'<div class="row" id="file'+i+'"><br><div class="col-md-5"><input type="file" name="file'+i+'" id="inputfile'+i+'" onchange="checkfile('+i+');"/></div><div class="col-md-7"><a class="btn btn-xs btn-danger" onclick="removebut(\'file'
 								+i+'\');">x</a></div></div>');
 		$("#inputfile"+i).trigger('click');
 	}
@@ -23,24 +25,6 @@
 	}
 
 </script>
-<script>
-	var i = 0;
-	function editFiles() {
-		i++;
-		$("#editFileImages").append('<div class="row" id="file'+i+'"><br><table><tr><td style="width:200px"><input type="file" name="file'+i+'" id="inputfile'+i+'" onchange="checkfile('+i+');"/></td><td style="width:90px">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a class="btn btn-xs btn-danger" onclick="removebut(\'file'+i+'\');">x</a></td></div>');
-		$("#inputfile"+i).trigger('click');
-	}
-
-	function checkfile(id){
-		$('#insertfn-'+id).html($("#inputfile"+id).val().trim());
-	}
-
-	function removebut(id) {
-		$('#'+id).remove();
-	}
-
-</script>
-
 
 <style>
 .container{
@@ -50,34 +34,18 @@
 }
 .chosen-container .chosen-container-single{
 width:250px;
-}
 .alert-success{
 background-image: linear-gradient(to bottom,#dff0d8 0,#c8e5bc 100%);
 background-repeat: repeat-x;
 border-color: #b2dba1;
 color:black;
 }
-.maptext {
-    position:absolute;
-    top:250px;
-    height:30px;
-    font-size:20px;
-    font-weight:bolder;
-    font-family: 'Dosis', sans-serif;
-    width:300px;
-    left:130px;
-    line-height:30px;
-    color:#006687;
-    /*-webkit-text-stroke: 0.25px;*/
+
 }
 </style>
 
-
-
 <script>
-
 $('[data-toggle="popover"]').popover();
-
 $('body').on('click', function (e) {
     $('[data-toggle="popover"]').each(function () {
         if (!$(this).is(e.target) && $(this).has(e.target).length === 0 && $('.popover').has(e.target).length === 0) {
@@ -86,46 +54,55 @@ $('body').on('click', function (e) {
     });
 });
     
-
 function submitimagesform(){
-
-$("[data-toggle=popover]").popover('hide');
-
-$('#spinner').addClass("fa-spin");
-
+	$("[data-toggle=popover]").popover('hide');
+	$('#spinner').addClass("fa-spin");
 }
 
 function submitbasicform(id){
-
 	$("[data-toggle=popover]").popover('hide');
 	$('#'+id).addClass("fa-spin");
 }
-
 </script>	
-	
+
+
+
+
+
+
+
+
+
 @if(diagnosticCentre.backgroudImage != null){
-	<div style="background-image:url('@routes.DiagnosticController.getDiagnosticImages(diagnosticCentre.id,0,0,0)');background-size:940px 400px; background-repeat:no-repeat; height:400px;"></div>
+	<div style="background-image:url('@routes.DiagnosticController.getDiagnosticImages(diagnosticCentre.id,0)');background-size:940px 400px; background-repeat:no-repeat; height:400px;"></div>
 }else{
 	<div style="background-image:url('/assets/images/pharmacy-default-bg-image.jpg');background-size:940px 400px; background-repeat:no-repeat; height:400px;"></div>
 }
-<span data-toggle="popover" data-placement="left" title="Change Background Image" data-html="true" data-content="<form action=&quot;/diagnostic/upload-diagnostic-images&quot; enctype=&quot;multipart/form-data&quot; method=&quot;POST&quot;><input type=&quot;file&quot; name=&quot;backgroundImage&quot;> <input type=&quot;hidden&quot; name=&quot;diagnosticId&quot; value=&quot;@diagnosticCentre.id&quot;> <br><input class=&quot;pull-right btn btn-xs btn-primary&quot; type=&quot;submit&quot; onclick=&quot;submitimagesform();&quot; value=&quot;save&quot;></form>" style="cursor:pointer; position:relative; top:-400px;left:910px; font-size:25px"><i id="spinner" class="fa fa-cog"></i></span>
+
+<span data-toggle="popover" data-placement="left" title="Change Background Image" data-html="true" data-content="<form action=&quot;@routes.DiagnosticController.uploadDiagnosticImageProcess()&quot; enctype=&quot;multipart/form-data&quot; method=&quot;POST&quot;><input type=&quot;file&quot; name=&quot;backgroundImage&quot;> <input type=&quot;hidden&quot; name=&quot;diagnosticId&quot; value=&quot;@diagnosticCentre.id&quot;> <br><input class=&quot;pull-right btn btn-xs btn-primary&quot; type=&quot;submit&quot; onclick=&quot;submitimagesform();&quot; value=&quot;save&quot;></form>" style="cursor:pointer; position:relative; top:-400px;left:910px; font-size:25px">
+<i style="text-shadow:1px 1px 20px #292929, 3px 3px 20px white;" id="spinner" class="fa fa-cog"></i>
+</span>
 </div>
-<div class="row" style="margin-top:-180px">
+<div class="row" style="margin-top:-235px">
 <div class="col-md-1"></div>
 <div class="col-md-10" >
-<span data-toggle="modal" data-target="#myModal" style="cursor:pointer; position:relative; top:20px;right:-805px; font-size:20px;"><i id="spinner2" class="fa fa-cog"></i></span>
-<div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+<span data-toggle="modal" data-target="#myModal" style="cursor:pointer; position:relative; top:30px;left:810px; font-size:25px;">
+  	<i style="text-shadow:1px 1px 20px #292929, 3px 3px 20px white;" id="spinner2" class="fa fa-cog"></i>
+  	
+  	
+	</span>
+	<div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
   <div class="modal-dialog" style="padding-left:100px">
     <div class="modal-content" style="width:400px">
       <div class="modal-header" style="color: #ffffff;background-color: #008cba;border-color: #008cba;">
-        <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+        <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button></form></form>
         <h4 class="modal-title" id="myModalLabel">Profile Images</h4>
       </div>
       <div class="modal-body well">
-       <table class="table table-striped">     
+      <table class="table table-striped">     
       @for(profileImages <- diagnosticCentre.profileImageList){
       <tr>
-      <td style="width:200px"> <img src="@routes.DiagnosticController.getDiagnosticImages(diagnosticCentre.id,profileImages.id,0,0)" width="150" height="75" /> </td>
+      <td style="width:200px"> <img src="@routes.DiagnosticController.getDiagnosticImages(diagnosticCentre.id,profileImages.id)" width="150" height="75" /> </td>
       <td> <button class="btn btn-danger btn-xs"><a href="/diagnostic/remove-image/@diagnosticCentre.id/@profileImages.id" style="color:white">Delete</a></button> </td>
       </tr>
       }      
@@ -138,33 +115,30 @@ function submitbasicform(id){
     	<input class="pull-right btn btn-primary btn-xs" type="submit" name="submit" value="Save Image" />
   		</div> 
       }
-      
       </div>
     </div>
   </div>
 </div>
 <div id="carousel-example-generic" class="carousel slide" data-ride="carousel">
   <!-- Indicators -->
- @if(diagnosticCentre.profileImageList.size()>0){
+  @if(diagnosticCentre.profileImageList.size()>0){
   <ol class="carousel-indicators">
   @for((profileImages,index) <- diagnosticCentre.profileImageList.zipWithIndex){
     <li data-target="#carousel-example-generic" data-slide-to="0" class="@if(index == 0){active}"></li>
     }
   </ol>
-
-  <!-- Wrapper for slides -->
-  <div class="carousel-inner">
+    <!-- Wrapper for slides -->
+   <div class="carousel-inner">
   
   
    @for((profileImages,index) <- diagnosticCentre.profileImageList.zipWithIndex){
     <div class="item @if(index == 0){active}">
-      <img src="@routes.DiagnosticController.getDiagnosticImages(diagnosticCentre.id,profileImages.id,0,0)" alt="diagnostic1" style="height:300px; width:800px;"/>
+      <img src="@routes.DiagnosticController.getDiagnosticImages(diagnosticCentre.id,profileImages.id)" alt="diagnostic1" style="height:300px; width:800px;"/>
     </div>
     }
   </div>
   }else{
-  
-   <ol class="carousel-indicators">
+  <ol class="carousel-indicators">
     <li data-target="#carousel-example-generic" data-slide-to="0" class="active"></li>
    </ol>
 
@@ -176,9 +150,8 @@ function submitbasicform(id){
   </div>
   
   }
-
   <!-- Controls -->
-   <a class="left carousel-control" href="#carousel-example-generic" role="button" data-slide="prev" style="width:0px">
+  <a class="left carousel-control" href="#carousel-example-generic" role="button" data-slide="prev" style="width:0px">
     <span class="glyphicon glyphicon-chevron-left" style="margin-left:-40px;color:#006687"></span>
   </a>
   <a class="right carousel-control" href="#carousel-example-generic" role="button" data-slide="next" style="width:0px">
@@ -188,22 +161,17 @@ function submitbasicform(id){
 </div>
 <div class="col-md-1"></div>
 </div>
-<br>
 
 <h1 style="text-shadow:10px 10px 10px white, 3px 3px 20px white; position:relative; top:-400px; text-align:center;font-weight:bold;color:#006687">
 @diagnosticCentre.name
-<span 
-
-data-toggle="popover" title="Edit Pharmacy Name" data-html="true" data-content="
+<span data-toggle="popover" title="Edit Diagnostic centre Name" data-html="true" data-content="
 <form style=&quot;color:#000000; font-weight:bold;&quot; action=&quot;@routes.DiagnosticController.diagnosticBasicUpdate()&quot; method=&quot;POST&quot;>
 <input type=&quot;text&quot; name=&quot;name&quot; value=&quot;@diagnosticCentre.name&quot;>
 <input type=&quot;hidden&quot; name=&quot;diagnosticId&quot; value=&quot;@diagnosticCentre.id&quot;>
 <br>
 <input class=&quot;pull-right btn btn-xs btn-primary&quot; type=&quot;submit&quot; onclick=&quot;submitbasicform('spinner-name');&quot; value=&quot;save&quot;>
 </form>"
-
 style="color:#006687; font-size:20px; position:relative; top:-20px; cursor:pointer;"><i id="spinner-name" class="fa fa-cog"></i></span>
-   
 </h1>
 <div class="alert alert-success">
 <span data-toggle="popover" title="Brief Description" data-placement="left" data-html="true" data-content="
@@ -215,17 +183,207 @@ style="color:#006687; font-size:20px; position:relative; top:-20px; cursor:point
 	@diagnosticCentre.description	 
 </p>
 </div>
-<br><br>	
+<br>
 <div class="row">
-<div class="col-md-1">
-</div>
+
 <div class="col-md-10">
-<div class="col-md-4">
 
-<div>
+<div class="col-md-5">
+@if(diagnosticCentre.address != null){
+<h5>@diagnosticCentre.contactPerson<span data-toggle="modal" data-target="#myaddrModal" style="cursor:pointer; position:relative; left: 20px; font-size:20px;"><i id="spinner2" class="fa fa-cog"></i></span></h5>
+<h5>@diagnosticCentre.address.addrressLine1</h5>
+<h5>@diagnosticCentre.address.area</h5>
+<h5>@diagnosticCentre.address.city</h5>
+@if(diagnosticCentre.address.state != null){
+<h5>@models.State.options().get(diagnosticCentre.address.state.toString())</h5>	
+}
+<h5>@diagnosticCentre.address.pinCode</h5>
+<h5>Phones: @diagnosticCentre.mobileNo </h5>
+}else{
+<h4>
+Edit Contact Details
+<span data-toggle="modal" data-target="#myaddrModal" style="cursor:pointer; position:relative; left:10px; font-size:20px;"><i id="spinner2" class="fa fa-cog"></i></span>
+</h4>
+}
+</div>
+
+<div class="col-md-7">
+	<div id="profile_map_canvas" style="width:600px;height:400px">
+	@if(diagnosticCentre.address == null || diagnosticCentre.address.latitude== null || diagnosticCentre.address.longitude == null || diagnosticCentre.address.latitude.trim().compareToIgnoreCase("") == 0 || diagnosticCentre.address.longitude.trim().compareToIgnoreCase("") == 0){
+		<img src="/assets/images/googlemap1.png" width="600" height="400" style="position:relative" />
+		<div class="maptext" style="text-align:center">
+		<p style="position:relative; top:-200px; color:#008cba;"><b>Kindly Edit Contact Details & Mark Your Diagnostic Centre</span></b></p>
+	}else{
+	
+	}
+	</div>
+</div>
+
 
 </div>
-<h2 style="position:reative; margin-top:0px;">Contact<span data-toggle="modal" data-target="#myaddrModal" style="cursor:pointer; position:relative; top:-3px;left:-150px; font-size:20px;"><i id="spinner2" class="fa fa-cog"></i></span></h2>
+
+</div>
+
+<br><br><br>
+
+</div>
+
+
+
+
+
+
+
+
+
+<script>
+
+var lng, lat, marker;
+var dbclk = false;
+var map, myLatLng;
+function initialize(mapdiv) {
+
+var mapOptions = {
+
+center : new google.maps.LatLng(lat, lng),
+
+zoom : 15
+
+};
+
+map = new google.maps.Map(document
+
+.getElementById(mapdiv), mapOptions);
+
+
+
+//  map.set("disableDoubleClickZoom", false);
+
+
+
+
+if(mapdiv == 'map_canvas'){
+
+marker = new google.maps.Marker({
+
+position : myLatLng,
+
+draggable : true,
+
+animation : google.maps.Animation.DROP,
+
+map : map
+
+});
+
+
+
+$("#lat1").val(lat);
+
+$("#lng1").val(lng);
+
+
+
+//On click event of map marker should get relocated
+
+google.maps.event.addListener(map, 'click', function(
+
+event) {
+
+marker.setPosition(event.latLng);
+
+$("#lat1").val(event.latLng.lat());
+
+$("#lng1").val(event.latLng.lng());
+
+});
+
+// After dragging the marker
+
+google.maps.event.addListener(marker, 'dragend',
+
+function(event) {
+
+$("#lat1").val(event.latLng.lat());
+
+$("#lng1").val(event.latLng.lng());
+
+});
+
+}
+
+
+
+if(mapdiv == 'profile_map_canvas'){
+
+marker = new google.maps.Marker({
+
+position : myLatLng,
+
+draggable : false,
+
+animation : google.maps.Animation.DROP,
+
+map : map
+
+});
+
+}
+
+
+
+
+}
+
+
+
+
+$( document ).ready(function() {
+$("#city").blur(function() {
+	$("#map_canvas").html('');
+	var geocoder = new google.maps.Geocoder();
+	//var streetname=$("#streetName").val();
+	var area=$("#area").val();
+	geocoder.geocode({
+		'address' : area+this.value
+	}, function(results, status) {
+		if (status == google.maps.GeocoderStatus.OK) {
+			//alert("location : " + results[0].geometry.location.lat() + " " +results[0].geometry.location.lng()); 
+			myLatLng = results[0].geometry.location;
+			lat = results[0].geometry.location.lat();
+			lng = results[0].geometry.location.lng();
+			initialize('map_canvas');
+		} else {
+			alert("Something got wrong " + status);
+		}
+	});
+	// google.maps.event.addDomListener(window, 'load', initialize);
+});
+});
+
+</script>
+
+
+
+
+@if(diagnosticCentre.address != null && diagnosticCentre.address.latitude!= null && diagnosticCentre.address.longitude != null && diagnosticCentre.address.latitude.trim().compareToIgnoreCase("") != 0 && diagnosticCentre.address.longitude.trim().compareToIgnoreCase("") != 0){
+<script>
+		window.onload=function(){
+			lat = @diagnosticCentre.address.latitude
+			lng = @diagnosticCentre.address.longitude
+			myLatLng= new google.maps.LatLng(lat, lng),
+			google.maps.event.addDomListener(window, 'load', initialize('profile_map_canvas'));
+			$('#myaddrModal').on('shown.bs.modal', function (e) {
+				initialize('map_canvas');
+			});
+		};
+		
+</script>
+}
+
+
+
+
 <div class="modal fade" id="myaddrModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
   <div class="modal-dialog" style="width:820px">
     <div class="modal-content" >
@@ -237,23 +395,23 @@ style="color:#006687; font-size:20px; position:relative; top:-20px; cursor:point
      	<div class="row">
 			<div class="col-md-4">
 			<form action=@routes.DiagnosticController.diagnosticAddressUpdate() role="form" method="POST">
-			<div ><input type="hidden" name="lat" id="lat1"></div>
-			<div ><input type="hidden" name="lng" id="lng1"></div>
+			<div ><input type="hidden" name="latitude" id="lat1"></div>
+			<div ><input type="hidden" name="longitude" id="lng1"></div>
   			<div class="form-group">
-   				 <label for="addressLine1">Address Line1</label>
-   				 <input type="text" class="form-control" name="addressLine1" @if(diagnosticCentre.address!=null){value="@diagnosticCentre.address.addrressLine1"} id="addressLine1" placeholder="Enter Address Line1">
+   				 <label for="addressLine1">Contact Person</label>
+   				 <input type="text" class="form-control" name="contactPerson" @if(diagnosticCentre.contactPerson!=null){value="@diagnosticCentre.contactPerson"} id="contactPerson" placeholder="Contact Person's Name">
  			</div>
   			<div class="form-group">
-    			<label for="addressLine2">Address Line2</label>
-    			<input type="text" class="form-control" name="addressLine2" @if(diagnosticCentre.address!=null){value="@diagnosticCentre.address.addrressLine2"} id="addressLine2" placeholder="Enter Address Line2">
-  			</div>
-  			<div class="form-group">
-    			<label for="city">City</label>
-    			<input type="text" class="form-control" name="city" @if(diagnosticCentre.address!=null){value="@diagnosticCentre.address.city"} id="city" placeholder="Enter City">
+    			<label for="streetName">Street Address</label>
+    			<input type="text" class="form-control" name="addressLine1" @if(diagnosticCentre.address!=null){value="@diagnosticCentre.address.addrressLine1"} id="streetName" placeholder="Enter Street Address">
   			</div>
   			<div class="form-group">
     			<label for="city">Area</label>
     			<input type="text" class="form-control" name="area" @if(diagnosticCentre.address!=null){value="@diagnosticCentre.address.area"} id="area" placeholder="Enter Area">
+  			</div>
+  			<div class="form-group">
+    			<label for="city">City</label>
+    			<input type="text" class="form-control" name="city" @if(diagnosticCentre.address!=null){value="@diagnosticCentre.address.city"} id="city" placeholder="Enter City">
   			</div>
   			<div class="form-group">
     			<label for="pincode">Pincode</label>
@@ -261,55 +419,57 @@ style="color:#006687; font-size:20px; position:relative; top:-20px; cursor:point
   			</div>
   			<div class="form-group">
     			<label for="state">State</label><br>
-				<select data-placeholder="Select the state" name="state" @if(diagnosticCentre.address!=null){value="@diagnosticCentre.address.state"}>
+				<select id="statesel" style="width:100%;" data-placeholder="Select State" name="state">
     				<option value=""></option>	
-     				@for(state <- models.State.values()){
-        			<option  name="state" value="@state">@state</option>
-          			     }
+     				@for((k,v) <- models.State.options()){
+     					@if(diagnosticCentre.address!=null && diagnosticCentre.address.state != null && diagnosticCentre.address.state.equals(diagnosticCentre.address.state)){
+							<option  name="state" value="@k" selected>@v</option>
+						}else{
+        					<option  name="state" value="@k">@v</option>
+        				}
+					}
     			</select>
   			</div>
-  			<div class="form-group">
-    			<label for="state">Country</label><br>
-    			<select data-placeholder="Select the country" name="country" @if(diagnosticCentre.address!=null){value="@diagnosticCentre.address.country"}>
-    				<option value=""></option>	
-     				@for(country <- models.Country.values()){
-        			<option  name="country" value="@country">@country</option>
-          			     }
-    			</select>
-  			</div>
-  
+  			
+  			 
   			<div class="form-group">
     			<label for="phone">Phone Number</label>
     			<input type="text" name="contactNo" value="@diagnosticCentre.mobileNo" id="phone" class="form-control" placeholder="Enter phone number">
   			</div>
+  			
   			<br>
   			<input type="hidden" name="diagnosticId" value='@diagnosticCentre.id' >
-			<button type="submit" onclick="submitbasicform(spinner-address);"class="btn btn-primary btn-sm">Submit</button>
+			<button type="submit" class="btn btn-primary btn-sm">Submit</button>
 		</form>
-	</div>
-	<div class="col-md-8">
-<br><br>
-<img src="/assets/images/googlemap1.png" width="520" height="400" style="position:relative" />
-<div class="maptext" style="text-align:center">
-<p>Please provide Area and City to generate the map</span></p>
+	</div>	
+<div class="col-md-8">
+
+<div id="map_canvas" style="width:520px;height:400px">
+	@if(diagnosticCentre.address == null || diagnosticCentre.address.latitude== null || diagnosticCentre.address.longitude == null || diagnosticCentre.address.latitude.trim().compareToIgnoreCase("") == 0 || diagnosticCentre.address.longitude.trim().compareToIgnoreCase("") == 0){
+		<img src="/assets/images/googlemap1.png" width="520" height="400" style="position:relative" />
+		<div class="maptext" style="text-align:center">
+		<p style="position:relative; top:-200px; color:#008cba;"><b>Please provide Area and City to generate the map</span></b></p>
+	}
+</div>
+
 </div>
 </div>
 </div>
       </div>
     </div>
   </div>
-</div></h2>
-@if(diagnosticCentre.address != null){
-<h5>@diagnosticCentre.name</h5>
-<h5>@diagnosticCentre.address.addrressLine1</h5>
-<h5>@diagnosticCentre.address.area</h5>
-<h5>@diagnosticCentre.address.city</h5>
-<h5>@diagnosticCentre.address.state</h5>
-<h5>@diagnosticCentre.address.country</h5>
-<h5>Pin Code:@diagnosticCentre.address.pinCode</h5>
-}
-<h5>Phones nos:@diagnosticCentre.mobileNo</h5>
-</div>	
+</div>
+
+
+<script>
+	$('#myaddrModal').on('shown.bs.modal', function (e) {
+		$('#statesel').chosen();
+	});
+</script>
+
+
+@*
+	
 <div class="col-md-8">
 <div id="map_canvas" style="width:500px;height:300px"> </div>
 </div>
@@ -602,23 +762,54 @@ function closeTestProfile(){
 
 </div>
 
-
-<br>
-<button class="btn btn-success btn-lg"><a href="/pharmacy/order" style="color:white">Place your order</a></button>
-
-
 <script>
-function submitbasicform(){
+	var i = 0;
+	function addFiles() {
+		i++;
+		$("#files").append('<div class="row" id="file'+i+'"><br><div class="col-md-5"><input type="file" name="file'+i+'" id="inputfile'+i+'" onchange="checkfile('+i+');"/></div><div class="col-md-7"><a class="btn btn-xs btn-danger" onclick="removebut(\'file'
+								+i+'\');">x</a></div></div>');
+		$("#inputfile"+i).trigger('click');
+	}
 
-	$("[data-toggle=popover]").popover('hide');
+	function checkfile(id){
+		$('#insertfn-'+id).html($("#inputfile"+id).val().trim());
+	}
 
-	$('#spinner-test').addClass( "fa-spin" );
+	function removebut(id) {
+		$('#'+id).remove();
+	}
 
-	window.location.href='';
-
-}
 </script>
+<script>
+	var i = 0;
+	function editFiles() {
+		i++;
+		$("#editFileImages").append('<div class="row" id="file'+i+'"><br><table><tr><td style="width:200px"><input type="file" name="file'+i+'" id="inputfile'+i+'" onchange="checkfile('+i+');"/></td><td style="width:90px">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a class="btn btn-xs btn-danger" onclick="removebut(\'file'+i+'\');">x</a></td></div>');
+		$("#inputfile"+i).trigger('click');
+	}
+
+	function checkfile(id){
+		$('#insertfn-'+id).html($("#inputfile"+id).val().trim());
+	}
+
+	function removebut(id) {
+		$('#'+id).remove();
+	}
+
+</script>
+
+
 *@
 
+
+
+
+
+
+
+@*
+<br>
+<button class="btn btn-success btn-lg"><a href="/pharmacy/order/@pharmacy.id" style="color:white">Place your order</a></button>
+*@
 
 }

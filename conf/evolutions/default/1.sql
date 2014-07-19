@@ -171,6 +171,7 @@ create table day_schedule (
 create table diagnostic_centre (
   id                        bigint not null,
   name                      varchar(255),
+  contact_person            varchar(255),
   address_id                bigint,
   mobile_no                 varchar(255),
   description               TEXT,

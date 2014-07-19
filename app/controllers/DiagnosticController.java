@@ -12,7 +12,6 @@ import javax.activation.MimetypesFileTypeMap;
 
 import models.Address;
 import models.Alert;
-import models.Country;
 import models.FileEntity;
 import models.Patient;
 import models.State;
@@ -42,10 +41,218 @@ public class DiagnosticController extends Controller {
 	public static Form<DiagnosticReport> diagReport = Form.form(DiagnosticReport.class);
 
 	/**
+	 * @author lakshmi	 *
+	 * Action for uploading DiagnosticCentre backgroundImage and profile
+	 * Images of of DiagnosticCentre of the loggedIn ADMIN_DIAGREP
+	 * POST	/diagnostic/upload-diagnostic-images
+	 */
+	public static Result uploadDiagnosticImageProcess() {
+		try{
+			final DiagnosticCentre diagnosticCentre = DiagnosticCentre.find.byId(Long.parseLong(request().body().asMultipartFormData().asFormUrlEncoded().get("diagnosticId")[0]));
+			//final DiagnosticCentre diagnosticCentre = LoginController.getLoggedInUser().getDiagnosticRepresentative().diagnosticCentre;
+			if (request().body().asMultipartFormData().getFile("backgroundImage") != null) {
+				final File image = request().body().asMultipartFormData().getFile("backgroundImage").getFile();
+				diagnosticCentre.backgroudImage = Files.toByteArray(image);
+				diagnosticCentre.update();
+			}
+
+			if (request().body().asMultipartFormData().getFile("profileImage") != null) {
+				final FileEntity fileEntity = new FileEntity();
+				final File image = request().body().asMultipartFormData().getFile("profileImage").getFile();
+				fileEntity.fileName = image.getName();
+				fileEntity.mimeType = new MimetypesFileTypeMap().getContentType(image);
+				fileEntity.byteContent = Files.toByteArray(image);
+				fileEntity.save();
+				final Long imageId=fileEntity.id;
+				diagnosticCentre.profileImageList.add(FileEntity.find.byId(imageId));
+				diagnosticCentre.update();
+			} else {
+				Logger.info("BG IMAGE NULL");
+			}
+		}catch(final Exception e){
+			e.printStackTrace();
+			Logger.error("");
+			flash().put("alert", new Alert("alert-danger", "Sorry. Something went wrong. Please try again.").toString());
+		}
+
+		//return ok(views.html.pharmacist.pharmacy_profile.render(pharmacy.inventoryList, pharmacy));
+
+		return redirect(routes.UserActions.dashboard());
+
+	}
+	/**
+	 * @author lakshmi
+	 *  Action to get byteData as image of DiagnosticCentre	 *
+	 * GET/diagnostic/get-image/:diagnosticId/:fileId
+	 */
+	public static Result getDiagnosticImages(final Long diagnosticId,final Long imageId) {
+		byte[] byteContent = null;
+		if(imageId == 0){
+			byteContent=DiagnosticCentre.find.byId(diagnosticId).backgroudImage;
+		}
+		else{
+			for (final FileEntity file : DiagnosticCentre.find.byId(diagnosticId).profileImageList) {
+				if(file.id == imageId){
+					byteContent = file.byteContent;
+				}
+			}
+		}
+
+		return ok(byteContent).as("image/jpeg");
+
+	}
+
+	/**
 	 * @author : lakshmi
 	 * 
-	 * GET /diagnosticlist
+	 * POST	/diagnostic/basic-update
 	 * 
+	 * Action to update the basic details(like name & brief description etc) of DiagnosticCentre
+	 * of the loggedIn ADMIN_DIAGREP
+	 */
+
+	public static Result diagnosticBasicUpdate() {
+		try{
+			Thread.sleep(500);
+			final Map<String, String[]> requestMap = request().body().asFormUrlEncoded();
+			final DiagnosticCentre diagnosticCentre = DiagnosticCentre.find.byId(Long.parseLong(requestMap.get("diagnosticId")[0]));
+			if(requestMap.get("name") != null && (requestMap.get("name")[0].trim().compareToIgnoreCase("")!=0)){
+				diagnosticCentre.name = requestMap.get("name")[0];
+			}
+			if(requestMap.get("description") != null && (requestMap.get("description")[0].trim().compareToIgnoreCase("")!=0)){
+				diagnosticCentre.description = requestMap.get("description")[0];
+			}
+			diagnosticCentre.update();
+		}
+		catch (final Exception e){
+			flash().put("alert", new Alert("alert-danger", "Sorry. Something went wrong. Please try again.").toString());
+		}
+		return redirect(routes.UserActions.dashboard());
+	}
+
+
+	/**
+	 * @author : lakshmi
+	 * POST	/diagnostic/address-update
+	 * Action to update the address details of DiagnosticCentre
+	 * of the loggedIn ADMIN_DIAGREP
+	 */
+
+	public static Result diagnosticAddressUpdate() {
+
+		try{
+			final Map<String, String[]> requestMap = request().body().asFormUrlEncoded();
+			final DiagnosticCentre diagnosticCentre = DiagnosticCentre.find.byId(Long.parseLong(requestMap.get("diagnosticId")[0]));
+			Logger.info("map size"+requestMap.toString());
+			if(diagnosticCentre.address == null){
+				final Address address = new Address();
+				address.save();
+				diagnosticCentre.address = address;
+			}
+			if(requestMap.get("contactPerson") != null && (requestMap.get("contactPerson")[0].trim().compareToIgnoreCase("")!=0)){
+				diagnosticCentre.contactPerson = requestMap.get("contactPerson")[0];
+			}
+			if(requestMap.get("addressLine1") != null && (requestMap.get("addressLine1")[0].trim().compareToIgnoreCase("")!=0)){
+				diagnosticCentre.address.addrressLine1 = requestMap.get("addressLine1")[0];
+			}
+
+			if(requestMap.get("city") != null && (requestMap.get("city")[0].trim().compareToIgnoreCase("")!=0)){
+				diagnosticCentre.address.city = requestMap.get("city")[0];
+			}
+			if(requestMap.get("area") != null && (requestMap.get("area")[0].trim().compareToIgnoreCase("")!=0)){
+				diagnosticCentre.address.area = requestMap.get("area")[0];
+			}
+			if(requestMap.get("pincode") != null && (requestMap.get("pincode")[0].trim().compareToIgnoreCase("")!=0)){
+				diagnosticCentre.address.pinCode = requestMap.get("pincode")[0];
+			}
+			if(requestMap.get("state") != null && (requestMap.get("state")[0].trim().compareToIgnoreCase("")!=0)){
+				diagnosticCentre.address.state = Enum.valueOf(State.class,requestMap.get("state")[0]);
+			}
+			if(requestMap.get("latitude") != null && (requestMap.get("latitude")[0].trim().compareToIgnoreCase("")!=0)){
+				diagnosticCentre.address.latitude = requestMap.get("latitude")[0];
+			}
+			if(requestMap.get("longitude") != null && (requestMap.get("longitude")[0].trim().compareToIgnoreCase("")!=0)){
+				diagnosticCentre.address.longitude = requestMap.get("longitude")[0];
+			}
+			if(requestMap.get("contactNo") != null && (requestMap.get("contactNo")[0].trim().compareToIgnoreCase("")!=0)){
+				diagnosticCentre.mobileNo = requestMap.get("contactNo")[0];
+			}
+			diagnosticCentre.address.update();
+			diagnosticCentre.update();
+
+		}
+		catch (final Exception e){
+			e.printStackTrace();
+			flash().put("alert", new Alert("alert-danger", "Sorry. Something went wrong. Please try again.").toString());
+		}
+		return redirect(routes.UserActions.dashboard());
+	}
+
+	/**
+	 * @author lakshmi
+	 * Action to remove profileImage of DiagnosticCentre of the loggedIn ADMIN_DIAGREP	 *
+	 * GET/diagnostic/remove-image/:diagnosticId/:fileId
+	 */
+	public static Result removeDiagnosticImage(final Long diagnosticId,final Long imageId){
+		final DiagnosticCentre diagnosticCentre = DiagnosticCentre.find.byId(diagnosticId);
+		Logger.info("before list size="+diagnosticCentre.profileImageList.size());
+		final FileEntity image = FileEntity.find.byId(imageId);
+
+		diagnosticCentre.profileImageList.remove(image);
+
+		diagnosticCentre.update();
+		//image.delete();
+		Logger.info("after list size="+diagnosticCentre.profileImageList.size());
+		//		return ok(views.html.pharmacist.pharmacy_profile.render(pharmacy.inventoryList, pharmacy));
+		return redirect(routes.UserActions.dashboard());
+	}
+
+	/**
+	 * @author lakshmi
+	 * Action to get byteData as image of ShowcasedService Of DiagnosticCentre
+	 * GET/diagnostic/get-image/:diagnosticId/:fileId
+	 */
+	public static Result getShowCasedImages(final Long diagnosticServiceId,final Long diagnosticServiceImageID) {
+		byte[] byteContent = null;
+		if(diagnosticServiceId != 0 && diagnosticServiceImageID != 0){
+			for (final FileEntity file : ShowCasedService.find.byId(diagnosticServiceId).showcasedImagesList) {
+				if(file.id == diagnosticServiceImageID){
+					byteContent = file.byteContent;
+				}
+			}
+		}
+		return ok(byteContent).as("image/jpeg");
+
+	}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+	/**
+	 * @author : lakshmi
+	 * GET /diagnosticlist
 	 * Action to list out all diagnostic centers from diagnostic center table
 	 */
 	public static Result diagnosticList() {
@@ -311,185 +518,6 @@ public class DiagnosticController extends Controller {
 		}
 		return ok(file);
 	}
-	/**
-	 * @author lakshmi
-	 * 
-	 * Action for uploading DiagnosticCentre backgroundImages and profile
-	 * Images
-	 * 
-	 * POST	/diagnostic/upload-diagnostic-images
-	 */
-	public static Result uploadDiagnosticImageProcess() throws IOException {
-		//final DiagnosticCentre diagnosticCentre = DiagnosticCentre.find.byId(Long.parseLong(request().body().asFormUrlEncoded().get("diagnosticId")[0]));
-		final DiagnosticCentre diagnosticCentre = LoginController.getLoggedInUser().getDiagnosticRepresentative().diagnosticCentre;
-
-
-
-		if (request().body().asMultipartFormData().getFile("backgroundImage") != null) {
-			final File image = request().body().asMultipartFormData().getFile("backgroundImage").getFile();
-			diagnosticCentre.backgroudImage = Files.toByteArray(image);
-			diagnosticCentre.update();
-		}
-
-		if (request().body().asMultipartFormData().getFile("profileImage") != null) {
-			final FileEntity fileEntity = new FileEntity();
-			final File image = request().body().asMultipartFormData().getFile("profileImage").getFile();
-			fileEntity.fileName = image.getName();
-			fileEntity.mimeType = new MimetypesFileTypeMap().getContentType(image);
-			fileEntity.byteContent = Files.toByteArray(image);
-			fileEntity.save();
-			final Long imageId=fileEntity.id;
-			diagnosticCentre.profileImageList.add(FileEntity.find.byId(imageId));
-			diagnosticCentre.update();
-		} else {
-			Logger.info("BG IMAGE NULL");
-		}
-
-		//return ok(views.html.pharmacist.pharmacy_profile.render(pharmacy.inventoryList, pharmacy));
-
-		return redirect(routes.UserActions.dashboard());
-
-	}
-	/**
-	 * @author : lakshmi
-	 * 
-	 *  Action for getting byte data as image
-	 * 
-	 * GET		/diagnostic/get-image/:diagnosticId/:fileId
-	 */
-	public static Result getDiagnosticImages(final Long diagnosticId,final Long imageId,final Long diagnosticServiceId,final Long diagnosticServiceImageID) {
-		byte[] byteContent = null;
-		if(diagnosticId != 0){
-			byteContent=DiagnosticCentre.find.byId(diagnosticId).backgroudImage;
-		}
-		if(diagnosticId != 0 && imageId != 0){
-			for (final FileEntity file : DiagnosticCentre.find.byId(diagnosticId).profileImageList) {
-				if(file.id == imageId){
-					byteContent = file.byteContent;
-				}
-			}
-		}
-		if(diagnosticServiceId != 0 && diagnosticServiceImageID != 0){
-			for (final FileEntity file : ShowCasedService.find.byId(diagnosticServiceId).showcasedImagesList) {
-				if(file.id == diagnosticServiceImageID){
-					byteContent = file.byteContent;
-				}
-			}
-		}
-		return ok(byteContent).as("image/jpeg");
-
-	}
-
-	/**
-	 * @author : lakshmi
-	 * 
-	 * POST	/diagnostic/basic-update
-	 * 
-	 * Action to update the basic details(like name & brief description etc) of DiagnosticCentre
-	 * of the loggedIn ADMIN_DIAGREP
-	 */
-
-	public static Result diagnosticBasicUpdate() {
-		try{
-			Thread.sleep(500);
-			final Map<String, String[]> requestMap = request().body().asFormUrlEncoded();
-			final DiagnosticCentre diagnosticCentre = DiagnosticCentre.find.byId(Long.parseLong(requestMap.get("diagnosticId")[0]));
-			if(requestMap.get("name") != null && (requestMap.get("name")[0].trim().compareToIgnoreCase("")!=0)){
-				diagnosticCentre.name = requestMap.get("name")[0];
-			}
-			if(requestMap.get("description") != null && (requestMap.get("description")[0].trim().compareToIgnoreCase("")!=0)){
-				diagnosticCentre.description = requestMap.get("description")[0];
-			}
-			diagnosticCentre.update();
-		}
-		catch (final Exception e){
-			flash().put("alert", new Alert("alert-danger", "Sorry. Something went wrong. Please try again.").toString());
-		}
-		return redirect(routes.UserActions.dashboard());
-	}
-
-
-	/**
-	 * @author : lakshmi
-	 * 
-	 * POST	/diagnostic/address-update
-	 * 
-	 * Action to update the address details of DiagnosticCentre
-	 * of the loggedIn ADMIN_DIAGREP
-	 */
-
-	public static Result diagnosticAddressUpdate() {
-
-		try{
-			final Map<String, String[]> requestMap = request().body().asFormUrlEncoded();
-			final DiagnosticCentre diagnosticCentre = DiagnosticCentre.find.byId(Long.parseLong(requestMap.get("diagnosticId")[0]));
-			Logger.info("map size"+requestMap.toString());
-			if(diagnosticCentre.address == null){
-				final Address address = new Address();
-				address.save();
-				diagnosticCentre.address = address;
-			}
-			if(requestMap.get("addressLine1") != null && (requestMap.get("addressLine1")[0].trim().compareToIgnoreCase("")!=0)){
-				diagnosticCentre.address.addrressLine1 = requestMap.get("addressLine1")[0];
-			}
-			if(requestMap.get("addressLine2") != null && (requestMap.get("addressLine2")[0].trim().compareToIgnoreCase("")!=0)){
-				diagnosticCentre.address.addrressLine2 = requestMap.get("addressLine2")[0];
-			}
-			if(requestMap.get("city") != null && (requestMap.get("city")[0].trim().compareToIgnoreCase("")!=0)){
-				diagnosticCentre.address.city = requestMap.get("city")[0];
-			}
-			if(requestMap.get("area") != null && (requestMap.get("area")[0].trim().compareToIgnoreCase("")!=0)){
-				diagnosticCentre.address.area = requestMap.get("area")[0];
-			}
-			if(requestMap.get("pincode") != null && (requestMap.get("pincode")[0].trim().compareToIgnoreCase("")!=0)){
-				diagnosticCentre.address.pinCode = requestMap.get("pincode")[0];
-			}
-			if(requestMap.get("state") != null && (requestMap.get("state")[0].trim().compareToIgnoreCase("")!=0)){
-				diagnosticCentre.address.state = Enum.valueOf(State.class,requestMap.get("state")[0]);
-			}
-			if(requestMap.get("country") != null && (requestMap.get("country")[0].trim().compareToIgnoreCase("")!=0)){
-				diagnosticCentre.address.country = Enum.valueOf(Country.class,requestMap.get("country")[0]);
-			}
-			if(requestMap.get("latitude") != null && (requestMap.get("latitude")[0].trim().compareToIgnoreCase("")!=0)){
-				diagnosticCentre.address.latitude = requestMap.get("latitude")[0];
-			}
-			if(requestMap.get("longitude") != null && (requestMap.get("longitude")[0].trim().compareToIgnoreCase("")!=0)){
-				diagnosticCentre.address.longitude = requestMap.get("longitude")[0];
-			}
-			if(requestMap.get("contactNo") != null && (requestMap.get("contactNo")[0].trim().compareToIgnoreCase("")!=0)){
-				diagnosticCentre.mobileNo = requestMap.get("contactNo")[0];
-			}
-			diagnosticCentre.address.update();
-			diagnosticCentre.update();
-
-		}
-		catch (final Exception e){
-			e.printStackTrace();
-			flash().put("alert", new Alert("alert-danger", "Sorry. Something went wrong. Please try again.").toString());
-		}
-		return redirect(routes.UserActions.dashboard());
-	}
-	/**
-	 * @author lakshmi
-	 * 
-	 * Action for removing diagnostic profileImage from the diagnostic profileImageList
-	 * 
-	 * GET		/diagnostic/remove-image/:diagnosticId/:fileId
-	 */
-	public static Result removeDiagnosticImage(final Long diagnosticId,final Long imageId){
-		final DiagnosticCentre diagnosticCentre = DiagnosticCentre.find.byId(diagnosticId);
-		Logger.info("before list size="+diagnosticCentre.profileImageList.size());
-		final FileEntity image = FileEntity.find.byId(imageId);
-
-		diagnosticCentre.profileImageList.remove(image);
-
-		diagnosticCentre.update();
-		//image.delete();
-		Logger.info("after list size="+diagnosticCentre.profileImageList.size());
-		//		return ok(views.html.pharmacist.pharmacy_profile.render(pharmacy.inventoryList, pharmacy));
-		return redirect(routes.UserActions.dashboard());
-	}
-
 
 	/**
 	 * @author lakshmi

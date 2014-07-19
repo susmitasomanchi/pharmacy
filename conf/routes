@@ -167,7 +167,15 @@ GET    /diagnosticrep/add-doctor/:id      		controllers.DRController.addDoctor(i
 GET    /diagnosticrep/remove-doctor/:id   		controllers.DRController.removeDoctor(id: Long)
 GET    /diagnostic-centre/all-doctors      		controllers.DRController.displayDiagnosticCentreDoctors()
 
-#Diagnostic Test
+#Diagnostic Profile
+POST	/diagnostic/upload-diagnostic-images					controllers.DiagnosticController.uploadDiagnosticImageProcess()
+GET		/diagnostic/get-image/:diagnosticId/:imageId			controllers.DiagnosticController.getDiagnosticImages(diagnosticId: Long,imageId: Long)
+POST	/diagnostic/basic-update								controllers.DiagnosticController.diagnosticBasicUpdate()
+POST	/diagnostic/address-update								controllers.DiagnosticController.diagnosticAddressUpdate()
+GET		/diagnostic/remove-image/:diagnosticId/:fileId			controllers.DiagnosticController.removeDiagnosticImage(diagnosticId: Long,fileId: Long)
+
+
+
 GET    /test				            						controllers.DiagnosticController.addTest()
 POST   /test/save					       						controllers.DiagnosticController.addTestProcess()
 GET    /test-list/:diagnosticCentreId/:patientId   				controllers.DiagnosticController.diagnosticTestList(diagnosticCentreId: Long,patientId: Long)
@@ -177,11 +185,7 @@ POST   /upload-patient-file/save		  						controllers.DiagnosticController.uploa
 GET    /download						  						controllers.DiagnosticController.downloadFile()
 #GET   /add-test-done						  					controllers.DiagnosticController.addTestDone()
 #GET    /test-list/:id				            				controllers.DiagnosticController.diagnosticCentreTestList(id: Long)
-POST	/diagnostic/upload-diagnostic-images					controllers.DiagnosticController.uploadDiagnosticImageProcess()
-GET		/diagnostic/get-image				controllers.DiagnosticController.getDiagnosticImages(diagnosticId: Long,fileId: Long,serviceId: Long,serviceImageId: Long)
-POST	/diagnostic/basic-update								controllers.DiagnosticController.diagnosticBasicUpdate()
-POST	/diagnostic/address-update								controllers.DiagnosticController.diagnosticAddressUpdate()
-GET		/diagnostic/remove-image/:diagnosticId/:fileId			controllers.DiagnosticController.removeDiagnosticImage(diagnosticId: Long,fileId: Long)
+GET     /diagnostic/get-showcased-image/:diagnosticServiceId/:imageID	controllers.DiagnosticController.getShowCasedImages(diagnosticServiceId: Long,imageID: Long)
 POST	/diagnostic/add-service-to-showcase						controllers.DiagnosticController.addShowCasedService()
 GET		/diagnostic/remove-service-from-showcase/:id			controllers.DiagnosticController.removeServiceFromShowcaseList(id: Long)
 GET		/diagnostic/remove-image-from-showcasedService			controllers.DiagnosticController.removeShowCasedImage(showCasedServiceId: Long,imageId: Long)
