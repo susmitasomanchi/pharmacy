@@ -56,12 +56,8 @@ public class MRController extends Controller{
 
 	/**
 	 * @author anand
-	 * 
 	 * @discription : this method is saving the headQuarter
-	 * 
 	 * url :	POST  POST   /mr/add-head-quarter
-	 * 
-	 * 
 	 * */
 	public static Result addHeadQuarter(){
 		final MedicalRepresentative loggedInMr = LoginController.getLoggedInUser().getMedicalRepresentative();

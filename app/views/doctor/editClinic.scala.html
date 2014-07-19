@@ -304,10 +304,11 @@
 					$("#city").blur(function() {
 						$("#map_canvas").html('');
 						var geocoder = new google.maps.Geocoder();
-						var streetname=$("#streetName").val();
+						//var streetname=$("#streetName").val();
 						var area=$("#area").val();
 						geocoder.geocode({
-							'address' : streetname+area+this.value
+							//'address' : streetname+area+this.value
+							'address' : area+this.value
 						}, function(results, status) {
 							if (status == google.maps.GeocoderStatus.OK) {
 								//  alert("location : " + results[0].geometry.location.lat() + " " +results[0].geometry.location.lng()); 

@@ -74,10 +74,6 @@ public class PharmacyBean implements Serializable{
 			pharmacy.contactNo= this.contactNo;
 		}
 
-		if(this.testField != null) {
-			pharmacy.testField= this.testField;
-		}
-
 		final Address address = new Address();
 		final Address oldAddress = Pharmacy.find.byId(this.id).address;
 		//	Logger.info("OldAddress"+oldAddress.toString());
