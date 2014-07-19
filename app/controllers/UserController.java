@@ -37,11 +37,20 @@ public class UserController extends Controller {
 
 
 	/**
-	 * Action to render the joinUs page (for Doctors)
-	 * GET    /join
+	 * Action to render the joinUs page for Doctor
+	 * GET    /doctor/join
 	 */
-	public static Result joinUs(){
-		return ok(views.html.joinus.render());
+	public static Result joinUsDoctor(){
+		return ok(views.html.doctor.joinus.render());
+	}
+
+
+	/**
+	 * Action to render the joinUs page for Pharmacy
+	 * GET    /pharmacy/join
+	 */
+	public static Result joinUsPharmacy(){
+		return ok(views.html.pharmacist.joinus.render());
 	}
 
 
@@ -59,7 +68,12 @@ public class UserController extends Controller {
 
 		if(AppUser.find.where().eq("email", appUser.email).findRowCount()>0){
 			flash().put("alert", new Alert("alert-danger", "Sorry! User with email id "+appUser.email.trim()+" already exists!").toString());
-			return redirect(routes.UserController.joinUs());
+			if(appUser.role == Role.DOCTOR){
+				return redirect(routes.UserController.joinUsDoctor());
+			}
+			if(appUser.role == Role.ADMIN_PHARMACIST){
+				return redirect(routes.UserController.joinUsPharmacy());
+			}
 		}
 
 		appUser.save();

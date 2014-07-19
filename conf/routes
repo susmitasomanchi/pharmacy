@@ -37,7 +37,8 @@ GET    /logout                            			controllers.LoginController.process
 
 
 # Sign up page
-GET    /join                              			controllers.UserController.joinUs()
+GET    /doctor/join                              			controllers.UserController.joinUsDoctor()
+GET    /pharmacy/join                              			controllers.UserController.joinUsPharmacy()
 POST   /join                              			controllers.UserController.processJoinUs()
 
 # Doctor's Profile
@@ -59,17 +60,25 @@ GET    /doctor/new-clinic                 		controllers.DoctorController.newClin
 POST   /doctor/new-clinic                 		controllers.DoctorController.processNewClinic()
 GET    /doctor/clinics                    		controllers.DoctorController.myClinics()
 GET    /doctor/edit-clinic/:id                          controllers.DoctorController.manageClinic(id:Long)
-
 GET    /doctor/edit-clinic-info/:id                  	controllers.DoctorController.editClinicInfo(id:Long)
 GET    /doctor/edit-clinic-schedule/:id                 controllers.DoctorController.editClinicSchedule(id:Long)
-
 POST   /doctor/update-clinic                            controllers.DoctorController.processUpdateClinicInfo()
 POST   /doctor/update-clinic-schedule                   controllers.DoctorController.processUpdateClinicSchedule()
 GET    /doctor/delete-clinic/:id                        controllers.DoctorController.deleteClinic(id:Long)
 
+
+# Pharmacy Profile
+
+POST	/pharmacy/upload-pharmacy-images					controllers.PharmacistController.uploadPharmacyImageProcess()
+POST	/pharmacy/basic-update								controllers.PharmacistController.pharmacyBasicUpdate()
+POST	/pharmacy/address-update			  				controllers.PharmacistController.pharmacyAddressUpdate()
+GET		/pharmacy/get-image/:pharmacyId/:fileId				controllers.PharmacistController.getPharmacyImages(pharmacyId: Long,fileId: Long)
+GET		/pharmacy/remove-image/:pharmacyId/:fileId			controllers.PharmacistController.removeImage(pharmacyId: Long,fileId: Long)
+
+
 # Remove later (at Beta Launch)
-#GET    /                                  controllers.Application.index()
-#GET    /:str		                      controllers.Application.indexX(str: String)
+GET    /                                  controllers.Application.index()
+GET    /:str		                      controllers.Application.indexX(str: String)
 
 
 #############################	PRODUCTION	#################################################################################
@@ -102,14 +111,9 @@ GET   	/place-product-order                     	controllers.PharmacistControlle
 GET   	/place-product-order/process              controllers.PharmacistController.placeProductOrderProcess()
 #GET	 /pharmacy/profile							controllers.PharmacistController.pharmacyProfile()
 GET		/edit-pharmacy-details					controllers.PharmacistController.editPharmacyDetails()
-POST	/pharmacy/basic-update					controllers.PharmacistController.pharmacyBasicUpdate()
-POST	/pharmacy/address-update				controllers.PharmacistController.pharmacyAddressUpdate()
 #GET	/pharmacy/search-product							controllers.PharmacistController.productSearchProcess()	
 POST   /pharmacy/add-product-to-showcase                controllers.PharmacistController.addShowCasedProduct()
 GET    /pharmacy/remove-product-from-showcase/:id       controllers.PharmacistController.removeProductFromShowcaseList(id: Long)
-POST	/pharmacy/upload-pharmacy-images					controllers.PharmacistController.uploadPharmacyImageProcess()
-GET		/pharmacy/get-image/:pharmacyId/:fileId				controllers.PharmacistController.getPharmacyImages(pharmacyId: Long,fileId: Long)
-GET		/pharmacy/remove-image/:pharmacyId/:fileId			controllers.PharmacistController.removeImage(pharmacyId: Long,fileId: Long)
 GET		/pharmacy/order/:id						controllers.PharmacistController.pharmacyPlaceOrder(id: Long)
 
 GET 	/pharmacy/order									controllers.PharmacistController.orderManagement()

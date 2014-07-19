@@ -1,7 +1,6 @@
 package controllers;
 
 import java.io.File;
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -13,6 +12,7 @@ import models.Alert;
 import models.Country;
 import models.FileEntity;
 import models.Product;
+import models.Role;
 import models.State;
 import models.pharmacist.Batch;
 import models.pharmacist.Inventory;
@@ -36,23 +36,245 @@ import com.google.common.io.Files;
 @BasicAuth
 public class PharmacistController extends Controller {
 
-	public static Form<PharmacyBean> pharmacyBeanForm = Form
-			.form(PharmacyBean.class);
-
+	public static Form<PharmacyBean> pharmacyBeanForm = Form.form(PharmacyBean.class);
 	public static Form<Pharmacist> form = Form.form(Pharmacist.class);
-	// public static Form<UserPreferenceBean> prefForm =
-	// Form.form(UserPreferenceBean.class);
-	//public static Form<Product> productForm = Form.form(Product.class);
-
 	public static Form<Pharmacy> pharmacyForm = Form.form(Pharmacy.class);
-
-	public static Form<OrderLineItem> orderLineItemForm = Form
-			.form(OrderLineItem.class);
-
-	public static Form<AddProductToInventoryBean> addProductForm = Form
-			.form(AddProductToInventoryBean.class);
-
+	public static Form<OrderLineItem> orderLineItemForm = Form.form(OrderLineItem.class);
+	public static Form<AddProductToInventoryBean> addProductForm = Form.form(AddProductToInventoryBean.class);
 	public static Form<Batch> batchForm = Form.form(Batch.class);
+
+
+
+
+
+
+	/**
+	 * @author : lakshmi
+	 * @url: /upload-pharmacy-images
+	 * Action to upload Background and Profile Images of the Pharmacy of the LoggedIn ADMIN_PHARMACIST
+	 */
+	public static Result uploadPharmacyImageProcess()  {
+		try{
+			final Pharmacy pharmacy = Pharmacy.find.byId(Long.parseLong(request().body().asMultipartFormData().asFormUrlEncoded().get("pharmacyId")[0]));
+			// Server side validation
+			if((pharmacy.id.longValue() != LoginController.getLoggedInUser().getPharmacist().pharmacy.id.longValue()) || (!LoginController.getLoggedInUser().role.equals(Role.ADMIN_PHARMACIST))){
+				Logger.warn("COULD NOT VALIDATE LOGGED IN USER TO PERFORM THIS TASK");
+				Logger.warn("update attempted for Pharmacy id: "+pharmacy.id);
+				Logger.warn("logged in AppUser: "+LoginController.getLoggedInUser().id);
+				Logger.warn("logged in Pharmacist: "+LoginController.getLoggedInUser().getPharmacist().id);
+				return redirect(routes.LoginController.processLogout());
+			}
+			final FileEntity fileEntity = new FileEntity();
+			if (request().body().asMultipartFormData().getFile("backgroundImage") != null) {
+				final File image = request().body().asMultipartFormData().getFile("backgroundImage").getFile();
+				pharmacy.backgroundImage = Files.toByteArray(image);
+			}
+			if (request().body().asMultipartFormData().getFile("profileImage") != null) {
+				final File image = request().body().asMultipartFormData().getFile("profileImage").getFile();
+				fileEntity.fileName = image.getName();
+				fileEntity.mimeType = new MimetypesFileTypeMap().getContentType(image);
+				fileEntity.byteContent = Files.toByteArray(image);
+				pharmacy.profileImageList.add(fileEntity);
+
+			} else {
+				Logger.info("BG IMAGE NULL");
+			}
+			pharmacy.update();
+			return redirect(routes.UserActions.dashboard());
+		}
+		catch(final Exception e){
+			Logger.error("ERROR WHILE UPLOADING IMAGES OF PHARMACY");
+			e.printStackTrace();
+			flash().put("alert", new Alert("alert-danger", "Sorry. Something went wrong. Please try again.").toString());
+			return redirect(routes.UserActions.dashboard());
+		}
+	}
+
+
+	/**
+	 * @author : lakshmi
+	 * POST	/pharmacy/basic-update
+	 * Action to update the basic details(like name & brief description etc) of Pharmacy
+	 * of the loggedIn ADMIN_PHARMACIST
+	 */
+	public static Result pharmacyBasicUpdate() {
+		try{
+			final Map<String, String[]> requestMap = request().body().asFormUrlEncoded();
+			final Pharmacy pharmacy = Pharmacy.find.byId(Long.parseLong(requestMap.get("pharmacyId")[0]));
+			// Server side validation
+			if((pharmacy.id.longValue() != LoginController.getLoggedInUser().getPharmacist().pharmacy.id.longValue()) || (!LoginController.getLoggedInUser().role.equals(Role.ADMIN_PHARMACIST))){
+				Logger.warn("COULD NOT VALIDATE LOGGED IN USER TO PERFORM THIS TASK");
+				Logger.warn("update attempted for Pharmacy id: "+pharmacy.id);
+				Logger.warn("logged in AppUser: "+LoginController.getLoggedInUser().id);
+				Logger.warn("logged in Pharmacist: "+LoginController.getLoggedInUser().getPharmacist().id);
+				return redirect(routes.LoginController.processLogout());
+			}
+			if(requestMap.get("name") != null && (requestMap.get("name")[0].trim().compareToIgnoreCase("")!=0)){
+				pharmacy.name = requestMap.get("name")[0];
+			}
+			if(requestMap.get("description") != null && (requestMap.get("description")[0].trim().compareToIgnoreCase("")!=0)){
+				pharmacy.description = requestMap.get("description")[0];
+			}
+			pharmacy.update();
+		}
+		catch (final Exception e){
+			Logger.error("ERROR WHILE UPDATING BASIC INFO OF PHARMACY");
+			e.printStackTrace();
+			flash().put("alert", new Alert("alert-danger", "Sorry. Something went wrong. Please try again.").toString());
+		}
+		return redirect(routes.UserActions.dashboard());
+	}
+
+
+	/**
+	 * @author : lakshmi
+	 * POST	/pharmacy/address-update
+	 * Action to update the address details of Pharmacy
+	 * of the loggedIn ADMIN_PHARMACIST
+	 */
+	public static Result pharmacyAddressUpdate() {
+		try{
+			final Map<String, String[]> requestMap = request().body().asFormUrlEncoded();
+			final Pharmacy pharmacy = Pharmacy.find.byId(Long.parseLong(requestMap.get("pharmacyId")[0]));
+
+			// Server side validation
+			if((pharmacy.id.longValue() != LoginController.getLoggedInUser().getPharmacist().pharmacy.id.longValue()) || (!LoginController.getLoggedInUser().role.equals(Role.ADMIN_PHARMACIST))){
+				Logger.warn("COULD NOT VALIDATE LOGGED IN USER TO PERFORM THIS TASK");
+				Logger.warn("update attempted for Pharmacy id: "+pharmacy.id);
+				Logger.warn("logged in AppUser: "+LoginController.getLoggedInUser().id);
+				Logger.warn("logged in Pharmacist: "+LoginController.getLoggedInUser().getPharmacist().id);
+				return redirect(routes.LoginController.processLogout());
+			}
+
+			if(requestMap.get("contactPerson") != null && (requestMap.get("contactPerson")[0].trim().compareToIgnoreCase("")!=0)){
+				pharmacy.contactPerson = requestMap.get("contactPerson")[0];
+			}
+			if(pharmacy.address == null){
+				final Address address = new Address();
+				address.save();
+				pharmacy.address = address;
+			}
+			if(requestMap.get("addressLine1") != null && (requestMap.get("addressLine1")[0].trim().compareToIgnoreCase("")!=0)){
+				pharmacy.address.addrressLine1 = requestMap.get("addressLine1")[0];
+			}
+			if(requestMap.get("city") != null && (requestMap.get("city")[0].trim().compareToIgnoreCase("")!=0)){
+				pharmacy.address.city = requestMap.get("city")[0];
+			}
+			if(requestMap.get("area") != null && (requestMap.get("area")[0].trim().compareToIgnoreCase("")!=0)){
+				pharmacy.address.area = requestMap.get("area")[0];
+			}
+			if(requestMap.get("pincode") != null && (requestMap.get("pincode")[0].trim().compareToIgnoreCase("")!=0)){
+				pharmacy.address.pinCode = requestMap.get("pincode")[0];
+			}
+			if(requestMap.get("state") != null && (requestMap.get("state")[0].trim().compareToIgnoreCase("")!=0)){
+				pharmacy.address.state = Enum.valueOf(State.class,requestMap.get("state")[0]);
+			}
+			if(requestMap.get("country") != null && (requestMap.get("country")[0].trim().compareToIgnoreCase("")!=0)){
+				pharmacy.address.country = Enum.valueOf(Country.class,requestMap.get("country")[0]);
+			}
+			if(requestMap.get("latitude") != null && (requestMap.get("latitude")[0].trim().compareToIgnoreCase("")!=0)){
+				pharmacy.address.latitude = requestMap.get("latitude")[0];
+			}
+			if(requestMap.get("longitude") != null && (requestMap.get("longitude")[0].trim().compareToIgnoreCase("")!=0)){
+				pharmacy.address.longitude = requestMap.get("longitude")[0];
+			}
+			if(requestMap.get("contactNo") != null && (requestMap.get("contactNo")[0].trim().compareToIgnoreCase("")!=0)){
+				pharmacy.contactNo = requestMap.get("contactNo")[0];
+			}
+			pharmacy.address.update();
+			pharmacy.update();
+
+		}
+		catch (final Exception e){
+			Logger.error("ERROR WHILE UPDATING ADDRESS OF PHARMACY");
+			e.printStackTrace();
+			flash().put("alert", new Alert("alert-danger", "Sorry. Something went wrong. Please try again.").toString());
+		}
+		return redirect(routes.UserActions.dashboard());
+	}
+
+
+	/**
+	 * @author lakshmi
+	 * GET /pharmacy/remove-image/:pharmacyId/:fileId
+	 * Action to remove a profile image of the Pharmacy of the loggedIn ADMIN_PHARMACIST
+	 */
+	public static Result removeImage(final Long pharmacyId,final Long imageId){
+		try{
+			final Pharmacy pharmacy = Pharmacy.find.byId(pharmacyId);
+			// Server side validation
+			if((pharmacy.id.longValue() != LoginController.getLoggedInUser().getPharmacist().pharmacy.id.longValue()) || (!LoginController.getLoggedInUser().role.equals(Role.ADMIN_PHARMACIST))){
+				Logger.warn("COULD NOT VALIDATE LOGGED IN USER TO PERFORM THIS TASK");
+				Logger.warn("update attempted for Pharmacy id: "+pharmacy.id);
+				Logger.warn("logged in AppUser: "+LoginController.getLoggedInUser().id);
+				Logger.warn("logged in Pharmacist: "+LoginController.getLoggedInUser().getPharmacist().id);
+				return redirect(routes.LoginController.processLogout());
+			}
+			Logger.info("before list size="+pharmacy.profileImageList.size());
+			final FileEntity image = FileEntity.find.byId(imageId);
+			pharmacy.profileImageList.remove(image);
+			pharmacy.update();
+			image.delete();
+			return redirect(routes.UserActions.dashboard());
+		}
+		catch (final Exception e){
+			Logger.error("ERROR WHILE REMOVING PROFILE IMAGE OF PHARMACY");
+			e.printStackTrace();
+			flash().put("alert", new Alert("alert-danger", "Sorry. Something went wrong. Please try again.").toString());
+		}
+		return redirect(routes.UserActions.dashboard());
+	}
+
+
+
+
+	/**
+	 * @author lakshmi
+	 * GET /pharmacy/get-image/:pharmacyId/:fileId
+	 * Action to get byte data as image of Pharmacy's Background and Profile Images
+	 */
+	public static Result getPharmacyImages(final Long pharmacyId,final Long imageId) {
+		byte[] byteContent = null;
+		if(imageId == 0){
+			byteContent=Pharmacy.find.byId(pharmacyId).backgroundImage;
+		}
+		else{
+			for (final FileEntity file : Pharmacy.find.byId(pharmacyId).profileImageList) {
+				if(file.id == imageId){
+					byteContent = file.byteContent;
+				}
+			}
+		}
+		return ok(byteContent).as("image/jpeg");
+	}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 	public static Result searchForm() {
 		final List<Product> products = Product.find.all();
@@ -218,163 +440,14 @@ public class PharmacistController extends Controller {
 		return ok(views.html.pharmacist.pharmacyDetails.render(filledForm));
 	}
 
-	/**
-	 * @author : lakshmi
-	 * POST	/pharmacy/basic-update
-	 * Action to update the basic details(like name & brief description etc) of Pharmacy
-	 * of the loggedIn ADMIN_PHARMACIST
-	 */
-	public static Result pharmacyBasicUpdate() {
-		try{
-			final Map<String, String[]> requestMap = request().body().asFormUrlEncoded();
-			final Pharmacy pharmacy = Pharmacy.find.byId(Long.parseLong(requestMap.get("pharmacyId")[0]));
-			if(requestMap.get("name") != null && (requestMap.get("name")[0].trim().compareToIgnoreCase("")!=0)){
-				pharmacy.name = requestMap.get("name")[0];
-			}
-			if(requestMap.get("description") != null && (requestMap.get("description")[0].trim().compareToIgnoreCase("")!=0)){
-				pharmacy.description = requestMap.get("description")[0];
-			}
-			pharmacy.update();
-		}
-		catch (final Exception e){
-			flash().put("alert", new Alert("alert-danger", "Sorry. Something went wrong. Please try again.").toString());
-		}
-		return redirect(routes.UserActions.dashboard());
-	}
+
+
+
+
+
 
 
 	/**
-	 * @author : lakshmi
-	 * POST	/pharmacy/address-update
-	 * Action to update the address details of Pharmacy
-	 * of the loggedIn ADMIN_PHARMACIST
-	 */
-	public static Result pharmacyAddressUpdate() {
-		try{
-			final Map<String, String[]> requestMap = request().body().asFormUrlEncoded();
-			final Pharmacy pharmacy = Pharmacy.find.byId(Long.parseLong(requestMap.get("pharmacyId")[0]));
-			if(requestMap.get("contactPerson") != null && (requestMap.get("contactPerson")[0].trim().compareToIgnoreCase("")!=0)){
-				pharmacy.contactPerson = requestMap.get("contactPerson")[0];
-			}
-			if(pharmacy.address == null){
-				final Address address = new Address();
-				address.save();
-				pharmacy.address = address;
-			}
-			if(requestMap.get("addressLine1") != null && (requestMap.get("addressLine1")[0].trim().compareToIgnoreCase("")!=0)){
-				pharmacy.address.addrressLine1 = requestMap.get("addressLine1")[0];
-			}
-			if(requestMap.get("city") != null && (requestMap.get("city")[0].trim().compareToIgnoreCase("")!=0)){
-				pharmacy.address.city = requestMap.get("city")[0];
-			}
-			if(requestMap.get("area") != null && (requestMap.get("area")[0].trim().compareToIgnoreCase("")!=0)){
-				pharmacy.address.area = requestMap.get("area")[0];
-			}
-			if(requestMap.get("pincode") != null && (requestMap.get("pincode")[0].trim().compareToIgnoreCase("")!=0)){
-				pharmacy.address.pinCode = requestMap.get("pincode")[0];
-			}
-			if(requestMap.get("state") != null && (requestMap.get("state")[0].trim().compareToIgnoreCase("")!=0)){
-				pharmacy.address.state = Enum.valueOf(State.class,requestMap.get("state")[0]);
-			}
-			if(requestMap.get("country") != null && (requestMap.get("country")[0].trim().compareToIgnoreCase("")!=0)){
-				pharmacy.address.country = Enum.valueOf(Country.class,requestMap.get("country")[0]);
-			}
-			if(requestMap.get("latitude") != null && (requestMap.get("latitude")[0].trim().compareToIgnoreCase("")!=0)){
-				pharmacy.address.latitude = requestMap.get("latitude")[0];
-			}
-			if(requestMap.get("longitude") != null && (requestMap.get("longitude")[0].trim().compareToIgnoreCase("")!=0)){
-				pharmacy.address.longitude = requestMap.get("longitude")[0];
-			}
-			if(requestMap.get("contactNo") != null && (requestMap.get("contactNo")[0].trim().compareToIgnoreCase("")!=0)){
-				pharmacy.contactNo = requestMap.get("contactNo")[0];
-			}
-			pharmacy.address.update();
-			pharmacy.update();
-
-		}
-		catch (final Exception e){
-			e.printStackTrace();
-			flash().put("alert", new Alert("alert-danger", "Sorry. Something went wrong. Please try again.").toString());
-		}
-		return redirect(routes.UserActions.dashboard());
-	}
-
-
-
-
-	/*
-	 * @author : lakshmi
-	 * 
-	 * @url: /upload-pharmacy-images
-	 * 
-	 * descrition:uploading the Pharmacy Images process
-	 */
-
-	public static Result uploadPharmacyImageProcess()  {
-		final Pharmacy pharmacy = LoginController.getLoggedInUser()
-				.getPharmacist().pharmacy;
-		final FileEntity fileEntity = new FileEntity();
-
-		if (request().body().asMultipartFormData().getFile("backgroundImage") != null) {
-			final File image = request().body().asMultipartFormData().getFile("backgroundImage").getFile();
-
-			try {
-				pharmacy.backgroundImage = Files.toByteArray(image);
-			} catch (final IOException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
-
-		}
-
-		if (request().body().asMultipartFormData().getFile("profileImage") != null) {
-			Logger.info("inside 1");
-			final File image = request().body().asMultipartFormData().getFile("profileImage").getFile();
-			fileEntity.fileName = image.getName();
-			fileEntity.mimeType = new MimetypesFileTypeMap().getContentType(image);
-			try {
-				fileEntity.byteContent = Files.toByteArray(image);
-			} catch (final IOException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
-			Logger.info("inside 2");
-			pharmacy.profileImageList.add(fileEntity);
-			Logger.info("inside 3");
-
-		} else {
-			Logger.info("BG IMAGE NULL");
-		}
-		pharmacy.update();
-		//return ok(views.html.pharmacist.pharmacy_profile.render(pharmacy.inventoryList, pharmacy));
-
-		return redirect(routes.UserActions.dashboard());
-
-	}
-	/*
-	 * @author : lakshmi
-	 * 
-	 * @url: /pharmacy/get-image/:pharmacyId/:fileId
-	 * 
-	 * descrition: method for getting byte data as image
-	 */
-
-	public static Result getPharmacyImages(final Long pharmacyId,final Long imageId) {
-		byte[] byteContent = null;
-		if(imageId == 0){
-			byteContent=Pharmacy.find.byId(pharmacyId).backgroundImage;
-		}
-		else{
-			for (final FileEntity file : Pharmacy.find.byId(pharmacyId).profileImageList) {
-				if(file.id == imageId){
-					byteContent = file.byteContent;
-				}
-			}
-		}
-		return ok(byteContent).as("image/jpeg");
-
-	}
-	/*
 	 * @author : lakshmi
 	 * 
 	 * @url:
@@ -385,26 +458,8 @@ public class PharmacistController extends Controller {
 	public static Result orderManagement(){
 		return ok();
 	}
-	/*
-	 * @author : lakshmi
-	 * 
-	 * @url:
-	 * 
-	 * descrition: removing pharmacy images from list
-	 */
-	public static Result removeImage(final Long pharmacyId,final Long imageId){
-		final Pharmacy pharmacy = Pharmacy.find.byId(pharmacyId);
-		Logger.info("before list size="+pharmacy.profileImageList.size());
-		final FileEntity image = FileEntity.find.byId(imageId);
 
-		pharmacy.profileImageList.remove(image);
 
-		pharmacy.update();
-		image.delete();
-		Logger.info("after list size="+pharmacy.profileImageList.size());
-		//		return ok(views.html.pharmacist.pharmacy_profile.render(pharmacy.inventoryList, pharmacy));
-		return redirect(routes.UserActions.dashboard());
-	}
 
 
 	public static Result addShowCasedProduct(){

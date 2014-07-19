@@ -74,12 +74,12 @@ function submitbasicform(id){
 
 
 @if(pharmacy.backgroundImage != null){
-	<div style="background-image:url('/pharmacy/get-image/@pharmacy.id/0');background-size:940px 400px; background-repeat:no-repeat; height:400px;"></div>
+	<div style="background-image:url('@routes.PharmacistController.getPharmacyImages(pharmacy.id,0)');background-size:940px 400px; background-repeat:no-repeat; height:400px;"></div>
 }else{
 	<div style="background-image:url('/assets/images/pharmacy-default-bg-image.jpg');background-size:940px 400px; background-repeat:no-repeat; height:400px;"></div>
 }
 
-<span data-toggle="popover" data-placement="left" title="Change Background Image" data-html="true" data-content="<form action=&quot;/pharmacy/upload-pharmacy-images&quot; enctype=&quot;multipart/form-data&quot; method=&quot;POST&quot;><input type=&quot;file&quot; name=&quot;backgroundImage&quot;> <input type=&quot;hidden&quot; name=&quot;pharmacyId&quot; value=&quot;@pharmacy.id&quot;> <br><input class=&quot;pull-right btn btn-xs btn-primary&quot; type=&quot;submit&quot; onclick=&quot;submitimagesform();&quot; value=&quot;save&quot;></form>" style="cursor:pointer; position:relative; top:-400px;left:910px; font-size:25px">
+<span data-toggle="popover" data-placement="left" title="Change Background Image" data-html="true" data-content="<form action=&quot;@routes.PharmacistController.uploadPharmacyImageProcess()&quot; enctype=&quot;multipart/form-data&quot; method=&quot;POST&quot;><input type=&quot;file&quot; name=&quot;backgroundImage&quot;> <input type=&quot;hidden&quot; name=&quot;pharmacyId&quot; value=&quot;@pharmacy.id&quot;> <br><input class=&quot;pull-right btn btn-xs btn-primary&quot; type=&quot;submit&quot; onclick=&quot;submitimagesform();&quot; value=&quot;save&quot;></form>" style="cursor:pointer; position:relative; top:-400px;left:910px; font-size:25px">
 <i style="text-shadow:1px 1px 20px #292929, 3px 3px 20px white;" id="spinner" class="fa fa-cog"></i>
 </span>
 </div>
@@ -102,14 +102,15 @@ function submitbasicform(id){
       <table class="table table-striped">
       @for(profileImages <- pharmacy.profileImageList){
       <tr>
-      <td style="width:200px"> <img src="/pharmacy/get-image/@pharmacy.id/@profileImages.id" width="150" height="75" /> </td>
-      <td> <button class="btn btn-danger btn-xs"><a href="/pharmacy/remove-image/@pharmacy.id/@profileImages.id" style="color:white">Delete</a></button> </td>
+      <td style="width:200px"> <img src="@routes.PharmacistController.getPharmacyImages(pharmacy.id,profileImages.id)" width="150" height="75" /> </td>
+      <td> <button class="btn btn-danger btn-xs"><a href="@routes.PharmacistController.removeImage(pharmacy.id,profileImages.id)" style="color:white">Delete</a></button> </td>
       </tr>
       }
      </table>
       @helper.form(action = routes.PharmacistController.uploadPharmacyImageProcess(), 'enctype -> "multipart/form-data",'method -> "post") {
       	<div class="form-group">
     	<label for="exampleInputFile" class="badge"><b>Add Image</b></label>
+    	<input type="hidden" name="pharmacyId" value="@pharmacy.id"/>
     	<input type="file" name="profileImage" />
     	<input class="pull-right btn btn-primary btn-xs" type="submit" name="submit" value="Save Image" />
   		</div> 
