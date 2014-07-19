@@ -60,6 +60,10 @@ GET    /doctor/new-clinic                 		controllers.DoctorController.newClin
 POST   /doctor/new-clinic                 		controllers.DoctorController.processNewClinic()
 GET    /doctor/clinics                    		controllers.DoctorController.myClinics()
 GET    /doctor/edit-clinic/:id                          controllers.DoctorController.manageClinic(id:Long)
+
+GET    /doctor/edit-clinic-info/:id                  	controllers.DoctorController.editClinicInfo(id:Long)
+GET    /doctor/edit-clinic-schedule/:id                 controllers.DoctorController.editClinicSchedule(id:Long)
+
 POST   /doctor/update-clinic                            controllers.DoctorController.processUpdateClinicInfo()
 POST   /doctor/update-clinic-schedule                   controllers.DoctorController.processUpdateClinicSchedule()
 GET    /doctor/delete-clinic/:id                        controllers.DoctorController.deleteClinic(id:Long)
@@ -120,14 +124,14 @@ GET 	/pharmacy/order									controllers.PharmacistController.orderManagement()
 
 
 
-GET    /medical-representative            		controllers.Application.medicalRepresentative()
-POST   /medical-representative/proccess   		controllers.Application.medicalRepresentativeProccess()
+#GET    /medical-representative                     controllers.Application.medicalRepresentative()
+#POST   /medical-representative/proccess            controllers.Application.medicalRepresentativeProccess()
 GET    /diagRep/                          		controllers.Application.diagnosticRep()
 POST   /diagRepProccess/                  		controllers.Application.diagnosticRepProccess()
 GET    /sampledata/populate               		controllers.SampleDataController.populate()
 GET    /sampledata/cleanup                		controllers.SampleDataController.cleanUp()
 GET    /sampledata/temp                   		controllers.SampleDataController.temp()
-GET		/sampledata/create-patdoc				controllers.SampleDataController.createSamplePatientDoctor()
+
 #POST   /userform/patientproccess/       		controllers.PatientController.process()
 
 GET    /home/                             		controllers.Application.homePage()
@@ -144,6 +148,7 @@ GET 	/patient/delete-fav-doc/:id					controllers.PatientController.deleteMyFavDo
 GET		/patient/search-doctors/:query					controllers.PatientController.searchDoctors(query:String)
 GET    /answerform                       		 controllers.DoctorController.displayAnswer()
 POST   /ansQuestion/:qaId                 		 controllers.DoctorController.answerQuestion(qaId: Long)
+GET    /static/new/appointment					controllers.PatientController.staticPatientNewAppointment()
 
 
 #GET    /diagnosticlist                   	 	controllers.DiagnosticController.diagnosticlist()
@@ -162,6 +167,7 @@ GET    /diagnosticrep/doctorsearch	         	controllers.DRController.searchProc
 GET    /diagnosticrep/add-doctor/:id      		controllers.DRController.addDoctor(id: Long)
 GET    /diagnosticrep/remove-doctor/:id   		controllers.DRController.removeDoctor(id: Long)
 GET    /diagnostic-centre/all-doctors      		controllers.DRController.displayDiagnosticCentreDoctors()
+GET		/static/diagnostic/profile				controllers.DiagnosticController.staticDiagnosticProfile()
 
 #Diagnostic Test
 GET    /test				            		controllers.DiagnosticController.addTest()
@@ -190,8 +196,12 @@ GET		/sample-collected/:id					controllers.DiagnosticOrderController.sampleColle
 GET		/report-generated						controllers.DiagnosticOrderController.reoprtReady(id: Long)
 GET    /patient-search      					controllers.DiagnosticOrderController.patientSearch()
 GET    /patient-search/list 					controllers.DiagnosticOrderController.patientSearchProcess()
+
 																										
 #MR Module
+
+GET		/mr/hierarchy							   controllers.MRController.viewHierarchy()
+
 GET    /doctor-list                                controllers.MRController.doctorList()
 GET    /mr/add-doctor/:id                          controllers.MRController.addDoctor(id: Long)
 GET    /mr/remove-doctor/:id                       controllers.MRController.removeDoctor(id: Long)
@@ -207,6 +217,11 @@ POST   /mr/dcr/delete-line-item/:dcrid/:lineitemid   controllers.MRController.re
 GET    /search                                     controllers.MRController.search()
 GET    /mr/display-appointment/:id                 controllers.MRController.scheduleAppointment(id:String)
 POST	/mr/add-head-quarter							controllers.MRController.addHeadQuarter()
+POST    /mr/add                                    controllers.MRController.medicalRepresentativeProccess()
+#POST    /mr/editmr                                 controllers.MRController.medicalRepresentativeProccessUpdate()
+GET     /mr/del	                                   controllers.MRController.removeMR(id: Long)
+GET     /mr/edit/:id	                           controllers.MRController.editMR(id: Long)
+GET    /mr/add-value                               controllers.SampleDataController.values()
 
 
 #common module
@@ -216,7 +231,6 @@ GET		/mr/new-product									controllers.ProductController.pharmaceuticalProduct
 POST	/mr/new-product									controllers.ProductController.savePharmceuticalProduct()
 GET    /view-products                              controllers.ProductController.displayProduct()
 #GET    /edit-product/:id                           controllers.ProductController.editProduct(id: Long)
-#GET    /remove-product/:id 
 
 
 # delete later
@@ -229,8 +243,8 @@ POST   /register/                         controllers.PatientController.register
 #sample data
 #GET   /sampledata/day					controllers.SampleDataController.days()
 GET	/mr/sample-data					controllers.SampleDataController.mrSampleData()
-
-
-
 # Map static resources from the /public folder to the /assets URL path
-GET    /assets/*file                      controllers.Assets.at(path="/public", file)
+GET    /assets/*file                                    controllers.Assets.at(path="/public", file)
+
+
+

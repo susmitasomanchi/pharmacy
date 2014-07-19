@@ -19,7 +19,7 @@ public class PharmacyBean implements Serializable{
 
 	public String contactNo;
 
-	public String testField;
+	public String contactPerson;
 
 	public String addrressLine1;
 
@@ -74,6 +74,10 @@ public class PharmacyBean implements Serializable{
 			pharmacy.contactNo= this.contactNo;
 		}
 
+		if(this.contactPerson != null) {
+			pharmacy.contactPerson= this.contactPerson;
+		}
+		
 		final Address address = new Address();
 		final Address oldAddress = Pharmacy.find.byId(this.id).address;
 		//	Logger.info("OldAddress"+oldAddress.toString());

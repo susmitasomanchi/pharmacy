@@ -76,6 +76,11 @@ public class Pharmacy extends BaseEntity {
 		if(this.contactNo != null) {
 			pharmacyBean.contactNo= this.contactNo;
 		}
+
+		if(this.contactPerson != null) {
+			pharmacyBean.contactPerson= this.contactPerson;
+		}
+
 		if(this.description != null) {
 			pharmacyBean.description= this.description;
 		}

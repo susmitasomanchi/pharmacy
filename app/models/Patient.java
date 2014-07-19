@@ -41,7 +41,6 @@ public class Patient extends BaseEntity {
 
 	public String isUrgentPatient;
 
-
 	@OneToMany(cascade=CascadeType.ALL)
 	public List<PatientDoctorInfo> patientDoctorInfos=new ArrayList<PatientDoctorInfo>();
 

@@ -3,7 +3,11 @@
 
 THIS IS AN AUTO GENERATED CODE
 PLEASE DO NOT MODIFY IT BY HAND
+ *****/
+/*****
 
+THIS IS AN AUTO GENERATED CODE
+PLEASE DO NOT MODIFY IT BY HAND
  *****/
 package controllers;
 
@@ -14,6 +18,7 @@ import models.Role;
 import models.diagnostic.DiagnosticRepresentative;
 import models.doctor.Doctor;
 import models.mr.MedicalRepresentative;
+import models.mr.PharmaceuticalCompany;
 import models.pharmacist.Pharmacist;
 import models.pharmacist.Pharmacy;
 import play.data.Form;
@@ -58,6 +63,22 @@ public class UserController extends Controller {
 		}
 
 		appUser.save();
+
+		if(appUser.role == Role.ADMIN_MR){
+
+			final MedicalRepresentative medicalRepresentative = new MedicalRepresentative();
+			final PharmaceuticalCompany pharmaCompany = new PharmaceuticalCompany();
+			medicalRepresentative.appUser = appUser;
+			medicalRepresentative.save();
+			pharmaCompany.name = request().body().asFormUrlEncoded().get("pharmaceuticalCompanyName")[0].trim();
+			pharmaCompany.mrList.add(medicalRepresentative);
+			//pharmaCompany.appuserid=appUser.id;
+			pharmaCompany.save();
+			medicalRepresentative.pharmaceuticalCompany = pharmaCompany;
+			medicalRepresentative.update();
+
+		}
+
 
 		if(appUser.role.equals(Role.DOCTOR)){
 			final Doctor doctor = new Doctor();
@@ -120,6 +141,7 @@ public class UserController extends Controller {
 
 		return redirect(routes.UserActions.dashboard());
 	}
+
 
 
 

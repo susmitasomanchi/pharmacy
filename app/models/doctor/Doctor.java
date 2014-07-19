@@ -56,36 +56,32 @@ public class Doctor extends BaseEntity{
 
 	//education
 	@OneToMany(cascade=CascadeType.ALL)
-	public List<DoctorEducation> doctorEducationList=new ArrayList<DoctorEducation>();
+	public List<DoctorEducation> doctorEducationList = new ArrayList<DoctorEducation>();
 
 	//experience
 	@OneToMany(cascade=CascadeType.ALL)
-	public List<DoctorExperience> doctorExperienceList=new ArrayList<DoctorExperience>();
+	public List<DoctorExperience> doctorExperienceList = new ArrayList<DoctorExperience>();
 
 	//publications
 	@OneToMany(cascade=CascadeType.ALL)
-	public List<DoctorPublication> doctorPublicationList=new ArrayList<DoctorPublication>();
+	public List<DoctorPublication> doctorPublicationList = new ArrayList<DoctorPublication>();
 
 	//awards
 	@OneToMany(cascade=CascadeType.ALL)
-	public List<DoctorAward> doctorAwardList=new ArrayList<DoctorAward>();
+	public List<DoctorAward> doctorAwardList = new ArrayList<DoctorAward>();
 
 	//language
 	@ManyToMany(cascade=CascadeType.ALL)
-	public List<DoctorLanguage> doctorLanguageList=new ArrayList<DoctorLanguage>();
+	public List<DoctorLanguage> doctorLanguageList = new ArrayList<DoctorLanguage>();
 
 	//socialwork
 	@OneToMany(cascade=CascadeType.ALL)
-	public List<DoctorSocialWork> doctorSocialWorkList=new ArrayList<DoctorSocialWork>();
+	public List<DoctorSocialWork> doctorSocialWorkList = new ArrayList<DoctorSocialWork>();
 
 	@OneToMany(cascade=CascadeType.ALL)
 	public List<DoctorEducation> doctorEducation = new ArrayList<DoctorEducation>();
 
 	public Integer experience;
-
-
-	@Column(columnDefinition="TEXT")
-	public String searchIndex;
 
 	public static Model.Finder<Long,Doctor> find = new Finder<Long, Doctor>(Long.class, Doctor.class);
 
@@ -100,37 +96,9 @@ public class Doctor extends BaseEntity{
 	public List<DoctorSocialWork> getDoctorSocialWorkList() {
 		return this.doctorSocialWorkList;
 	}
+
 	public List<DoctorClinicInfo> getActiveClinic(){
 		return DoctorClinicInfo.find.where().eq("doctor", this).eq("active", true).findList();
 	}
-
-
-	@Override
-	public void save(){
-
-		final StringBuilder stringBuilder=new StringBuilder();
-		for (final DoctorClinicInfo clinicInfo : this.doctorClinicInfoList) {
-			stringBuilder.append(clinicInfo.clinic.name.toLowerCase());
-
-		}
-		stringBuilder.append(this.appUser.name.toLowerCase()).append(this.experience);
-		this.searchIndex = stringBuilder.toString();
-		super.save();
-	}
-
-
-	@Override
-	public void update() {
-		final StringBuilder stringBuilder=new StringBuilder();
-		for (final DoctorClinicInfo clinicInfo : this.doctorClinicInfoList) {
-			stringBuilder.append(clinicInfo.clinic.name.toLowerCase());
-
-		}
-		stringBuilder.append(this.appUser.name.toLowerCase()).append(this.experience);
-		this.searchIndex = stringBuilder.toString();
-		super.update();
-	}
-
-
 
 }
