@@ -635,6 +635,12 @@ create table patient_diagnostic_centre (
   constraint pk_patient_diagnostic_centre primary key (patient_id, diagnostic_centre_id))
 ;
 
+create table pharmaceutical_company_product (
+  pharmaceutical_company_id      bigint not null,
+  product_id                     bigint not null,
+  constraint pk_pharmaceutical_company_product primary key (pharmaceutical_company_id, product_id))
+;
+
 create table pharmacy_file_entity (
   pharmacy_id                    bigint not null,
   file_entity_id                 bigint not null,
@@ -645,12 +651,6 @@ create table show_cased_service_file_entity (
   show_cased_service_id          bigint not null,
   file_entity_id                 bigint not null,
   constraint pk_show_cased_service_file_entity primary key (show_cased_service_id, file_entity_id))
-;
-
-create table pharmaceutical_company_product (
-  pharmaceutical_company_id      bigint not null,
-  product_id                     bigint not null,
-  constraint pk_pharmaceutical_company_product primary key (pharmaceutical_company_id, product_id))
 ;
 create sequence address_seq;
 
@@ -782,98 +782,6 @@ alter table dcrline_item add constraint fk_dcrline_item_daily_call_re_15 foreign
 create index ix_dcrline_item_daily_call_re_15 on dcrline_item (daily_call_report_id);
 alter table dcrline_item add constraint fk_dcrline_item_doctor_16 foreign key (doctor_id) references doctor (id);
 create index ix_dcrline_item_doctor_16 on dcrline_item (doctor_id);
-<<<<<<< HEAD
-alter table daily_call_report add constraint fk_daily_call_report_medical__17 foreign key (medical_representative_id) references medical_representative (id);
-create index ix_daily_call_report_medical__17 on daily_call_report (medical_representative_id);
-alter table day_schedule add constraint fk_day_schedule_doctor_clinic_18 foreign key (doctor_clinic_info_id) references doctor_clinic_info (id);
-create index ix_day_schedule_doctor_clinic_18 on day_schedule (doctor_clinic_info_id);
-alter table diagnostic_centre add constraint fk_diagnostic_centre_address_19 foreign key (address_id) references address (id);
-create index ix_diagnostic_centre_address_19 on diagnostic_centre (address_id);
-alter table diagnostic_centre add constraint fk_diagnostic_centre_diagnost_20 foreign key (diagnostic_rep_admin_id) references diagnostic_representative (id);
-create index ix_diagnostic_centre_diagnost_20 on diagnostic_centre (diagnostic_rep_admin_id);
-alter table diagnostic_order add constraint fk_diagnostic_order_diagnosti_21 foreign key (diagnostic_centre_id) references diagnostic_centre (id);
-create index ix_diagnostic_order_diagnosti_21 on diagnostic_order (diagnostic_centre_id);
-alter table diagnostic_order add constraint fk_diagnostic_order_patient_22 foreign key (patient_id) references patient (id);
-create index ix_diagnostic_order_patient_22 on diagnostic_order (patient_id);
-alter table diagnostic_report add constraint fk_diagnostic_report_diagnost_23 foreign key (diagnostic_order_id) references diagnostic_order (id);
-create index ix_diagnostic_report_diagnost_23 on diagnostic_report (diagnostic_order_id);
-alter table diagnostic_report add constraint fk_diagnostic_report_diagnost_24 foreign key (diagnostic_test_id) references diagnostic_test (id);
-create index ix_diagnostic_report_diagnost_24 on diagnostic_report (diagnostic_test_id);
-alter table diagnostic_representative add constraint fk_diagnostic_representative__25 foreign key (app_user_id) references app_user (id);
-create index ix_diagnostic_representative__25 on diagnostic_representative (app_user_id);
-alter table diagnostic_representative add constraint fk_diagnostic_representative__26 foreign key (patient_id) references patient (id);
-create index ix_diagnostic_representative__26 on diagnostic_representative (patient_id);
-alter table diagnostic_representative add constraint fk_diagnostic_representative__27 foreign key (diagnostic_centre_id) references diagnostic_centre (id);
-create index ix_diagnostic_representative__27 on diagnostic_representative (diagnostic_centre_id);
-alter table diagnostic_test add constraint fk_diagnostic_test_diagnostic_28 foreign key (diagnostic_centre_id) references diagnostic_centre (id);
-create index ix_diagnostic_test_diagnostic_28 on diagnostic_test (diagnostic_centre_id);
-alter table diagnostic_test_line_item add constraint fk_diagnostic_test_line_item__29 foreign key (prescription_id) references prescription (id);
-create index ix_diagnostic_test_line_item__29 on diagnostic_test_line_item (prescription_id);
-alter table doctor add constraint fk_doctor_appUser_30 foreign key (app_user_id) references app_user (id);
-create index ix_doctor_appUser_30 on doctor (app_user_id);
-alter table doctor_assistant add constraint fk_doctor_assistant_appUser_31 foreign key (app_user_id) references app_user (id);
-create index ix_doctor_assistant_appUser_31 on doctor_assistant (app_user_id);
-alter table doctor_award add constraint fk_doctor_award_doctor_32 foreign key (doctor_id) references doctor (id);
-create index ix_doctor_award_doctor_32 on doctor_award (doctor_id);
-alter table doctor_clinic_info add constraint fk_doctor_clinic_info_clinic_33 foreign key (clinic_id) references clinic (id);
-create index ix_doctor_clinic_info_clinic_33 on doctor_clinic_info (clinic_id);
-alter table doctor_clinic_info add constraint fk_doctor_clinic_info_doctor_34 foreign key (doctor_id) references doctor (id);
-create index ix_doctor_clinic_info_doctor_34 on doctor_clinic_info (doctor_id);
-alter table doctor_education add constraint fk_doctor_education_doctor_35 foreign key (doctor_id) references doctor (id);
-create index ix_doctor_education_doctor_35 on doctor_education (doctor_id);
-alter table doctor_experience add constraint fk_doctor_experience_doctor_36 foreign key (doctor_id) references doctor (id);
-create index ix_doctor_experience_doctor_36 on doctor_experience (doctor_id);
-alter table doctor_publication add constraint fk_doctor_publication_doctor_37 foreign key (doctor_id) references doctor (id);
-create index ix_doctor_publication_doctor_37 on doctor_publication (doctor_id);
-alter table doctor_social_work add constraint fk_doctor_social_work_doctor_38 foreign key (doctor_id) references doctor (id);
-create index ix_doctor_social_work_doctor_38 on doctor_social_work (doctor_id);
-alter table inventory add constraint fk_inventory_pharmacy_39 foreign key (pharmacy_id) references pharmacy (id);
-create index ix_inventory_pharmacy_39 on inventory (pharmacy_id);
-alter table inventory add constraint fk_inventory_product_40 foreign key (product_id) references product (id);
-create index ix_inventory_product_40 on inventory (product_id);
-alter table language_app_user add constraint fk_language_app_user_doctor_l_41 foreign key (doctor_language_id) references doctor_language (id);
-create index ix_language_app_user_doctor_l_41 on language_app_user (doctor_language_id);
-alter table medical_representative add constraint fk_medical_representative_app_42 foreign key (app_user_id) references app_user (id);
-create index ix_medical_representative_app_42 on medical_representative (app_user_id);
-alter table medical_representative add constraint fk_medical_representative_pha_43 foreign key (pharmaceutical_company_id) references pharmaceutical_company (id);
-create index ix_medical_representative_pha_43 on medical_representative (pharmaceutical_company_id);
-alter table medicine_line_item add constraint fk_medicine_line_item_prescri_44 foreign key (prescription_id) references prescription (id);
-create index ix_medicine_line_item_prescri_44 on medicine_line_item (prescription_id);
-alter table order_line_item add constraint fk_order_line_item_pharmacy_o_45 foreign key (pharmacy_order_id) references pharmacy_order (id);
-create index ix_order_line_item_pharmacy_o_45 on order_line_item (pharmacy_order_id);
-alter table order_line_item add constraint fk_order_line_item_product_46 foreign key (product_id) references product (id);
-create index ix_order_line_item_product_46 on order_line_item (product_id);
-alter table patient add constraint fk_patient_appUser_47 foreign key (app_user_id) references app_user (id);
-create index ix_patient_appUser_47 on patient (app_user_id);
-alter table pharmacist add constraint fk_pharmacist_appUser_48 foreign key (app_user_id) references app_user (id);
-create index ix_pharmacist_appUser_48 on pharmacist (app_user_id);
-alter table pharmacist add constraint fk_pharmacist_pharmacy_49 foreign key (pharmacy_id) references pharmacy (id);
-create index ix_pharmacist_pharmacy_49 on pharmacist (pharmacy_id);
-alter table pharmacy add constraint fk_pharmacy_address_50 foreign key (address_id) references address (id);
-create index ix_pharmacy_address_50 on pharmacy (address_id);
-alter table pharmacy add constraint fk_pharmacy_adminPharmacist_51 foreign key (admin_pharmacist_id) references pharmacist (id);
-create index ix_pharmacy_adminPharmacist_51 on pharmacy (admin_pharmacist_id);
-alter table pharmacy_product add constraint fk_pharmacy_product_pharmacy_52 foreign key (pharmacy_id) references pharmacy (id);
-create index ix_pharmacy_product_pharmacy_52 on pharmacy_product (pharmacy_id);
-alter table prescription add constraint fk_prescription_appointment_53 foreign key (appointment_id) references appointment (id);
-create index ix_prescription_appointment_53 on prescription (appointment_id);
-alter table product add constraint fk_product_pharmaceuticalComp_54 foreign key (pharmaceutical_company_id) references pharmaceutical_company (id);
-create index ix_product_pharmaceuticalComp_54 on product (pharmaceutical_company_id);
-alter table product add constraint fk_product_pharmacy_55 foreign key (pharmacy_id) references pharmacy (id);
-create index ix_product_pharmacy_55 on product (pharmacy_id);
-alter table question_and_answer add constraint fk_question_and_answer_questi_56 foreign key (question_by_id) references app_user (id);
-create index ix_question_and_answer_questi_56 on question_and_answer (question_by_id);
-alter table question_and_answer add constraint fk_question_and_answer_answer_57 foreign key (answer_by_id) references app_user (id);
-create index ix_question_and_answer_answer_57 on question_and_answer (answer_by_id);
-alter table sample add constraint fk_sample_dcrline_item_58 foreign key (dcrline_item_id) references dcrline_item (id);
-create index ix_sample_dcrline_item_58 on sample (dcrline_item_id);
-alter table sample add constraint fk_sample_product_59 foreign key (product_id) references product (id);
-create index ix_sample_product_59 on sample (product_id);
-alter table show_cased_product add constraint fk_show_cased_product_pharmac_60 foreign key (pharmacy_id) references pharmacy (id);
-create index ix_show_cased_product_pharmac_60 on show_cased_product (pharmacy_id);
-alter table show_cased_service add constraint fk_show_cased_service_diagnos_61 foreign key (diagnostic_centre_id) references diagnostic_centre (id);
-create index ix_show_cased_service_diagnos_61 on show_cased_service (diagnostic_centre_id);
-=======
 alter table dcrline_item add constraint fk_dcrline_item_headQuater_17 foreign key (head_quater_id) references head_quarter (id);
 create index ix_dcrline_item_headQuater_17 on dcrline_item (head_quater_id);
 alter table daily_call_report add constraint fk_daily_call_report_medical__18 foreign key (medical_representative_id) references medical_representative (id);
@@ -920,98 +828,64 @@ alter table doctor_publication add constraint fk_doctor_publication_doctor_38 fo
 create index ix_doctor_publication_doctor_38 on doctor_publication (doctor_id);
 alter table doctor_social_work add constraint fk_doctor_social_work_doctor_39 foreign key (doctor_id) references doctor (id);
 create index ix_doctor_social_work_doctor_39 on doctor_social_work (doctor_id);
-alter table file_entity add constraint fk_file_entity_pharmacy_40 foreign key (pharmacy_id) references pharmacy (id);
-create index ix_file_entity_pharmacy_40 on file_entity (pharmacy_id);
-alter table head_quarter add constraint fk_head_quarter_medical_repre_41 foreign key (medical_representative_id) references medical_representative (id);
-create index ix_head_quarter_medical_repre_41 on head_quarter (medical_representative_id);
-alter table inventory add constraint fk_inventory_pharmacy_42 foreign key (pharmacy_id) references pharmacy (id);
-create index ix_inventory_pharmacy_42 on inventory (pharmacy_id);
-alter table inventory add constraint fk_inventory_product_43 foreign key (product_id) references product (id);
-create index ix_inventory_product_43 on inventory (product_id);
-alter table language_app_user add constraint fk_language_app_user_doctor_l_44 foreign key (doctor_language_id) references doctor_language (id);
-create index ix_language_app_user_doctor_l_44 on language_app_user (doctor_language_id);
-alter table medical_representative add constraint fk_medical_representative_app_45 foreign key (app_user_id) references app_user (id);
-create index ix_medical_representative_app_45 on medical_representative (app_user_id);
-alter table medical_representative add constraint fk_medical_representative_man_46 foreign key (manager_id) references medical_representative (id);
-create index ix_medical_representative_man_46 on medical_representative (manager_id);
-alter table medical_representative add constraint fk_medical_representative_pha_47 foreign key (pharmaceutical_company_id) references pharmaceutical_company (id);
-create index ix_medical_representative_pha_47 on medical_representative (pharmaceutical_company_id);
-alter table medicine_line_item add constraint fk_medicine_line_item_prescri_48 foreign key (prescription_id) references prescription (id);
-create index ix_medicine_line_item_prescri_48 on medicine_line_item (prescription_id);
-alter table order_line_item add constraint fk_order_line_item_pharmacy_o_49 foreign key (pharmacy_order_id) references pharmacy_order (id);
-create index ix_order_line_item_pharmacy_o_49 on order_line_item (pharmacy_order_id);
-alter table order_line_item add constraint fk_order_line_item_product_50 foreign key (product_id) references product (id);
-create index ix_order_line_item_product_50 on order_line_item (product_id);
-alter table patient add constraint fk_patient_appUser_51 foreign key (app_user_id) references app_user (id);
-create index ix_patient_appUser_51 on patient (app_user_id);
-<<<<<<< HEAD
-alter table pharmaceutical_company add constraint fk_pharmaceutical_company_adm_52 foreign key (admin_mr_id) references medical_representative (id);
-create index ix_pharmaceutical_company_adm_52 on pharmaceutical_company (admin_mr_id);
-alter table pharmaceutical_product add constraint fk_pharmaceutical_product_pha_53 foreign key (pharmaceutical_company_id) references pharmaceutical_company (id);
-create index ix_pharmaceutical_product_pha_53 on pharmaceutical_product (pharmaceutical_company_id);
-alter table pharmacist add constraint fk_pharmacist_appUser_54 foreign key (app_user_id) references app_user (id);
-create index ix_pharmacist_appUser_54 on pharmacist (app_user_id);
-alter table pharmacist add constraint fk_pharmacist_pharmacy_55 foreign key (pharmacy_id) references pharmacy (id);
-create index ix_pharmacist_pharmacy_55 on pharmacist (pharmacy_id);
-alter table pharmacy add constraint fk_pharmacy_address_56 foreign key (address_id) references address (id);
-create index ix_pharmacy_address_56 on pharmacy (address_id);
-alter table pharmacy add constraint fk_pharmacy_adminPharmacist_57 foreign key (admin_pharmacist_id) references pharmacist (id);
-create index ix_pharmacy_adminPharmacist_57 on pharmacy (admin_pharmacist_id);
-alter table pharmacy_product add constraint fk_pharmacy_product_pharmacy_58 foreign key (pharmacy_id) references pharmacy (id);
-create index ix_pharmacy_product_pharmacy_58 on pharmacy_product (pharmacy_id);
-alter table prescription add constraint fk_prescription_appointment_59 foreign key (appointment_id) references appointment (id);
-create index ix_prescription_appointment_59 on prescription (appointment_id);
-alter table product add constraint fk_product_pharmaceuticalComp_60 foreign key (pharmaceutical_company_id) references pharmaceutical_company (id);
-create index ix_product_pharmaceuticalComp_60 on product (pharmaceutical_company_id);
-alter table product add constraint fk_product_pharmacy_61 foreign key (pharmacy_id) references pharmacy (id);
-create index ix_product_pharmacy_61 on product (pharmacy_id);
-alter table question_and_answer add constraint fk_question_and_answer_questi_62 foreign key (question_by_id) references app_user (id);
-create index ix_question_and_answer_questi_62 on question_and_answer (question_by_id);
-alter table question_and_answer add constraint fk_question_and_answer_answer_63 foreign key (answer_by_id) references app_user (id);
-create index ix_question_and_answer_answer_63 on question_and_answer (answer_by_id);
-alter table sample add constraint fk_sample_dcrline_item_64 foreign key (dcrline_item_id) references dcrline_item (id);
-create index ix_sample_dcrline_item_64 on sample (dcrline_item_id);
-alter table sample add constraint fk_sample_product_65 foreign key (product_id) references product (id);
-create index ix_sample_product_65 on sample (product_id);
-alter table show_cased_product add constraint fk_show_cased_product_pharmac_66 foreign key (pharmacy_id) references pharmacy (id);
-create index ix_show_cased_product_pharmac_66 on show_cased_product (pharmacy_id);
->>>>>>> branch 'master' of http://pharmacy.bz/green-software/mednetwork.git
-=======
-alter table patient_doctor_info add constraint fk_patient_doctor_info_doctor_52 foreign key (doctor_id) references doctor (id);
-create index ix_patient_doctor_info_doctor_52 on patient_doctor_info (doctor_id);
-alter table patient_doctor_info add constraint fk_patient_doctor_info_patien_53 foreign key (patient_id) references patient (id);
-create index ix_patient_doctor_info_patien_53 on patient_doctor_info (patient_id);
-alter table pharmaceutical_company add constraint fk_pharmaceutical_company_adm_54 foreign key (admin_mr_id) references medical_representative (id);
-create index ix_pharmaceutical_company_adm_54 on pharmaceutical_company (admin_mr_id);
-alter table pharmaceutical_product add constraint fk_pharmaceutical_product_pha_55 foreign key (pharmaceutical_company_id) references pharmaceutical_company (id);
-create index ix_pharmaceutical_product_pha_55 on pharmaceutical_product (pharmaceutical_company_id);
-alter table pharmacist add constraint fk_pharmacist_appUser_56 foreign key (app_user_id) references app_user (id);
-create index ix_pharmacist_appUser_56 on pharmacist (app_user_id);
-alter table pharmacist add constraint fk_pharmacist_pharmacy_57 foreign key (pharmacy_id) references pharmacy (id);
-create index ix_pharmacist_pharmacy_57 on pharmacist (pharmacy_id);
-alter table pharmacy add constraint fk_pharmacy_address_58 foreign key (address_id) references address (id);
-create index ix_pharmacy_address_58 on pharmacy (address_id);
-alter table pharmacy add constraint fk_pharmacy_adminPharmacist_59 foreign key (admin_pharmacist_id) references pharmacist (id);
-create index ix_pharmacy_adminPharmacist_59 on pharmacy (admin_pharmacist_id);
-alter table pharmacy_product add constraint fk_pharmacy_product_pharmacy_60 foreign key (pharmacy_id) references pharmacy (id);
-create index ix_pharmacy_product_pharmacy_60 on pharmacy_product (pharmacy_id);
-alter table prescription add constraint fk_prescription_appointment_61 foreign key (appointment_id) references appointment (id);
-create index ix_prescription_appointment_61 on prescription (appointment_id);
-alter table product add constraint fk_product_pharmaceuticalComp_62 foreign key (pharmaceutical_company_id) references pharmaceutical_company (id);
-create index ix_product_pharmaceuticalComp_62 on product (pharmaceutical_company_id);
-alter table product add constraint fk_product_pharmacy_63 foreign key (pharmacy_id) references pharmacy (id);
-create index ix_product_pharmacy_63 on product (pharmacy_id);
-alter table question_and_answer add constraint fk_question_and_answer_questi_64 foreign key (question_by_id) references app_user (id);
-create index ix_question_and_answer_questi_64 on question_and_answer (question_by_id);
-alter table question_and_answer add constraint fk_question_and_answer_answer_65 foreign key (answer_by_id) references app_user (id);
-create index ix_question_and_answer_answer_65 on question_and_answer (answer_by_id);
-alter table sample add constraint fk_sample_dcrline_item_66 foreign key (dcrline_item_id) references dcrline_item (id);
-create index ix_sample_dcrline_item_66 on sample (dcrline_item_id);
-alter table sample add constraint fk_sample_product_67 foreign key (product_id) references product (id);
-create index ix_sample_product_67 on sample (product_id);
-alter table show_cased_product add constraint fk_show_cased_product_pharmac_68 foreign key (pharmacy_id) references pharmacy (id);
-create index ix_show_cased_product_pharmac_68 on show_cased_product (pharmacy_id);
->>>>>>> branch 'master' of http://pharmacy.bz/green-software/mednetwork.git
+alter table head_quarter add constraint fk_head_quarter_medical_repre_40 foreign key (medical_representative_id) references medical_representative (id);
+create index ix_head_quarter_medical_repre_40 on head_quarter (medical_representative_id);
+alter table inventory add constraint fk_inventory_pharmacy_41 foreign key (pharmacy_id) references pharmacy (id);
+create index ix_inventory_pharmacy_41 on inventory (pharmacy_id);
+alter table inventory add constraint fk_inventory_product_42 foreign key (product_id) references product (id);
+create index ix_inventory_product_42 on inventory (product_id);
+alter table language_app_user add constraint fk_language_app_user_doctor_l_43 foreign key (doctor_language_id) references doctor_language (id);
+create index ix_language_app_user_doctor_l_43 on language_app_user (doctor_language_id);
+alter table medical_representative add constraint fk_medical_representative_app_44 foreign key (app_user_id) references app_user (id);
+create index ix_medical_representative_app_44 on medical_representative (app_user_id);
+alter table medical_representative add constraint fk_medical_representative_man_45 foreign key (manager_id) references medical_representative (id);
+create index ix_medical_representative_man_45 on medical_representative (manager_id);
+alter table medical_representative add constraint fk_medical_representative_pha_46 foreign key (pharmaceutical_company_id) references pharmaceutical_company (id);
+create index ix_medical_representative_pha_46 on medical_representative (pharmaceutical_company_id);
+alter table medicine_line_item add constraint fk_medicine_line_item_prescri_47 foreign key (prescription_id) references prescription (id);
+create index ix_medicine_line_item_prescri_47 on medicine_line_item (prescription_id);
+alter table order_line_item add constraint fk_order_line_item_pharmacy_o_48 foreign key (pharmacy_order_id) references pharmacy_order (id);
+create index ix_order_line_item_pharmacy_o_48 on order_line_item (pharmacy_order_id);
+alter table order_line_item add constraint fk_order_line_item_product_49 foreign key (product_id) references product (id);
+create index ix_order_line_item_product_49 on order_line_item (product_id);
+alter table patient add constraint fk_patient_appUser_50 foreign key (app_user_id) references app_user (id);
+create index ix_patient_appUser_50 on patient (app_user_id);
+alter table patient_doctor_info add constraint fk_patient_doctor_info_doctor_51 foreign key (doctor_id) references doctor (id);
+create index ix_patient_doctor_info_doctor_51 on patient_doctor_info (doctor_id);
+alter table patient_doctor_info add constraint fk_patient_doctor_info_patien_52 foreign key (patient_id) references patient (id);
+create index ix_patient_doctor_info_patien_52 on patient_doctor_info (patient_id);
+alter table pharmaceutical_company add constraint fk_pharmaceutical_company_adm_53 foreign key (admin_mr_id) references medical_representative (id);
+create index ix_pharmaceutical_company_adm_53 on pharmaceutical_company (admin_mr_id);
+alter table pharmaceutical_product add constraint fk_pharmaceutical_product_pha_54 foreign key (pharmaceutical_company_id) references pharmaceutical_company (id);
+create index ix_pharmaceutical_product_pha_54 on pharmaceutical_product (pharmaceutical_company_id);
+alter table pharmacist add constraint fk_pharmacist_appUser_55 foreign key (app_user_id) references app_user (id);
+create index ix_pharmacist_appUser_55 on pharmacist (app_user_id);
+alter table pharmacist add constraint fk_pharmacist_pharmacy_56 foreign key (pharmacy_id) references pharmacy (id);
+create index ix_pharmacist_pharmacy_56 on pharmacist (pharmacy_id);
+alter table pharmacy add constraint fk_pharmacy_address_57 foreign key (address_id) references address (id);
+create index ix_pharmacy_address_57 on pharmacy (address_id);
+alter table pharmacy add constraint fk_pharmacy_adminPharmacist_58 foreign key (admin_pharmacist_id) references pharmacist (id);
+create index ix_pharmacy_adminPharmacist_58 on pharmacy (admin_pharmacist_id);
+alter table pharmacy_product add constraint fk_pharmacy_product_pharmacy_59 foreign key (pharmacy_id) references pharmacy (id);
+create index ix_pharmacy_product_pharmacy_59 on pharmacy_product (pharmacy_id);
+alter table prescription add constraint fk_prescription_appointment_60 foreign key (appointment_id) references appointment (id);
+create index ix_prescription_appointment_60 on prescription (appointment_id);
+alter table product add constraint fk_product_pharmaceuticalComp_61 foreign key (pharmaceutical_company_id) references pharmaceutical_company (id);
+create index ix_product_pharmaceuticalComp_61 on product (pharmaceutical_company_id);
+alter table product add constraint fk_product_pharmacy_62 foreign key (pharmacy_id) references pharmacy (id);
+create index ix_product_pharmacy_62 on product (pharmacy_id);
+alter table question_and_answer add constraint fk_question_and_answer_questi_63 foreign key (question_by_id) references app_user (id);
+create index ix_question_and_answer_questi_63 on question_and_answer (question_by_id);
+alter table question_and_answer add constraint fk_question_and_answer_answer_64 foreign key (answer_by_id) references app_user (id);
+create index ix_question_and_answer_answer_64 on question_and_answer (answer_by_id);
+alter table sample add constraint fk_sample_dcrline_item_65 foreign key (dcrline_item_id) references dcrline_item (id);
+create index ix_sample_dcrline_item_65 on sample (dcrline_item_id);
+alter table sample add constraint fk_sample_product_66 foreign key (product_id) references product (id);
+create index ix_sample_product_66 on sample (product_id);
+alter table show_cased_product add constraint fk_show_cased_product_pharmac_67 foreign key (pharmacy_id) references pharmacy (id);
+create index ix_show_cased_product_pharmac_67 on show_cased_product (pharmacy_id);
+alter table show_cased_service add constraint fk_show_cased_service_diagnos_68 foreign key (diagnostic_centre_id) references diagnostic_centre (id);
+create index ix_show_cased_service_diagnos_68 on show_cased_service (diagnostic_centre_id);
 
 
 
@@ -1035,21 +909,17 @@ alter table patient_diagnostic_centre add constraint fk_patient_diagnostic_centr
 
 alter table patient_diagnostic_centre add constraint fk_patient_diagnostic_centre__02 foreign key (diagnostic_centre_id) references diagnostic_centre (id);
 
-<<<<<<< HEAD
-alter table pharmacy_file_entity add constraint fk_pharmacy_file_entity_pharm_01 foreign key (pharmacy_id) references pharmacy (id);
-=======
 alter table pharmaceutical_company_product add constraint fk_pharmaceutical_company_pro_01 foreign key (pharmaceutical_company_id) references pharmaceutical_company (id);
->>>>>>> branch 'master' of http://pharmacy.bz/green-software/mednetwork.git
 
-<<<<<<< HEAD
+alter table pharmaceutical_company_product add constraint fk_pharmaceutical_company_pro_02 foreign key (product_id) references product (id);
+
+alter table pharmacy_file_entity add constraint fk_pharmacy_file_entity_pharm_01 foreign key (pharmacy_id) references pharmacy (id);
+
 alter table pharmacy_file_entity add constraint fk_pharmacy_file_entity_file__02 foreign key (file_entity_id) references file_entity (id);
 
 alter table show_cased_service_file_entity add constraint fk_show_cased_service_file_en_01 foreign key (show_cased_service_id) references show_cased_service (id);
 
 alter table show_cased_service_file_entity add constraint fk_show_cased_service_file_en_02 foreign key (file_entity_id) references file_entity (id);
-=======
-alter table pharmaceutical_company_product add constraint fk_pharmaceutical_company_pro_02 foreign key (product_id) references product (id);
->>>>>>> branch 'master' of http://pharmacy.bz/green-software/mednetwork.git
 
 # --- !Downs
 

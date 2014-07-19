@@ -493,8 +493,8 @@ public class DiagnosticController extends Controller {
 
 	/**
 	 * @author lakshmi
-	 * Action to add and update a ShowCasedProduct to the pharmacy showCasedList
-	 * POST	/pharmacy/add-product-to-showcase
+	 * Action to add and update a ShowCasedProduct to the Diagnostic showCasedList
+	 * POST	diagnostic/add-service-to-showcase
 	 */
 
 	public static Result addShowCasedService(){
@@ -585,8 +585,17 @@ public class DiagnosticController extends Controller {
 
 
 
-	public static Result staticDiagnosticProfile(){
-		
-		return ok(views.html.diagnostic.static_diagnostic_profile.render());
+	public static Result removeShowCasedImage(final Long showCasedServiceId,final Long imageId ){
+		final ShowCasedService showCasedService = ShowCasedService.find.byId(showCasedServiceId);
+		for (final FileEntity image : showCasedService.showcasedImagesList) {
+			if(image.id == imageId){
+				showCasedService.showcasedImagesList.remove(image);
+				break;
+			}
+
+		}
+		showCasedService.update();
+
+		return redirect(routes.UserActions.dashboard());
 	}
 }

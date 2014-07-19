@@ -148,7 +148,7 @@ GET		/static/patient/new/appointment				controllers.PatientController.staticPati
 
 GET    /answerform                       		 controllers.DoctorController.displayAnswer()
 POST   /ansQuestion/:qaId                 		 controllers.DoctorController.answerQuestion(qaId: Long)
-GET    /static/new/appointment					controllers.PatientController.staticPatientNewAppointment()
+#GET    /static/new/appointment					controllers.PatientController.staticPatientNewAppointment()
 
 
 #GET    /diagnosticlist                   	 	controllers.DiagnosticController.diagnosticlist()
@@ -167,7 +167,6 @@ GET    /diagnosticrep/doctorsearch	         	controllers.DRController.searchProc
 GET    /diagnosticrep/add-doctor/:id      		controllers.DRController.addDoctor(id: Long)
 GET    /diagnosticrep/remove-doctor/:id   		controllers.DRController.removeDoctor(id: Long)
 GET    /diagnostic-centre/all-doctors      		controllers.DRController.displayDiagnosticCentreDoctors()
-GET		/static/diagnostic/profile				controllers.DiagnosticController.staticDiagnosticProfile()
 
 #Diagnostic Test
 GET    /test				            						controllers.DiagnosticController.addTest()
@@ -180,12 +179,13 @@ GET    /download						  						controllers.DiagnosticController.downloadFile()
 #GET   /add-test-done						  					controllers.DiagnosticController.addTestDone()
 #GET    /test-list/:id				            				controllers.DiagnosticController.diagnosticCentreTestList(id: Long)
 POST	/diagnostic/upload-diagnostic-images					controllers.DiagnosticController.uploadDiagnosticImageProcess()
-GET		/diagnostic/get-image/:diagnosticId/:fileId/:serviceId/:serviceImageId				controllers.DiagnosticController.getDiagnosticImages(diagnosticId: Long,fileId: Long,serviceId: Long,serviceImageId: Long)
+GET		/diagnostic/get-image				controllers.DiagnosticController.getDiagnosticImages(diagnosticId: Long,fileId: Long,serviceId: Long,serviceImageId: Long)
 POST	/diagnostic/basic-update								controllers.DiagnosticController.diagnosticBasicUpdate()
 POST	/diagnostic/address-update								controllers.DiagnosticController.diagnosticAddressUpdate()
 GET		/diagnostic/remove-image/:diagnosticId/:fileId			controllers.DiagnosticController.removeDiagnosticImage(diagnosticId: Long,fileId: Long)
 POST	/diagnostic/add-service-to-showcase						controllers.DiagnosticController.addShowCasedService()
 GET		/diagnostic/remove-service-from-showcase/:id			controllers.DiagnosticController.removeServiceFromShowcaseList(id: Long)
+GET		/diagnostic/remove-image-from-showcasedService			controllers.DiagnosticController.removeShowCasedImage(showCasedServiceId: Long,imageId: Long)
 
 																																
 
