@@ -481,7 +481,7 @@ create table pharmacist (
 create table pharmacy (
   id                        bigint not null,
   name                      varchar(255),
-  test_field                varchar(255),
+  contact_person            varchar(255),
   background_image          bytea,
   address_id                bigint,
   contact_no                varchar(255),

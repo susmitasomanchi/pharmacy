@@ -215,6 +215,9 @@ public class PharmacistController extends Controller {
 			final Map<String, String[]> requestMap = request().body().asFormUrlEncoded();
 			final Pharmacy pharmacy = Pharmacy.find.byId(Long.parseLong(requestMap.get("pharmacyId")[0]));
 			Logger.info("map size"+requestMap.toString());
+			if(requestMap.get("contactPerson") != null && (requestMap.get("contactPerson")[0].trim().compareToIgnoreCase("")!=0)){
+				pharmacy.contactPerson = requestMap.get("contactPerson")[0];
+			}
 			if(pharmacy.address == null){
 				final Address address = new Address();
 				address.save();
@@ -222,9 +225,6 @@ public class PharmacistController extends Controller {
 			}
 			if(requestMap.get("addressLine1") != null && (requestMap.get("addressLine1")[0].trim().compareToIgnoreCase("")!=0)){
 				pharmacy.address.addrressLine1 = requestMap.get("addressLine1")[0];
-			}
-			if(requestMap.get("addressLine2") != null && (requestMap.get("addressLine2")[0].trim().compareToIgnoreCase("")!=0)){
-				pharmacy.address.addrressLine2 = requestMap.get("addressLine2")[0];
 			}
 			if(requestMap.get("city") != null && (requestMap.get("city")[0].trim().compareToIgnoreCase("")!=0)){
 				pharmacy.address.city = requestMap.get("city")[0];
