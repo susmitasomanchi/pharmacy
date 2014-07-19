@@ -147,7 +147,8 @@ GET		/patient/search-doctors/:query					controllers.PatientController.searchDoct
 GET    /answerform                       		 controllers.DoctorController.displayAnswer()
 POST   /ansQuestion/:qaId                 		 controllers.DoctorController.answerQuestion(qaId: Long)
 GET    /static/new/appointment					controllers.PatientController.staticPatientNewAppointment()
-
+GET 	/patient/new-appointment/:docclinicid		controllers.PatientController.patientNewAppointment(docclinicid:Long)
+GET   /patient/display-appointment/:docId/:timeMillis	controllers.PatientController.displayAppointment(docId:Long,timeMillis:Long)
 
 #GET    /diagnosticlist                   	 	controllers.DiagnosticController.diagnosticlist()
 #GET    /diagnostic-service-list/:id            controllers.DiagnosticController.diagnosticServiceslist(id: Long)

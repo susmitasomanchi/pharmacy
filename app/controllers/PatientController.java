@@ -1,5 +1,8 @@
 package controllers;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.LinkedHashMap;
 import java.util.List;
@@ -10,9 +13,12 @@ import models.AppUser;
 import models.Patient;
 import models.diagnostic.DiagnosticCentre;
 import models.doctor.Appointment;
+import models.doctor.DaySchedule;
 import models.doctor.Doctor;
+import models.doctor.DoctorClinicInfo;
 import models.doctor.QuestionAndAnswer;
 import models.patient.PatientDoctorInfo;
+import play.Logger;
 import play.data.Form;
 import play.mvc.Controller;
 import play.mvc.Result;
@@ -27,40 +33,72 @@ public class PatientController extends Controller {
 		return ok(views.html.patient.scheduleAppointment.render(appointmentMap,null));
 	}
 
-	public static Result displayAppointment(final String id) {
-		final List<Appointment> listAppointments = null;
-		final int slots=1000;
+	/**
+	 * @author Mitesh
+	 * Action to display a form which has lists of appointment as per date is provided
+	 *  GET /patient/display-appointment/:docId/:timeMillis
+	 */
+	public static Result displayAppointment(final Long docId,final Long timeMillis) {
+
+		int slots=0;
 
 		final Map<Date, List<Appointment>> appointmentMap = new LinkedHashMap<Date, List<Appointment>>();
-		/*final Doctor doctor = Doctor.find.byId(Long.parseLong(id));
-		final Calendar calendar = Calendar.getInstance();
-		calendar.setTime(new Date());
 
-		for (int i = 0; i <4 ; i++) {
-			for (DoctorClinicInfo clinicInfo: doctor.doctorClinicInfoList) {
 
-				for (DaySchedule schedule : clinicInfo.schedulDays) {
 
-					calendar.set(Calendar.HOUR_OF_DAY, schedule.fromTime);
-					calendar.set(Calendar.MINUTE, 0);
-					calendar.set(Calendar.SECOND, 0);
-					calendar.set(Calendar.MILLISECOND, 0);
-					listAppointments = Appointment.getAvailableAppointmentList(doctor,calendar.getTime(),schedule.toTime);
+		final Doctor doctor = Doctor.find.byId(docId);
+
+		final Calendar calendarFrom = Calendar.getInstance();
+		calendarFrom.setTime(new Date(timeMillis));
+
+		Logger.info(calendarFrom.getTime().toString());
+
+		final Calendar calendarTo = Calendar.getInstance();
+		calendarFrom.setTime(new Date(timeMillis));
+
+		final Calendar calendar1=Calendar.getInstance();
+		final Calendar calendar2=Calendar.getInstance();
+		final SimpleDateFormat dateFormat=new SimpleDateFormat("kk:mm");
+
+		for (int i = 0; i <10 ; i++) {
+			for (final DoctorClinicInfo clinicInfo: doctor.doctorClinicInfoList) {
+
+				for (final DaySchedule schedule : clinicInfo.scheduleDays) {
+					try{
+						calendar1.setTime(dateFormat.parse(schedule.fromTime));
+						calendar2.setTime(dateFormat.parse(schedule.toTime));
+					}
+					catch(final ParseException exception){
+						exception.printStackTrace();
+					}
+
+					calendarFrom.set(Calendar.HOUR_OF_DAY, calendar1.get(Calendar.HOUR_OF_DAY));
+					calendarFrom.set(Calendar.MINUTE,calendar1.get(Calendar.HOUR_OF_DAY));
+					calendarFrom.set(Calendar.SECOND, 0);
+					calendarFrom.set(Calendar.MILLISECOND, 0);
+
+					calendarTo.set(Calendar.HOUR_OF_DAY, calendar2.get(Calendar.HOUR_OF_DAY));
+					calendarTo.set(Calendar.MINUTE,calendar2.get(Calendar.HOUR_OF_DAY));
+					calendarTo.set(Calendar.SECOND, 0);
+					calendarTo.set(Calendar.MILLISECOND, 0);
+
+					final List<Appointment> listAppointments = Appointment.getAvailableAppointmentList(doctor.id,calendarFrom.getTime(),calendarTo.getTime());
 					if(listAppointments.size() != 0 ){
-						appointmentMap.put(calendar.getTime(), listAppointments);
-						slots=Math.min(slots,listAppointments.size());
+						appointmentMap.put(calendarFrom.getTime(), listAppointments);
+						slots=Math.max(slots,listAppointments.size());
 					}
 
 
-					calendar.add(Calendar.DATE, 1);
-
-					System.out.print(calendar.getTime());
+					calendarFrom.add(Calendar.DATE, 1);
+					calendarTo.add(Calendar.DATE, 1);
+					System.out.print(calendarFrom.getTime());
 				}
 			}
 		}
-		Logger.warn(""+listAppointments.size());
-		 */		return ok(views.html.patient.scheduleAppointment.render(appointmentMap,
-				 slots));
+		/*return ok(views.html.patient.scheduleAppointment.render(appointmentMap,
+				 slots));*/
+
+		return ok(views.html.patient.appointmentForm.render(appointmentMap,slots));
 	}
 
 	public static Result processAppointment() {
@@ -253,6 +291,16 @@ public class PatientController extends Controller {
 
 	public static Result staticPatientNewAppointment() {
 		return ok(views.html.patient.static_patient_new_appointment.render());
+	}
+
+	/**
+	 * @author Mitesh
+	 * Action to show a forms which have Doctor and it will show the available and booked appointment
+	 *  GET /patient/new-appointment/:docclinicid
+	 */
+	public static Result patientNewAppointment(final Long docclinicid) {
+		final DoctorClinicInfo clinicInfo=DoctorClinicInfo.find.byId(docclinicid);
+		return ok(views.html.patient.patientNewAppointment.render(clinicInfo));
 	}
 
 }

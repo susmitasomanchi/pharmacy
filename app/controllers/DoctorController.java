@@ -671,7 +671,7 @@ public class DoctorController extends Controller {
 	 * Action to show form to edit one of loggedIn doctor's clinic information
 	 * GET /doctor/edit-clinic-info/:id
 	 */
-	public static Result editClinicInfo(Long docClinicId) {
+	public static Result editClinicInfo(final Long docClinicId) {
 
 		final DoctorClinicInfo doctorClinicInfo=DoctorClinicInfo.find.byId(docClinicId);
 		//server-side check
@@ -690,7 +690,7 @@ public class DoctorController extends Controller {
 	 * Action to show form to edit one of loggedIn doctor's clinic schedule
 	 * GET /doctor/edit-clinic-schedule/:id
 	 */
-	public static Result editClinicSchedule(Long docClinicId) {
+	public static Result editClinicSchedule(final Long docClinicId) {
 		final DoctorClinicInfo doctorClinicInfo=DoctorClinicInfo.find.byId(docClinicId);
 		//server-side check
 		if(doctorClinicInfo.doctor.id.longValue() != LoginController.getLoggedInUser().getDoctor().id.longValue()){
@@ -804,6 +804,8 @@ public class DoctorController extends Controller {
 		return ok(views.html.doctor.doctor_appointments.render(appointments));
 
 	}
+
+
 
 	public static Result requestAppointment(){
 
