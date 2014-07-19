@@ -588,6 +588,7 @@ public class MRController extends Controller {
 	public static Result viewHierarchy() {
 
 		List<MedicalRepresentative> mrList = MedicalRepresentative.find.where().eq("pharmaceutical_company_id",LoginController.getLoggedInUser().getMedicalRepresentative().pharmaceuticalCompany.id).findList();
+		Logger.info(mrList.toString());
 		return ok(views.html.mr.organizationStructure.render(mrList));
 
 	}

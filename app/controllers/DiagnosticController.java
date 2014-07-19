@@ -585,4 +585,8 @@ public class DiagnosticController extends Controller {
 
 
 
+	public static Result staticDiagnosticProfile(){
+		
+		return ok(views.html.diagnostic.static_diagnostic_profile.render());
+	}
 }

@@ -148,6 +148,7 @@ GET		/static/patient/new/appointment				controllers.PatientController.staticPati
 
 GET    /answerform                       		 controllers.DoctorController.displayAnswer()
 POST   /ansQuestion/:qaId                 		 controllers.DoctorController.answerQuestion(qaId: Long)
+GET    /static/new/appointment					controllers.PatientController.staticPatientNewAppointment()
 
 
 #GET    /diagnosticlist                   	 	controllers.DiagnosticController.diagnosticlist()
@@ -166,6 +167,7 @@ GET    /diagnosticrep/doctorsearch	         	controllers.DRController.searchProc
 GET    /diagnosticrep/add-doctor/:id      		controllers.DRController.addDoctor(id: Long)
 GET    /diagnosticrep/remove-doctor/:id   		controllers.DRController.removeDoctor(id: Long)
 GET    /diagnostic-centre/all-doctors      		controllers.DRController.displayDiagnosticCentreDoctors()
+GET		/static/diagnostic/profile				controllers.DiagnosticController.staticDiagnosticProfile()
 
 #Diagnostic Test
 GET    /test				            						controllers.DiagnosticController.addTest()
@@ -197,6 +199,7 @@ GET		/sample-collected/:id					controllers.DiagnosticOrderController.sampleColle
 GET		/report-generated						controllers.DiagnosticOrderController.reoprtReady(id: Long)
 GET    /patient-search      					controllers.DiagnosticOrderController.patientSearch()
 GET    /patient-search/list 					controllers.DiagnosticOrderController.patientSearchProcess()
+
 																										
 #MR Module
 

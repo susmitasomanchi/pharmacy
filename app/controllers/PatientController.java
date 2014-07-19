@@ -1,6 +1,7 @@
 package controllers;
 
 import java.util.Date;
+
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
@@ -254,5 +255,5 @@ public class PatientController extends Controller {
 	public static Result staticPatientNewAppointment() {
 		return ok(views.html.patient.static_patient_new_appointment.render());
 	}
-
+	
 }
