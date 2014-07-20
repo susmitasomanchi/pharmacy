@@ -246,6 +246,7 @@ create table doctor (
   background_image          bytea,
   profile_image             bytea,
   experience                integer,
+  search_index              TEXT,
   last_update               timestamp not null,
   constraint pk_doctor primary key (id))
 ;

@@ -1,11 +1,27 @@
-@(doctorList	: List[models.doctor.Doctor])
+@(searched:Boolean,searchedKey:String,doctorList: List[models.doctor.Doctor])
 @import play.i18n._
 @import helper.twitterBootstrap._
 @import helper._
 
 @main("Search Doctor"){
+
+
+<div class="well">
+<div class="row">
+
+<label for="searchInput">Search For</label>
+<input id="searchInput" value="@searchedKey"/>
+
+<a onclick="window.location.href='/doctor/search/'+$('#searchInput').val().trim();" class="btn btn-xs btn-primary">Search</a>
+
+</div>
+</div>
+
+
+@if(searched){
+	
 	@if(doctorList.size()==0){
-		No List is created yet
+		Sorry. No Doctors Found.
 	}else{
 	<style>
 .badge{
@@ -18,6 +34,8 @@ background-color:#cccccc;
 }
 
 </style>
+
+
 
 		<table class="table table-bordered">
 		@for((doctor,index) <- doctorList.zipWithIndex){
@@ -277,8 +295,13 @@ background-color:#cccccc;
 	
 }
 </table>	
+
+}
+
+
+
 	
-	}
+}
 	
 	
 	

@@ -14,6 +14,7 @@ import models.AppUser;
 import models.BaseEntity;
 
 
+@SuppressWarnings("serial")
 @Entity
 public class Appointment extends BaseEntity {
 

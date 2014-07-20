@@ -145,7 +145,7 @@ public class PatientController extends Controller {
 		final List<Doctor> doctors = Doctor.find
 				.where().like("searchIndex","%"+search+"%").findList();
 
-		return ok(views.html.doctor.searchedDoctors.render(doctors));
+		return ok(views.html.doctor.searchedDoctors.render(true, search, doctors));
 	}
 
 
@@ -255,5 +255,5 @@ public class PatientController extends Controller {
 	public static Result staticPatientNewAppointment() {
 		return ok(views.html.patient.static_patient_new_appointment.render());
 	}
-	
+
 }

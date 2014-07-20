@@ -35,6 +35,10 @@ GET    /                                 			controllers.Application.index()
 POST   /login                             			controllers.LoginController.processLogin()
 GET    /logout                            			controllers.LoginController.processLogout()
 
+# Public Pages
+GET	   /doctor/search									controllers.PublicController.searchDoctorsPage()
+GET	   /doctor/search/:key								controllers.PublicController.processSearchDoctors(key: String)
+
 
 # Sign up page
 GET    /doctor/join                              			controllers.UserController.joinUsDoctor()
@@ -65,7 +69,6 @@ GET    /doctor/edit-clinic-schedule/:id                 controllers.DoctorContro
 POST   /doctor/update-clinic                            controllers.DoctorController.processUpdateClinicInfo()
 POST   /doctor/update-clinic-schedule                   controllers.DoctorController.processUpdateClinicSchedule()
 GET    /doctor/delete-clinic/:id                        controllers.DoctorController.deleteClinic(id:Long)
-
 
 # Pharmacy Profile
 
