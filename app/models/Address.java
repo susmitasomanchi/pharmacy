@@ -15,11 +15,11 @@ public class Address extends BaseEntity {
 	public  Long id;
 
 	@Required
-	public String addrressLine1;
+	public String addressLine1;
 
-	public String addrressLine2;
+	public String addressLine2;
 
-	public String addrressLine3;
+	public String addressLine3;
 
 	public String area;
 

@@ -5,9 +5,9 @@
 
 create table address (
   id                        bigint not null,
-  addrress_line1            varchar(255),
-  addrress_line2            varchar(255),
-  addrress_line3            varchar(255),
+  address_line1             varchar(255),
+  address_line2             varchar(255),
+  address_line3             varchar(255),
   area                      varchar(255),
   latitude                  varchar(255),
   longitude                 varchar(255),
@@ -17,7 +17,7 @@ create table address (
   fetched_pin_code          varchar(255),
   country                   varchar(27),
   last_update               timestamp not null,
-  constraint ck_address_state check (state in ('DADRA_AND_NAGAR_HAVELI','KERALA','WEST_BENGAL','JAMMU_AND_KASHMIR','HIMACHAL_PRADESH','MANIPUR','MIZORAM','MAHARASHTRA','JHARKHAND','ASSAM','UTTARAKHAND','SIKKIM','KARNATAKA','CHHATTISGARH','ANDHRA_PRADESH','NATIONAL_CAPITAL_TERRITORY_OF_DELHI','UTTAR_PRADESH','PUDUCHERRY','ANDAMAN_AND_NICOBAR_ISLANDS','TRIPURA','GOA','DAMAN_AND_DIU','NAGALAND','ODISHA','TAMIL_NADU','BIHAR','RAJASTHAN','LAKSHADWEEP','HARYANA','MEGHALAYA','PUNJAB','ARUNACHAL_PRADESH','GUJARAT','TELANGANA','MADHYA_PRADESH','CHNADIGARH')),
+  constraint ck_address_state check (state in ('DADRA_AND_NAGAR_HAVELI','KERALA','WEST_BENGAL','JAMMU_AND_KASHMIR','HIMACHAL_PRADESH','MANIPUR','MIZORAM','MAHARASHTRA','CHANDIGARH','JHARKHAND','ASSAM','UTTARAKHAND','SIKKIM','KARNATAKA','CHHATTISGARH','ANDHRA_PRADESH','NATIONAL_CAPITAL_TERRITORY_OF_DELHI','UTTAR_PRADESH','PUDUCHERRY','ANDAMAN_AND_NICOBAR_ISLANDS','TRIPURA','GOA','DAMAN_AND_DIU','NAGALAND','ODISHA','TAMIL_NADU','BIHAR','RAJASTHAN','LAKSHADWEEP','HARYANA','MEGHALAYA','PUNJAB','ARUNACHAL_PRADESH','GUJARAT','TELANGANA','MADHYA_PRADESH')),
   constraint ck_address_country check (country in ('ARMENIA','ANGUILLA','AUSTRALIA','ARUBA','CHAD','BOSNIA_AND_HERZEGOVINA','ANTIGUA_AND_BARBUDA','CHINA','ASHMORE_AND_CARTIER_ISLANDS','AMERICAN_SAMOA','COMOROS','INDIA','BOLIVIA','CAMEROON','PAKISTAN','DENMARK','BURUNDI','CAPE_VERDE','BULGARIA','ARGENTINA','DJIBOUTI','BELGIUM','ALBANIA','BAHRAIN','ALGERIA','ECUADOR','BELARUS','BARBADOS','BURMA','CHILE','BRUNEI','BELIZE','AZERBAIJAN','BHUTAN','CANADA','AFGHANISTAN','ANDORRA','CAMBODIA','AKROTIRI','AUSTRIA','BOUVET_ISLAND','BERMUDA','DOMINICA','ANGOLA','EGYPT','BENIN','UNITED_STATES','DHEKELIA','BOTSWANA','CUBA','ANTARCTICA','BRAZIL','CYPRUS','BURKINA_FASO','BANGLADESH','COLOMBIA')),
   constraint pk_address primary key (id))
 ;
@@ -171,6 +171,7 @@ create table day_schedule (
 create table diagnostic_centre (
   id                        bigint not null,
   name                      varchar(255),
+  contact_person            varchar(255),
   address_id                bigint,
   mobile_no                 varchar(255),
   description               TEXT,
@@ -246,6 +247,8 @@ create table doctor (
   background_image          bytea,
   profile_image             bytea,
   experience                integer,
+  search_index              TEXT,
+  slug_url                  TEXT,
   last_update               timestamp not null,
   constraint pk_doctor primary key (id))
 ;
@@ -344,10 +347,10 @@ create table doctors_prescription (
 
 create table file_entity (
   id                        bigint not null,
+  pharmacy_id               bigint not null,
   file_name                 varchar(255),
   mime_type                 varchar(255),
   byte_content              bytea,
-  pharmacy_id               bigint,
   last_update               timestamp not null,
   constraint pk_file_entity primary key (id))
 ;
@@ -358,7 +361,7 @@ create table head_quarter (
   state                     varchar(35),
   name                      varchar(255),
   last_update               timestamp not null,
-  constraint ck_head_quarter_state check (state in ('DADRA_AND_NAGAR_HAVELI','KERALA','WEST_BENGAL','JAMMU_AND_KASHMIR','HIMACHAL_PRADESH','MANIPUR','MIZORAM','MAHARASHTRA','JHARKHAND','ASSAM','UTTARAKHAND','SIKKIM','KARNATAKA','CHHATTISGARH','ANDHRA_PRADESH','NATIONAL_CAPITAL_TERRITORY_OF_DELHI','UTTAR_PRADESH','PUDUCHERRY','ANDAMAN_AND_NICOBAR_ISLANDS','TRIPURA','GOA','DAMAN_AND_DIU','NAGALAND','ODISHA','TAMIL_NADU','BIHAR','RAJASTHAN','LAKSHADWEEP','HARYANA','MEGHALAYA','PUNJAB','ARUNACHAL_PRADESH','GUJARAT','TELANGANA','MADHYA_PRADESH','CHNADIGARH')),
+  constraint ck_head_quarter_state check (state in ('DADRA_AND_NAGAR_HAVELI','KERALA','WEST_BENGAL','JAMMU_AND_KASHMIR','HIMACHAL_PRADESH','MANIPUR','MIZORAM','MAHARASHTRA','CHANDIGARH','JHARKHAND','ASSAM','UTTARAKHAND','SIKKIM','KARNATAKA','CHHATTISGARH','ANDHRA_PRADESH','NATIONAL_CAPITAL_TERRITORY_OF_DELHI','UTTAR_PRADESH','PUDUCHERRY','ANDAMAN_AND_NICOBAR_ISLANDS','TRIPURA','GOA','DAMAN_AND_DIU','NAGALAND','ODISHA','TAMIL_NADU','BIHAR','RAJASTHAN','LAKSHADWEEP','HARYANA','MEGHALAYA','PUNJAB','ARUNACHAL_PRADESH','GUJARAT','TELANGANA','MADHYA_PRADESH')),
   constraint pk_head_quarter primary key (id))
 ;
 
@@ -482,12 +485,12 @@ create table pharmacist (
 create table pharmacy (
   id                        bigint not null,
   name                      varchar(255),
-  contact_person            varchar(255),
-  background_image          bytea,
   address_id                bigint,
+  contact_person            varchar(255),
   contact_no                varchar(255),
   description               TEXT,
   admin_pharmacist_id       bigint,
+  background_image          bytea,
   last_update               timestamp not null,
   constraint pk_pharmacy primary key (id))
 ;
@@ -574,6 +577,16 @@ create table show_cased_product (
   constraint pk_show_cased_product primary key (id))
 ;
 
+create table show_cased_service (
+  id                        bigint not null,
+  diagnostic_centre_id      bigint not null,
+  name                      varchar(255),
+  description               TEXT,
+  cost                      float,
+  last_update               timestamp not null,
+  constraint pk_show_cased_service primary key (id))
+;
+
 create table sig_code (
   code                      varchar(255),
   description               varchar(255),
@@ -630,6 +643,12 @@ create table pharmaceutical_company_product (
   pharmaceutical_company_id      bigint not null,
   product_id                     bigint not null,
   constraint pk_pharmaceutical_company_product primary key (pharmaceutical_company_id, product_id))
+;
+
+create table show_cased_service_file_entity (
+  show_cased_service_id          bigint not null,
+  file_entity_id                 bigint not null,
+  constraint pk_show_cased_service_file_entity primary key (show_cased_service_id, file_entity_id))
 ;
 create sequence address_seq;
 
@@ -724,6 +743,8 @@ create sequence question_and_answer_seq;
 create sequence sample_seq;
 
 create sequence show_cased_product_seq;
+
+create sequence show_cased_service_seq;
 
 create sequence social_user_seq;
 
@@ -863,6 +884,8 @@ alter table sample add constraint fk_sample_product_67 foreign key (product_id) 
 create index ix_sample_product_67 on sample (product_id);
 alter table show_cased_product add constraint fk_show_cased_product_pharmac_68 foreign key (pharmacy_id) references pharmacy (id);
 create index ix_show_cased_product_pharmac_68 on show_cased_product (pharmacy_id);
+alter table show_cased_service add constraint fk_show_cased_service_diagnos_69 foreign key (diagnostic_centre_id) references diagnostic_centre (id);
+create index ix_show_cased_service_diagnos_69 on show_cased_service (diagnostic_centre_id);
 
 
 
@@ -889,6 +912,10 @@ alter table patient_diagnostic_centre add constraint fk_patient_diagnostic_centr
 alter table pharmaceutical_company_product add constraint fk_pharmaceutical_company_pro_01 foreign key (pharmaceutical_company_id) references pharmaceutical_company (id);
 
 alter table pharmaceutical_company_product add constraint fk_pharmaceutical_company_pro_02 foreign key (product_id) references product (id);
+
+alter table show_cased_service_file_entity add constraint fk_show_cased_service_file_en_01 foreign key (show_cased_service_id) references show_cased_service (id);
+
+alter table show_cased_service_file_entity add constraint fk_show_cased_service_file_en_02 foreign key (file_entity_id) references file_entity (id);
 
 # --- !Downs
 
@@ -1002,6 +1029,10 @@ drop table if exists sample cascade;
 
 drop table if exists show_cased_product cascade;
 
+drop table if exists show_cased_service cascade;
+
+drop table if exists show_cased_service_file_entity cascade;
+
 drop table if exists sig_code cascade;
 
 drop table if exists social_user cascade;
@@ -1099,6 +1130,8 @@ drop sequence if exists question_and_answer_seq;
 drop sequence if exists sample_seq;
 
 drop sequence if exists show_cased_product_seq;
+
+drop sequence if exists show_cased_service_seq;
 
 drop sequence if exists social_user_seq;
 

@@ -730,7 +730,7 @@ function submitimagesform(name){
 
 
 <div class="well">
-<h3 style="color:#006687;font-weight:bold">Clinics</h3>
+<h3 style="color:#006687;font-weight:bold">Clinics <span onclick="window.location.href='@routes.DoctorController.newClinic()';" style="font-size:30px; color:#43ac6a; cursor:pointer;"><i class="fa fa-plus-square"></i>&nbsp;</span></h3>
 
 <ul class="nav nav-tabs">
   @for((clinicInfo, index) <- doctor.getActiveClinic().zipWithIndex){
@@ -754,13 +754,12 @@ function submitimagesform(name){
 <div class="row" style="padding-left:20px">
 <br>
 <div class="col-md-6">
-<span  class="pull-right" style="padding-right:60px" ><i  id="info/@clinicInfo.id"  class="fa fa-cog editInfo"></i></span>
 <br>
-<h3 style="color:#006687;"><b>@clinicInfo.clinic.name</b></h3>
+<h3 style="color:#006687;"><b>@clinicInfo.clinic.name</b> <span style="cursor:pointer; position:relative; top:-10px" ><i  id="info/@clinicInfo.id"  class="fa fa-cog editInfo"></i></span></h3>
 <h5>
 @clinicInfo.clinic.contactPersonName
 <br>
-@clinicInfo.clinic.address.addrressLine1
+@clinicInfo.clinic.address.addressLine1
 <br>
 @clinicInfo.clinic.address.area
 <br>
@@ -771,8 +770,10 @@ function submitimagesform(name){
 </div>
 
 <div class="col-md-6">
-<span class="pull-right"  style="padding-right:60px" ><i id="schedule/@clinicInfo.id"  class="fa fa-cog editSchedule"></i></span>
-<h4><b>Weekdays:</b><br><br>
+
+<h4><b>Weekdays <span class=""  style="cursor:pointer; position:relative; top:-10px" ><i id="schedule/@clinicInfo.id"  class="fa fa-cog editSchedule"></i></span> 
+</b>
+<br><br>
 <div class="row" style="padding-left:20px">
 
 @if(clinicInfo.getScheduleMap().get("MONDAY") != null){
@@ -844,7 +845,7 @@ function submitimagesform(name){
 
 </div>
 <br>
-<h4><b>Weekends:</b><br><br>
+<h4><b>Weekends</b><br><br>
 <div class="row" style="padding-left:20px">
 
 
