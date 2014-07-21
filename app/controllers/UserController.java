@@ -118,6 +118,18 @@ public class UserController extends Controller {
 			diagnosticRepresentative.diagnosticCentre = diagnosticCentre;
 			diagnosticRepresentative.update();
 		}
+		if(appUser.role.equals(Role.ADMIN_DIAGREP)){
+			final DiagnosticRepresentative diagnosticRepresentative = new DiagnosticRepresentative();
+			diagnosticRepresentative.appUser = appUser;
+			diagnosticRepresentative.save();
+
+			final DiagnosticCentre diagnosticCentre = new DiagnosticCentre();
+			diagnosticCentre.name = request().body().asFormUrlEncoded().get("diagnosticCentreName")[0];
+			diagnosticCentre.diagnosticRepAdmin = diagnosticRepresentative;
+			diagnosticCentre.save();
+			diagnosticRepresentative.diagnosticCentre = diagnosticCentre;
+			diagnosticRepresentative.update();
+		}
 
 		session().clear();
 		session(Constants.LOGGED_IN_USER_ID, appUser.id + "");

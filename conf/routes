@@ -105,7 +105,7 @@ POST   /scheduleappointment/              		controllers.AppointmentController.pr
 #Pharmacy Module
 
 GET   	/edit-product/:id                      	controllers.PharmacistController.editProduct(id: Long)
-GET     /remove-product/:id                      	controllers.PharmacistController.removeProduct(id: Long)
+#GET     /remove-product/:id                      	controllers.PharmacistController.removeProduct(id: Long)
 POST	/addProductToInventory/					controllers.PharmacistController.addProductForm(id: Long)
 POST    /addProductToInventory1/            		controllers.PharmacistController.addToInventory(id:Long)		
 GET		/order									controllers.PharmacistController.orderRecord()
@@ -174,7 +174,7 @@ GET    /diagnosticrep/doctorsearch	         	controllers.DRController.searchProc
 GET    /diagnosticrep/add-doctor/:id      		controllers.DRController.addDoctor(id: Long)
 GET    /diagnosticrep/remove-doctor/:id   		controllers.DRController.removeDoctor(id: Long)
 GET    /diagnostic-centre/all-doctors      		controllers.DRController.displayDiagnosticCentreDoctors()
-GET		/static/diagnostic/profile				controllers.DiagnosticController.staticDiagnosticProfile()
+#GET		/static/diagnostic/profile				controllers.DiagnosticController.staticDiagnosticProfile()
 
 #Diagnostic Test
 GET    /test				            		controllers.DiagnosticController.addTest()

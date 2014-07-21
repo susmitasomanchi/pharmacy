@@ -113,6 +113,7 @@
         <select class="" name="role" id="inputRole" required>
         	<option value="DOCTOR">Doctor</option>
         	<option value="ADMIN_PHARMACIST">Pharmacist</option>
+        	<option value="ADMIN_DIAGREP">Diagnostic Repreesntative</option>
         </select>
       </div>
     </div>
@@ -121,6 +122,12 @@
       <label for="inputPharmacyName" class="col-lg-2 control-label">Name of Pharmacy*</label>
       <div class="col-lg-10">
         <input type="text" class="form-control" name="pharmacyName" id="inputPharmacyName" placeholder="Name of Pharmacy">
+      </div>
+    </div>
+    <div style="display:none;" id="diagnosticDiv" class="form-group">
+      <label for="inputPharmacyName" class="col-lg-2 control-label">Diagnostic Centre Name*</label>
+      <div class="col-lg-10">
+        <input type="text" class="form-control" name="diagnosticCentreName" id="diagnosticCentreName" placeholder="Name of Diagnostic Centre">
       </div>
     </div>
     
@@ -134,6 +141,20 @@
 			else{	
 				$('#inputPharmacyName').removeAttr('required');
 					$('#pharmaNameDiv').hide();
+			}
+
+		});
+
+    </script>
+     <script>
+		$('#inputRole').on('change', function(){
+			if($('#inputRole').val() == 'ADMIN_DIAGREP'){
+				$('#diagnosticCentreName').attr('required','true');
+				$('#diagnosticDiv').show();
+			}
+			else{	
+				$('#diagnosticCentreName').removeAttr('required');
+					$('#diagnosticDiv').hide();
 			}
 
 		});
