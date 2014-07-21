@@ -666,7 +666,7 @@ public class DoctorController extends Controller {
 			clinicInfoPrevious.clinic.name = clinicInfo.clinic.name;
 			clinicInfoPrevious.clinic.contactNo=clinicInfo.clinic.contactNo;
 			clinicInfoPrevious.clinic.contactPersonName=clinicInfo.clinic.contactPersonName;
-			clinicInfoPrevious.clinic.address.addrressLine1=clinicInfo.clinic.address.addrressLine1;
+			clinicInfoPrevious.clinic.address.addressLine1=clinicInfo.clinic.address.addressLine1;
 			clinicInfoPrevious.clinic.address.area=clinicInfo.clinic.address.area;
 			clinicInfoPrevious.clinic.address.state=clinicInfo.clinic.address.state;
 			clinicInfoPrevious.clinic.address.city=clinicInfo.clinic.address.city;

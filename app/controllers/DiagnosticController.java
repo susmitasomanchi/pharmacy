@@ -407,10 +407,10 @@ public class DiagnosticController extends Controller {
 				diagnosticCentre.address = address;
 			}
 			if(requestMap.get("addressLine1") != null && (requestMap.get("addressLine1")[0].trim().compareToIgnoreCase("")!=0)){
-				diagnosticCentre.address.addrressLine1 = requestMap.get("addressLine1")[0];
+				diagnosticCentre.address.addressLine1 = requestMap.get("addressLine1")[0];
 			}
 			if(requestMap.get("addressLine2") != null && (requestMap.get("addressLine2")[0].trim().compareToIgnoreCase("")!=0)){
-				diagnosticCentre.address.addrressLine2 = requestMap.get("addressLine2")[0];
+				diagnosticCentre.address.addressLine2 = requestMap.get("addressLine2")[0];
 			}
 			if(requestMap.get("city") != null && (requestMap.get("city")[0].trim().compareToIgnoreCase("")!=0)){
 				diagnosticCentre.address.city = requestMap.get("city")[0];
@@ -464,7 +464,7 @@ public class DiagnosticController extends Controller {
 
 
 	public static Result staticDiagnosticProfile(){
-		
+
 		return ok(views.html.diagnostic.static_diagnostic_profile.render());
 	}
 }

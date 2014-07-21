@@ -43,7 +43,8 @@ GET	   /doctor/search/:key								controllers.PublicController.processSearchDoct
 # Sign up page
 GET    /doctor/join                              			controllers.UserController.joinUsDoctor()
 GET    /pharmacy/join                              			controllers.UserController.joinUsPharmacy()
-POST   /join                              			controllers.UserController.processJoinUs()
+GET    /diagnostic/join                              		controllers.UserController.joinUsDiagnostic()
+POST   /join		                              			controllers.UserController.processJoinUs()
 
 # Doctor's Profile
 GET		/dashboard                                  controllers.UserActions.dashboard()

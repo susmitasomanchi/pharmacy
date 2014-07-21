@@ -130,7 +130,7 @@ public class DoctorClinicInfoBean implements Serializable {
 		}
 
 		if (this.street != null) {
-			address.addrressLine1 = this.street;
+			address.addressLine1 = this.street;
 
 		}
 		if (this.area != null) {
