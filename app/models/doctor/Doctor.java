@@ -116,7 +116,7 @@ public class Doctor extends BaseEntity{
 				stringBuilder.append(clinicInfo.clinic.name.toLowerCase());
 			}
 		}
-		stringBuilder.append(this.appUser.name.toLowerCase()).append(this.specialization.toLowerCase()).append(this.degree.toLowerCase());
+		stringBuilder.append(this.appUser.name.toLowerCase()).append(this.specialization.toLowerCase()).append(this.degree.toLowerCase()).append(this.slugUrl.toLowerCase());
 		this.searchIndex = stringBuilder.toString();
 		super.save();
 	}
@@ -130,7 +130,7 @@ public class Doctor extends BaseEntity{
 				stringBuilder.append(clinicInfo.clinic.name.toLowerCase());
 			}
 		}
-		stringBuilder.append(this.appUser.name.toLowerCase()).append(this.specialization.toLowerCase()).append(this.degree.toLowerCase());
+		stringBuilder.append(this.appUser.name.toLowerCase()).append(this.specialization.toLowerCase()).append(this.degree.toLowerCase()).append(this.slugUrl.toLowerCase());
 		this.searchIndex = stringBuilder.toString();
 		super.update();
 	}
