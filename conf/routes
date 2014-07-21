@@ -5,7 +5,7 @@
 GET    /test	                                   controllers.SampleDataController.test()
 
 GET    /blog/create-blog-admin                     controllers.SampleDataController.createBlogAdmin()
-GET    /blog/login                                 controllers.LoginController.blogAdminLoginForm()
+GET    /login                                 controllers.LoginController.blogAdminLoginForm()
 
 GET		/blog										controllers.BlogController.blogHome()
 GET		/blog/admin/new-category					controllers.BlogController.categoryForm()
@@ -59,9 +59,11 @@ GET		/doctor/remove-social-work/:docId/:id		controllers.DoctorController.removeS
 GET    /doctor/new-clinic                 		controllers.DoctorController.newClinic()
 POST   /doctor/new-clinic                 		controllers.DoctorController.processNewClinic()
 GET    /doctor/clinics                    		controllers.DoctorController.myClinics()
-GET    /doctor/edit-clinic-info/:id                    controllers.DoctorController.editClinicInfo(id:Long)
-GET    /doctor/edit-clinic-schedule/:id                 controllers.DoctorController.editClinicSchedule(id:Long)
 GET    /doctor/edit-clinic/:id                          controllers.DoctorController.manageClinic(id:Long)
+
+GET    /doctor/edit-clinic-info/:id                  	controllers.DoctorController.editClinicInfo(id:Long)
+GET    /doctor/edit-clinic-schedule/:id                 controllers.DoctorController.editClinicSchedule(id:Long)
+
 POST   /doctor/update-clinic                            controllers.DoctorController.processUpdateClinicInfo()
 POST   /doctor/update-clinic-schedule                   controllers.DoctorController.processUpdateClinicSchedule()
 GET    /doctor/delete-clinic/:id                        controllers.DoctorController.deleteClinic(id:Long)

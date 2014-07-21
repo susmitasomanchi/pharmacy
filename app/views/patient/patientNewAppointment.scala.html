@@ -47,12 +47,12 @@ Phone nos: @doctorClinic.clinic.contactNo</h6>
 </div>
 </div>
 <div class="col-md-4" style="padding-left:0px">
-<p style="color:#008bca;font-size:22px"><b>XYZ Clinic, Area</b></p>
+<p style="color:#008bca;font-size:22px"><b>@doctorClinic.clinic.name,@doctorClinic.clinic.address.area</b></p>
 @*<img src='' url="@routes.DoctorController.getImage(doctorClinic.doctor.id,"backgroundImage")" width="360" height="250" />*@
 @if(doctorClinic.doctor.backgroundImage != null){
 	<img src="@routes.DoctorController.getImage(doctorClinic.doctor.id,"backgroundImage")" width="360" height="250" class="thumbnail"/>
 }else{
-	<img src="/assets/images/doctor.png"  style="width=360; height=250;" class="thumbnail"/>
+<img src="http://placehold.it/360x250" width="360" height="250" />
 }
 
 </div>
@@ -211,7 +211,7 @@ $('#carousel-example-generic').carousel({
 </script>
 
 <script type="text/javascript"> 
-var date=new Date().getTime();
+var date=new Date();
 
 $( document ).ready(function() {
 
@@ -222,11 +222,26 @@ $( document ).ready(function() {
 	initialize();
 }
 
- $.get('/patient/display-appointment/@doctorClinic.id/'+date,function(htmldata){
+ $.get('/patient/display-appointment/@doctorClinic.id/'+date.getTime(),function(htmldata){
 			     $('#active').html(htmldata);
 		    });
  
 });
+
+$('#carousel-example-generic').on('slide.bs.carousel', function (e) {
+						alert("hii");
+				
+		
+		if(e.direction=="left"){
+		}
+  		date.setDate(date.getDate() + 7);
+  		console.log('/patient/display-appointment/@doctorClinic.id/'+date.getTime());
+		$.get('/patient/display-appointment/@doctorClinic.id/'+date.getTime(),function(htmldata){
+			  alert('<div class="item" style="padding:40px">'+htmldata+'</div>')
+			   $('.carousel-inner').append('<div class="item" style="padding:40px">'+htmldata+'</div>');
+    });
+})
+
 </script>
 
 }

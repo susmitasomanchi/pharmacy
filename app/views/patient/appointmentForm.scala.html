@@ -2,7 +2,7 @@
 @* appointmentForm Template File *@
 <table class="table table-hover table-bordered" style="text-align:center">
     <tr class="danger">
-    @for(date <- apptMap.keySet()){
+    @for((date,value) <- apptMap){
      <th style="text-align:center">@date.format("dd-MMM-yy")<br>@date.format("EE")</th>
     }
     </tr>
@@ -12,7 +12,7 @@
       	 @for(date <- apptMap.keySet()){
       	 	@if(slot<=apptMap.get(date).size()-1){
       	 		@if(apptMap.get(date).get(slot).appointmentStatus.equals(models.doctor.AppointmentStatus.AVAILABLE)){
-      	 			     <td class="success" style="cursor:pointer">@apptMap.get(date).get(slot).appointmentTime.format("HH:mm")</td>
+      	 			     <td class="success" style="cursor:pointer">@apptMap.get(date).get(slot).appointmentTime.format("HH:mm") </td>
       	 			
       	 		}else{
       	 		      	 <td class="active" disabled>@apptMap.get(date).get(slot).appointmentTime.format("HH:mm")</td>
@@ -24,87 +24,4 @@
       	  </tr>
       }
      
-    <!-- 
-    <tr>
-    <td class="active">16:00</td>
-    <td class="success" style="cursor:pointer">16:00</td>
-    <td class="active">16:00</td>
-    <td class="success"style="cursor:pointer" >16:00</td>
-    <td class="active">16:00</td>
-    <td class="active">16:00</td>
-    <td class="success" style="cursor:pointer">16:00</td>
-    </tr>
-    <tr>
-    <td class="active">16:15</td>
-    <td class="success" style="cursor:pointer">16:15</td>
-    <td class="active">16:15</td>
-    <td class="active">16:15</td>
-    <td class="active">16:15</td>
-    <td class="active">16:15</td>
-    <td class="active">16:15</td>
-    </tr>
-    <tr>
-    <td class="success" style="cursor:pointer">16:30</td>
-    <td class="success" style="cursor:pointer">16:30</td>
-    <td class="success" style="cursor:pointer">16:30</td>
-    <td class="active">16:30</td>
-    <td class="active">16:30</td>
-    <td class="success" style="cursor:pointer">16:30</td>
-    <td class="active">16:30</td>
-    </tr>
-    <tr>
-    <td class="active">16:45</td>
-    <td class="success" style="cursor:pointer">16:45</td>
-    <td class="success" style="cursor:pointer">16:45</td>
-    <td class="active">16:45</td>
-    <td class="active">16:45</td>
-    <td class="success" style="cursor:pointer">16:45</td>
-    <td class="active">16:45</td>
-    </tr>
-    <tr>
-    <td class="success" style="cursor:pointer">17:00</td>
-    <td class="active">17:00</td>
-    <td class="success" style="cursor:pointer">17:00</td>
-    <td class="active">17:00</td>
-    <td class="success" style="cursor:pointer">17:00</td>
-    <td class="active">17:00</td>
-    <td class="success" style="cursor:pointer">17:00</td>
-    </tr>
-    <tr>
-    <td class="success" style="cursor:pointer">17:15</td>
-    <td class="success" style="cursor:pointer">17:15</td>
-    <td class="success" style="cursor:pointer">17:15</td>
-    <td class="success" style="cursor:pointer">17:15</td>
-    <td class="success" style="cursor:pointer">17:15</td>
-    <td class="success" style="cursor:pointer">17:15</td>
-    <td class="success" style="cursor:pointer">17:15</td>
-    </tr>
-    <tr>
-    <td class="active">17:30</td>
-    <td class="active">17:30</td>
-    <td class="success" style="cursor:pointer">17:30</td>
-    <td class="active">17:30</td>
-    <td class="success" style="cursor:pointer">17:30</td>
-    <td class="active">17:30</td>
-    <td class="success" style="cursor:pointer">17:30</td>
-    </tr>
-    <tr>
-    <td class="active">17:45</td>
-    <td class="active">17:45</td>
-    <td class="success" style="cursor:pointer">17:45</td>
-    <td class="active">17:45</td>
-    <td class="success" style="cursor:pointer">17:45</td>
-    <td class="success" style="cursor:pointer">17:45</td>
-    <td class="active">17:45</td>
-    </tr>
-    <tr>
-    <td class="success" style="cursor:pointer">18:00</td>
-    <td class="active">18:00</td>
-    <td class="success" style="cursor:pointer">18:00</td>
-    <td class="success" style="cursor:pointer">18:00</td>
-    <td class="active">18:00</td>
-    <td class="success" style="cursor:pointer">18:00</td>
-    <td class="active">18:00</td>
-    </tr>
-     -->
     </table>

@@ -44,59 +44,69 @@ public class PatientController extends Controller {
 
 		final Map<Date, List<Appointment>> appointmentMap = new LinkedHashMap<Date, List<Appointment>>();
 
-
-
 		final Doctor doctor = Doctor.find.byId(docId);
 
 		final Calendar calendarFrom = Calendar.getInstance();
 		calendarFrom.setTime(new Date(timeMillis));
 
-		Logger.info(calendarFrom.getTime().toString());
+		Logger.warn(calendarFrom.getTime().toString());
 
 		final Calendar calendarTo = Calendar.getInstance();
-		calendarFrom.setTime(new Date(timeMillis));
+		calendarTo.setTime(new Date(timeMillis));
 
 		final Calendar calendar1=Calendar.getInstance();
 		final Calendar calendar2=Calendar.getInstance();
 		final SimpleDateFormat dateFormat=new SimpleDateFormat("kk:mm");
 
-		for (int i = 0; i <10 ; i++) {
+		for (int i = 0; i <25; i++) {
 			for (final DoctorClinicInfo clinicInfo: doctor.doctorClinicInfoList) {
-
 				for (final DaySchedule schedule : clinicInfo.scheduleDays) {
 					try{
 						calendar1.setTime(dateFormat.parse(schedule.fromTime));
+
 						calendar2.setTime(dateFormat.parse(schedule.toTime));
+
 					}
 					catch(final ParseException exception){
 						exception.printStackTrace();
 					}
+					Logger.warn("docclinic");
+
 
 					calendarFrom.set(Calendar.HOUR_OF_DAY, calendar1.get(Calendar.HOUR_OF_DAY));
-					calendarFrom.set(Calendar.MINUTE,calendar1.get(Calendar.HOUR_OF_DAY));
+					calendarFrom.set(Calendar.MINUTE,calendar1.get(Calendar.MINUTE));
 					calendarFrom.set(Calendar.SECOND, 0);
 					calendarFrom.set(Calendar.MILLISECOND, 0);
 
 					calendarTo.set(Calendar.HOUR_OF_DAY, calendar2.get(Calendar.HOUR_OF_DAY));
-					calendarTo.set(Calendar.MINUTE,calendar2.get(Calendar.HOUR_OF_DAY));
+					calendarTo.set(Calendar.MINUTE,calendar2.get(Calendar.MINUTE));
 					calendarTo.set(Calendar.SECOND, 0);
 					calendarTo.set(Calendar.MILLISECOND, 0);
+
+					Logger.info("from**"+calendarFrom.getTime().toString());
+					Logger.info("to**"+calendarTo.getTime().toString());
+
 
 					final List<Appointment> listAppointments = Appointment.getAvailableAppointmentList(doctor.id,calendarFrom.getTime(),calendarTo.getTime());
 					if(listAppointments.size() != 0 ){
 						appointmentMap.put(calendarFrom.getTime(), listAppointments);
 						slots=Math.max(slots,listAppointments.size());
+
+						Logger.info("from**"+calendarFrom.getTime().toString());
+						Logger.info("to**"+calendarFrom.getTime().toString());
+						Logger.info("");
 					}
 
 
 					calendarFrom.add(Calendar.DATE, 1);
+
 					calendarTo.add(Calendar.DATE, 1);
-					System.out.print(calendarFrom.getTime());
 				}
 			}
 		}
 		/*return ok(views.html.patient.scheduleAppointment.render(appointmentMap,
 				 slots));*/
+		Logger.warn(""+appointmentMap.size());
 
 		return ok(views.html.patient.appointmentForm.render(appointmentMap,slots));
 	}

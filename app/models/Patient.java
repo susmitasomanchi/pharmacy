@@ -1,4 +1,3 @@
-
 package models;
 
 import java.util.ArrayList;
@@ -40,12 +39,13 @@ public class Patient extends BaseEntity {
 
 	public String isUrgentPatient;
 
-	@OneToMany(cascade=CascadeType.ALL)
-	public List<PatientDoctorInfo> patientDoctorInfos=new ArrayList<PatientDoctorInfo>();
+	@OneToMany(cascade = CascadeType.ALL)
+	public List<PatientDoctorInfo> patientDoctorInfos = new ArrayList<PatientDoctorInfo>();
 
-	@ManyToMany(cascade=CascadeType.ALL)
-	public List<DiagnosticCentre> diagnosticCenterList=new ArrayList<DiagnosticCentre>();
+	@ManyToMany(cascade = CascadeType.ALL)
+	public List<DiagnosticCentre> diagnosticCenterList = new ArrayList<DiagnosticCentre>();
 
-	public static Model.Finder<Long, Patient> find = new Finder<Long, Patient>(Long.class, Patient.class);
+	public static Model.Finder<Long, Patient> find = new Finder<Long, Patient>(
+			Long.class, Patient.class);
 
 }

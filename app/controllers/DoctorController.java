@@ -55,6 +55,10 @@ public class DoctorController extends Controller {
 
 			// Server side validation
 			if(doctor.id.longValue() != LoginController.getLoggedInUser().getDoctor().id.longValue()){
+				Logger.warn("COULD NOT VALIDATE LOGGED IN USER TO PERFORM THIS TASK");
+				Logger.warn("update attempted for doctor id: "+doctor.id);
+				Logger.warn("logged in AppUser: "+LoginController.getLoggedInUser().id);
+				Logger.warn("logged in Doctor: "+LoginController.getLoggedInUser().getDoctor().id);
 				return redirect(routes.LoginController.processLogout());
 			}
 
@@ -78,7 +82,7 @@ public class DoctorController extends Controller {
 			doctor.update();
 			return ok("0");
 		}
-		catch(final Exception e){
+		catch (final Exception e){
 			Logger.error("ERROR WHILE UPDATING BASIC DOCTOR INFO");
 			e.printStackTrace();
 			return ok("-1");
@@ -111,6 +115,10 @@ public class DoctorController extends Controller {
 		final Doctor doctor = Doctor.find.byId(Long.parseLong(formData.asFormUrlEncoded().get("doctorId")[0]));
 		// Server side validation
 		if(doctor.id.longValue() != LoginController.getLoggedInUser().getDoctor().id.longValue()){
+			Logger.warn("COULD NOT VALIDATE LOGGED IN USER TO PERFORM THIS TASK");
+			Logger.warn("update attempted for doctor id: "+doctor.id);
+			Logger.warn("logged in AppUser: "+LoginController.getLoggedInUser().id);
+			Logger.warn("logged in Doctor: "+LoginController.getLoggedInUser().getDoctor().id);
 			return redirect(routes.LoginController.processLogout());
 		}
 		try{
@@ -141,8 +149,13 @@ public class DoctorController extends Controller {
 
 		final Map<String, String[]> requestMap = request().body().asFormUrlEncoded();
 		final Doctor doctor = Doctor.find.byId(Long.parseLong(requestMap.get("doctorId")[0]));
+
 		// Server side validation
 		if(doctor.id.longValue() != LoginController.getLoggedInUser().getDoctor().id.longValue()){
+			Logger.warn("COULD NOT VALIDATE LOGGED IN USER TO PERFORM THIS TASK");
+			Logger.warn("update attempted for doctor id: "+doctor.id);
+			Logger.warn("logged in AppUser: "+LoginController.getLoggedInUser().id);
+			Logger.warn("logged in Doctor: "+LoginController.getLoggedInUser().getDoctor().id);
 			return redirect(routes.LoginController.processLogout());
 		}
 
@@ -189,60 +202,6 @@ public class DoctorController extends Controller {
 			return redirect(routes.UserActions.dashboard());
 		}
 	}
-	/**
-	 * @author Mitesh
-	 * Action to process adding new clinic of the loggedInDoctor by creating a clinicInfo object
-	 * and then calls DoctorController.createAppointment(clinicInfo) method to create requisite appointments
-	 * POST /doctor/new-clinic
-	 */
-	public static Result processNewClinic(){
-		final Form<DoctorClinicInfoBean> filledForm = clinicForm.bindFromRequest();
-		if(filledForm.hasErrors()){
-			return ok(views.html.doctor.newClinic.render(clinicForm));
-		}
-		else{
-			final DoctorClinicInfo clinicInfo = filledForm.get().toDoctorClinicInfo();
-			clinicInfo.doctor = LoginController.getLoggedInUser().getDoctor();
-			clinicInfo.save();
-			return DoctorController.createAppointment(clinicInfo);
-		}
-	}
-
-
-	/**
-	 * @author Mitesh
-	 * Action to update one of loggedInDoctor's clinics (non-schedule) information like name, address etc.
-	 * POST   /doctor/update-clinic
-	 */
-	public static Result processUpdateClinicInfo() {
-		final Form<DoctorClinicInfoBean> filledForm = clinicForm.bindFromRequest();
-		if(filledForm.hasErrors()){
-			return ok(views.html.doctor.editClinic.render(clinicForm,new ArrayList<String>(),new ArrayList<String>()));
-		}
-		else{
-			final DoctorClinicInfo clinicInfo = filledForm.get().toDoctorClinicInfo();
-			//server-side check
-			if(clinicInfo.doctor.id.longValue() != LoginController.getLoggedInUser().id.longValue()){
-				return redirect(routes.LoginController.processLogout());
-			}
-			final DoctorClinicInfo clinicInfoPrevious=DoctorClinicInfo.find.byId(clinicInfo.id);
-			clinicInfoPrevious.clinic.name = clinicInfo.clinic.name;
-			clinicInfoPrevious.clinic.contactNo=clinicInfo.clinic.contactNo;
-			clinicInfoPrevious.clinic.contactPersonName=clinicInfo.clinic.contactPersonName;
-			//clinicInfoPrevious.clinic.update();
-			clinicInfoPrevious.clinic.address.addrressLine1=clinicInfo.clinic.address.addrressLine1;
-			clinicInfoPrevious.clinic.address.area=clinicInfo.clinic.address.area;
-			clinicInfoPrevious.clinic.address.state=clinicInfo.clinic.address.state;
-			clinicInfoPrevious.clinic.address.city=clinicInfo.clinic.address.city;
-			clinicInfoPrevious.clinic.address.latitude=clinicInfo.clinic.address.latitude;
-			clinicInfoPrevious.clinic.address.longitude=clinicInfo.clinic.address.longitude;
-			clinicInfoPrevious.clinic.address.update();
-			clinicInfoPrevious.update();
-			flash().put("alert", new Alert("alert-success","Successfully Updated").toString());
-			return redirect(routes.DoctorController.myClinics());
-		}
-	}
-
 
 
 	/**
@@ -251,8 +210,13 @@ public class DoctorController extends Controller {
 	 */
 	public static Result removeWorkExperience(final Long docId, final Long id){
 		final Doctor doctor = Doctor.find.byId(docId);
+
 		// Server side validation
 		if(doctor.id.longValue() != LoginController.getLoggedInUser().getDoctor().id.longValue()){
+			Logger.warn("COULD NOT VALIDATE LOGGED IN USER TO PERFORM THIS TASK");
+			Logger.warn("update attempted for doctor id: "+doctor.id);
+			Logger.warn("logged in AppUser: "+LoginController.getLoggedInUser().id);
+			Logger.warn("logged in Doctor: "+LoginController.getLoggedInUser().getDoctor().id);
 			return redirect(routes.LoginController.processLogout());
 		}
 
@@ -272,8 +236,13 @@ public class DoctorController extends Controller {
 	public static Result addAward(){
 		final Map<String, String[]> requestMap = request().body().asFormUrlEncoded();
 		final Doctor doctor = Doctor.find.byId(Long.parseLong(requestMap.get("doctorId")[0]));
+
 		// Server side validation
 		if(doctor.id.longValue() != LoginController.getLoggedInUser().getDoctor().id.longValue()){
+			Logger.warn("COULD NOT VALIDATE LOGGED IN USER TO PERFORM THIS TASK");
+			Logger.warn("update attempted for doctor id: "+doctor.id);
+			Logger.warn("logged in AppUser: "+LoginController.getLoggedInUser().id);
+			Logger.warn("logged in Doctor: "+LoginController.getLoggedInUser().getDoctor().id);
 			return redirect(routes.LoginController.processLogout());
 		}
 
@@ -323,6 +292,10 @@ public class DoctorController extends Controller {
 		final Doctor doctor = Doctor.find.byId(docId);
 		// Server side validation
 		if(doctor.id.longValue() != LoginController.getLoggedInUser().getDoctor().id.longValue()){
+			Logger.warn("COULD NOT VALIDATE LOGGED IN USER TO PERFORM THIS TASK");
+			Logger.warn("update attempted for doctor id: "+doctor.id);
+			Logger.warn("logged in AppUser: "+LoginController.getLoggedInUser().id);
+			Logger.warn("logged in Doctor: "+LoginController.getLoggedInUser().getDoctor().id);
 			return redirect(routes.LoginController.processLogout());
 		}
 		final DoctorAward award = DoctorAward.find.byId(id);
@@ -343,6 +316,10 @@ public class DoctorController extends Controller {
 		final Doctor doctor = Doctor.find.byId(Long.parseLong(requestMap.get("doctorId")[0]));
 		// Server side validation
 		if(doctor.id.longValue() != LoginController.getLoggedInUser().getDoctor().id.longValue()){
+			Logger.warn("COULD NOT VALIDATE LOGGED IN USER TO PERFORM THIS TASK");
+			Logger.warn("update attempted for doctor id: "+doctor.id);
+			Logger.warn("logged in AppUser: "+LoginController.getLoggedInUser().id);
+			Logger.warn("logged in Doctor: "+LoginController.getLoggedInUser().getDoctor().id);
 			return redirect(routes.LoginController.processLogout());
 		}
 		try{
@@ -397,6 +374,10 @@ public class DoctorController extends Controller {
 		final Doctor doctor = Doctor.find.byId(docId);
 		// Server side validation
 		if(doctor.id.longValue() != LoginController.getLoggedInUser().getDoctor().id.longValue()){
+			Logger.warn("COULD NOT VALIDATE LOGGED IN USER TO PERFORM THIS TASK");
+			Logger.warn("update attempted for doctor id: "+doctor.id);
+			Logger.warn("logged in AppUser: "+LoginController.getLoggedInUser().id);
+			Logger.warn("logged in Doctor: "+LoginController.getLoggedInUser().getDoctor().id);
 			return redirect(routes.LoginController.processLogout());
 		}
 		final DoctorEducation education = DoctorEducation.find.byId(id);
@@ -417,6 +398,10 @@ public class DoctorController extends Controller {
 		final Doctor doctor = Doctor.find.byId(Long.parseLong(requestMap.get("doctorId")[0]));
 		// Server side validation
 		if(doctor.id.longValue() != LoginController.getLoggedInUser().getDoctor().id.longValue()){
+			Logger.warn("COULD NOT VALIDATE LOGGED IN USER TO PERFORM THIS TASK");
+			Logger.warn("update attempted for doctor id: "+doctor.id);
+			Logger.warn("logged in AppUser: "+LoginController.getLoggedInUser().id);
+			Logger.warn("logged in Doctor: "+LoginController.getLoggedInUser().getDoctor().id);
 			return redirect(routes.LoginController.processLogout());
 		}
 		try{
@@ -451,6 +436,10 @@ public class DoctorController extends Controller {
 		final Doctor doctor = Doctor.find.byId(docId);
 		// Server side validation
 		if(doctor.id.longValue() != LoginController.getLoggedInUser().getDoctor().id.longValue()){
+			Logger.warn("COULD NOT VALIDATE LOGGED IN USER TO PERFORM THIS TASK");
+			Logger.warn("update attempted for doctor id: "+doctor.id);
+			Logger.warn("logged in AppUser: "+LoginController.getLoggedInUser().id);
+			Logger.warn("logged in Doctor: "+LoginController.getLoggedInUser().getDoctor().id);
 			return redirect(routes.LoginController.processLogout());
 		}
 
@@ -473,6 +462,24 @@ public class DoctorController extends Controller {
 
 
 
+	/**
+	 * @author Mitesh
+	 * Action to process adding new clinic of the loggedInDoctor by creating a clinicInfo object
+	 * and then calls DoctorController.createAppointment(clinicInfo) method to create requisite appointments
+	 * POST /doctor/new-clinic
+	 */
+	public static Result processNewClinic(){
+		final Form<DoctorClinicInfoBean> filledForm = clinicForm.bindFromRequest();
+		if(filledForm.hasErrors()){
+			return ok(views.html.doctor.newClinic.render(clinicForm));
+		}
+		else{
+			final DoctorClinicInfo clinicInfo = filledForm.get().toDoctorClinicInfo();
+			clinicInfo.doctor = LoginController.getLoggedInUser().getDoctor();
+			clinicInfo.save();
+			return DoctorController.createAppointment(clinicInfo);
+		}
+	}
 
 	/**
 	 * @author Mitesh
@@ -483,7 +490,11 @@ public class DoctorController extends Controller {
 	 */
 	private static Result createAppointment(final DoctorClinicInfo docClinicInfo) {
 		// Server side validation
-		if(docClinicInfo.doctor.id.longValue() != LoginController.getLoggedInUser().id.longValue()){
+		if(docClinicInfo.doctor.id.longValue() != LoginController.getLoggedInUser().getDoctor().id.longValue()){
+			Logger.warn("COULD NOT VALIDATE LOGGED IN USER TO PERFORM THIS TASK");
+			Logger.warn("update attempted for doctor id: "+docClinicInfo.doctor.id);
+			Logger.warn("logged in AppUser: "+LoginController.getLoggedInUser().id);
+			Logger.warn("logged in Doctor: "+LoginController.getLoggedInUser().getDoctor().id);
 			return redirect(routes.LoginController.processLogout());
 		}
 		try{
@@ -561,7 +572,6 @@ public class DoctorController extends Controller {
 	}
 
 
-
 	/**
 	 * @author Mitesh
 	 * Action to show all active clinics of the loggedIn Doctor
@@ -570,6 +580,70 @@ public class DoctorController extends Controller {
 	public static Result myClinics(){
 		final Doctor loggedInDoctor = LoginController.getLoggedInUser().getDoctor();
 		return ok(views.html.doctor.myClinics.render(loggedInDoctor.getActiveClinic()));
+	}
+
+
+	/**
+	 * @author Mitesh
+	 * Action to show form to edit one of loggedIn doctor's clinic
+	 * GET /doctor/edit-clinic/:id
+	 * Depricated on 18th July 2014. Use DoctorController.editClinicInfo(Long docClinicId) and DoctorController.editClinicSchedule(Long docClinicId) instead.
+	 */
+	@Deprecated
+	public static Result manageClinic(final Long docClinicId) {
+		final DoctorClinicInfo doctorClinicInfo = DoctorClinicInfo.find.byId(docClinicId);
+		// Server side validation
+		if(doctorClinicInfo.doctor.id.longValue() != LoginController.getLoggedInUser().getDoctor().id.longValue()){
+			Logger.warn("COULD NOT VALIDATE LOGGED IN USER TO PERFORM THIS TASK");
+			Logger.warn("update attempted for doctor id: "+doctorClinicInfo.doctor.id);
+			Logger.warn("logged in AppUser: "+LoginController.getLoggedInUser().id);
+			Logger.warn("logged in Doctor: "+LoginController.getLoggedInUser().getDoctor().id);
+			return redirect(routes.LoginController.processLogout());
+		}
+		final DoctorClinicInfoBean bean = doctorClinicInfo.toBean();
+		final Form<DoctorClinicInfoBean> filledForm = clinicForm.fill(doctorClinicInfo.toBean());
+		for (final String from : bean.fromHrs) {
+			Logger.warn(from);
+		}
+		return ok(views.html.doctor.editClinic.render(filledForm,bean.daysOfWeek,bean.daysOfWeekMr));
+	}
+
+
+	/**
+	 * @author Mitesh
+	 * Action to update one of loggedInDoctor's clinics (non-schedule) information like name, address etc.
+	 * POST   /doctor/update-clinic
+	 */
+	public static Result processUpdateClinicInfo() {
+		final Form<DoctorClinicInfoBean> filledForm = clinicForm.bindFromRequest();
+		if(filledForm.hasErrors()){
+			return ok(views.html.doctor.editClinic.render(clinicForm,new ArrayList<String>(),new ArrayList<String>()));
+		}
+		else{
+			final DoctorClinicInfo clinicInfo = filledForm.get().toDoctorClinicInfo();
+			// Server side validation
+			if(clinicInfo.doctor.id.longValue() != LoginController.getLoggedInUser().getDoctor().id.longValue()){
+				Logger.warn("COULD NOT VALIDATE LOGGED IN USER TO PERFORM THIS TASK");
+				Logger.warn("update attempted for doctor id: "+clinicInfo.doctor.id);
+				Logger.warn("logged in AppUser: "+LoginController.getLoggedInUser().id);
+				Logger.warn("logged in Doctor: "+LoginController.getLoggedInUser().getDoctor().id);
+				return redirect(routes.LoginController.processLogout());
+			}
+			final DoctorClinicInfo clinicInfoPrevious=DoctorClinicInfo.find.byId(clinicInfo.id);
+			clinicInfoPrevious.clinic.name = clinicInfo.clinic.name;
+			clinicInfoPrevious.clinic.contactNo=clinicInfo.clinic.contactNo;
+			clinicInfoPrevious.clinic.contactPersonName=clinicInfo.clinic.contactPersonName;
+			clinicInfoPrevious.clinic.address.addrressLine1=clinicInfo.clinic.address.addrressLine1;
+			clinicInfoPrevious.clinic.address.area=clinicInfo.clinic.address.area;
+			clinicInfoPrevious.clinic.address.state=clinicInfo.clinic.address.state;
+			clinicInfoPrevious.clinic.address.city=clinicInfo.clinic.address.city;
+			clinicInfoPrevious.clinic.address.latitude=clinicInfo.clinic.address.latitude;
+			clinicInfoPrevious.clinic.address.longitude=clinicInfo.clinic.address.longitude;
+			clinicInfoPrevious.clinic.address.update();
+			clinicInfoPrevious.update();
+			flash().put("alert", new Alert("alert-success","Successfully Updated").toString());
+			return redirect(routes.DoctorController.myClinics());
+		}
 	}
 
 
@@ -586,7 +660,11 @@ public class DoctorController extends Controller {
 		else{
 			final DoctorClinicInfo clinicInfo = filledForm.get().toDoctorClinicInfo();
 			//server-side check
-			if(clinicInfo.doctor.id.longValue() != LoginController.getLoggedInUser().id.longValue()){
+			if(clinicInfo.doctor.id.longValue() != LoginController.getLoggedInUser().getDoctor().id.longValue()){
+				Logger.warn("COULD NOT VALIDATE LOGGED IN USER TO PERFORM THIS TASK");
+				Logger.warn("update attempted for doctor id: "+clinicInfo.doctor.id);
+				Logger.warn("logged in AppUser: "+LoginController.getLoggedInUser().id);
+				Logger.warn("logged in Doctor: "+LoginController.getLoggedInUser().getDoctor().id);
 				return redirect(routes.LoginController.processLogout());
 			}
 			final DoctorClinicInfo clinicInfoPrevious=DoctorClinicInfo.find.byId(clinicInfo.id);
@@ -629,8 +707,12 @@ public class DoctorController extends Controller {
 	 */
 	public static Result deleteClinic(final Long id) {
 		final DoctorClinicInfo clinicInfo = DoctorClinicInfo.find.byId(id);
-		//server-side check
-		if(clinicInfo.doctor.id.longValue() != LoginController.getLoggedInUser().id.longValue()){
+		// Server side validation
+		if(clinicInfo.doctor.id.longValue() != LoginController.getLoggedInUser().getDoctor().id.longValue()){
+			Logger.warn("COULD NOT VALIDATE LOGGED IN USER TO PERFORM THIS TASK");
+			Logger.warn("update attempted for doctor id: "+clinicInfo.doctor.id);
+			Logger.warn("logged in AppUser: "+LoginController.getLoggedInUser().id);
+			Logger.warn("logged in Doctor: "+LoginController.getLoggedInUser().getDoctor().id);
 			return redirect(routes.LoginController.processLogout());
 		}
 		final Calendar calendar=Calendar.getInstance();
@@ -664,8 +746,6 @@ public class DoctorController extends Controller {
 		return redirect(routes.DoctorController.myClinics());
 	}
 
-
-
 	/**
 	 * @author Mitesh
 	 * Action to show form to edit one of loggedIn doctor's clinic information
@@ -678,7 +758,6 @@ public class DoctorController extends Controller {
 		if(doctorClinicInfo.doctor.id.longValue() != LoginController.getLoggedInUser().getDoctor().id.longValue()){
 			return redirect(routes.LoginController.processLogout());
 		}
-		final DoctorClinicInfoBean bean = doctorClinicInfo.toBean();
 		final Form<DoctorClinicInfoBean> filledForm = clinicForm.fill(doctorClinicInfo.toBean());
 		return ok(views.html.doctor.editClinicInfo.render(filledForm));
 
@@ -702,26 +781,6 @@ public class DoctorController extends Controller {
 
 	}
 
-
-
-	/**
-	 * @author Mitesh
-	 * Action to show form to edit one of loggedIn doctor's clinic
-	 * GET /doctor/edit-clinic/:id
-	 */
-	public static Result manageClinic(final Long docClinicId) {
-		final DoctorClinicInfo doctorClinicInfo=DoctorClinicInfo.find.byId(docClinicId);
-		//server-side check
-		if(doctorClinicInfo.doctor.id.longValue() != LoginController.getLoggedInUser().id.longValue()){
-			return redirect(routes.LoginController.processLogout());
-		}
-		final DoctorClinicInfoBean bean = doctorClinicInfo.toBean();
-		final Form<DoctorClinicInfoBean> filledForm = clinicForm.fill(doctorClinicInfo.toBean());
-		for (final String from : bean.fromHrs) {
-			Logger.warn(from);
-		}
-		return ok(views.html.doctor.editClinic.render(filledForm,bean.daysOfWeek,bean.daysOfWeekMr));
-	}
 
 
 	public static Result displayAnswer(){
@@ -758,6 +817,20 @@ public class DoctorController extends Controller {
 
 
 
+	public static boolean isListSame(final List<DaySchedule> arrayList1,final List<DaySchedule> arrayList2) {
+		if(arrayList1.size() != arrayList2.size()){
+			Logger.info("if 1");
+			return false;
+		}
+		for(int i=0;i<arrayList1.size();i++){
+			final DaySchedule schedule=arrayList1.get(i);
+			final DaySchedule scheduleMr=arrayList2.get(i);
+			if(!schedule.equals(scheduleMr)){
+				return schedule.equals(scheduleMr);
+			}
+		}
+		return true;
+	}
 
 
 
@@ -799,7 +872,6 @@ public class DoctorController extends Controller {
 		final Doctor loggedIndoctor = LoginController.getLoggedInUser().getDoctor();
 
 		final List<Appointment> appointments=Appointment.find.where().eq("appointmentStatus", AppointmentStatus.APPROVED).eq("doctor", loggedIndoctor).ge("appointmentTime", calendar.getTime()).findList();
-
 		Logger.warn(""+appointments.toString());
 		return ok(views.html.doctor.doctor_appointments.render(appointments));
 

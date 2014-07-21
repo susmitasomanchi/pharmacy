@@ -28,7 +28,7 @@ public class Pharmacy extends BaseEntity {
 
 	public String name;
 
-	public String testField;
+	public String contactPerson;
 
 
 	@Lob
@@ -77,8 +77,8 @@ public class Pharmacy extends BaseEntity {
 		if(this.contactNo != null) {
 			pharmacyBean.contactNo= this.contactNo;
 		}
-		if(this.testField != null) {
-			pharmacyBean.testField= this.testField;
+		if(this.contactPerson != null) {
+			pharmacyBean.contactPerson= this.contactPerson;
 		}
 		if(this.description != null) {
 			pharmacyBean.description= this.description;
