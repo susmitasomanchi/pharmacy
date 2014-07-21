@@ -61,6 +61,8 @@ GET		/doctor/remove-social-work/:docId/:id		controllers.DoctorController.removeS
 GET    /doctor/new-clinic                 		controllers.DoctorController.newClinic()
 POST   /doctor/new-clinic                 		controllers.DoctorController.processNewClinic()
 GET    /doctor/clinics                    		controllers.DoctorController.myClinics()
+#
+
 GET    /doctor/edit-clinic/:id                          controllers.DoctorController.manageClinic(id:Long)
 
 GET    /doctor/edit-clinic-info/:id                  	controllers.DoctorController.editClinicInfo(id:Long)
@@ -185,7 +187,7 @@ POST   /upload-patient-file/save		  						controllers.DiagnosticController.uploa
 GET    /download						  						controllers.DiagnosticController.downloadFile()
 #GET   /add-test-done						  					controllers.DiagnosticController.addTestDone()
 #GET    /test-list/:id				            				controllers.DiagnosticController.diagnosticCentreTestList(id: Long)
-GET     /diagnostic/get-showcased-image/:diagnosticServiceId/:imageID	controllers.DiagnosticController.getShowCasedImages(diagnosticServiceId: Long,imageID: Long)
+GET     /diagnostic/get-showcased-image/:diagnosticServiceId/:imageId	controllers.DiagnosticController.getShowCasedImages(diagnosticServiceId: Long,imageId: Long)
 POST	/diagnostic/add-service-to-showcase						controllers.DiagnosticController.addShowCasedService()
 GET		/diagnostic/remove-service-from-showcase/:id			controllers.DiagnosticController.removeServiceFromShowcaseList(id: Long)
 GET		/diagnostic/remove-image-from-showcasedService			controllers.DiagnosticController.removeShowCasedImage(showCasedServiceId: Long,imageId: Long)

@@ -80,14 +80,14 @@ function submitbasicform(id){
 }
 
 <span data-toggle="popover" data-placement="left" title="Change Background Image" data-html="true" data-content="<form action=&quot;@routes.DiagnosticController.uploadDiagnosticImageProcess()&quot; enctype=&quot;multipart/form-data&quot; method=&quot;POST&quot;><input type=&quot;file&quot; name=&quot;backgroundImage&quot;> <input type=&quot;hidden&quot; name=&quot;diagnosticId&quot; value=&quot;@diagnosticCentre.id&quot;> <br><input class=&quot;pull-right btn btn-xs btn-primary&quot; type=&quot;submit&quot; onclick=&quot;submitimagesform();&quot; value=&quot;save&quot;></form>" style="cursor:pointer; position:relative; top:-400px;left:910px; font-size:25px">
-<i style="text-shadow:1px 1px 20px #292929, 3px 3px 20px white;" id="spinner" class="fa fa-cog"></i>
+<i style="text-shadow:1px 1px 20px white, 3px 3px 20px white;" id="spinner" class="fa fa-cog"></i>
 </span>
 </div>
 <div class="row" style="margin-top:-235px">
 <div class="col-md-1"></div>
 <div class="col-md-10" >
 <span data-toggle="modal" data-target="#myModal" style="cursor:pointer; position:relative; top:30px;left:810px; font-size:25px;">
-  	<i style="text-shadow:1px 1px 20px #292929, 3px 3px 20px white;" id="spinner2" class="fa fa-cog"></i>
+  	<i style="text-shadow:1px 1px 20px white, 3px 3px 20px white;" id="spinner2" class="fa fa-cog"></i>
   	
   	
 	</span>
@@ -173,7 +173,7 @@ function submitbasicform(id){
 </form>"
 style="color:#006687; font-size:20px; position:relative; top:-20px; cursor:pointer;"><i id="spinner-name" class="fa fa-cog"></i></span>
 </h1>
-<div class="alert alert-success">
+<div class="alert alert-success" style="padding:15px">
 <span data-toggle="popover" title="Brief Description" data-placement="left" data-html="true" data-content="
 <form action=&quot;@routes.DiagnosticController.diagnosticBasicUpdate()&quot;method=&quot;POST&quot;>
 <textarea name=&quot;description&quot; rows=&quot;10&quot; style=&quot;color:#292929; font-weight:bold;&quot; >@diagnosticCentre.description</textarea>
@@ -807,7 +807,7 @@ function closeTestProfile(){
 
 @*
 <br>
-<button class="btn btn-success btn-lg"><a href="/pharmacy/order/@pharmacy.id" style="color:white">Place your order</a></button>
+<button class="btn btn-success btn-lg"><a href="#" style="color:white">Place your order</a></button>
 *@
 
 }

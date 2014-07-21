@@ -519,6 +519,7 @@ create table pharmacy_product (
 
 create table prescription (
   id                        bigint not null,
+  pharmacy_id               bigint not null,
   appointment_id            bigint,
   problem_statement         varchar(255),
   prognosis                 varchar(255),
@@ -616,6 +617,12 @@ create table diagnostic_centre_file_entity (
   diagnostic_centre_id           bigint not null,
   file_entity_id                 bigint not null,
   constraint pk_diagnostic_centre_file_entity primary key (diagnostic_centre_id, file_entity_id))
+;
+
+create table diagnostic_centre_doctor (
+  diagnostic_centre_id           bigint not null,
+  doctor_id                      bigint not null,
+  constraint pk_diagnostic_centre_doctor primary key (diagnostic_centre_id, doctor_id))
 ;
 
 create table doctor_doctor_language (
@@ -869,24 +876,26 @@ alter table pharmacy add constraint fk_pharmacy_adminPharmacist_58 foreign key (
 create index ix_pharmacy_adminPharmacist_58 on pharmacy (admin_pharmacist_id);
 alter table pharmacy_product add constraint fk_pharmacy_product_pharmacy_59 foreign key (pharmacy_id) references pharmacy (id);
 create index ix_pharmacy_product_pharmacy_59 on pharmacy_product (pharmacy_id);
-alter table prescription add constraint fk_prescription_appointment_60 foreign key (appointment_id) references appointment (id);
-create index ix_prescription_appointment_60 on prescription (appointment_id);
-alter table product add constraint fk_product_pharmaceuticalComp_61 foreign key (pharmaceutical_company_id) references pharmaceutical_company (id);
-create index ix_product_pharmaceuticalComp_61 on product (pharmaceutical_company_id);
-alter table product add constraint fk_product_pharmacy_62 foreign key (pharmacy_id) references pharmacy (id);
-create index ix_product_pharmacy_62 on product (pharmacy_id);
-alter table question_and_answer add constraint fk_question_and_answer_questi_63 foreign key (question_by_id) references app_user (id);
-create index ix_question_and_answer_questi_63 on question_and_answer (question_by_id);
-alter table question_and_answer add constraint fk_question_and_answer_answer_64 foreign key (answer_by_id) references app_user (id);
-create index ix_question_and_answer_answer_64 on question_and_answer (answer_by_id);
-alter table sample add constraint fk_sample_dcrline_item_65 foreign key (dcrline_item_id) references dcrline_item (id);
-create index ix_sample_dcrline_item_65 on sample (dcrline_item_id);
-alter table sample add constraint fk_sample_product_66 foreign key (product_id) references product (id);
-create index ix_sample_product_66 on sample (product_id);
-alter table show_cased_product add constraint fk_show_cased_product_pharmac_67 foreign key (pharmacy_id) references pharmacy (id);
-create index ix_show_cased_product_pharmac_67 on show_cased_product (pharmacy_id);
-alter table show_cased_service add constraint fk_show_cased_service_diagnos_68 foreign key (diagnostic_centre_id) references diagnostic_centre (id);
-create index ix_show_cased_service_diagnos_68 on show_cased_service (diagnostic_centre_id);
+alter table prescription add constraint fk_prescription_pharmacy_60 foreign key (pharmacy_id) references pharmacy (id);
+create index ix_prescription_pharmacy_60 on prescription (pharmacy_id);
+alter table prescription add constraint fk_prescription_appointment_61 foreign key (appointment_id) references appointment (id);
+create index ix_prescription_appointment_61 on prescription (appointment_id);
+alter table product add constraint fk_product_pharmaceuticalComp_62 foreign key (pharmaceutical_company_id) references pharmaceutical_company (id);
+create index ix_product_pharmaceuticalComp_62 on product (pharmaceutical_company_id);
+alter table product add constraint fk_product_pharmacy_63 foreign key (pharmacy_id) references pharmacy (id);
+create index ix_product_pharmacy_63 on product (pharmacy_id);
+alter table question_and_answer add constraint fk_question_and_answer_questi_64 foreign key (question_by_id) references app_user (id);
+create index ix_question_and_answer_questi_64 on question_and_answer (question_by_id);
+alter table question_and_answer add constraint fk_question_and_answer_answer_65 foreign key (answer_by_id) references app_user (id);
+create index ix_question_and_answer_answer_65 on question_and_answer (answer_by_id);
+alter table sample add constraint fk_sample_dcrline_item_66 foreign key (dcrline_item_id) references dcrline_item (id);
+create index ix_sample_dcrline_item_66 on sample (dcrline_item_id);
+alter table sample add constraint fk_sample_product_67 foreign key (product_id) references product (id);
+create index ix_sample_product_67 on sample (product_id);
+alter table show_cased_product add constraint fk_show_cased_product_pharmac_68 foreign key (pharmacy_id) references pharmacy (id);
+create index ix_show_cased_product_pharmac_68 on show_cased_product (pharmacy_id);
+alter table show_cased_service add constraint fk_show_cased_service_diagnos_69 foreign key (diagnostic_centre_id) references diagnostic_centre (id);
+create index ix_show_cased_service_diagnos_69 on show_cased_service (diagnostic_centre_id);
 
 
 
@@ -897,6 +906,10 @@ alter table dcrline_item_product add constraint fk_dcrline_item_product_produ_02
 alter table diagnostic_centre_file_entity add constraint fk_diagnostic_centre_file_ent_01 foreign key (diagnostic_centre_id) references diagnostic_centre (id);
 
 alter table diagnostic_centre_file_entity add constraint fk_diagnostic_centre_file_ent_02 foreign key (file_entity_id) references file_entity (id);
+
+alter table diagnostic_centre_doctor add constraint fk_diagnostic_centre_doctor_d_01 foreign key (diagnostic_centre_id) references diagnostic_centre (id);
+
+alter table diagnostic_centre_doctor add constraint fk_diagnostic_centre_doctor_d_02 foreign key (doctor_id) references doctor (id);
 
 alter table doctor_doctor_language add constraint fk_doctor_doctor_language_doc_01 foreign key (doctor_id) references doctor (id);
 
@@ -953,6 +966,8 @@ drop table if exists day_schedule cascade;
 drop table if exists diagnostic_centre cascade;
 
 drop table if exists diagnostic_centre_file_entity cascade;
+
+drop table if exists diagnostic_centre_doctor cascade;
 
 drop table if exists diagnostic_order cascade;
 
