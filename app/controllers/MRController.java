@@ -146,7 +146,7 @@ public class MRController extends Controller {
 	 * 
 	 * @discription : this method is saving the headQuarter
 	 * 
-	 *  url : POST POST /mr/add-head-quarter
+	 *              url : POST POST /mr/add-head-quarter
 	 * 
 	 * 
 	 * */
@@ -383,7 +383,8 @@ public class MRController extends Controller {
 				headQmap.put(headQuarter.state, headQuarterList);
 			}
 		}
-		return ok(views.html.mr.dcrList.render(loggedInMr.dcrList, headQmap));
+		final List<MedicalRepresentative> mySubordinateMrList =  loggedInMr.getSubordinates();
+		return ok(views.html.mr.dcrList.render(loggedInMr.dcrList, headQmap,mySubordinateMrList));
 	}
 
 	/**
@@ -404,7 +405,7 @@ public class MRController extends Controller {
 		final DynamicForm requestData = Form.form().bindFromRequest();
 		final String strDate = requestData.get("forDate");
 		final String quarterIdString = requestData.get("headQuarter");
-		if(dcr.dcrStatus == null){
+		if (dcr.dcrStatus == null) {
 			dcr.dcrStatus = DCRStatus.DRAFT;
 		}
 		if (quarterIdString != "") {
@@ -478,8 +479,74 @@ public class MRController extends Controller {
 
 		return ok(views.html.mr.dcrLineItem.render(dcr, dcrLineItemForm,
 				loggedInMr.doctorList, disabledDoctorList,
-				loggedInMr.pharmaceuticalCompany.productList));
+				loggedInMr.pharmaceuticalCompany.productList,loggedInMr));
 
+	}
+
+	/**
+	 * @author anand
+	 * 
+	 * url :GET    /mr/approve-dcr/:dcrid
+	 * 
+	 * @description : manager can approve mr's submitted dcr
+	 * 
+	 * 
+	 * */
+
+	public static Result approveDCRLineItem( final Long dcrId){
+
+		final DailyCallReport dcr = DailyCallReport.find.byId(dcrId);
+
+		final MedicalRepresentative loggedInMr = LoginController
+				.getLoggedInUser().getMedicalRepresentative();
+		dcr.dcrStatus = DCRStatus.APPROVED;
+		dcr.approver = loggedInMr;
+		dcr.responseOn = new Date();
+		dcr.update();
+
+
+		return redirect(routes.MRController.listDCR());
+	}
+
+	/**
+	 * @author anand
+	 * 
+	 * url :GET    /mr/reject-dcr/:dcrid
+	 * 
+	 * @description : manager can reject mr's submitted dcr
+	 * 
+	 * 
+	 * */
+	public static Result rejectDCRLineItem(final Long dcrId){
+		final DailyCallReport dcr = DailyCallReport.find.byId(dcrId);
+		final MedicalRepresentative loggedInMr = LoginController
+				.getLoggedInUser().getMedicalRepresentative();
+		dcr.dcrStatus = DCRStatus.REJECTED;
+		dcr.approver = loggedInMr;
+		dcr.responseOn = new Date();
+		dcr.update();
+
+		return redirect(routes.MRController.listDCR());
+	}
+	/**
+	 * @author anand
+	 * 
+	 * url :GET    /mr/delete-dcr/:dcrid
+	 * 
+	 * @description : mr can delete own dcr which is not  submitted.
+	 * 
+	 * 
+	 * */
+
+	public static Result deleteDCR(final Long dcrid){
+		final MedicalRepresentative loggedInMr = LoginController
+				.getLoggedInUser().getMedicalRepresentative();
+		final DailyCallReport dcr = DailyCallReport.find.byId(dcrid);
+		loggedInMr.dcrList.remove(dcr);
+		loggedInMr.update();
+		dcr.delete();
+
+		return redirect(routes.MRController.listDCR());
 	}
 
 	/**
@@ -589,7 +656,7 @@ public class MRController extends Controller {
 	/**
 	 * @author anand
 	 * 
-	 * url : POST /mr/dcr/delete-line-item/:dcrid/:lineitemid
+	 *         url : POST /mr/dcr/delete-line-item/:dcrid/:lineitemid
 	 * 
 	 * @description: to remove the added dcr-line-item
 	 * 
@@ -610,15 +677,16 @@ public class MRController extends Controller {
 	/**
 	 * @author anand
 	 * 
-	 * @descriotion : this method is used to submit the mr's dcr line items to crossponding manager
+	 * @description : this method is used to submit the mr's dcr line items to
+	 *              crossponding manager
 	 * 
-	 * url:  POST   /mr/submit-dcr-line-items/:dcrid
+	 * url: POST /mr/submit-dcr-line-items/:dcrid
 	 * 
 	 * @param dcrId
 	 * 
 	 * */
 
-	public static Result submitDCRLineItems(final Long dcrId){
+	public static Result submitDCRLineItems(final Long dcrId) {
 
 		final MedicalRepresentative loggedInMr = LoginController
 				.getLoggedInUser().getMedicalRepresentative();

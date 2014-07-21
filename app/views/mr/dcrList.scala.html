@@ -1,4 +1,4 @@
-@(dcrList:List[models.mr.DailyCallReport],headQuarterMap:Map[models.State,List[models.mr.HeadQuarter]])
+@(dcrList:List[models.mr.DailyCallReport],headQuarterMap:Map[models.State,List[models.mr.HeadQuarter]],mySubordinateMrList: List[models.mr.MedicalRepresentative])
 @import play.i18n._
 @import helper.twitterBootstrap._
 @import helper._
@@ -41,7 +41,7 @@
 		<input type="submit" class="btn btn-primary" value="Create DCR" />
 	</form>
 	<br>
-	@main("my DcrS"){
+	<h3><b>My DcrS</b></h3>
 	<table class="table table-bordered table-condensed col-md-3">
 	<thead>
 	<th>Sr. No.</th>
@@ -49,6 +49,7 @@
 	<th>Status</th>
 	<th>Approver</th>
 	<th>SubmitDate</th>
+	<th>ResponseOn</th>
 	<th>Action</th>
 	</thead>
 	<tbody>
@@ -60,42 +61,62 @@
 		@dcr.forDate.format("dd-MMM-yyyy")
 		</td>
 		<td>@dcr.dcrStatus</td>
+		@if(dcr.approver != null){
+			<td>@dcr.approver.appUser.name</td>
+		}else{
 		<td>&nbsp;</td>
+		}
 		@if(dcr.submittedDate != null){
 		<td>@dcr.submittedDate.format("dd-MMM-yyyy")</td>
 		}else{
 		<td>&nbsp;</td>
 		}
+		@if(dcr.responseOn != null){
+		<td>@dcr.responseOn.format("dd-MMM-yyyy")</td>
+		}else{
+		<td>&nbsp;</td>
+		}
 		<td>
 		<a class="btn btn-primary btn-xs" href="@routes.MRController.addDCRLineItem(dcr.id)">View Line Item</a>
+		@if("DRAFT".compareToIgnoreCase(dcr.dcrStatus.name()) == 0){
+		<a class="btn btn-primary btn-danger btn-xs" href="@routes.MRController.deleteDCR(dcr.id)">Delete Line Item</a>
+		}
 		</td>
    </tr>
 	}
 	</tbody>
 	</table>
-	}
+	
 	
 	<br>
-	@main("Team's DcrS"){
+	<h3><b>Team's DcrS</b></h3>
 	<table class="table table-bordered table-condensed col-md-3">
 	<thead>
 	<th>Sr. No.</th>
 	<th>ForDate</th>
 	<th>Status</th>
+	<th>Submitter</th>
 	<th>Approver</th>
 	<th>SubmitDate</th>
 	<th>Action</th>
 	</thead>
 	<tbody>
-	@for(dcr<-dcrList){
-	
+	@for(mySubordinate <- mySubordinateMrList){
+		
+	@for(dcr <- mySubordinate.dcrList){
+	@if("DRAFT".compareToIgnoreCase(dcr.dcrStatus.name()) != 0){ 
 	<tr>
 		<td></td>
 		<td>
 		@dcr.forDate.format("dd-MMM-yyyy")
 		</td>
 		<td>@dcr.dcrStatus</td>
+		<td>@mySubordinate.appUser.name</td>
+		@if(dcr.approver != null){		
+		<td>@dcr.approver.appUser.name</td>
+		}else{
 		<td>&nbsp;</td>
+		}
 		@if(dcr.submittedDate != null){
 		<td>@dcr.submittedDate.format("dd-MMM-yyyy")</td>
 		}else{
@@ -105,10 +126,12 @@
 		<a class="btn btn-primary btn-xs" href="@routes.MRController.addDCRLineItem(dcr.id)">View Line Item</a>
 		</td>
    </tr>
+   }
+	}
 	}
 	</tbody>
 	</table>
-	}
+	
 	
 	
 }
