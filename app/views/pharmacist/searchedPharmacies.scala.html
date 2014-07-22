@@ -1,9 +1,21 @@
-@(pharmacyList	: List[models.pharmacist.Pharmacy])
+@(flag: Boolean,searchKey: String,pharmacyList	: List[models.pharmacist.Pharmacy])
 @import play.i18n._
 @import helper.twitterBootstrap._
 @import helper._
 
 @main("Search Pharmacy"){
+<div class="well">
+<div class="row">
+
+<label for="searchInput">Search For</label>
+<input id="searchInput" value="@searchKey"/>
+
+<a onclick="window.location.href='/pharmacy/search/'+$('#searchInput').val().trim();" class="btn btn-xs btn-primary">Search</a>
+
+</div>
+</div>
+@if(flag == true){
+
 	@if(pharmacyList.size()==0){
 		No List is created yet
 	}else{
@@ -38,24 +50,20 @@ background-color:#cccccc;
 				<img src="/assets/images/pharmacy-default-profile-image.jpg" class="thumbnail" width="120" height="120"  />
 				}
 				</div>
-				
-				</div>
 				<div style="cursor:pointer" onclick="location.href='@routes.PharmacistController.pharmacyProfile(pharmacy.id)';" class="col-md-5">
-				<h3>@pharmacy.name</h3>
-				@if(pharmacy.address != null){
-				<h4>@pharmacy.address.addrressLine1</h4>
+				<h3 ><b><i>@pharmacy.name</i></b></h3>
+				@if(pharmacy.address != null){	
+				<h5>@pharmacy.address.addressLine1</h5>			
 				<h5>@pharmacy.address.area</h5>
 				<h5>@pharmacy.address.city</h5>
 				<h5>@pharmacy.address.state</h5>
-				<h5>@pharmacy.contactNo</h5>
 				}
-				<br>
+				<h5>@pharmacy.contactNo</h5>
+				
+				</div>
 				</div>
 				
 				</div>
-				
-				
-				</div>	
 				<a class="btn btn-primary btn-xs pull-right" href="#">Ask Query</a>
 				</td>	
 				</tr>			
@@ -63,6 +71,7 @@ background-color:#cccccc;
 				} 
 				
 				
+	}
 	}
 	
 	

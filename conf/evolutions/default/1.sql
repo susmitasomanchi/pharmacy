@@ -5,9 +5,9 @@
 
 create table address (
   id                        bigint not null,
-  addrress_line1            varchar(255),
-  addrress_line2            varchar(255),
-  addrress_line3            varchar(255),
+  address_line1             varchar(255),
+  address_line2             varchar(255),
+  address_line3             varchar(255),
   area                      varchar(255),
   latitude                  varchar(255),
   longitude                 varchar(255),
@@ -248,6 +248,7 @@ create table doctor (
   profile_image             bytea,
   experience                integer,
   search_index              TEXT,
+  slug_url                  TEXT,
   last_update               timestamp not null,
   constraint pk_doctor primary key (id))
 ;
@@ -489,6 +490,8 @@ create table pharmacy (
   description               TEXT,
   admin_pharmacist_id       bigint,
   background_image          bytea,
+  search_index              TEXT,
+  test                      integer,
   last_update               timestamp not null,
   constraint pk_pharmacy primary key (id))
 ;

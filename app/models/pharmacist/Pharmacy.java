@@ -10,6 +10,7 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Lob;
+import javax.persistence.ManyToMany;
 import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 
@@ -45,7 +46,10 @@ public class Pharmacy extends BaseEntity {
 	@Lob
 	public byte[] backgroundImage;
 
-	@OneToMany(cascade=CascadeType.ALL)
+	@Column(columnDefinition="TEXT")
+	public String searchIndex;
+
+	@ManyToMany(cascade=CascadeType.ALL)
 	public List<FileEntity> profileImageList = new ArrayList<FileEntity>();
 
 	@OneToMany(cascade=CascadeType.ALL)
@@ -91,6 +95,29 @@ public class Pharmacy extends BaseEntity {
 
 		return pharmacyBean;
 	}
+	int test;
 
+	@Override
+	public void save(){
+		final StringBuilder stringBuilder = new StringBuilder();
+		stringBuilder.append((this.name).toLowerCase());
+		if(this.address != null){
+			stringBuilder.append(this.address.area.toLowerCase());
+		}
+		this.searchIndex = stringBuilder.toString();
+		super.save();
+	}
+
+
+	@Override
+	public void update() {
+		final StringBuilder stringBuilder=new StringBuilder();
+		stringBuilder.append((this.name).toLowerCase());
+		if(this.address != null){
+			stringBuilder.append(this.address.area.toLowerCase());
+		}
+		this.searchIndex = stringBuilder.toString();
+		super.update();
+	}
 
 }

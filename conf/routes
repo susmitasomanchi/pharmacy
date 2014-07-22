@@ -38,6 +38,8 @@ GET    /logout                            			controllers.LoginController.process
 # Public Pages
 GET	   /doctor/search									controllers.PublicController.searchDoctorsPage()
 GET	   /doctor/search/:key								controllers.PublicController.processSearchDoctors(key: String)
+GET		/pharmacy/search 								controllers.PharmacistController.searchPhamacy()
+GET   	/pharmacy/search/:searchString                  controllers.PharmacistController.searchPharmacies(searchString: String)
 
 
 # Sign up page
@@ -78,6 +80,8 @@ POST	/pharmacy/basic-update								controllers.PharmacistController.pharmacyBasi
 POST	/pharmacy/address-update			  				controllers.PharmacistController.pharmacyAddressUpdate()
 GET		/pharmacy/get-image/:pharmacyId/:fileId				controllers.PharmacistController.getPharmacyImages(pharmacyId: Long,fileId: Long)
 GET		/pharmacy/remove-image/:pharmacyId/:fileId			controllers.PharmacistController.removeImage(pharmacyId: Long,fileId: Long)
+GET		/pharmacy/profile/:id								controllers.PharmacistController.pharmacyProfile(id: Long)
+
 
 
 # Remove later (at Beta Launch)

@@ -21,7 +21,6 @@ import models.pharmacist.Pharmacist;
 import models.pharmacist.Pharmacy;
 import models.pharmacist.ShowCasedProduct;
 import play.Logger;
-import play.data.DynamicForm;
 import play.data.Form;
 import play.mvc.Controller;
 import play.mvc.Http.MultipartFormData;
@@ -225,10 +224,6 @@ public class PharmacistController extends Controller {
 		}
 		return redirect(routes.UserActions.dashboard());
 	}
-
-
-
-
 	/**
 	 * @author lakshmi
 	 * GET /pharmacy/get-image/:pharmacyId/:fileId
@@ -249,25 +244,35 @@ public class PharmacistController extends Controller {
 		return ok(byteContent).as("image/jpeg");
 	}
 
+	/**
+	 *@author lakshmi
+	 * Action to render the pharmacy_profile page
+	 * GET		/pharmacy/profile/:id
+	 */
+	public static Result pharmacyProfile(final Long pharmacyId){
+		final Pharmacy pharmacy = Pharmacy.find.byId(pharmacyId);
+		return ok(views.html.pharmacist.pharmacy_profile.render(Pharmacy.find.byId(pharmacyId)));
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+	}
+	/**
+	 * @author lakshmi
+	 * Action to render the searchedPharmacies scala template
+	 * GET/pharmacy/search
+	 */
+	public static Result searchPhamacy(){
+		return ok(views.html.pharmacist.searchedPharmacies.render(false,"", new ArrayList<Pharmacy>()));
+	}
+	/**
+	 * @author lakshmi
+	 * Action to perform search operation for finding pharmacies based on
+	 * name and area
+	 * GET/pharmacy/search/:searchString
+	 */
+	public static Result searchPharmacies(final String searchString) {
+		final String searchStr = searchString.toLowerCase().trim();
+		final List<Pharmacy> pharmacyList = Pharmacy.find.where().like("searchIndex","%"+searchStr+"%").findList();
+		return ok(views.html.pharmacist.searchedPharmacies.render(true,searchStr,pharmacyList));
+	}
 
 
 
@@ -436,11 +441,8 @@ public class PharmacistController extends Controller {
 
 
 	/**
-	 * @author : lakshmi
-	 * 
-	 * @url:
-	 * 
-	 * descrition: handling pharmacy orders
+	 * @author lakshmi
+	 * handling pharmacy orders
 	 */
 
 	public static Result orderManagement(){
@@ -456,71 +458,6 @@ public class PharmacistController extends Controller {
 	 * POST	/pharmacy/add-product-to-showcase
 	 * @return
 	 */
-
-	/*	public static Result addShowCasedProduct(){
-		try{
-			final Map<String, String[]> requestMap = request().body().asMultipartFormData().asFormUrlEncoded();
-			final Pharmacy pharmacy = Pharmacy.find.byId(Long.parseLong(requestMap.get("pharmacyId")[0]));
-			Logger.info("map size"+requestMap);
-			final ShowCasedProduct showCasedProduct = new ShowCasedProduct();
-			if(requestMap.get("name") != null && (requestMap.get("name")[0].trim().compareToIgnoreCase("")!=0)){
-				showCasedProduct.name = requestMap.get("name")[0];
-			}
-			if(requestMap.get("description") != null && (requestMap.get("description")[0].trim().compareToIgnoreCase("")!=0)){
-				showCasedProduct.description = requestMap.get("description")[0];
-			}
-			if(requestMap.get("mrp") != null && (requestMap.get("mrp")[0].trim().compareToIgnoreCase("")!=0)){
-				showCasedProduct.mrp = Double.parseDouble(requestMap.get("mrp")[0]);
-			}
-			if (request().body().asMultipartFormData().getFiles().size() != 0) {
-
-				final List<Long> ids = new ArrayList<>();
-				final MultipartFormData body = request().body().asMultipartFormData();
-				final List<FilePart> listOfImages = body.getFiles();
-				for (final FilePart filePart : listOfImages) {
-					final FileEntity fileEntity = new FileEntity();
-					if (filePart != null) {
-						final File imageFile = filePart.getFile();
-						fileEntity.fileName = filePart.getFilename();
-						fileEntity.mimeType = filePart.getContentType();
-						fileEntity.byteContent = Files.toByteArray(imageFile);
-						fileEntity.save();
-						ids.add(fileEntity.id);
-						Logger.info(" fileEntity id==="+fileEntity.id);
-
-					}
-				}
-				for (final Long id : ids) {
-					final FileEntity fileEntity2 = FileEntity.find.byId(id);
-					showCasedProduct.showcasedImagesList.add(id);
-					//					showCasedProduct.update();
-
-				}
-				//				showCasedProduct.update();
-				Logger.info("image list size() "+showCasedProduct.showcasedImagesList.size());
-
-
-
-			}
-			pharmacy.showCaseProductList.add(showCasedProduct);
-
-			pharmacy.update();
-			Logger.info("pharmacy ID=="+pharmacy.id);
-
-			Logger.info("ShowcasedProduct list size=="+pharmacy.showCaseProductList.size());
-			Logger.info("showcased product image list=="+pharmacy.showCaseProductList.get(0).showcasedImagesList.size());
-			Logger.info("Showcase Product Id=="+showCasedProduct.id);
-			Logger.info("*******************************************************************");
-		}catch(final Exception e){
-			e.printStackTrace();
-			flash().put("alert", new Alert("alert-danger", "Sorry. Something went wrong. Please try again.").toString());
-		}
-
-		return redirect(routes.UserActions.dashboard());
-		//return ok();
-
-	}*/
-
 
 	public static Result addShowCasedProduct(){
 		try{
@@ -562,20 +499,11 @@ public class PharmacistController extends Controller {
 
 				}
 				//				showCasedProduct.update();
-				Logger.info("image list size() "+showCasedProduct.showcasedImagesList.size());
-
-
-
 			}
 			pharmacy.showCaseProductList.add(showCasedProduct);
 
 			pharmacy.update();
-			Logger.info("pharmacy ID=="+pharmacy.id);
 
-			Logger.info("ShowcasedProduct list size=="+pharmacy.showCaseProductList.size());
-			Logger.info("showcased product image list=="+pharmacy.showCaseProductList.get(0).showcasedImagesList.size());
-			Logger.info("Showcase Product Id=="+showCasedProduct.id);
-			Logger.info("*******************************************************************");
 		}catch(final Exception e){
 			e.printStackTrace();
 			flash().put("alert", new Alert("alert-danger", "Sorry. Something went wrong. Please try again.").toString());
@@ -611,14 +539,6 @@ public class PharmacistController extends Controller {
 		return redirect(routes.UserActions.dashboard());
 
 	}
-	public static Result displayImage(){
-		final Pharmacy pharmacy = LoginController.getLoggedInUser().getPharmacist().pharmacy;
-		Logger.info("PharmacyId=="+pharmacy.id);
-		final ShowCasedProduct showCasedProduct = pharmacy.showCaseProductList.get(0);
-		Logger.info("showCasedProduct id=="+showCasedProduct.id);
-		Logger.info("showcasedImagesList size()=="+showCasedProduct.showcasedImagesList.size());
-		return ok(views.html.pharmacist.displayImage.render(showCasedProduct));
-	}
 
 	public static Result getShowPharmacyImages(final Long showcaseId,final Long imageId) {
 		Logger.info("showcaseId=="+showcaseId);
@@ -634,25 +554,9 @@ public class PharmacistController extends Controller {
 		return ok(byteContent).as("image/jpeg");
 
 	}
-	public static Result searchPhamacy(){
-		return ok(views.html.doctor.searchPharmacy.render());
-
-	}
-	public static Result searchPharmacies() {
-		final DynamicForm requestData = Form.form().bindFromRequest();
-		final String searchStr = requestData.get("searchStr");
-		Logger.info("searchStr==="+searchStr);
-		final List<Pharmacy> pharmacyList = Pharmacy.find.where().like("name",searchStr+"%").findList();
-		Logger.info("pharmacyList+"+pharmacyList.size());
-
-		return ok(views.html.doctor.searchedPharmacies.render(pharmacyList));
-	}
 
 
-	public static Result pharmacyProfile(final Long pharmacyId){
-		final Pharmacy pharmacy = Pharmacy.find.byId(pharmacyId);
-		return ok(views.html.pharmacist.pharmacy_profile.render(Pharmacy.find.byId(pharmacyId)));
 
-	}
+
 
 }
