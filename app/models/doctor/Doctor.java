@@ -116,7 +116,6 @@ public class Doctor extends BaseEntity{
 				stringBuilder.append(clinicInfo.clinic.name.toLowerCase());
 			}
 		}
-		this.updateSlugUrl();
 		stringBuilder.append(this.appUser.name.toLowerCase()).append(this.specialization.toLowerCase()).append(this.degree.toLowerCase()).append(this.slugUrl.toLowerCase());
 		this.searchIndex = stringBuilder.toString();
 		super.save();
@@ -136,8 +135,6 @@ public class Doctor extends BaseEntity{
 		super.update();
 	}
 
-	public void updateSlugUrl(){
-		this.slugUrl=this.appUser.name.toLowerCase();
-	}
+	
 
 }

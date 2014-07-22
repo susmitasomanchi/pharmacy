@@ -36,7 +36,7 @@ public class PublicController extends Controller{
 		final String cleanKey = slugUrl.trim().toLowerCase();
 		final Doctor doctor = Doctor.find.where().like("searchIndex","%"+cleanKey+"%").findUnique();
 
-		return ok(views.html.doctor.doctorProfile.render(doctor));
+		return ok(views.html.doctor.publicDoctorProfile.render(doctor));
 	}
 
 
