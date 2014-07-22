@@ -21,6 +21,7 @@ import models.pharmacist.Pharmacist;
 import models.pharmacist.Pharmacy;
 import models.pharmacist.ShowCasedProduct;
 import play.Logger;
+import play.data.DynamicForm;
 import play.data.Form;
 import play.mvc.Controller;
 import play.mvc.Http.MultipartFormData;
@@ -547,7 +548,25 @@ public class PharmacistController extends Controller {
 		return ok(byteContent).as("image/jpeg");
 
 	}
+	public static Result searchPhamacy(){
+		return ok(views.html.doctor.searchPharmacy.render());
+
+	}
+	public static Result searchPharmacies() {
+		final DynamicForm requestData = Form.form().bindFromRequest();
+		final String searchStr = requestData.get("searchStr");
+		Logger.info("searchStr==="+searchStr);
+		final List<Pharmacy> pharmacyList = Pharmacy.find.where().like("name",searchStr+"%").findList();
+		Logger.info("pharmacyList+"+pharmacyList.size());
+
+		return ok(views.html.doctor.searchedPharmacies.render(pharmacyList));
+	}
 
 
+	public static Result pharmacyProfile(final Long pharmacyId){
+		final Pharmacy pharmacy = Pharmacy.find.byId(pharmacyId);
+		return ok(views.html.pharmacist.pharmacy_profile.render(Pharmacy.find.byId(pharmacyId)));
+
+	}
 
 }

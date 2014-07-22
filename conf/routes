@@ -93,8 +93,8 @@ GET    /scheduleappointment/              		controllers.AppointmentController.fo
 POST   /scheduleappointment/              		controllers.AppointmentController.process()			
 
 #Pharmacy Module
-
-
+GET	/pharmacy/search 										controllers.PharmacistController.searchPhamacy()
+GET   	/pharmacy/search/:str                      	controllers.PharmacistController.searchPharmacies(str: Long)
 GET   	/edit-product/:id                      	controllers.PharmacistController.editProduct(id: Long)
 POST	/addProductToInventory/					controllers.PharmacistController.addProductForm(id: Long)
 POST    /addProductToInventory1/            		controllers.PharmacistController.addToInventory(id:Long)		
@@ -113,6 +113,7 @@ POST	/pharmacy/upload-pharmacy-images					controllers.PharmacistController.uploa
 GET		/pharmacy/get-image/:pharmacyId/:fileId				controllers.PharmacistController.getPharmacyImages(pharmacyId: Long,fileId: Long)
 GET		/pharmacy/remove-image/:pharmacyId/:fileId			controllers.PharmacistController.removeImage(pharmacyId: Long,fileId: Long)
 GET		/pharmacy/order/:id						controllers.PharmacistController.pharmacyPlaceOrder(id: Long)
+GET		/pharmacy/profile						controllers.PharmacistController.pharmacyProfile(id: Long)
 
 GET 	/pharmacy/order									controllers.PharmacistController.orderManagement()
 
