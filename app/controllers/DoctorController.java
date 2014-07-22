@@ -615,17 +615,13 @@ public class DoctorController extends Controller {
 	 * GET /doctor/edit-clinic-info/:id
 	 */
 	public static Result editClinicInfo(final Long docClinicId) {
-
 		final DoctorClinicInfo doctorClinicInfo=DoctorClinicInfo.find.byId(docClinicId);
 		//server-side check
 		if(doctorClinicInfo.doctor.id.longValue() != LoginController.getLoggedInUser().getDoctor().id.longValue()){
 			return redirect(routes.LoginController.processLogout());
 		}
-		final DoctorClinicInfoBean bean = doctorClinicInfo.toBean();
 		final Form<DoctorClinicInfoBean> filledForm = clinicForm.fill(doctorClinicInfo.toBean());
 		return ok(views.html.doctor.editClinicInfo.render(filledForm));
-
-
 	}
 
 	/**
@@ -670,7 +666,7 @@ public class DoctorController extends Controller {
 			clinicInfoPrevious.clinic.name = clinicInfo.clinic.name;
 			clinicInfoPrevious.clinic.contactNo=clinicInfo.clinic.contactNo;
 			clinicInfoPrevious.clinic.contactPersonName=clinicInfo.clinic.contactPersonName;
-			clinicInfoPrevious.clinic.address.addrressLine1=clinicInfo.clinic.address.addrressLine1;
+			clinicInfoPrevious.clinic.address.addressLine1=clinicInfo.clinic.address.addressLine1;
 			clinicInfoPrevious.clinic.address.area=clinicInfo.clinic.address.area;
 			clinicInfoPrevious.clinic.address.state=clinicInfo.clinic.address.state;
 			clinicInfoPrevious.clinic.address.city=clinicInfo.clinic.address.city;

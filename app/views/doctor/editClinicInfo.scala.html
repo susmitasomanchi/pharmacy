@@ -67,9 +67,9 @@
     			 <select data-placeholder="Select the state" name="state" class="form-control chosen-select">
   				 	@for((state,state1) <-State.options()){
   				 		@if(state.equals(clinicForm("state").value)){
-  				 			<option value="@state" selected>@state</option>
+  				 			<option value="@state" selected>@state1</option>
   				 		}else{
-  				 		  				 	<option value="@state">@state</option>
+							<option value="@state">@state1</option>
   				 		}
 					}
 				</select>

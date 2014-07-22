@@ -189,7 +189,7 @@ style="color:#006687; font-size:20px; position:relative; top:-20px; cursor:point
 <div class="col-md-5">
 @if(diagnosticCentre.address != null){
 <h5>@diagnosticCentre.contactPerson<span data-toggle="modal" data-target="#myaddrModal" style="cursor:pointer; position:relative; left: 20px; font-size:20px;"><i id="spinner2" class="fa fa-cog"></i></span></h5>
-<h5>@diagnosticCentre.address.addrressLine1</h5>
+<h5>@diagnosticCentre.address.addressLine1</h5>
 <h5>@diagnosticCentre.address.area</h5>
 <h5>@diagnosticCentre.address.city</h5>
 @if(diagnosticCentre.address.state != null){
@@ -401,7 +401,7 @@ $("#city").blur(function() {
  			</div>
   			<div class="form-group">
     			<label for="streetName">Street Address</label>
-    			<input type="text" class="form-control" name="addressLine1" @if(diagnosticCentre.address!=null){value="@diagnosticCentre.address.addrressLine1"} id="streetName" placeholder="Enter Street Address">
+    			<input type="text" class="form-control" name="addressLine1" @if(diagnosticCentre.address!=null){value="@diagnosticCentre.address.addressLine1"} id="streetName" placeholder="Enter Street Address">
   			</div>
   			<div class="form-group">
     			<label for="city">Area</label>

@@ -5,7 +5,7 @@
 @import helper._
 
 
-@main("Update Clinic Schedule"){
+@main("Update Clinic Schedule At "+clinicForm("name").value){
 	<script src="@routes.Assets.at("javascripts/bootstrap-timepicker.min.js")" type="text/javascript"></script>
 	<link rel="stylesheet" media="screen" href="@routes.Assets.at("stylesheets/bootstrap-timepicker.min.css")">
 	
@@ -17,8 +17,8 @@
 	
 	<script>
 	$(document).ready(function() {
-	$("#patient").hide();
-	$("#medicalrep").hide();
+		$("#patient").hide();
+		$("#medicalrep").hide();
 	});
 	</script>
 	

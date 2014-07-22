@@ -179,7 +179,7 @@ public class DiagnosticController extends Controller {
 				diagnosticCentre.contactPerson = requestMap.get("contactPerson")[0];
 			}
 			if(requestMap.get("addressLine1") != null && (requestMap.get("addressLine1")[0].trim().compareToIgnoreCase("")!=0)){
-				diagnosticCentre.address.addrressLine1 = requestMap.get("addressLine1")[0];
+				diagnosticCentre.address.addressLine1 = requestMap.get("addressLine1")[0];
 			}
 
 			if(requestMap.get("city") != null && (requestMap.get("city")[0].trim().compareToIgnoreCase("")!=0)){

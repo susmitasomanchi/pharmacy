@@ -13,13 +13,11 @@ package controllers;
 
 import models.Alert;
 import models.AppUser;
-import models.Patient;
 import models.Role;
 import models.diagnostic.DiagnosticCentre;
 import models.diagnostic.DiagnosticRepresentative;
 import models.doctor.Doctor;
 import models.mr.MedicalRepresentative;
-import models.mr.PharmaceuticalCompany;
 import models.pharmacist.Pharmacist;
 import models.pharmacist.Pharmacy;
 import play.data.Form;
@@ -38,11 +36,28 @@ public class UserController extends Controller {
 
 
 	/**
-	 * Action to render the joinUs page (for Doctors)
-	 * GET    /join
+	 * Action to render the joinUs page for Doctor
+	 * GET    /doctor/join
 	 */
-	public static Result joinUs(){
-		return ok(views.html.joinus.render());
+	public static Result joinUsDoctor(){
+		return ok(views.html.doctor.joinus.render());
+	}
+
+
+	/**
+	 * Action to render the joinUs page for Pharmacy
+	 * GET    /pharmacy/join
+	 */
+	public static Result joinUsPharmacy(){
+		return ok(views.html.pharmacist.joinus.render());
+	}
+
+	/**
+	 * Action to render the joinUs page for Diagnostic Centre
+	 * GET    /diagnostic/join
+	 */
+	public static Result joinUsDiagnostic(){
+		return ok(views.html.diagnostic.joinus.render());
 	}
 
 
@@ -60,26 +75,15 @@ public class UserController extends Controller {
 
 		if(AppUser.find.where().eq("email", appUser.email).findRowCount()>0){
 			flash().put("alert", new Alert("alert-danger", "Sorry! User with email id "+appUser.email.trim()+" already exists!").toString());
-			return redirect(routes.UserController.joinUs());
+			if(appUser.role == Role.DOCTOR){
+				return redirect(routes.UserController.joinUsDoctor());
+			}
+			if(appUser.role == Role.ADMIN_PHARMACIST){
+				return redirect(routes.UserController.joinUsPharmacy());
+			}
 		}
 
 		appUser.save();
-
-		if(appUser.role == Role.ADMIN_MR){
-
-			final MedicalRepresentative medicalRepresentative = new MedicalRepresentative();
-			final PharmaceuticalCompany pharmaCompany = new PharmaceuticalCompany();
-			medicalRepresentative.appUser = appUser;
-			medicalRepresentative.save();
-			pharmaCompany.name = request().body().asFormUrlEncoded().get("pharmaceuticalCompanyName")[0].trim();
-			pharmaCompany.mrList.add(medicalRepresentative);
-			//pharmaCompany.appuserid=appUser.id;
-			pharmaCompany.save();
-			medicalRepresentative.pharmaceuticalCompany = pharmaCompany;
-			medicalRepresentative.update();
-
-		}
-
 
 		if(appUser.role.equals(Role.DOCTOR)){
 			final Doctor doctor = new Doctor();
@@ -102,10 +106,17 @@ public class UserController extends Controller {
 			pharmacist.update();
 		}
 
-		if(appUser.role.equals(Role.PATIENT)){
-			final Patient patient= new Patient();
-			patient.appUser = appUser;
-			patient.save();
+		if(appUser.role.equals(Role.ADMIN_DIAGREP)){
+			final DiagnosticRepresentative diagnosticRepresentative = new DiagnosticRepresentative();
+			diagnosticRepresentative.appUser = appUser;
+			diagnosticRepresentative.save();
+
+			final DiagnosticCentre diagnosticCentre = new DiagnosticCentre();
+			diagnosticCentre.name = request().body().asFormUrlEncoded().get("diagnosticCentreName")[0];
+			diagnosticCentre.diagnosticRepAdmin = diagnosticRepresentative;
+			diagnosticCentre.save();
+			diagnosticRepresentative.diagnosticCentre = diagnosticCentre;
+			diagnosticRepresentative.update();
 		}
 		if(appUser.role.equals(Role.ADMIN_DIAGREP)){
 			final DiagnosticRepresentative diagnosticRepresentative = new DiagnosticRepresentative();
@@ -123,7 +134,6 @@ public class UserController extends Controller {
 		session().clear();
 		session(Constants.LOGGED_IN_USER_ID, appUser.id + "");
 		session(Constants.LOGGED_IN_USER_ROLE, appUser.role+ "");
-
 		return redirect(routes.UserActions.dashboard());
 	}
 
