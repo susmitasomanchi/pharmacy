@@ -4,7 +4,7 @@
 #Blog
 
 GET    /blog/create-blog-admin                     controllers.SampleDataController.createBlogAdmin()
-GET    /login	                                 controllers.LoginController.blogAdminLoginForm()
+GET    /login	                                 controllers.LoginController.loginForm()
 
 GET		/blog										controllers.BlogController.blogHome()
 GET		/blog/admin/new-category					controllers.BlogController.categoryForm()
@@ -34,6 +34,9 @@ GET		/sitemap.xml								controllers.Application.sitemap()
 GET    /                                 			controllers.Application.index()
 POST   /login                             			controllers.LoginController.processLogin()
 GET    /logout                            			controllers.LoginController.processLogout()
+GET    /edit-password                            	controllers.LoginController.editPassword()
+POST   /update-password                            	controllers.LoginController.updatePassword()
+
 
 # Public Pages
 GET	   /doctor/search									controllers.PublicController.searchDoctorsPage()

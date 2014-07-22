@@ -306,10 +306,10 @@
 			<!--
 			<li><a href="/user/preferences"><i class="fa fa-gears"></i>&nbsp;&nbsp;Preferences</a></li>
 			<li><a href="/doctor-profile"><i class="fa fa-gears"></i>&nbsp;&nbsp;My Profile</a></li>
-			<li class="divider"></li>
-			<li><a href="/change-password"><i class="fa fa-lock"></i>&nbsp;&nbsp;Change Password</a></li>
 			-->
-			<li><a href="/logout"><i class="fa fa-sign-out"></i>&nbsp;&nbsp;Logout</a></li>
+			<li><a href="@routes.LoginController.editPassword()"><i class="fa fa-lock"></i>&nbsp;&nbsp;Change Password</a></li>
+			<li class="divider"></li>
+			<li><a href="@routes.LoginController.processLogout()"><i class="fa fa-sign-out"></i>&nbsp;&nbsp;Logout</a></li>
 		</ul>
 		</li>
 		} else {

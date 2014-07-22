@@ -63,29 +63,62 @@ public class DoctorController extends Controller {
 			}
 
 			if(requestMap.get("fullname") != null && !(requestMap.get("fullname")[0].trim().isEmpty())){
-				doctor.appUser.name = requestMap.get("fullname")[0];
+				doctor.appUser.name = requestMap.get("fullname")[0].trim();
 			}
 
 			if(requestMap.get("specialization") != null && !(requestMap.get("specialization")[0].trim().isEmpty())){
-				doctor.specialization = requestMap.get("specialization")[0];
+				doctor.specialization = requestMap.get("specialization")[0].trim();
 			}
 
 			if(requestMap.get("degree") != null && !(requestMap.get("degree")[0].trim().isEmpty())){
-				doctor.degree = requestMap.get("degree")[0];
+				doctor.degree = requestMap.get("degree")[0].trim();
+			}
+
+			if(requestMap.get("expYear") != null && !(requestMap.get("expYear")[0].trim().isEmpty())){
+				doctor.experience = Integer.parseInt(requestMap.get("expYear")[0].trim());
 			}
 
 			if(requestMap.get("description") != null && !(requestMap.get("description")[0].trim().isEmpty())){
-				doctor.description = requestMap.get("description")[0];
+				doctor.description = requestMap.get("description")[0].trim();
+			}
+
+			if(requestMap.get("email") != null && !(requestMap.get("email")[0].trim().isEmpty())){
+				final String oldEmail = doctor.appUser.email;
+				if(oldEmail.trim().compareToIgnoreCase(requestMap.get("email")[0].trim()) != 0){
+					doctor.appUser.email = requestMap.get("email")[0].trim().toLowerCase();
+					doctor.appUser.emailConfirmed = false;
+				}
+			}
+
+			if(requestMap.get("mobileNumber") != null && !(requestMap.get("mobileNumber")[0].trim().isEmpty())){
+				final Long oldNumber = doctor.appUser.mobileNumber;
+				final Long newNumber = Long.parseLong(requestMap.get("mobileNumber")[0].trim());
+				if(oldNumber == null || (oldNumber.longValue() != newNumber.longValue())){
+					doctor.appUser.mobileNumber = Long.parseLong(requestMap.get("mobileNumber")[0].trim());
+					doctor.appUser.mobileNumberConfirmed = false;
+				}
+			}
+
+			if(requestMap.get("registrationNumber") != null && !(requestMap.get("registrationNumber")[0].trim().isEmpty())){
+				doctor.registrationNumber = requestMap.get("registrationNumber")[0].trim();
 			}
 
 			doctor.appUser.update();
 			doctor.update();
-			return ok("0");
+			//return ok("0");
+			return redirect(routes.UserActions.dashboard());
+		}
+		catch (final NumberFormatException e){
+			Logger.error("ERROR WHILE UPDATING BASIC DOCTOR INFO");
+			e.printStackTrace();
+			flash().put("alert", new Alert("alert-danger", "Sorry! Numbers could not be read. Please try again.").toString());
+			return redirect(routes.UserActions.dashboard());
 		}
 		catch (final Exception e){
 			Logger.error("ERROR WHILE UPDATING BASIC DOCTOR INFO");
 			e.printStackTrace();
-			return ok("-1");
+			flash().put("alert", new Alert("alert-danger", "Sorry! Something went wrong. Please try again.").toString());
+			return redirect(routes.UserActions.dashboard());
 		}
 	}
 

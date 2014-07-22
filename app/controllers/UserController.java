@@ -11,6 +11,15 @@ PLEASE DO NOT MODIFY IT BY HAND
  *****/
 package controllers;
 
+import java.security.MessageDigest;
+import java.security.SecureRandom;
+import java.util.Calendar;
+import java.util.Date;
+import java.util.Random;
+
+import org.apache.commons.codec.binary.Base64;
+
+
 import models.Alert;
 import models.AppUser;
 import models.Role;
@@ -20,6 +29,7 @@ import models.doctor.Doctor;
 import models.mr.MedicalRepresentative;
 import models.pharmacist.Pharmacist;
 import models.pharmacist.Pharmacy;
+import play.Logger;
 import play.data.Form;
 import play.mvc.Controller;
 import play.mvc.Result;
@@ -69,8 +79,28 @@ public class UserController extends Controller {
 	public static Result processJoinUs(){
 		final AppUser appUser = new AppUser();
 		appUser.name = request().body().asFormUrlEncoded().get("fullname")[0].trim();
-		appUser.email = request().body().asFormUrlEncoded().get("email")[0].trim();
-		appUser.password = request().body().asFormUrlEncoded().get("password")[0].trim();
+		appUser.email = request().body().asFormUrlEncoded().get("email")[0].toLowerCase().trim();
+		final String password = request().body().asFormUrlEncoded().get("password")[0].trim();
+		try {
+
+			final Random random = new SecureRandom();
+			final byte[] saltArray = new byte[32];
+			random.nextBytes(saltArray);
+			final String randomSalt = Base64.encodeBase64String(saltArray);
+
+			final String passwordWithSalt = password+randomSalt;
+			final MessageDigest sha256 = MessageDigest.getInstance("SHA-256");
+			final byte[] passBytes = passwordWithSalt.getBytes();
+			final String hashedPasswordWithSalt = Base64.encodeBase64String(sha256.digest(passBytes));
+
+			appUser.salt = randomSalt;
+			appUser.password = hashedPasswordWithSalt;
+
+		} catch (final Exception e) {
+			Logger.error("ERROR WHILE CREATING SHA2 HASH");
+			e.printStackTrace();
+		}
+
 		appUser.role = Role.valueOf(request().body().asFormUrlEncoded().get("role")[0]);
 
 		if(AppUser.find.where().eq("email", appUser.email).findRowCount()>0){
@@ -89,6 +119,12 @@ public class UserController extends Controller {
 			final Doctor doctor = new Doctor();
 			doctor.specialization = "Specialization";
 			doctor.degree = "Degree";
+			final Calendar cal = Calendar.getInstance();
+			cal.setTime(new Date());
+			doctor.experience = cal.get(Calendar.YEAR);
+			doctor.registrationNumber = "00000";
+			appUser.mobileNumber = 9999999999L;
+			appUser.update();
 			doctor.appUser = appUser;
 			doctor.save();
 		}

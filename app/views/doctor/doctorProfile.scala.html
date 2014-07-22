@@ -253,11 +253,17 @@ a.prev span, a.next span {
 </style>
 
 
-<form style="display:none" id="basicinfoform">
+<form style="display:none" id="basicinfoform" action="@routes.DoctorController.basicUpdate()" method="POST">
 <input type="hidden" name="doctorId" value="@doctor.id">
 <input id="fullname" type="hidden" name="fullname" value="">
 <input id="specialization" type="hidden" name="specialization" value="">
 <input id="degree" type="hidden" name="degree" value="">
+
+<input id="email" type="hidden" name="email" value="">
+<input id="mobileNumber" type="hidden" name="mobileNumber" value="">
+<input id="expYear" type="hidden" name="expYear" value="">
+<input id="registrationNumber" type="hidden" name="registrationNumber" value="">
+
 <input id="description" type="hidden" name="description" value="">
 </form>
 
@@ -304,11 +310,15 @@ function submitbasicform(name){
 	$('#spinner-'+name).addClass( "fa-spin" );
 	$('#'+name).val($('#new-'+name).val());
 
-	$.post("@routes.DoctorController.basicUpdate()",$('#basicinfoform').serialize(),function(data){
-		if(data == 0){
-			window.location.href='';
-		}
-	});
+	//$.post("@routes.DoctorController.basicUpdate()",$('#basicinfoform').serialize()
+		//,function(data){
+		//if(data == 0){
+		//	window.location.href='';
+		//}
+		//}
+	//);
+
+	$('#basicinfoform').submit();
 }
 
 function submitimagesform(name){
@@ -321,11 +331,11 @@ function submitimagesform(name){
 @if(doctor.backgroundImage != null){
 	<div style="background-image:url('@routes.DoctorController.getImage(doctor.id,"backgroundImage")');background-repeat:no-repeat; background-size:940px 400px; height:400px; font-size:40px;">
 }else{
-	<div style="background-image:url('/assets/images/sunrise.png'); height:400px; font-size:40px;">
+	<div style="background-image:url('/assets/images/sunrise.png'); background-repeat:no-repeat; background-size:940px 400px; height:400px; font-size:40px;">
 }
-<span data-toggle="popover" data-placement="left" title="Change Background Image" data-html="true" data-content="<form action=&quot;@routes.DoctorController.imagesUpdate()&quot; enctype=&quot;multipart/form-data&quot; method=&quot;POST&quot;><input type=&quot;file&quot; name=&quot;backgroundimage&quot;> <input type=&quot;hidden&quot; name=&quot;doctorId&quot; value=&quot;@doctor.id&quot;> <br><input class=&quot;pull-right btn btn-xs btn-primary&quot; type=&quot;submit&quot; onclick=&quot;submitimagesform('backgroundimage');&quot; value=&quot;save&quot;></form>" style="cursor:pointer; position:relative; top:-5px; left:900px;"><i id="spinner-backgroundimage" class="fa fa-cog"></i></span>
+<span data-toggle="popover" data-placement="left" title="Change Background Image" data-html="true" data-content="<form action=&quot;@routes.DoctorController.imagesUpdate()&quot; enctype=&quot;multipart/form-data&quot; method=&quot;POST&quot;><input type=&quot;file&quot; name=&quot;backgroundimage&quot;> <input type=&quot;hidden&quot; name=&quot;doctorId&quot; value=&quot;@doctor.id&quot;> <br><input class=&quot;pull-right btn btn-xs btn-primary&quot; type=&quot;submit&quot; onclick=&quot;submitimagesform('backgroundimage');&quot; value=&quot;save&quot;></form>" style="cursor:pointer; position:relative; top:-5px; left:900px; text-shadow:1px 1px 20px white, 3px 3px 20px white;"><i id="spinner-backgroundimage" class="fa fa-cog"></i></span>
 </div>
-<div class="row" style="margin-top:-150px">
+<div class="row" style="margin-top:-170px">
 <div class="col-md-1" style="width:5%"></div>
 <div class="col-md-4" >
 <br>
@@ -335,19 +345,25 @@ function submitimagesform(name){
 	<img src="/assets/images/doctor.png" style="width:250px; height:275px;" class="thumbnail"/>
 }
 
-<span data-toggle="popover" title="Change Profile Pic" data-html="true" data-content="<form action=&quot;@routes.DoctorController.imagesUpdate()&quot; enctype=&quot;multipart/form-data&quot; method=&quot;POST&quot;><input type=&quot;file&quot; name=&quot;profileimage&quot;> <input type=&quot;hidden&quot; name=&quot;doctorId&quot; value=&quot;@doctor.id&quot;> <br><input class=&quot;pull-right btn btn-xs btn-primary&quot; type=&quot;submit&quot; onclick=&quot;submitimagesform('profileimage');&quot; value=&quot;save&quot;></form>" style="font-size:20px; position:relative; top:-295px; left:228px; cursor:pointer;"><i id="spinner-profileimage" class="fa fa-cog"></i></span>
+<span data-toggle="popover" title="Change Profile Pic" data-html="true" data-content="<form action=&quot;@routes.DoctorController.imagesUpdate()&quot; enctype=&quot;multipart/form-data&quot; method=&quot;POST&quot;><input type=&quot;file&quot; name=&quot;profileimage&quot;> <input type=&quot;hidden&quot; name=&quot;doctorId&quot; value=&quot;@doctor.id&quot;> <br><input class=&quot;pull-right btn btn-xs btn-primary&quot; type=&quot;submit&quot; onclick=&quot;submitimagesform('profileimage');&quot; value=&quot;save&quot;></form>" style="font-size:20px; position:relative; top:-295px; left:228px; cursor:pointer; text-shadow:1px 1px 20px white, 3px 3px 20px white;"><i id="spinner-profileimage" class="fa fa-cog"></i></span>
 </div>
 <div class="col-md-6">
-<h2><span style="text-shadow:1px 1px 20px #292929, 3px 3px 20px white;"><b> Dr. @doctor.appUser.name </b></span><span data-toggle="popover" title="Edit Name" data-html="true" data-content="<input id=&quot;new-fullname&quot; style=&quot;color:#292929; font-weight:bold;&quot; type=&quot;text&quot; value=&quot;@doctor.appUser.name&quot;><br><a class=&quot;pull-right btn btn-xs btn-primary&quot; onclick=&quot;submitbasicform('fullname');&quot; >save</a> " style="cursor:pointer; position:relative; font-size:15px; top:-15px;"><i id="spinner-fullname" class="fa fa-cog"></i></span></h2>
-<h3><span style="text-shadow:1px 1px 20px #292929, 3px 3px 20px white;">@doctor.specialization</span><span data-toggle="popover" title="Edit Specialization" data-html="true" data-content="<input id=&quot;new-specialization&quot; style=&quot;color:#292929; font-weight:bold;&quot; type=&quot;text&quot; value=&quot;@doctor.specialization&quot;><br><a class=&quot;pull-right btn btn-xs btn-primary&quot; onclick=&quot;submitbasicform('specialization');&quot; >save</a> " style="cursor:pointer; position:relative; font-size:15px; top:-10px;"><i id="spinner-specialization" class="fa fa-cog"></i></span></h3>
-<h4><span style="text-shadow:1px 1px 20px #292929, 3px 3px 20px white;">@doctor.degree</span><span data-toggle="popover" title="Edit Degree" data-html="true" data-content="<input id=&quot;new-degree&quot; style=&quot;color:#292929; font-weight:bold;&quot; type=&quot;text&quot; value=&quot;@doctor.degree&quot;><br><a class=&quot;pull-right btn btn-xs btn-primary&quot; onclick=&quot;submitbasicform('degree');&quot; >save</a> " style="cursor:pointer; position:relative; font-size:15px; top:-10px;"><i id="spinner-degree" class="fa fa-cog"></i></span></h4>
-<br>
 
-<!--
-<h5>Brand Name</h5>
-<h5>Main Clinic: <br><br><br></h5>
-<h5>Phone nos: 9999999999 </h5><br>
--->
+<h2><span style="text-shadow:1px 1px 20px white, 3px 3px 20px white;"><b> Dr. @doctor.appUser.name </b></span><span data-toggle="popover" title="Edit Name" data-html="true" data-content="<input id=&quot;new-fullname&quot; style=&quot;color:#292929; font-weight:bold;&quot; type=&quot;text&quot; value=&quot;@doctor.appUser.name&quot;><br><a class=&quot;pull-right btn btn-xs btn-primary&quot; onclick=&quot;submitbasicform('fullname');&quot; >save</a> " style="cursor:pointer; position:relative; font-size:15px; top:-15px; text-shadow:1px 1px 20px white, 3px 3px 20px white;"><i id="spinner-fullname" class="fa fa-cog"></i></span></h2>
+
+<h3><span style="text-shadow:1px 1px 20px white, 3px 3px 20px white;">@doctor.specialization</span><span data-toggle="popover" title="Edit Specialization" data-html="true" data-content="<input id=&quot;new-specialization&quot; style=&quot;color:#292929; font-weight:bold;&quot; type=&quot;text&quot; value=&quot;@doctor.specialization&quot;><br><a class=&quot;pull-right btn btn-xs btn-primary&quot; onclick=&quot;submitbasicform('specialization');&quot; >save</a> " style="cursor:pointer; position:relative; font-size:15px; top:-10px; text-shadow:1px 1px 20px white, 3px 3px 20px white;"><i id="spinner-specialization" class="fa fa-cog"></i></span></h3>
+
+<h4><span style="text-shadow:1px 1px 20px white, 3px 3px 20px white;">@doctor.degree</span><span data-toggle="popover" title="Edit Degree" data-html="true" data-content="<input id=&quot;new-degree&quot; style=&quot;color:#292929; font-weight:bold;&quot; type=&quot;text&quot; value=&quot;@doctor.degree&quot;><br><a class=&quot;pull-right btn btn-xs btn-primary&quot; onclick=&quot;submitbasicform('degree');&quot; >save</a> " style="cursor:pointer; position:relative; font-size:15px; top:-10px; text-shadow:1px 1px 20px white, 3px 3px 20px white;"><i id="spinner-degree" class="fa fa-cog"></i></span></h4>
+
+<h4><span style="text-shadow:1px 1px 20px white, 3px 3px 20px white;">Experience: @doctor.getYearsOfExperience() years</span><span data-toggle="popover" title="Calculate Experience From (Year)" data-html="true" data-content="<input id=&quot;new-expYear&quot; style=&quot;color:#292929; font-weight:bold;&quot; type=&quot;text&quot; value=&quot;@doctor.experience&quot;><br><a class=&quot;pull-right btn btn-xs btn-primary&quot; onclick=&quot;submitbasicform('expYear');&quot; >save</a> " style="cursor:pointer; position:relative; font-size:15px; top:-10px; text-shadow:1px 1px 20px white, 3px 3px 20px white;"><i id="spinner-expYear" class="fa fa-cog"></i></span></h4>
+
+<h4><span style=""><span style="text-shadow:1px 1px 20px white, 3px 3px 20px white;">@doctor.appUser.email </span><a data-toggle="popover" data-html="true" data-content="Your email is used for identifying you and for mailing updates, notifications and other information related to your account.<br> It will not be visible on your profile page." style="cursor:pointer;font-size:16px;">(private)</a></span><span data-toggle="popover" title="Edit Email" data-html="true" data-content="<input id=&quot;new-email&quot; style=&quot;color:#292929; font-weight:bold;&quot; type=&quot;text&quot; value=&quot;@doctor.appUser.email&quot;><br><a class=&quot;pull-right btn btn-xs btn-primary&quot; onclick=&quot;submitbasicform('email');&quot; >save</a> " style="cursor:pointer; position:relative; font-size:15px; top:-10px; text-shadow:1px 1px 20px white, 3px 3px 20px white;"><i id="spinner-email" class="fa fa-cog"></i></span></h4>
+
+<h4><span style=""><span style="text-shadow:1px 1px 20px white, 3px 3px 20px white;">@doctor.appUser.mobileNumber </span><a data-toggle="popover" data-html="true" data-content="Your Mobile Number is used for sending you notifications, updates and other information related to your account.<br> It will not be visible on your profile page." style="cursor:pointer;font-size:16px;">(private)</a></span><span data-toggle="popover" title="Edit Mobile Number" data-html="true" data-content="<input id=&quot;new-mobileNumber&quot; style=&quot;color:#292929; font-weight:bold;&quot; type=&quot;text&quot; value=&quot;@doctor.appUser.mobileNumber&quot;><br><a class=&quot;pull-right btn btn-xs btn-primary&quot; onclick=&quot;submitbasicform('mobileNumber');&quot; >save</a> " style="cursor:pointer; position:relative; font-size:15px; top:-10px; text-shadow:1px 1px 20px white, 3px 3px 20px white;"><i id="spinner-mobileNumber" class="fa fa-cog"></i></span></h4>
+
+<h4><span style=""><span style="text-shadow:1px 1px 20px white, 3px 3px 20px white;">Reg. No: @doctor.registrationNumber </span><a data-toggle="popover" data-html="true" data-content="Registration number is used for verfication purposes.<br> It will not be visible on your profile page." style="cursor:pointer;font-size:16px;">(private)</a></span><span data-toggle="popover" title="Edit Registration Number" data-html="true" data-content="<input id=&quot;new-registrationNumber&quot; style=&quot;color:#292929; font-weight:bold;&quot; type=&quot;text&quot; value=&quot;@doctor.registrationNumber&quot;><br><a class=&quot;pull-right btn btn-xs btn-primary&quot; onclick=&quot;submitbasicform('registrationNumber');&quot; >save</a> " style="cursor:pointer; position:relative; font-size:15px; top:-10px; text-shadow:1px 1px 20px white, 3px 3px 20px white;"><i id="spinner-registrationNumber" class="fa fa-cog"></i></span></h4>
+
+<br>
 
 
 <br><br>
@@ -358,7 +374,7 @@ function submitimagesform(name){
 </div>	
 <div class="alert alert-success">
 <span data-toggle="popover" title="Brief Professional Description" data-placement="left" data-html="true" data-content="<textarea placeholder=&quot;I am...&quot; id=&quot;new-description&quot; rows=&quot;12&quot; cols=&quot;25&quot; style=&quot;color:#292929; font-weight:bold;&quot; >@doctor.description</textarea><br><a class=&quot;pull-right btn btn-xs btn-primary&quot; onclick=&quot;submitbasicform('description');&quot; >save</a> " style="cursor:pointer; position:relative; font-size:15px; top:-10px; left:905px;"><i id="spinner-description" class="fa fa-cog"></i></span>
-<p style="font-size:1.5em; align:justify; margin-top:-20px;">
+<p style="font-size:1.5em; text-align:justify; margin-top:-15px;">
 	@doctor.description
 </p>
 
