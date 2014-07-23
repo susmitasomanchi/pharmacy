@@ -2,7 +2,6 @@ package controllers;
 
 import java.util.List;
 import java.util.Map;
-
 import models.Alert;
 import models.Product;
 import models.Role;

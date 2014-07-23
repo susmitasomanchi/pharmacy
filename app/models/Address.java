@@ -4,7 +4,6 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-
 import play.data.validation.Constraints.Required;
 
 @SuppressWarnings("serial")
@@ -16,11 +15,11 @@ public class Address extends BaseEntity {
 	public  Long id;
 
 	@Required
-	public String addrressLine1;
+	public String addressLine1;
 
-	public String addrressLine2;
+	public String addressLine2;
 
-	public String addrressLine3;
+	public String addressLine3;
 
 	public String area;
 

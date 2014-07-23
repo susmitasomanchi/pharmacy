@@ -28,17 +28,10 @@ public class Pharmacy extends BaseEntity {
 
 	public String name;
 
-	public String testField;
-
-
-	@Lob
-	public byte[] backgroundImage;
-
-	@OneToMany(cascade=CascadeType.ALL)
-	public List<FileEntity> profileImageList = new ArrayList<FileEntity>();
-
 	@OneToOne
 	public Address address;
+
+	public String contactPerson;
 
 	public String contactNo;
 
@@ -47,6 +40,12 @@ public class Pharmacy extends BaseEntity {
 
 	@OneToOne
 	public Pharmacist adminPharmacist;
+
+	@Lob
+	public byte[] backgroundImage;
+
+	@OneToMany(cascade=CascadeType.ALL)
+	public List<FileEntity> profileImageList = new ArrayList<FileEntity>();
 
 	@OneToMany(cascade=CascadeType.ALL)
 	public List<PharmacyProduct> pharmacyProductList = new ArrayList<PharmacyProduct>();
@@ -77,9 +76,11 @@ public class Pharmacy extends BaseEntity {
 		if(this.contactNo != null) {
 			pharmacyBean.contactNo= this.contactNo;
 		}
-		if(this.testField != null) {
-			pharmacyBean.testField= this.testField;
+
+		if(this.contactPerson != null) {
+			pharmacyBean.contactPerson= this.contactPerson;
 		}
+
 		if(this.description != null) {
 			pharmacyBean.description= this.description;
 		}

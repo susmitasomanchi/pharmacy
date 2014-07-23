@@ -1,8 +1,9 @@
+
+
 package models.mr;
 
 import java.util.ArrayList;
 import java.util.List;
-
 import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -16,6 +17,7 @@ import javax.persistence.OneToOne;
 import models.AppUser;
 import models.BaseEntity;
 import models.doctor.Doctor;
+import beans.MedicalRepresentativeBean;
 
 @SuppressWarnings("serial")
 @Entity
@@ -32,11 +34,23 @@ public class MedicalRepresentative extends BaseEntity{
 
 	public String companyName;
 
-	public String typesOfMedecine;
+	public String designation;
 
-	public Long mrAdminId;
+	//public int age;
 
-	@ManyToOne
+	//public String sex;
+
+	//public Long mrAdminId;
+
+	public boolean isActive=true;
+
+	public String status;
+
+	//public Long manager;
+	@OneToOne
+	public MedicalRepresentative manager;
+
+	@ManyToOne(cascade=CascadeType.ALL)
 	public PharmaceuticalCompany pharmaceuticalCompany = new PharmaceuticalCompany();
 
 	@ManyToMany(cascade=CascadeType.ALL)

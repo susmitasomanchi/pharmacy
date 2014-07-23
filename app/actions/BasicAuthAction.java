@@ -20,7 +20,7 @@ public class BasicAuthAction extends Action<Result> {
 				return F.Promise.pure((SimpleResult) BlogController.blogHome());
 			}
 			if (!LoginController.isLoggedInUserBlogAdmin()) {
-				Controller.flash().put("alert", new Alert("alert-info", "You have been logged out. Please login to continue.").toString());
+				Controller.flash().put("alert", new Alert("alert-info", "Blogger have been logged out. Please login to continue.").toString());
 				return F.Promise.pure((SimpleResult) BlogController.blogHome());
 			}
 		}

@@ -1,7 +1,6 @@
 package controllers;
 
 import java.util.List;
-
 import models.AppUser;
 import models.Role;
 import play.Logger;
@@ -72,7 +71,7 @@ public class LoginController extends Controller {
 				session(Constants.LOGGED_IN_USER_ID, appUsers.get(0).id + "");
 				session(Constants.LOGGED_IN_USER_ROLE, appUsers.get(0).role+ "");
 				Logger.info("more than one users exists with same email and passowrd");
-				return redirect(routes.UserActions.dashboard());
+				return redirect("/");
 			}
 			return null;
 		}

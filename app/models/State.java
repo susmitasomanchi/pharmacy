@@ -3,6 +3,8 @@ package models;
 import java.util.Map;
 import java.util.TreeMap;
 
+import org.apache.commons.lang3.text.WordUtils;
+
 import com.avaje.ebean.annotation.EnumValue;
 
 public enum State {
@@ -98,8 +100,8 @@ public enum State {
 	@EnumValue("ANDAMAN_AND_NICOBAR_ISLANDS")
 	ANDAMAN_AND_NICOBAR_ISLANDS,
 
-	@EnumValue("CHNADIGARH")
-	CHNADIGARH,
+	@EnumValue("CHANDIGARH")
+	CHANDIGARH,
 
 	@EnumValue("DADRA_AND_NAGAR_HAVELI")
 	DADRA_AND_NAGAR_HAVELI,
@@ -119,8 +121,9 @@ public enum State {
 	public static Map<String, String> options() {
 		final TreeMap<String, String> vals = new TreeMap<String, String>();
 		for (final State val : State.values()) {
-			vals.put(val.toString(), val.toString().replaceAll("_", " "));
+			vals.put(val.toString(), WordUtils.capitalizeFully(val.toString().replaceAll("_", " ")));
 		}
 		return vals;
 	}
+
 }

@@ -19,13 +19,13 @@ public class PharmacyBean implements Serializable{
 
 	public String contactNo;
 
-	public String testField;
+	public String contactPerson;
 
-	public String addrressLine1;
+	public String addressLine1;
 
-	public String addrressLine2;
+	public String addressLine2;
 
-	public String addrressLine3;
+	public String addressLine3;
 
 
 
@@ -74,8 +74,8 @@ public class PharmacyBean implements Serializable{
 			pharmacy.contactNo= this.contactNo;
 		}
 
-		if(this.testField != null) {
-			pharmacy.testField= this.testField;
+		if(this.contactPerson != null) {
+			pharmacy.contactPerson= this.contactPerson;
 		}
 
 		final Address address = new Address();
@@ -84,14 +84,14 @@ public class PharmacyBean implements Serializable{
 		if(oldAddress != null){
 			address.id = oldAddress.id;
 		}
-		if(this.addrressLine1 != null){
-			address.addrressLine1 = this.addrressLine1;
+		if(this.addressLine1 != null){
+			address.addressLine1 = this.addressLine1;
 		}
-		if(this.addrressLine2 != null){
-			address.addrressLine2 = this.addrressLine2;
+		if(this.addressLine2 != null){
+			address.addressLine2 = this.addressLine2;
 		}
-		if(this.addrressLine3 != null){
-			address.addrressLine3 = this.addrressLine3;
+		if(this.addressLine3 != null){
+			address.addressLine3 = this.addressLine3;
 		}
 		if(this.city!=null){
 			address.city = this.city;

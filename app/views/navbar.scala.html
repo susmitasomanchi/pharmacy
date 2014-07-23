@@ -9,7 +9,7 @@
         <span class="icon-bar"></span>
         <span class="icon-bar"></span>
         <span class="icon-bar"></span>
-      </button>
+    </button>
       <a class="navbar-brand" href="@routes.UserActions.dashboard()">@Messages.get("MedNetwork")</a>
     </div> 
      <!-- Collect the nav links, forms, and other content for toggling -->
@@ -54,6 +54,7 @@
 		
 
 		@if(LoginController.getLoggedInUserRole().equals(Role.ADMIN_PHARMACIST.toString())){
+		@*
 		<li class="dropdown">
           <a href="#" class="dropdown-toggle" data-toggle="dropdown">
           Orders
@@ -88,11 +89,14 @@
             <li><a href="/searchProduct">Add Product to Inventory</a></li>
           </ul>
         </li>
+        *@
        
 		}
 		
 		
 		@if(LoginController.getLoggedInUserRole().equals(Role.DOCTOR.toString())){
+        
+        <!--
         <li class="dropdown">
           <a href="#" class="dropdown-toggle" data-toggle="dropdown">
           Appointments
@@ -102,7 +106,9 @@
             <li><a href="/doctor/search/appointment">Search</a></li>
           </ul>
         </li>
-    
+    	-->
+    	
+    	<!--
     	<li class="dropdown">
           <a href="#" class="dropdown-toggle" data-toggle="dropdown">
           Prescriptions
@@ -111,16 +117,21 @@
     	        <li><a href="">List</a></li>
           </ul>
         </li>
+		-->
 	
         <li class="dropdown">
           <a href="#" class="dropdown-toggle" data-toggle="dropdown">
           Clinics
           <b class="caret"></b></a>
           <ul class="dropdown-menu">
+	            <!--
 	            <li><a href="">Search Clinics</a></li>
+	            -->
 	            <li><a href="@routes.DoctorController.myClinics()">My Clinics</a></li>
 	            <li><a href="@routes.DoctorController.newClinic()">Add a Clinic</a></li>
+    	        <!--
     	        <li><a href="">New Assistant</a></li>
+    	        -->
           </ul>
         </li>
         }
@@ -262,7 +273,8 @@
         </li>
         }
     
-    
+    	
+    	<!--
         <li class="dropdown">
           <a href="#" class="dropdown-toggle" data-toggle="dropdown">
 			Report
@@ -274,32 +286,36 @@
             <li><a href="">Pharmacy Reports</a></li>
           </ul>
         </li>
-        
+         -->
 
    	  </ul>
-   	  <form class="navbar-form navbar-left" role="search">
+   	  
+   	  	@*
+		<form class="navbar-form navbar-left" role="search">
         <div class="form-group">
           <input type="text" class="form-control" placeholder="Search">
         </div>
         <button type="submit" class="btn btn-default btn-sm">Submit</button>
-      </form>
-   	  
-   	  
-   	  <ul class="nav navbar-nav navbar-right">
+		</form>
+		*@
+		
+		<ul class="nav navbar-nav navbar-right">
 		@if(LoginController.isLoggedIn()) {
 		<li class="dropdown"><a href="#" class="dropdown-toggle" data-toggle="dropdown">@LoginController.getLoggedInUser.name <b class="caret"></b></a>
 		<ul class="dropdown-menu">
+			<!--
 			<li><a href="/user/preferences"><i class="fa fa-gears"></i>&nbsp;&nbsp;Preferences</a></li>
 			<li><a href="/doctor-profile"><i class="fa fa-gears"></i>&nbsp;&nbsp;My Profile</a></li>
 			<li class="divider"></li>
 			<li><a href="/change-password"><i class="fa fa-lock"></i>&nbsp;&nbsp;Change Password</a></li>
+			-->
 			<li><a href="/logout"><i class="fa fa-sign-out"></i>&nbsp;&nbsp;Logout</a></li>
 		</ul>
 		</li>
 		} else {
 			<li><a href="/login">Login</a></li>
 		}
-	</ul>
+		</ul>
    	  
    	  
     </div><!-- /.navbar-collapse -->

@@ -3,13 +3,19 @@
 
 THIS IS AN AUTO GENERATED CODE
 PLEASE DO NOT MODIFY IT BY HAND
+ *****/
+/*****
 
+THIS IS AN AUTO GENERATED CODE
+PLEASE DO NOT MODIFY IT BY HAND
  *****/
 package controllers;
+
 
 import models.Alert;
 import models.AppUser;
 import models.Role;
+import models.diagnostic.DiagnosticCentre;
 import models.diagnostic.DiagnosticRepresentative;
 import models.doctor.Doctor;
 import models.mr.MedicalRepresentative;
@@ -19,6 +25,7 @@ import play.data.Form;
 import play.mvc.Controller;
 import play.mvc.Result;
 import utils.Constants;
+import utils.Util;
 import beans.JoinUsBean;
 
 
@@ -31,11 +38,28 @@ public class UserController extends Controller {
 
 
 	/**
-	 * Action to render the joinUs page (for Doctors)
-	 * GET    /join
+	 * Action to render the joinUs page for Doctor
+	 * GET    /doctor/join
 	 */
-	public static Result joinUs(){
-		return ok(views.html.joinus.render());
+	public static Result joinUsDoctor(){
+		return ok(views.html.doctor.joinus.render());
+	}
+
+
+	/**
+	 * Action to render the joinUs page for Pharmacy
+	 * GET    /pharmacy/join
+	 */
+	public static Result joinUsPharmacy(){
+		return ok(views.html.pharmacist.joinus.render());
+	}
+
+	/**
+	 * Action to render the joinUs page for Diagnostic Centre
+	 * GET    /diagnostic/join
+	 */
+	public static Result joinUsDiagnostic(){
+		return ok(views.html.diagnostic.joinus.render());
 	}
 
 
@@ -53,7 +77,12 @@ public class UserController extends Controller {
 
 		if(AppUser.find.where().eq("email", appUser.email).findRowCount()>0){
 			flash().put("alert", new Alert("alert-danger", "Sorry! User with email id "+appUser.email.trim()+" already exists!").toString());
-			return redirect(routes.UserController.joinUs());
+			if(appUser.role == Role.DOCTOR){
+				return redirect(routes.UserController.joinUsDoctor());
+			}
+			if(appUser.role == Role.ADMIN_PHARMACIST){
+				return redirect(routes.UserController.joinUsPharmacy());
+			}
 		}
 
 		appUser.save();
@@ -63,7 +92,10 @@ public class UserController extends Controller {
 			doctor.specialization = "Specialization";
 			doctor.degree = "Degree";
 			doctor.appUser = appUser;
+			doctor.slugUrl=Util.simpleSlugify(appUser.name);
 			doctor.save();
+			doctor.slugUrl += doctor.id.toString();
+			doctor.update();
 		}
 
 		if(appUser.role.equals(Role.ADMIN_PHARMACIST)){
@@ -79,11 +111,34 @@ public class UserController extends Controller {
 			pharmacist.update();
 		}
 
+		if(appUser.role.equals(Role.ADMIN_DIAGREP)){
+			final DiagnosticRepresentative diagnosticRepresentative = new DiagnosticRepresentative();
+			diagnosticRepresentative.appUser = appUser;
+			diagnosticRepresentative.save();
+
+			final DiagnosticCentre diagnosticCentre = new DiagnosticCentre();
+			diagnosticCentre.name = request().body().asFormUrlEncoded().get("diagnosticCentreName")[0];
+			diagnosticCentre.diagnosticRepAdmin = diagnosticRepresentative;
+			diagnosticCentre.save();
+			diagnosticRepresentative.diagnosticCentre = diagnosticCentre;
+			diagnosticRepresentative.update();
+		}
+		if(appUser.role.equals(Role.ADMIN_DIAGREP)){
+			final DiagnosticRepresentative diagnosticRepresentative = new DiagnosticRepresentative();
+			diagnosticRepresentative.appUser = appUser;
+			diagnosticRepresentative.save();
+
+			final DiagnosticCentre diagnosticCentre = new DiagnosticCentre();
+			diagnosticCentre.name = request().body().asFormUrlEncoded().get("diagnosticCentreName")[0];
+			diagnosticCentre.diagnosticRepAdmin = diagnosticRepresentative;
+			diagnosticCentre.save();
+			diagnosticRepresentative.diagnosticCentre = diagnosticCentre;
+			diagnosticRepresentative.update();
+		}
 
 		session().clear();
 		session(Constants.LOGGED_IN_USER_ID, appUser.id + "");
 		session(Constants.LOGGED_IN_USER_ROLE, appUser.role+ "");
-
 		return redirect(routes.UserActions.dashboard());
 	}
 
@@ -114,6 +169,7 @@ public class UserController extends Controller {
 
 		return redirect(routes.UserActions.dashboard());
 	}
+
 
 
 
