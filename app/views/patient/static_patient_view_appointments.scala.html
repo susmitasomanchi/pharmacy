@@ -1,0 +1,192 @@
+@()
+@import play.i18n._
+@import helper.twitterBootstrap._
+@import helper._
+
+@main("View Appointments"){
+
+<table class="table table-striped table-bordered">
+<tr>
+<th style="text-align:center">S.NO</th>
+<th style="text-align:center">DATE/TIME</th>
+<th style="text-align:center">DOCTOR</th>
+<th style="text-align:center">CLINIC</th>
+<th style="text-align:center">ACTION</th>
+</tr>
+<tr>
+<td style="vertical-align:middle;text-align:center;font-size:16px">1</td>
+<td style="vertical-align:middle;text-align:center;font-size:16px"> 21-Jul-2014<br>16:00</td>
+<td>
+<div class="row" style="cursor:pointer" onclick="location.href='/dashboard';">
+<div class="col-md-4">
+<img src="/assets/images/doctor.png" class="thumbnail" width="80" height="80" />
+</div>
+<div class="col-md-8">
+<h4>Dr Name</h4>
+<h6>Specialization</h6>
+<h6>Degree</h6>
+</div>
+</div>
+</td>
+<td>
+<div class="row">
+<div class="col-md-4">
+<img src="http://placehold.it/120x80" width="120" height="80" />
+</div>
+<div class="col-md-8">
+<h4>Clinic Name</h4>
+</div>
+</div>
+</td>
+<td style="vertical-align:middle;text-align:center">
+<button class="btn btn-success btn-sm" >Prescription</button>
+</td>
+</tr>
+<tr>
+<td style="vertical-align:middle;text-align:center;font-size:16px">2</td>
+<td style="vertical-align:middle;text-align:center;font-size:16px"> 24-Jul-2014<br>16:30</td>
+<td>
+<div class="row" style="cursor:pointer" onclick="location.href='/dashboard';">
+<div class="col-md-4">
+<img src="/assets/images/doctor.png" class="thumbnail" width="80" height="80" />
+</div>
+<div class="col-md-8">
+<h4>Dr Name</h4>
+<h6>Specialization</h6>
+<h6>Degree</h6>
+</div>
+</div>
+</td>
+<td>
+<div class="row">
+<div class="col-md-4">
+<img src="http://placehold.it/120x80" width="120" height="80" />
+</div>
+<div class="col-md-8">
+<h4>Clinic Name</h4>
+</div>
+</div>
+</td>
+<td style="vertical-align:middle;text-align:center">
+<button class="btn btn-success btn-sm" >Prescription</button>
+</td>
+</tr>
+<tr>
+<td style="vertical-align:middle;text-align:center;font-size:16px">3</td>
+<td style="vertical-align:middle;text-align:center;font-size:16px"> 31-Jul-2014<br>17:15</td>
+<td>
+<div class="row" style="cursor:pointer" onclick="location.href='/dashboard';">
+<div class="col-md-4">
+<img src="/assets/images/doctor.png" class="thumbnail" width="80" height="80" />
+</div>
+<div class="col-md-8">
+<h4>Dr Name</h4>
+<h6>Specialization</h6>
+<h6>Degree</h6>
+</div>
+</div>
+</td>
+<td>
+<div class="row">
+<div class="col-md-4">
+<img src="http://placehold.it/120x80" width="120" height="80" />
+</div>
+<div class="col-md-8">
+<h4>Clinic Name</h4>
+</div>
+</div>
+</td>
+<td style="vertical-align:middle;text-align:center">
+<button class="btn btn-success btn-sm" >Prescription</button>
+</td>
+</tr>
+<tr>
+<td style="vertical-align:middle;text-align:center;font-size:16px">4</td>
+<td style="vertical-align:middle;text-align:center;font-size:16px"> 21-Aug-2014<br>16:00</td>
+<td>
+<div class="row" style="cursor:pointer" onclick="location.href='/dashboard';">
+<div class="col-md-4">
+<img src="/assets/images/doctor.png" class="thumbnail" width="80" height="80" />
+</div>
+<div class="col-md-8">
+<h4>Dr Name</h4>
+<h6>Specialization</h6>
+<h6>Degree</h6>
+</div>
+</div>
+</td>
+<td>
+<div class="row">
+<div class="col-md-4">
+<img src="http://placehold.it/120x80" width="120" height="80" />
+</div>
+<div class="col-md-8">
+<h4>Clinic Name</h4>
+</div>
+</div>
+</td>
+<td style="vertical-align:middle;text-align:center">
+<button class="btn btn-default btn-sm" disabled="disabled">Pending</button>
+</td>
+</tr>
+<tr>
+<td style="vertical-align:middle;text-align:center;font-size:16px">5</td>
+<td style="vertical-align:middle;text-align:center;font-size:16px"> 24-Aug-2014<br>16:15</td>
+<td>
+<div class="row" style="cursor:pointer" onclick="location.href='/dashboard';">
+<div class="col-md-4">
+<img src="/assets/images/doctor.png" class="thumbnail" width="80" height="80" />
+</div> 
+<div class="col-md-8">
+<h4>Dr Name</h4>
+<h6>Specialization</h6>
+<h6>Degree</h6>
+</div>
+</div>
+</td>
+<td>
+<div class="row">
+<div class="col-md-4">
+<img src="http://placehold.it/120x80" width=120" height="80" />
+</div>
+<div class="col-md-8">
+<h4>Clinic Name</h4>
+</div>
+</div>
+</td>
+<td style="vertical-align:middle;text-align:center">
+<button class="btn btn-default btn-sm" disabled="disabled">Pending</button>
+</td>
+</tr>
+<tr>
+<td>6</td>
+<td style="vertical-align:middle;text-align:center;font-size:16px"> 31-Aug-2014<br>17:00</td>
+<td>
+<div class="row" style="cursor:pointer" onclick="location.href='/dashboard';">
+<div class="col-md-4">
+<img src="/assets/images/doctor.png" class="thumbnail" width="80" height="80" />
+</div>
+<div class="col-md-8">
+<h4>Dr Name</h4>
+<h6>Specialization</h6>
+<h6>Degree</h6>
+</div>
+</div>
+</td>
+<td>
+<div class="row">
+<div class="col-md-4">
+<img src="http://placehold.it/120x800" width="120" height="80" />
+</div>
+<div class="col-md-8">
+<h4>Clinic Name</h4>
+</div>
+</div>
+</td>
+<td style="vertical-align:middle;text-align:center">
+<button class="btn btn-default btn-sm" disabled="disabled">Pending</button>
+</td>
+</tr>
+</table>
+
+}

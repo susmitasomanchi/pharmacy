@@ -13,6 +13,7 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Lob;
+import javax.persistence.OneToOne;
 
 import org.apache.commons.codec.binary.Base64;
 
@@ -54,6 +55,9 @@ public class AppUser extends BaseEntity {
 	public Date dob;
 
 	public Role role;
+
+	@OneToOne
+	Address address;
 
 	public boolean emailConfirmed = false;
 

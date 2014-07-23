@@ -102,10 +102,21 @@ public class DoctorController extends Controller {
 			if(requestMap.get("registrationNumber") != null && !(requestMap.get("registrationNumber")[0].trim().isEmpty())){
 				doctor.registrationNumber = requestMap.get("registrationNumber")[0].trim();
 			}
+			if(requestMap.get("slugUrl") != null && !(requestMap.get("slugUrl")[0].trim().isEmpty())){
+				Logger.info("test comming");
+				final int availableSlug=Doctor.find.where().eq("slugUrl", requestMap.get("slugUrl")[0]).findRowCount();
+				if(availableSlug == 0){
+					doctor.slugUrl = requestMap.get("slugUrl")[0];
+				}else{
+					flash().put("alert", new Alert("alert-danger", "Requested Url is not available.").toString());
+					return redirect(routes.UserActions.dashboard());
+
+				}
+			}
+
 
 			doctor.appUser.update();
 			doctor.update();
-			//return ok("0");
 			return redirect(routes.UserActions.dashboard());
 		}
 		catch (final NumberFormatException e){
@@ -644,39 +655,6 @@ public class DoctorController extends Controller {
 
 	/**
 	 * @author Mitesh
-	 * Action to show form to edit one of loggedIn doctor's clinic information
-	 * GET /doctor/edit-clinic-info/:id
-	 */
-	public static Result editClinicInfo(final Long docClinicId) {
-		final DoctorClinicInfo doctorClinicInfo=DoctorClinicInfo.find.byId(docClinicId);
-		//server-side check
-		if(doctorClinicInfo.doctor.id.longValue() != LoginController.getLoggedInUser().getDoctor().id.longValue()){
-			return redirect(routes.LoginController.processLogout());
-		}
-		final Form<DoctorClinicInfoBean> filledForm = clinicForm.fill(doctorClinicInfo.toBean());
-		return ok(views.html.doctor.editClinicInfo.render(filledForm));
-	}
-
-	/**
-	 * @author Mitesh
-	 * Action to show form to edit one of loggedIn doctor's clinic schedule
-	 * GET /doctor/edit-clinic-schedule/:id
-	 */
-	public static Result editClinicSchedule(final Long docClinicId) {
-		final DoctorClinicInfo doctorClinicInfo=DoctorClinicInfo.find.byId(docClinicId);
-		//server-side check
-		if(doctorClinicInfo.doctor.id.longValue() != LoginController.getLoggedInUser().getDoctor().id.longValue()){
-			return redirect(routes.LoginController.processLogout());
-		}
-		final DoctorClinicInfoBean bean = doctorClinicInfo.toBean();
-		final Form<DoctorClinicInfoBean> filledForm = clinicForm.fill(doctorClinicInfo.toBean());
-		return ok(views.html.doctor.editClinicSchedule.render(filledForm,bean.daysOfWeek,bean.daysOfWeekMr));
-
-	}
-
-
-	/**
-	 * @author Mitesh
 	 * Action to update one of loggedInDoctor's clinics (non-schedule) information like name, address etc.
 	 * POST   /doctor/update-clinic
 	 */
@@ -812,10 +790,40 @@ public class DoctorController extends Controller {
 		return redirect(routes.DoctorController.myClinics());
 	}
 
+	/**
+	 * @author Mitesh
+	 * Action to show form to edit one of loggedIn doctor's clinic information
+	 * GET /doctor/edit-clinic-info/:id
+	 */
+	public static Result editClinicInfo(final Long docClinicId) {
+
+		final DoctorClinicInfo doctorClinicInfo=DoctorClinicInfo.find.byId(docClinicId);
+		//server-side check
+		if(doctorClinicInfo.doctor.id.longValue() != LoginController.getLoggedInUser().getDoctor().id.longValue()){
+			return redirect(routes.LoginController.processLogout());
+		}
+		final Form<DoctorClinicInfoBean> filledForm = clinicForm.fill(doctorClinicInfo.toBean());
+		return ok(views.html.doctor.editClinicInfo.render(filledForm));
 
 
+	}
 
+	/**
+	 * @author Mitesh
+	 * Action to show form to edit one of loggedIn doctor's clinic schedule
+	 * GET /doctor/edit-clinic-schedule/:id
+	 */
+	public static Result editClinicSchedule(final Long docClinicId) {
+		final DoctorClinicInfo doctorClinicInfo=DoctorClinicInfo.find.byId(docClinicId);
+		//server-side check
+		if(doctorClinicInfo.doctor.id.longValue() != LoginController.getLoggedInUser().getDoctor().id.longValue()){
+			return redirect(routes.LoginController.processLogout());
+		}
+		final DoctorClinicInfoBean bean = doctorClinicInfo.toBean();
+		final Form<DoctorClinicInfoBean> filledForm = clinicForm.fill(doctorClinicInfo.toBean());
+		return ok(views.html.doctor.editClinicSchedule.render(filledForm,bean.daysOfWeek,bean.daysOfWeekMr));
 
+	}
 
 
 
@@ -913,5 +921,26 @@ public class DoctorController extends Controller {
 
 	}
 
+
+
+	public static Result requestAppointment(){
+
+
+		final String param[] =request().body().asFormUrlEncoded().get("datetime");
+		try{
+			final Appointment appointment=Appointment.find.byId(Long.parseLong(param[1]));
+			appointment.remarks=param[0];
+			appointment.requestedBy=LoginController.getLoggedInUser();
+			appointment.appointmentStatus=AppointmentStatus.APPROVED;
+			appointment.update();
+			return ok("0");
+		}
+		catch(final Exception e){
+			e.printStackTrace();
+			return ok("-1");
+		}
+
+
+	}
 
 }
