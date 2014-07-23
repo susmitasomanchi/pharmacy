@@ -383,8 +383,10 @@ public class MRController extends Controller {
 				headQmap.put(headQuarter.state, headQuarterList);
 			}
 		}
-		final List<MedicalRepresentative> mySubordinateMrList =  loggedInMr.getSubordinates();
-		return ok(views.html.mr.dcrList.render(loggedInMr.dcrList, headQmap,mySubordinateMrList));
+		final List<MedicalRepresentative> mySubordinatelist = loggedInMr.getSubordinates();
+		//final List<DailyCallReport> mySubordinateDCRList =  loggedInMr.getSubordinatesDCRList();
+		final List<DailyCallReport> mySubordinateDCRList =  new ArrayList<DailyCallReport>();
+		return ok(views.html.mr.dcrList.render(loggedInMr.dcrList, headQmap,mySubordinatelist,mySubordinateDCRList));
 	}
 
 	/**
@@ -404,6 +406,7 @@ public class MRController extends Controller {
 		final DailyCallReport dcr = new DailyCallReport();
 		final DynamicForm requestData = Form.form().bindFromRequest();
 		final String strDate = requestData.get("forDate");
+		Logger.info("entered date is : "+strDate);
 		final String quarterIdString = requestData.get("headQuarter");
 		if (dcr.dcrStatus == null) {
 			dcr.dcrStatus = DCRStatus.DRAFT;
@@ -424,7 +427,6 @@ public class MRController extends Controller {
 			final DateTime myDate = formatter.parseDateTime(strDate);
 
 			final DateTime today = new DateTime();
-			// Logger.info("today is : "+today);
 			final int dayInterval = Days
 					.daysBetween(myDate.withTimeAtStartOfDay(),
 							today.withTimeAtStartOfDay()).getDays();
@@ -542,6 +544,7 @@ public class MRController extends Controller {
 		final MedicalRepresentative loggedInMr = LoginController
 				.getLoggedInUser().getMedicalRepresentative();
 		final DailyCallReport dcr = DailyCallReport.find.byId(dcrid);
+		Logger.info(dcr.submitter.appUser.name);
 		loggedInMr.dcrList.remove(dcr);
 		loggedInMr.update();
 		dcr.delete();
@@ -697,6 +700,96 @@ public class MRController extends Controller {
 		dcr.update();
 
 		return redirect(routes.MRController.listDCR());
+	}
+	/**
+	 * @author anand
+	 * 
+	 * @description : this method is used to display the dcr of which u selected
+	 * 
+	 * url: GET /mr/search-subordinate-dcr
+	 * 
+	 * */
+	public static Result searchSubordinateDcr(){
+		boolean isSearchDCRForAll = false;
+		final MedicalRepresentative loggedInMr = LoginController.getLoggedInUser().getMedicalRepresentative();
+		final String subordinateId[] = request().body().asFormUrlEncoded().get("dcr-subordinate");
+		final List<MedicalRepresentative> subordinateList = new ArrayList<MedicalRepresentative>();
+		for(int i=0;i<subordinateId.length;i++){
+			if(subordinateId[i].compareToIgnoreCase("0")==0){
+				isSearchDCRForAll = true;
+				subordinateList.removeAll(subordinateList);
+				break;
+			}else{
+				subordinateList.add(MedicalRepresentative.find.byId(Long.parseLong(subordinateId[i])));
+			}
+		}
+
+		final DateTimeFormatter formatter = DateTimeFormat.forPattern("dd-MM-yyyy");
+		Date dcrFromDate = new Date();
+		Date dcrToDate = new Date();
+
+		final String dcrFromDateStr = request().body().asFormUrlEncoded().get("dcr-from-date")[0];
+		if(dcrFromDateStr != ""){
+			dcrFromDate = formatter.parseDateTime(dcrFromDateStr).toDate();
+		}
+
+		final String dcrToDateStr = request().body().asFormUrlEncoded().get("dcr-to-date")[0];
+		if(dcrToDateStr != ""){
+			dcrToDate = formatter.parseDateTime(dcrToDateStr).toDate();
+		}
+
+		List<DailyCallReport> mySubordinateDCRList = new ArrayList<DailyCallReport>();
+		if(isSearchDCRForAll){
+			if(dcrFromDateStr != "" && dcrToDateStr != ""){
+				mySubordinateDCRList = DailyCallReport.find.where().in("submitter", loggedInMr.getSubordinates()).ne("dcrStatus",DCRStatus.DRAFT).le("forDate", dcrToDate).ge("forDate", dcrFromDate).orderBy("forDate DESC").findList();
+			}else{
+				if(dcrFromDateStr != ""){
+					mySubordinateDCRList = DailyCallReport.find.where().in("submitter", loggedInMr.getSubordinates()).ne("dcrStatus",DCRStatus.DRAFT).ge("forDate", dcrFromDate).orderBy("forDate DESC").findList();
+				}else{
+					if(dcrToDateStr != ""){
+						mySubordinateDCRList = DailyCallReport.find.where().in("submitter", loggedInMr.getSubordinates()).ne("dcrStatus",DCRStatus.DRAFT).le("forDate", dcrToDate).orderBy("forDate DESC").findList();
+					}else{
+						//mySubordinateDCRList =  loggedInMr.getSubordinatesDCRList();
+						mySubordinateDCRList = DailyCallReport.find.where().in("submitter", loggedInMr.getSubordinates()).ne("dcrStatus",DCRStatus.DRAFT).orderBy("forDate DESC").findList();
+					}
+				}
+			}
+
+		}else{
+			if(dcrFromDateStr != "" && dcrToDateStr != ""){
+				mySubordinateDCRList = DailyCallReport.find.where().in("submitter", subordinateList).ne("dcrStatus",DCRStatus.DRAFT).le("forDate", dcrToDate).ge("forDate", dcrFromDate).orderBy("forDate DESC").findList();
+			}else{
+				if(dcrFromDateStr != ""){
+					mySubordinateDCRList = DailyCallReport.find.where().in("submitter", subordinateList).ne("dcrStatus",DCRStatus.DRAFT).ge("forDate", dcrFromDate).orderBy("forDate DESC").findList();
+				}else{
+					if(dcrToDateStr != ""){
+						mySubordinateDCRList = DailyCallReport.find.where().in("submitter", subordinateList).ne("dcrStatus",DCRStatus.DRAFT).le("forDate", dcrToDate).orderBy("forDate DESC").findList();
+					}else{
+						mySubordinateDCRList = DailyCallReport.find.where().in("submitter", subordinateList).ne("dcrStatus",DCRStatus.DRAFT).orderBy("forDate DESC").findList();
+					}
+				}
+			}
+			//mySubordinateDCRList = DailyCallReport.find.where().in("submitter", subordinateList).ne("dcrStatus",DCRStatus.DRAFT).le("forDate", dcrToDate).ge("forDate", dcrFromDate).orderBy("forDate DESC").findList();
+		}
+
+		final Map<State, List<HeadQuarter>> headQmap = new LinkedHashMap<State, List<HeadQuarter>>();
+
+		for (final HeadQuarter headQuarter : loggedInMr.headQuarterList) {
+			if (headQmap.containsKey(headQuarter.state)) {
+				final List<HeadQuarter> headQuarterList = headQmap
+						.get(headQuarter.state);
+				headQuarterList.add(headQuarter);
+
+			} else {
+				final List<HeadQuarter> headQuarterList = new ArrayList<HeadQuarter>();
+				headQuarterList.add(headQuarter);
+				headQmap.put(headQuarter.state, headQuarterList);
+			}
+		}
+		final List<MedicalRepresentative> mySubordinatelist = loggedInMr.getSubordinates();
+		return ok(views.html.mr.dcrList.render(loggedInMr.dcrList, headQmap,mySubordinatelist,mySubordinateDCRList));
+
+
 	}
 
 	// schedule appointment for mr

@@ -55,9 +55,12 @@ public class MedicalRepresentative extends BaseEntity {
 	public List<HeadQuarter> headQuarterList = new ArrayList<HeadQuarter>();
 
 	public List<MedicalRepresentative> getSubordinates() {
-		return MedicalRepresentative.find.where().eq("manager_id", this.id)
-				.findList();
+		return MedicalRepresentative.find.where().eq("manager_id", this.id).findList();
 	}
+
+	/*public List<DailyCallReport> getSubordinatesDCRList(){
+		return DailyCallReport.find.where().in("submitter", this.getSubordinates()).ne("dcrStatus",DCRStatus.DRAFT).orderBy("forDate DESC").findList();
+	}*/
 
 	public MedicalRepresentativeBean toBean() {
 		final MedicalRepresentativeBean bean = new MedicalRepresentativeBean();

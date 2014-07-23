@@ -216,6 +216,7 @@ GET    /mr/submit-dcr-line-items/:dcrid                 controllers.MRController
 GET    /mr/approve-dcr/:dcrid                           controllers.MRController.approveDCRLineItem(dcrid: Long)
 GET    /mr/reject-dcr/:dcrid                            controllers.MRController.rejectDCRLineItem(dcrid: Long)
 GET    /mr/delete-dcr/:dcrid                            controllers.MRController.deleteDCR(dcrid: Long)
+POST		/mr/search-subordinate-dcr						controllers.MRController.searchSubordinateDcr()
 GET    /search                                          controllers.MRController.search()
 GET    /mr/display-appointment/:id                      controllers.MRController.scheduleAppointment(id:String)
 POST   /mr/add-head-quarter                             controllers.MRController.addHeadQuarter()
