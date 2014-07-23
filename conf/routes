@@ -71,7 +71,7 @@ POST   /doctor/update-clinic-schedule                   controllers.DoctorContro
 GET    /doctor/delete-clinic/:id                        controllers.DoctorController.deleteClinic(id:Long)
 
 #slug url
-GET 	/doctor/:slugUrl								controllers.PublicController.processSlugUrl(slugUrl:String)
+GET 	/doctor/:slugUrl								controllers.PublicController.getDoctorWithSlug(slugUrl:String)
 
 # Pharmacy Profile
 
@@ -86,6 +86,7 @@ GET		/pharmacy/remove-image/:pharmacyId/:fileId			controllers.PharmacistControll
 GET    /                                  controllers.Application.index()
 GET    /:str		                      controllers.Application.indexX(str: String)
 
+GET		/static/fav/pharmacies							controllers.PharmacistController.staticFavPharmacies()
 
 #############################	PRODUCTION	#################################################################################
 

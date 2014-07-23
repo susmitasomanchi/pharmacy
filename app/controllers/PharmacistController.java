@@ -635,5 +635,10 @@ public class PharmacistController extends Controller {
 	}
 
 
+	public static Result staticFavPharmacies(){
+
+		return ok(views.html.pharmacist.static_fav_pharmacies.render());
+	}
+
 
 }
