@@ -313,4 +313,9 @@ public class PatientController extends Controller {
 		return ok(views.html.patient.patientNewAppointment.render(clinicInfo));
 	}
 
+	public static Result staticPatientViewAppointments(){
+		return ok(views.html.patient.static_patient_view_appointments.render());
+	}
+
+
 }

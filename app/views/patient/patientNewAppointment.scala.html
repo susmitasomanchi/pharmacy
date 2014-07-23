@@ -6,6 +6,18 @@
 @main("Book Appointment"){
 
 <script src="http://maps.googleapis.com/maps/api/js?sensor=false"></script>
+<script src="@routes.Assets.at("javascripts/jquery.carouFredSel-6.2.1-packed.js")" type="text/javascript"></script>
+<script src="http://ihle-brothers.com/packages/jquery/jquery.carouFred/jquery.ui.effects.js" type="text/javascript"></script>
+
+<style>
+#carousel {             
+    width: 870px;       
+    height: 175px;      
+    //overflow: hidden;
+}
+
+
+</style>
 
 <div class="row">
 <div class="col-md-4">
@@ -65,18 +77,18 @@ Phone nos: @doctorClinic.clinic.contactNo</h6>
 </div>
 <br>
 
-<div id="carousel-example-generic" class="carousel slide" data-ride="carousel" style="box-shadow: 1px 1px 10px 5px #bbbbbb;padding-bottom:0px">
 <script>
-$('#carousel-example-generic').carousel({
-	  interval: false,
-	  wrap: false
-	})
+//$('#carousel-example-generic').carousel({
+	//  interval: false,
+	 // wrap: false
+	//})
 </script> 
   <!-- Wrapper for slides -->
-  <div class="carousel-inner">
+  <div class="carousel-inner"  id="inner" >
     <div id="active" class="item active" style="padding:40px">
     
 	</div>  
+	
 	<!-- 
     <div class="item" style="padding:40px">
      <table class="table table-hover table-bordered" style="text-align:center">
@@ -172,7 +184,7 @@ $('#carousel-example-generic').carousel({
     </tr>
     </table> 
     </div> -->
-  </div>
+ 
 
   <!-- Controls -->
   <a class="left carousel-control" href="#carousel-example-generic" role="button" data-slide="prev" style="width:20px">
@@ -183,6 +195,18 @@ $('#carousel-example-generic').carousel({
   </a>
   
 </div>
+
+
+@*
+<img alt="Previcon" class="carousel-sliders navigators" src="@routes.Assets.at("blog/images/previcon.png")" />
+
+</a>
+
+<a class="next-t">
+
+<img alt="Nexticon" class="carousel-sliders navigators" src="@routes.Assets.at("blog/images/nexticon.png")" />
+
+</a>*@
 <!-- finish carousel  -->
 <div id="temp">
 </div>
@@ -215,32 +239,62 @@ var date=new Date();
 
 $( document ).ready(function() {
 
+
+
 @if(doctorClinic != null ){
 	lat=@doctorClinic.clinic.address.latitude
 	lng=@doctorClinic.clinic.address.longitude
 	myLatLng= new google.maps.LatLng(lat, lng),
 	initialize();
 }
-
  $.get('/patient/display-appointment/@doctorClinic.id/'+date.getTime(),function(htmldata){
 			     $('#active').html(htmldata);
-		    });
+	    });
+	    
+	      		date.setDate(date.getDate() + 1);
+	    
+	    
+	    $.get('/patient/display-appointment/@doctorClinic.id/'+date.getTime(),function(htmldata){
+			     $('#second').html(htmldata);
+	    });
+ console.log("pass");
  
+    // Using custom configuration
+  /*  $('#carousel1').carouFredSel({
+        visible				:1,
+        items               : 2,
+        circular 			:false,
+        infinite			:false,
+		auto				:false,
+		prev : {
+            button        : "#prev-t",                         
+        },
+        next : {
+            button        : "#next-t",                         
+        },       
+        scroll : {
+            duration        : 500,                         
+        }     
+                      
+    });*/
+    
+    
 });
 
-$('#carousel-example-generic').on('slide.bs.carousel', function (e) {
-						alert("hii");
-				
-		
-		if(e.direction=="left"){
-		}
-  		date.setDate(date.getDate() + 7);
-  		console.log('/patient/display-appointment/@doctorClinic.id/'+date.getTime());
+
+  		/*date.setDate(date.getDate() + 7);
+  		$(".right").click(function(){
+  		console.log('localhost:9000/patient/display-appointment/@doctorClinic.id/'+date.getTime());
 		$.get('/patient/display-appointment/@doctorClinic.id/'+date.getTime(),function(htmldata){
-			  alert('<div class="item" style="padding:40px">'+htmldata+'</div>')
-			   $('.carousel-inner').append('<div class="item" style="padding:40px">'+htmldata+'</div>');
-    });
-})
+		  alert('<div class="item" style="padding:40px">'+htmldata+'</div>')
+			  $('#inner').append('<div class="item" style="padding:40px">'+htmldata+'</div>');
+   				     console.log("test courosel");
+   				
+   				$('.carousel').carousel('next');
+
+});
+  		});*/
+  		
 
 </script>
 

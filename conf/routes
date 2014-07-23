@@ -160,6 +160,7 @@ POST   /ansQuestion/:qaId                 		 controllers.DoctorController.answer
 GET    /static/new/appointment					controllers.PatientController.staticPatientNewAppointment()
 GET 	/patient/new-appointment/:docclinicid		controllers.PatientController.patientNewAppointment(docclinicid:Long)
 GET   /patient/display-appointment/:docId/:timeMillis	controllers.PatientController.displayAppointment(docId:Long,timeMillis:Long)
+GET    /static/patient/view/appointments		controllers.PatientController.staticPatientViewAppointments()
 
 #GET    /diagnosticlist                   	 	controllers.DiagnosticController.diagnosticlist()
 #GET    /diagnostic-service-list/:id            controllers.DiagnosticController.diagnosticServiceslist(id: Long)
