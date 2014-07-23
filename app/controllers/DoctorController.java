@@ -102,18 +102,16 @@ public class DoctorController extends Controller {
 			if(requestMap.get("registrationNumber") != null && !(requestMap.get("registrationNumber")[0].trim().isEmpty())){
 				doctor.registrationNumber = requestMap.get("registrationNumber")[0].trim();
 			}
+
 			if(requestMap.get("slugUrl") != null && !(requestMap.get("slugUrl")[0].trim().isEmpty())){
-				Logger.info("test comming");
 				final int availableSlug=Doctor.find.where().eq("slugUrl", requestMap.get("slugUrl")[0]).findRowCount();
 				if(availableSlug == 0){
 					doctor.slugUrl = requestMap.get("slugUrl")[0];
 				}else{
 					flash().put("alert", new Alert("alert-danger", "Requested Url is not available.").toString());
 					return redirect(routes.UserActions.dashboard());
-
 				}
 			}
-
 
 			doctor.appUser.update();
 			doctor.update();

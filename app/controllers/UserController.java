@@ -17,9 +17,6 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.Random;
 
-import org.apache.commons.codec.binary.Base64;
-
-
 import models.Alert;
 import models.AppUser;
 import models.Role;
@@ -29,11 +26,15 @@ import models.doctor.Doctor;
 import models.mr.MedicalRepresentative;
 import models.pharmacist.Pharmacist;
 import models.pharmacist.Pharmacy;
+
+import org.apache.commons.codec.binary.Base64;
+
 import play.Logger;
 import play.data.Form;
 import play.mvc.Controller;
 import play.mvc.Result;
 import utils.Constants;
+import utils.Util;
 import beans.JoinUsBean;
 
 
@@ -123,6 +124,7 @@ public class UserController extends Controller {
 			cal.setTime(new Date());
 			doctor.experience = cal.get(Calendar.YEAR);
 			doctor.registrationNumber = "00000";
+			doctor.slugUrl = Util.simpleSlugify(appUser.name)+appUser.id;
 			appUser.mobileNumber = 9999999999L;
 			appUser.update();
 			doctor.appUser = appUser;
