@@ -11,7 +11,7 @@ import java.util.Map;
 import models.Alert;
 import models.AppUser;
 import models.Product;
-import models.Role;
+import models.State;
 import models.doctor.Appointment;
 import models.doctor.Doctor;
 import models.mr.DCRLineItem;
@@ -26,7 +26,6 @@ import org.joda.time.Days;
 import org.joda.time.format.DateTimeFormat;
 import org.joda.time.format.DateTimeFormatter;
 
-import play.Logger;
 import play.data.DynamicForm;
 import play.data.Form;
 import play.mvc.Controller;
@@ -40,15 +39,9 @@ public class MRController extends Controller {
 
 	public static Map<MedicalRepresentative, List<MedicalRepresentative>> mgrMap = new HashMap<MedicalRepresentative, List<MedicalRepresentative>>();
 
-	public static Form<MedicalRepresentative> medicalRepresentative = Form
-			.form(MedicalRepresentative.class);
-	public static Form<HeadQuarter> headquarter = Form.form(HeadQuarter.class);
-	public static Form<DCRLineItem> dcrLineItemForm = Form
-			.form(DCRLineItem.class);
-	public static Form<DailyCallReport> dcrForm = Form
-			.form(DailyCallReport.class);
-	public static Form<MedicalRepresentativeBean> mrForm = Form
-			.form(MedicalRepresentativeBean.class);
+	public static Form<MedicalRepresentative> medicalRepresentative=Form.form(MedicalRepresentative.class);
+	public static Form<HeadQuarter> headQuarter=Form.form(HeadQuarter.class);
+	public static Form<DCRLineItem> dcrLineItemForm = Form.form(DCRLineItem.class);
 
 	
 	
@@ -165,6 +158,43 @@ public class MRController extends Controller {
 		}
 		return ok();
 	}
+	/*public static Result addHeadQuarter(){
+		final MedicalRepresentative loggedInMr = LoginController.getLoggedInUser().getMedicalRepresentative();
+		//final Map<State, List<HeadQuarter>> headQuarterMap = new HashMap<State, List<HeadQuarter>>();
+
+		final Form<HeadQuarter> filledHeadQuarterForm = headQuarter.bindFromRequest();
+		Logger.info("control is coming here");
+		if(filledHeadQuarterForm.hasErrors()){
+			return ok(views.html.mr.headQuarter.render(filledHeadQuarterForm));
+		}else{
+			final HeadQuarter headQuarter = filledHeadQuarterForm.get();
+			headQuarter.save();
+			//loggedInMr.headQuarterList.add(headQuarter);
+			//loggedInMr.update();
+			boolean flag = false;
+			if(loggedInMr.headQuarterMap == null){
+				final List<HeadQuarter> headQuarterList = new ArrayList<HeadQuarter>();
+				headQuarterList.add(headQuarter);
+				loggedInMr.headQuarterMap.put(headQuarter.state, headQuarterList);
+
+			}else{
+				for(final Map.Entry<State, List<HeadQuarter>> entry : loggedInMr.headQuarterMap.entrySet()){
+					if(headQuarter.state.compareTo(entry.getKey()) == 0){
+						loggedInMr.headQuarterMap.get(entry.getKey()).add(headQuarter);
+						flag=true;
+						break;
+					}
+				}
+				if(flag==false){
+					final List<HeadQuarter> headQuarterList = new ArrayList<HeadQuarter>();
+					headQuarterList.add(headQuarter);
+					loggedInMr.headQuarterMap.put(headQuarter.state, headQuarterList);
+				}
+			}
+			loggedInMr.update();
+		}
+		return ok();
+	}*/
 
 	/**
 	 * 
@@ -343,7 +373,7 @@ public class MRController extends Controller {
 	}
 
 	/**
-	 * @author anand
+	 * @author anand@quarter.state
 	 * 
 	 * url : GET    /mr/dcr-list
 	 * 
@@ -352,10 +382,20 @@ public class MRController extends Controller {
 	 * */
 	public static Result listDCR(){
 		final MedicalRepresentative loggedInMr = LoginController.getLoggedInUser().getMedicalRepresentative();
-		for (final HeadQuarter quarter : loggedInMr.headQuarterList) {
-			Logger.info("Quarter is : "+quarter);
+		final Map<State,List<HeadQuarter>> headQmap=new LinkedHashMap<State, List<HeadQuarter>>();
+
+		for (final HeadQuarter headQuarter : loggedInMr.headQuarterList) {
+			if(headQmap.containsKey(headQuarter.state)){
+				final List<HeadQuarter> headQuarterList=headQmap.get(headQuarter.state);
+				headQuarterList.add(headQuarter);
+
+			}else{
+				final List<HeadQuarter> headQuarterList=new ArrayList<HeadQuarter>();
+				headQuarterList.add(headQuarter);
+				headQmap.put(headQuarter.state, headQuarterList);
+			}
 		}
-		return ok(views.html.mr.dcrList.render(loggedInMr.dcrList,loggedInMr.headQuarterList));
+		return ok(views.html.mr.dcrList.render(loggedInMr.dcrList,headQmap));
 	}
 
 	/**
@@ -370,34 +410,33 @@ public class MRController extends Controller {
 	public static Result processNewDCR(){
 		boolean isExistingDCRDate = false;
 		final MedicalRepresentative loggedInMr = LoginController.getLoggedInUser().getMedicalRepresentative();
-		final Form<DailyCallReport> filledDCRForm = dcrForm.bindFromRequest();
 
 		final DailyCallReport dcr = new DailyCallReport();
 		final DynamicForm requestData = Form.form().bindFromRequest();
 		final String strDate = requestData.get("forDate");
+		final String quarterIdString = requestData.get("headQuarter");
+
+		if(quarterIdString != ""){
+			final Long headQuarterId =  Long.parseLong(quarterIdString);
+			dcr.headQuarter = HeadQuarter.find.byId(headQuarterId);
+		}
+		//dcr.save();
 		if(strDate == ""){
 			flash().put("alert", new Alert("alert-danger","Please Enter the Date. ").toString());
 		}else{
 			final DateTimeFormatter formatter = DateTimeFormat.forPattern("dd-MM-yyyy");
 			final DateTime myDate = formatter.parseDateTime(strDate);
 
-			//Logger.info("entered date is : "+myDate);
-
-
-
-
 			final DateTime today = new DateTime();
-			Logger.info("today is : "+today);
-			//Logger.info("mydate  : "+jodaMyDate);
+			//Logger.info("today is : "+today);
 			final int dayInterval = Days.daysBetween(myDate.withTimeAtStartOfDay() , today.withTimeAtStartOfDay() ).getDays();
 
-			Logger.info("dayInterval : "+dayInterval);
+			//Logger.info("dayInterval : "+dayInterval);
 			if(dayInterval>5){
-				//Logger.info("before 5 days");
 				flash().put("alert", new Alert("alert-danger","You have exceeded your DCR submission date").toString());
 			}else{
 				for(final DailyCallReport dCR : loggedInMr.dcrList){
-					Logger.info("dcr date  is : "+dCR.forDate);
+					//Logger.info("dcr date  is : "+dCR.forDate);
 					if(dCR.forDate.equals(myDate.toDate())){
 						isExistingDCRDate = true;
 						flash().put("alert", new Alert("alert-danger","You have already created DCR for this date").toString());
@@ -464,7 +503,7 @@ public class MRController extends Controller {
 
 		dcrLineItem.doctor=Doctor.find.byId(Long.parseLong(doctorId));
 
-		Logger.info("doctor Id : "+doctorId);
+		//Logger.info("doctor Id : "+doctorId);
 		for(int i=0;i<sampleList.length;i++){
 			final Sample sample = new Sample();
 
@@ -560,7 +599,7 @@ public class MRController extends Controller {
 				appointmentMap.put(calendar.getTime(), listAppointments);
 				size=listAppointments.size();
 			}
-			Logger.error(listAppointments.size()+"Test");
+			//Logger.error(listAppointments.size()+"Test");
 
 			calendar.add(Calendar.DATE, 1);
 			//			calendar.set(Calendar.HOUR_OF_DAY,doctor.doctorClinicInfoList.get(0).fromHrsMr);

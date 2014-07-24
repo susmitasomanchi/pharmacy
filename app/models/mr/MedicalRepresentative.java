@@ -59,65 +59,11 @@ public class MedicalRepresentative extends BaseEntity{
 	@OneToMany(cascade=CascadeType.ALL)
 	public List<DailyCallReport> dcrList = new ArrayList<DailyCallReport>();
 
-    @OneToMany(cascade=CascadeType.ALL)
+	@ManyToMany(cascade=CascadeType.ALL)
 	public List<HeadQuarter> headQuarterList = new ArrayList<HeadQuarter>();
 
-	public List<MedicalRepresentative> getSubordinates(){
-		return MedicalRepresentative.find.where().eq("manager_id", this.id).findList();
-	}
 
-	public MedicalRepresentativeBean toBean(){
-		final MedicalRepresentativeBean bean=new MedicalRepresentativeBean();
-
-		bean.id = this.id;
-
-		bean.appid=this.appUser.id;
-
-		if(this.appUser != null){
-			bean.name=this.appUser.name;
-		}
-		if(this.appUser != null){
-			bean.username=this.appUser.username;
-		}
-
-		if(this.appUser != null){
-			bean.email=this.appUser.email;
-		}
-
-		if(this.appUser != null){
-			bean.password=this.appUser.password;
-		}
-
-		if(this.regionAlloted!= null){
-			bean.regionAlloted=this.regionAlloted;
-		}
-
-		if(this.designation!= null){
-			bean.designation=this.designation;
-		}
-
-		if(this.status!= null){
-			bean.status=this.status;
-		}
-
-		/*if(this.age == 0){
-			bean.age=this.age;
-		}
-		if(this.sex != null){
-			bean.sex=this.sex;
-		}*/
-
-		if(this.companyName!= null){
-			bean.companyName=this.companyName;
-		}
-
-		/*if(this.manager != null){
-			bean.manager=this.manager;
-		}*/
-		return bean;
-	}
-
-
+	//public Map<State , List<HeadQuarter>> headQuarterMap= new LinkedHashMap<State , List<HeadQuarter>>();
 
 	public static Finder<Long, MedicalRepresentative> find = new Finder<Long, MedicalRepresentative>(Long.class, MedicalRepresentative.class);
 
