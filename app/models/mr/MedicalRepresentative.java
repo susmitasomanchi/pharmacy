@@ -106,4 +106,8 @@ public class MedicalRepresentative extends BaseEntity {
 	public static Finder<Long, MedicalRepresentative> find = new Finder<Long, MedicalRepresentative>(
 			Long.class, MedicalRepresentative.class);
 
+	//public Map<State , List<HeadQuarter>> headQuarterMap= new LinkedHashMap<State , List<HeadQuarter>>();
+
+
+
 }

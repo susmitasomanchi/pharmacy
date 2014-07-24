@@ -144,14 +144,11 @@ public class MRController extends Controller {
 	/**
 	 * @author anand
 	 * @discription : this method is saving the headQuarter
-<<<<<<< HEAD
 	 * 
 	 *              url : POST POST /mr/add-head-quarter
 	 * 
 	 * 
-=======
 	 * url :	POST  POST   /mr/add-head-quarter
->>>>>>> 69299d0064dd85c9bfab53d95fabf3875602b672
 	 * */
 	public static Result addHeadQuarter() {
 		final MedicalRepresentative loggedInMr = LoginController

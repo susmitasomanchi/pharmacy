@@ -503,10 +503,7 @@ public class DoctorController extends Controller {
 	private static Result createAppointment(final DoctorClinicInfo docClinicInfo) {
 		// Server side validation
 		if(docClinicInfo.doctor.id.longValue() != LoginController.getLoggedInUser().getDoctor().id.longValue()){
-			Logger.warn("COULD NOT VALIDATE LOGGED IN USER TO PERFORM THIS TASK");
-			Logger.warn("update attempted for doctor id: "+docClinicInfo.doctor.id);
-			Logger.warn("logged in AppUser: "+LoginController.getLoggedInUser().id);
-			Logger.warn("logged in Doctor: "+LoginController.getLoggedInUser().getDoctor().id);
+			
 			return redirect(routes.LoginController.processLogout());
 		}
 		try{
@@ -605,10 +602,6 @@ public class DoctorController extends Controller {
 		final DoctorClinicInfo doctorClinicInfo = DoctorClinicInfo.find.byId(docClinicId);
 		// Server side validation
 		if(doctorClinicInfo.doctor.id.longValue() != LoginController.getLoggedInUser().getDoctor().id.longValue()){
-			Logger.warn("COULD NOT VALIDATE LOGGED IN USER TO PERFORM THIS TASK");
-			Logger.warn("update attempted for doctor id: "+doctorClinicInfo.doctor.id);
-			Logger.warn("logged in AppUser: "+LoginController.getLoggedInUser().id);
-			Logger.warn("logged in Doctor: "+LoginController.getLoggedInUser().getDoctor().id);
 			return redirect(routes.LoginController.processLogout());
 		}
 		final DoctorClinicInfoBean bean = doctorClinicInfo.toBean();
@@ -634,10 +627,6 @@ public class DoctorController extends Controller {
 			final DoctorClinicInfo clinicInfo = filledForm.get().toDoctorClinicInfo();
 			// Server side validation
 			if(clinicInfo.doctor.id.longValue() != LoginController.getLoggedInUser().getDoctor().id.longValue()){
-				Logger.warn("COULD NOT VALIDATE LOGGED IN USER TO PERFORM THIS TASK");
-				Logger.warn("update attempted for doctor id: "+clinicInfo.doctor.id);
-				Logger.warn("logged in AppUser: "+LoginController.getLoggedInUser().id);
-				Logger.warn("logged in Doctor: "+LoginController.getLoggedInUser().getDoctor().id);
 				return redirect(routes.LoginController.processLogout());
 			}
 			final DoctorClinicInfo clinicInfoPrevious=DoctorClinicInfo.find.byId(clinicInfo.id);
