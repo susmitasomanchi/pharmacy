@@ -91,7 +91,7 @@ GET    /:str		                      controllers.Application.indexX(str: String)
 
 GET    /doctor/prescription						controllers.DoctorController.doctorPrescription()
 
-GET 	/viewappointments							controllers.DoctorController.doctorViewAppointment()F
+GET 	/viewappointments							controllers.DoctorController.doctorViewAppointment()
 GET    /doctor/today-appointment                        controllers.DoctorController.viewTodaysAppointment()	
 GET	   	/doctor/appointments						   controllers.DoctorController.doctorAppointments()
 GET		/doctor/search/appointment					controllers.DoctorController.doctorSearchAppointment()
