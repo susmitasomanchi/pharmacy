@@ -266,11 +266,9 @@ public class PatientController extends Controller {
 	public static Result addFavoritePharmacy(final Long pharmacyId,final String searchStr) {
 		final Patient patient = LoginController.getLoggedInUser().getPatient();
 		final Pharmacy pharmacy = Pharmacy.find.byId(pharmacyId);
-
 		if(patient.pharmacyList.contains(pharmacy)!= true){
 			patient.pharmacyList.add(pharmacy);
 			patient.update();
-
 		}
 		else{
 			flash().put("alert", new Alert("alert-info", pharmacy.name+" Already existed in the Favorite List.").toString());
@@ -292,7 +290,7 @@ public class PatientController extends Controller {
 	 */
 	public static Result myFavoritePharmacies() {
 		final Patient patient = LoginController.getLoggedInUser().getPatient();
-		return ok(views.html.favorite_pharmacy_list.render(patient.pharmacyList,0,patient.id));
+		return ok(views.html.favorite_pharmacy_list.render(patient.pharmacyList,0L,patient.id));
 	}
 	/**
 	 * @author lakshmi
@@ -306,7 +304,7 @@ public class PatientController extends Controller {
 		patient.update();
 		Logger.info("after delete list size()==="+patient.pharmacyList.size());
 		//return redirect(routes.UserActions.dashboard());
-		return ok(views.html.favorite_pharmacy_list.render(patient.pharmacyList,0,patient.id));
+		return ok(views.html.favorite_pharmacy_list.render(patient.pharmacyList,0L,patient.id));
 	}
 
 

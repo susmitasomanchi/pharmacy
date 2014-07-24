@@ -65,7 +65,7 @@ public class PublicController extends Controller{
 			return redirect(routes.DoctorController.addFavoritePharmacy(pharmacyId,searchKey));
 		}
 		else if(LoginController.getLoggedInUserRole().equals("PATIENT")){
-			return redirect(routes.PatientController.addFavoritePharmacy(pharmacyId));
+			return redirect(routes.PatientController.addFavoritePharmacy(pharmacyId,searchKey));
 		}else{
 
 			return redirect(routes.UserController.processJoinUs());
