@@ -652,6 +652,12 @@ create table medical_representative_doctor (
   constraint pk_medical_representative_doctor primary key (medical_representative_id, doctor_id))
 ;
 
+create table patient_pharmacy (
+  patient_id                     bigint not null,
+  pharmacy_id                    bigint not null,
+  constraint pk_patient_pharmacy primary key (patient_id, pharmacy_id))
+;
+
 create table patient_diagnostic_centre (
   patient_id                     bigint not null,
   diagnostic_centre_id           bigint not null,
@@ -942,6 +948,10 @@ alter table medical_representative_doctor add constraint fk_medical_representati
 
 alter table medical_representative_doctor add constraint fk_medical_representative_doc_02 foreign key (doctor_id) references doctor (id);
 
+alter table patient_pharmacy add constraint fk_patient_pharmacy_patient_01 foreign key (patient_id) references patient (id);
+
+alter table patient_pharmacy add constraint fk_patient_pharmacy_pharmacy_02 foreign key (pharmacy_id) references pharmacy (id);
+
 alter table patient_diagnostic_centre add constraint fk_patient_diagnostic_centre__01 foreign key (patient_id) references patient (id);
 
 alter table patient_diagnostic_centre add constraint fk_patient_diagnostic_centre__02 foreign key (diagnostic_centre_id) references diagnostic_centre (id);
@@ -1045,6 +1055,8 @@ drop table if exists monthly_tour_plan cascade;
 drop table if exists order_line_item cascade;
 
 drop table if exists patient cascade;
+
+drop table if exists patient_pharmacy cascade;
 
 drop table if exists patient_diagnostic_centre cascade;
 

@@ -260,7 +260,7 @@ public class PatientController extends Controller {
 
 	/**
 	 * @author lakshmi
-	 * Action to add favorite pharmacy of the Doctor to the list of patient of loggedin PATIENT
+	 * Action to add favorite pharmacy of the Doctor to the list of Patient of loggedin PATIENT
 	 * GET/patient/add-favorite-pharmacy/:pharmacyId/:str
 	 */
 	public static Result addFavoritePharmacy(final Long pharmacyId,final String searchStr) {
@@ -285,7 +285,7 @@ public class PatientController extends Controller {
 
 	/**
 	 * @author lakshmi
-	 * Action to list out favorite pharmacies of patient of loggedin PATIENT
+	 * Action to list out favorite pharmacies of Patient of loggedin PATIENT
 	 * GET/patient/my-favorite-pharmacies
 	 */
 	public static Result myFavoritePharmacies() {
@@ -294,7 +294,7 @@ public class PatientController extends Controller {
 	}
 	/**
 	 * @author lakshmi
-	 * Action to remove pharmacy from  favorite pharmacies List of patient of loggedin PATIENT
+	 * Action to remove pharmacy from  favorite pharmacies List of Patient of loggedin PATIENT
 	 * GET/patient/remove-favorite-pharmacy/:patientId/:pharmacyId
 	 */
 	public static Result removeFavoritePharmacy(final Long patientId,final Long pharmacyId) {

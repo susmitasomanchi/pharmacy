@@ -882,7 +882,8 @@ public class DoctorController extends Controller {
 	}
 	/**
 	 * @author lakshmi
-	 * Action to add favorite pharmacy of the Doctor to the list
+	 * Action to add favorite pharmacy of the Doctor to the list of Doctor of loggedin DOCTOR
+	 * GET/doctor/add-favorite-pharmacy/:pharmacyId/:str
 	 */
 	public static Result addFavoritePharmacy(final Long pharmacyId,final String searchStr) {
 		final Doctor doctor = LoginController.getLoggedInUser().getDoctor();
@@ -908,15 +909,18 @@ public class DoctorController extends Controller {
 
 	/**
 	 * @author lakshmi
-	 * Action to list out favorite pharmacies
+	 * Action to list out favorite Pharmacies of Doctor of loggedin DOCTOR
+	 * GET/doctor/my-favorite-pharmacies
 	 */
+
 	public static Result myFavoritePharmacies() {
 		final Doctor doctor = LoginController.getLoggedInUser().getDoctor();
 		return ok(views.html.favorite_pharmacy_list.render(doctor.pharmacyList,doctor.id,0L));
 	}
 	/**
 	 * @author lakshmi
-	 * Action to remove pharmacy from  favorite pharmacies List
+	 * Action to remove Pharmacy from  favorite pharmacies List of Doctor of loggedin DOCTOR
+	 * GET/doctor/remove-favorite-pharmacy/:patientId/:pharmacyId
 	 */
 	public static Result removeFavoritePharmacy(final Long doctorId,final Long pharmacyId) {
 		final Doctor doctor = Doctor.find.byId(doctorId);

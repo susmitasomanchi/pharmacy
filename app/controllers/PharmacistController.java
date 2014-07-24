@@ -250,7 +250,7 @@ public class PharmacistController extends Controller {
 	 *@author lakshmi
 	 * Action to render the pharmacy_profile page
 	 * GET		/pharmacy/profile/:id
-	 */
+	 *//*
 	public static Result myFavoritePharmacy(final Long pharmacyId,final String searchKey){
 		if(LoginController.getLoggedInUserRole().equals("DOCTOR")){
 			return redirect(routes.DoctorController.addFavoritePharmacy(pharmacyId,searchKey));
@@ -260,10 +260,10 @@ public class PharmacistController extends Controller {
 		}else{
 
 			return redirect(routes.UserController.processJoinUs());
-		}
+		}*/
 
 
-	}
+
 
 
 
