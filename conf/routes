@@ -140,7 +140,7 @@ POST   /diagRepProccess/                  		controllers.Application.diagnosticRe
 GET    /sampledata/populate               		controllers.SampleDataController.populate()
 GET    /sampledata/cleanup                		controllers.SampleDataController.cleanUp()
 GET    /sampledata/temp                   		controllers.SampleDataController.temp()
-
+GET		/sampledata/create-patdoc				controllers.SampleDataController.createSamplePatientDoctor()
 #POST   /userform/patientproccess/       		controllers.PatientController.process()
 
 GET    /home/                             		controllers.Application.homePage()
@@ -161,7 +161,7 @@ GET    /static/new/appointment					controllers.PatientController.staticPatientNe
 GET 	/patient/new-appointment/:docclinicid		controllers.PatientController.patientNewAppointment(docclinicid:Long)
 GET   /patient/display-appointment/:docId/:timeMillis	controllers.PatientController.displayAppointment(docId:Long,timeMillis:Long)
 GET    /static/patient/view/appointments		controllers.PatientController.staticPatientViewAppointments()
-
+GET		/patient/my-appointments			controllers.PatientController.viewMyAppointments()
 #GET    /diagnosticlist                   	 	controllers.DiagnosticController.diagnosticlist()
 #GET    /diagnostic-service-list/:id            controllers.DiagnosticController.diagnosticServiceslist(id: Long)
 GET    /diagnostic-delete/:id             		controllers.DiagnosticController.deleteCenter(id: Long)

@@ -295,6 +295,7 @@ public class PatientController extends Controller {
 		flash().put("alert", new Alert("alert-success","Successfully Deleted:"+patientDoctorInfo.doctor.appUser.name).toString());
 		return redirect(routes.PatientController.patientMyFavDoctors());
 	}
+
 	public static Result staticPatientMyFavDoctors() {
 		return ok(views.html.patient.static_fav_doctors.render());
 	}
@@ -314,6 +315,18 @@ public class PatientController extends Controller {
 	}
 
 	public static Result staticPatientViewAppointments(){
+		return ok(views.html.patient.static_patient_view_appointments.render());
+	}
+
+	/**
+	 * @author Mitesh
+	 * Action to show a forms which have currently logged in patient approved appointments
+	 *  GET		/patient/my-appointments
+	 */
+	public static Result viewMyAppointments(){
+		AppUser patient=LoginController.getLoggedInUser();
+
+		List<Appointment> patientApppointments=Appointment.find.where().eq("requestedBy", patient).findList();
 		return ok(views.html.patient.static_patient_view_appointments.render());
 	}
 

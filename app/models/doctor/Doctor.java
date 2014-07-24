@@ -88,7 +88,7 @@ public class Doctor extends BaseEntity{
 	public String searchIndex;
 
 	@Column(columnDefinition="TEXT")
-	public String slugUrl;
+	public String slugUrl="";
 
 	public static Model.Finder<Long,Doctor> find = new Finder<Long, Doctor>(Long.class, Doctor.class);
 
@@ -116,7 +116,20 @@ public class Doctor extends BaseEntity{
 				stringBuilder.append(clinicInfo.clinic.name.toLowerCase());
 			}
 		}
-		stringBuilder.append(this.appUser.name.toLowerCase()).append(this.specialization.toLowerCase()).append(this.degree.toLowerCase()).append(this.slugUrl.toLowerCase());
+		if(this.appUser.name != null){
+			stringBuilder.append(this.appUser.name.toLowerCase());
+		}
+		if(this.specialization != null){
+			stringBuilder.append(this.specialization.toLowerCase());
+		}
+		if(this.degree != null){
+			stringBuilder.append(this.degree.toLowerCase());
+		}
+		if(this.slugUrl != null){
+			stringBuilder.append(this.slugUrl.toLowerCase());
+		}
+
+
 		this.searchIndex = stringBuilder.toString();
 		super.save();
 	}
@@ -124,17 +137,30 @@ public class Doctor extends BaseEntity{
 
 	@Override
 	public void update() {
-		final StringBuilder stringBuilder=new StringBuilder();
+		final StringBuilder stringBuilder = new StringBuilder();
 		for (final DoctorClinicInfo clinicInfo : this.doctorClinicInfoList) {
 			if(clinicInfo.clinic != null){
 				stringBuilder.append(clinicInfo.clinic.name.toLowerCase());
 			}
 		}
-		stringBuilder.append(this.appUser.name.toLowerCase()).append(this.specialization.toLowerCase()).append(this.degree.toLowerCase()).append(this.slugUrl.toLowerCase());
+		if(this.appUser.name != null){
+			stringBuilder.append(this.appUser.name.toLowerCase());
+		}
+		if(this.specialization != null){
+			stringBuilder.append(this.specialization.toLowerCase());
+		}
+		if(this.degree != null){
+			stringBuilder.append(this.degree.toLowerCase());
+		}
+		if(this.slugUrl != null){
+			stringBuilder.append(this.slugUrl.toLowerCase());
+		}
+
+
 		this.searchIndex = stringBuilder.toString();
 		super.update();
 	}
 
-	
+
 
 }

@@ -7,7 +7,7 @@
 	@if(favDocs.size()==0){
 		No List is created yet
 	}else{
-	<style>
+<style>
 .badge{
 color:#000000;
 background-color:#cccccc;
@@ -16,41 +16,50 @@ background-color:#cccccc;
     opacity: 0.4;
     filter: alpha(opacity=40); /* For IE8 and earlier */
 }
+.well{
+margin-bottom:0px;
+}
 
-</style>
-
+</style>	
 		<table class="table table-bordered">
 		@for((patDoc,index) <- favDocs.zipWithIndex){
 			@if(index % 2 == 0){
 				
-				<tr>
-
-				<td>
+				<tr class="row">
+				<td class="col-md-6">
 				<div class="row" style="padding-left:20px;padding-right:20px">
-				<div style="cursor:pointer" onclick="location.href='/doctor/profile';"><img src="/assets/images/sunrise.png" width="525" height="200" />
-				<img id="coverborder" src="/assets/images/bordercover.png" style="position:relative;top:-65px"/>
+				<div style="cursor:pointer" onclick="location.href='/dashboard';"><img src="/assets/images/sunrise.png" width="530" height="170" />
+				@if(patDoc.doctor.backgroundImage != null){
+				<img id="coverborder" src="@routes.DoctorController.getImage(patDoc.doctor.id,"backgroundImage")"  width="530" style="position:relative;top:-65px"/>
+				}else{
+				<img id="coverborder" src="/assets/images/bordercover.png" width="530" style="position:relative;top:-65px"/>
+				}
 				</div>
-				<div class="row" style="margin-top:-145px;padding-left:20px"><div style="cursor:pointer" onclick="location.href='/doctor/profile';" class="col-md-3">
+				<div class="row" style="margin-top:-120px;padding-left:15px">
+				<div style="cursor:pointer;width:23%" onclick="location.href='/dashboard';" class="col-md-3">
 				<br>
-				<img src="/assets/images/doctor.png" class="thumbnail" width="120" height="120"  />
+				@if(patDoc.doctor.backgroundImage != null){
+				<img src="@routes.DoctorController.getImage(patDoc.doctor.id,"profileImage")" class="thumbnail" width="100" height="100"  />
+					}else{
+				<img src="/assets/images/doctor.png" class="thumbnail" width="100" height="100"  />
+					}
 				</div>
 				<div style="cursor:pointer" onclick="location.href='/doctor/profile';" class="col-md-5">
-				<h3>@patDoc.doctor.appUser.name</h3>
-				<h4>@patDoc.doctor.specialization</h4>
-				<h5>@patDoc.doctor.degree</h5>
-				<h5>@patDoc.doctor.experience</h5>
+				<p style="font-size:18px"><b>@patDoc.doctor.appUser.name</b></p>
+				<p style="font-size:14px"><b>@patDoc.doctor.specialization</b></p>
+				<h6>@patDoc.doctor.degree</h6>
+				<h6>@patDoc.doctor.experience</h6>
 				<br>
 				</div>
-				
-				</div>
-				<a class="btn btn-primary btn-xs pull-right" href="#">Ask Query</a>
-				<button id="@patDoc.id" class="btn btn-danger btn-xs pull-right" data-toggle="modal" data-target="#myModal">Remove</button>
+				<div class="col-md-3" style="width:30%;padding-left:3px;padding-top:60px">
+				<a class="btn btn-primary btn-xs" href="#">Ask Query</a>
+				<button id="@patDoc.id" class="btn btn-danger btn-xs" data-toggle="modal" data-target="#myModal1">Remove</button>
 				@*<a class="btn btn-danger btn-sm" href="@routes.PatientController.deleteMyFavDoctors(patDoc.id)">Remove</a>*@
+				</div>
+				</div>
 				
-				<br>
-				<br>
-					<div class="row">
-				<div class="well">
+				
+				<div class="well" style="padding-left:20px;padding-right:0px;padding-top:0px;padding-bottom:20px">
 				<h4 style="color:#006687;font-weight:bold">Clinics</h4>
 				<ul class="nav nav-tabs">			
 				@if(patDoc.doctor.doctorClinicInfoList.size()==0){
@@ -67,116 +76,123 @@ background-color:#cccccc;
 				</ul>
 				
 				<div class="tab-content">
-				@for(docclinic <- patDoc.doctor.doctorClinicInfoList){
-					@if( patDoc.doctor.doctorClinicInfoList.indexOf(docclinic)==0){
-				<div class="tab-pane active" id="clinic13">
-				<div class="row">
-				<br>
-				<div class="col-md-4">
-				<h5><b><a href="#" >@docclinic.clinic.name</a></b></h5>
-				<h6>@docclinic.clinic.address.addressLine1<br>
-				@docclinic.clinic.address.area<br>
-				@docclinic.clinic.address.city<br>
-				@docclinic.clinic.contactNo</h6>
-				</div>
-				<div class="col-md-9">
-				<h5><b>Timings</b><br><br>
-				<div class="row" style="padding-left:10px">
-				@for(schedule <- docclinic.scheduleDays){
-					
-					<span class="col-md-2" style="font-size:16px;width:20%">@schedule.day</span>
-				}
-				
-				</div>
-				
-				</h5>
-				<div class="row" style="padding-left:10px">
-				@for(schedule <- docclinic.scheduleDays){
-				<span class="col-md-2" style="font-size:10px;padding-right:0px;padding-left:10px;width:20%">@schedule.fromTime-@schedule.toTime</span>
-				}
-				</div>
-				
-				</div>
-				</div>
-				
-				<a class="btn btn-success btn-sm" href="/patient/new/appointment">Book Appointment</a>
-				</div>					
-				}else{
-				
-				<div class="tab-pane" id="clinic13">
-				<div class="row">
-				<br>
-				<div class="col-md-3">
-				<h5><b><a href="#" >@docclinic.clinic.name</a></b></h5>
-				<h6>@docclinic.clinic.address.addressLine1<br>
-				@docclinic.clinic.address.area<br>
-				@docclinic.clinic.address.city<br>
-				@docclinic.clinic.contactNo</h6>
-				</div>
-				<div class="col-md-9">
-				<h5><b>Timings</b><br><br>
-				<div class="row" style="padding-left:10px">
-				@for(schedule <- docclinic.scheduleDays){
-					
-						<span class="col-md-2" style="font-size:16px;width:14%">@schedule.day</span>
-				}
-				
-				</div>
-				
-				</h5>
-				<div class="row" style="padding-left:10px">
-				@for(schedule <- docclinic.scheduleDays){
-				<span class="col-md-2" style="font-size:10px;padding-right:0px;width:14%"">@schedule.fromTime-@schedule.toTime</span>
-				}
-				</div>
-				
-				</div>
-				</div>
-				<a class="btn btn-success btn-sm" href="/patient/new/appointment">Book Appointment</a>
-				</div>					
-				}
-				} 
-				
-				</div>
+					@for(docclinic <- patDoc.doctor.doctorClinicInfoList){
+						@if( patDoc.doctor.doctorClinicInfoList.indexOf(docclinic)==0){
+							<div class="tab-pane active" id="clinic1">
+								<div class="row">
+									<div class="col-md-8">
+									<h5 style="color:#006687">
+									<b><a href="#" >@docclinic.clinic.name</a></b>
+										<span style="font-size:12px;color:black">@docclinic.clinic.address.addressLine1
+										@docclinic.clinic.address.area
+										@docclinic.clinic.address.city
+										@docclinic.clinic.address.state</h5>
+									<i class="fa fa-phone-square"></i> @docclinic.clinic.contactNo<br><br>
+									</div>
+									<div class="col-md-4">
+										<a class="btn btn-success btn-xs" style="float:right" href="/static/new/appointment">Book Appointment</a>
+									</div>
+								</div>
+								<div class="row" style="padding-left:10px">
+									@for((key,value)<-docclinic.getScheduleMap()){
+										@if(docclinic.getScheduleMap().get(key)!=null){
+											<span class="col-md-2" style="font-size:16px;width:14%">key</span>
+										}else{
+										<span class="badge col-md-2" style="font-size:16px;width:14%">key</span>
+										}
+									}
+								</div>	
+									<div class="row" style="padding-left:10px">
+										@for((key,value)<-docclinic.getScheduleMap()){
+											@if(docclinic.getScheduleMap().get(key)!=null){
+												<span class="col-md-2" style="font-size:16px;width:14%">docclinic.getScheduleMap().get(key)</span>
+											}else{
+											<span class="badge col-md-2" style="font-size:16px;width:14%"></span>
+											}
+										}
+									</div>
+							</div>
+						}else{<div class="tab-pane active" id="clinic1">
+								<div class="row">
+									<div class="col-md-8">
+									<h5 style="color:#006687">
+									<b><a href="#" >@docclinic.clinic.name</a></b>
+										<span style="font-size:12px;color:black">@docclinic.clinic.address.addressLine1
+										@docclinic.clinic.address.area
+										@docclinic.clinic.address.city
+										@docclinic.clinic.address.state</h5>
+									<i class="fa fa-phone-square"></i> @docclinic.clinic.contactNo<br><br>
+									</div>
+									<div class="col-md-4">
+										<a class="btn btn-success btn-xs" style="float:right" href="/static/new/appointment">Book Appointment</a>
+									</div>
+								</div>
+								<div class="row" style="padding-left:10px">
+									@for((key,value)<-docclinic.getScheduleMap()){
+										@if(docclinic.getScheduleMap().get(key)!=null){
+											<span class="col-md-2" style="font-size:16px;width:14%">key</span>
+										}else{
+										<span class="badge col-md-2" style="font-size:16px;width:14%">key</span>
+										}
+									}
+								</div>	
+									<div class="row" style="padding-left:10px">
+										@for((key,value)<-docclinic.getScheduleMap()){
+											@if(docclinic.getScheduleMap().get(key)!=null){
+												<span class="col-md-2" style="font-size:16px;width:14%">docclinic.getScheduleMap().get(key)</span>
+											}else{
+											<span class="badge col-md-2" style="font-size:16px;width:14%"></span>
+											}
+										}
+									</div>
+							</div>				
+						}
+					} 
 				</div>
 			</div>
-				<br>
-				</div>
-			</td>
+		</div>
+	<br>
+</td>
 				
 				@if(index == favDocs.size()-1){
 						</tr>
 					}
 				
 			}else{
-			
-			
-<td>
+			<td class="col-md-6">
 				<div class="row" style="padding-left:20px;padding-right:20px">
-				<div style="cursor:pointer" onclick="location.href='/doctor/profile';"><img src="/assets/images/sunrise.png" width="525" height="200" />
-				<img id="coverborder" src="/assets/images/bordercover.png" style="position:relative;top:-65px"/>
+				<div style="cursor:pointer" onclick="location.href='/dashboard';"><img src="/assets/images/sunrise.png" width="530" height="170" />
+				@if(patDoc.doctor.backgroundImage != null){
+				<img id="coverborder" src="@routes.DoctorController.getImage(patDoc.doctor.id,"backgroundImage")"  width="530" style="position:relative;top:-65px"/>
+				}else{
+				<img id="coverborder" src="/assets/images/bordercover.png" width="530" style="position:relative;top:-65px"/>
+				}
 				</div>
-				<div class="row" style="margin-top:-145px;padding-left:20px"><div style="cursor:pointer" onclick="location.href='/doctor/profile';" class="col-md-3">
+				<div class="row" style="margin-top:-120px;padding-left:15px">
+				<div style="cursor:pointer;width:23%" onclick="location.href='/dashboard';" class="col-md-3">
 				<br>
-				<img src="/assets/images/doctor.png" class="thumbnail" width="120" height="120"  />
+				@if(patDoc.doctor.backgroundImage != null){
+				<img src="@routes.DoctorController.getImage(patDoc.doctor.id,"profileImage")" class="thumbnail" width="100" height="100"  />
+					}else{
+				<img src="/assets/images/doctor.png" class="thumbnail" width="100" height="100"  />
+					}
 				</div>
 				<div style="cursor:pointer" onclick="location.href='/doctor/profile';" class="col-md-5">
-				<h3>@patDoc.doctor.appUser.name</h3>
-				<h4>@patDoc.doctor.specialization</h4>
-				<h5>@patDoc.doctor.degree</h5>
-				<h5>@patDoc.doctor.experience</h5>
+				<p style="font-size:18px"><b>@patDoc.doctor.appUser.name</b></p>
+				<p style="font-size:14px"><b>@patDoc.doctor.specialization</b></p>
+				<h6>@patDoc.doctor.degree</h6>
+				<h6>@patDoc.doctor.experience</h6>
 				<br>
 				</div>
-				
-				</div>
-				<a class="btn btn-primary btn-xs pull-right" href="#">Ask Query</a>
-				<button id="@patDoc.id" class="btn btn-danger btn-xs pull-right" data-toggle="modal" data-target="#myModal">Remove</button>
+				<div class="col-md-3" style="width:30%;padding-left:3px;padding-top:60px">
+				<a class="btn btn-primary btn-xs" href="#">Ask Query</a>
+				<button class="btn btn-danger btn-xs" data-toggle="modal" data-target="#myModal2">Remove</button>
 				@*<a class="btn btn-danger btn-sm" href="@routes.PatientController.deleteMyFavDoctors(patDoc.id)">Remove</a>*@
+				</div>
+				</div>
 				
-				<br>
-				<br>
-					<div class="row">
-				<div class="well">
+				
+				<div class="well" style="padding-left:20px;padding-right:0px;padding-top:0px;padding-bottom:20px">
 				<h4 style="color:#006687;font-weight:bold">Clinics</h4>
 				<ul class="nav nav-tabs">			
 				@if(patDoc.doctor.doctorClinicInfoList.size()==0){
@@ -193,114 +209,117 @@ background-color:#cccccc;
 				</ul>
 				
 				<div class="tab-content">
-				@for(docclinic <- patDoc.doctor.doctorClinicInfoList){
-					@if( patDoc.doctor.doctorClinicInfoList.indexOf(docclinic)==0){
-				<div class="tab-pane active" id="clinic13">
-				<div class="row">
-				<br>
-				<div class="col-md-4">
-				<h5><b><a href="#" >@docclinic.clinic.name</a></b></h5>
-				<h6>@docclinic.clinic.address.addressLine1<br>
-				@docclinic.clinic.address.area<br>
-				@docclinic.clinic.address.city<br>
-				@docclinic.clinic.contactNo</h6>
-				</div>
-				<div class="col-md-9">
-				<h5><b>Timings</b><br><br>
-				<div class="row" style="padding-left:10px">
-				@for(schedule <- docclinic.scheduleDays){
-					
-					<span class="col-md-2" style="font-size:16px;width:20%">@schedule.day</span>
-				}
-				
-				</div>
-				
-				</h5>
-				<div class="row" style="padding-left:10px">
-				@for(schedule <- docclinic.scheduleDays){
-				<span class="col-md-2" style="font-size:10px;padding-right:0px;padding-left:10px;width:20%">@schedule.fromTime-@schedule.toTime</span>
-				}
-				</div>
-				
-				</div>
-				</div>
-				
-				<a class="btn btn-success btn-sm" href="/patient/new/appointment">Book Appointment</a>
-				</div>					
-				}else{
-				
-				<div class="tab-pane" id="clinic13">
-				<div class="row">
-				<br>
-				<div class="col-md-3">
-				<h5><b><a href="#" >@docclinic.clinic.name</a></b></h5>
-				<h6>@docclinic.clinic.address.addressLine1<br>
-				@docclinic.clinic.address.area<br>
-				@docclinic.clinic.address.city<br>
-				@docclinic.clinic.contactNo</h6>
-				</div>
-				<div class="col-md-9">
-				<h5><b>Timings</b><br><br>
-				<div class="row" style="padding-left:10px">
-				@for(schedule <- docclinic.scheduleDays){
-					
-						<span class="col-md-2" style="font-size:16px;width:14%">@schedule.day</span>
-				}
-				
-				</div>
-				
-				</h5>
-				<div class="row" style="padding-left:10px">
-				@for(schedule <- docclinic.scheduleDays){
-				<span class="col-md-2" style="font-size:10px;padding-right:0px;width:14%"">@schedule.fromTime-@schedule.toTime</span>
-				}
-				</div>
-				
-				</div>
-				</div>
-				<a class="btn btn-success btn-sm" href="/patient/new/appointment">Book Appointment</a>
-				</div>					
-				}
-				} 
-				
-				</div>
+					@for(docclinic <- patDoc.doctor.doctorClinicInfoList){
+						@if( patDoc.doctor.doctorClinicInfoList.indexOf(docclinic)==0){
+							<div class="tab-pane active" id="clinic1">
+								<div class="row">
+									<div class="col-md-8">
+									<h5 style="color:#006687">
+									<b><a href="#" >@docclinic.clinic.name</a></b>
+										<span style="font-size:12px;color:black">@docclinic.clinic.address.addressLine1
+										@docclinic.clinic.address.area
+										@docclinic.clinic.address.city
+										@docclinic.clinic.address.state</h5>
+									<i class="fa fa-phone-square"></i> @docclinic.clinic.contactNo<br><br>
+									</div>
+									<div class="col-md-4">
+										<a class="btn btn-success btn-xs" style="float:right" href="/static/new/appointment">Book Appointment</a>
+									</div>
+								</div>
+								<div class="row" style="padding-left:10px">
+									@for((key,value)<-docclinic.getScheduleMap()){
+										@if(docclinic.getScheduleMap().get(key)!=null){
+											<span class="col-md-2" style="font-size:16px;width:14%">key</span>
+										}else{
+										<span class="badge col-md-2" style="font-size:16px;width:14%">key</span>
+										}
+									}
+								</div>	
+									<div class="row" style="padding-left:10px">
+										@for((key,value)<-docclinic.getScheduleMap()){
+											@if(docclinic.getScheduleMap().get(key)!=null){
+												<span class="col-md-2" style="font-size:16px;width:14%">docclinic.getScheduleMap().get(key)</span>
+											}else{
+											<span class="badge col-md-2" style="font-size:16px;width:14%"></span>
+											}
+										}
+									</div>
+							</div>
+						}else{<div class="tab-pane active" id="clinic1">
+								<div class="row">
+									<div class="col-md-8">
+									<h5 style="color:#006687">
+									<b><a href="#" >@docclinic.clinic.name</a></b>
+										<span style="font-size:12px;color:black">@docclinic.clinic.address.addressLine1
+										@docclinic.clinic.address.area
+										@docclinic.clinic.address.city
+										@docclinic.clinic.address.state</h5>
+									<i class="fa fa-phone-square"></i> @docclinic.clinic.contactNo<br><br>
+									</div>
+									<div class="col-md-4">
+										<a class="btn btn-success btn-xs" style="float:right" href="/static/new/appointment">Book Appointment</a>
+									</div>
+								</div>
+								<div class="row" style="padding-left:10px">
+									@for((key,value)<-docclinic.getScheduleMap()){
+										@if(docclinic.getScheduleMap().get(key)!=null){
+											<span class="col-md-2" style="font-size:16px;width:14%">key</span>
+										}else{
+										<span class="badge col-md-2" style="font-size:16px;width:14%">key</span>
+										}
+									}
+								</div>	
+									<div class="row" style="padding-left:10px">
+										@for((key,value)<-docclinic.getScheduleMap()){
+											@if(docclinic.getScheduleMap().get(key)!=null){
+												<span class="col-md-2" style="font-size:16px;width:14%">docclinic.getScheduleMap().get(key)</span>
+											}else{
+											<span class="badge col-md-2" style="font-size:16px;width:14%"></span>
+											}
+										}
+									</div>
+							</div>				
+						}
+					} 
 				</div>
 			</div>
-				<br>
-				</div>
-			</td>
-					
-				</tr>
+		</div>
+	<br>
+</td>		</tr>
 		
 			}
 		}
-		
 }
 </table>	
-	<div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
-  <div class="modal-dialog" style="padding-top:200px">
-  
-    <div class="modal-content" style="padding-left:20px">
-	<h4 class="modal-title">Delete Doctor</h4>
-	 <div class="modal-body">
-        <p>Are you to confirm to remove1</p>
-      </div>
-      <div class="modal-footer">
+		<div class="modal fade" id="myModal11" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+  		<div class="modal-dialog" style="padding-top:200px">
+    	<div class="modal-content" style="padding-left:20px">
+      	<h4>Are you to confirm to remove1</h4>
+      	<div class="modal-footer">
         <button type="button" class="btn btn-default btn-xs" data-dismiss="modal">Close</button>
-        <button id="del" onclick=window.location.href="/patient/delete-fav-doc/"+docid; type="button" class="btn btn-primary btn-xs">Confirm</button>
-      </div>
-    </div>
-  </div>
-</div>
+        <button type="button" class="btn btn-primary btn-xs">Confirm</button>
+      	</div>
+    	</div>
+  		</div>
+	</div>
+	<div class="modal fade" id="myModal1" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+  		<div class="modal-dialog" style="padding-top:200px">
+    	<div class="modal-content" style="padding-left:20px">
+      	<h4>Are you to confirm to remove1</h4>
+      	<div class="modal-footer">
+        <button type="button" class="btn btn-default btn-xs" data-dismiss="modal">Close</button>
+        <button type="button" class="btn btn-primary btn-xs" onclick="window.location.href = '/patient/delete-fav-doc/'+docid;">Confirm</button>
+      	</div>
+    	</div>
+  		</div>
+	</div>
 	
 	
 <script>
 var docid;
-$('#myModal').on('show.bs.modal', function (e) {
+$('#myModal1').on('show.bs.modal', function (e) {
 	  docid= $(e.relatedTarget).attr("id");
 	});
-
-	
 </script>	
 }
 	
