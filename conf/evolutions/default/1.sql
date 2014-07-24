@@ -640,6 +640,12 @@ create table doctor_doctor_language (
   constraint pk_doctor_doctor_language primary key (doctor_id, doctor_language_id))
 ;
 
+create table doctor_pharmacy (
+  doctor_id                      bigint not null,
+  pharmacy_id                    bigint not null,
+  constraint pk_doctor_pharmacy primary key (doctor_id, pharmacy_id))
+;
+
 create table medical_representative_doctor (
   medical_representative_id      bigint not null,
   doctor_id                      bigint not null,
@@ -928,6 +934,10 @@ alter table doctor_doctor_language add constraint fk_doctor_doctor_language_doc_
 
 alter table doctor_doctor_language add constraint fk_doctor_doctor_language_doc_02 foreign key (doctor_language_id) references doctor_language (id);
 
+alter table doctor_pharmacy add constraint fk_doctor_pharmacy_doctor_01 foreign key (doctor_id) references doctor (id);
+
+alter table doctor_pharmacy add constraint fk_doctor_pharmacy_pharmacy_02 foreign key (pharmacy_id) references pharmacy (id);
+
 alter table medical_representative_doctor add constraint fk_medical_representative_doc_01 foreign key (medical_representative_id) references medical_representative (id);
 
 alter table medical_representative_doctor add constraint fk_medical_representative_doc_02 foreign key (doctor_id) references doctor (id);
@@ -995,6 +1005,8 @@ drop table if exists diagnostic_test_line_item cascade;
 drop table if exists doctor cascade;
 
 drop table if exists doctor_doctor_language cascade;
+
+drop table if exists doctor_pharmacy cascade;
 
 drop table if exists doctor_assistant cascade;
 

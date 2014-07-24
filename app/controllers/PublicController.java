@@ -3,6 +3,7 @@ package controllers;
 import java.util.ArrayList;
 import java.util.List;
 
+import models.Alert;
 import models.doctor.Doctor;
 import models.pharmacist.Pharmacy;
 import play.mvc.Controller;
@@ -34,7 +35,7 @@ public class PublicController extends Controller{
 	 * GET/pharmacy/search
 	 */
 	public static Result searchPhamacy(){
-		return ok(views.html.pharmacist.favourite_pharmacies.render(false,"", new ArrayList<Pharmacy>()));
+		return ok(views.html.pharmacist.searched_pharmacies.render(false,"", new ArrayList<Pharmacy>()));
 	}
 
 	/**
@@ -45,8 +46,32 @@ public class PublicController extends Controller{
 	 */
 	public static Result searchPharmacies(final String searchString) {
 		final String searchStr = searchString.toLowerCase().trim();
-		final List<Pharmacy> pharmacyList = Pharmacy.find.where().like("searchIndex","%"+searchStr+"%").findList();
-		return ok(views.html.pharmacist.favourite_pharmacies.render(true,searchStr,pharmacyList));
+		List<Pharmacy> pharmacyList = new ArrayList<Pharmacy>();
+		if(searchStr.length()>=4){
+			pharmacyList = Pharmacy.find.where().like("searchIndex","%"+searchStr+"%").findList();
+		}
+		else{
+			flash().put("alert", new Alert("alert-danger", "The searck key should contain four charecters").toString());
+		}
+		return ok(views.html.pharmacist.searched_pharmacies.render(true,searchStr,pharmacyList));
+	}
+	/**
+	 *@author lakshmi
+	 * Action to add pharmacy to the Logged in user list
+	 * 
+	 */
+	public static Result myFavoritePharmacy(final Long pharmacyId,final String searchKey){
+		if(LoginController.getLoggedInUserRole().equals("DOCTOR")){
+			return redirect(routes.DoctorController.addFavoritePharmacy(pharmacyId,searchKey));
+		}
+		else if(LoginController.getLoggedInUserRole().equals("PATIENT")){
+			return redirect(routes.PatientController.addFavoritePharmacy(pharmacyId));
+		}else{
+
+			return redirect(routes.UserController.processJoinUs());
+		}
+
+
 	}
 
 

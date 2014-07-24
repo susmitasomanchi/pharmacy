@@ -1,5 +1,6 @@
 package controllers;
 
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.LinkedHashMap;
 import java.util.List;
@@ -13,6 +14,8 @@ import models.doctor.Appointment;
 import models.doctor.Doctor;
 import models.doctor.QuestionAndAnswer;
 import models.patient.PatientDoctorInfo;
+import models.pharmacist.Pharmacy;
+import play.Logger;
 import play.data.Form;
 import play.mvc.Controller;
 import play.mvc.Result;
@@ -257,15 +260,54 @@ public class PatientController extends Controller {
 
 	/**
 	 * @author lakshmi
-	 * Action to add favorite pharmacy of the Patient to the list
+	 * Action to add favorite pharmacy of the Doctor to the list of patient of loggedin PATIENT
+	 * GET/patient/add-favorite-pharmacy/:pharmacyId/:str
 	 */
-	public static Result addFavoritePharmacy(final Long pharmacyId) {
-		/*final Patient patient = LoginController.getLoggedInUser().getPatient();
-		patient.pharmacyList.add(Pharmacy.find.byId(pharmacyId));
-		patient.update();*/
+	public static Result addFavoritePharmacy(final Long pharmacyId,final String searchStr) {
+		final Patient patient = LoginController.getLoggedInUser().getPatient();
+		final Pharmacy pharmacy = Pharmacy.find.byId(pharmacyId);
 
+		if(patient.pharmacyList.contains(pharmacy)!= true){
+			patient.pharmacyList.add(pharmacy);
+			patient.update();
 
-		return ok();
+		}
+		else{
+			flash().put("alert", new Alert("alert-info", pharmacy.name+" Already existed in the Favorite List.").toString());
+		}
+		final List<Pharmacy> pharmacyList = new ArrayList<Pharmacy>();
+		for (final Pharmacy pharmacy2 : Pharmacy.find.where().like("searchIndex","%"+searchStr+"%").findList()) {
+			if(patient.pharmacyList.contains(pharmacy2) != true){
+				pharmacyList.add(pharmacy2);
+			}
+		}
+		return ok(views.html.pharmacist.searched_pharmacies.render(true,searchStr,pharmacyList));
+		//		return redirect(routes.UserActions.dashboard());
 	}
+
+	/**
+	 * @author lakshmi
+	 * Action to list out favorite pharmacies of patient of loggedin PATIENT
+	 * GET/patient/my-favorite-pharmacies
+	 */
+	public static Result myFavoritePharmacies() {
+		final Patient patient = LoginController.getLoggedInUser().getPatient();
+		return ok(views.html.favorite_pharmacy_list.render(patient.pharmacyList,0,patient.id));
+	}
+	/**
+	 * @author lakshmi
+	 * Action to remove pharmacy from  favorite pharmacies List of patient of loggedin PATIENT
+	 * GET/patient/remove-favorite-pharmacy/:patientId/:pharmacyId
+	 */
+	public static Result removeFavoritePharmacy(final Long patientId,final Long pharmacyId) {
+		final Patient patient = Patient.find.byId(patientId);
+		Logger.info("before delete list size()==="+patient.pharmacyList.size());
+		patient.pharmacyList.remove(Pharmacy.find.byId(pharmacyId));
+		patient.update();
+		Logger.info("after delete list size()==="+patient.pharmacyList.size());
+		//return redirect(routes.UserActions.dashboard());
+		return ok(views.html.favorite_pharmacy_list.render(patient.pharmacyList,0,patient.id));
+	}
+
 
 }

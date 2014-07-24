@@ -22,6 +22,7 @@ import models.doctor.DoctorEducation;
 import models.doctor.DoctorExperience;
 import models.doctor.DoctorSocialWork;
 import models.doctor.QuestionAndAnswer;
+import models.pharmacist.Pharmacy;
 import play.Logger;
 import play.data.Form;
 import play.mvc.Controller;
@@ -883,12 +884,49 @@ public class DoctorController extends Controller {
 	 * @author lakshmi
 	 * Action to add favorite pharmacy of the Doctor to the list
 	 */
-	public static Result addFavoritePharmacy(final Long pharmacyId) {
-		/*final Doctor doctor = LoginController.getLoggedInUser().getDoctor();
-		doctor.pharmacyList.add(Pharmacy.find.byId(pharmacyId));
+	public static Result addFavoritePharmacy(final Long pharmacyId,final String searchStr) {
+		final Doctor doctor = LoginController.getLoggedInUser().getDoctor();
+		final Pharmacy pharmacy = Pharmacy.find.byId(pharmacyId);
+
+		if(doctor.pharmacyList.contains(pharmacy)!= true){
+			doctor.pharmacyList.add(pharmacy);
+			doctor.update();
+
+		}
+		else{
+			flash().put("alert", new Alert("alert-info", pharmacy.name+" Already existed in the Favorite List.").toString());
+		}
+		final List<Pharmacy> pharmacyList = new ArrayList<Pharmacy>();
+		for (final Pharmacy pharmacy2 : Pharmacy.find.where().like("searchIndex","%"+searchStr+"%").findList()) {
+			if(doctor.pharmacyList.contains(pharmacy2) != true){
+				pharmacyList.add(pharmacy2);
+			}
+		}
+		return ok(views.html.pharmacist.searched_pharmacies.render(true,searchStr,pharmacyList));
+		//		return redirect(routes.UserActions.dashboard());
+	}
+
+	/**
+	 * @author lakshmi
+	 * Action to list out favorite pharmacies
+	 */
+	public static Result myFavoritePharmacies() {
+		final Doctor doctor = LoginController.getLoggedInUser().getDoctor();
+
+		return ok(views.html.favorite_pharmacy_list.render(doctor.pharmacyList,doctor.id,0));
+	}
+	/**
+	 * @author lakshmi
+	 * Action to remove pharmacy from  favorite pharmacies List
+	 */
+	public static Result removeFavoritePharmacy(final Long doctorId,final Long pharmacyId) {
+		final Doctor doctor = Doctor.find.byId(doctorId);
+		Logger.info("before delete list size()==="+doctor.pharmacyList.size());
+		doctor.pharmacyList.remove(Pharmacy.find.byId(pharmacyId));
 		doctor.update();
-		 */
-		return ok();
+		Logger.info("after delete list size()==="+doctor.pharmacyList.size());
+		//return redirect(routes.UserActions.dashboard());
+		return ok(views.html.favorite_pharmacy_list.render(doctor.pharmacyList,doctor.id,0));
 	}
 
 }

@@ -251,9 +251,9 @@ public class PharmacistController extends Controller {
 	 * Action to render the pharmacy_profile page
 	 * GET		/pharmacy/profile/:id
 	 */
-	public static Result myFavoritePharmacy(final Long pharmacyId){
+	public static Result myFavoritePharmacy(final Long pharmacyId,final String searchKey){
 		if(LoginController.getLoggedInUserRole().equals("DOCTOR")){
-			return redirect(routes.DoctorController.addFavoritePharmacy(pharmacyId));
+			return redirect(routes.DoctorController.addFavoritePharmacy(pharmacyId,searchKey));
 		}
 		else if(LoginController.getLoggedInUserRole().equals("PATIENT")){
 			return redirect(routes.PatientController.addFavoritePharmacy(pharmacyId));

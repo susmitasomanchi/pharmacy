@@ -16,6 +16,7 @@ import javax.persistence.OneToOne;
 
 import models.AppUser;
 import models.BaseEntity;
+import models.pharmacist.Pharmacy;
 import play.data.validation.Constraints.Required;
 import play.db.ebean.Model;
 
@@ -81,9 +82,9 @@ public class Doctor extends BaseEntity{
 	@OneToMany(cascade=CascadeType.ALL)
 	public List<DoctorEducation> doctorEducation = new ArrayList<DoctorEducation>();
 
-	/*@OneToMany(cascade=CascadeType.ALL)
+	@ManyToMany(cascade=CascadeType.ALL)
 	public List<Pharmacy> pharmacyList=new ArrayList<Pharmacy>();
-	 */
+
 	public Integer experience;
 
 
@@ -114,27 +115,27 @@ public class Doctor extends BaseEntity{
 	@Override
 	public void save(){
 		final StringBuilder stringBuilder = new StringBuilder();
-		for (final DoctorClinicInfo clinicInfo : this.doctorClinicInfoList) {
+		/*for (final DoctorClinicInfo clinicInfo : this.doctorClinicInfoList) {
 			if(clinicInfo.clinic != null){
 				stringBuilder.append(clinicInfo.clinic.name.toLowerCase());
 			}
 		}
 		stringBuilder.append(this.appUser.name.toLowerCase()).append(this.specialization.toLowerCase()).append(this.degree.toLowerCase()).append(this.slugUrl.toLowerCase());
-		this.searchIndex = stringBuilder.toString();
+		this.searchIndex = stringBuilder.toString();*/
 		super.save();
 	}
 
 
 	@Override
 	public void update() {
-		final StringBuilder stringBuilder=new StringBuilder();
+		/*final StringBuilder stringBuilder=new StringBuilder();
 		for (final DoctorClinicInfo clinicInfo : this.doctorClinicInfoList) {
 			if(clinicInfo.clinic != null){
 				stringBuilder.append(clinicInfo.clinic.name.toLowerCase());
 			}
 		}
 		stringBuilder.append(this.appUser.name.toLowerCase()).append(this.specialization.toLowerCase()).append(this.degree.toLowerCase()).append(this.slugUrl.toLowerCase());
-		this.searchIndex = stringBuilder.toString();
+		this.searchIndex = stringBuilder.toString();*/
 		super.update();
 	}
 
