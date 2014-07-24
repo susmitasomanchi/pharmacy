@@ -11,6 +11,7 @@ PLEASE DO NOT MODIFY IT BY HAND
  *****/
 package controllers;
 
+
 import models.Alert;
 import models.AppUser;
 import models.Role;
@@ -24,6 +25,7 @@ import play.data.Form;
 import play.mvc.Controller;
 import play.mvc.Result;
 import utils.Constants;
+import utils.Util;
 import beans.JoinUsBean;
 
 
@@ -90,7 +92,10 @@ public class UserController extends Controller {
 			doctor.specialization = "Specialization";
 			doctor.degree = "Degree";
 			doctor.appUser = appUser;
+			doctor.slugUrl=Util.simpleSlugify(appUser.name);
 			doctor.save();
+			doctor.slugUrl += doctor.id.toString();
+			doctor.update();
 		}
 
 		if(appUser.role.equals(Role.ADMIN_PHARMACIST)){

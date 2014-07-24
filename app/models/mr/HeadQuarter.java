@@ -22,8 +22,12 @@ public class HeadQuarter extends BaseEntity{
 
 	public String name;
 
-	//@ManyToOne(cascade=CascadeType.ALL)
-	//public MedicalRepresentative mr;
-
 	public static Finder<Long, HeadQuarter> find = new Finder<Long, HeadQuarter>(Long.class, HeadQuarter.class);
+	/**
+	 * this method returns state from which HeadQuarter belongs
+	 * 
+	 * */
+	public static State getState(final Long id){
+		return HeadQuarter.find.byId(id).state;
+	}
 }

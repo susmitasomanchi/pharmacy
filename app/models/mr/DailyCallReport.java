@@ -10,6 +10,7 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.OneToMany;
+import javax.persistence.OneToOne;
 
 import models.BaseEntity;
 
@@ -23,13 +24,26 @@ public class DailyCallReport extends BaseEntity{
 
 	public Date forDate;
 
-	//public MedicalRepresentative submitter;
+	@OneToOne
+	public MedicalRepresentative submitter;
 
-	//public MedicalRepresentative approver;
+	@OneToOne
+	public MedicalRepresentative approver;
 
-	//public DCRStatus dcrStatus;
+	public DCRStatus dcrStatus;
 
-	public HeadQuarter headQuater;
+	public Date submittedDate;
+
+	//public Date approvedDate;
+
+	//public Date rejectedDate;
+
+	public Date responseOn;
+
+	public Date reOpenedDate;
+
+	@OneToOne
+	public HeadQuarter headQuarter = new HeadQuarter();
 
 	@OneToMany(cascade=CascadeType.ALL)
 	public List<DCRLineItem> dcrLineItemList = new ArrayList<DCRLineItem>();

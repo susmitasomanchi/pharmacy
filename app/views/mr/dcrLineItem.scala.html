@@ -1,4 +1,4 @@
-@(dcr: models.mr.DailyCallReport, dcrLineItemForm:play.data.Form[models.mr.DCRLineItem],doctorList: List[models.doctor.Doctor],disabledDoctorList: List[models.doctor.Doctor],productList: List[models.mr.PharmaceuticalProduct])
+@(dcr: models.mr.DailyCallReport, dcrLineItemForm:play.data.Form[models.mr.DCRLineItem],doctorList: List[models.doctor.Doctor],disabledDoctorList: List[models.doctor.Doctor],productList: List[models.mr.PharmaceuticalProduct],loggedInMr: models.mr.MedicalRepresentative)
 
 @import play.i18n._
 @import helper.twitterBootstrap._
@@ -56,6 +56,73 @@
 				});
 	</script>
 	</script>
+	@if("SUBMITTED".compareToIgnoreCase(dcr.dcrStatus.name()) == 0 || "APPROVED".compareToIgnoreCase(dcr.dcrStatus.name()) == 0){
+		<table class="table table-bordered table-condensed">
+	<thead>
+	<tr>
+	   <th>Doctors</th>
+	   <th>Samples (Qty)</th>
+	   <th>Promotions</th>
+	   <th>InTime</th>
+	   <th>OutTime</th>
+	   <th>POB</th>
+	   <th>Remarks</th>
+	</tr>   
+	</thead>
+	<tbody>
+	@for(dcrLineItem <- dcr.dcrLineItemList){
+	<tr>
+		<td>@dcrLineItem.doctor.appUser.name</td>
+		<td>
+			@for(sample <- dcrLineItem.sampleList){
+				@if(sample.product != null){
+				@sample.product.medicineName (@sample.quantity)
+				<br>
+				}
+			}
+	   	</td>
+	   	<td valign="top">
+			<div id="samplesdiv">
+			      <table> 	
+				  	@for(promotedProduct <- dcrLineItem.promotionList){
+					  <tr>
+						 <td>@promotedProduct.medicineName</td>
+					  </tr>
+					 }
+			      </table>
+			</div>   
+	   	</td>
+	   	
+	   	@if(dcrLineItem.inTime == null){
+	   		<td>&nbsp;</td>
+	   		}else{
+	   		<td>@dcrLineItem.inTime.format("kk:mm")</td>
+	   		}
+	   	@if(dcrLineItem.outTime == null){
+	   		<td>&nbsp;</td>
+	   		}else{
+	   		<td>@dcrLineItem.outTime.format("kk:mm")</td>
+	   		}
+	   	
+	    @if(dcrLineItem.pob==0){
+	   		<td>&nbsp;</td>
+	   	}else{
+	   	<td>@dcrLineItem.pob</td>
+	   	}
+	   	
+		<td>@dcrLineItem.remarks</td>
+     </tr>
+     }
+   </tbody>
+  </table>
+  @if(loggedInMr == dcr.submitter.manager && "SUBMITTED".compareToIgnoreCase(dcr.dcrStatus.name()) == 0 ){
+  	<a class="btn btn-primary" href="/mr/approve-dcr/@dcr.id" >Approve</a>
+  	<a class="btn btn-primary btn-danger" href="/mr/reject-dcr/@dcr.id" >Reject</a>
+  	
+  }
+		
+	}else{
+	
 	
 	<div class="well">
 	<form id="dcrliform" name="dcrliform">
@@ -216,6 +283,8 @@
   </table>	
   
 	</div>
+	<a class="btn btn-primary pull-right" href="@routes.MRController.submitDCRLineItems(dcr.id)">Submit DCR Line Items</a>
+	}
 	<script>
 		$("#pob").keypress(function (evt) {
 			  var keycode = evt.charCode || evt.keyCode;

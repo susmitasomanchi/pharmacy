@@ -28,6 +28,18 @@ public class PublicController extends Controller{
 		final List<Doctor> doctors = Doctor.find.where().like("searchIndex","%"+cleanKey+"%").findList();
 		return ok(views.html.doctor.searchedDoctors.render(true, key, doctors));
 	}
+	/**
+	 * @author Mitesh
+	 * Action to search Doctor and display his profile page
+	 * GET /doctor/:slugUrl
+	 */
+	public static Result processSlugUrl(final String slugUrl) {
+		final String cleanKey = slugUrl.trim().toLowerCase();
+		final Doctor doctor = Doctor.find.where().like("searchIndex","%"+cleanKey+"%").findUnique();
+
+		return ok(views.html.doctor.publicDoctorProfile.render(doctor));
+	}
+	
 
 	/**
 	 * @author lakshmi

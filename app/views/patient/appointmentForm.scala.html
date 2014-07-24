@@ -1,0 +1,27 @@
+@(apptMap : Map[Date,List[models.doctor.Appointment]],slotes:Integer)
+@* appointmentForm Template File *@
+<table class="table table-hover table-bordered" style="text-align:center">
+    <tr class="danger">
+    @for((date,value) <- apptMap){
+     <th style="text-align:center">@date.format("dd-MMM-yy")<br>@date.format("EE")</th>
+    }
+    </tr>
+    
+      @for(slot <- 0 until slotes){
+      	<tr>
+      	 @for(date <- apptMap.keySet()){
+      	 	@if(slot<=apptMap.get(date).size()-1){
+      	 		@if(apptMap.get(date).get(slot).appointmentStatus.equals(models.doctor.AppointmentStatus.AVAILABLE)){
+      	 			     <td class="success" style="cursor:pointer">@apptMap.get(date).get(slot).appointmentTime.format("HH:mm") </td>
+      	 			
+      	 		}else{
+      	 		      	 <td class="active" disabled>@apptMap.get(date).get(slot).appointmentTime.format("HH:mm")</td>
+      	 		}
+      		}else{
+      		<td class="active" disabled></td>
+      		}
+      	 }
+      	  </tr>
+      }
+     
+    </table>
