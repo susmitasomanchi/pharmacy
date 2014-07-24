@@ -38,8 +38,8 @@ GET    /logout                            			controllers.LoginController.process
 # Public Pages
 GET	   /doctor/search									controllers.PublicController.searchDoctorsPage()
 GET	   /doctor/search/:key								controllers.PublicController.processSearchDoctors(key: String)
-GET		/pharmacy/search 								controllers.PharmacistController.searchPhamacy()
-GET   	/pharmacy/search/:searchString                  controllers.PharmacistController.searchPharmacies(searchString: String)
+GET		/pharmacy/search 								controllers.PublicController.searchPhamacy()
+GET   	/pharmacy/search/:searchString                  controllers.PublicController.searchPharmacies(searchString: String)
 
 
 # Sign up page
@@ -61,6 +61,7 @@ POST	/doctor/add-education						controllers.DoctorController.addEducation()
 GET		/doctor/remove-education/:docId/:id			controllers.DoctorController.removeEducation(docId: Long, id: Long)
 POST	/doctor/add-social-work						controllers.DoctorController.addSocialWork()
 GET		/doctor/remove-social-work/:docId/:id		controllers.DoctorController.removeSocialWork(docId: Long, id: Long)
+GET		/doctor/add-favorite-pharmacy/:pharmacyId		controllers.DoctorController.addFavoritePharmacy(pharmacyId: Long)
 
 # Doctor's Clinics
 GET    /doctor/new-clinic                 		controllers.DoctorController.newClinic()
@@ -85,9 +86,8 @@ GET		/pharmacy/profile/:id								controllers.PharmacistController.pharmacyProfi
 
 
 # Remove later (at Beta Launch)
-GET    /                                  controllers.Application.index()
-GET    /:str		                      controllers.Application.indexX(str: String)
-
+#GET    /                                  controllers.Application.index()
+#GET    /:str		                      controllers.Application.indexX(str: String)
 
 #############################	PRODUCTION	#################################################################################
 
@@ -108,10 +108,16 @@ POST   /scheduleappointment/              		controllers.AppointmentController.pr
 
 #Pharmacy Module
 
+GET   	/pharmacy/add-favourite-pharmacy/:pharmacyId                      	controllers.PharmacistController.myFavoritePharmacy(pharmacyId : Long)
+GET   	/pharmacy/add-pharmacy-product                      	controllers.PharmacistController.addPharmacyProduct()
+POST   	/pharmacy/add-pharmacy-product                      	controllers.PharmacistController.addPharmacyProductProcess()
+GET		/pharmacy/pharmacy-product-list							controllers.PharmacistController.getPharmacyProducts()
+GET	    /pharmacy/addProductToInventory/:productId/:pharmacyId            		controllers.PharmacistController.addProductToInventory(productId :Long,pharmacyId : Long)
+POST	/pharmacy/addProductToInventory/:productId/:pharmacyId            		controllers.PharmacistController.addProductToInventoryProcess(productId:Long,pharmacyId : Long)
 GET   	/edit-product/:id                      	controllers.PharmacistController.editProduct(id: Long)
 #GET     /remove-product/:id                      	controllers.PharmacistController.removeProduct(id: Long)
 POST	/addProductToInventory/					controllers.PharmacistController.addProductForm(id: Long)
-POST    /addProductToInventory1/            		controllers.PharmacistController.addToInventory(id:Long)		
+		
 GET		/order									controllers.PharmacistController.orderRecord()
 GET     /searchProduct                           controllers.PharmacistController.searchForm()
 POST  	/searchProduct                           controllers.PharmacistController.searchProduct(arg: String ?= "")
@@ -160,6 +166,7 @@ GET		/patient/search-doctors/:query					controllers.PatientController.searchDoct
 GET    /answerform                       		 controllers.DoctorController.displayAnswer()
 POST   /ansQuestion/:qaId                 		 controllers.DoctorController.answerQuestion(qaId: Long)
 GET    /static/new/appointment					controllers.PatientController.staticPatientNewAppointment()
+GET		/patient/add-favorite-pharmacy/:pharmacyId		controllers.PatientController.addFavoritePharmacy(pharmacyId: Long)
 
 
 #GET    /diagnosticlist                   	 	controllers.DiagnosticController.diagnosticlist()

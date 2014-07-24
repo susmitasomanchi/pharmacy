@@ -879,6 +879,16 @@ public class DoctorController extends Controller {
 		return ok(views.html.doctor.doctor_appointments.render(appointments));
 
 	}
-
+	/**
+	 * @author lakshmi
+	 * Action to add favorite pharmacy of the Doctor to the list
+	 */
+	public static Result addFavoritePharmacy(final Long pharmacyId) {
+		/*final Doctor doctor = LoginController.getLoggedInUser().getDoctor();
+		doctor.pharmacyList.add(Pharmacy.find.byId(pharmacyId));
+		doctor.update();
+		 */
+		return ok();
+	}
 
 }

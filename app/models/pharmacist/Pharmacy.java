@@ -53,6 +53,9 @@ public class Pharmacy extends BaseEntity {
 	public List<FileEntity> profileImageList = new ArrayList<FileEntity>();
 
 	@OneToMany(cascade=CascadeType.ALL)
+	public List<PharmacyInfo> pharmacyInfoList = new ArrayList<PharmacyInfo>();
+
+	@OneToMany(cascade=CascadeType.ALL)
 	public List<PharmacyProduct> pharmacyProductList = new ArrayList<PharmacyProduct>();
 
 	@OneToMany(cascade=CascadeType.ALL)
@@ -95,7 +98,6 @@ public class Pharmacy extends BaseEntity {
 
 		return pharmacyBean;
 	}
-	int test;
 
 	@Override
 	public void save(){

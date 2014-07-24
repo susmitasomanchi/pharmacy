@@ -1,7 +1,6 @@
 package controllers;
 
 import java.util.Date;
-
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
@@ -254,6 +253,19 @@ public class PatientController extends Controller {
 
 	public static Result staticPatientNewAppointment() {
 		return ok(views.html.patient.static_patient_new_appointment.render());
+	}
+
+	/**
+	 * @author lakshmi
+	 * Action to add favorite pharmacy of the Patient to the list
+	 */
+	public static Result addFavoritePharmacy(final Long pharmacyId) {
+		/*final Patient patient = LoginController.getLoggedInUser().getPatient();
+		patient.pharmacyList.add(Pharmacy.find.byId(pharmacyId));
+		patient.update();*/
+
+
+		return ok();
 	}
 
 }

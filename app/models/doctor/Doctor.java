@@ -81,6 +81,9 @@ public class Doctor extends BaseEntity{
 	@OneToMany(cascade=CascadeType.ALL)
 	public List<DoctorEducation> doctorEducation = new ArrayList<DoctorEducation>();
 
+	/*@OneToMany(cascade=CascadeType.ALL)
+	public List<Pharmacy> pharmacyList=new ArrayList<Pharmacy>();
+	 */
 	public Integer experience;
 
 

@@ -1,0 +1,153 @@
+@(flag: Boolean,searchKey: String,pharmacyList  : List[models.pharmacist.Pharmacy])
+
+@import play.i18n._
+@import helper.twitterBootstrap._
+@import helper._
+
+@main("Favorite Pharmacies"){
+<div class="well">
+<div class="row">
+
+<label for="searchInput">Search For</label>
+<input id="searchInput" value="@searchKey"/>
+
+<a onclick="window.location.href='/pharmacy/search/'+$('#searchInput').val().trim();" class="btn btn-xs btn-primary">Search</a>
+
+</div>
+</div>
+	
+<script src="http://maps.googleapis.com/maps/api/js?sensor=false"></script>
+<script src="@routes.Assets.at("javascripts/googlemaps.js")" type="text/javascript"></script>
+
+<style>
+.badge{
+color:#000000;
+background-color:#cccccc;
+}
+#coverborder {
+    opacity: 0.4;
+    filter: alpha(opacity=40); /* For IE8 and earlier */
+}
+.well{
+margin-bottom:0px;
+}
+
+</style>	
+	
+<table class="table table-bordered">
+@for((pharmacy,index) <- pharmacyList.zipWithIndex){
+@if(index%2 == 0){
+<tr class="row">
+<td class="col-md-6">
+<div class="row" style="padding-left:20px;padding-right:20px">
+<div style="cursor:pointer" onclick="location.href='@routes.PharmacistController.pharmacyProfile(pharmacy.id)';">@if(pharmacy.backgroundImage != null){<img src="@routes.PharmacistController.getPharmacyImages(pharmacy.id,0)" width="530" height="170" />}else{<img src="/assets/images/pharmacy-default-bg-image.jpg" width="530" height="170" />}
+        
+        </div>
+
+<div class="row" style="margin-top:-55px;padding-left:15px">
+<div style="cursor:pointer;width:23%" onclick="location.href='@routes.PharmacistController.pharmacyProfile(pharmacy.id)';" class="col-md-3">
+@if(pharmacy.profileImageList.size() >0){
+<img src="@routes.PharmacistController.getPharmacyImages(pharmacy.id,pharmacy.profileImageList.get(0).id)" class="thumbnail" width="100" height="100"  />
+ }else{
+ <img src="/assets/images/pharmacy-default-profile-image.jpg" class="thumbnail" width="100" height="100"  />
+ }
+</div>
+<div style="cursor:pointer;padding-left:0px;padding-top:50px;padding-right:0px;width:46%" onclick="location.href='/dashboard';" class="col-md-6">
+<h5><b>@pharmacy.name</b></h5>
+<br>
+</div>
+<div class="col-md-3" style="width:31%;padding-left:0px;padding-top:60px">
+<a class="btn btn-primary btn-xs" href="@routes.PharmacistController.myFavoritePharmacy(pharmacy.id)">Add to Fav</a>
+<button class="btn btn-danger btn-xs" data-toggle="modal" data-target="#myModal1">Remove</button>
+<div class="modal fade" id="myModal1" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+  <div class="modal-dialog" style="padding-top:200px">
+    <div class="modal-content" style="padding-left:20px">
+      <h4>Are you to confirm to remove1</h4>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-default btn-xs" data-dismiss="modal">Close</button>
+        <button type="button" class="btn btn-primary btn-xs">Confirm</button>
+      </div>
+    </div>
+  </div>
+</div>
+</div>
+</div>
+<div class="row well">
+<div class="col-md-5" style="padding:0px">
+<h5 ><b>@pharmacy.name</b></h5>
+        @if(pharmacy.address != null){  
+        <h5>@pharmacy.address.addressLine1</h5>     
+        <h5>@pharmacy.address.area</h5>
+        <h5>@pharmacy.address.city</h5>
+        <h5>@pharmacy.address.state</h5>
+        }
+        <h5>Phones nos:@pharmacy.contactNo</h5>
+</div>
+
+<br>
+</div>
+</td>
+@if(index == pharmacyList.size()-1){
+            </tr>
+          }
+}else{
+<td>
+<div class="row" style="padding-left:20px;padding-right:20px">
+<div style="cursor:pointer" onclick="location.href='@routes.PharmacistController.pharmacyProfile(pharmacy.id)';">@if(pharmacy.backgroundImage != null){<img src="@routes.PharmacistController.getPharmacyImages(pharmacy.id,0)" width="530" height="170" />}else{<img src="/assets/images/pharmacy-default-bg-image.jpg" width="530" height="170" />}
+        
+        </div>
+
+<div class="row" style="margin-top:-55px;padding-left:15px">
+<div style="cursor:pointer;width:23%" onclick="location.href='@routes.PharmacistController.pharmacyProfile(pharmacy.id)';" class="col-md-3">
+@if(pharmacy.profileImageList.size() >0){
+<img src="@routes.PharmacistController.getPharmacyImages(pharmacy.id,pharmacy.profileImageList.get(0).id)" class="thumbnail" width="100" height="100"  />
+ }else{
+ <img src="/assets/images/pharmacy-default-profile-image.jpg" class="thumbnail" width="100" height="100"  />
+ }
+</div>
+<div style="cursor:pointer;padding-left:0px;padding-top:50px;padding-right:0px;width:46%" onclick="location.href='/dashboard';" class="col-md-6">
+<h5><b>@pharmacy.name</b></h5>
+<br>
+</div>
+<div class="col-md-3" style="width:31%;padding-left:0px;padding-top:60px">
+<a class="btn btn-primary btn-xs" href="@routes.PharmacistController.myFavoritePharmacy(pharmacy.id)">Add to Fav</a>
+<button class="btn btn-danger btn-xs" data-toggle="modal" data-target="#myModal1">Remove</button>
+<div class="modal fade" id="myModal1" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+  <div class="modal-dialog" style="padding-top:200px">
+    <div class="modal-content" style="padding-left:20px">
+      <h4>Are you to confirm to remove1</h4>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-default btn-xs" data-dismiss="modal">Close</button>
+        <button type="button" class="btn btn-primary btn-xs">Confirm</button>
+      </div>
+    </div>
+  </div>
+</div>
+</div>
+</div>
+<div class="row well">
+<div class="col-md-5" style="padding:0px">
+<h5 ><b>@pharmacy.name</b></h5>
+        @if(pharmacy.address != null){  
+        <h5>@pharmacy.address.addressLine1</h5>     
+        <h5>@pharmacy.address.area</h5>
+        <h5>@pharmacy.address.city</h5>
+        <h5>@pharmacy.address.state</h5>
+        }
+        <h5>Phones nos:@pharmacy.contactNo</h5>
+</div>
+
+<br>
+</div>
+</td>
+  
+}
+
+</tr>
+}
+</table>
+
+
+}
+
+
