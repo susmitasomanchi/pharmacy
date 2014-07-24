@@ -3,11 +3,8 @@
 
 @main(pharmacy.name) {
 
-@*Script for loading google map*@
 <script src="http://maps.googleapis.com/maps/api/js?sensor=false"></script>
 
-
-@*End of Script for loading google map*@
 <script>
 	var i = 0;
 	function addfiles() {
@@ -46,10 +43,9 @@ color:black;
 
 }
 </style>
-	<script>
 
+<script>
 $('[data-toggle="popover"]').popover();
-
 $('body').on('click', function (e) {
     $('[data-toggle="popover"]').each(function () {
         if (!$(this).is(e.target) && $(this).has(e.target).length === 0 && $('.popover').has(e.target).length === 0) {
@@ -58,13 +54,9 @@ $('body').on('click', function (e) {
     });
 });
     
-
 function submitimagesform(){
-
-$("[data-toggle=popover]").popover('hide');
-
-$('#spinner').addClass("fa-spin");
-
+	$("[data-toggle=popover]").popover('hide');
+	$('#spinner').addClass("fa-spin");
 }
 
 function submitbasicform(id){
@@ -72,14 +64,22 @@ function submitbasicform(id){
 	$('#'+id).addClass("fa-spin");
 }
 </script>	
-	
+
+
+
+
+
+
+
+
+
 @if(pharmacy.backgroundImage != null){
-	<div style="background-image:url('/pharmacy/get-image/@pharmacy.id/0');background-size:940px 400px; background-repeat:no-repeat; height:400px;"></div>
+	<div style="background-image:url('@routes.PharmacistController.getPharmacyImages(pharmacy.id,0)');background-size:940px 400px; background-repeat:no-repeat; height:400px;"></div>
 }else{
 	<div style="background-image:url('/assets/images/pharmacy-default-bg-image.jpg');background-size:940px 400px; background-repeat:no-repeat; height:400px;"></div>
 }
 
-<span data-toggle="popover" data-placement="left" title="Change Background Image" data-html="true" data-content="<form action=&quot;/pharmacy/upload-pharmacy-images&quot; enctype=&quot;multipart/form-data&quot; method=&quot;POST&quot;><input type=&quot;file&quot; name=&quot;backgroundImage&quot;> <input type=&quot;hidden&quot; name=&quot;pharmacyId&quot; value=&quot;@pharmacy.id&quot;> <br><input class=&quot;pull-right btn btn-xs btn-primary&quot; type=&quot;submit&quot; onclick=&quot;submitimagesform();&quot; value=&quot;save&quot;></form>" style="cursor:pointer; position:relative; top:-400px;left:910px; font-size:25px">
+<span data-toggle="popover" data-placement="left" title="Change Background Image" data-html="true" data-content="<form action=&quot;@routes.PharmacistController.uploadPharmacyImageProcess()&quot; enctype=&quot;multipart/form-data&quot; method=&quot;POST&quot;><input type=&quot;file&quot; name=&quot;backgroundImage&quot;> <input type=&quot;hidden&quot; name=&quot;pharmacyId&quot; value=&quot;@pharmacy.id&quot;> <br><input class=&quot;pull-right btn btn-xs btn-primary&quot; type=&quot;submit&quot; onclick=&quot;submitimagesform();&quot; value=&quot;save&quot;></form>" style="cursor:pointer; position:relative; top:-400px;left:910px; font-size:25px">
 <i style="text-shadow:1px 1px 20px #292929, 3px 3px 20px white;" id="spinner" class="fa fa-cog"></i>
 </span>
 </div>
@@ -102,14 +102,15 @@ function submitbasicform(id){
       <table class="table table-striped">
       @for(profileImages <- pharmacy.profileImageList){
       <tr>
-      <td style="width:200px"> <img src="/pharmacy/get-image/@pharmacy.id/@profileImages.id" width="150" height="75" /> </td>
-      <td> <button class="btn btn-danger btn-xs"><a href="/pharmacy/remove-image/@pharmacy.id/@profileImages.id" style="color:white">Delete</a></button> </td>
+      <td style="width:200px"> <img src="@routes.PharmacistController.getPharmacyImages(pharmacy.id,profileImages.id)" width="150" height="75" /> </td>
+      <td> <button class="btn btn-danger btn-xs"><a href="@routes.PharmacistController.removeImage(pharmacy.id,profileImages.id)" style="color:white">Delete</a></button> </td>
       </tr>
       }
      </table>
       @helper.form(action = routes.PharmacistController.uploadPharmacyImageProcess(), 'enctype -> "multipart/form-data",'method -> "post") {
       	<div class="form-group">
     	<label for="exampleInputFile" class="badge"><b>Add Image</b></label>
+    	<input type="hidden" name="pharmacyId" value="@pharmacy.id"/>
     	<input type="file" name="profileImage" />
     	<input class="pull-right btn btn-primary btn-xs" type="submit" name="submit" value="Save Image" />
   		</div> 
@@ -119,6 +120,7 @@ function submitbasicform(id){
     </div>
   </div>
 </div>
+
 <div id="carousel-example-generic" class="carousel slide" data-ride="carousel">
   <!-- Indicators -->
   
@@ -147,7 +149,7 @@ function submitbasicform(id){
 
   <!-- Wrapper for slides -->
   <div class="carousel-inner">
-    <div class="active">
+    <div class="item active">
       <img src="/assets/images/pharmacy-default-profile-image.jpg" alt="Pharmacy Pic" style="height:300px; width:800px;"/>
     </div>
   </div>
@@ -165,11 +167,13 @@ function submitbasicform(id){
     <span class="glyphicon glyphicon-chevron-right" style="left:20px;color:#006687"></span>
   </a>
 </div>
+
+
 </div>
 <div class="col-md-1"></div>
 </div>
 <br>
-<h1 style="text-align:center;font-weight:bold;color:#006687">
+<h1 style="text-shadow:10px 10px 10px white, 3px 3px 20px white; position:relative; top:-400px; text-align:center;font-weight:bold;color:#006687">
 @pharmacy.name
 <span 
 
@@ -196,15 +200,167 @@ style="color:#006687; font-size:20px; position:relative; top:-20px; cursor:point
 </p>
 </div>
 <div class="row">
-<div class="col-md-1">
-</div>
+
 <div class="col-md-10">
-<div class="col-md-4">
 
-<div>
+<div class="col-md-5">
+
+<!--
+<h2 style="position:reative; margin-top:0px;">Contact<span data-toggle="modal" data-target="#myaddrModal" style="cursor:pointer; position:relative; top:-3px;left:-150px; font-size:20px;"><i id="spinner2" class="fa fa-cog"></i></span></h2>
+-->
+
+
+<!--
+</h2>
+-->
+@if(pharmacy.address != null){
+<h5>@pharmacy.contactPerson<span data-toggle="modal" data-target="#myaddrModal" style="cursor:pointer; position:relative; left: 20px; font-size:20px;"><i id="spinner2" class="fa fa-cog"></i></span></h5>
+<h5>@pharmacy.address.addressLine1</h5>
+<h5>@pharmacy.address.area</h5>
+<h5>@pharmacy.address.city</h5>
+@if(pharmacy.address.state != null){
+<h5>@models.State.options().get(pharmacy.address.state.toString())</h5>	
+}
+<h5>@pharmacy.address.pinCode</h5>
+<h5>Phones: @pharmacy.contactNo </h5>
+}else{
+<h4>
+Edit Contact Details
+<span data-toggle="modal" data-target="#myaddrModal" style="cursor:pointer; position:relative; left:10px; font-size:20px;"><i id="spinner2" class="fa fa-cog"></i></span>
+</h4>
+}
+</div>
+
+<div class="col-md-7">
+	<div id="profile_map_canvas" style="width:600px;height:400px">
+	@if(pharmacy.address == null || pharmacy.address.latitude== null || pharmacy.address.longitude == null || pharmacy.address.latitude.trim().compareToIgnoreCase("") == 0 || pharmacy.address.longitude.trim().compareToIgnoreCase("") == 0){
+		<img src="/assets/images/googlemap1.png" width="600" height="400" style="position:relative" />
+		<div class="maptext" style="text-align:center">
+		<p style="position:relative; top:-200px; color:#008cba;"><b>Kindly Edit Contact Details & Mark Your Pharmacy</span></b></p>
+	}else{
+	
+	}
+	</div>
+</div>
+
 
 </div>
-<h2 style="position:reative; margin-top:0px;">Contact<span data-toggle="modal" data-target="#myaddrModal" style="cursor:pointer; position:relative; top:-3px;left:-150px; font-size:20px;"><i id="spinner2" class="fa fa-cog"></i></span></h2>
+
+</div>
+
+<br><br><br>
+
+</div>
+
+
+
+
+
+
+
+
+
+<script>
+
+var lng, lat, marker;
+var dbclk = false;
+var map, myLatLng;
+function initialize(mapdiv) {
+	var mapOptions = {
+		center : new google.maps.LatLng(lat, lng),
+		zoom : 15
+	};
+	map = new google.maps.Map(document
+			.getElementById(mapdiv), mapOptions);
+
+	//  map.set("disableDoubleClickZoom", false);
+
+	
+	if(mapdiv == 'map_canvas'){
+		marker = new google.maps.Marker({
+			position : myLatLng,
+			draggable : true,
+			animation : google.maps.Animation.DROP,
+			map : map
+		});
+
+		$("#lat1").val(lat);
+		$("#lng1").val(lng);
+
+		//On click event of map marker should get relocated
+		google.maps.event.addListener(map, 'click', function(
+				event) {
+			marker.setPosition(event.latLng);
+			$("#lat1").val(event.latLng.lat());
+			$("#lng1").val(event.latLng.lng());
+		});
+		// After dragging the marker
+		google.maps.event.addListener(marker, 'dragend',
+				function(event) {
+					$("#lat1").val(event.latLng.lat());
+					$("#lng1").val(event.latLng.lng());
+		});
+	}
+
+	if(mapdiv == 'profile_map_canvas'){
+		marker = new google.maps.Marker({
+			position : myLatLng,
+			draggable : false,
+			animation : google.maps.Animation.DROP,
+			map : map
+		});
+	}
+
+	
+}
+
+
+$( document ).ready(function() {
+$("#city").blur(function() {
+	$("#map_canvas").html('');
+	var geocoder = new google.maps.Geocoder();
+	//var streetname=$("#streetName").val();
+	var area=$("#area").val();
+	geocoder.geocode({
+		'address' : area+this.value
+	}, function(results, status) {
+		if (status == google.maps.GeocoderStatus.OK) {
+			//alert("location : " + results[0].geometry.location.lat() + " " +results[0].geometry.location.lng()); 
+			myLatLng = results[0].geometry.location;
+			lat = results[0].geometry.location.lat();
+			lng = results[0].geometry.location.lng();
+			initialize('map_canvas');
+		} else {
+			alert("Something got wrong " + status);
+		}
+	});
+	// google.maps.event.addDomListener(window, 'load', initialize);
+});
+});
+
+</script>
+
+
+
+
+@if(pharmacy.address != null && pharmacy.address.latitude!= null && pharmacy.address.longitude != null && pharmacy.address.latitude.trim().compareToIgnoreCase("") != 0 && pharmacy.address.longitude.trim().compareToIgnoreCase("") != 0){
+<script>
+		window.onload=function(){
+			lat = @pharmacy.address.latitude
+			lng = @pharmacy.address.longitude
+			myLatLng= new google.maps.LatLng(lat, lng),
+			google.maps.event.addDomListener(window, 'load', initialize('profile_map_canvas'));
+			$('#myaddrModal').on('shown.bs.modal', function (e) {
+				initialize('map_canvas');
+			});
+		};
+		
+</script>
+}
+
+
+
+
 <div class="modal fade" id="myaddrModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
   <div class="modal-dialog" style="width:820px">
     <div class="modal-content" >
@@ -216,23 +372,23 @@ style="color:#006687; font-size:20px; position:relative; top:-20px; cursor:point
      	<div class="row">
 			<div class="col-md-4">
 			<form action=@routes.PharmacistController.pharmacyAddressUpdate() role="form" method="POST">
-			<div ><input type="hidden" name="lat" id="lat1"></div>
-			<div ><input type="hidden" name="lng" id="lng1"></div>
+			<div ><input type="hidden" name="latitude" id="lat1"></div>
+			<div ><input type="hidden" name="longitude" id="lng1"></div>
   			<div class="form-group">
-   				 <label for="addressLine1">Address Line1</label>
-   				 <input type="text" class="form-control" name="addressLine1" @if(pharmacy.address!=null){value="@pharmacy.address.addrressLine1"} id="addressLine1" placeholder="Enter Address Line1">
+   				 <label for="addressLine1">Contact Person</label>
+   				 <input type="text" class="form-control" name="contactPerson" @if(pharmacy.contactPerson!=null){value="@pharmacy.contactPerson"} id="contactPerson" placeholder="Contact Person's Name">
  			</div>
   			<div class="form-group">
-    			<label for="addressLine2">Address Line2</label>
-    			<input type="text" class="form-control" name="addressLine2" @if(pharmacy.address!=null){value="@pharmacy.address.addrressLine2"} id="addressLine2" placeholder="Enter Address Line2">
-  			</div>
-  			<div class="form-group">
-    			<label for="city">City</label>
-    			<input type="text" class="form-control" name="city" @if(pharmacy.address!=null){value="@pharmacy.address.city"} id="city" placeholder="Enter City">
+    			<label for="streetName">Street Address</label>
+    			<input type="text" class="form-control" name="addressLine1" @if(pharmacy.address!=null){value="@pharmacy.address.addressLine1"} id="streetName" placeholder="Enter Street Address">
   			</div>
   			<div class="form-group">
     			<label for="city">Area</label>
     			<input type="text" class="form-control" name="area" @if(pharmacy.address!=null){value="@pharmacy.address.area"} id="area" placeholder="Enter Area">
+  			</div>
+  			<div class="form-group">
+    			<label for="city">City</label>
+    			<input type="text" class="form-control" name="city" @if(pharmacy.address!=null){value="@pharmacy.address.city"} id="city" placeholder="Enter City">
   			</div>
   			<div class="form-group">
     			<label for="pincode">Pincode</label>
@@ -240,13 +396,19 @@ style="color:#006687; font-size:20px; position:relative; top:-20px; cursor:point
   			</div>
   			<div class="form-group">
     			<label for="state">State</label><br>
-				<select data-placeholder="Select the state" name="state" @if(pharmacy.address!=null){value="@pharmacy.address.state"}>
+				<select id="statesel" style="width:100%;" data-placeholder="Select State" name="state">
     				<option value=""></option>	
-     				@for(state <- models.State.values()){
-        			<option  name="state" value="@state">@state</option>
-          			     }
+     				@for((k,v) <- models.State.options()){
+     					@if(pharmacy.address != null && pharmacy.address.state != null && pharmacy.address.state == k){
+							<option  name="state" value="@k" selected>@v</option>
+						}else{
+        					<option  name="state" value="@k">@v</option>
+        				}
+					}
     			</select>
   			</div>
+  			
+  			@*
   			<div class="form-group">
     			<label for="state">Country</label><br>
     			<select data-placeholder="Select the country" name="country" @if(pharmacy.address!=null){value="@pharmacy.address.country"}>
@@ -256,6 +418,7 @@ style="color:#006687; font-size:20px; position:relative; top:-20px; cursor:point
           			     }
     			</select>
   			</div>
+  			*@
   
   			<div class="form-group">
     			<label for="phone">Phone Number</label>
@@ -268,41 +431,34 @@ style="color:#006687; font-size:20px; position:relative; top:-20px; cursor:point
 		</form>
 	</div>	
 <div class="col-md-8">
-<br><br>
-<img src="/assets/images/googlemap1.png" width="520" height="400" style="position:relative" />
-<div class="maptext" style="text-align:center">
 
-<p>Please provide Area and City to generate the map</span></p>
+<div id="map_canvas" style="width:520px;height:400px">
+	@if(pharmacy.address == null || pharmacy.address.latitude== null || pharmacy.address.longitude == null || pharmacy.address.latitude.trim().compareToIgnoreCase("") == 0 || pharmacy.address.longitude.trim().compareToIgnoreCase("") == 0){
+		<img src="/assets/images/googlemap1.png" width="520" height="400" style="position:relative" />
+		<div class="maptext" style="text-align:center">
+		<p style="position:relative; top:-200px; color:#008cba;"><b>Please provide Area and City to generate the map</span></b></p>
+	}
+</div>
+
 </div>
 </div>
 </div>
       </div>
     </div>
   </div>
-</div></h2>
-@if(pharmacy.address != null){
-<h5>@pharmacy.name</h5>
-<h5>@pharmacy.address.addrressLine1</h5>
-<h5>@pharmacy.address.area</h5>
-<h5>@pharmacy.address.city</h5>
-<h5>@pharmacy.address.state</h5>
-<h5>@pharmacy.address.country</h5>
-<h5>Pin Code:@pharmacy.address.pinCode</h5>
-}
-<h5>Phones nos:@pharmacy.contactNo</h5>
-</div>	
-<div class="col-md-8">
-<div id="map_canvas" style="width:500px;height:300px"> </div>
-</div>
 </div>
 
-@*<span style="font-size:20px; cursor:pointer; position:relative; top:-10px;">
-<i id="spinner-address" class="fa fa-cog"></i>*@
 
-<div class="col-md-1">
-</div>
-</div>
-<br><br>
+<script>
+	$('#myaddrModal').on('shown.bs.modal', function (e) {
+		$('#statesel').chosen();
+	});
+</script>
+
+
+
+
+@*
 <h2>ShowCase List</h2>
 <span data-toggle="modal" data-target="#mydrugModal" style="cursor:pointer; position:relative; top:2px;left:940px; font-size:15px;"><i id="spinner2" class="fa fa-cog"></i></span>
 <div class="modal fade" id="mydrugModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
@@ -349,6 +505,8 @@ style="color:#006687; font-size:20px; position:relative; top:-20px; cursor:point
     </div>
   </div>
 </div>
+
+
 <table class="table table-bordered">
 <tr>
 <th> S No </th>
@@ -367,9 +525,16 @@ style="color:#006687; font-size:20px; position:relative; top:-20px; cursor:point
 </tr>
 }
 }
+*@
+
 </table>
 
+
+
+
+<!--
 <br>
 <button class="btn btn-success btn-lg"><a href="/pharmacy/order/@pharmacy.id" style="color:white">Place your order</a></button>
-
+-->
 }
+

@@ -35,6 +35,8 @@ public class DiagnosticCentre extends BaseEntity {
 	@Required
 	public String name;
 
+	public String contactPerson;
+
 	@OneToOne
 	public Address address;
 
@@ -47,6 +49,9 @@ public class DiagnosticCentre extends BaseEntity {
 
 	@ManyToMany(cascade = CascadeType.ALL)
 	public List<FileEntity> profileImageList = new ArrayList<FileEntity>();
+
+	@OneToMany(cascade = CascadeType.ALL)
+	public List<ShowCasedService> showCasedServiceList = new ArrayList<ShowCasedService>();
 
 	@Email
 	@Required

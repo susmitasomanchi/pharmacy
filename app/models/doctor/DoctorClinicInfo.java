@@ -126,8 +126,8 @@ public class DoctorClinicInfo extends BaseEntity {
 		if(this.clinic.address != null){
 			bean.addressId = this.clinic.address.id;
 		}
-		if(this.clinic.address.addrressLine1!=null){
-			bean.street=this.clinic.address.addrressLine1;
+		if(this.clinic.address.addressLine1!=null){
+			bean.street=this.clinic.address.addressLine1;
 		}
 		if(this.clinic.address.area!=null){
 			bean.area=this.clinic.address.area;

@@ -83,6 +83,13 @@ public class Doctor extends BaseEntity{
 
 	public Integer experience;
 
+
+	@Column(columnDefinition="TEXT")
+	public String searchIndex;
+
+	@Column(columnDefinition="TEXT")
+	public String slugUrl;
+
 	public static Model.Finder<Long,Doctor> find = new Finder<Long, Doctor>(Long.class, Doctor.class);
 
 	public List<DoctorExperience> getExperienceListInOrder(){
@@ -100,5 +107,34 @@ public class Doctor extends BaseEntity{
 	public List<DoctorClinicInfo> getActiveClinic(){
 		return DoctorClinicInfo.find.where().eq("doctor", this).eq("active", true).findList();
 	}
+
+	@Override
+	public void save(){
+		final StringBuilder stringBuilder = new StringBuilder();
+		for (final DoctorClinicInfo clinicInfo : this.doctorClinicInfoList) {
+			if(clinicInfo.clinic != null){
+				stringBuilder.append(clinicInfo.clinic.name.toLowerCase());
+			}
+		}
+		stringBuilder.append(this.appUser.name.toLowerCase()).append(this.specialization.toLowerCase()).append(this.degree.toLowerCase()).append(this.slugUrl.toLowerCase());
+		this.searchIndex = stringBuilder.toString();
+		super.save();
+	}
+
+
+	@Override
+	public void update() {
+		final StringBuilder stringBuilder=new StringBuilder();
+		for (final DoctorClinicInfo clinicInfo : this.doctorClinicInfoList) {
+			if(clinicInfo.clinic != null){
+				stringBuilder.append(clinicInfo.clinic.name.toLowerCase());
+			}
+		}
+		stringBuilder.append(this.appUser.name.toLowerCase()).append(this.specialization.toLowerCase()).append(this.degree.toLowerCase()).append(this.slugUrl.toLowerCase());
+		this.searchIndex = stringBuilder.toString();
+		super.update();
+	}
+
+	
 
 }
