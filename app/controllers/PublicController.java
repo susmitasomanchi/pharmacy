@@ -39,7 +39,7 @@ public class PublicController extends Controller{
 
 		return ok(views.html.doctor.publicDoctorProfile.render(doctor));
 	}
-	
+
 
 	/**
 	 * @author lakshmi
@@ -63,7 +63,7 @@ public class PublicController extends Controller{
 			pharmacyList = Pharmacy.find.where().like("searchIndex","%"+searchStr+"%").findList();
 		}
 		else{
-			flash().put("alert", new Alert("alert-danger", "The searck key should contain four charecters").toString());
+			flash().put("alert", new Alert("alert-danger", "The searck key should contain atleast four charecters").toString());
 		}
 		return ok(views.html.pharmacist.searched_pharmacies.render(true,searchStr,pharmacyList));
 	}
