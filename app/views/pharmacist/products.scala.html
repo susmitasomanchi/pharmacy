@@ -1,0 +1,35 @@
+@(pharmacyProducts: List[models.pharmacist.PharmacyProduct])
+ 
+@main("PharmacyProducts"){
+	
+
+<table width="50%" border="1">
+<tr>
+<th>
+Product Name
+</th>
+<th>
+Product Description
+</th>
+</tr>
+
+@for(pharmacyProduct <- pharmacyProducts) {
+<tr>
+<td>
+  @pharmacyProduct.medicineName  
+  </td>
+  <td> 
+  @pharmacyProduct.description  
+  </td>
+  <td>
+   @helper.form(action=routes.PharmacistController.addToInventory(product.id)) {
+    <input type="submit" value="Add To Inventory"/>
+    }
+    </td>
+  
+  
+   
+} 
+</tr>
+</table>
+}
