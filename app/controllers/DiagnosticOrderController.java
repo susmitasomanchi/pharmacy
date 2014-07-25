@@ -3,13 +3,13 @@ package controllers;
 import java.util.Date;
 import java.util.List;
 
-import models.Patient;
 import models.diagnostic.DiagnosticCentre;
 import models.diagnostic.DiagnosticOrder;
 import models.diagnostic.DiagnosticOrderStatus;
 import models.diagnostic.DiagnosticReport;
 import models.diagnostic.DiagnosticReportStatus;
 import models.diagnostic.DiagnosticTest;
+import models.patient.Patient;
 import play.Logger;
 import play.data.DynamicForm;
 import play.data.Form;

@@ -10,13 +10,13 @@ import java.util.Map;
 
 import models.Alert;
 import models.AppUser;
-import models.Patient;
 import models.diagnostic.DiagnosticCentre;
 import models.doctor.Appointment;
 import models.doctor.DaySchedule;
 import models.doctor.Doctor;
 import models.doctor.DoctorClinicInfo;
 import models.doctor.QuestionAndAnswer;
+import models.patient.Patient;
 import models.patient.PatientDoctorInfo;
 import play.Logger;
 import play.data.Form;

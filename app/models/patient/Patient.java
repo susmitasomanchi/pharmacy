@@ -1,4 +1,4 @@
-package models;
+package models.patient;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -12,8 +12,9 @@ import javax.persistence.ManyToMany;
 import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 
+import models.AppUser;
+import models.BaseEntity;
 import models.diagnostic.DiagnosticCentre;
-import models.patient.PatientDoctorInfo;
 import play.db.ebean.Model;
 
 @SuppressWarnings("serial")

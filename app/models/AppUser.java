@@ -16,6 +16,7 @@ import javax.persistence.OneToOne;
 import models.diagnostic.DiagnosticRepresentative;
 import models.doctor.Doctor;
 import models.mr.MedicalRepresentative;
+import models.patient.Patient;
 import models.pharmacist.Pharmacist;
 import play.data.validation.Constraints.Email;
 import play.db.ebean.Model;

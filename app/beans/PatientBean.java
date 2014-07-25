@@ -7,8 +7,8 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 
 import models.AppUser;
-import models.Patient;
 import models.Sex;
+import models.patient.Patient;
 import play.data.validation.Constraints.Email;
 
 
