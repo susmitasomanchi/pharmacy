@@ -1,0 +1,52 @@
+@(appList:List[models.doctor.Appointment])
+@import play.i18n._
+@import helper.twitterBootstrap._
+@import helper._
+
+@main("View Appointments"){
+
+<table class="table table-striped table-bordered">
+<tr>
+<th style="text-align:center">S.NO</th>
+<th style="text-align:center">DATE/TIME</th>
+<th style="text-align:center">DOCTOR</th>
+<th style="text-align:center">CLINIC</th>
+<th style="text-align:center">ACTION</th>
+</tr>
+@for((appointment,index) <- appList.zipWithIndex){
+<tr>
+<td style="vertical-align:middle;text-align:center;font-size:16px">@{index+1}</td>
+<td style="vertical-align:middle;text-align:center;font-size:16px">@appointment.appointmentTime.format("dd-mm-yyyy")<br>@appointment.appointmentTime.format("EE")<br>@appointment.appointmentTime.format("hh:mm")</td>
+<td>
+<div class="row" style="cursor:pointer" onclick="location.href='/dashboard';">
+<div class="col-md-4">
+@if(appointment.doctorClinicInfo.doctor.backgroundImage != null){
+		<img src="@routes.DoctorController.getImage(appointment.doctorClinicInfo.doctor.id,"profileImage")" class="thumbnail" width="100" height="100"  />
+	}else{
+		<img src="/assets/images/doctor.png" class="thumbnail" width="100" height="100"  />
+	}</div>
+<div class="col-md-8">
+<h4>@appointment.doctorClinicInfo.doctor.appUser.name</h4>
+<h6>@appointment.doctorClinicInfo.doctor.specialization</h6>
+<h6>@appointment.doctorClinicInfo.doctor.degree</h6>
+</div>
+</div>
+</td>
+<td>
+<div class="row">
+<div class="col-md-4">
+<img src="http://placehold.it/120x80" width="120" height="80" />
+</div>
+<div class="col-md-8">
+<h4>@appointment.doctorClinicInfo.clinic.name</h4>
+</div>
+</div>
+</td>
+<td style="vertical-align:middle;text-align:center">
+<button class="btn btn-success btn-sm" >Prescription</button>
+</td>
+</tr>
+}
+</table>
+
+}

@@ -63,9 +63,11 @@ GET		/doctor/remove-education/:docId/:id			controllers.DoctorController.removeEd
 POST	/doctor/add-social-work						controllers.DoctorController.addSocialWork()
 GET		/doctor/remove-social-work/:docId/:id		controllers.DoctorController.removeSocialWork(docId: Long, id: Long)
 GET		/doctor/add-favorite-pharmacy/:pharmacyId/:str							controllers.DoctorController.addFavoritePharmacy(pharmacyId: Long,str: String)
+GET		/patient/add-favorite-pharmacy/:pharmacyId/:str								controllers.PatientController.addFavoritePharmacy(pharmacyId: Long,str: String)
 GET		/doctor/my-favorite-pharmacies											controllers.DoctorController.myFavoritePharmacies()
+GET		/patient/my-favorite-pharmacies												controllers.PatientController.myFavoritePharmacies()
 GET		/doctor/remove-favorite-pharmacy/:doctorId/:pharmacyId					controllers.DoctorController.removeFavoritePharmacy(doctorId: Long,pharmacyId: Long)
-
+GET		/patient/remove-favorite-pharmacy/:patientId/:pharmacyId					controllers.PatientController.removeFavoritePharmacy(patientId: Long,pharmacyId: Long)
 # Doctor's Clinics
 GET    /doctor/new-clinic                 		controllers.DoctorController.newClinic()
 POST   /doctor/new-clinic                 		controllers.DoctorController.processNewClinic()
@@ -78,7 +80,7 @@ POST   /doctor/update-clinic-schedule                   controllers.DoctorContro
 GET    /doctor/delete-clinic/:id                        controllers.DoctorController.deleteClinic(id:Long)
 
 #slug url
-GET    /doctor/:slugUrl                                  controllers.PublicController.processSlugUrl(slugUrl:String)
+GET    /doctor/:slugUrl                                  controllers.PublicController.getDoctorWithSlug(slugUrl:String)
 
 # Pharmacy Profile
 
