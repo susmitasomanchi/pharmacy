@@ -1,10 +1,10 @@
-@(dataform:play.data.Form[beans.AddProductToInventoryBean],id:Long)
+@(dataform:play.data.Form[beans.AddProductToInventoryBean],productId:Long,pharmacyId: Long)
 @main("User Form"){
 	
 	<br>
 	<div class="container">
 	
-	@helper.form(action=routes.PharmacistController.addToInventory(id),'method -> "post") {	
+	@helper.form(action=routes.PharmacistController.addProductToInventory(productId,pharmacyId),'method -> "post") {	
 	
 	@helper.inputText(dataform("batchNo"),'class -> "inputs",'_label->"Batch No.")
 	
@@ -21,11 +21,8 @@
 	
 	@helper.inputText(dataform("shelfNo"),'class -> "inputs",'_label->"Shelf No")
 	
-	@helper.inputText(dataform("productQuantity"),'class -> "inputs",'_label->"Quantity of Product")
-	
 	@helper.inputText(dataform("remarks"),'class -> "inputs",'_label->"Remarks")
 	
-	<input type="hidden" name="product" value="@id"/>
 	<br>
 	<input type="submit" class="submit" value="Save">
 	

@@ -8,7 +8,7 @@
 	
 		<ul class="nav nav-tabs" role="tablist" id="my-tab">
   			<li  class="active"><a href="#all"  data-toggle="tab">Home</a></li>
-  			@for( a <-  appointments.get(0).doctor.doctorClinicInfoList){
+  			@for( a <-  appointments.get(0).doctorClinicInfo.doctor.doctorClinicInfoList){
   				
  			 <li><a href="#@a.clinic.id" data-toggle="tab">@a.clinic.name</a></li>
   				
@@ -58,7 +58,7 @@
 			}
 		</table>
 		</div>
-		@for( a <-  appointments.get(0).doctor.doctorClinicInfoList){
+		@for( a <-  appointments.get(0).doctorClinicInfo.doctor.doctorClinicInfoList){
 			<div class="tab-pane fade" id="@a.id">
 				<table class="table">
 			<thead>
@@ -107,9 +107,9 @@
 	
 	
 	<script>
-	$('#my-tab a').click(function (e) {
-		  //e.preventDefault()
-		  $(this).tab('show')
+		$('#my-tab a').click(function(e) {
+			//e.preventDefault()
+			$(this).tab('show')
 		})
 	</script>
 	

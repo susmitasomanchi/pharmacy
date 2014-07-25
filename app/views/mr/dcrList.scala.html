@@ -1,10 +1,19 @@
-@(dcrList:List[models.mr.DailyCallReport],headQuarterList: List[models.mr.HeadQuarter])
+@(dcrList:List[models.mr.DailyCallReport],headQuarterMap:Map[models.State,List[models.mr.HeadQuarter]],mysubordinatesList: List[models.mr.MedicalRepresentative],mySubordinateDCRList: List[models.mr.DailyCallReport])
 @import play.i18n._
 @import helper.twitterBootstrap._
 @import helper._
 
-
 @main("DCR"){
+	<script type="text/javascript">
+	function isMrSelectForDcr(){
+			if(($("#dcr-subordinate").val()) == null) {
+			    alert("please select MR for show DCR.");
+			    return false;
+			   }else{
+				 return true;
+			   }
+	}
+	</script>
 	<script>
 	$(document).on('keydown',function(e)
 			{ 
@@ -19,42 +28,161 @@
 				});
 	</script>
 	
+	<div class="well">
 	<form id="dcrliform" action="@routes.MRController.processNewDCR()" method="post">
 			<div class="datepicker-past input-append date" id="dp3"  data-date="today" data-date-format="dd-mm-yyyy" >
-		     <input id="forDate" name="forDate" class="span2" size="16" type="text" >
+		     <input id="forDate" name="forDate" class="span2 datepicker-past" size="16" type="text" >
 		     <span class="add-on"><i class="icon-th"></i></span>
 	   	    </div>
 	   	    
-		   	    <select id="headQuarter" data-placeholder="Select headQuarter" class="chzn" name="headQuarter" style="width:200px;" >
+		   	    <select id="headQuarter" data-placeholder="Select Head Quarter" class="chzn" name="headQuarter" style="width:200px;" >
 				   <option></option>
-					@for(quarter <- headQuarterList){
-							<option>@quarter.name</option>
-			        }
+					@for((state,quarterlist)<-headQuarterMap){
+						<optgroup label="@state">
+						@for(quarter <- quarterlist){
+							<option value='@quarter.id'>@quarter.name</option>
+						}
+						</optgroup>
+					}
 			        
 		       </select>
 		       
 	       
-		<input type="submit" class="btn btn-primary" value="Create DCR" />
+		<input type="submit" class="btn btn-primary btn-sm" value="Create DCR" />
 	</form>
-	
+	</div>
+	<br>
+	<h3><b>My DcrS</b></h3>
 	<table class="table table-bordered table-condensed col-md-3">
 	<thead>
-	<th>Date</th>
+	<th>Sr. No.</th>
+	<th>ForDate</th>
+	<th>Status</th>
+	<th>Approver</th>
+	<th>SubmitDate</th>
+	<th>ResponseOn</th>
 	<th>Action</th>
 	</thead>
 	<tbody>
-	@for(dcr<-dcrList){
+	@for((dcr,index)<-dcrList zipWithIndex){
 	<tr>
+		<td>@{index+1}</td>
 		<td>
-		@dcr.forDate
+		@dcr.forDate.format("dd-MMM-yyyy")
 		</td>
+		<td>@dcr.dcrStatus</td>
+		@if(dcr.approver != null){
+			<td>@dcr.approver.appUser.name</td>
+		}else{
+		<td>&nbsp;</td>
+		}
+		@if(dcr.submittedDate != null){
+		<td>@dcr.submittedDate.format("dd-MMM-yyyy")</td>
+		}else{
+		<td>&nbsp;</td>
+		}
+		@if(dcr.responseOn != null){
+		<td>@dcr.responseOn.format("dd-MMM-yyyy")</td>
+		}else{
+		<td>&nbsp;</td>
+		}
 		<td>
-		<a class="btn btn-primary btn-xs" href="@routes.MRController.addDCRLineItem(dcr.id)">Add Line Item</a>
+		<a class="btn btn-primary btn-xs" href="@routes.MRController.addDCRLineItem(dcr.id)">View Line Item</a>
+		@if("DRAFT".compareToIgnoreCase(dcr.dcrStatus.name()) == 0){
+		<a class="btn btn-primary btn-danger btn-xs" href="@routes.MRController.deleteDCR(dcr.id)">Delete Line Item</a>
+		}
 		</td>
    </tr>
 	}
 	</tbody>
-	</table
+	</table>
+	
+	
+	<br>
+	<h3><b>Team's DcrS</b></h3>
+	<div  class="well">
+	<form id="search-form" name="search-form" action="@routes.MRController.searchSubordinateDcr()" onsubmit="return isMrSelectForDcr();" method="post" >
+	
+	<table class="md-col-12 table table-condensed">
+		<thead>
+			<th>Select DCR For</th>
+			<th>From Date</th>
+			<th>To Date</th>
+		</thead>
+		<tbody>
+			<tr>
+				<td valign="top">
+				<div>
+					<select id="dcr-subordinate" name="dcr-subordinate" class="chzn" multiple="multiple" data-placeholder="select DCR for" style="width:200px; ">
+					<option value="0">All</option>
+					@for(subordinate <- mysubordinatesList){
+							<option value="@subordinate.id">@subordinate.appUser.name</option>
+						}
+					</select>
+				</div>
+				</td>
+				<td valign="top">
+					<div class="datepicker input-append date" id="dp3"  data-date="today" data-date-format="dd-mm-yyyy" >
+			     		<input id="dcr-from-date" name="dcr-from-date" class="span2 " size="16" type="text"  style="height:25px">
+			    		<span class="add-on"><i class="icon-th"></i></span>
+		   	   		</div>
+				</td>
+				<td valign="top">
+					<div class="datepicker input-append date" id="dp3"  data-date="today" data-date-format="dd-mm-yyyy" >
+		     			<input id="dcr-to-date" name="dcr-to-date" class="span2 " size="16" type="text" style="height:25px" >
+		     			<span class="add-on"><i class="icon-th"></i></span>
+	   	    		</div>
+				</td>
+				<td valign="top">
+					<input type="submit" class="btn btn-primary btn-sm" value="Search" />
+				</td>
+			</tr>
+		</tbody>
+	</table>
+
+	</form>
+	</div>
+	<div id="tbl-div">
+	<table  class="table table-bordered table-condensed col-md-3" id="my-subordinate-dcr-tbl">
+	<thead>
+	<th>Sr. No.</th>
+	<th>ForDate</th>
+	<th>Status</th>
+	<th>Submitter</th>
+	<th>Approver</th>
+	<th>SubmitDate</th>
+	<th>Action</th>
+	</thead>
+	<tbody>
+	
+	
+	@for((dcr, index) <- mySubordinateDCRList zipWithIndex){
+		
+	<tr>
+		<td>@{index+1}</td>
+		<td>
+		@dcr.forDate.format("dd-MMM-yyyy")
+		</td>
+		<td>@dcr.dcrStatus</td>
+		<td>@dcr.submitter.appUser.name</td>
+		@if(dcr.approver != null){		
+		<td>@dcr.approver.appUser.name</td>
+		}else{
+		<td>&nbsp;</td>
+		}
+		@if(dcr.submittedDate != null){
+		<td>@dcr.submittedDate.format("dd-MMM-yyyy")</td>
+		}else{
+		<td>&nbsp;</td>
+		}
+		<td>
+		<a class="btn btn-primary btn-xs" href="@routes.MRController.addDCRLineItem(dcr.id)">View Line Item</a>
+		</td>
+   </tr>
+	}
+	</tbody>
+	</table>
+	</div>
 	
 	
 }

@@ -8,7 +8,7 @@
       <select data-placeholder="Select the medicine" class="chosen-select" style="width:200px;" tabindex="2">
       <option value=""></option>
       @for(inventory <- inventoryList){
-      <option value="@inventory.product.id">@inventory.product.medicineName</option>
+      <option value="@inventory.pharmacyProduct.id">@inventory.pharmacyProduct.medicineName</option>
       }
        </select>
        <script>
@@ -25,7 +25,7 @@
       
       <script>
 			function addOrder(){
-			$("#order").append('<div class="row" id="removeOrder"><div class="col-md-5" style="padding-left:30px"><p> Drug Names </p><select data-placeholder="Select the medicine" class="chosen-select" style="width:200px;" tabindex="2"><option value=""></option>@for(inventory <- inventoryList){<option value="@inventory.product.id">@inventory.product.medicineName</option>}</select></div><div class="col-md-5"><p> Quantity</p><input type="text" name="quantity" placeholder="Quantity"></div><div class="col-md-2" style="padding-top:10px"><br><a class="btn btn-sm btn-danger" onclick="removeOrder();"> x </a></div></div>')
+			$("#order").append('<div class="row" id="removeOrder"><div class="col-md-5" style="padding-left:30px"><p> Drug Names </p><select data-placeholder="Select the medicine" class="chosen-select" style="width:200px;" tabindex="2"><option value=""></option>@for(inventory <- inventoryList){<option value="@inventory.pharmacyProduct.id">@inventory.pharmacyProduct.medicineName</option>}</select></div><div class="col-md-5"><p> Quantity</p><input type="text" name="quantity" placeholder="Quantity"></div><div class="col-md-2" style="padding-top:10px"><br><a class="btn btn-sm btn-danger" onclick="removeOrder();"> x </a></div></div>')
 				$(".chosen-select").chosen();
 			}
 	  </script>

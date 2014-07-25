@@ -21,6 +21,15 @@
 		@if(LoginController.getLoggedInUserRole().equals(Role.PATIENT.toString())){
 		<li class="dropdown">
           <a href="#" class="dropdown-toggle" data-toggle="dropdown">
+          Pharmacies
+          <b class="caret"></b></a>
+          <ul class="dropdown-menu">
+	           	<li><a href="@routes.PublicController.searchPhamacy()">Search Pharmacies</a></li>
+	            <li><a href="@routes.PatientController.myFavoritePharmacies()">My Pharmacies</a></li>
+	           </ul>
+        </li>
+		<li class="dropdown">
+          <a href="#" class="dropdown-toggle" data-toggle="dropdown">
         	Doctors
           <b class="caret"></b></a>
           <ul class="dropdown-menu">
@@ -65,18 +74,7 @@
             <li><a href="/place-product-order">Place Order</a></li>
           </ul>
         </li>			
-		<li class="dropdown">
-          <a href="#" class="dropdown-toggle" data-toggle="dropdown">
-          Inventory
-          <b class="caret"></b></a>
-          <ul class="dropdown-menu">
-            <li><a href="/view-products">Products</a></li>
-            <li><a href="/new-product">Create new product</a></li>
-           
-            <li class="divider"></li>
-            <li><a href="/searchProduct">Add Product to Inventory</a></li>
-          </ul>
-        </li>
+		
         <li class="dropdown">
           <a href="#" class="dropdown-toggle" data-toggle="dropdown">
           Pharmacy
@@ -90,7 +88,16 @@
           </ul>
         </li>
         *@
-       
+       <li class="dropdown">
+          <a href="#" class="dropdown-toggle" data-toggle="dropdown">
+          Inventory
+          <b class="caret"></b></a>
+          <ul class="dropdown-menu">
+          
+            <li><a href="@routes.PharmacistController.addPharmacyProduct()">Create Pharmacy product</a></li>
+             <li><a href="@routes.PharmacistController.getPharmacyProducts()">View Pharmacy products</a></li>
+            </ul>
+        </li>
 		}
 		
 		
@@ -100,7 +107,7 @@
         <li class="dropdown">
           <a href="#" class="dropdown-toggle" data-toggle="dropdown">
           Appointments
-          <b class="caret"></b></a>
+          <b class="caret"></b></a>mr
           <ul class="dropdown-menu">
             <li><a href="/doctor/appointments">Today</a></li>
             <li><a href="/doctor/search/appointment">Search</a></li>
@@ -133,6 +140,15 @@
     	        <li><a href="">New Assistant</a></li>
     	        -->
           </ul>
+        </li>
+        <li class="dropdown">
+          <a href="#" class="dropdown-toggle" data-toggle="dropdown">
+          Pharmacies
+          <b class="caret"></b></a>
+          <ul class="dropdown-menu">
+	           	<li><a href="@routes.PublicController.searchPhamacy()">Search Pharmacies</a></li>
+	            <li><a href="@routes.DoctorController.myFavoritePharmacies()">My Pharmacies</a></li>
+	           </ul>
         </li>
         }
         

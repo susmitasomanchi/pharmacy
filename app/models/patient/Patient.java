@@ -15,6 +15,7 @@ import javax.persistence.OneToOne;
 import models.AppUser;
 import models.BaseEntity;
 import models.diagnostic.DiagnosticCentre;
+import models.pharmacist.Pharmacy;
 import play.db.ebean.Model;
 
 @SuppressWarnings("serial")
@@ -44,9 +45,11 @@ public class Patient extends BaseEntity {
 	public List<PatientDoctorInfo> patientDoctorInfos = new ArrayList<PatientDoctorInfo>();
 
 	@ManyToMany(cascade = CascadeType.ALL)
+	public List<Pharmacy> pharmacyList = new ArrayList<Pharmacy>();
+
+	@ManyToMany(cascade = CascadeType.ALL)
 	public List<DiagnosticCentre> diagnosticCenterList = new ArrayList<DiagnosticCentre>();
 
-	public static Model.Finder<Long, Patient> find = new Finder<Long, Patient>(
-			Long.class, Patient.class);
+	public static Model.Finder<Long, Patient> find = new Finder<Long, Patient>(Long.class, Patient.class);
 
 }

@@ -22,6 +22,7 @@ import models.doctor.DoctorEducation;
 import models.doctor.DoctorExperience;
 import models.doctor.DoctorSocialWork;
 import models.doctor.QuestionAndAnswer;
+import models.pharmacist.Pharmacy;
 import play.Logger;
 import play.data.Form;
 import play.mvc.Controller;
@@ -503,17 +504,13 @@ public class DoctorController extends Controller {
 	private static Result createAppointment(final DoctorClinicInfo docClinicInfo) {
 		// Server side validation
 		if(docClinicInfo.doctor.id.longValue() != LoginController.getLoggedInUser().getDoctor().id.longValue()){
-			Logger.warn("COULD NOT VALIDATE LOGGED IN USER TO PERFORM THIS TASK");
-			Logger.warn("update attempted for doctor id: "+docClinicInfo.doctor.id);
-			Logger.warn("logged in AppUser: "+LoginController.getLoggedInUser().id);
-			Logger.warn("logged in Doctor: "+LoginController.getLoggedInUser().getDoctor().id);
+
 			return redirect(routes.LoginController.processLogout());
 		}
 		try{
 			final Calendar calendar1=Calendar.getInstance();
 			final Calendar calendar2=Calendar.getInstance();
 			final SimpleDateFormat dateFormat=new SimpleDateFormat("kk:mm");
-			final Doctor doctor=LoginController.getLoggedInUser().getDoctor();
 			final Calendar calendar = Calendar.getInstance();
 			calendar.setTime(new Date());
 			for(int date=0;date<31;date++){
@@ -534,13 +531,12 @@ public class DoctorController extends Controller {
 						calendar.set(Calendar.MILLISECOND,0);
 						if(schedule.requester.equals(Role.PATIENT)){
 							for (int j2 = 0; j2 <(((hoursToClinic*60)+minutsToClinic)/docClinicInfo.slot); j2++) {
-								if(Appointment.find.where().eq("doctor",doctor).eq("clinic",docClinicInfo.clinic).eq("appointmentTime", calendar.getTime()).findUnique()==null){
+								if(Appointment.find.where().eq("doctorClinicInfo",docClinicInfo).eq("appointmentTime", calendar.getTime()).findUnique()==null){
 									Logger.info("  "+calendar.getTime());
 									final Appointment appointment=new Appointment();
 									appointment.appointmentStatus=AppointmentStatus.AVAILABLE;
 									appointment.appointmentTime=calendar.getTime();
-									appointment.clinic=docClinicInfo.clinic;
-									appointment.doctor=doctor;
+									appointment.doctorClinicInfo=docClinicInfo;
 									appointment.save();
 									calendar.add(Calendar.MINUTE, docClinicInfo.slot);
 								}
@@ -550,13 +546,12 @@ public class DoctorController extends Controller {
 							}
 						}else {
 							for (int j2 = 0; j2 <(((hoursToClinic*60)+minutsToClinic)/docClinicInfo.slotmr); j2++) {
-								if(Appointment.find.where().eq("doctor",doctor).eq("clinic",docClinicInfo.clinic).eq("appointmentTime", calendar.getTime()).findUnique()==null){
+								if(Appointment.find.where().eq("doctorClinicInfo",docClinicInfo).eq("appointmentTime", calendar.getTime()).findUnique()==null){
 									Logger.info("  "+calendar.getTime());
 									final Appointment appointment=new Appointment();
 									appointment.appointmentStatus=AppointmentStatus.AVAILABLE;
 									appointment.appointmentTime=calendar.getTime();
-									appointment.clinic=docClinicInfo.clinic;
-									appointment.doctor=doctor;
+									appointment.doctorClinicInfo=docClinicInfo;
 									appointment.save();
 									calendar.add(Calendar.MINUTE,docClinicInfo.slotmr);
 								}
@@ -601,15 +596,10 @@ public class DoctorController extends Controller {
 	 * GET /doctor/edit-clinic/:id
 	 * Depricated on 18th July 2014. Use DoctorController.editClinicInfo(Long docClinicId) and DoctorController.editClinicSchedule(Long docClinicId) instead.
 	 */
-	@Deprecated
 	public static Result manageClinic(final Long docClinicId) {
 		final DoctorClinicInfo doctorClinicInfo = DoctorClinicInfo.find.byId(docClinicId);
 		// Server side validation
 		if(doctorClinicInfo.doctor.id.longValue() != LoginController.getLoggedInUser().getDoctor().id.longValue()){
-			Logger.warn("COULD NOT VALIDATE LOGGED IN USER TO PERFORM THIS TASK");
-			Logger.warn("update attempted for doctor id: "+doctorClinicInfo.doctor.id);
-			Logger.warn("logged in AppUser: "+LoginController.getLoggedInUser().id);
-			Logger.warn("logged in Doctor: "+LoginController.getLoggedInUser().getDoctor().id);
 			return redirect(routes.LoginController.processLogout());
 		}
 		final DoctorClinicInfoBean bean = doctorClinicInfo.toBean();
@@ -635,10 +625,6 @@ public class DoctorController extends Controller {
 			final DoctorClinicInfo clinicInfo = filledForm.get().toDoctorClinicInfo();
 			// Server side validation
 			if(clinicInfo.doctor.id.longValue() != LoginController.getLoggedInUser().getDoctor().id.longValue()){
-				Logger.warn("COULD NOT VALIDATE LOGGED IN USER TO PERFORM THIS TASK");
-				Logger.warn("update attempted for doctor id: "+clinicInfo.doctor.id);
-				Logger.warn("logged in AppUser: "+LoginController.getLoggedInUser().id);
-				Logger.warn("logged in Doctor: "+LoginController.getLoggedInUser().getDoctor().id);
 				return redirect(routes.LoginController.processLogout());
 			}
 			final DoctorClinicInfo clinicInfoPrevious=DoctorClinicInfo.find.byId(clinicInfo.id);
@@ -888,7 +874,57 @@ public class DoctorController extends Controller {
 		return ok(views.html.doctor.doctor_appointments.render(appointments));
 
 	}
+	/**
+	 * @author lakshmi
+	 * Action to add favorite pharmacy of the Doctor to the list of Doctor of loggedin DOCTOR
+	 * GET/doctor/add-favorite-pharmacy/:pharmacyId/:str
+	 */
+	public static Result addFavoritePharmacy(final Long pharmacyId,final String searchStr) {
+		final Doctor doctor = LoginController.getLoggedInUser().getDoctor();
+		final Pharmacy pharmacy = Pharmacy.find.byId(pharmacyId);
 
+		if(doctor.pharmacyList.contains(pharmacy)!= true){
+			doctor.pharmacyList.add(pharmacy);
+			doctor.update();
+
+		}
+		else{
+			flash().put("alert", new Alert("alert-info", pharmacy.name+" Already existed in the Favorite List.").toString());
+		}
+		final List<Pharmacy> pharmacyList = new ArrayList<Pharmacy>();
+		for (final Pharmacy pharmacy2 : Pharmacy.find.where().like("searchIndex","%"+searchStr+"%").findList()) {
+			if(doctor.pharmacyList.contains(pharmacy2) != true){
+				pharmacyList.add(pharmacy2);
+			}
+		}
+		return ok(views.html.pharmacist.searched_pharmacies.render(true,searchStr,pharmacyList));
+		//		return redirect(routes.UserActions.dashboard());
+	}
+
+	/**
+	 * @author lakshmi
+	 * Action to list out favorite Pharmacies of Doctor of loggedin DOCTOR
+	 * GET/doctor/my-favorite-pharmacies
+	 */
+
+	public static Result myFavoritePharmacies() {
+		final Doctor doctor = LoginController.getLoggedInUser().getDoctor();
+		return ok(views.html.favorite_pharmacy_list.render(doctor.pharmacyList,doctor.id,0L));
+	}
+	/**
+	 * @author lakshmi
+	 * Action to remove Pharmacy from  favorite pharmacies List of Doctor of loggedin DOCTOR
+	 * GET/doctor/remove-favorite-pharmacy/:patientId/:pharmacyId
+	 */
+	public static Result removeFavoritePharmacy(final Long doctorId,final Long pharmacyId) {
+		final Doctor doctor = Doctor.find.byId(doctorId);
+		Logger.info("before delete list size()==="+doctor.pharmacyList.size());
+		doctor.pharmacyList.remove(Pharmacy.find.byId(pharmacyId));
+		doctor.update();
+		Logger.info("after delete list size()==="+doctor.pharmacyList.size());
+		//return redirect(routes.UserActions.dashboard());
+		return ok(views.html.favorite_pharmacy_list.render(doctor.pharmacyList,doctor.id,0L));
+	}
 
 
 	public static Result requestAppointment(){

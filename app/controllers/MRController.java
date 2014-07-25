@@ -11,10 +11,11 @@ import java.util.Map;
 import models.Alert;
 import models.AppUser;
 import models.Product;
-import models.Role;
+import models.State;
 import models.doctor.Appointment;
 import models.doctor.Doctor;
 import models.mr.DCRLineItem;
+import models.mr.DCRStatus;
 import models.mr.DailyCallReport;
 import models.mr.HeadQuarter;
 import models.mr.MedicalRepresentative;
@@ -34,7 +35,6 @@ import play.mvc.Result;
 import actions.BasicAuth;
 import beans.MedicalRepresentativeBean;
 
-
 @BasicAuth
 public class MRController extends Controller {
 
@@ -42,20 +42,15 @@ public class MRController extends Controller {
 
 	public static Form<MedicalRepresentative> medicalRepresentative = Form
 			.form(MedicalRepresentative.class);
-	public static Form<HeadQuarter> headquarter = Form.form(HeadQuarter.class);
+	public static Form<HeadQuarter> headQuarter = Form.form(HeadQuarter.class);
 	public static Form<DCRLineItem> dcrLineItemForm = Form
 			.form(DCRLineItem.class);
+	public static Form<HeadQuarter> headquarter = Form.form(HeadQuarter.class);
 	public static Form<DailyCallReport> dcrForm = Form
 			.form(DailyCallReport.class);
 	public static Form<MedicalRepresentativeBean> mrForm = Form
 			.form(MedicalRepresentativeBean.class);
 
-	
-	
-	
-	
-	
-	
 	/**
 	 * 
 	 * @author Dibesh
@@ -66,7 +61,7 @@ public class MRController extends Controller {
 	 */
 
 	public static Result addMR() {
-		MedicalRepresentative mr = new MedicalRepresentative();
+		final MedicalRepresentative mr = new MedicalRepresentative();
 		final List<MedicalRepresentative> mrList = MedicalRepresentative.find
 				.where().eq("appUser.role", "MR").findList();
 		return ok(views.html.mr.medicalRepresentative.render(mrForm, mrList));
@@ -91,7 +86,8 @@ public class MRController extends Controller {
 			Logger.info("*** user bad request");
 			final List<MedicalRepresentative> mrList = MedicalRepresentative.find
 					.where().eq("appUser.role", "MR").findList();
-			return ok(views.html.mr.medicalRepresentative.render(mrForm, mrList));
+			return ok(views.html.mr.medicalRepresentative
+					.render(mrForm, mrList));
 		}
 
 		else {
@@ -148,16 +144,22 @@ public class MRController extends Controller {
 	/**
 	 * @author anand
 	 * @discription : this method is saving the headQuarter
+	 * 
+	 *              url : POST POST /mr/add-head-quarter
+	 * 
+	 * 
 	 * url :	POST  POST   /mr/add-head-quarter
 	 * */
-	public static Result addHeadQuarter(){
-		final MedicalRepresentative loggedInMr = LoginController.getLoggedInUser().getMedicalRepresentative();
+	public static Result addHeadQuarter() {
+		final MedicalRepresentative loggedInMr = LoginController
+				.getLoggedInUser().getMedicalRepresentative();
 
-		final Form<HeadQuarter> filledHeadQuarterForm = headquarter.bindFromRequest();
+		final Form<HeadQuarter> filledHeadQuarterForm = headquarter
+				.bindFromRequest();
 
-		if(filledHeadQuarterForm.hasErrors()){
+		if (filledHeadQuarterForm.hasErrors()) {
 			return ok(views.html.mr.headQuarter.render(filledHeadQuarterForm));
-		}else{
+		} else {
 			final HeadQuarter headQuarter = filledHeadQuarterForm.get();
 			loggedInMr.headQuarterList.add(headQuarter);
 			loggedInMr.update();
@@ -183,8 +185,13 @@ public class MRController extends Controller {
 		// final List<MedicalRepresentative> mrList =
 		// MedicalRepresentative.find.where().eq("companyName",
 		// loggedInMR.companyName).findList();
-		return ok(views.html.mr.mrList.render(MedicalRepresentative.find.where().eq("pharmaceutical_company_id",LoginController.getLoggedInUser().getMedicalRepresentative().pharmaceuticalCompany.id)
-				.findList()));
+		return ok(views.html.mr.mrList
+				.render(MedicalRepresentative.find
+						.where()
+						.eq("pharmaceutical_company_id",
+								LoginController.getLoggedInUser()
+								.getMedicalRepresentative().pharmaceuticalCompany.id)
+								.findList()));
 	}
 
 	/**
@@ -199,7 +206,7 @@ public class MRController extends Controller {
 	public static Result removeMR(final Long id) {
 		final MedicalRepresentative loggedInMR = LoginController
 				.getLoggedInUser().getMedicalRepresentative();
-		MedicalRepresentative mr = MedicalRepresentative.find.byId(id);
+		final MedicalRepresentative mr = MedicalRepresentative.find.byId(id);
 		mr.isActive = false;
 		mr.update();
 		return ok(views.html.mr.mrList
@@ -228,7 +235,7 @@ public class MRController extends Controller {
 
 		Logger.info("filled mr id is : " + filledMr.id);
 
-		Form<MedicalRepresentativeBean> editForm = mrForm.fill(filledMr
+		final Form<MedicalRepresentativeBean> editForm = mrForm.fill(filledMr
 				.toBean());
 		// final List<AppUser> mrList
 		// =AppUser.find.where().eq("role","MR").findList();
@@ -240,12 +247,13 @@ public class MRController extends Controller {
 	/**
 	 * @author anand
 	 * 
-	 * url : GET    /doctor-list
+	 *         url : GET /doctor-list
 	 * 
-	 * @description: It shows all the doctor which is join through this application
+	 * @description: It shows all the doctor which is join through this
+	 *               application
 	 * 
 	 * */
-	public static Result doctorList(){
+	public static Result doctorList() {
 		final List<Doctor> doctorList = Doctor.find.all();
 		return ok(views.html.mr.doctorList.render(doctorList));
 	}
@@ -253,13 +261,15 @@ public class MRController extends Controller {
 	/**
 	 * @author anand
 	 * 
-	 * url : GET    /mr/add-doctor/:id
+	 *         url : GET /mr/add-doctor/:id
 	 * 
-	 * @description: this method is used to add the doctor in particular Admin mr from avilable doctor in this appps
+	 * @description: this method is used to add the doctor in particular Admin
+	 *               mr from avilable doctor in this appps
 	 * */
-	public static Result addDoctor(final Long id){
-		final MedicalRepresentative loggedInMr = LoginController.getLoggedInUser().getMedicalRepresentative();
-		if(loggedInMr.doctorList.contains(Doctor.find.byId(id))!=true){
+	public static Result addDoctor(final Long id) {
+		final MedicalRepresentative loggedInMr = LoginController
+				.getLoggedInUser().getMedicalRepresentative();
+		if (loggedInMr.doctorList.contains(Doctor.find.byId(id)) != true) {
 			loggedInMr.doctorList.add(Doctor.find.byId(id));
 
 		}
@@ -268,41 +278,47 @@ public class MRController extends Controller {
 		return redirect(routes.MRController.mrDoctorList());
 
 	}
+
 	/**
 	 * @author anand
 	 * 
-	 * url : GET    /mr/doctor-list
+	 *         url : GET /mr/doctor-list
 	 * 
-	 * @description: whatever the doctor added to the admin mr ,It shows all of them.
+	 * @description: whatever the doctor added to the admin mr ,It shows all of
+	 *               them.
 	 * */
-	public static Result mrDoctorList(){
-		final MedicalRepresentative loggedInMr = LoginController.getLoggedInUser().getMedicalRepresentative();
+	public static Result mrDoctorList() {
+		final MedicalRepresentative loggedInMr = LoginController
+				.getLoggedInUser().getMedicalRepresentative();
 		return ok(views.html.mr.mrDoctor.render(loggedInMr.doctorList));
 
 	}
+
 	/**
 	 * @author anand
 	 * 
-	 * url : GET    /mr/remove-doctor/:id
+	 *         url : GET /mr/remove-doctor/:id
 	 * 
-	 * @description:this method is used to remove the doctor which belongs to Admin mr
+	 * @description:this method is used to remove the doctor which belongs to
+	 *                   Admin mr
 	 * 
 	 * */
-	public static Result removeDoctor(final Long id){
-		final MedicalRepresentative loggedInMr = LoginController.getLoggedInUser().getMedicalRepresentative();
-		int indexOfDoctorList=-1;
-		final Doctor doctor=Doctor.find.byId(id);
-		for(final Doctor doc:loggedInMr.doctorList){
+	public static Result removeDoctor(final Long id) {
+		final MedicalRepresentative loggedInMr = LoginController
+				.getLoggedInUser().getMedicalRepresentative();
+		int indexOfDoctorList = -1;
+		final Doctor doctor = Doctor.find.byId(id);
+		for (final Doctor doc : loggedInMr.doctorList) {
 			indexOfDoctorList++;
-			if(doctor.appUser.name.equals(doc.appUser.name)){
+			if (doctor.appUser.name.equals(doc.appUser.name)) {
 				break;
 			}
 		}
 
-		//return TODO;
+		// return TODO;
 		loggedInMr.doctorList.remove(indexOfDoctorList);
 		loggedInMr.update();
-		//loggedInMr.doctorList.
+		// loggedInMr.doctorList.
 		return redirect(routes.MRController.mrDoctorList());
 
 	}
@@ -312,10 +328,10 @@ public class MRController extends Controller {
 	 * 
 	 * @description: to search the doctor for Admin mr.
 	 * 
-	 * url : GET    /search
+	 *               url : GET /search
 	 * 
 	 * */
-	public static Result search(){
+	public static Result search() {
 
 		final DynamicForm requestData = Form.form().bindFromRequest();
 
@@ -327,86 +343,117 @@ public class MRController extends Controller {
 			// it is a string, search by namDailyCallRe
 			if (searchStr.matches("[a-zA-Z]+")) {
 
-
-				final List<Doctor> doctorList = Doctor.find.where().like("appUser.name", searchStr+"%").findList();
+				final List<Doctor> doctorList = Doctor.find.where()
+						.like("appUser.name", searchStr + "%").findList();
 
 				return ok(views.html.mr.doctorList.render(doctorList));
-			}else{
+			} else {
 				return redirect(routes.MRController.doctorList());
 			}
 
-		}else{
+		} else {
 			return redirect(routes.MRController.doctorList());
 		}
-
 
 	}
 
 	/**
-	 * @author anand
+	 * @author anand@quarter.state
 	 * 
-	 * url : GET    /mr/dcr-list
+	 *         url : GET /mr/dcr-list
 	 * 
-	 * @description: this method shows list of all dcr date wise for particular Admin Mr
+	 * @description: this method shows list of all dcr date wise for particular
+	 *               Admin Mr
 	 * 
 	 * */
-	public static Result listDCR(){
-		final MedicalRepresentative loggedInMr = LoginController.getLoggedInUser().getMedicalRepresentative();
-		for (final HeadQuarter quarter : loggedInMr.headQuarterList) {
-			Logger.info("Quarter is : "+quarter);
+	public static Result listDCR() {
+		final MedicalRepresentative loggedInMr = LoginController
+				.getLoggedInUser().getMedicalRepresentative();
+		final Map<State, List<HeadQuarter>> headQmap = new LinkedHashMap<State, List<HeadQuarter>>();
+
+		for (final HeadQuarter headQuarter : loggedInMr.headQuarterList) {
+			if (headQmap.containsKey(headQuarter.state)) {
+				final List<HeadQuarter> headQuarterList = headQmap
+						.get(headQuarter.state);
+				headQuarterList.add(headQuarter);
+
+			} else {
+				final List<HeadQuarter> headQuarterList = new ArrayList<HeadQuarter>();
+				headQuarterList.add(headQuarter);
+				headQmap.put(headQuarter.state, headQuarterList);
+			}
 		}
-		return ok(views.html.mr.dcrList.render(loggedInMr.dcrList,loggedInMr.headQuarterList));
+		final List<MedicalRepresentative> mySubordinatelist = loggedInMr.getSubordinates();
+		//final List<DailyCallReport> mySubordinateDCRList =  loggedInMr.getSubordinatesDCRList();
+		final List<DailyCallReport> mySubordinateDCRList =  new ArrayList<DailyCallReport>();
+		return ok(views.html.mr.dcrList.render(loggedInMr.dcrList, headQmap,mySubordinatelist,mySubordinateDCRList));
 	}
 
 	/**
 	 * @author anand
 	 * 
 	 * @description: this method is used to capture date and store into database
-	 * and date related server side validation
+	 *               and date related server side validation
 	 * 
-	 * url : POST   /mr/new-dcr
+	 *               url : POST /mr/new-dcr
 	 * 
 	 * */
-	public static Result processNewDCR(){
+	public static Result processNewDCR() {
 		boolean isExistingDCRDate = false;
-		final MedicalRepresentative loggedInMr = LoginController.getLoggedInUser().getMedicalRepresentative();
-		final Form<DailyCallReport> filledDCRForm = dcrForm.bindFromRequest();
+		final MedicalRepresentative loggedInMr = LoginController
+				.getLoggedInUser().getMedicalRepresentative();
 
 		final DailyCallReport dcr = new DailyCallReport();
 		final DynamicForm requestData = Form.form().bindFromRequest();
 		final String strDate = requestData.get("forDate");
-		if(strDate == ""){
-			flash().put("alert", new Alert("alert-danger","Please Enter the Date. ").toString());
-		}else{
-			final DateTimeFormatter formatter = DateTimeFormat.forPattern("dd-MM-yyyy");
+		Logger.info("entered date is : "+strDate);
+		final String quarterIdString = requestData.get("headQuarter");
+		if (dcr.dcrStatus == null) {
+			dcr.dcrStatus = DCRStatus.DRAFT;
+		}
+		if (quarterIdString != "") {
+			final Long headQuarterId = Long.parseLong(quarterIdString);
+			dcr.headQuarter = HeadQuarter.find.byId(headQuarterId);
+		}
+		// dcr.save();
+		if (strDate == "") {
+			flash().put(
+					"alert",
+					new Alert("alert-danger", "Please Enter the Date. ")
+					.toString());
+		} else {
+			final DateTimeFormatter formatter = DateTimeFormat
+					.forPattern("dd-MM-yyyy");
 			final DateTime myDate = formatter.parseDateTime(strDate);
 
-			//Logger.info("entered date is : "+myDate);
-
-
-
-
 			final DateTime today = new DateTime();
-			Logger.info("today is : "+today);
-			//Logger.info("mydate  : "+jodaMyDate);
-			final int dayInterval = Days.daysBetween(myDate.withTimeAtStartOfDay() , today.withTimeAtStartOfDay() ).getDays();
+			final int dayInterval = Days
+					.daysBetween(myDate.withTimeAtStartOfDay(),
+							today.withTimeAtStartOfDay()).getDays();
 
-			Logger.info("dayInterval : "+dayInterval);
-			if(dayInterval>5){
-				//Logger.info("before 5 days");
-				flash().put("alert", new Alert("alert-danger","You have exceeded your DCR submission date").toString());
-			}else{
-				for(final DailyCallReport dCR : loggedInMr.dcrList){
-					Logger.info("dcr date  is : "+dCR.forDate);
-					if(dCR.forDate.equals(myDate.toDate())){
+			// Logger.info("dayInterval : "+dayInterval);
+			if (dayInterval > 5) {
+				flash().put(
+						"alert",
+						new Alert("alert-danger",
+								"You have exceeded your DCR submission date")
+						.toString());
+			} else {
+				for (final DailyCallReport dCR : loggedInMr.dcrList) {
+					// Logger.info("dcr date  is : "+dCR.forDate);
+					if (dCR.forDate.equals(myDate.toDate())) {
 						isExistingDCRDate = true;
-						flash().put("alert", new Alert("alert-danger","You have already created DCR for this date").toString());
+						flash().put(
+								"alert",
+								new Alert("alert-danger",
+										"You have already created DCR for this date")
+								.toString());
 						break;
 					}
 				}
-				if(isExistingDCRDate == false){
+				if (isExistingDCRDate == false) {
 					dcr.forDate = myDate.toDate();
-					//Logger.info("within 5 days");
+					// Logger.info("within 5 days");
 					loggedInMr.dcrList.add(dcr);
 					loggedInMr.update();
 				}
@@ -415,102 +462,188 @@ public class MRController extends Controller {
 		return redirect(routes.MRController.listDCR());
 
 	}
+
 	/**
 	 * @author anand
 	 * 
-	 * url : GET    /mr/show-dcr/:id
+	 *         url : GET /mr/show-dcr/:id
 	 * 
 	 * @description: to show dcr-line-item to adding in daily call report
 	 * **/
-	public static Result addDCRLineItem(final Long id){
+	public static Result addDCRLineItem(final Long id) {
 		final DailyCallReport dcr = DailyCallReport.find.byId(id);
-		final MedicalRepresentative loggedInMr = LoginController.getLoggedInUser().getMedicalRepresentative();
+		final MedicalRepresentative loggedInMr = LoginController
+				.getLoggedInUser().getMedicalRepresentative();
 		final List<Doctor> disabledDoctorList = new ArrayList<Doctor>();
 		for (final DCRLineItem lineItem : dcr.dcrLineItemList) {
 			disabledDoctorList.add(lineItem.doctor);
 		}
 
-		return ok(views.html.mr.dcrLineItem.render(dcr, dcrLineItemForm,loggedInMr.doctorList,disabledDoctorList,loggedInMr.pharmaceuticalCompany.productList));
+		return ok(views.html.mr.dcrLineItem.render(dcr, dcrLineItemForm,
+				loggedInMr.doctorList, disabledDoctorList,
+				loggedInMr.pharmaceuticalCompany.productList,loggedInMr));
 
 	}
 
 	/**
 	 * @author anand
 	 * 
-	 * url : POST   /mr/dcr/add-line-item
+	 * url :GET    /mr/approve-dcr/:dcrid
 	 * 
-	 * @description: this shows the added dcrlinetime in daily call report of particular mr
+	 * @description : manager can approve mr's submitted dcr
+	 * 
+	 * 
+	 * */
+
+	public static Result approveDCRLineItem( final Long dcrId){
+
+		final DailyCallReport dcr = DailyCallReport.find.byId(dcrId);
+
+		final MedicalRepresentative loggedInMr = LoginController
+				.getLoggedInUser().getMedicalRepresentative();
+		dcr.dcrStatus = DCRStatus.APPROVED;
+		dcr.approver = loggedInMr;
+		dcr.responseOn = new Date();
+		dcr.update();
+
+
+		return redirect(routes.MRController.listDCR());
+	}
+
+	/**
+	 * @author anand
+	 * 
+	 * url :GET    /mr/reject-dcr/:dcrid
+	 * 
+	 * @description : manager can reject mr's submitted dcr
+	 * 
+	 * 
+	 * */
+	public static Result rejectDCRLineItem(final Long dcrId){
+		final DailyCallReport dcr = DailyCallReport.find.byId(dcrId);
+		final MedicalRepresentative loggedInMr = LoginController
+				.getLoggedInUser().getMedicalRepresentative();
+		dcr.dcrStatus = DCRStatus.REJECTED;
+		dcr.approver = loggedInMr;
+		dcr.responseOn = new Date();
+		dcr.update();
+
+		return redirect(routes.MRController.listDCR());
+	}
+	/**
+	 * @author anand
+	 * 
+	 * url :GET    /mr/delete-dcr/:dcrid
+	 * 
+	 * @description : mr can delete own dcr which is not  submitted.
+	 * 
+	 * 
+	 * */
+
+	public static Result deleteDCR(final Long dcrid){
+		final MedicalRepresentative loggedInMr = LoginController
+				.getLoggedInUser().getMedicalRepresentative();
+		final DailyCallReport dcr = DailyCallReport.find.byId(dcrid);
+		Logger.info(dcr.submitter.appUser.name);
+		loggedInMr.dcrList.remove(dcr);
+		loggedInMr.update();
+		dcr.delete();
+
+		return redirect(routes.MRController.listDCR());
+	}
+
+	/**
+	 * @author anand
+	 * 
+	 *         url : POST /mr/dcr/add-line-item
+	 * 
+	 * @description: this shows the added dcrlinetime in daily call report of
+	 *               particular mr
 	 * 
 	 */
 	@SuppressWarnings("deprecation")
-	public static Result processDCRLineItem(){
+	public static Result processDCRLineItem() {
 
-		final MedicalRepresentative loggedInMr = LoginController.getLoggedInUser().getMedicalRepresentative();
+		final MedicalRepresentative loggedInMr = LoginController
+				.getLoggedInUser().getMedicalRepresentative();
 
 		final String dcrId = request().body().asFormUrlEncoded().get("dcrId")[0];
-		final String doctorId = request().body().asFormUrlEncoded().get("doctor")[0];
+		final String doctorId = request().body().asFormUrlEncoded()
+				.get("doctor")[0];
 
-		final String sampleList[] = request().body().asFormUrlEncoded().get("sampleList");
-		final String qtyList[] = request().body().asFormUrlEncoded().get("qtyList");
-		final String promotionList[] = request().body().asFormUrlEncoded().get("promotionList");
+		final String sampleList[] = request().body().asFormUrlEncoded()
+				.get("sampleList");
+		final String qtyList[] = request().body().asFormUrlEncoded()
+				.get("qtyList");
+		final String promotionList[] = request().body().asFormUrlEncoded()
+				.get("promotionList");
 		final String inTime = request().body().asFormUrlEncoded().get("inTime")[0];
-		final String outTime = request().body().asFormUrlEncoded().get("outTime")[0];
+		final String outTime = request().body().asFormUrlEncoded()
+				.get("outTime")[0];
 		final String pob = request().body().asFormUrlEncoded().get("pob")[0];
-		final String remarks = request().body().asFormUrlEncoded().get("remarks")[0];
-
+		final String remarks = request().body().asFormUrlEncoded()
+				.get("remarks")[0];
 
 		final DCRLineItem dcrLineItem = new DCRLineItem();
-		final DailyCallReport dcr = DailyCallReport.find.byId(Long.parseLong(dcrId));
+		final DailyCallReport dcr = DailyCallReport.find.byId(Long
+				.parseLong(dcrId));
 
-		dcrLineItem.doctor=Doctor.find.byId(Long.parseLong(doctorId));
+		dcrLineItem.doctor = Doctor.find.byId(Long.parseLong(doctorId));
 
-		Logger.info("doctor Id : "+doctorId);
-		for(int i=0;i<sampleList.length;i++){
+		// Logger.info("doctor Id : "+doctorId);
+		for (int i = 0; i < sampleList.length; i++) {
 			final Sample sample = new Sample();
 
-			if((sampleList[i].compareToIgnoreCase("")==0)){
-			}else{
-				sample.product = Product.find.byId(Long.parseLong(sampleList[i]));
-				if(qtyList[i] == ""){
+			if ((sampleList[i].compareToIgnoreCase("") == 0)) {
+			} else {
+				sample.product = Product.find.byId(Long
+						.parseLong(sampleList[i]));
+				if (qtyList[i] == "") {
 					sample.quantity = 0;
-				}else{
+				} else {
 					sample.quantity = Integer.parseInt(qtyList[i]);
 				}
 				dcrLineItem.sampleList.add(sample);
 			}
 		}
 
-		if(promotionList == null){
-		}else{
-			for(int i=0;i<promotionList.length;i++){
-				dcrLineItem.promotionList.add(Product.find.byId(Long.parseLong(promotionList[i])));
+		if (promotionList == null) {
+		} else {
+			for (int i = 0; i < promotionList.length; i++) {
+				dcrLineItem.promotionList.add(Product.find.byId(Long
+						.parseLong(promotionList[i])));
 			}
 		}
-
 
 		final Date dcrDate = dcr.forDate;
 		final DateTimeFormatter formatter = DateTimeFormat.forPattern("kk:mm");
 
 		final DateTime inDateTime = new DateTime(dcrDate);
 		final DateTime outDateTime = new DateTime(dcrDate);
-		if(inTime.compareToIgnoreCase("")==0 ){
-		}else{
-			final DateTime fromTime=formatter.parseDateTime(inTime);
-			final DateTime inDateTimeHours = inDateTime.plusHours(fromTime.getHourOfDay());
-			final DateTime inDateTimeHoursMin = inDateTimeHours.plusMinutes(fromTime.getMinuteOfDay()-(60*fromTime.getHourOfDay()));
+		if (inTime.compareToIgnoreCase("") == 0) {
+		} else {
+			final DateTime fromTime = formatter.parseDateTime(inTime);
+			final DateTime inDateTimeHours = inDateTime.plusHours(fromTime
+					.getHourOfDay());
+			final DateTime inDateTimeHoursMin = inDateTimeHours
+					.plusMinutes(fromTime.getMinuteOfDay()
+							- (60 * fromTime.getHourOfDay()));
 			dcrLineItem.inTime = inDateTimeHoursMin.toDate();
 		}
-		if(outTime.compareToIgnoreCase("")==0){
-		}else{
+		if (outTime.compareToIgnoreCase("") == 0) {
+		} else {
 			final DateTime toTime = formatter.parseDateTime(outTime);
-			final DateTime outDateTimeHours = outDateTime.plusHours(toTime.getHourOfDay());
-			final DateTime outDateTimeHoursMin = outDateTimeHours.plusMinutes(toTime.getMinuteOfDay()-(60*toTime.getHourOfDay()));
+			final DateTime outDateTimeHours = outDateTime.plusHours(toTime
+					.getHourOfDay());
+			final DateTime outDateTimeHoursMin = outDateTimeHours
+					.plusMinutes(toTime.getMinuteOfDay()
+							- (60 * toTime.getHourOfDay()));
 			dcrLineItem.outTime = outDateTimeHoursMin.toDate();
 		}
 
-		if(pob==""){
-			dcrLineItem.pob=0;
-		}else{
+		if (pob == "") {
+			dcrLineItem.pob = 0;
+		} else {
 			dcrLineItem.pob = Integer.parseInt(pob);
 		}
 
@@ -525,15 +658,17 @@ public class MRController extends Controller {
 
 	/**
 	 * @author anand
-	 * url : POST   /mr/dcr/delete-line-item/:dcrid/:lineitemid
+	 * 
+	 *         url : POST /mr/dcr/delete-line-item/:dcrid/:lineitemid
 	 * 
 	 * @description: to remove the added dcr-line-item
 	 * 
 	 * @param dcrId
 	 * @param lineItemId
-	 * @return
+	 * 
 	 */
-	public static Result removeDCRLineItem(final Long dcrId,final Long lineItemId){
+	public static Result removeDCRLineItem(final Long dcrId,
+			final Long lineItemId) {
 		final DailyCallReport dcr = DailyCallReport.find.byId(dcrId);
 		final DCRLineItem lineItem = DCRLineItem.find.byId(lineItemId);
 		dcr.dcrLineItemList.remove(lineItem);
@@ -541,37 +676,154 @@ public class MRController extends Controller {
 		dcr.update();
 		return ok(views.html.mr.filledDCRLineItem.render(dcr.dcrLineItemList));
 	}
-	//schedule appointment for mr
-	public static Result scheduleAppointment(final String docID) {
-		List<Appointment> listAppointments=null;
-		final Map<Date, List<Appointment>> appointmentMap = new LinkedHashMap<Date, List<Appointment>>();
-		final Doctor doctor=Doctor.find.byId(Long.parseLong(docID));
-		final Calendar calendar = Calendar.getInstance();
-		calendar.setTime(new Date());
-		//		calendar.set(Calendar.HOUR_OF_DAY,doctor.doctorClinicInfoList.get(0).fromHrsMr);
-		calendar.set(Calendar.MINUTE,0);
-		calendar.set(Calendar.SECOND,0);
-		calendar.set(Calendar.MILLISECOND,0);
-		int size=0;
 
-		for(int i=0;i<20;i++){
-			listAppointments = Appointment.getAvailableMrAppointmentList(doctor, calendar.getTime());
-			if(listAppointments.size()!=0){
-				appointmentMap.put(calendar.getTime(), listAppointments);
-				size=listAppointments.size();
+	/**
+	 * @author anand
+	 * 
+	 * @description : this method is used to submit the mr's dcr line items to
+	 *              crossponding manager
+	 * 
+	 * url: POST /mr/submit-dcr-line-items/:dcrid
+	 * 
+	 * @param dcrId
+	 * 
+	 * */
+
+	public static Result submitDCRLineItems(final Long dcrId) {
+
+		final MedicalRepresentative loggedInMr = LoginController
+				.getLoggedInUser().getMedicalRepresentative();
+		final DailyCallReport dcr = DailyCallReport.find.byId(dcrId);
+		dcr.submitter = loggedInMr;
+		dcr.submittedDate = new Date();
+		dcr.dcrStatus = DCRStatus.SUBMITTED;
+		dcr.update();
+
+		return redirect(routes.MRController.listDCR());
+	}
+	/**
+	 * @author anand
+	 * 
+	 * @description : this method is used to display the dcr of which u selected
+	 * 
+	 * url: GET /mr/search-subordinate-dcr
+	 * 
+	 * */
+	public static Result searchSubordinateDcr(){
+		boolean isSearchDCRForAll = false;
+		final MedicalRepresentative loggedInMr = LoginController.getLoggedInUser().getMedicalRepresentative();
+		final String subordinateId[] = request().body().asFormUrlEncoded().get("dcr-subordinate");
+		final List<MedicalRepresentative> subordinateList = new ArrayList<MedicalRepresentative>();
+		for(int i=0;i<subordinateId.length;i++){
+			if(subordinateId[i].compareToIgnoreCase("0")==0){
+				isSearchDCRForAll = true;
+				subordinateList.removeAll(subordinateList);
+				break;
+			}else{
+				subordinateList.add(MedicalRepresentative.find.byId(Long.parseLong(subordinateId[i])));
 			}
-			Logger.error(listAppointments.size()+"Test");
-
-			calendar.add(Calendar.DATE, 1);
-			//			calendar.set(Calendar.HOUR_OF_DAY,doctor.doctorClinicInfoList.get(0).fromHrsMr);
-			calendar.set(Calendar.MINUTE,0);
-			calendar.set(Calendar.SECOND,0);
-			calendar.set(Calendar.MILLISECOND,0);
-			System.out.print(calendar.getTime());
 		}
-		return ok(views.html.patient.scheduleAppointment.render(appointmentMap,size));
+
+		final DateTimeFormatter formatter = DateTimeFormat.forPattern("dd-MM-yyyy");
+		Date dcrFromDate = new Date();
+		Date dcrToDate = new Date();
+
+		final String dcrFromDateStr = request().body().asFormUrlEncoded().get("dcr-from-date")[0];
+		if(dcrFromDateStr != ""){
+			dcrFromDate = formatter.parseDateTime(dcrFromDateStr).toDate();
+		}
+
+		final String dcrToDateStr = request().body().asFormUrlEncoded().get("dcr-to-date")[0];
+		if(dcrToDateStr != ""){
+			dcrToDate = formatter.parseDateTime(dcrToDateStr).toDate();
+		}
+
+		List<DailyCallReport> mySubordinateDCRList = new ArrayList<DailyCallReport>();
+		if(isSearchDCRForAll){
+			if(dcrFromDateStr != "" && dcrToDateStr != ""){
+				mySubordinateDCRList = DailyCallReport.find.where().in("submitter", loggedInMr.getSubordinates()).ne("dcrStatus",DCRStatus.DRAFT).le("forDate", dcrToDate).ge("forDate", dcrFromDate).orderBy("forDate DESC").findList();
+			}else{
+				if(dcrFromDateStr != ""){
+					mySubordinateDCRList = DailyCallReport.find.where().in("submitter", loggedInMr.getSubordinates()).ne("dcrStatus",DCRStatus.DRAFT).ge("forDate", dcrFromDate).orderBy("forDate DESC").findList();
+				}else{
+					if(dcrToDateStr != ""){
+						mySubordinateDCRList = DailyCallReport.find.where().in("submitter", loggedInMr.getSubordinates()).ne("dcrStatus",DCRStatus.DRAFT).le("forDate", dcrToDate).orderBy("forDate DESC").findList();
+					}else{
+						//mySubordinateDCRList =  loggedInMr.getSubordinatesDCRList();
+						mySubordinateDCRList = DailyCallReport.find.where().in("submitter", loggedInMr.getSubordinates()).ne("dcrStatus",DCRStatus.DRAFT).orderBy("forDate DESC").findList();
+					}
+				}
+			}
+
+		}else{
+			if(dcrFromDateStr != "" && dcrToDateStr != ""){
+				mySubordinateDCRList = DailyCallReport.find.where().in("submitter", subordinateList).ne("dcrStatus",DCRStatus.DRAFT).le("forDate", dcrToDate).ge("forDate", dcrFromDate).orderBy("forDate DESC").findList();
+			}else{
+				if(dcrFromDateStr != ""){
+					mySubordinateDCRList = DailyCallReport.find.where().in("submitter", subordinateList).ne("dcrStatus",DCRStatus.DRAFT).ge("forDate", dcrFromDate).orderBy("forDate DESC").findList();
+				}else{
+					if(dcrToDateStr != ""){
+						mySubordinateDCRList = DailyCallReport.find.where().in("submitter", subordinateList).ne("dcrStatus",DCRStatus.DRAFT).le("forDate", dcrToDate).orderBy("forDate DESC").findList();
+					}else{
+						mySubordinateDCRList = DailyCallReport.find.where().in("submitter", subordinateList).ne("dcrStatus",DCRStatus.DRAFT).orderBy("forDate DESC").findList();
+					}
+				}
+			}
+			//mySubordinateDCRList = DailyCallReport.find.where().in("submitter", subordinateList).ne("dcrStatus",DCRStatus.DRAFT).le("forDate", dcrToDate).ge("forDate", dcrFromDate).orderBy("forDate DESC").findList();
+		}
+
+		final Map<State, List<HeadQuarter>> headQmap = new LinkedHashMap<State, List<HeadQuarter>>();
+
+		for (final HeadQuarter headQuarter : loggedInMr.headQuarterList) {
+			if (headQmap.containsKey(headQuarter.state)) {
+				final List<HeadQuarter> headQuarterList = headQmap
+						.get(headQuarter.state);
+				headQuarterList.add(headQuarter);
+
+			} else {
+				final List<HeadQuarter> headQuarterList = new ArrayList<HeadQuarter>();
+				headQuarterList.add(headQuarter);
+				headQmap.put(headQuarter.state, headQuarterList);
+			}
+		}
+		final List<MedicalRepresentative> mySubordinatelist = loggedInMr.getSubordinates();
+		return ok(views.html.mr.dcrList.render(loggedInMr.dcrList, headQmap,mySubordinatelist,mySubordinateDCRList));
+
+
 	}
 
+	// schedule appointment for mr
+	public static Result scheduleAppointment(final String docID) {
+		List<Appointment> listAppointments = null;
+		final Map<Date, List<Appointment>> appointmentMap = new LinkedHashMap<Date, List<Appointment>>();
+		final Doctor doctor = Doctor.find.byId(Long.parseLong(docID));
+		final Calendar calendar = Calendar.getInstance();
+		calendar.setTime(new Date());
+		// calendar.set(Calendar.HOUR_OF_DAY,doctor.doctorClinicInfoList.get(0).fromHrsMr);
+		calendar.set(Calendar.MINUTE, 0);
+		calendar.set(Calendar.SECOND, 0);
+		calendar.set(Calendar.MILLISECOND, 0);
+		int size = 0;
+
+		for (int i = 0; i < 20; i++) {
+			listAppointments = Appointment.getAvailableMrAppointmentList(
+					doctor, calendar.getTime());
+			if (listAppointments.size() != 0) {
+				appointmentMap.put(calendar.getTime(), listAppointments);
+				size = listAppointments.size();
+			}
+			// Logger.error(listAppointments.size()+"Test");
+
+			calendar.add(Calendar.DATE, 1);
+			// calendar.set(Calendar.HOUR_OF_DAY,doctor.doctorClinicInfoList.get(0).fromHrsMr);
+			calendar.set(Calendar.MINUTE, 0);
+			calendar.set(Calendar.SECOND, 0);
+			calendar.set(Calendar.MILLISECOND, 0);
+			System.out.print(calendar.getTime());
+		}
+		return ok(views.html.patient.scheduleAppointment.render(appointmentMap,
+				size));
+	}
 
 	/**
 	 * 
@@ -583,7 +835,12 @@ public class MRController extends Controller {
 	 */
 	public static Result viewHierarchy() {
 
-		List<MedicalRepresentative> mrList = MedicalRepresentative.find.where().eq("pharmaceutical_company_id",LoginController.getLoggedInUser().getMedicalRepresentative().pharmaceuticalCompany.id).findList();
+		final List<MedicalRepresentative> mrList = MedicalRepresentative.find
+				.where()
+				.eq("pharmaceutical_company_id",
+						LoginController.getLoggedInUser()
+						.getMedicalRepresentative().pharmaceuticalCompany.id)
+						.findList();
 		Logger.info(mrList.toString());
 		return ok(views.html.mr.organizationStructure.render(mrList));
 
