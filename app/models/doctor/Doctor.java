@@ -16,6 +16,7 @@ import javax.persistence.OneToOne;
 
 import models.AppUser;
 import models.BaseEntity;
+import models.pharmacist.Pharmacy;
 import play.data.validation.Constraints.Required;
 import play.db.ebean.Model;
 
@@ -81,6 +82,9 @@ public class Doctor extends BaseEntity{
 	@OneToMany(cascade=CascadeType.ALL)
 	public List<DoctorEducation> doctorEducation = new ArrayList<DoctorEducation>();
 
+	@ManyToMany(cascade=CascadeType.ALL)
+	public List<Pharmacy> pharmacyList=new ArrayList<Pharmacy>();
+
 	public Integer experience;
 
 
@@ -88,7 +92,7 @@ public class Doctor extends BaseEntity{
 	public String searchIndex;
 
 	@Column(columnDefinition="TEXT")
-	public String slugUrl="";
+	public String slugUrl;
 
 	public static Model.Finder<Long,Doctor> find = new Finder<Long, Doctor>(Long.class, Doctor.class);
 

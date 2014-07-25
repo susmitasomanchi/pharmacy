@@ -217,6 +217,20 @@ public class SampleDataController extends Controller {
 
 	}
 
+	public static Result patientTest(){
+		final AppUser appUser1 = new AppUser();
+		appUser1.name = "laxmi";
+		appUser1.email = "patient@gmail.com";
+		appUser1.password = "1111";
+		appUser1.role = Role.PATIENT;
+		appUser1.save();
+		final Patient patient = new Patient();
+		patient.appUser = appUser1;
+		patient.save();
+		return ok();
+
+	}
+
 }
 
 
