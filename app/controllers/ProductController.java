@@ -2,6 +2,7 @@ package controllers;
 
 import java.util.List;
 import java.util.Map;
+
 import models.Alert;
 import models.Product;
 import models.Role;
@@ -20,13 +21,7 @@ public class ProductController extends Controller{
 	public static Form<PharmaceuticalProduct> pharmaceuticalProductForm = Form.form(PharmaceuticalProduct.class);
 
 	public static Form<Product> productForm = Form.form(Product.class);
-	/**
-	 * @autor:
-	 * 
-	 * @url: GET    /new-product
-	 * 
-	 * @description: rendering to the createProduct scala to create a new product
-	 */
+
 	public static Result pharmaceuticalProductForm() {
 
 		return ok(views.html.common.createPharmaceuticalProduct.render(pharmaceuticalProductForm));

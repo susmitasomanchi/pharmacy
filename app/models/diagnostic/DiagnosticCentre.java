@@ -59,7 +59,7 @@ public class DiagnosticCentre extends BaseEntity {
 
 	public String websiteName;
 
-
+	@ManyToMany(cascade=CascadeType.ALL)
 	public List<Doctor> doctorList = new ArrayList<Doctor>();
 
 	@OneToOne

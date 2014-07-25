@@ -37,18 +37,15 @@ public class Appointment extends BaseEntity {
 	public String remarks;
 
 	@OneToOne
-	public Doctor doctor;
-
-	@OneToOne
-	public Clinic clinic;
+	public DoctorClinicInfo	doctorClinicInfo;
 
 
 
-	public static List<Appointment> getAvailableAppointmentList( final Long doctorId, final Date fromDate, final Date toDate) {
+	public static List<Appointment> getAvailableAppointmentList( final Long docClincId, final Date fromDate, final Date toDate) {
 
 
 
-		final List<Appointment>  list=Appointment.find.where().eq("doctor.id", doctorId).between("appointmentTime", fromDate, toDate).
+		final List<Appointment>  list=Appointment.find.where().eq("doctorClinicInfo.id", docClincId).between("appointmentTime", fromDate, toDate).
 				order().asc("appointmentTime").findList();
 
 		return list;

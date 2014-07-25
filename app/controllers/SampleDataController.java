@@ -34,11 +34,13 @@ public class SampleDataController extends Controller {
 
 		final AppUser user = new AppUser();
 		user.name = "Test User";
-		//user.role = Role.USER;
-		user.email = "user@mednet.com";
-		user.password = "123456";
+		user.role = Role.PATIENT;
+		user.email = "user@mednet1.com";
+		user.password = "1";
 		user.save();
-
+		Patient patient=new Patient();
+		patient.appUser=user;
+		patient.save();
 		//return ok("user created");
 		return redirect(routes.Application.index());
 
@@ -151,8 +153,8 @@ public class SampleDataController extends Controller {
 		{
 			if(i==1)
 			{
-				final MedicalRepresentative mr = new MedicalRepresentative();
-				final AppUser appUser = new AppUser();
+				MedicalRepresentative mr = new MedicalRepresentative();
+				AppUser appUser = new AppUser();
 
 				appUser.name = "admin";
 				appUser.username = "admin";
@@ -162,7 +164,7 @@ public class SampleDataController extends Controller {
 				appUser.save();
 				mr.appUser = appUser;
 				mr.companyName = "hello";
-				final PharmaceuticalCompany pc = new PharmaceuticalCompany();
+				PharmaceuticalCompany pc = new PharmaceuticalCompany();
 				pc.name = mr.companyName;
 				pc.mrList.add(mr);
 				pc.adminMR = LoginController.getLoggedInUser().getMedicalRepresentative();
@@ -171,8 +173,8 @@ public class SampleDataController extends Controller {
 				mr.save();
 
 			}
-			final MedicalRepresentative mr = new MedicalRepresentative();
-			final AppUser appUser = new AppUser();
+			MedicalRepresentative mr = new MedicalRepresentative();
+			AppUser appUser = new AppUser();
 			appUser.name = "sam"+i;
 			appUser.username = "sam"+i;
 			appUser.email="sam@gmail.com";
@@ -181,7 +183,7 @@ public class SampleDataController extends Controller {
 			appUser.save();
 			mr.appUser = appUser;
 			mr.companyName = "hello";
-			final PharmaceuticalCompany pc = new PharmaceuticalCompany();
+			PharmaceuticalCompany pc = new PharmaceuticalCompany();
 			pc.name = mr.companyName;
 			pc.mrList.add(mr);
 			pc.adminMR = LoginController.getLoggedInUser().getMedicalRepresentative();
@@ -211,6 +213,20 @@ public class SampleDataController extends Controller {
 		company.save();
 		mr.pharmaceuticalCompany = company;
 		mr.save();
+		return ok();
+
+	}
+
+	public static Result patientTest(){
+		final AppUser appUser1 = new AppUser();
+		appUser1.name = "laxmi";
+		appUser1.email = "patient@gmail.com";
+		appUser1.password = "1111";
+		appUser1.role = Role.PATIENT;
+		appUser1.save();
+		final Patient patient = new Patient();
+		patient.appUser = appUser1;
+		patient.save();
 		return ok();
 
 	}
