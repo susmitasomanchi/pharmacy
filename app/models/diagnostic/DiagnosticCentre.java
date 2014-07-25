@@ -59,7 +59,6 @@ public class DiagnosticCentre extends BaseEntity {
 
 	public String websiteName;
 
-
 	public List<Doctor> doctorList = new ArrayList<Doctor>();
 
 	@OneToOne
@@ -78,6 +77,12 @@ public class DiagnosticCentre extends BaseEntity {
 
 	@OneToMany(cascade=CascadeType.ALL)
 	public List<DiagnosticOrder> diagnosticOrderList = new ArrayList<DiagnosticOrder>();
+
+	@Column(columnDefinition="TEXT")
+	public String searchIndex;
+
+	@Column(columnDefinition="TEXT")
+	public String slugUrl;
 
 	public static Model.Finder<Long, DiagnosticCentre> find = new Finder<Long, DiagnosticCentre>(
 			Long.class, DiagnosticCentre.class);
@@ -110,13 +115,54 @@ public class DiagnosticCentre extends BaseEntity {
 
 
 
-	/*
 	@Override
-	public String toString() {
-		return this.id + "  " + this.name + "  " + this.services + "  "
-				+ this.contactPersonName + "  " + this.address + "  "
-				+ this.mobileNo + "  " + this.emailId + "  " + this.websiteName;
+	public void save(){
+		final StringBuilder stringBuilder = new StringBuilder();
+		stringBuilder.append(this.name.trim().toLowerCase());
+		if(this.address != null){
+			if(this.address.addressLine1 != null){
+				stringBuilder.append(this.address.addressLine1.trim().toLowerCase());
+			}
+			if(this.address.area != null){
+				stringBuilder.append(this.address.area.trim().toLowerCase());
+			}
+			if(this.address.city != null){
+				stringBuilder.append(this.address.city.trim().toLowerCase());
+			}
+			if(this.address.pinCode != null){
+				stringBuilder.append(this.address.pinCode.trim().toLowerCase());
+			}
+			if(this.address.fetchedPinCode != null){
+				stringBuilder.append(this.address.fetchedPinCode.trim().toLowerCase());
+			}
+		}
+		this.searchIndex = stringBuilder.toString();
+		super.save();
 	}
-	 */
+
+	@Override
+	public void update() {
+		final StringBuilder stringBuilder = new StringBuilder();
+		stringBuilder.append(this.name.trim().toLowerCase());
+		if(this.address != null){
+			if(this.address.addressLine1 != null){
+				stringBuilder.append(this.address.addressLine1.trim().toLowerCase());
+			}
+			if(this.address.area != null){
+				stringBuilder.append(this.address.area.trim().toLowerCase());
+			}
+			if(this.address.city != null){
+				stringBuilder.append(this.address.city.trim().toLowerCase());
+			}
+			if(this.address.pinCode != null){
+				stringBuilder.append(this.address.pinCode.trim().toLowerCase());
+			}
+			if(this.address.fetchedPinCode != null){
+				stringBuilder.append(this.address.fetchedPinCode.trim().toLowerCase());
+			}
+		}
+		this.searchIndex = stringBuilder.toString();
+		super.update();
+	}
 
 }

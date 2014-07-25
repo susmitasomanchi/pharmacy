@@ -35,7 +35,7 @@ public class DoctorClinicInfo extends BaseEntity {
 
 	public Integer slot;
 
-	public Integer	slotmr;
+	public Integer	slotMR;
 
 	public boolean active = true;
 
@@ -83,13 +83,13 @@ public class DoctorClinicInfo extends BaseEntity {
 
 		final List<String> toHrs = new ArrayList<String>();
 
-		final List<String> fromHrsMr = new ArrayList<String>();
+		final List<String> fromHrsMR = new ArrayList<String>();
 
-		final List<String> toHrsMr = new ArrayList<String>();
+		final List<String> toHrsMR = new ArrayList<String>();
 
 		final List<String> daysOfWeek	= new ArrayList<String>();
 
-		final List<String> daysOfWeekMr	= new ArrayList<String>();
+		final List<String> daysOfWeekMR	= new ArrayList<String>();
 
 
 		if(this.scheduleDays.size()!=0){
@@ -101,9 +101,9 @@ public class DoctorClinicInfo extends BaseEntity {
 					daysOfWeek.add(schedule.day.toString());
 
 				}else{
-					fromHrsMr.add(schedule.fromTime);
-					toHrsMr.add(schedule.toTime);
-					daysOfWeekMr.add(schedule.day.toString());
+					fromHrsMR.add(schedule.fromTime);
+					toHrsMR.add(schedule.toTime);
+					daysOfWeekMR.add(schedule.day.toString());
 				}
 			}
 
@@ -111,16 +111,16 @@ public class DoctorClinicInfo extends BaseEntity {
 
 		bean.fromHrs=fromHrs;
 		bean.toHrs=toHrs;
-		bean.fromHrsMr=fromHrsMr;
-		bean.toHrsMr=toHrsMr;
+		bean.fromHrsMR=fromHrsMR;
+		bean.toHrsMR=toHrsMR;
 		bean.daysOfWeek=daysOfWeek;
-		bean.daysOfWeekMr=daysOfWeekMr;
+		bean.daysOfWeekMr=daysOfWeekMR;
 		if(this.slot!=null){
 			bean.slot=this.slot;
 
 		}
 		if(this.slot!=null){
-			bean.slotmr=this.slotmr;
+			bean.slotMR=this.slotMR;
 		}
 		Logger.info(this.clinic.address+"****");
 		if(this.clinic.address != null){

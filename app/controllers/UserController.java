@@ -24,6 +24,7 @@ import models.diagnostic.DiagnosticCentre;
 import models.diagnostic.DiagnosticRepresentative;
 import models.doctor.Doctor;
 import models.mr.MedicalRepresentative;
+import models.patient.Patient;
 import models.pharmacist.Pharmacist;
 import models.pharmacist.Pharmacy;
 
@@ -71,6 +72,14 @@ public class UserController extends Controller {
 		return ok(views.html.diagnostic.joinus.render());
 	}
 
+	/**
+	 * Action to render the joinUs page for Patients("User")
+	 * GET    /user/join
+	 */
+	public static Result joinUsPatient(){
+		return ok(views.html.patient.joinus.render());
+	}
+
 
 
 	/**
@@ -106,11 +115,17 @@ public class UserController extends Controller {
 
 		if(AppUser.find.where().eq("email", appUser.email).findRowCount()>0){
 			flash().put("alert", new Alert("alert-danger", "Sorry! User with email id "+appUser.email.trim()+" already exists!").toString());
+			if(appUser.role == Role.PATIENT){
+				return redirect(routes.UserController.joinUsPatient());
+			}
 			if(appUser.role == Role.DOCTOR){
 				return redirect(routes.UserController.joinUsDoctor());
 			}
 			if(appUser.role == Role.ADMIN_PHARMACIST){
 				return redirect(routes.UserController.joinUsPharmacy());
+			}
+			if(appUser.role == Role.ADMIN_DIAGREP){
+				return redirect(routes.UserController.joinUsDiagnostic());
 			}
 		}
 
@@ -139,6 +154,7 @@ public class UserController extends Controller {
 			final Pharmacy pharmacy = new Pharmacy();
 			pharmacy.name = request().body().asFormUrlEncoded().get("pharmacyName")[0];
 			pharmacy.adminPharmacist = pharmacist;
+			pharmacy.slugUrl = Util.simpleSlugify(pharmacy.name)+pharmacist.id;
 			pharmacy.save();
 			pharmacist.pharmacy = pharmacy;
 			pharmacist.update();
@@ -155,6 +171,12 @@ public class UserController extends Controller {
 			diagnosticCentre.save();
 			diagnosticRepresentative.diagnosticCentre = diagnosticCentre;
 			diagnosticRepresentative.update();
+		}
+
+		if(appUser.role.equals(Role.PATIENT)){
+			final Patient patient = new Patient();
+			patient.appUser = appUser;
+			patient.save();
 		}
 
 		session().clear();

@@ -22,6 +22,7 @@ import models.doctor.DoctorEducation;
 import models.doctor.DoctorExperience;
 import models.doctor.DoctorSocialWork;
 import models.doctor.QuestionAndAnswer;
+import models.pharmacist.Pharmacy;
 import play.Logger;
 import play.data.Form;
 import play.mvc.Controller;
@@ -104,12 +105,14 @@ public class DoctorController extends Controller {
 			}
 
 			if(requestMap.get("slugUrl") != null && !(requestMap.get("slugUrl")[0].trim().isEmpty())){
-				final int availableSlug=Doctor.find.where().eq("slugUrl", requestMap.get("slugUrl")[0]).findRowCount();
-				if(availableSlug == 0){
-					doctor.slugUrl = requestMap.get("slugUrl")[0];
-				}else{
-					flash().put("alert", new Alert("alert-danger", "Requested Url is not available.").toString());
-					return redirect(routes.UserActions.dashboard());
+				if(requestMap.get("slugUrl")[0].trim().compareToIgnoreCase(doctor.slugUrl) != 0){
+					final int availableSlug = Doctor.find.where().eq("slugUrl", requestMap.get("slugUrl")[0].trim()).findRowCount();
+					if(availableSlug == 0){
+						doctor.slugUrl = requestMap.get("slugUrl")[0].trim();
+					}else{
+						flash().put("alert", new Alert("alert-danger", "Requested Url is not available.").toString());
+						return redirect(routes.UserActions.dashboard());
+					}
 				}
 			}
 
@@ -579,7 +582,7 @@ public class DoctorController extends Controller {
 								}
 							}
 						}else {
-							for (int j2 = 0; j2 <(((hoursToClinic*60)+minutsToClinic)/docClinicInfo.slotmr); j2++) {
+							for (int j2 = 0; j2 <(((hoursToClinic*60)+minutsToClinic)/docClinicInfo.slotMR); j2++) {
 								if(Appointment.find.where().eq("doctor",doctor).eq("clinic",docClinicInfo.clinic).eq("appointmentTime", calendar.getTime()).findUnique()==null){
 									Logger.info("  "+calendar.getTime());
 									final Appointment appointment=new Appointment();
@@ -588,10 +591,10 @@ public class DoctorController extends Controller {
 									appointment.clinic=docClinicInfo.clinic;
 									appointment.doctor=doctor;
 									appointment.save();
-									calendar.add(Calendar.MINUTE,docClinicInfo.slotmr);
+									calendar.add(Calendar.MINUTE,docClinicInfo.slotMR);
 								}
 								else{
-									calendar.add(Calendar.MINUTE,docClinicInfo.slotmr);
+									calendar.add(Calendar.MINUTE,docClinicInfo.slotMR);
 								}
 							}
 						}
@@ -716,7 +719,7 @@ public class DoctorController extends Controller {
 			Ebean.delete(clinicInfoPrevious.scheduleDays);
 			clinicInfoPrevious.scheduleDays=clinicInfo.scheduleDays;
 			clinicInfoPrevious.slot=clinicInfo.slot;
-			clinicInfoPrevious.slotmr=clinicInfo.slotmr;
+			clinicInfoPrevious.slotMR=clinicInfo.slotMR;
 			clinicInfoPrevious.update();
 			flash().put("alert", new Alert("alert-success","Successfully Updated").toString());
 			return DoctorController.reCreateAppointment(clinicInfoPrevious);
@@ -822,6 +825,70 @@ public class DoctorController extends Controller {
 		return ok(views.html.doctor.editClinicSchedule.render(filledForm,bean.daysOfWeek,bean.daysOfWeekMr));
 
 	}
+
+
+
+
+
+	/**
+	 * @author lakshmi
+	 * Action to list out favorite Pharmacies of loggedin DOCTOR
+	 * GET	/doctor/my-pharmacies
+	 */
+
+	public static Result myFavoritePharmacies() {
+		final Doctor doctor = LoginController.getLoggedInUser().getDoctor();
+		return ok(views.html.pharmacist.favorite_pharmacy_list.render(doctor.pharmacyList,doctor.id,0L));
+	}
+
+
+	/**
+	 * @author lakshmi
+	 * Action to remove Pharmacy from  favorite pharmacies List of loggedin DOCTOR
+	 * GET	/doctor/remove-pharmacy/:doctorId/:pharmacyId
+	 */
+	public static Result removeFavoritePharmacy(final Long doctorId,final Long pharmacyId) {
+		final Doctor doctor = Doctor.find.byId(doctorId);
+		//server-side check
+		if(doctor.id.longValue() != LoginController.getLoggedInUser().getDoctor().id.longValue()){
+			return redirect(routes.LoginController.processLogout());
+		}
+		doctor.pharmacyList.remove(Pharmacy.find.byId(pharmacyId));
+		doctor.update();
+		return ok(views.html.pharmacist.favorite_pharmacy_list.render(doctor.pharmacyList,doctor.id,0L));
+	}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 

@@ -5,7 +5,6 @@ import javax.persistence.Id;
 import javax.persistence.OneToOne;
 
 import models.BaseEntity;
-import models.Patient;
 import models.doctor.Doctor;
 import play.db.ebean.Model;
 

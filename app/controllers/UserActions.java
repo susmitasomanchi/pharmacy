@@ -1,8 +1,10 @@
 package controllers;
 
+import java.util.ArrayList;
+
 import models.AppUser;
 import models.Role;
-import models.doctor.Doctor;
+import models.patient.PatientDoctorInfo;
 import play.mvc.Controller;
 import play.mvc.Result;
 import actions.BasicAuth;
@@ -25,11 +27,10 @@ public class UserActions extends Controller {
 			return ok(views.html.diagnostic.diagnostic_centre_profile.render(appUser.getDiagnosticRepresentative().diagnosticCentre));
 		}
 		if(appUser.role.equals(Role.DOCTOR)){
-			final Doctor doctor = LoginController.getLoggedInUser().getDoctor();
-			return ok(views.html.doctor.doctorProfile.render(doctor));
+			return ok(views.html.doctor.doctorProfile.render(appUser.getDoctor()));
 		}
 		if(appUser.role.equals(Role.PATIENT)){
-			return ok(views.html.dashboard.render(appUser));
+			return ok(views.html.patient.fav_doctors.render(new ArrayList<PatientDoctorInfo>()));
 		}
 
 		//@TODO: none should render the dashboard of patient

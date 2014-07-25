@@ -51,7 +51,7 @@ create table appointment (
   appointment_status        varchar(9),
   requested_by_id           bigint,
   apporoved_by_id           bigint,
-  remarks                   varchar(255),
+  remarks                   TEXT,
   doctor_id                 bigint,
   clinic_id                 bigint,
   last_update               timestamp not null,
@@ -185,6 +185,8 @@ create table diagnostic_centre (
   email_id                  varchar(255),
   website_name              varchar(255),
   diagnostic_rep_admin_id   bigint,
+  search_index              TEXT,
+  slug_url                  TEXT,
   last_update               timestamp not null,
   constraint pk_diagnostic_centre primary key (id))
 ;
@@ -285,7 +287,7 @@ create table doctor_clinic_info (
   clinic_id                 bigint,
   doctor_id                 bigint,
   slot                      integer,
-  slotmr                    integer,
+  slot_mr                   integer,
   active                    boolean,
   last_update               timestamp not null,
   constraint pk_doctor_clinic_info primary key (id))
@@ -438,12 +440,6 @@ create table order_line_item (
 create table patient (
   id                        bigint not null,
   app_user_id               bigint,
-  mbno                      varchar(255),
-  date                      varchar(255),
-  disease                   varchar(255),
-  appointment_id            varchar(255),
-  doctor_availability       varchar(255),
-  is_urgent_patient         varchar(255),
   last_update               timestamp not null,
   constraint pk_patient primary key (id))
 ;
@@ -493,10 +489,12 @@ create table pharmacy (
   name                      varchar(255),
   address_id                bigint,
   contact_person            varchar(255),
-  contact_no                varchar(255),
+  contact_number            varchar(255),
   description               TEXT,
   admin_pharmacist_id       bigint,
   background_image          bytea,
+  search_index              TEXT,
+  slug_url                  TEXT,
   last_update               timestamp not null,
   constraint pk_pharmacy primary key (id))
 ;
@@ -633,10 +631,22 @@ create table doctor_doctor_language (
   constraint pk_doctor_doctor_language primary key (doctor_id, doctor_language_id))
 ;
 
+create table doctor_pharmacy (
+  doctor_id                      bigint not null,
+  pharmacy_id                    bigint not null,
+  constraint pk_doctor_pharmacy primary key (doctor_id, pharmacy_id))
+;
+
 create table medical_representative_doctor (
   medical_representative_id      bigint not null,
   doctor_id                      bigint not null,
   constraint pk_medical_representative_doctor primary key (medical_representative_id, doctor_id))
+;
+
+create table patient_pharmacy (
+  patient_id                     bigint not null,
+  pharmacy_id                    bigint not null,
+  constraint pk_patient_pharmacy primary key (patient_id, pharmacy_id))
 ;
 
 create table patient_diagnostic_centre (
@@ -909,9 +919,17 @@ alter table doctor_doctor_language add constraint fk_doctor_doctor_language_doc_
 
 alter table doctor_doctor_language add constraint fk_doctor_doctor_language_doc_02 foreign key (doctor_language_id) references doctor_language (id);
 
+alter table doctor_pharmacy add constraint fk_doctor_pharmacy_doctor_01 foreign key (doctor_id) references doctor (id);
+
+alter table doctor_pharmacy add constraint fk_doctor_pharmacy_pharmacy_02 foreign key (pharmacy_id) references pharmacy (id);
+
 alter table medical_representative_doctor add constraint fk_medical_representative_doc_01 foreign key (medical_representative_id) references medical_representative (id);
 
 alter table medical_representative_doctor add constraint fk_medical_representative_doc_02 foreign key (doctor_id) references doctor (id);
+
+alter table patient_pharmacy add constraint fk_patient_pharmacy_patient_01 foreign key (patient_id) references patient (id);
+
+alter table patient_pharmacy add constraint fk_patient_pharmacy_pharmacy_02 foreign key (pharmacy_id) references pharmacy (id);
 
 alter table patient_diagnostic_centre add constraint fk_patient_diagnostic_centre__01 foreign key (patient_id) references patient (id);
 
@@ -971,6 +989,8 @@ drop table if exists doctor cascade;
 
 drop table if exists doctor_doctor_language cascade;
 
+drop table if exists doctor_pharmacy cascade;
+
 drop table if exists doctor_assistant cascade;
 
 drop table if exists doctor_award cascade;
@@ -1008,6 +1028,8 @@ drop table if exists monthly_tour_plan cascade;
 drop table if exists order_line_item cascade;
 
 drop table if exists patient cascade;
+
+drop table if exists patient_pharmacy cascade;
 
 drop table if exists patient_diagnostic_centre cascade;
 

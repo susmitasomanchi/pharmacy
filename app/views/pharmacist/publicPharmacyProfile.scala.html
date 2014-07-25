@@ -1,0 +1,411 @@
+@(pharmacy: models.pharmacist.Pharmacy)
+
+
+@main(pharmacy.name) {
+
+<script src="http://maps.googleapis.com/maps/api/js?sensor=false"></script>
+
+<script>
+	var i = 0;
+	function addfiles() {
+		i++;
+		$("#files")
+				.append(
+						'<div class="row" id="file'+i+'"><br><div class="col-md-5"><input type="file" name="file'+i+'" id="inputfile'+i+'" onchange="checkfile('+i+');"/></div><div class="col-md-7"><a class="btn btn-xs btn-danger" onclick="removebut(\'file'
+								+i+'\');">x</a></div></div>');
+		$("#inputfile"+i).trigger('click');
+	}
+
+	function checkfile(id){
+		$('#insertfn-'+id).html($("#inputfile"+id).val().trim());
+	}
+
+	function removebut(id) {
+		$('#'+id).remove();
+	}
+
+</script>
+
+<style>
+.container{
+	padding-left: 30px;
+	padding-right: 30px;
+	width:1032px;
+}
+.chosen-container .chosen-container-single{
+width:250px;
+.alert-success{
+background-image: linear-gradient(to bottom,#dff0d8 0,#c8e5bc 100%);
+background-repeat: repeat-x;
+border-color: #b2dba1;
+color:black;
+}
+
+}
+
+
+.slugUrlP .popover{
+  max-width: none;
+  width:450px;
+}
+
+.dottedU{    
+    border-bottom: 1px dotted #fff;
+    text-decoration: none;
+}
+
+</style>
+
+<script>
+$('[data-toggle="popover"]').popover();
+$('body').on('click', function (e) {
+    $('[data-toggle="popover"]').each(function () {
+        if (!$(this).is(e.target) && $(this).has(e.target).length === 0 && $('.popover').has(e.target).length === 0) {
+            $(this).popover('hide');
+        }
+    });
+});
+    
+</script>	
+
+
+
+
+
+
+
+
+
+@if(pharmacy.backgroundImage != null){
+	<div style="background-image:url('@routes.PharmacistController.getPharmacyImages(pharmacy.id,0)');background-size:940px 400px; background-repeat:no-repeat; height:400px;"></div>
+}else{
+	<div style="background-image:url('/assets/images/pharmacy-default-bg-image.jpg');background-size:940px 400px; background-repeat:no-repeat; height:400px;"></div>
+}
+
+
+</div>
+<div class="row" style="margin-top:-235px">
+<div class="col-md-1"></div>
+<div class="col-md-10" >
+
+<div id="carousel-example-generic" class="carousel slide" data-ride="carousel">
+  <!-- Indicators -->
+  
+  
+  
+  @if(pharmacy.profileImageList.size()>0){
+  <ol class="carousel-indicators">
+  @for((profileImages,index) <- pharmacy.profileImageList.zipWithIndex){
+    <li data-target="#carousel-example-generic" data-slide-to="0" class="@if(index == 0){active}"></li>
+    }
+  </ol>
+
+  <!-- Wrapper for slides -->
+  <div class="carousel-inner">
+  @for((profileImages,index) <- pharmacy.profileImageList.zipWithIndex){
+    <div class="item @if(index == 0){active}">
+      <img src="/pharmacy/get-image/@pharmacy.id/@profileImages.id" alt="pharmacy1" style="height:300px; width:800px;"/>
+    </div>
+    }
+  </div>
+  }else{
+  
+   <ol class="carousel-indicators">
+    <li data-target="#carousel-example-generic" data-slide-to="0" class="active"></li>
+   </ol>
+
+  <!-- Wrapper for slides -->
+  <div class="carousel-inner">
+    <div class="item active">
+      <img src="/assets/images/pharmacy-default-profile-image.jpg" alt="Pharmacy Pic" style="height:300px; width:800px;"/>
+    </div>
+  </div>
+  
+  }
+  
+  
+  
+
+  <!-- Controls -->
+  <a class="left carousel-control" href="#carousel-example-generic" role="button" data-slide="prev" style="width:0px">
+    <span class="glyphicon glyphicon-chevron-left" style="margin-left:-40px;color:#006687"></span>
+  </a>
+  <a class="right carousel-control" href="#carousel-example-generic" role="button" data-slide="next" style="width:0px">
+    <span class="glyphicon glyphicon-chevron-right" style="left:20px;color:#006687"></span>
+  </a>
+</div>
+
+
+</div>
+<div class="col-md-1"></div>
+</div>
+<br>
+<h1 style="text-shadow:10px 10px 10px white, 3px 3px 20px white; position:relative; top:-400px; text-align:center;font-weight:bold;color:#006687">
+@pharmacy.name
+
+   
+</h1>
+<br>
+<div class="alert alert-success">
+
+
+<p style="font-size:1.5em; align:justify; margin-top:0px;">
+	@pharmacy.description	 
+</p>
+</div>
+<div class="row">
+
+<div class="col-md-10">
+
+<div class="col-md-5">
+
+
+@if(pharmacy.address != null){
+<h5>@pharmacy.contactPerson</h5>
+<h5>@pharmacy.address.addressLine1</h5>
+<h5>@pharmacy.address.area</h5>
+<h5>@pharmacy.address.city</h5>
+@if(pharmacy.address.state != null){
+<h5>@models.State.options().get(pharmacy.address.state.toString())</h5>	
+}
+<h5>@pharmacy.address.pinCode</h5>
+<h5>Phones: @pharmacy.contactNumber </h5>
+}
+
+</div>
+
+<div class="col-md-7">
+	<div id="profile_map_canvas" style="width:600px;height:400px">
+	@if(pharmacy.address == null || pharmacy.address.latitude== null || pharmacy.address.longitude == null || pharmacy.address.latitude.trim().compareToIgnoreCase("") == 0 || pharmacy.address.longitude.trim().compareToIgnoreCase("") == 0){
+		<img src="/assets/images/googlemap1.png" width="600" height="400" style="position:relative" />
+		<div class="maptext" style="text-align:center">
+		<p style="position:relative; top:-200px; color:#008cba;"><b>Kindly Edit Contact Details & Mark Your Pharmacy</span></b></p>
+	}else{
+	
+	}
+	</div>
+</div>
+
+
+</div>
+
+</div>
+
+<br><br><br>
+
+</div>
+
+
+
+
+
+
+
+
+
+<script>
+
+var lng, lat, marker;
+var dbclk = false;
+var map, myLatLng;
+function initialize(mapdiv) {
+	var mapOptions = {
+		center : new google.maps.LatLng(lat, lng),
+		zoom : 15
+	};
+	map = new google.maps.Map(document
+			.getElementById(mapdiv), mapOptions);
+
+	//  map.set("disableDoubleClickZoom", false);
+
+	
+	if(mapdiv == 'map_canvas'){
+		marker = new google.maps.Marker({
+			position : myLatLng,
+			draggable : true,
+			animation : google.maps.Animation.DROP,
+			map : map
+		});
+
+		$("#lat1").val(lat);
+		$("#lng1").val(lng);
+
+		//On click event of map marker should get relocated
+		google.maps.event.addListener(map, 'click', function(
+				event) {
+			marker.setPosition(event.latLng);
+			$("#lat1").val(event.latLng.lat());
+			$("#lng1").val(event.latLng.lng());
+		});
+		// After dragging the marker
+		google.maps.event.addListener(marker, 'dragend',
+				function(event) {
+					$("#lat1").val(event.latLng.lat());
+					$("#lng1").val(event.latLng.lng());
+		});
+	}
+
+	if(mapdiv == 'profile_map_canvas'){
+		marker = new google.maps.Marker({
+			position : myLatLng,
+			draggable : false,
+			animation : google.maps.Animation.DROP,
+			map : map
+		});
+	}
+
+	
+}
+
+
+$( document ).ready(function() {
+$("#city").blur(function() {
+	$("#map_canvas").html('');
+	var geocoder = new google.maps.Geocoder();
+	//var streetname=$("#streetName").val();
+	var area=$("#area").val();
+	geocoder.geocode({
+		'address' : area+this.value
+	}, function(results, status) {
+		if (status == google.maps.GeocoderStatus.OK) {
+			//alert("location : " + results[0].geometry.location.lat() + " " +results[0].geometry.location.lng()); 
+			myLatLng = results[0].geometry.location;
+			lat = results[0].geometry.location.lat();
+			lng = results[0].geometry.location.lng();
+			initialize('map_canvas');
+		} else {
+			alert("Something got wrong " + status);
+		}
+	});
+	// google.maps.event.addDomListener(window, 'load', initialize);
+});
+});
+
+</script>
+
+
+
+
+@if(pharmacy.address != null && pharmacy.address.latitude!= null && pharmacy.address.longitude != null && pharmacy.address.latitude.trim().compareToIgnoreCase("") != 0 && pharmacy.address.longitude.trim().compareToIgnoreCase("") != 0){
+<script>
+		window.onload=function(){
+			lat = @pharmacy.address.latitude
+			lng = @pharmacy.address.longitude
+			myLatLng= new google.maps.LatLng(lat, lng),
+			google.maps.event.addDomListener(window, 'load', initialize('profile_map_canvas'));
+			$('#myaddrModal').on('shown.bs.modal', function (e) {
+				initialize('map_canvas');
+			});
+		};
+		
+</script>
+}
+
+
+
+
+<script>
+	$('#myaddrModal').on('shown.bs.modal', function (e) {
+		$('#statesel').chosen();
+	});
+</script>
+
+
+
+
+@*
+<h2>ShowCase List</h2>
+<span data-toggle="modal" data-target="#mydrugModal" style="cursor:pointer; position:relative; top:2px;left:940px; font-size:15px;"><i id="spinner2" class="fa fa-cog"></i></span>
+<div class="modal fade" id="mydrugModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header" style="color: #ffffff;background-color: #008cba;border-color: #008cba;">
+        <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+        <h4 class="modal-title" id="myModalLabel">Change Drug Names</h4>
+      </div>
+      <div class="modal-body well">
+      
+      <form action=@routes.PharmacistController.addShowCasedProduct() enctype="multipart/form-data" method="POST">	
+      <div >
+    			<label for="name">Product Name</label>
+    			<input type="text" class="form-control" name="name" id="name" placeholder="Enter Product Name">
+  			</div>
+  			<br>
+  			<div >
+			<textarea name="description" rows=5  placeholder="Write Some Description" ></textarea>
+			</div>
+			<div class="row">
+      <div class="col-md-5">
+			<label for="image">Upload Images</label>
+			<input type="file"  name="file">
+      </div>
+      <div class=" col-md-7">
+      <br>
+			<a class="btn btn-xs btn-success" onclick="addfiles();" id="addfiles"> + </a>
+      </div>
+      </div>
+      <div id="files"></div>
+      <br>
+			<div >
+    			<label for="MRP">MRP</label>
+    			<input type="text" class="form-control" name="mrp" id="mrp" placeholder="Price Of Prroduct">
+  			</div>
+  			<br>
+  			<input type="hidden" name="pharmacyId" value="@pharmacy.id"/>
+  			<input type="submit" value="Add Product" />
+
+	</form>
+     
+	  </div>
+    </div>
+  </div>
+</div>
+
+
+<table class="table table-bordered">
+<tr>
+<th> S No </th>
+<th> Drug Name </th>
+<th> Purpose</th>
+</tr>
+@if(pharmacy.showCaseProductList.size != 0){
+@for((showCaseProduct,index)<- pharmacy.showCaseProductList.zipWithIndex){
+<tr>
+<td> @{index+1} </td>
+<td> @showCaseProduct.name</td>
+<td> @showCaseProduct.description </td>
+<th>
+<a href="/pharmacy/remove-product-from-showcase/@showCaseProduct.id" class="btn btn-xs btn-danger">Remove</a>
+</th>
+</tr>
+}
+}
+*@
+
+</table>
+
+
+
+
+<script>
+	
+$('#slugpopover').on('shown.bs.popover', function () {
+	$('#new-slugUrl').keypress(function(e) {
+	    e = e || event;
+    	var s = String.fromCharCode(e.charCode);
+    	if(
+    		(s.match(/[a-z]/))
+    		||
+    		(s.match(/[0-9]/))
+    		||
+    		(s.match(/[-]/))
+    		){
+    			return true;
+    		}
+			return false;
+	});
+});
+
+</script>
+}
+

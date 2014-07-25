@@ -10,14 +10,15 @@ import java.util.Map;
 
 import models.Alert;
 import models.AppUser;
-import models.Patient;
 import models.diagnostic.DiagnosticCentre;
 import models.doctor.Appointment;
 import models.doctor.DaySchedule;
 import models.doctor.Doctor;
 import models.doctor.DoctorClinicInfo;
 import models.doctor.QuestionAndAnswer;
+import models.patient.Patient;
 import models.patient.PatientDoctorInfo;
+import models.pharmacist.Pharmacy;
 import play.Logger;
 import play.data.Form;
 import play.mvc.Controller;
@@ -27,6 +28,50 @@ import beans.QuestionAndAnswerBean;
 
 @BasicAuth
 public class PatientController extends Controller {
+
+	/**
+	 * @author Mitesh
+	 * Action to display currently logged in Patient' Doctor List
+	 *  GET  /user/my-doctors
+	 */
+	public static Result myFavouriteDoctors() {
+		final Patient patient=LoginController.getLoggedInUser().getPatient();
+		return ok(views.html.patient.fav_doctors.render(patient.patientDoctorInfoList));
+	}
+
+
+
+	/**
+	 * @author lakshmi
+	 * Action to remove pharmacy from  favorite pharmacies List of loggedin PATIENT
+	 * GET /user/remove-pharmacy/:patientId/:pharmacyId
+	 */
+	public static Result removeFavoritePharmacy(final Long patientId,final Long pharmacyId) {
+		final Patient patient = Patient.find.byId(patientId);
+		//server-side check
+		if(patient.id.longValue() != LoginController.getLoggedInUser().getPatient().id.longValue()){
+			return redirect(routes.LoginController.processLogout());
+		}
+		patient.pharmacyList.remove(Pharmacy.find.byId(pharmacyId));
+		patient.update();
+		return ok(views.html.pharmacist.favorite_pharmacy_list.render(patient.pharmacyList,0L,patient.id));
+	}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 	public static Result scheduleAppointment() {
 		final Map<Date, List<Appointment>> appointmentMap = null;
@@ -273,15 +318,6 @@ public class PatientController extends Controller {
 		return redirect(routes.PatientController.myDiagnosticCenters());
 
 	}
-	/**
-	 * @author Mitesh
-	 * Action to display currently logged in Patient'Doctor List
-	 *  GET /patient/favdoctors
-	 */
-	public static Result patientMyFavDoctors() {
-		final Patient patient=LoginController.getLoggedInUser().getPatient();
-		return ok(views.html.patient.fav_doctors.render(patient.patientDoctorInfos));
-	}
 
 	/**
 	 * @author Mitesh
@@ -293,7 +329,7 @@ public class PatientController extends Controller {
 		final PatientDoctorInfo patientDoctorInfo=PatientDoctorInfo.find.byId(patDocid);
 		patientDoctorInfo.delete();
 		flash().put("alert", new Alert("alert-success","Successfully Deleted:"+patientDoctorInfo.doctor.appUser.name).toString());
-		return redirect(routes.PatientController.patientMyFavDoctors());
+		return redirect(routes.PatientController.myFavouriteDoctors());
 	}
 	public static Result staticPatientMyFavDoctors() {
 		return ok(views.html.patient.static_fav_doctors.render());

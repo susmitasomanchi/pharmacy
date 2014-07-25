@@ -18,6 +18,7 @@ import javax.persistence.OneToOne;
 
 import models.AppUser;
 import models.BaseEntity;
+import models.pharmacist.Pharmacy;
 import play.data.validation.Constraints.Required;
 import play.db.ebean.Model;
 
@@ -88,13 +89,15 @@ public class Doctor extends BaseEntity{
 	 */
 	public Integer experience;
 
-
 	@Column(columnDefinition="TEXT")
 	public String searchIndex;
 
 	@Column(columnDefinition="TEXT")
 	public String slugUrl;
-	
+
+	@ManyToMany(cascade = CascadeType.ALL)
+	public List<Pharmacy> pharmacyList = new ArrayList<Pharmacy>();
+
 	public static Model.Finder<Long,Doctor> find = new Finder<Long, Doctor>(Long.class, Doctor.class);
 
 	public List<DoctorExperience> getExperienceListInOrder(){
@@ -125,7 +128,6 @@ public class Doctor extends BaseEntity{
 		this.searchIndex = stringBuilder.toString();
 		super.save();
 	}
-
 
 	@Override
 	public void update() {

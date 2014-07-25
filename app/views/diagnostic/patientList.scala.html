@@ -1,4 +1,4 @@
-@(patient: List[models.Patient])
+@(patient: List[models.patient.Patient])
 @main("Diagnostic Centers List") {
 <table class="table table-bordered">
 <thead>
@@ -22,9 +22,6 @@ Mobile No
 </td>
 <td>
 @p.appUser.email
-</td>
-<td>
-@p.mbno
 </td>
 <th>
 

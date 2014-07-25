@@ -45,13 +45,10 @@ public class PharmacistController extends Controller {
 
 
 
-
-
-
 	/**
 	 * @author : lakshmi
-	 * @url: /upload-pharmacy-images
 	 * Action to upload Background and Profile Images of the Pharmacy of the LoggedIn ADMIN_PHARMACIST
+	 * POST	/pharmacy/upload-pharmacy-images
 	 */
 	public static Result uploadPharmacyImageProcess()  {
 		try{
@@ -114,6 +111,17 @@ public class PharmacistController extends Controller {
 			}
 			if(requestMap.get("description") != null && (requestMap.get("description")[0].trim().compareToIgnoreCase("")!=0)){
 				pharmacy.description = requestMap.get("description")[0];
+			}
+			if(requestMap.get("slugUrl") != null && !(requestMap.get("slugUrl")[0].trim().isEmpty())){
+				if(requestMap.get("slugUrl")[0].trim().compareToIgnoreCase(pharmacy.slugUrl) != 0){
+					final int availableSlug = Pharmacy.find.where().eq("slugUrl", requestMap.get("slugUrl")[0].trim()).findRowCount();
+					if(availableSlug == 0){
+						pharmacy.slugUrl = requestMap.get("slugUrl")[0].trim();
+					}else{
+						flash().put("alert", new Alert("alert-danger", "Sorry, Requested URL is not available.").toString());
+						return redirect(routes.UserActions.dashboard());
+					}
+				}
 			}
 			pharmacy.update();
 		}
@@ -179,7 +187,7 @@ public class PharmacistController extends Controller {
 				pharmacy.address.longitude = requestMap.get("longitude")[0];
 			}
 			if(requestMap.get("contactNo") != null && (requestMap.get("contactNo")[0].trim().compareToIgnoreCase("")!=0)){
-				pharmacy.contactNo = requestMap.get("contactNo")[0];
+				pharmacy.contactNumber = requestMap.get("contactNo")[0];
 			}
 			pharmacy.address.update();
 			pharmacy.update();

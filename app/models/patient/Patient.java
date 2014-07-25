@@ -1,4 +1,4 @@
-package models;
+package models.patient;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -12,8 +12,10 @@ import javax.persistence.ManyToMany;
 import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 
+import models.AppUser;
+import models.BaseEntity;
 import models.diagnostic.DiagnosticCentre;
-import models.patient.PatientDoctorInfo;
+import models.pharmacist.Pharmacy;
 import play.db.ebean.Model;
 
 @SuppressWarnings("serial")
@@ -27,25 +29,15 @@ public class Patient extends BaseEntity {
 	@OneToOne
 	public AppUser appUser;
 
-	public String mbno;
-
-	public String date;
-
-	public String disease;
-
-	public String appointmentId;
-
-	public String doctorAvailability;
-
-	public String isUrgentPatient;
-
 	@OneToMany(cascade = CascadeType.ALL)
-	public List<PatientDoctorInfo> patientDoctorInfos = new ArrayList<PatientDoctorInfo>();
+	public List<PatientDoctorInfo> patientDoctorInfoList = new ArrayList<PatientDoctorInfo>();
+
+	@ManyToMany(cascade = CascadeType.ALL)
+	public List<Pharmacy> pharmacyList = new ArrayList<Pharmacy>();
 
 	@ManyToMany(cascade = CascadeType.ALL)
 	public List<DiagnosticCentre> diagnosticCenterList = new ArrayList<DiagnosticCentre>();
 
-	public static Model.Finder<Long, Patient> find = new Finder<Long, Patient>(
-			Long.class, Patient.class);
+	public static Model.Finder<Long, Patient> find = new Finder<Long, Patient>(Long.class, Patient.class);
 
 }

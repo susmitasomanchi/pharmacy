@@ -3,6 +3,7 @@ package models.doctor;
 import java.util.Date;
 import java.util.List;
 
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -21,19 +22,17 @@ public class Appointment extends BaseEntity {
 	@GeneratedValue(strategy = GenerationType.AUTO)
 	public  Long id;
 
-
 	public Date appointmentTime;
 
 	public AppointmentStatus appointmentStatus;
 
-
 	@OneToOne
 	public AppUser requestedBy;
-
 
 	@OneToOne
 	public AppUser apporovedBy;
 
+	@Column(columnDefinition="TEXT")
 	public String remarks;
 
 	@OneToOne
@@ -45,18 +44,15 @@ public class Appointment extends BaseEntity {
 
 
 	public static List<Appointment> getAvailableAppointmentList( final Long doctorId, final Date fromDate, final Date toDate) {
-
-
-
-		final List<Appointment>  list=Appointment.find.where().eq("doctor.id", doctorId).between("appointmentTime", fromDate, toDate).
-				order().asc("appointmentTime").findList();
-
-		return list;
-
+		return Appointment.find.where()
+				.eq("doctor.id", doctorId)
+				.between("appointmentTime", fromDate, toDate)
+				.order().asc("appointmentTime")
+				.findList();
 	}
+
 	public static List<Appointment> getAvailableMrAppointmentList(final Doctor doctor,final Date date) {
 		final List<Appointment> list=null;
-
 		/*	final Calendar calendar=Calendar.getInstance();
 		calendar.setTime(date);
 		calendar.set(Calendar.HOUR_OF_DAY,doctor.doctorClinicInfoList.get(0).toHrsMr);
@@ -67,8 +63,6 @@ public class Appointment extends BaseEntity {
 		list=Appointment.find.where().eq("doctor", doctor).between("appointmentTime", date, calendar.getTime()).
 				order().asc("appointmentTime").findList();
 		 */
-
-
 		return list;
 	}
 
