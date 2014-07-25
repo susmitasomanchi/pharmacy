@@ -21,6 +21,7 @@ import models.mr.HeadQuarter;
 import models.mr.MedicalRepresentative;
 import models.mr.PharmaceuticalCompany;
 import models.mr.Sample;
+import models.mr.TourPlan;
 
 import org.joda.time.DateTime;
 import org.joda.time.Days;
@@ -844,5 +845,65 @@ public class MRController extends Controller {
 		Logger.info(mrList.toString());
 		return ok(views.html.mr.organizationStructure.render(mrList));
 
+	}
+	/**
+	 * @author anand
+	 * 
+	 * @description : this method render to the monthlyTourPlan view to take input as month and year
+	 * 
+	 * url : GET    /mr/monthly-tour-plan
+	 * 
+	 * */
+	public static Result tourPlan(){
+		final MedicalRepresentative loggedInMr = LoginController.getLoggedInUser().getMedicalRepresentative();
+		return ok(views.html.mr.tourPlan.render(loggedInMr.tourPlanList));
+	}
+
+	/**
+	 * @author anand
+	 * 
+	 * @description : this method is save month and year and make templete to fill the tour plan
+	 * 
+	 * url : POST	/mr/add-month-for-tour-plan
+	 * 
+	 * */
+	public static Result addTourPlan(){
+
+		final MedicalRepresentative loggedInmr = LoginController.getLoggedInUser().getMedicalRepresentative();
+		final String monthForTourPlanStr = request().body().asFormUrlEncoded().get("dateForTourPlan")[0];
+		Logger.info("Date for tour plan : "+monthForTourPlanStr);
+		final DateTimeFormatter formatter = DateTimeFormat.forPattern("MM-yyyy");
+		final Date monthForTourPlan = formatter.parseDateTime(monthForTourPlanStr).toDate();
+		Logger.info("Date for tour plan : "+monthForTourPlan);
+		final TourPlan tourPlan = new TourPlan();
+		tourPlan.forMonth = monthForTourPlan;
+		loggedInmr.tourPlanList.add(tourPlan);
+		loggedInmr.update();
+
+
+		return ok(views.html.mr.tourPlan.render(loggedInmr.tourPlanList));
+	}
+
+	/**
+	 * @author anand
+	 * 
+	 * @description : this method is rendering to tour plan page,where MR has to fil the tourPlan
+	 * 
+	 * url : GET    /mr/tourplan-lineitem
+	 * 
+	 * 
+	 * */
+	public static Result tourPlanLineItem(final Long lineItemId){
+
+		final TourPlan tourPlan = TourPlan.find.byId(lineItemId);
+		final Calendar calender = Calendar.getInstance();
+		calender.setTime(tourPlan.forMonth);
+		final int maxDaysInMonth = calender.getActualMaximum(Calendar.DAY_OF_MONTH);
+		final Map<Integer,TourPlan> tourPlanMap = new LinkedHashMap<Integer,TourPlan>();
+
+		for(int i=1;i<=maxDaysInMonth;i++){
+			tourPlanMap.put(i, tourPlan);
+		}
+		return ok(views.html.mr.tpLineItem.render(tourPlanMap));
 	}
 }

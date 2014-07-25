@@ -412,16 +412,6 @@ create table medicine_line_item (
   last_update               timestamp not null)
 ;
 
-create table monthly_tour_plan (
-  id                        bigint not null,
-  for_month                 timestamp,
-  status                    varchar(9),
-  submit_date               timestamp,
-  last_update               timestamp not null,
-  constraint ck_monthly_tour_plan_status check (status in ('REJECTED','DRAFT','APPROVED','REOPENED','SUBMITTED')),
-  constraint pk_monthly_tour_plan primary key (id))
-;
-
 create table order_line_item (
   id                        bigint not null,
   pharmacy_order_id         bigint not null,
@@ -614,6 +604,25 @@ create table social_user (
   constraint pk_social_user primary key (id))
 ;
 
+create table tpline_item (
+  id                        bigint not null,
+  tour_plan_id              bigint not null,
+  month                     timestamp,
+  last_update               timestamp not null,
+  constraint pk_tpline_item primary key (id))
+;
+
+create table tour_plan (
+  id                        bigint not null,
+  medical_representative_id bigint not null,
+  for_month                 timestamp,
+  status                    varchar(9),
+  submit_date               timestamp,
+  last_update               timestamp not null,
+  constraint ck_tour_plan_status check (status in ('REJECTED','DRAFT','APPROVED','REOPENED','SUBMITTED')),
+  constraint pk_tour_plan primary key (id))
+;
+
 
 create table dcrline_item_product (
   dcrline_item_id                bigint not null,
@@ -726,8 +735,6 @@ create sequence language_app_user_seq;
 
 create sequence medical_representative_seq;
 
-create sequence monthly_tour_plan_seq;
-
 create sequence order_line_item_seq;
 
 create sequence patient_seq;
@@ -759,6 +766,10 @@ create sequence show_cased_product_seq;
 create sequence show_cased_service_seq;
 
 create sequence social_user_seq;
+
+create sequence tpline_item_seq;
+
+create sequence tour_plan_seq;
 
 alter table appointment add constraint fk_appointment_requestedBy_1 foreign key (requested_by_id) references app_user (id);
 create index ix_appointment_requestedBy_1 on appointment (requested_by_id);
@@ -900,6 +911,10 @@ alter table show_cased_product add constraint fk_show_cased_product_pharmac_69 f
 create index ix_show_cased_product_pharmac_69 on show_cased_product (pharmacy_id);
 alter table show_cased_service add constraint fk_show_cased_service_diagnos_70 foreign key (diagnostic_centre_id) references diagnostic_centre (id);
 create index ix_show_cased_service_diagnos_70 on show_cased_service (diagnostic_centre_id);
+alter table tpline_item add constraint fk_tpline_item_tour_plan_71 foreign key (tour_plan_id) references tour_plan (id);
+create index ix_tpline_item_tour_plan_71 on tpline_item (tour_plan_id);
+alter table tour_plan add constraint fk_tour_plan_medical_represen_72 foreign key (medical_representative_id) references medical_representative (id);
+create index ix_tour_plan_medical_represen_72 on tour_plan (medical_representative_id);
 
 
 
@@ -1015,8 +1030,6 @@ drop table if exists medical_representative_head_quar cascade;
 
 drop table if exists medicine_line_item cascade;
 
-drop table if exists monthly_tour_plan cascade;
-
 drop table if exists order_line_item cascade;
 
 drop table if exists patient cascade;
@@ -1056,6 +1069,10 @@ drop table if exists show_cased_service_file_entity cascade;
 drop table if exists sig_code cascade;
 
 drop table if exists social_user cascade;
+
+drop table if exists tpline_item cascade;
+
+drop table if exists tour_plan cascade;
 
 drop sequence if exists address_seq;
 
@@ -1121,8 +1138,6 @@ drop sequence if exists language_app_user_seq;
 
 drop sequence if exists medical_representative_seq;
 
-drop sequence if exists monthly_tour_plan_seq;
-
 drop sequence if exists order_line_item_seq;
 
 drop sequence if exists patient_seq;
@@ -1154,4 +1169,8 @@ drop sequence if exists show_cased_product_seq;
 drop sequence if exists show_cased_service_seq;
 
 drop sequence if exists social_user_seq;
+
+drop sequence if exists tpline_item_seq;
+
+drop sequence if exists tour_plan_seq;
 

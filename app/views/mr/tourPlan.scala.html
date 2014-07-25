@@ -1,0 +1,42 @@
+@(tourPlanList: List[models.mr.TourPlan])
+
+@import play.i18n._
+@import helper.twitterBootstrap._
+@import helper._
+
+@main("Tour Plan"){
+	<script>
+	$("#datepicker").datepicker( {
+	    format: "mm-yyyy",
+	    viewMode: "1", 
+	    minViewMode: "1"
+	});
+	</script>
+		<form action="@routes.MRController.addTourPlan()" method="post">
+			Select month and year
+			<div class="datepicker input-append date" id="datepicker"  data-date="today" data-date-format="mm-yyyy" >
+		     <input id="dateForTourPlan" name="dateForTourPlan" class="span2" size="16" type="text" >
+		     <span class="add-on"><i class="icon-th"></i></span>
+	   	    </div>
+	   		<input type="submit" value="Add Tour Plan" />
+	   	</form>
+	   	
+	 <br>
+	<h3><b>My Tour PlanS</b></h3>
+	<table class="table table-bordered table-condensed col-md-3">
+	<thead>
+	<th>Sr. No.</th>
+	<th>ForMonth</th>
+	<th>Action</th>
+	</thead>
+	<tbody>
+	@for(tourPlan <- tourPlanList){
+	<tr>
+		<td>&nbsp;</td>
+		<td>@tourPlan.forMonth.format("MMM-yyyy")</td>
+		<td><a class="btn btn-primary btn-xs" href="@routes.MRController.tourPlanLineItem(tourPlan.id)">View Tour Plan</a></td>
+	</tr>
+	}
+	</tbody>
+	</table>
+}

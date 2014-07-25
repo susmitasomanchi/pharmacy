@@ -212,7 +212,7 @@ GET    /patient-search/list                              controllers.DiagnosticO
 
 GET    /mr/hierarchy                                     controllers.MRController.viewHierarchy()
 
-GET    /mr/search-doctor-list                                      controllers.MRController.doctorList()
+GET    /mr/search-doctor-list                            controllers.MRController.doctorList()
 GET    /mr/add-doctor/:id                                controllers.MRController.addDoctor(id: Long)
 GET    /mr/remove-doctor/:id                             controllers.MRController.removeDoctor(id: Long)
 GET    /mr/doctor-list                                   controllers.MRController.mrDoctorList()
@@ -232,6 +232,9 @@ POST   /mr/search-subordinate-dcr                        controllers.MRControlle
 GET    /search                                           controllers.MRController.search()
 GET    /mr/display-appointment/:id                       controllers.MRController.scheduleAppointment(id:String)
 POST   /mr/add-head-quarter                              controllers.MRController.addHeadQuarter()
+GET    /mr/tour-plan                                     controllers.MRController.tourPlan()
+POST   /mr/add-tour-plan                                 controllers.MRController.addTourPlan()
+GET    /mr/tourplan-lineitem/:tourplanid                 controllers.MRController.tourPlanLineItem(tourplanid: Long)
 
 POST   /mr/add                                           controllers.MRController.medicalRepresentativeProccess()
 #POST    /mr/editmr                                 controllers.MRController.medicalRepresentativeProccessUpdate()
