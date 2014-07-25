@@ -136,6 +136,7 @@ public class DiagnosticCentre extends BaseEntity {
 				stringBuilder.append(this.address.fetchedPinCode.trim().toLowerCase());
 			}
 		}
+		stringBuilder.append(this.slugUrl.toLowerCase());
 		this.searchIndex = stringBuilder.toString();
 		super.save();
 	}
@@ -161,6 +162,7 @@ public class DiagnosticCentre extends BaseEntity {
 				stringBuilder.append(this.address.fetchedPinCode.trim().toLowerCase());
 			}
 		}
+		stringBuilder.append(this.slugUrl.toLowerCase());
 		this.searchIndex = stringBuilder.toString();
 		super.update();
 	}

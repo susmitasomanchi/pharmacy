@@ -119,6 +119,7 @@ public class Pharmacy extends BaseEntity {
 		if(this.contactNumber!= null){
 			stringBuilder.append(this.contactNumber.trim().toLowerCase());
 		}
+		stringBuilder.append(this.slugUrl.toLowerCase());
 		this.searchIndex = stringBuilder.toString();
 		super.save();
 	}
@@ -147,6 +148,7 @@ public class Pharmacy extends BaseEntity {
 		if(this.contactNumber!= null){
 			stringBuilder.append(this.contactNumber.trim().toLowerCase());
 		}
+		stringBuilder.append(this.slugUrl.toLowerCase());
 		this.searchIndex = stringBuilder.toString();
 		super.update();
 	}

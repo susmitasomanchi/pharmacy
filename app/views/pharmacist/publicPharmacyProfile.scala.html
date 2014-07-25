@@ -175,15 +175,10 @@ $('body').on('click', function (e) {
 </div>
 
 <div class="col-md-7">
+	@if(pharmacy.address != null){
 	<div id="profile_map_canvas" style="width:600px;height:400px">
-	@if(pharmacy.address == null || pharmacy.address.latitude== null || pharmacy.address.longitude == null || pharmacy.address.latitude.trim().compareToIgnoreCase("") == 0 || pharmacy.address.longitude.trim().compareToIgnoreCase("") == 0){
-		<img src="/assets/images/googlemap1.png" width="600" height="400" style="position:relative" />
-		<div class="maptext" style="text-align:center">
-		<p style="position:relative; top:-200px; color:#008cba;"><b>Kindly Edit Contact Details & Mark Your Pharmacy</span></b></p>
-	}else{
-	
-	}
 	</div>
+	}
 </div>
 
 

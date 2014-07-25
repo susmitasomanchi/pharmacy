@@ -168,6 +168,7 @@ public class UserController extends Controller {
 			final DiagnosticCentre diagnosticCentre = new DiagnosticCentre();
 			diagnosticCentre.name = request().body().asFormUrlEncoded().get("diagnosticCentreName")[0];
 			diagnosticCentre.diagnosticRepAdmin = diagnosticRepresentative;
+			diagnosticCentre.slugUrl = Util.simpleSlugify(diagnosticCentre.name)+diagnosticRepresentative.id;
 			diagnosticCentre.save();
 			diagnosticRepresentative.diagnosticCentre = diagnosticCentre;
 			diagnosticRepresentative.update();

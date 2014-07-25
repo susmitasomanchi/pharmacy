@@ -137,7 +137,7 @@ function submitbasicform(id){
 
 <p class="slugUrlP" style="font-size:20px; position:absolute; margin-top:-240px; margin-left:-40px;">
 <span style="text-shadow:1px 1px 20px white, 3px 3px 20px white;">
-You profile is available at 
+Your profile is live at 
 <a href="@routes.PublicController.getPharmacyWithSlug(pharmacy.slugUrl)" style="color:black;">mednetwork.in/pharmacy/@pharmacy.slugUrl</a>
 </span>
 <span id="slugpopover" data-toggle="popover" title="Edit Your URL" data-html="true" data-placement="bottom" data-content=
@@ -146,7 +146,7 @@ You profile is available at
 <form action=&quot;@routes.PharmacistController.pharmacyBasicUpdate()&quot; method=&quot;POST&quot;>
 <div style=&quot;text-shadow:none;&quot;><span style=&quot;font-size:16px;&quot;>mednetwork.in/pharmacy/</span>
 <input type=&quot;hidden&quot; name=&quot;pharmacyId&quot; value=&quot;@pharmacy.id&quot;>
-<input id=&quot;slugUrl&quot; name=&quot;slugUrl&quot; style=&quot;color:#292929; font-weight:bold; height: 22px; position:relative; top:0px; padding-left:0px; font-size:16px; width:150px;&quot; type=&quot;text&quot; value=&quot;@pharmacy.slugUrl&quot;>
+<input id=&quot;slugUrl&quot; name=&quot;slugUrl&quot; style=&quot;color:#292929; font-weight:bold; height: 22px; position:relative; top:0px; padding-left:0px; font-size:16px; width:200px;&quot; type=&quot;text&quot; value=&quot;@pharmacy.slugUrl&quot;>
 <br><br>
 <ul style=&quot;padding-left:20px; margin:0px;&quot;>
 <li>Lower case alphabets (a-z) can be used.</li>

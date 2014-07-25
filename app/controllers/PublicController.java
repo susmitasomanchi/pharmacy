@@ -5,6 +5,7 @@ import java.util.List;
 
 import models.Alert;
 import models.Role;
+import models.diagnostic.DiagnosticCentre;
 import models.doctor.Doctor;
 import models.patient.Patient;
 import models.patient.PatientDoctorInfo;
@@ -51,7 +52,12 @@ public class PublicController extends Controller{
 	public static Result getDoctorWithSlug(final String slug) {
 		final String cleanSlug = slug.trim().toLowerCase();
 		final Doctor doctor = Doctor.find.where().eq("slugUrl",cleanSlug).findUnique();
-		return ok(views.html.doctor.publicDoctorProfile.render(doctor));
+		if(doctor != null){
+			return ok(views.html.doctor.publicDoctorProfile.render(doctor));
+		}
+		else{
+			return ok("404");
+		}
 	}
 
 	/**
@@ -62,7 +68,12 @@ public class PublicController extends Controller{
 	public static Result getPharmacyWithSlug(final String slug) {
 		final String cleanSlug = slug.trim().toLowerCase();
 		final Pharmacy pharmacy = Pharmacy.find.where().eq("slugUrl",cleanSlug).findUnique();
-		return ok(views.html.pharmacist.publicPharmacyProfile.render(pharmacy));
+		if(pharmacy != null){
+			return ok(views.html.pharmacist.publicPharmacyProfile.render(pharmacy));
+		}
+		else{
+			return ok("404");
+		}
 	}
 
 
@@ -155,6 +166,23 @@ public class PublicController extends Controller{
 
 			}
 			return redirect(routes.UserActions.dashboard());
+		}
+	}
+
+
+	/**
+	 * @author Lakshmi
+	 * Action to search DiagnosticCentre by slug and display its profile page
+	 * GET /diagnostic/:slugUrl
+	 */
+	public static Result getDiagnosticCentreWithSlug(final String slug) {
+		final String cleanSlug = slug.trim().toLowerCase();
+		final DiagnosticCentre diagnosticCentre = DiagnosticCentre.find.where().eq("slugUrl",cleanSlug).findUnique();
+		if(diagnosticCentre != null){
+			return ok(views.html.diagnostic.publicDiagnosticProfile.render(diagnosticCentre));
+		}
+		else{
+			return ok("404");
 		}
 	}
 
