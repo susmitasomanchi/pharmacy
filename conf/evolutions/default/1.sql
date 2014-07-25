@@ -443,6 +443,7 @@ create table patient (
   appointment_id            varchar(255),
   doctor_availability       varchar(255),
   is_urgent_patient         varchar(255),
+  is_urgent_patiesdfnt      varchar(255),
   last_update               timestamp not null,
   constraint pk_patient primary key (id))
 ;

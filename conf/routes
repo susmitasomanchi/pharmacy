@@ -89,6 +89,7 @@ GET		/pharmacy/get-image/:pharmacyId/:fileId				controllers.PharmacistController
 GET		/pharmacy/remove-image/:pharmacyId/:fileId			controllers.PharmacistController.removeImage(pharmacyId: Long,fileId: Long)
 GET		/pharmacy/profile/:id								controllers.PharmacistController.pharmacyProfile(id: Long)
 
+GET		/patient/add-favorite-pharmacy/:pharmacyId/:str								controllers.PatientController.addFavoritePharmacy(pharmacyId: Long,str: String)
 GET		/user/my-favorite-pharmacies											controllers.PatientController.myFavoritePharmacies()
 GET		/user/remove-favorite-pharmacy/:patientId/:pharmacyId					controllers.PatientController.removeFavoritePharmacy(patientId: Long,pharmacyId: Long)
 
