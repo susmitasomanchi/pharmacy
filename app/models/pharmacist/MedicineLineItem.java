@@ -1,6 +1,9 @@
 package models.pharmacist;
 
 import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
 
 import models.BaseEntity;
 import models.Product;
@@ -11,9 +14,16 @@ import play.db.ebean.Model;
 @Entity
 public class MedicineLineItem extends BaseEntity{
 
+	@Id
+	@GeneratedValue(strategy = GenerationType.AUTO)
+	public  Long id;
+
 	public Product medicine;
+
 	public String frequency;
+
 	public SigCode sigCode;
+
 	public String remarks;
 
 	public static Model.Finder<Long, MedicineLineItem> find = new Finder<Long, MedicineLineItem>(Long.class, MedicineLineItem.class);

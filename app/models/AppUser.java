@@ -5,14 +5,18 @@
 package models;
 
 import java.util.Date;
+
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Lob;
+import javax.persistence.OneToOne;
+
 import models.diagnostic.DiagnosticRepresentative;
 import models.doctor.Doctor;
 import models.mr.MedicalRepresentative;
+import models.patient.Patient;
 import models.pharmacist.Pharmacist;
 import play.data.validation.Constraints.Email;
 import play.db.ebean.Model;
@@ -37,15 +41,16 @@ public class AppUser extends BaseEntity {
 	@Email
 	public String email;
 
-
 	public String password;
 
 	public Sex sex;
 
 	public Date dob;
 
-
 	public Role role;
+
+	@OneToOne
+	Address address;
 
 	//@OneToOne(mappedBy="appUser")
 	//public MedicalRepresentative mr;

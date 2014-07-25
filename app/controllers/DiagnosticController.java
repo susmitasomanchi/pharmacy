@@ -13,13 +13,13 @@ import javax.activation.MimetypesFileTypeMap;
 import models.Address;
 import models.Alert;
 import models.FileEntity;
-import models.Patient;
 import models.Role;
 import models.State;
 import models.diagnostic.DiagnosticCentre;
 import models.diagnostic.DiagnosticReport;
 import models.diagnostic.DiagnosticTest;
 import models.diagnostic.ShowCasedService;
+import models.patient.Patient;
 
 import org.apache.commons.io.FileUtils;
 

@@ -286,6 +286,12 @@
 								myLatLng = results[0].geometry.location;
 								lat = results[0].geometry.location.lat();
 								lng = results[0].geometry.location.lng();
+								state = results[0].address_components[4].long_name;
+								
+								//var address = results[0].address_components;
+								//var zipcode = address[address.length].long_name;
+							console.log(JSON.stringify(results[0]));
+								alert(state);
 								initialize();
 							} else {
 								//alert("Something got wrong " + status);

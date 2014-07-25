@@ -11,7 +11,6 @@ import java.util.Map;
 
 import models.Alert;
 import models.AppUser;
-import models.Patient;
 import models.diagnostic.DiagnosticCentre;
 import models.doctor.Appointment;
 import models.doctor.AppointmentStatus;
@@ -19,6 +18,7 @@ import models.doctor.DaySchedule;
 import models.doctor.Doctor;
 import models.doctor.DoctorClinicInfo;
 import models.doctor.QuestionAndAnswer;
+import models.patient.Patient;
 import models.patient.PatientDoctorInfo;
 import models.pharmacist.Pharmacy;
 import play.Logger;
@@ -41,7 +41,7 @@ public class PatientController extends Controller {
 	 * Action to display a form which has lists of appointment as per date is provided
 	 *  GET/patient/display-appointment/:docClinicId/:timeMillis
 	 */
-	public static Result displayAppointment(final Long docClinId,final Long timeMillis) {
+	public static Result displayAppointment(final Long docClinId,Long timeMillis) {
 
 		int slots=0;
 
@@ -374,9 +374,9 @@ public class PatientController extends Controller {
 	 *  GET		/patient/my-appointments
 	 */
 	public static Result viewMyAppointments(){
-		final AppUser patient=LoginController.getLoggedInUser();
+		AppUser patient=LoginController.getLoggedInUser();
 
-		final List<Appointment> patientApppointments=Appointment.find.where().eq("requestedBy", patient).findList();
+		List<Appointment> patientApppointments=Appointment.find.where().eq("requestedBy", patient).findList();
 		return ok(views.html.patient.patientViewAppointments.render(patientApppointments));
 	}
 
@@ -385,11 +385,11 @@ public class PatientController extends Controller {
 	 * Action to process requested appointments
 	 *  POST 	/patient/process-appointment
 	 */
-	public static Result processAppointment(final Long apptId) {
-		final String remark=request().body().asFormUrlEncoded().get("remark")[0];
+	public static Result processAppointment(Long apptId) {
+		String remark=request().body().asFormUrlEncoded().get("remark")[0];
 
 		Logger.warn(remark);
-		final Appointment appointment=Appointment.find.byId(apptId);
+		Appointment appointment=Appointment.find.byId(apptId);
 		appointment.appointmentStatus=AppointmentStatus.APPROVED;
 		appointment.remarks=remark;
 		appointment.requestedBy=LoginController.getLoggedInUser();

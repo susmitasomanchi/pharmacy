@@ -13,7 +13,7 @@ import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 
 import models.BaseEntity;
-import models.Patient;
+import models.patient.Patient;
 import play.db.ebean.Model;
 @Entity
 public class DiagnosticOrder extends BaseEntity{

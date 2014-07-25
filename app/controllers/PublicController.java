@@ -4,9 +4,9 @@ import java.util.ArrayList;
 import java.util.List;
 
 import models.Alert;
-import models.Patient;
 import models.Role;
 import models.doctor.Doctor;
+import models.patient.Patient;
 import models.patient.PatientDoctorInfo;
 import models.pharmacist.Pharmacy;
 import play.mvc.Controller;
@@ -28,8 +28,14 @@ public class PublicController extends Controller{
 	 */
 	public static Result processSearchDoctors(final String key) {
 		final String cleanKey = key.trim().toLowerCase();
-		final List<Doctor> doctors = Doctor.find.where().like("searchIndex","%"+cleanKey+"%").findList();
-		return ok(views.html.doctor.searchedDoctors.render(true, key, doctors));
+		if(cleanKey.length() < 4){
+			flash().put("alert", new Alert("alert-info", "Searched word should be atleast 4 characters long.").toString());
+			return ok(views.html.doctor.searchedDoctors.render(false,key, new ArrayList<Doctor>()));
+		}
+		else{
+			final List<Doctor> doctors = Doctor.find.where().like("searchIndex","%"+cleanKey+"%").findList();
+			return ok(views.html.doctor.searchedDoctors.render(true, key, doctors));
+		}
 	}
 
 	/**
@@ -70,10 +76,9 @@ public class PublicController extends Controller{
 	 * Action to search Doctor and display his profile page
 	 * GET /doctor/:slugUrl
 	 */
-	public static Result getDoctorWithSlug(final String slugUrl) {
-		final String cleanKey = slugUrl.trim().toLowerCase();
-		final Doctor doctor = Doctor.find.where().like("searchIndex","%"+cleanKey+"%").findUnique();
-
+	public static Result getDoctorWithSlug(final String slug) {
+		final String cleanSlug = slug.trim().toLowerCase();
+		final Doctor doctor = Doctor.find.where().eq("slugUrl",cleanSlug).findUnique();
 		return ok(views.html.doctor.publicDoctorProfile.render(doctor));
 	}
 

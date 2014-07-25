@@ -5,11 +5,11 @@ import java.util.Date;
 import java.util.List;
 
 import models.AppUser;
-import models.Patient;
 import models.Role;
 import models.doctor.Doctor;
 import models.mr.MedicalRepresentative;
 import models.mr.PharmaceuticalCompany;
+import models.patient.Patient;
 import models.patient.PatientDoctorInfo;
 import play.mvc.Controller;
 import play.mvc.Result;
