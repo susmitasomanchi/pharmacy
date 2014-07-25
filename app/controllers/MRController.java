@@ -386,8 +386,7 @@ public class MRController extends Controller {
 		final List<MedicalRepresentative> mySubordinatelist = loggedInMr.getSubordinates();
 		//final List<DailyCallReport> mySubordinateDCRList =  loggedInMr.getSubordinatesDCRList();
 		final List<DailyCallReport> mySubordinateDCRList =  new ArrayList<DailyCallReport>();
-		//return ok(views.html.mr.dcrList.render(loggedInMr.dcrList, headQmap,mySubordinatelist,mySubordinateDCRList));
-		return ok();
+		return ok(views.html.mr.dcrList.render(loggedInMr.dcrList, headQmap,mySubordinatelist,mySubordinateDCRList));
 	}
 
 	/**
@@ -480,12 +479,10 @@ public class MRController extends Controller {
 			disabledDoctorList.add(lineItem.doctor);
 		}
 
-		/*return ok(views.html.mr.dcrLineItem.render(dcr, dcrLineItemForm,
+		return ok(views.html.mr.dcrLineItem.render(dcr, dcrLineItemForm,
 				loggedInMr.doctorList, disabledDoctorList,
 				loggedInMr.pharmaceuticalCompany.productList,loggedInMr));
 
-		 */
-		return ok();
 	}
 
 	/**
@@ -506,7 +503,7 @@ public class MRController extends Controller {
 				.getLoggedInUser().getMedicalRepresentative();
 		dcr.dcrStatus = DCRStatus.APPROVED;
 		dcr.approver = loggedInMr;
-		//		dcr.responseOn = new Date();
+		dcr.responseOn = new Date();
 		dcr.update();
 
 
@@ -528,7 +525,7 @@ public class MRController extends Controller {
 				.getLoggedInUser().getMedicalRepresentative();
 		dcr.dcrStatus = DCRStatus.REJECTED;
 		dcr.approver = loggedInMr;
-		//dcr.responseOn = new Date();
+		dcr.responseOn = new Date();
 		dcr.update();
 
 		return redirect(routes.MRController.listDCR());
@@ -790,8 +787,8 @@ public class MRController extends Controller {
 			}
 		}
 		final List<MedicalRepresentative> mySubordinatelist = loggedInMr.getSubordinates();
-		//return ok(views.html.mr.dcrList.render(loggedInMr.dcrList, headQmap,mySubordinatelist,mySubordinateDCRList));
-		return ok();
+		return ok(views.html.mr.dcrList.render(loggedInMr.dcrList, headQmap,mySubordinatelist,mySubordinateDCRList));
+
 
 	}
 

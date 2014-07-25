@@ -86,7 +86,6 @@ Phone nos: @doctorClinic.clinic.contactNo</h6>
   <!-- Wrapper for slides -->
   <div class="carousel-inner"  id="inner" >
     <div id="active" class="item active" style="padding:40px">
-    
 	</div>  
 	
 	<!-- 
@@ -247,16 +246,12 @@ $( document ).ready(function() {
 	myLatLng= new google.maps.LatLng(lat, lng),
 	initialize();
 }
- $.get('/patient/display-appointment/@doctorClinic.id/'+date.getTime(),function(htmldata){
+console.log('localhost:9000/patient/display-appointment/@doctorClinic.doctor.id/'+date.getTime());
+ $.get('/patient/display-appointment/@doctorClinic.doctor.id/'+date.getTime(),function(htmldata){
 			     $('#active').html(htmldata);
 	    });
 	    
-	      		date.setDate(date.getDate() + 1);
-	    
-	    
-	    $.get('/patient/display-appointment/@doctorClinic.id/'+date.getTime(),function(htmldata){
-			     $('#second').html(htmldata);
-	    });
+	      		
  console.log("pass");
  
     // Using custom configuration
@@ -279,12 +274,13 @@ $( document ).ready(function() {
     });*/
     
     
+    
 });
 
 
   		/*date.setDate(date.getDate() + 7);
   		$(".right").click(function(){
-  		console.log('localhost:9000/patient/display-appointment/@doctorClinic.id/'+date.getTime());
+  		console.log('localhost:9000/patient/display-appointment/@doctorClinic.id'+date.getTime());
 		$.get('/patient/display-appointment/@doctorClinic.id/'+date.getTime(),function(htmldata){
 		  alert('<div class="item" style="padding:40px">'+htmldata+'</div>')
 			  $('#inner').append('<div class="item" style="padding:40px">'+htmldata+'</div>');
@@ -297,5 +293,36 @@ $( document ).ready(function() {
   		
 
 </script>
+ <div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+     <h4 class="modal-title">Book Appointment</h4>
+      <div class="modal-body" id="model-content">
+     
+      </div>
+     	 <div class="modal-footer">
+        <a class="btn btn-default" data-dismiss="modal">Close</a>
+        <a class="btn btn-primary" onclick="$('#datetimeform').submit();" id="confirm">Confirm</a>
+      </div>
+    </div>
+  </div>
+</div>
 
+<script>
+$("#myModal").on('shown.bs.modal',function(evt){
+alert($(evt.relatedTarget).attr('clinic'));
+
+$("#model-content").html(
+'<form action="/patient/process-appointment/'+$(evt.relatedTarget).attr("id")+'" method="post" id="datetimeform">'
++'<p> Are you sure you wish to request an appointment on <br>'
++$(evt.relatedTarget).attr("date")
++' at '
++$(evt.relatedTarget).attr("clinic")
++' on '+$(evt.relatedTarget).text()
++' Hrs ?</p><br><textarea name="remark"></textarea></form>'
+);
+
+});
+
+</script>
 }

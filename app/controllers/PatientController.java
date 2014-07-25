@@ -13,6 +13,7 @@ import models.AppUser;
 import models.Patient;
 import models.diagnostic.DiagnosticCentre;
 import models.doctor.Appointment;
+import models.doctor.AppointmentStatus;
 import models.doctor.DaySchedule;
 import models.doctor.Doctor;
 import models.doctor.DoctorClinicInfo;
@@ -36,15 +37,16 @@ public class PatientController extends Controller {
 	/**
 	 * @author Mitesh
 	 * Action to display a form which has lists of appointment as per date is provided
-	 *  GET /patient/display-appointment/:docId/:timeMillis
+	 *  GET/patient/display-appointment/:docClinicId/:timeMillis
 	 */
-	public static Result displayAppointment(final Long docId,final Long timeMillis) {
+	public static Result displayAppointment(final Long docClinId,Long timeMillis) {
 
 		int slots=0;
 
 		final Map<Date, List<Appointment>> appointmentMap = new LinkedHashMap<Date, List<Appointment>>();
 
-		final Doctor doctor = Doctor.find.byId(docId);
+		final DoctorClinicInfo doctorClinicInfo = DoctorClinicInfo.find.byId(docClinId);
+
 
 		final Calendar calendarFrom = Calendar.getInstance();
 		calendarFrom.setTime(new Date(timeMillis));
@@ -58,51 +60,52 @@ public class PatientController extends Controller {
 		final Calendar calendar2=Calendar.getInstance();
 		final SimpleDateFormat dateFormat=new SimpleDateFormat("kk:mm");
 
+
 		for (int i = 0; i <25; i++) {
-			for (final DoctorClinicInfo clinicInfo: doctor.doctorClinicInfoList) {
-				for (final DaySchedule schedule : clinicInfo.scheduleDays) {
-					try{
-						calendar1.setTime(dateFormat.parse(schedule.fromTime));
 
-						calendar2.setTime(dateFormat.parse(schedule.toTime));
+			for (final DaySchedule schedule : doctorClinicInfo.scheduleDays) {
+				try{
+					calendar1.setTime(dateFormat.parse(schedule.fromTime));
 
-					}
-					catch(final ParseException exception){
-						exception.printStackTrace();
-					}
-					Logger.warn("docclinic");
+					calendar2.setTime(dateFormat.parse(schedule.toTime));
+
+				}
+				catch(final ParseException exception){
+					exception.printStackTrace();
+				}
+				Logger.warn("docclinic");
 
 
-					calendarFrom.set(Calendar.HOUR_OF_DAY, calendar1.get(Calendar.HOUR_OF_DAY));
-					calendarFrom.set(Calendar.MINUTE,calendar1.get(Calendar.MINUTE));
-					calendarFrom.set(Calendar.SECOND, 0);
-					calendarFrom.set(Calendar.MILLISECOND, 0);
+				calendarFrom.set(Calendar.HOUR_OF_DAY, calendar1.get(Calendar.HOUR_OF_DAY));
+				calendarFrom.set(Calendar.MINUTE,calendar1.get(Calendar.MINUTE));
+				calendarFrom.set(Calendar.SECOND, 0);
+				calendarFrom.set(Calendar.MILLISECOND, 0);
 
-					calendarTo.set(Calendar.HOUR_OF_DAY, calendar2.get(Calendar.HOUR_OF_DAY));
-					calendarTo.set(Calendar.MINUTE,calendar2.get(Calendar.MINUTE));
-					calendarTo.set(Calendar.SECOND, 0);
-					calendarTo.set(Calendar.MILLISECOND, 0);
+				calendarTo.set(Calendar.HOUR_OF_DAY, calendar2.get(Calendar.HOUR_OF_DAY));
+				calendarTo.set(Calendar.MINUTE,calendar2.get(Calendar.MINUTE));
+				calendarTo.set(Calendar.SECOND, 0);
+				calendarTo.set(Calendar.MILLISECOND, 0);
+
+				Logger.info("from**"+calendarFrom.getTime().toString());
+				Logger.info("to**"+calendarTo.getTime().toString());
+
+
+				final List<Appointment> listAppointments = Appointment.getAvailableAppointmentList(doctorClinicInfo.id,calendarFrom.getTime(),calendarTo.getTime());
+				if(listAppointments.size() != 0 ){
+					appointmentMap.put(calendarFrom.getTime(), listAppointments);
+					slots=Math.max(slots,listAppointments.size());
 
 					Logger.info("from**"+calendarFrom.getTime().toString());
-					Logger.info("to**"+calendarTo.getTime().toString());
-
-
-					final List<Appointment> listAppointments = Appointment.getAvailableAppointmentList(doctor.id,calendarFrom.getTime(),calendarTo.getTime());
-					if(listAppointments.size() != 0 ){
-						appointmentMap.put(calendarFrom.getTime(), listAppointments);
-						slots=Math.max(slots,listAppointments.size());
-
-						Logger.info("from**"+calendarFrom.getTime().toString());
-						Logger.info("to**"+calendarFrom.getTime().toString());
-						Logger.info("");
-					}
-
-
-					calendarFrom.add(Calendar.DATE, 1);
-
-					calendarTo.add(Calendar.DATE, 1);
+					Logger.info("to**"+calendarFrom.getTime().toString());
+					Logger.info("");
 				}
+
+
+				calendarFrom.add(Calendar.DATE, 1);
+
+				calendarTo.add(Calendar.DATE, 1);
 			}
+
 		}
 		/*return ok(views.html.patient.scheduleAppointment.render(appointmentMap,
 				 slots));*/
@@ -111,9 +114,6 @@ public class PatientController extends Controller {
 		return ok(views.html.patient.appointmentForm.render(appointmentMap,slots));
 	}
 
-	public static Result processAppointment() {
-		return ok();
-	}
 
 	public static Form<Patient> form = Form.form(Patient.class);
 
@@ -320,15 +320,30 @@ public class PatientController extends Controller {
 
 	/**
 	 * @author Mitesh
-	 * Action to show a forms which have currently logged in patient approved appointments
+	 * Action to show a forms which have currently logged in patient requested appointments
 	 *  GET		/patient/my-appointments
 	 */
 	public static Result viewMyAppointments(){
 		AppUser patient=LoginController.getLoggedInUser();
 
 		List<Appointment> patientApppointments=Appointment.find.where().eq("requestedBy", patient).findList();
-		return ok(views.html.patient.static_patient_view_appointments.render());
+		return ok(views.html.patient.patientViewAppointments.render(patientApppointments));
 	}
 
+	/**
+	 * @author Mitesh
+	 * Action to process requested appointments
+	 *  POST 	/patient/process-appointment
+	 */
+	public static Result processAppointment(Long apptId) {
+		String remark=request().body().asFormUrlEncoded().get("remark")[0];
+
+		Logger.warn(remark);
+		Appointment appointment=Appointment.find.byId(apptId);
+		appointment.appointmentStatus=AppointmentStatus.APPROVED;
+		appointment.remarks=remark;
+		appointment.requestedBy=LoginController.getLoggedInUser();
+		return ok("appointment save");
+	}
 
 }

@@ -46,8 +46,7 @@ create table appointment (
   requested_by_id           bigint,
   apporoved_by_id           bigint,
   remarks                   varchar(255),
-  doctor_id                 bigint,
-  clinic_id                 bigint,
+  doctor_clinic_info_id     bigint,
   last_update               timestamp not null,
   constraint ck_appointment_appointment_status check (appointment_status in ('CANCELLED','REQUESTED','APPROVED','AVAILABLE','SERVED')),
   constraint pk_appointment primary key (id))
@@ -149,10 +148,16 @@ create table dcrline_item (
 
 create table daily_call_report (
   id                        bigint not null,
-  medical_representative_id bigint not null,
   for_date                  timestamp,
+  submitter_id              bigint,
+  approver_id               bigint,
+  dcr_status                varchar(9),
+  submitted_date            timestamp,
+  response_on               timestamp,
+  re_opened_date            timestamp,
   head_quarter_id           bigint,
   last_update               timestamp not null,
+  constraint ck_daily_call_report_dcr_status check (dcr_status in ('REJECTED','DRAFT','APPROVED','REOPENED','SUBMITTED')),
   constraint pk_daily_call_report primary key (id))
 ;
 
@@ -438,6 +443,7 @@ create table patient (
   appointment_id            varchar(255),
   doctor_availability       varchar(255),
   is_urgent_patient         varchar(255),
+  is_urgent_patiesdfnt      varchar(255),
   last_update               timestamp not null,
   constraint pk_patient primary key (id))
 ;
@@ -758,38 +764,38 @@ alter table appointment add constraint fk_appointment_requestedBy_1 foreign key 
 create index ix_appointment_requestedBy_1 on appointment (requested_by_id);
 alter table appointment add constraint fk_appointment_apporovedBy_2 foreign key (apporoved_by_id) references app_user (id);
 create index ix_appointment_apporovedBy_2 on appointment (apporoved_by_id);
-alter table appointment add constraint fk_appointment_doctor_3 foreign key (doctor_id) references doctor (id);
-create index ix_appointment_doctor_3 on appointment (doctor_id);
-alter table appointment add constraint fk_appointment_clinic_4 foreign key (clinic_id) references clinic (id);
-create index ix_appointment_clinic_4 on appointment (clinic_id);
-alter table article add constraint fk_article_category_5 foreign key (category_id) references article_category (id);
-create index ix_article_category_5 on article (category_id);
-alter table batch add constraint fk_batch_inventory_6 foreign key (inventory_id) references inventory (id);
-create index ix_batch_inventory_6 on batch (inventory_id);
-alter table batch add constraint fk_batch_product_7 foreign key (product_id) references product (id);
-create index ix_batch_product_7 on batch (product_id);
-alter table blog_comment add constraint fk_blog_comment_article_8 foreign key (article_id) references article (id);
-create index ix_blog_comment_article_8 on blog_comment (article_id);
-alter table blog_comment add constraint fk_blog_comment_by_9 foreign key (by_id) references app_user (id);
-create index ix_blog_comment_by_9 on blog_comment (by_id);
-alter table blog_comment add constraint fk_blog_comment_socialBy_10 foreign key (social_by_id) references social_user (id);
-create index ix_blog_comment_socialBy_10 on blog_comment (social_by_id);
-alter table blog_comment_reply add constraint fk_blog_comment_reply_blog_co_11 foreign key (blog_comment_id) references blog_comment (id);
-create index ix_blog_comment_reply_blog_co_11 on blog_comment_reply (blog_comment_id);
-alter table blog_comment_reply add constraint fk_blog_comment_reply_by_12 foreign key (by_id) references app_user (id);
-create index ix_blog_comment_reply_by_12 on blog_comment_reply (by_id);
-alter table blog_comment_reply add constraint fk_blog_comment_reply_socialB_13 foreign key (social_by_id) references social_user (id);
-create index ix_blog_comment_reply_socialB_13 on blog_comment_reply (social_by_id);
-alter table clinic add constraint fk_clinic_address_14 foreign key (address_id) references address (id);
-create index ix_clinic_address_14 on clinic (address_id);
-alter table dcrline_item add constraint fk_dcrline_item_daily_call_re_15 foreign key (daily_call_report_id) references daily_call_report (id);
-create index ix_dcrline_item_daily_call_re_15 on dcrline_item (daily_call_report_id);
-alter table dcrline_item add constraint fk_dcrline_item_doctor_16 foreign key (doctor_id) references doctor (id);
-create index ix_dcrline_item_doctor_16 on dcrline_item (doctor_id);
-alter table dcrline_item add constraint fk_dcrline_item_headQuater_17 foreign key (head_quater_id) references head_quarter (id);
-create index ix_dcrline_item_headQuater_17 on dcrline_item (head_quater_id);
-alter table daily_call_report add constraint fk_daily_call_report_medical__18 foreign key (medical_representative_id) references medical_representative (id);
-create index ix_daily_call_report_medical__18 on daily_call_report (medical_representative_id);
+alter table appointment add constraint fk_appointment_doctorClinicInf_3 foreign key (doctor_clinic_info_id) references doctor_clinic_info (id);
+create index ix_appointment_doctorClinicInf_3 on appointment (doctor_clinic_info_id);
+alter table article add constraint fk_article_category_4 foreign key (category_id) references article_category (id);
+create index ix_article_category_4 on article (category_id);
+alter table batch add constraint fk_batch_inventory_5 foreign key (inventory_id) references inventory (id);
+create index ix_batch_inventory_5 on batch (inventory_id);
+alter table batch add constraint fk_batch_product_6 foreign key (product_id) references product (id);
+create index ix_batch_product_6 on batch (product_id);
+alter table blog_comment add constraint fk_blog_comment_article_7 foreign key (article_id) references article (id);
+create index ix_blog_comment_article_7 on blog_comment (article_id);
+alter table blog_comment add constraint fk_blog_comment_by_8 foreign key (by_id) references app_user (id);
+create index ix_blog_comment_by_8 on blog_comment (by_id);
+alter table blog_comment add constraint fk_blog_comment_socialBy_9 foreign key (social_by_id) references social_user (id);
+create index ix_blog_comment_socialBy_9 on blog_comment (social_by_id);
+alter table blog_comment_reply add constraint fk_blog_comment_reply_blog_co_10 foreign key (blog_comment_id) references blog_comment (id);
+create index ix_blog_comment_reply_blog_co_10 on blog_comment_reply (blog_comment_id);
+alter table blog_comment_reply add constraint fk_blog_comment_reply_by_11 foreign key (by_id) references app_user (id);
+create index ix_blog_comment_reply_by_11 on blog_comment_reply (by_id);
+alter table blog_comment_reply add constraint fk_blog_comment_reply_socialB_12 foreign key (social_by_id) references social_user (id);
+create index ix_blog_comment_reply_socialB_12 on blog_comment_reply (social_by_id);
+alter table clinic add constraint fk_clinic_address_13 foreign key (address_id) references address (id);
+create index ix_clinic_address_13 on clinic (address_id);
+alter table dcrline_item add constraint fk_dcrline_item_daily_call_re_14 foreign key (daily_call_report_id) references daily_call_report (id);
+create index ix_dcrline_item_daily_call_re_14 on dcrline_item (daily_call_report_id);
+alter table dcrline_item add constraint fk_dcrline_item_doctor_15 foreign key (doctor_id) references doctor (id);
+create index ix_dcrline_item_doctor_15 on dcrline_item (doctor_id);
+alter table dcrline_item add constraint fk_dcrline_item_headQuater_16 foreign key (head_quater_id) references head_quarter (id);
+create index ix_dcrline_item_headQuater_16 on dcrline_item (head_quater_id);
+alter table daily_call_report add constraint fk_daily_call_report_submitte_17 foreign key (submitter_id) references medical_representative (id);
+create index ix_daily_call_report_submitte_17 on daily_call_report (submitter_id);
+alter table daily_call_report add constraint fk_daily_call_report_approver_18 foreign key (approver_id) references medical_representative (id);
+create index ix_daily_call_report_approver_18 on daily_call_report (approver_id);
 alter table daily_call_report add constraint fk_daily_call_report_headQuar_19 foreign key (head_quarter_id) references head_quarter (id);
 create index ix_daily_call_report_headQuar_19 on daily_call_report (head_quarter_id);
 alter table day_schedule add constraint fk_day_schedule_doctor_clinic_20 foreign key (doctor_clinic_info_id) references doctor_clinic_info (id);

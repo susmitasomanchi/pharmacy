@@ -24,17 +24,21 @@ public class DailyCallReport extends BaseEntity{
 
 	public Date forDate;
 
+	@OneToOne
 	public MedicalRepresentative submitter;
 
+	@OneToOne
 	public MedicalRepresentative approver;
 
 	public DCRStatus dcrStatus;
 
 	public Date submittedDate;
 
-	public Date approvedDate;
+	//public Date approvedDate;
 
-	public Date rejectedDate;
+	//public Date rejectedDate;
+
+	public Date responseOn;
 
 	public Date reOpenedDate;
 

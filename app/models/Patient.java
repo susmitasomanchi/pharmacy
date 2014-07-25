@@ -38,6 +38,7 @@ public class Patient extends BaseEntity {
 	public String doctorAvailability;
 
 	public String isUrgentPatient;
+	public String isUrgentPatiesdfnt;
 
 
 	@OneToMany(cascade = CascadeType.ALL)

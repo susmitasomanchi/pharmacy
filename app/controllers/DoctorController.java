@@ -503,13 +503,13 @@ public class DoctorController extends Controller {
 	private static Result createAppointment(final DoctorClinicInfo docClinicInfo) {
 		// Server side validation
 		if(docClinicInfo.doctor.id.longValue() != LoginController.getLoggedInUser().getDoctor().id.longValue()){
+
 			return redirect(routes.LoginController.processLogout());
 		}
 		try{
 			final Calendar calendar1=Calendar.getInstance();
 			final Calendar calendar2=Calendar.getInstance();
 			final SimpleDateFormat dateFormat=new SimpleDateFormat("kk:mm");
-			final Doctor doctor=LoginController.getLoggedInUser().getDoctor();
 			final Calendar calendar = Calendar.getInstance();
 			calendar.setTime(new Date());
 			for(int date=0;date<31;date++){
@@ -530,13 +530,12 @@ public class DoctorController extends Controller {
 						calendar.set(Calendar.MILLISECOND,0);
 						if(schedule.requester.equals(Role.PATIENT)){
 							for (int j2 = 0; j2 <(((hoursToClinic*60)+minutsToClinic)/docClinicInfo.slot); j2++) {
-								if(Appointment.find.where().eq("doctor",doctor).eq("clinic",docClinicInfo.clinic).eq("appointmentTime", calendar.getTime()).findUnique()==null){
+								if(Appointment.find.where().eq("doctorClinicInfo",docClinicInfo).eq("appointmentTime", calendar.getTime()).findUnique()==null){
 									Logger.info("  "+calendar.getTime());
 									final Appointment appointment=new Appointment();
 									appointment.appointmentStatus=AppointmentStatus.AVAILABLE;
 									appointment.appointmentTime=calendar.getTime();
-									appointment.clinic=docClinicInfo.clinic;
-									appointment.doctor=doctor;
+									appointment.doctorClinicInfo=docClinicInfo;
 									appointment.save();
 									calendar.add(Calendar.MINUTE, docClinicInfo.slot);
 								}
@@ -546,13 +545,12 @@ public class DoctorController extends Controller {
 							}
 						}else {
 							for (int j2 = 0; j2 <(((hoursToClinic*60)+minutsToClinic)/docClinicInfo.slotmr); j2++) {
-								if(Appointment.find.where().eq("doctor",doctor).eq("clinic",docClinicInfo.clinic).eq("appointmentTime", calendar.getTime()).findUnique()==null){
+								if(Appointment.find.where().eq("doctorClinicInfo",docClinicInfo).eq("appointmentTime", calendar.getTime()).findUnique()==null){
 									Logger.info("  "+calendar.getTime());
 									final Appointment appointment=new Appointment();
 									appointment.appointmentStatus=AppointmentStatus.AVAILABLE;
 									appointment.appointmentTime=calendar.getTime();
-									appointment.clinic=docClinicInfo.clinic;
-									appointment.doctor=doctor;
+									appointment.doctorClinicInfo=docClinicInfo;
 									appointment.save();
 									calendar.add(Calendar.MINUTE,docClinicInfo.slotmr);
 								}
@@ -597,10 +595,9 @@ public class DoctorController extends Controller {
 	 * GET /doctor/edit-clinic/:id
 	 * Depricated on 18th July 2014. Use DoctorController.editClinicInfo(Long docClinicId) and DoctorController.editClinicSchedule(Long docClinicId) instead.
 	 */
-	@Deprecated
 	public static Result manageClinic(final Long docClinicId) {
 		final DoctorClinicInfo doctorClinicInfo = DoctorClinicInfo.find.byId(docClinicId);
-		//server-side check
+		// Server side validation
 		if(doctorClinicInfo.doctor.id.longValue() != LoginController.getLoggedInUser().getDoctor().id.longValue()){
 			return redirect(routes.LoginController.processLogout());
 		}
@@ -625,7 +622,7 @@ public class DoctorController extends Controller {
 		}
 		else{
 			final DoctorClinicInfo clinicInfo = filledForm.get().toDoctorClinicInfo();
-			//server-side check
+			// Server side validation
 			if(clinicInfo.doctor.id.longValue() != LoginController.getLoggedInUser().getDoctor().id.longValue()){
 				return redirect(routes.LoginController.processLogout());
 			}

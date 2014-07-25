@@ -12,7 +12,7 @@
       	 @for(date <- apptMap.keySet()){
       	 	@if(slot<=apptMap.get(date).size()-1){
       	 		@if(apptMap.get(date).get(slot).appointmentStatus.equals(models.doctor.AppointmentStatus.AVAILABLE)){
-      	 			     <td class="success" style="cursor:pointer">@apptMap.get(date).get(slot).appointmentTime.format("HH:mm") </td>
+      	 			     <td id="@apptMap.get(date).get(slot).id" clinic="@apptMap.get(date).get(slot).doctorClinicInfo.clinic.name" date="@apptMap.get(date).get(slot).appointmentTime.format("HH:mm")" class="success appointment" style="cursor:pointer" data-toggle="modal" data-target="#myModal">@apptMap.get(date).get(slot).appointmentTime.format("HH:mm") </td>
       	 			
       	 		}else{
       	 		      	 <td class="active" disabled>@apptMap.get(date).get(slot).appointmentTime.format("HH:mm")</td>
@@ -24,3 +24,5 @@
       	  </tr>
       }
     </table>
+    
+ 
