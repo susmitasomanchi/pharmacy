@@ -43,21 +43,9 @@ public class PatientController extends Controller {
 
 
 
-	/**
-	 * @author lakshmi
-	 * Action to remove pharmacy from  favorite pharmacies List of loggedin PATIENT
-	 * GET /user/remove-pharmacy/:patientId/:pharmacyId
-	 */
-	public static Result removeFavoritePharmacy(final Long patientId,final Long pharmacyId) {
-		final Patient patient = Patient.find.byId(patientId);
-		//server-side check
-		if(patient.id.longValue() != LoginController.getLoggedInUser().getPatient().id.longValue()){
-			return redirect(routes.LoginController.processLogout());
-		}
-		patient.pharmacyList.remove(Pharmacy.find.byId(pharmacyId));
-		patient.update();
-		return ok(views.html.pharmacist.favorite_pharmacy_list.render(patient.pharmacyList,0L,patient.id));
-	}
+
+
+
 
 
 
@@ -85,7 +73,7 @@ public class PatientController extends Controller {
 	 * Action to display a form which has lists of appointment as per date is provided
 	 *  GET/patient/display-appointment/:docClinicId/:timeMillis
 	 */
-	public static Result displayAppointment(final Long docClinId,Long timeMillis) {
+	public static Result displayAppointment(final Long docClinId,final Long timeMillis) {
 
 		int slots=0;
 
@@ -411,9 +399,9 @@ public class PatientController extends Controller {
 	 *  GET		/patient/my-appointments
 	 */
 	public static Result viewMyAppointments(){
-		AppUser patient=LoginController.getLoggedInUser();
+		final AppUser patient=LoginController.getLoggedInUser();
 
-		List<Appointment> patientApppointments=Appointment.find.where().eq("requestedBy", patient).findList();
+		final List<Appointment> patientApppointments=Appointment.find.where().eq("requestedBy", patient).findList();
 		return ok(views.html.patient.patientViewAppointments.render(patientApppointments));
 	}
 
@@ -422,11 +410,11 @@ public class PatientController extends Controller {
 	 * Action to process requested appointments
 	 *  POST 	/patient/process-appointment
 	 */
-	public static Result processAppointment(Long apptId) {
-		String remark=request().body().asFormUrlEncoded().get("remark")[0];
+	public static Result processAppointment(final Long apptId) {
+		final String remark=request().body().asFormUrlEncoded().get("remark")[0];
 
 		Logger.warn(remark);
-		Appointment appointment=Appointment.find.byId(apptId);
+		final Appointment appointment=Appointment.find.byId(apptId);
 		appointment.appointmentStatus=AppointmentStatus.APPROVED;
 		appointment.remarks=remark;
 		appointment.requestedBy=LoginController.getLoggedInUser();

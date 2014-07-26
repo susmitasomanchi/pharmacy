@@ -4,7 +4,7 @@
 #Blog
 
 GET    /blog/create-blog-admin                     controllers.SampleDataController.createBlogAdmin()
-GET    /login	                                 controllers.LoginController.blogAdminLoginForm()
+GET    /login	                                 controllers.LoginController.loginForm()
 
 GET		/blog										controllers.BlogController.blogHome()
 GET		/blog/admin/new-category					controllers.BlogController.categoryForm()
@@ -42,11 +42,11 @@ POST   /update-password                            	controllers.LoginController.
 GET	   /doctor/search									controllers.PublicController.searchDoctorsPage()
 GET	   /doctor/search/:key								controllers.PublicController.processSearchDoctors(key: String)
 GET    /doctor/add-to-favourites/:docId					controllers.PublicController.addDoctorToLoggedInUser(docId: Long)
-GET   	/pharmacy/search/:searchString                  controllers.PublicController.searchPharmacies(searchString: String)
-GET   	/pharmacy/add-favourite-pharmacy/:pharmacyId/:str   controllers.PublicController.myFavoritePharmacy(pharmacyId : Long,str: String)
+GET   	/pharmacy/search/:searchString                  controllers.PublicController.processSearchPharmacies(searchString: String)
+#GET   	/pharmacy/add-favourite-pharmacy/:pharmacyId/:str   controllers.PublicController.myFavoritePharmacy(pharmacyId : Long,str: String)
 GET    /pharmacy/search									controllers.PublicController.searchPharmaciesPage()
 
-GET		/public/add-to-Favorite/:docId						controllers.PublicController.addToFavDoctor(docId: Long)
+GET		/public/add-to-Favorite/:docId						controllers.PublicController.addDoctorToLoggedInUser(docId: Long)
 # Sign up page
 GET    /doctor/join                              			controllers.UserController.joinUsDoctor()
 GET    /pharmacy/join                              			controllers.UserController.joinUsPharmacy()
@@ -71,7 +71,6 @@ POST	/doctor/add-social-work						controllers.DoctorController.addSocialWork()
 GET		/doctor/remove-social-work/:docId/:id		controllers.DoctorController.removeSocialWork(docId: Long, id: Long)
 GET		/doctor/add-favorite-pharmacy/:pharmacyId/:str							controllers.DoctorController.addFavoritePharmacy(pharmacyId: Long,str: String)
 GET		/doctor/my-favorite-pharmacies											controllers.DoctorController.myFavoritePharmacies()
-GET		/doctor/remove-favorite-pharmacy/:doctorId/:pharmacyId					controllers.DoctorController.removeFavoritePharmacy(doctorId: Long,pharmacyId: Long)
 
 # Doctor's Clinics
 GET    /doctor/new-clinic                 		controllers.DoctorController.newClinic()
@@ -97,7 +96,9 @@ POST	/pharmacy/basic-update								controllers.PharmacistController.pharmacyBasi
 POST	/pharmacy/address-update			  				controllers.PharmacistController.pharmacyAddressUpdate()
 GET		/pharmacy/get-image/:pharmacyId/:fileId				controllers.PharmacistController.getPharmacyImages(pharmacyId: Long,fileId: Long)
 GET		/pharmacy/remove-image/:pharmacyId/:fileId			controllers.PharmacistController.removeImage(pharmacyId: Long,fileId: Long)
-
+GET		/pharmacy/add-to-user/:pharmacyId					controllers.PublicController.addPharmacyToLoggedInUser(pharmacyId: Long)
+#slug url (must be the last route in /pharmacy/)
+GET /pharmacy/:slugUrl										controllers.PublicController.getPharmacyWithSlug(slugUrl: String)
 
 
 # Doagnostic Centre Module
@@ -183,7 +184,7 @@ GET    /patient/diagnostics               		controllers.PatientController.diagno
 GET    /add-diagnostic-center/:id               controllers.PatientController.saveDiagnosticCenter(id: Long)
 GET    /patient/my-diag-centers               	controllers.PatientController.myDiagnosticCenters()
 GET    /patient/remove-diag-centers/:id         controllers.PatientController.removePatientDiagnoCenter(id: Long)
-GET    /patient/favdoctors						controllers.PatientController.patientMyFavDoctors()
+#GET    /patient/favdoctors						controllers.PatientController.patientMyFavDoctors()
 GET    /static/patient/favdoctors						controllers.PatientController.staticPatientMyFavDoctors()
 GET 	/patient/delete-fav-doc/:id					controllers.PatientController.deleteMyFavDoctors(id:Long)
 GET		/patient/search-doctors/:query					controllers.PatientController.searchDoctors(query:String)
