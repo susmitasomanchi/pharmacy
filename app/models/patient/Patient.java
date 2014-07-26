@@ -41,6 +41,9 @@ public class Patient extends BaseEntity {
 
 	public String isUrgentPatient;
 
+	public String sfd;
+
+
 	@OneToMany(cascade = CascadeType.ALL)
 	public List<PatientDoctorInfo> patientDoctorInfos = new ArrayList<PatientDoctorInfo>();
 

@@ -20,7 +20,7 @@
 </style>
 
 <div class="row">
-<div class="col-md-4">
+<div class="col-md-6">
 <div class="col-md-5">
 @if(doctorClinic.doctor.profileImage != null){
 	<img src="@routes.DoctorController.getImage(doctorClinic.doctor.id,"profileImage")" width="120" height="110" class="thumbnail"/>
@@ -58,18 +58,9 @@
 Phone nos: @doctorClinic.clinic.contactNo</h6>
 </div>
 </div>
-<div class="col-md-4" style="padding-left:0px">
-<p style="color:#008bca;font-size:22px"><b>@doctorClinic.clinic.name,@doctorClinic.clinic.address.area</b></p>
-@*<img src='' url="@routes.DoctorController.getImage(doctorClinic.doctor.id,"backgroundImage")" width="360" height="250" />*@
-@if(doctorClinic.doctor.backgroundImage != null){
-	<img src="@routes.DoctorController.getImage(doctorClinic.doctor.id,"backgroundImage")" width="360" height="250" class="thumbnail"/>
-}else{
-<img src="http://placehold.it/360x250" width="360" height="250" />
-}
 
-</div>
 
-	<div class="col-md-4" style="padding-left:0px">
+	<div class="col-md-6" style="padding-left:0px">
 	<p style="color:#008bca;font-size:22px"><b>Location Map</b></p>
 	<div id="clinic_map" style="width:360px;height:250px"></div>
 	</div>
@@ -235,19 +226,21 @@ Phone nos: @doctorClinic.clinic.contactNo</h6>
 
 <script type="text/javascript"> 
 var date=new Date();
-
+var days=@doctorClinic.scheduleDays.size();
+var daytoshow;
+if(days>0){
+daytoshow= Math.floor((7/days)*7);
+}
 $( document ).ready(function() {
-
-
-
 @if(doctorClinic != null ){
 	lat=@doctorClinic.clinic.address.latitude
 	lng=@doctorClinic.clinic.address.longitude
 	myLatLng= new google.maps.LatLng(lat, lng),
 	initialize();
 }
-console.log('localhost:9000/patient/display-appointment/@doctorClinic.doctor.id/'+date.getTime());
- $.get('/patient/display-appointment/@doctorClinic.doctor.id/'+date.getTime(),function(htmldata){
+alert(daytoshow);
+console.log('localhost:9000/patient/display-appointment/@doctorClinic.id/'+daytoshow+'/'+date.getTime());
+ $.get('/patient/display-appointment/@doctorClinic.id/'+daytoshow+'/'+date.getTime(),function(htmldata){
 			     $('#active').html(htmldata);
 	    });
 	    

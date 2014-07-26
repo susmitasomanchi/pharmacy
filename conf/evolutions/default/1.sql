@@ -46,7 +46,7 @@ create table appointment (
   appointment_status        varchar(9),
   requested_by_id           bigint,
   apporoved_by_id           bigint,
-  remarks                   varchar(255),
+  problem_statement         TEXT,
   doctor_clinic_info_id     bigint,
   last_update               timestamp not null,
   constraint ck_appointment_appointment_status check (appointment_status in ('CANCELLED','REQUESTED','APPROVED','AVAILABLE','SERVED')),
@@ -437,6 +437,7 @@ create table patient (
   appointment_id            varchar(255),
   doctor_availability       varchar(255),
   is_urgent_patient         varchar(255),
+  sfd                       varchar(255),
   last_update               timestamp not null,
   constraint pk_patient primary key (id))
 ;

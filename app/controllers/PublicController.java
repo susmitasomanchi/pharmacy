@@ -1,14 +1,25 @@
 package controllers;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
+import java.util.LinkedHashMap;
 import java.util.List;
+import java.util.Map;
 
 import models.Alert;
 import models.Role;
+import models.doctor.Appointment;
+import models.doctor.Day;
+import models.doctor.DaySchedule;
 import models.doctor.Doctor;
+import models.doctor.DoctorClinicInfo;
 import models.patient.Patient;
 import models.patient.PatientDoctorInfo;
 import models.pharmacist.Pharmacy;
+import play.Logger;
 import play.mvc.Controller;
 import play.mvc.Result;
 
@@ -124,9 +135,104 @@ public class PublicController extends Controller{
 
 			return redirect(routes.UserController.processJoinUs());
 		}
-
-
 	}
 
+	/**
+	 * @author Mitesh
+	 * Action to show a forms which have Doctor and it will show the available and booked appointment
+	 *  GET /doctor/schedule-appointment/:docclinicid
+	 */
+	public static Result scheduleAppointment(final Long docclinicid) {
+		final DoctorClinicInfo clinicInfo=DoctorClinicInfo.find.byId(docclinicid);
+		return ok(views.html.patient.patientNewAppointment.render(clinicInfo));
+	}
+
+	/**
+	 * @author Mitesh
+	 * Action to display a form which has lists of appointment as per date is provided
+	 *  GET/patient/display-appointment/:docClinicId/:days/:timeMillis
+	 */
+	public static Result displayAppointment(final Long docClinId,int days,Long timeMillis) {
+
+		int slots=0;
+
+		final Map<Date, List<Appointment>> appointmentMap = new LinkedHashMap<Date, List<Appointment>>();
+
+		final DoctorClinicInfo doctorClinicInfo = DoctorClinicInfo.find.byId(docClinId);
+
+		Logger.debug(doctorClinicInfo.scheduleDays.size()+"");
+		final Calendar calendarFrom = Calendar.getInstance();
+		calendarFrom.setTime(new Date(timeMillis));
+
+		final Calendar calendarTo = Calendar.getInstance();
+		calendarTo.setTime(new Date(timeMillis));
+
+		final Calendar calendar1=Calendar.getInstance();
+		final Calendar calendar2=Calendar.getInstance();
+
+		final SimpleDateFormat dateFormat=new SimpleDateFormat("kk:mm");
+		int i=0;
+		while(true){
+
+			if(i==7){
+				break;
+			}
+
+			Logger.warn("i:"+i);
+			for (final DaySchedule schedule : doctorClinicInfo.scheduleDays) {
+				Logger.error("schedule"+schedule.day);
+				Logger.error("calender"+Day.getDay(calendarFrom.get(Calendar.DAY_OF_WEEK)-1));
+				if(schedule.day == Day.getDay(calendarFrom.get(Calendar.DAY_OF_WEEK)-1)){
+					Logger.debug("schedule"+schedule.day);
+					try{
+						calendar1.setTime(dateFormat.parse(schedule.fromTime));
+
+						calendar2.setTime(dateFormat.parse(schedule.toTime));
+
+					}
+					catch(final ParseException exception){
+						exception.printStackTrace();
+					}
+
+
+					calendarFrom.set(Calendar.HOUR_OF_DAY, calendar1.get(Calendar.HOUR_OF_DAY));
+					calendarFrom.set(Calendar.MINUTE,calendar1.get(Calendar.MINUTE));
+					calendarFrom.set(Calendar.SECOND, 0);
+					calendarFrom.set(Calendar.MILLISECOND, 0);
+
+					calendarTo.set(Calendar.HOUR_OF_DAY, calendar2.get(Calendar.HOUR_OF_DAY));
+					calendarTo.set(Calendar.MINUTE,calendar2.get(Calendar.MINUTE));
+					calendarTo.set(Calendar.SECOND, 0);
+					calendarTo.set(Calendar.MILLISECOND, 0);
+
+
+					final List<Appointment> listAppointments = Appointment.getAvailableAppointmentList(doctorClinicInfo.id,calendarFrom.getTime(),calendarTo.getTime());
+					if(listAppointments.size() != 0 ){
+						Logger.debug("fetched",calendarFrom);
+						appointmentMap.put(calendarFrom.getTime(), listAppointments);
+						slots=Math.max(slots,listAppointments.size());
+						i++;
+
+					}
+
+					Logger.warn("if end");
+				}
+
+				Logger.warn("schedule  end");
+			}
+			Logger.warn("i  end");
+
+			calendarFrom.add(Calendar.DATE, 1);
+			calendarTo.add(Calendar.DATE, 1);
+
+		}
+
+
+		/*return ok(views.html.patient.scheduleAppointment.render(appointmentMap,
+				 slots));*/
+		Logger.warn(""+appointmentMap.size());
+
+		return ok(views.html.patient.appointmentForm.render(appointmentMap,slots));
+	}
 
 }
