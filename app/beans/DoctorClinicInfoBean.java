@@ -45,9 +45,9 @@ public class DoctorClinicInfoBean implements Serializable {
 
 	public List<String> toHrs = new ArrayList<String>();
 
-	public List<String> fromHrsMr = new ArrayList<String>();
+	public List<String> fromHrsMR = new ArrayList<String>();
 
-	public List<String> toHrsMr = new ArrayList<String>();
+	public List<String> toHrsMR = new ArrayList<String>();
 
 	public List<String> daysOfWeek = new ArrayList<String>();
 
@@ -59,7 +59,7 @@ public class DoctorClinicInfoBean implements Serializable {
 
 	public Integer slot;
 
-	public Integer slotmr;
+	public Integer slotMR;
 
 	public DoctorClinicInfo toDoctorClinicInfo() {
 
@@ -109,8 +109,8 @@ public class DoctorClinicInfoBean implements Serializable {
 		for (int index = 0; index < this.daysOfWeekMr.size(); index++) {
 			if (this.daysOfWeekMr.get(index) != null) {
 				final DaySchedule schedule = new DaySchedule();
-				schedule.fromTime = this.fromHrsMr.get(index);
-				schedule.toTime = this.toHrsMr.get(index);
+				schedule.fromTime = this.fromHrsMR.get(index);
+				schedule.toTime = this.toHrsMR.get(index);
 				schedule.requester = Role.MR;
 				schedule.day = Day.valueOf(this.daysOfWeekMr.get(index));
 				doctorClinicInfo.scheduleDays.add(schedule);
@@ -121,8 +121,8 @@ public class DoctorClinicInfoBean implements Serializable {
 			doctorClinicInfo.slot = this.slot;
 
 		}
-		if (this.slotmr != null) {
-			doctorClinicInfo.slotmr = this.slotmr;
+		if (this.slotMR != null) {
+			doctorClinicInfo.slotMR = this.slotMR;
 		}
 
 		final Address address = new Address();

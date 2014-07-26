@@ -1,15 +1,22 @@
 package controllers;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Date;
+import java.util.LinkedHashMap;
 import java.util.List;
+import java.util.Map;
 
 import models.Alert;
 import models.AppUser;
 import models.diagnostic.DiagnosticCentre;
 import models.doctor.Appointment;
 import models.doctor.AppointmentStatus;
+import models.doctor.DaySchedule;
 import models.doctor.Doctor;
+import models.doctor.DoctorClinicInfo;
 import models.doctor.QuestionAndAnswer;
 import models.patient.Patient;
 import models.patient.PatientDoctorInfo;

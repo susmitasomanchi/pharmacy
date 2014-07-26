@@ -28,6 +28,10 @@ public class PublicController extends Controller{
 
 
 
+	/**
+	 * Action to render search doctor page
+	 * GET /doctor/search
+	 */
 	public static Result searchDoctorsPage(){
 		return ok(views.html.doctor.searchedDoctors.render(false,"", new ArrayList<Doctor>()));
 	}

@@ -38,7 +38,7 @@ public class SampleDataController extends Controller {
 		user.email = "user@mednet1.com";
 		user.password = "1";
 		user.save();
-		Patient patient=new Patient();
+		final Patient patient=new Patient();
 		patient.appUser=user;
 		patient.save();
 		//return ok("user created");
@@ -112,7 +112,7 @@ public class SampleDataController extends Controller {
 
 			patDocInfo.doctor=doctor;
 
-			patient.patientDoctorInfos.add(patDocInfo);
+			patient.patientDoctorInfoList.add(patDocInfo);
 		}
 
 		patient.save();
@@ -153,8 +153,8 @@ public class SampleDataController extends Controller {
 		{
 			if(i==1)
 			{
-				MedicalRepresentative mr = new MedicalRepresentative();
-				AppUser appUser = new AppUser();
+				final MedicalRepresentative mr = new MedicalRepresentative();
+				final AppUser appUser = new AppUser();
 
 				appUser.name = "admin";
 				appUser.username = "admin";
@@ -164,7 +164,7 @@ public class SampleDataController extends Controller {
 				appUser.save();
 				mr.appUser = appUser;
 				mr.companyName = "hello";
-				PharmaceuticalCompany pc = new PharmaceuticalCompany();
+				final PharmaceuticalCompany pc = new PharmaceuticalCompany();
 				pc.name = mr.companyName;
 				pc.mrList.add(mr);
 				pc.adminMR = LoginController.getLoggedInUser().getMedicalRepresentative();
@@ -173,8 +173,8 @@ public class SampleDataController extends Controller {
 				mr.save();
 
 			}
-			MedicalRepresentative mr = new MedicalRepresentative();
-			AppUser appUser = new AppUser();
+			final MedicalRepresentative mr = new MedicalRepresentative();
+			final AppUser appUser = new AppUser();
 			appUser.name = "sam"+i;
 			appUser.username = "sam"+i;
 			appUser.email="sam@gmail.com";
@@ -183,7 +183,7 @@ public class SampleDataController extends Controller {
 			appUser.save();
 			mr.appUser = appUser;
 			mr.companyName = "hello";
-			PharmaceuticalCompany pc = new PharmaceuticalCompany();
+			final PharmaceuticalCompany pc = new PharmaceuticalCompany();
 			pc.name = mr.companyName;
 			pc.mrList.add(mr);
 			pc.adminMR = LoginController.getLoggedInUser().getMedicalRepresentative();

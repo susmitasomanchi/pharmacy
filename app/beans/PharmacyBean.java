@@ -17,7 +17,7 @@ public class PharmacyBean implements Serializable{
 
 	public Address address;
 
-	public String contactNo;
+	public String contactNumber;
 
 	public String contactPerson;
 
@@ -70,8 +70,8 @@ public class PharmacyBean implements Serializable{
 		//}
 
 
-		if(this.contactNo != null) {
-			pharmacy.contactNo= this.contactNo;
+		if(this.contactNumber != null) {
+			pharmacy.contactNumber= this.contactNumber;
 		}
 
 		if(this.contactPerson != null) {

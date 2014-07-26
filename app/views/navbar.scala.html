@@ -24,8 +24,8 @@
           Pharmacies
           <b class="caret"></b></a>
           <ul class="dropdown-menu">
-	           	<li><a href="@routes.PublicController.searchPhamacy()">Search Pharmacies</a></li>
-	            <li><a href="@routes.PatientController.myFavoritePharmacies()">My Pharmacies</a></li>
+	           	<li><a href="">Search Pharmacies</a></li>
+	            <li><a href="">My Pharmacies</a></li>
 	           </ul>
         </li>
 		<li class="dropdown">
@@ -33,13 +33,14 @@
         	Doctors
           <b class="caret"></b></a>
           <ul class="dropdown-menu">
-            <li><a href="">Search Doctors</a></li>
-            <li><a href="">My Doctors</a></li>
+            <li><a href="@routes.PublicController.searchDoctorsPage()">Search Doctors</a></li>
+            <li><a href="@routes.PatientController.myFavouriteDoctors()">My Doctors</a></li>
             <li class="divider"></li>
             <li><a href="">Schedule an Appointment</a></li>
           </ul>
         </li>
-        <li><a href="">Today</a></li>
+        
+        @*
         <li class="dropdown">
           <a href="#" class="dropdown-toggle" data-toggle="dropdown">
           Prescriptions
@@ -58,6 +59,8 @@
             
           </ul>
           </li>
+          *@
+          
 		}
 		
 		
@@ -146,10 +149,24 @@
           Pharmacies
           <b class="caret"></b></a>
           <ul class="dropdown-menu">
-	           	<li><a href="@routes.PublicController.searchPhamacy()">Search Pharmacies</a></li>
+	           	<li><a href="">Search Pharmacies</a></li>
 	            <li><a href="@routes.DoctorController.myFavoritePharmacies()">My Pharmacies</a></li>
 	           </ul>
         </li>
+        
+        <li class="dropdown">
+          <a href="#" class="dropdown-toggle" data-toggle="dropdown">
+          Pharmacies
+          <b class="caret"></b></a>
+          <ul class="dropdown-menu">
+	            <li><a href="@routes.PublicController.searchPharmaciesPage()">Search Pharmacies</a></li>
+	            <li><a href="@routes.DoctorController.myFavoritePharmacies()">My Pharmacies</a></li>
+    	        <!--
+    	        <li><a href="">New Assistant</a></li>
+    	        -->
+          </ul>
+        </li>
+        
         }
         
         
@@ -236,6 +253,7 @@
         }
     	@if(LoginController.getLoggedInUserRole().equals(Role.ADMIN_DIAGREP.toString())){
          
+         @*
          <li class="dropdown">
           <a href="#" class="dropdown-toggle" data-toggle="dropdown">
           Diagnostic Centre
@@ -287,6 +305,8 @@
             
           </ul>
         </li>
+        
+        *@
         }
     
     	
@@ -322,10 +342,10 @@
 			<!--
 			<li><a href="/user/preferences"><i class="fa fa-gears"></i>&nbsp;&nbsp;Preferences</a></li>
 			<li><a href="/doctor-profile"><i class="fa fa-gears"></i>&nbsp;&nbsp;My Profile</a></li>
-			<li class="divider"></li>
-			<li><a href="/change-password"><i class="fa fa-lock"></i>&nbsp;&nbsp;Change Password</a></li>
 			-->
-			<li><a href="/logout"><i class="fa fa-sign-out"></i>&nbsp;&nbsp;Logout</a></li>
+			<li><a href="@routes.LoginController.editPassword()"><i class="fa fa-lock"></i>&nbsp;&nbsp;Change Password</a></li>
+			<li class="divider"></li>
+			<li><a href="@routes.LoginController.processLogout()"><i class="fa fa-sign-out"></i>&nbsp;&nbsp;Logout</a></li>
 		</ul>
 		</li>
 		} else {

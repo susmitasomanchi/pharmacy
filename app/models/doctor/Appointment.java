@@ -36,7 +36,11 @@ public class Appointment extends BaseEntity {
 	public AppUser apporovedBy;
 
 	@Column(columnDefinition="TEXT")
+<<<<<<< HEAD
 	public String problemStatement;
+=======
+	public String remarks;
+>>>>>>> branch 'master' of git@pharmacy.bz:green-software/mednetwork.git
 
 	@OneToOne
 	public DoctorClinicInfo	doctorClinicInfo;
