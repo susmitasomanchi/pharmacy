@@ -114,9 +114,11 @@ $('body').on('click', function (e) {
 function submitbasicform(name){
 
 	if(name.localeCompare('slugUrl') == 0){
-		var s = $('#new-slugUrl').val();
-		
-		// TODO: validate URL using regex
+		var s = $('#new-slugUrl').val().trim();
+		if(!s.match("^[a-z0-9\-]+$")){
+			alert('Invalid characters have been provided.');
+			return false;
+		}
 	}
 
 	$("[data-toggle=popover]").popover('hide');

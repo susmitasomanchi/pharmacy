@@ -138,7 +138,20 @@ public class DiagnosticController extends Controller {
 				diagnosticCentre.description = requestMap.get("description")[0].trim();
 			}
 			if(requestMap.get("slugUrl") != null && (requestMap.get("slugUrl")[0].trim().compareToIgnoreCase("")!=0)){
-				diagnosticCentre.slugUrl = requestMap.get("slugUrl")[0].trim();
+				final String newSlug = requestMap.get("slugUrl")[0].trim();
+				if(!newSlug.matches("^[a-z0-9\\-]+$")){
+					flash().put("alert", new Alert("alert-danger", "Invalid charactrer provided in Url.").toString());
+					return redirect(routes.UserActions.dashboard());
+				}
+				if(requestMap.get("slugUrl")[0].trim().compareToIgnoreCase(diagnosticCentre.slugUrl) != 0){
+					final int availableSlug = DiagnosticCentre.find.where().eq("slugUrl", requestMap.get("slugUrl")[0].trim()).findRowCount();
+					if(availableSlug == 0){
+						diagnosticCentre.slugUrl = requestMap.get("slugUrl")[0].trim();
+					}else{
+						flash().put("alert", new Alert("alert-danger", "Sorry, Requested URL is not available.").toString());
+						return redirect(routes.UserActions.dashboard());
+					}
+				}
 			}
 			diagnosticCentre.update();
 		}

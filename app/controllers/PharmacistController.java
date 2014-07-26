@@ -113,6 +113,11 @@ public class PharmacistController extends Controller {
 				pharmacy.description = requestMap.get("description")[0];
 			}
 			if(requestMap.get("slugUrl") != null && !(requestMap.get("slugUrl")[0].trim().isEmpty())){
+				final String newSlug = requestMap.get("slugUrl")[0].trim();
+				if(!newSlug.matches("^[a-z0-9\\-]+$")){
+					flash().put("alert", new Alert("alert-danger", "Invalid charactrer provided in Url.").toString());
+					return redirect(routes.UserActions.dashboard());
+				}
 				if(requestMap.get("slugUrl")[0].trim().compareToIgnoreCase(pharmacy.slugUrl) != 0){
 					final int availableSlug = Pharmacy.find.where().eq("slugUrl", requestMap.get("slugUrl")[0].trim()).findRowCount();
 					if(availableSlug == 0){
