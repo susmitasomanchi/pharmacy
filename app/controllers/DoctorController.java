@@ -64,41 +64,78 @@ public class DoctorController extends Controller {
 			}
 
 			if(requestMap.get("fullname") != null && !(requestMap.get("fullname")[0].trim().isEmpty())){
-				doctor.appUser.name = requestMap.get("fullname")[0];
+				doctor.appUser.name = requestMap.get("fullname")[0].trim();
 			}
 
 			if(requestMap.get("specialization") != null && !(requestMap.get("specialization")[0].trim().isEmpty())){
-				doctor.specialization = requestMap.get("specialization")[0];
+				doctor.specialization = requestMap.get("specialization")[0].trim();
 			}
 
 			if(requestMap.get("degree") != null && !(requestMap.get("degree")[0].trim().isEmpty())){
-				doctor.degree = requestMap.get("degree")[0];
+				doctor.degree = requestMap.get("degree")[0].trim();
+			}
+
+			if(requestMap.get("expYear") != null && !(requestMap.get("expYear")[0].trim().isEmpty())){
+				doctor.experience = Integer.parseInt(requestMap.get("expYear")[0].trim());
 			}
 
 			if(requestMap.get("description") != null && !(requestMap.get("description")[0].trim().isEmpty())){
-				doctor.description = requestMap.get("description")[0];
+				doctor.description = requestMap.get("description")[0].trim();
 			}
-			if(requestMap.get("slugUrl") != null && !(requestMap.get("slugUrl")[0].trim().isEmpty())){
-				Logger.info("test comming");
-				final int availableSlug=Doctor.find.where().eq("slugUrl", requestMap.get("slugUrl")[0]).findRowCount();
-				if(availableSlug == 0){
-					doctor.slugUrl = requestMap.get("slugUrl")[0];
-				}else{
-					flash().put("alert", new Alert("alert-danger", "Requested Url is not available.").toString());
-					return ok("0");
 
+			if(requestMap.get("email") != null && !(requestMap.get("email")[0].trim().isEmpty())){
+				final String oldEmail = doctor.appUser.email;
+				if(oldEmail.trim().compareToIgnoreCase(requestMap.get("email")[0].trim()) != 0){
+					doctor.appUser.email = requestMap.get("email")[0].trim().toLowerCase();
+					doctor.appUser.emailConfirmed = false;
 				}
 			}
 
+			if(requestMap.get("mobileNumber") != null && !(requestMap.get("mobileNumber")[0].trim().isEmpty())){
+				final Long oldNumber = doctor.appUser.mobileNumber;
+				final Long newNumber = Long.parseLong(requestMap.get("mobileNumber")[0].trim());
+				if(oldNumber == null || (oldNumber.longValue() != newNumber.longValue())){
+					doctor.appUser.mobileNumber = Long.parseLong(requestMap.get("mobileNumber")[0].trim());
+					doctor.appUser.mobileNumberConfirmed = false;
+				}
+			}
+
+			if(requestMap.get("registrationNumber") != null && !(requestMap.get("registrationNumber")[0].trim().isEmpty())){
+				doctor.registrationNumber = requestMap.get("registrationNumber")[0].trim();
+			}
+
+			if(requestMap.get("slugUrl") != null && !(requestMap.get("slugUrl")[0].trim().isEmpty())){
+				final String newSlug = requestMap.get("slugUrl")[0].trim();
+				if(!newSlug.matches("^[a-z0-9\\-]+$")){
+					flash().put("alert", new Alert("alert-danger", "Invalid charactrer provided in Url.").toString());
+					return redirect(routes.UserActions.dashboard());
+				}
+				if(requestMap.get("slugUrl")[0].trim().compareToIgnoreCase(doctor.slugUrl) != 0){
+					final int availableSlug = Doctor.find.where().eq("slugUrl", requestMap.get("slugUrl")[0].trim()).findRowCount();
+					if(availableSlug == 0){
+						doctor.slugUrl = requestMap.get("slugUrl")[0].trim();
+					}else{
+						flash().put("alert", new Alert("alert-danger", "Requested Url is not available.").toString());
+						return redirect(routes.UserActions.dashboard());
+					}
+				}
+			}
 
 			doctor.appUser.update();
 			doctor.update();
-			return ok("0");
+			return redirect(routes.UserActions.dashboard());
+		}
+		catch (final NumberFormatException e){
+			Logger.error("ERROR WHILE UPDATING BASIC DOCTOR INFO");
+			e.printStackTrace();
+			flash().put("alert", new Alert("alert-danger", "Sorry! Numbers could not be read. Please try again.").toString());
+			return redirect(routes.UserActions.dashboard());
 		}
 		catch (final Exception e){
 			Logger.error("ERROR WHILE UPDATING BASIC DOCTOR INFO");
 			e.printStackTrace();
-			return ok("-1");
+			flash().put("alert", new Alert("alert-danger", "Sorry! Something went wrong. Please try again.").toString());
+			return redirect(routes.UserActions.dashboard());
 		}
 	}
 
@@ -504,13 +541,17 @@ public class DoctorController extends Controller {
 	private static Result createAppointment(final DoctorClinicInfo docClinicInfo) {
 		// Server side validation
 		if(docClinicInfo.doctor.id.longValue() != LoginController.getLoggedInUser().getDoctor().id.longValue()){
-
+			Logger.warn("COULD NOT VALIDATE LOGGED IN USER TO PERFORM THIS TASK");
+			Logger.warn("update attempted for doctor id: "+docClinicInfo.doctor.id);
+			Logger.warn("logged in AppUser: "+LoginController.getLoggedInUser().id);
+			Logger.warn("logged in Doctor: "+LoginController.getLoggedInUser().getDoctor().id);
 			return redirect(routes.LoginController.processLogout());
 		}
 		try{
 			final Calendar calendar1=Calendar.getInstance();
 			final Calendar calendar2=Calendar.getInstance();
 			final SimpleDateFormat dateFormat=new SimpleDateFormat("kk:mm");
+			final Doctor doctor=LoginController.getLoggedInUser().getDoctor();
 			final Calendar calendar = Calendar.getInstance();
 			calendar.setTime(new Date());
 			for(int date=0;date<31;date++){
@@ -545,7 +586,7 @@ public class DoctorController extends Controller {
 								}
 							}
 						}else {
-							for (int j2 = 0; j2 <(((hoursToClinic*60)+minutsToClinic)/docClinicInfo.slotmr); j2++) {
+							for (int j2 = 0; j2 <(((hoursToClinic*60)+minutsToClinic)/docClinicInfo.slotMR); j2++) {
 								if(Appointment.find.where().eq("doctorClinicInfo",docClinicInfo).eq("appointmentTime", calendar.getTime()).findUnique()==null){
 									Logger.info("  "+calendar.getTime());
 									final Appointment appointment=new Appointment();
@@ -553,10 +594,10 @@ public class DoctorController extends Controller {
 									appointment.appointmentTime=calendar.getTime();
 									appointment.doctorClinicInfo=docClinicInfo;
 									appointment.save();
-									calendar.add(Calendar.MINUTE,docClinicInfo.slotmr);
+									calendar.add(Calendar.MINUTE,docClinicInfo.slotMR);
 								}
 								else{
-									calendar.add(Calendar.MINUTE,docClinicInfo.slotmr);
+									calendar.add(Calendar.MINUTE,docClinicInfo.slotMR);
 								}
 							}
 						}
@@ -596,10 +637,15 @@ public class DoctorController extends Controller {
 	 * GET /doctor/edit-clinic/:id
 	 * Depricated on 18th July 2014. Use DoctorController.editClinicInfo(Long docClinicId) and DoctorController.editClinicSchedule(Long docClinicId) instead.
 	 */
+	@Deprecated
 	public static Result manageClinic(final Long docClinicId) {
 		final DoctorClinicInfo doctorClinicInfo = DoctorClinicInfo.find.byId(docClinicId);
 		// Server side validation
 		if(doctorClinicInfo.doctor.id.longValue() != LoginController.getLoggedInUser().getDoctor().id.longValue()){
+			Logger.warn("COULD NOT VALIDATE LOGGED IN USER TO PERFORM THIS TASK");
+			Logger.warn("update attempted for doctor id: "+doctorClinicInfo.doctor.id);
+			Logger.warn("logged in AppUser: "+LoginController.getLoggedInUser().id);
+			Logger.warn("logged in Doctor: "+LoginController.getLoggedInUser().getDoctor().id);
 			return redirect(routes.LoginController.processLogout());
 		}
 		final DoctorClinicInfoBean bean = doctorClinicInfo.toBean();
@@ -625,6 +671,10 @@ public class DoctorController extends Controller {
 			final DoctorClinicInfo clinicInfo = filledForm.get().toDoctorClinicInfo();
 			// Server side validation
 			if(clinicInfo.doctor.id.longValue() != LoginController.getLoggedInUser().getDoctor().id.longValue()){
+				Logger.warn("COULD NOT VALIDATE LOGGED IN USER TO PERFORM THIS TASK");
+				Logger.warn("update attempted for doctor id: "+clinicInfo.doctor.id);
+				Logger.warn("logged in AppUser: "+LoginController.getLoggedInUser().id);
+				Logger.warn("logged in Doctor: "+LoginController.getLoggedInUser().getDoctor().id);
 				return redirect(routes.LoginController.processLogout());
 			}
 			final DoctorClinicInfo clinicInfoPrevious=DoctorClinicInfo.find.byId(clinicInfo.id);
@@ -672,7 +722,7 @@ public class DoctorController extends Controller {
 			Ebean.delete(clinicInfoPrevious.scheduleDays);
 			clinicInfoPrevious.scheduleDays=clinicInfo.scheduleDays;
 			clinicInfoPrevious.slot=clinicInfo.slot;
-			clinicInfoPrevious.slotmr=clinicInfo.slotmr;
+			clinicInfoPrevious.slotMR=clinicInfo.slotMR;
 			clinicInfoPrevious.update();
 			flash().put("alert", new Alert("alert-success","Successfully Updated").toString());
 			return DoctorController.reCreateAppointment(clinicInfoPrevious);
@@ -778,6 +828,43 @@ public class DoctorController extends Controller {
 		return ok(views.html.doctor.editClinicSchedule.render(filledForm,bean.daysOfWeek,bean.daysOfWeekMr));
 
 	}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 

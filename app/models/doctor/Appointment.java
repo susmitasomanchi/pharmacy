@@ -3,6 +3,7 @@ package models.doctor;
 import java.util.Date;
 import java.util.List;
 
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -34,6 +35,7 @@ public class Appointment extends BaseEntity {
 	@OneToOne
 	public AppUser apporovedBy;
 
+	@Column(columnDefinition="TEXT")
 	public String remarks;
 
 	@OneToOne

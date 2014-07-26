@@ -11,6 +11,11 @@ PLEASE DO NOT MODIFY IT BY HAND
  *****/
 package controllers;
 
+import java.security.MessageDigest;
+import java.security.SecureRandom;
+import java.util.Calendar;
+import java.util.Date;
+import java.util.Random;
 
 import models.Alert;
 import models.AppUser;
@@ -19,8 +24,13 @@ import models.diagnostic.DiagnosticCentre;
 import models.diagnostic.DiagnosticRepresentative;
 import models.doctor.Doctor;
 import models.mr.MedicalRepresentative;
+import models.patient.Patient;
 import models.pharmacist.Pharmacist;
 import models.pharmacist.Pharmacy;
+
+import org.apache.commons.codec.binary.Base64;
+
+import play.Logger;
 import play.data.Form;
 import play.mvc.Controller;
 import play.mvc.Result;
@@ -62,6 +72,14 @@ public class UserController extends Controller {
 		return ok(views.html.diagnostic.joinus.render());
 	}
 
+	/**
+	 * Action to render the joinUs page for Patients("User")
+	 * GET    /user/join
+	 */
+	public static Result joinUsPatient(){
+		return ok(views.html.patient.joinus.render());
+	}
+
 
 
 	/**
@@ -71,17 +89,43 @@ public class UserController extends Controller {
 	public static Result processJoinUs(){
 		final AppUser appUser = new AppUser();
 		appUser.name = request().body().asFormUrlEncoded().get("fullname")[0].trim();
-		appUser.email = request().body().asFormUrlEncoded().get("email")[0].trim();
-		appUser.password = request().body().asFormUrlEncoded().get("password")[0].trim();
+		appUser.email = request().body().asFormUrlEncoded().get("email")[0].toLowerCase().trim();
+		final String password = request().body().asFormUrlEncoded().get("password")[0].trim();
+		try {
+
+			final Random random = new SecureRandom();
+			final byte[] saltArray = new byte[32];
+			random.nextBytes(saltArray);
+			final String randomSalt = Base64.encodeBase64String(saltArray);
+
+			final String passwordWithSalt = password+randomSalt;
+			final MessageDigest sha256 = MessageDigest.getInstance("SHA-256");
+			final byte[] passBytes = passwordWithSalt.getBytes();
+			final String hashedPasswordWithSalt = Base64.encodeBase64String(sha256.digest(passBytes));
+
+			appUser.salt = randomSalt;
+			appUser.password = hashedPasswordWithSalt;
+
+		} catch (final Exception e) {
+			Logger.error("ERROR WHILE CREATING SHA2 HASH");
+			e.printStackTrace();
+		}
+
 		appUser.role = Role.valueOf(request().body().asFormUrlEncoded().get("role")[0]);
 
 		if(AppUser.find.where().eq("email", appUser.email).findRowCount()>0){
 			flash().put("alert", new Alert("alert-danger", "Sorry! User with email id "+appUser.email.trim()+" already exists!").toString());
+			if(appUser.role == Role.PATIENT){
+				return redirect(routes.UserController.joinUsPatient());
+			}
 			if(appUser.role == Role.DOCTOR){
 				return redirect(routes.UserController.joinUsDoctor());
 			}
 			if(appUser.role == Role.ADMIN_PHARMACIST){
 				return redirect(routes.UserController.joinUsPharmacy());
+			}
+			if(appUser.role == Role.ADMIN_DIAGREP){
+				return redirect(routes.UserController.joinUsDiagnostic());
 			}
 		}
 
@@ -91,11 +135,15 @@ public class UserController extends Controller {
 			final Doctor doctor = new Doctor();
 			doctor.specialization = "Specialization";
 			doctor.degree = "Degree";
+			final Calendar cal = Calendar.getInstance();
+			cal.setTime(new Date());
+			doctor.experience = cal.get(Calendar.YEAR);
+			doctor.registrationNumber = "00000";
+			doctor.slugUrl = Util.simpleSlugify(appUser.name)+appUser.id;
+			appUser.mobileNumber = 9999999999L;
+			appUser.update();
 			doctor.appUser = appUser;
-			doctor.slugUrl=Util.simpleSlugify(appUser.name);
 			doctor.save();
-			doctor.slugUrl += doctor.id.toString();
-			doctor.update();
 		}
 
 		if(appUser.role.equals(Role.ADMIN_PHARMACIST)){
@@ -106,6 +154,7 @@ public class UserController extends Controller {
 			final Pharmacy pharmacy = new Pharmacy();
 			pharmacy.name = request().body().asFormUrlEncoded().get("pharmacyName")[0];
 			pharmacy.adminPharmacist = pharmacist;
+			pharmacy.slugUrl = Util.simpleSlugify(pharmacy.name)+pharmacist.id;
 			pharmacy.save();
 			pharmacist.pharmacy = pharmacy;
 			pharmacist.update();
@@ -119,21 +168,16 @@ public class UserController extends Controller {
 			final DiagnosticCentre diagnosticCentre = new DiagnosticCentre();
 			diagnosticCentre.name = request().body().asFormUrlEncoded().get("diagnosticCentreName")[0];
 			diagnosticCentre.diagnosticRepAdmin = diagnosticRepresentative;
+			diagnosticCentre.slugUrl = Util.simpleSlugify(diagnosticCentre.name)+diagnosticRepresentative.id;
 			diagnosticCentre.save();
 			diagnosticRepresentative.diagnosticCentre = diagnosticCentre;
 			diagnosticRepresentative.update();
 		}
-		if(appUser.role.equals(Role.ADMIN_DIAGREP)){
-			final DiagnosticRepresentative diagnosticRepresentative = new DiagnosticRepresentative();
-			diagnosticRepresentative.appUser = appUser;
-			diagnosticRepresentative.save();
 
-			final DiagnosticCentre diagnosticCentre = new DiagnosticCentre();
-			diagnosticCentre.name = request().body().asFormUrlEncoded().get("diagnosticCentreName")[0];
-			diagnosticCentre.diagnosticRepAdmin = diagnosticRepresentative;
-			diagnosticCentre.save();
-			diagnosticRepresentative.diagnosticCentre = diagnosticCentre;
-			diagnosticRepresentative.update();
+		if(appUser.role.equals(Role.PATIENT)){
+			final Patient patient = new Patient();
+			patient.appUser = appUser;
+			patient.save();
 		}
 
 		session().clear();

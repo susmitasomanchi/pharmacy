@@ -34,23 +34,30 @@ GET		/sitemap.xml								controllers.Application.sitemap()
 GET    /                                 			controllers.Application.index()
 POST   /login                             			controllers.LoginController.processLogin()
 GET    /logout                            			controllers.LoginController.processLogout()
+GET    /edit-password                            	controllers.LoginController.editPassword()
+POST   /update-password                            	controllers.LoginController.updatePassword()
+
 
 # Public Pages
 GET	   /doctor/search									controllers.PublicController.searchDoctorsPage()
 GET	   /doctor/search/:key								controllers.PublicController.processSearchDoctors(key: String)
-GET		/pharmacy/search 								controllers.PublicController.searchPhamacy()
+GET    /doctor/add-to-favourites/:docId					controllers.PublicController.addDoctorToLoggedInUser(docId: Long)
 GET   	/pharmacy/search/:searchString                  controllers.PublicController.searchPharmacies(searchString: String)
 GET   	/pharmacy/add-favourite-pharmacy/:pharmacyId/:str   controllers.PublicController.myFavoritePharmacy(pharmacyId : Long,str: String)
+GET    /pharmacy/search									controllers.PublicController.searchPharmaciesPage()
 
 GET		/public/add-to-Favorite/:docId						controllers.PublicController.addToFavDoctor(docId: Long)
 # Sign up page
 GET    /doctor/join                              			controllers.UserController.joinUsDoctor()
 GET    /pharmacy/join                              			controllers.UserController.joinUsPharmacy()
 GET    /diagnostic/join                              		controllers.UserController.joinUsDiagnostic()
+GET    /user/join											controllers.UserController.joinUsPatient()
 POST   /join		                              			controllers.UserController.processJoinUs()
 
-# Doctor's Profile
+# Dashboard of LoggedInUser
 GET		/dashboard                                  controllers.UserActions.dashboard()
+
+# Doctor's Actions
 POST	/doctor/doctor-basic-update					controllers.DoctorController.basicUpdate()
 POST	/doctor/doctor-images-update				controllers.DoctorController.imagesUpdate()
 GET    	/doctor/get-image/:id/:type                 controllers.DoctorController.getImage(id: Long, type :String)
@@ -76,23 +83,29 @@ GET    /doctor/edit-clinic-schedule/:id                 controllers.DoctorContro
 POST   /doctor/update-clinic                            controllers.DoctorController.processUpdateClinicInfo()
 POST   /doctor/update-clinic-schedule                   controllers.DoctorController.processUpdateClinicSchedule()
 GET    /doctor/delete-clinic/:id                        controllers.DoctorController.deleteClinic(id:Long)
-
-#slug url
+GET		/doctor/my-pharmacies							controllers.DoctorController.myFavoritePharmacies()
+GET		/doctor/remove-pharmacy/:doctorId/:pharmacyId		controllers.DoctorController.removeFavoritePharmacy(doctorId: Long, pharmacyId:Long)
+#slug url (must be the last route in /doctor/)
 GET 	/doctor/:slugUrl								controllers.PublicController.getDoctorWithSlug(slugUrl:String)
 
-# Pharmacy Profile
+# Patient Module
+GET    /user/my-doctors									controllers.PatientController.myFavouriteDoctors()
+GET		/user/remove-pharmacy/:patientId/:pharmacyId	controllers.PatientController.removeFavoritePharmacy(patientId: Long, pharmacyId: Long)
 
 POST	/pharmacy/upload-pharmacy-images					controllers.PharmacistController.uploadPharmacyImageProcess()
 POST	/pharmacy/basic-update								controllers.PharmacistController.pharmacyBasicUpdate()
 POST	/pharmacy/address-update			  				controllers.PharmacistController.pharmacyAddressUpdate()
 GET		/pharmacy/get-image/:pharmacyId/:fileId				controllers.PharmacistController.getPharmacyImages(pharmacyId: Long,fileId: Long)
 GET		/pharmacy/remove-image/:pharmacyId/:fileId			controllers.PharmacistController.removeImage(pharmacyId: Long,fileId: Long)
-GET		/pharmacy/profile/:id								controllers.PharmacistController.pharmacyProfile(id: Long)
 
-GET		/patient/add-favorite-pharmacy/:pharmacyId/:str								controllers.PatientController.addFavoritePharmacy(pharmacyId: Long,str: String)
-GET		/user/my-favorite-pharmacies											controllers.PatientController.myFavoritePharmacies()
-GET		/user/remove-favorite-pharmacy/:patientId/:pharmacyId					controllers.PatientController.removeFavoritePharmacy(patientId: Long,pharmacyId: Long)
 
+
+# Doagnostic Centre Module
+
+POST   /diagnostic/upload-diagnostic-images             controllers.DiagnosticController.uploadDiagnosticImageProcess()
+
+#slug url (must be the last route in /diagnostic/)
+GET 	/diagnostic/:slugUrl								controllers.PublicController.getDiagnosticCentreWithSlug(slugUrl: String)
 
 # Remove later (at Beta Launch)
 #GET    /                                  controllers.Application.index()

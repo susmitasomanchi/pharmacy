@@ -30,12 +30,13 @@ import play.mvc.Controller;
 import play.mvc.Http.MultipartFormData;
 import play.mvc.Http.MultipartFormData.FilePart;
 import play.mvc.Result;
+import actions.BasicAuth;
 import beans.DiagnosticBean;
 
 import com.google.common.io.Files;
 
+@BasicAuth
 public class DiagnosticController extends Controller {
-
 	public static Form<DiagnosticBean> diagnosticBeanForm = Form.form(DiagnosticBean.class);
 	public static Form<DiagnosticCentre> diagnosticForm = Form.form(DiagnosticCentre.class);
 	public static Form<DiagnosticTest> diagnosticTestForm = Form.form(DiagnosticTest.class);
@@ -50,15 +51,15 @@ public class DiagnosticController extends Controller {
 	public static Result uploadDiagnosticImageProcess() {
 		try{
 			final DiagnosticCentre diagnosticCentre = DiagnosticCentre.find.byId(Long.parseLong(request().body().asMultipartFormData().asFormUrlEncoded().get("diagnosticId")[0]));
-			//server side validation
+			// Server side validation
 			if((diagnosticCentre.id.longValue() != LoginController.getLoggedInUser().getDiagnosticRepresentative().diagnosticCentre.id.longValue()) || (!LoginController.getLoggedInUser().role.equals(Role.ADMIN_DIAGREP))){
 				Logger.warn("COULD NOT VALIDATE LOGGED IN USER TO PERFORM THIS TASK");
 				Logger.warn("update attempted for DiagnosticCentre id: "+diagnosticCentre.id);
 				Logger.warn("logged in AppUser: "+LoginController.getLoggedInUser().id);
-				Logger.warn("logged in DiagnosticRepresentative: "+LoginController.getLoggedInUser().getDiagnosticRepresentative().id);
+				Logger.warn("logged in DiagnosticRep: "+LoginController.getLoggedInUser().getDiagnosticRepresentative().id);
 				return redirect(routes.LoginController.processLogout());
 			}
-			//final DiagnosticCentre diagnosticCentre = LoginController.getLoggedInUser().getDiagnosticRepresentative().diagnosticCentre;
+
 			if (request().body().asMultipartFormData().getFile("backgroundImage") != null) {
 				final File image = request().body().asMultipartFormData().getFile("backgroundImage").getFile();
 				diagnosticCentre.backgroudImage = Files.toByteArray(image);
@@ -89,10 +90,9 @@ public class DiagnosticController extends Controller {
 		return redirect(routes.UserActions.dashboard());
 
 	}
-
 	/**
 	 * @author lakshmi
-	 *  Action to get byteData as image of DiagnosticCentre
+	 *  Action to get byteData as image of DiagnosticCentre	 *
 	 * GET/diagnostic/get-image/:diagnosticId/:fileId
 	 */
 	public static Result getDiagnosticImages(final Long diagnosticId,final Long imageId) {
@@ -114,31 +114,44 @@ public class DiagnosticController extends Controller {
 
 	/**
 	 * @author : lakshmi
-	 * 
 	 * POST	/diagnostic/basic-update
-	 * 
 	 * Action to update the basic details(like name & brief description etc) of DiagnosticCentre
 	 * of the loggedIn ADMIN_DIAGREP
 	 */
 
 	public static Result diagnosticBasicUpdate() {
 		try{
-			Thread.sleep(500);
 			final Map<String, String[]> requestMap = request().body().asFormUrlEncoded();
 			final DiagnosticCentre diagnosticCentre = DiagnosticCentre.find.byId(Long.parseLong(requestMap.get("diagnosticId")[0]));
-			//server side validation
+			// Server side validation
 			if((diagnosticCentre.id.longValue() != LoginController.getLoggedInUser().getDiagnosticRepresentative().diagnosticCentre.id.longValue()) || (!LoginController.getLoggedInUser().role.equals(Role.ADMIN_DIAGREP))){
 				Logger.warn("COULD NOT VALIDATE LOGGED IN USER TO PERFORM THIS TASK");
 				Logger.warn("update attempted for DiagnosticCentre id: "+diagnosticCentre.id);
 				Logger.warn("logged in AppUser: "+LoginController.getLoggedInUser().id);
-				Logger.warn("logged in DiagnosticRepresentative: "+LoginController.getLoggedInUser().getDiagnosticRepresentative().id);
+				Logger.warn("logged in DiagnosticRep: "+LoginController.getLoggedInUser().getDiagnosticRepresentative().id);
 				return redirect(routes.LoginController.processLogout());
 			}
 			if(requestMap.get("name") != null && (requestMap.get("name")[0].trim().compareToIgnoreCase("")!=0)){
-				diagnosticCentre.name = requestMap.get("name")[0];
+				diagnosticCentre.name = requestMap.get("name")[0].trim();
 			}
 			if(requestMap.get("description") != null && (requestMap.get("description")[0].trim().compareToIgnoreCase("")!=0)){
-				diagnosticCentre.description = requestMap.get("description")[0];
+				diagnosticCentre.description = requestMap.get("description")[0].trim();
+			}
+			if(requestMap.get("slugUrl") != null && (requestMap.get("slugUrl")[0].trim().compareToIgnoreCase("")!=0)){
+				final String newSlug = requestMap.get("slugUrl")[0].trim();
+				if(!newSlug.matches("^[a-z0-9\\-]+$")){
+					flash().put("alert", new Alert("alert-danger", "Invalid charactrer provided in Url.").toString());
+					return redirect(routes.UserActions.dashboard());
+				}
+				if(requestMap.get("slugUrl")[0].trim().compareToIgnoreCase(diagnosticCentre.slugUrl) != 0){
+					final int availableSlug = DiagnosticCentre.find.where().eq("slugUrl", requestMap.get("slugUrl")[0].trim()).findRowCount();
+					if(availableSlug == 0){
+						diagnosticCentre.slugUrl = requestMap.get("slugUrl")[0].trim();
+					}else{
+						flash().put("alert", new Alert("alert-danger", "Sorry, Requested URL is not available.").toString());
+						return redirect(routes.UserActions.dashboard());
+					}
+				}
 			}
 			diagnosticCentre.update();
 		}
@@ -161,14 +174,6 @@ public class DiagnosticController extends Controller {
 		try{
 			final Map<String, String[]> requestMap = request().body().asFormUrlEncoded();
 			final DiagnosticCentre diagnosticCentre = DiagnosticCentre.find.byId(Long.parseLong(requestMap.get("diagnosticId")[0]));
-			//server side validation
-			if((diagnosticCentre.id.longValue() != LoginController.getLoggedInUser().getDiagnosticRepresentative().diagnosticCentre.id.longValue()) || (!LoginController.getLoggedInUser().role.equals(Role.ADMIN_DIAGREP))){
-				Logger.warn("COULD NOT VALIDATE LOGGED IN USER TO PERFORM THIS TASK");
-				Logger.warn("update attempted for DiagnosticCentre id: "+diagnosticCentre.id);
-				Logger.warn("logged in AppUser: "+LoginController.getLoggedInUser().id);
-				Logger.warn("logged in DiagnosticRepresentative: "+LoginController.getLoggedInUser().getDiagnosticRepresentative().id);
-				return redirect(routes.LoginController.processLogout());
-			}
 			Logger.info("map size"+requestMap.toString());
 			if(diagnosticCentre.address == null){
 				final Address address = new Address();
@@ -181,7 +186,6 @@ public class DiagnosticController extends Controller {
 			if(requestMap.get("addressLine1") != null && (requestMap.get("addressLine1")[0].trim().compareToIgnoreCase("")!=0)){
 				diagnosticCentre.address.addressLine1 = requestMap.get("addressLine1")[0];
 			}
-
 			if(requestMap.get("city") != null && (requestMap.get("city")[0].trim().compareToIgnoreCase("")!=0)){
 				diagnosticCentre.address.city = requestMap.get("city")[0];
 			}
@@ -216,27 +220,20 @@ public class DiagnosticController extends Controller {
 
 	/**
 	 * @author lakshmi
-	 * Action to remove profileImage of DiagnosticCentre of the loggedIn ADMIN_DIAGREP
+	 * Action to remove profileImage of DiagnosticCentre of the loggedIn ADMIN_DIAGREP	 *
 	 * GET/diagnostic/remove-image/:diagnosticId/:fileId
 	 */
 	public static Result removeDiagnosticImage(final Long diagnosticId,final Long imageId){
-		try{
-			final DiagnosticCentre diagnosticCentre = DiagnosticCentre.find.byId(diagnosticId);
-			//server side validation
-			if((diagnosticCentre.id.longValue() != LoginController.getLoggedInUser().getDiagnosticRepresentative().diagnosticCentre.id.longValue()) || (!LoginController.getLoggedInUser().role.equals(Role.ADMIN_DIAGREP))){
-				Logger.warn("COULD NOT VALIDATE LOGGED IN USER TO PERFORM THIS TASK");
-				Logger.warn("update attempted for DiagnosticCentre id: "+diagnosticCentre.id);
-				Logger.warn("logged in AppUser: "+LoginController.getLoggedInUser().id);
-				Logger.warn("logged in DiagnosticRepresentative: "+LoginController.getLoggedInUser().getDiagnosticRepresentative().id);
-				return redirect(routes.LoginController.processLogout());
-			}
-			Logger.info("before list size="+diagnosticCentre.profileImageList.size());
-			final FileEntity image = FileEntity.find.byId(imageId);
-			diagnosticCentre.profileImageList.remove(image);
-			diagnosticCentre.update();
-		}catch(final Exception e){
+		final DiagnosticCentre diagnosticCentre = DiagnosticCentre.find.byId(diagnosticId);
+		Logger.info("before list size="+diagnosticCentre.profileImageList.size());
+		final FileEntity image = FileEntity.find.byId(imageId);
 
-		}
+		diagnosticCentre.profileImageList.remove(image);
+
+		diagnosticCentre.update();
+		//image.delete();
+		Logger.info("after list size="+diagnosticCentre.profileImageList.size());
+		//		return ok(views.html.pharmacist.pharmacy_profile.render(pharmacy.inventoryList, pharmacy));
 		return redirect(routes.UserActions.dashboard());
 	}
 

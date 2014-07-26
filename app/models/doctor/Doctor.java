@@ -1,6 +1,8 @@
 package models.doctor;
 
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
 
 import javax.persistence.CascadeType;
@@ -85,6 +87,9 @@ public class Doctor extends BaseEntity{
 	@ManyToMany(cascade=CascadeType.ALL)
 	public List<Pharmacy> pharmacyList=new ArrayList<Pharmacy>();
 
+	/** Using it to capture starting year of experience.
+	 * 	So, Doctor's experience = currentYear - this.experience
+	 */
 	public Integer experience;
 
 
@@ -132,8 +137,6 @@ public class Doctor extends BaseEntity{
 		if(this.slugUrl != null){
 			stringBuilder.append(this.slugUrl.toLowerCase());
 		}
-
-
 		this.searchIndex = stringBuilder.toString();
 		super.save();
 	}
@@ -159,12 +162,25 @@ public class Doctor extends BaseEntity{
 		if(this.slugUrl != null){
 			stringBuilder.append(this.slugUrl.toLowerCase());
 		}
-
-
 		this.searchIndex = stringBuilder.toString();
 		super.update();
 	}
 
+
+	public Integer getYearsOfExperience(){
+		final Calendar cal = Calendar.getInstance();
+		cal.setTime(new Date());
+		final int currentYear = cal.get(Calendar.YEAR);
+		if(this.experience != null){
+			if(currentYear - this.experience == 0){
+				return 1;
+			}
+			return (currentYear - this.experience);
+		}
+		else{
+			return 1;
+		}
+	}
 
 
 }

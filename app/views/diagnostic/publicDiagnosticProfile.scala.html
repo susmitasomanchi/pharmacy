@@ -44,16 +44,10 @@ color:black;
 }
 
 
-.slugUrlP .popover{
-  max-width: none;
-  width:450px;
-}
-
 .dottedU{    
     border-bottom: 1px dotted #fff;
     text-decoration: none;
 }
-
 </style>
 
 <script>
@@ -72,25 +66,15 @@ function submitimagesform(){
 }
 
 function submitbasicform(id){
-	if(id.localeCompare('spinner-slugUrl') != 0){
-		$("[data-toggle=popover]").popover('hide');
-		$('#'+id).addClass("fa-spin");
-	}
+	$("[data-toggle=popover]").popover('hide');
+	$('#'+id).addClass("fa-spin");
 }
+</script>	
 
-function validateSlugUrl(){
-	var s = $('#slugUrl').val().trim();
-	if(!s.match("^[a-z0-9\-]+$")){
-		alert('Invalid characters have been provided.');
-		return false;
-	}
-	else{	
-		$("[data-toggle=popover]").popover('hide');
-		$('#spinner-slugUrl').addClass("fa-spin");
-		return true;
-	}
-}
-</script>
+
+
+
+
 
 
 
@@ -101,143 +85,44 @@ function validateSlugUrl(){
 	<div style="background-image:url('/assets/images/pharmacy-default-bg-image.jpg');background-size:940px 400px; background-repeat:no-repeat; height:400px;"></div>
 }
 
-<span data-toggle="popover" data-placement="left" title="Change Background Image" data-html="true" data-content="<form action=&quot;@routes.DiagnosticController.uploadDiagnosticImageProcess()&quot; enctype=&quot;multipart/form-data&quot; method=&quot;POST&quot;><input type=&quot;file&quot; name=&quot;backgroundImage&quot;> <input type=&quot;hidden&quot; name=&quot;diagnosticId&quot; value=&quot;@diagnosticCentre.id&quot;> <br><input class=&quot;pull-right btn btn-xs btn-primary&quot; type=&quot;submit&quot; onclick=&quot;submitimagesform();&quot; value=&quot;save&quot;></form>" style="cursor:pointer; position:relative; top:-400px;left:910px; font-size:25px">
-<i style="text-shadow:1px 1px 20px white, 3px 3px 20px white;" id="spinner" class="fa fa-cog"></i>
-</span>
 </div>
 <div class="row" style="margin-top:-235px">
 <div class="col-md-1"></div>
 <div class="col-md-10" >
-<span data-toggle="modal" data-target="#myModal" style="cursor:pointer; position:relative; top:30px;left:810px; font-size:25px;">
-  	<i style="text-shadow:1px 1px 20px white, 3px 3px 20px white;" id="spinner2" class="fa fa-cog"></i>
-</span>
-	<div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
-  <div class="modal-dialog" style="padding-left:100px">
-    <div class="modal-content" style="width:400px">
-      <div class="modal-header" style="color: #ffffff;background-color: #008cba;border-color: #008cba;">
-        <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button></form></form>
-        <h4 class="modal-title" id="myModalLabel">Profile Images</h4>
-      </div>
-      <div class="modal-body well">
-      <table class="table table-striped">     
-      @for(profileImages <- diagnosticCentre.profileImageList){
-      <tr>
-      <td style="width:200px"> <img src="@routes.DiagnosticController.getDiagnosticImages(diagnosticCentre.id,profileImages.id)" width="150" height="75" /> </td>
-      <td> <button class="btn btn-danger btn-xs"><a href="/diagnostic/remove-image/@diagnosticCentre.id/@profileImages.id" style="color:white">Delete</a></button> </td>
-      </tr>
-      }      
-     </table>
-      @helper.form(action = routes.DiagnosticController.uploadDiagnosticImageProcess(), 'enctype -> "multipart/form-data",'method -> "post") {
-      	<div class="form-group">
-    	<label for="exampleInputFile" class="badge"><b>Add Image</b></label>
-    	<input type="hidden" name="diagnosticId" value="@diagnosticCentre.id">
-    	<input type="file" name="profileImage" />
-    	<input class="pull-right btn btn-primary btn-xs" type="submit" name="submit" value="Save Image" />
-  		</div> 
-      }
-      
-      </div>
-    </div>
-  </div>
-</div>
-
-
-
-
-
-<p class="slugUrlP" style="font-size:20px; position:absolute; margin-top:-240px; margin-left:-40px;">
-<span style="text-shadow:1px 1px 20px white, 3px 3px 20px white;">
-Your profile is live at 
-<a href="@routes.PublicController.getDiagnosticCentreWithSlug(diagnosticCentre.slugUrl)" style="color:black;">mednetwork.in/diagnostic/@diagnosticCentre.slugUrl</a>
-</span>
-<span id="slugpopover" data-toggle="popover" title="Edit Your URL" data-html="true" data-placement="bottom" data-content=
-
-"
-<form onsubmit=&quot;return validateSlugUrl();&quot; action=&quot;@routes.DiagnosticController.diagnosticBasicUpdate()&quot; method=&quot;POST&quot;>
-<div style=&quot;text-shadow:none;&quot;><span style=&quot;font-size:16px;&quot;>mednetwork.in/diagnostic/</span>
-<input type=&quot;hidden&quot; name=&quot;diagnosticId&quot; value=&quot;@diagnosticCentre.id&quot;>
-<input id=&quot;slugUrl&quot; name=&quot;slugUrl&quot; style=&quot;color:#292929; font-weight:bold; height: 22px; position:relative; top:0px; padding-left:0px; font-size:16px; width:200px;&quot; type=&quot;text&quot; value=&quot;@diagnosticCentre.slugUrl&quot;>
-<br><br>
-<ul style=&quot;padding-left:20px; margin:0px;&quot;>
-<li>Lower case alphabets (a-z) can be used.</li>
-  <li>Numerals (0-9) can be used.</li>
-  <li>Hyphens (-) can be used.</li>
-  <li>Spaces, upper case alphabets &amp; other characters 
-  <span class=&quot;dottedU&quot;>cannot</span>
-   be used.</li>
-</ul>
-<br>
-<input type=&quot;submit&quot; class=&quot;pull-right btn btn-xs btn-primary&quot; onclick=&quot;submitbasicform('spinner-slugUrl');&quot value=&quot;save&quot;>
-</div>
-</form>
-"
-style="cursor:pointer; position:relative; font-size:16px; top:-13px; text-shadow:1px 1px 20px white, 3px 3px 20px white;"><i id="spinner-slugUrl" class="fa fa-cog"></i></span>
-
-</p>
-
-
-<script>
-	
-$('#slugpopover').on('shown.bs.popover', function () {
-	$('#slugUrl').keypress(function(e) {
-	    e = e || event;
-    	var s = String.fromCharCode(e.charCode);
-    	if(
-    		(s.match(/[a-z]/))
-    		||
-    		(s.match(/[0-9]/))
-    		||
-    		(s.match(/[-]/))
-    		){
-    			return true;
-    		}
-			return false;
-	});
-});
-
-</script>
-
 
 
 
 <div id="carousel-example-generic" class="carousel slide" data-ride="carousel">
   <!-- Indicators -->
-  
-  
-  
   @if(diagnosticCentre.profileImageList.size()>0){
   <ol class="carousel-indicators">
   @for((profileImages,index) <- diagnosticCentre.profileImageList.zipWithIndex){
     <li data-target="#carousel-example-generic" data-slide-to="0" class="@if(index == 0){active}"></li>
     }
   </ol>
-    
-  <!-- Wrapper for slides -->
-  <div class="carousel-inner">
-  @for((profileImages,index) <- diagnosticCentre.profileImageList.zipWithIndex){
+    <!-- Wrapper for slides -->
+   <div class="carousel-inner">
+  
+  
+   @for((profileImages,index) <- diagnosticCentre.profileImageList.zipWithIndex){
     <div class="item @if(index == 0){active}">
       <img src="@routes.DiagnosticController.getDiagnosticImages(diagnosticCentre.id,profileImages.id)" alt="diagnostic1" style="height:300px; width:800px;"/>
     </div>
-	}
+    }
   </div>
   }else{
-  
   <ol class="carousel-indicators">
     <li data-target="#carousel-example-generic" data-slide-to="0" class="active"></li>
    </ol>
 
   <!-- Wrapper for slides -->
   <div class="carousel-inner">
-    <div class="item active">
+    <div class="active">
       <img src="/assets/images/pharmacy-default-profile-image.jpg" alt="Diagnostic Pic" style="height:300px; width:800px;"/>
     </div>
   </div>
   
   }
-  
-  
-  
-  
   <!-- Controls -->
   <a class="left carousel-control" href="#carousel-example-generic" role="button" data-slide="prev" style="width:0px">
     <span class="glyphicon glyphicon-chevron-left" style="margin-left:-40px;color:#006687"></span>
@@ -246,35 +131,16 @@ $('#slugpopover').on('shown.bs.popover', function () {
     <span class="glyphicon glyphicon-chevron-right" style="left:20px;color:#006687"></span>
   </a>
 </div>
-
-
 </div>
 <div class="col-md-1"></div>
 </div>
-<br>
+
 <h1 style="text-shadow:10px 10px 10px white, 3px 3px 20px white; position:relative; top:-400px; text-align:center;font-weight:bold;color:#006687">
 @diagnosticCentre.name
-<span 
-
-data-toggle="popover" title="Edit Diagnostic centre Name" data-html="true" data-content="
-<form style=&quot;color:#000000; font-weight:bold;&quot; action=&quot;@routes.DiagnosticController.diagnosticBasicUpdate()&quot; method=&quot;POST&quot;>
-<input type=&quot;text&quot; name=&quot;name&quot; value=&quot;@diagnosticCentre.name&quot;>
-<input type=&quot;hidden&quot; name=&quot;diagnosticId&quot; value=&quot;@diagnosticCentre.id&quot;>
-<br>
-<input class=&quot;pull-right btn btn-xs btn-primary&quot; type=&quot;submit&quot; onclick=&quot;submitbasicform('spinner-name');&quot; value=&quot;save&quot;>
-</form>"
-
-style="color:#006687; font-size:20px; position:relative; top:-20px; cursor:pointer;"><i id="spinner-name" class="fa fa-cog"></i></span>
-
 </h1>
-<br>
 <div class="alert alert-success">
-<span data-toggle="popover" title="Brief Description" data-placement="left" data-html="true" data-content="
-<form action=&quot;@routes.DiagnosticController.diagnosticBasicUpdate()&quot;method=&quot;POST&quot;>
-<textarea name=&quot;description&quot; rows=&quot;10&quot; style=&quot;color:#292929; font-weight:bold;&quot; >@diagnosticCentre.description</textarea>
-<input type=&quot;hidden&quot; name=&quot;diagnosticId&quot; value=&quot;@diagnosticCentre.id&quot;>
-<br><input class=&quot;pull-right btn btn-xs btn-primary&quot; type=&quot;submit&quot; onclick=&quot;submitbasicform('spinner-description');&quot; value=&quot;save&quot;></form> " style="cursor:pointer; position:relative; font-size:15px; top:-13px; left:935px;"><i id="spinner-description" class="fa fa-cog"></i></span>
-<p style="font-size:1.5em; align:justify; margin-top:-20px;">
+
+<p style="font-size:1.5em; align:justify; margin-top:0px;">
 	@diagnosticCentre.description	 
 </p>
 </div>
@@ -283,7 +149,7 @@ style="color:#006687; font-size:20px; position:relative; top:-20px; cursor:point
 <div class="col-md-10">
 <div class="col-md-5">
 @if(diagnosticCentre.address != null){
-<h5>@diagnosticCentre.contactPerson<span data-toggle="modal" data-target="#myaddrModal" style="cursor:pointer; position:relative; left: 20px; font-size:20px;"><i id="spinner2" class="fa fa-cog"></i></span></h5>
+<h5>@diagnosticCentre.contactPerson</h5>
 <h5>@diagnosticCentre.address.addressLine1</h5>
 <h5>@diagnosticCentre.address.area</h5>
 <h5>@diagnosticCentre.address.city</h5>
@@ -292,24 +158,14 @@ style="color:#006687; font-size:20px; position:relative; top:-20px; cursor:point
 }
 <h5>@diagnosticCentre.address.pinCode</h5>
 <h5>Phones: @diagnosticCentre.mobileNo </h5>
-}else{
-<h4>
-Edit Contact Details
-<span data-toggle="modal" data-target="#myaddrModal" style="cursor:pointer; position:relative; left:10px; font-size:20px;"><i id="spinner2" class="fa fa-cog"></i></span>
-</h4>
 }
 </div>
 
 <div class="col-md-7">
-	<div id="profile_map_canvas" style="width:600px;height:400px">
-	@if(diagnosticCentre.address == null || diagnosticCentre.address.latitude== null || diagnosticCentre.address.longitude == null || diagnosticCentre.address.latitude.trim().compareToIgnoreCase("") == 0 || diagnosticCentre.address.longitude.trim().compareToIgnoreCase("") == 0){
-		<img src="/assets/images/googlemap1.png" width="600" height="400" style="position:relative" />
-		<div class="maptext" style="text-align:center">
-		<p style="position:relative; top:-200px; color:#008cba;"><b>Kindly Edit Contact Details & Mark Your Diagnostic Centre</span></b></p>
-	}else{
-	
-	}
-	</div>
+	@if(diagnosticCentre.address != null){
+		<div id="profile_map_canvas" style="width:600px;height:400px">
+		</div>
+	}	
 </div>
 
 
@@ -329,69 +185,106 @@ Edit Contact Details
 
 
 
-
-
-
-
-
-
-
-
-
-
 <script>
 
 var lng, lat, marker;
 var dbclk = false;
 var map, myLatLng;
 function initialize(mapdiv) {
-	var mapOptions = {
-		center : new google.maps.LatLng(lat, lng),
-		zoom : 15
-	};
-	map = new google.maps.Map(document
-			.getElementById(mapdiv), mapOptions);
 
-	//  map.set("disableDoubleClickZoom", false);
+var mapOptions = {
+
+center : new google.maps.LatLng(lat, lng),
+
+zoom : 15
+
+};
+
+map = new google.maps.Map(document
+
+.getElementById(mapdiv), mapOptions);
 
 
-	if(mapdiv == 'map_canvas'){
-		marker = new google.maps.Marker({
-			position : myLatLng,
-			draggable : true,
-			animation : google.maps.Animation.DROP,
-			map : map
-		});
 
-		$("#lat1").val(lat);
-		$("#lng1").val(lng);
+//  map.set("disableDoubleClickZoom", false);
 
-		//On click event of map marker should get relocated
-		google.maps.event.addListener(map, 'click', function(
-				event) {
-			marker.setPosition(event.latLng);
-			$("#lat1").val(event.latLng.lat());
-			$("#lng1").val(event.latLng.lng());
-		});
-		// After dragging the marker
-		google.maps.event.addListener(marker, 'dragend',
-				function(event) {
-					$("#lat1").val(event.latLng.lat());
-					$("#lng1").val(event.latLng.lng());
-		});
-	}
 
-	if(mapdiv == 'profile_map_canvas'){
-		marker = new google.maps.Marker({
-			position : myLatLng,
-			draggable : false,
-			animation : google.maps.Animation.DROP,
-			map : map
-		});
-	}
+
+
+if(mapdiv == 'map_canvas'){
+
+marker = new google.maps.Marker({
+
+position : myLatLng,
+
+draggable : true,
+
+animation : google.maps.Animation.DROP,
+
+map : map
+
+});
+
+
+
+$("#lat1").val(lat);
+
+$("#lng1").val(lng);
+
+
+
+//On click event of map marker should get relocated
+
+google.maps.event.addListener(map, 'click', function(
+
+event) {
+
+marker.setPosition(event.latLng);
+
+$("#lat1").val(event.latLng.lat());
+
+$("#lng1").val(event.latLng.lng());
+
+});
+
+// After dragging the marker
+
+google.maps.event.addListener(marker, 'dragend',
+
+function(event) {
+
+$("#lat1").val(event.latLng.lat());
+
+$("#lng1").val(event.latLng.lng());
+
+});
+
+}
+
+
+
+if(mapdiv == 'profile_map_canvas'){
+
+marker = new google.maps.Marker({
+
+position : myLatLng,
+
+draggable : false,
+
+animation : google.maps.Animation.DROP,
+
+map : map
+
+});
+
+}
+
+
 
 
 }
+
+
 
 
 $( document ).ready(function() {
@@ -487,6 +380,7 @@ $("#city").blur(function() {
     			</select>
   			</div>
   			
+  			 
   			<div class="form-group">
     			<label for="phone">Phone Number</label>
     			<input type="text" name="contactNo" value="@diagnosticCentre.mobileNo" id="phone" class="form-control" placeholder="Enter phone number">
