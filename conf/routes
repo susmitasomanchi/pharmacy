@@ -63,11 +63,9 @@ GET		/doctor/remove-education/:docId/:id			controllers.DoctorController.removeEd
 POST	/doctor/add-social-work						controllers.DoctorController.addSocialWork()
 GET		/doctor/remove-social-work/:docId/:id		controllers.DoctorController.removeSocialWork(docId: Long, id: Long)
 GET		/doctor/add-favorite-pharmacy/:pharmacyId/:str							controllers.DoctorController.addFavoritePharmacy(pharmacyId: Long,str: String)
-GET		/patient/add-favorite-pharmacy/:pharmacyId/:str								controllers.PatientController.addFavoritePharmacy(pharmacyId: Long,str: String)
 GET		/doctor/my-favorite-pharmacies											controllers.DoctorController.myFavoritePharmacies()
-GET		/patient/my-favorite-pharmacies												controllers.PatientController.myFavoritePharmacies()
 GET		/doctor/remove-favorite-pharmacy/:doctorId/:pharmacyId					controllers.DoctorController.removeFavoritePharmacy(doctorId: Long,pharmacyId: Long)
-GET		/patient/remove-favorite-pharmacy/:patientId/:pharmacyId					controllers.PatientController.removeFavoritePharmacy(patientId: Long,pharmacyId: Long)
+
 # Doctor's Clinics
 GET    /doctor/new-clinic                 		controllers.DoctorController.newClinic()
 POST   /doctor/new-clinic                 		controllers.DoctorController.processNewClinic()
@@ -80,7 +78,7 @@ POST   /doctor/update-clinic-schedule                   controllers.DoctorContro
 GET    /doctor/delete-clinic/:id                        controllers.DoctorController.deleteClinic(id:Long)
 
 #slug url
-GET    /doctor/:slugUrl                                  controllers.PublicController.getDoctorWithSlug(slugUrl:String)
+GET 	/doctor/:slugUrl								controllers.PublicController.getDoctorWithSlug(slugUrl:String)
 
 # Pharmacy Profile
 
@@ -91,12 +89,16 @@ GET		/pharmacy/get-image/:pharmacyId/:fileId				controllers.PharmacistController
 GET		/pharmacy/remove-image/:pharmacyId/:fileId			controllers.PharmacistController.removeImage(pharmacyId: Long,fileId: Long)
 GET		/pharmacy/profile/:id								controllers.PharmacistController.pharmacyProfile(id: Long)
 
+GET		/patient/add-favorite-pharmacy/:pharmacyId/:str								controllers.PatientController.addFavoritePharmacy(pharmacyId: Long,str: String)
+GET		/user/my-favorite-pharmacies											controllers.PatientController.myFavoritePharmacies()
+GET		/user/remove-favorite-pharmacy/:patientId/:pharmacyId					controllers.PatientController.removeFavoritePharmacy(patientId: Long,pharmacyId: Long)
 
 
 # Remove later (at Beta Launch)
 #GET    /                                  controllers.Application.index()
 #GET    /:str		                      controllers.Application.indexX(str: String)
 
+GET		/static/fav/pharmacies							controllers.PharmacistController.staticFavPharmacies()
 
 #############################	PRODUCTION	#################################################################################
 
@@ -254,9 +256,12 @@ GET    /mr/approve-dcr/:dcrid                            controllers.MRControlle
 GET    /mr/reject-dcr/:dcrid                             controllers.MRController.rejectDCRLineItem(dcrid: Long)
 GET    /mr/delete-dcr/:dcrid                             controllers.MRController.deleteDCR(dcrid: Long)
 POST   /mr/search-subordinate-dcr                        controllers.MRController.searchSubordinateDcr()
-GET    /search                                     controllers.MRController.search()
-GET    /mr/display-appointment/:id                 controllers.MRController.scheduleAppointment(id:String)
-POST	/mr/add-head-quarter							controllers.MRController.addHeadQuarter()
+GET    /search                                           controllers.MRController.search()
+GET    /mr/display-appointment/:id                       controllers.MRController.scheduleAppointment(id:String)
+POST   /mr/add-head-quarter                              controllers.MRController.addHeadQuarter()
+GET    /mr/tour-plan                                     controllers.MRController.tourPlan()
+POST   /mr/add-tour-plan                                 controllers.MRController.addTourPlan()
+GET    /mr/tourplan-lineitem/:tourplanid                 controllers.MRController.tourPlanLineItem(tourplanid: Long)
 POST    /mr/add                                    controllers.MRController.medicalRepresentativeProccess()
 #POST    /mr/editmr                                 controllers.MRController.medicalRepresentativeProccessUpdate()
 GET     /mr/del	                                   controllers.MRController.removeMR(id: Long)

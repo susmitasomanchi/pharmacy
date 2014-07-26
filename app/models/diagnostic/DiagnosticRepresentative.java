@@ -11,7 +11,7 @@ import javax.persistence.OneToOne;
 
 import models.AppUser;
 import models.BaseEntity;
-import models.Patient;
+import models.patient.Patient;
 
 @SuppressWarnings("serial")
 @Entity

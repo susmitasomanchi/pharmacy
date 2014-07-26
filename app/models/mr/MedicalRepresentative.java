@@ -62,6 +62,9 @@ public class MedicalRepresentative extends BaseEntity {
 		return DailyCallReport.find.where().in("submitter", this.getSubordinates()).ne("dcrStatus",DCRStatus.DRAFT).orderBy("forDate DESC").findList();
 	}*/
 
+	@OneToMany(cascade = CascadeType.ALL)
+	public List<TourPlan> tourPlanList = new ArrayList<TourPlan>();
+
 	public MedicalRepresentativeBean toBean() {
 		final MedicalRepresentativeBean bean = new MedicalRepresentativeBean();
 

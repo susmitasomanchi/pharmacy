@@ -11,7 +11,6 @@ import java.util.Map;
 
 import models.Alert;
 import models.AppUser;
-import models.Patient;
 import models.diagnostic.DiagnosticCentre;
 import models.doctor.Appointment;
 import models.doctor.AppointmentStatus;
@@ -19,6 +18,7 @@ import models.doctor.DaySchedule;
 import models.doctor.Doctor;
 import models.doctor.DoctorClinicInfo;
 import models.doctor.QuestionAndAnswer;
+import models.patient.Patient;
 import models.patient.PatientDoctorInfo;
 import models.pharmacist.Pharmacy;
 import play.Logger;

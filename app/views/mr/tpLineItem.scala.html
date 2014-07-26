@@ -1,0 +1,25 @@
+@(tourPlanMap: Map[Integer,models.mr.TourPlan])
+@import play.i18n._
+@import helper.twitterBootstrap._
+@import helper._
+
+@main("T P Line Item"){
+	
+	<table class="table table-bordered table-condensed col-md-3">
+	<thead>
+	<th>Sr.No.</th>
+	<th>Day</th>
+	<th>Action</th>
+	</thead>
+	<tbody>
+	@for((index,tourplan)<- tourPlanMap){
+	<tr>
+		<td>@index</td>
+		<td><input value='@tourPlanMap.get(index).forMonth.format(index+"-MM-yyyy")' disabled style="width:100px;"/></td>
+		<td>&nbsp;</td>
+	</tr>
+	}
+	</tbody>
+	</table>
+	
+	}
