@@ -296,7 +296,7 @@
 										var zipcode = address[address.length - 1].long_name;
 										 state=address[address.length - 3].long_name;
 											$("#fetchPin").val(zipcode);
-								            $( "select" ).val(state+"kbs".toUpperCase().replace(/\s+/g, '_'));
+								            $( "select" ).val(state.toUpperCase().replace(/\s+/g, '_'));
 								          $('select').trigger("chosen:updated");
 										 }
 									});
