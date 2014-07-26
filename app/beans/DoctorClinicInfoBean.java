@@ -39,6 +39,8 @@ public class DoctorClinicInfoBean implements Serializable {
 
 	public String state;
 
+	public String fetchpin;
+
 	public List<String> fromHrs = new ArrayList<String>();
 
 	public List<String> toHrs = new ArrayList<String>();
@@ -148,6 +150,10 @@ public class DoctorClinicInfoBean implements Serializable {
 		}
 		if(this.lng != null){
 			address.longitude = this.lng;
+		}
+
+		if(this.fetchpin != null){
+			address.fetchedPinCode = this.fetchpin;
 		}
 
 		doctorClinicInfo.clinic.address = address;
