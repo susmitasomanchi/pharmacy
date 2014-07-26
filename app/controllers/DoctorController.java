@@ -867,8 +867,14 @@ public class DoctorController extends Controller {
 
 
 
-
-
+	/**
+	 * Action to render the prescription form to the loggedInDoctor
+	 * GET	/doctor/prescription
+	 */
+	public static Result showPrescriptionForm(final Long appointmentId){
+		//final Appointment appointment = Appointment.find.byId(appointmentId);
+		return ok();
+	}
 
 
 
@@ -923,11 +929,6 @@ public class DoctorController extends Controller {
 
 
 
-
-	public static Result showPrescriptionForm(final Long appointmentId){
-		//final Appointment appointment = Appointment.find.byId(appointmentId);
-		return ok();
-	}
 
 
 

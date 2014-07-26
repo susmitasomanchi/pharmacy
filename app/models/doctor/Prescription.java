@@ -8,10 +8,12 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.ManyToMany;
 import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 
 import models.BaseEntity;
+import models.diagnostic.DiagnosticReport;
 import models.diagnostic.DiagnosticTestLineItem;
 import models.pharmacist.MedicineLineItem;
 import play.db.ebean.Model;
@@ -37,6 +39,9 @@ public class Prescription extends BaseEntity{
 
 	@OneToMany(cascade=CascadeType.ALL)
 	public List<DiagnosticTestLineItem> diagnosticTestLineItemList = new ArrayList<DiagnosticTestLineItem>();
+
+	@ManyToMany(cascade=CascadeType.ALL)
+	public List<DiagnosticReport> diagnosticReportList = new ArrayList<>();
 
 	public String remarks;
 

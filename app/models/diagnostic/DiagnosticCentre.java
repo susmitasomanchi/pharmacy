@@ -67,13 +67,8 @@ public class DiagnosticCentre extends BaseEntity {
 	@OneToMany(cascade=CascadeType.ALL,mappedBy="diagnosticCentre")
 	public List<DiagnosticRepresentative> diagnosticRepresentativelist = new ArrayList<DiagnosticRepresentative>();
 
-
 	@OneToMany(cascade=CascadeType.ALL)
 	public List<DiagnosticTest> diagnosticTestList = new ArrayList<DiagnosticTest>();
-
-	//	@OneToMany(cascade=CascadeType.ALL)
-	//	 * 	public List<Patient> patientList = new ArrayList<Patient>();
-
 
 	@OneToMany(cascade=CascadeType.ALL)
 	public List<DiagnosticOrder> diagnosticOrderList = new ArrayList<DiagnosticOrder>();

@@ -9,33 +9,34 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.OneToMany;
+import javax.persistence.ManyToMany;
 import javax.persistence.OneToOne;
 
 import models.BaseEntity;
-import models.patient.Patient;
+import models.doctor.Prescription;
 import play.db.ebean.Model;
+
+@SuppressWarnings("serial")
 @Entity
 public class DiagnosticOrder extends BaseEntity{
-	
+
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO)
 	public Long id;
-	
+
 	@OneToOne
-	public Patient patient;
-	
-	@OneToMany(cascade=CascadeType.ALL)
+	public Prescription prescription;
+
+	@ManyToMany(cascade=CascadeType.ALL)
 	public List<DiagnosticReport> diagnosticReportList = new ArrayList<>();
-	
+
 	public DiagnosticOrderStatus diagnosticOrderStatus;
-	
+
 	public Date receivedDate;
-	
+
 	public Date confirmedDate;
-	
-	
-	public static Model.Finder<Long, DiagnosticOrder> find = new Finder<Long, DiagnosticOrder>(
-			Long.class, DiagnosticOrder.class);
-	
+
+
+	public static Model.Finder<Long, DiagnosticOrder> find = new Finder<Long, DiagnosticOrder>(Long.class, DiagnosticOrder.class);
+
 }
