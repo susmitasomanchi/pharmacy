@@ -7,6 +7,7 @@ import models.Alert;
 import models.Role;
 import models.diagnostic.DiagnosticCentre;
 import models.doctor.Doctor;
+import models.doctor.DoctorClinicInfo;
 import models.patient.Patient;
 import models.patient.PatientDoctorInfo;
 import models.pharmacist.Pharmacy;
@@ -185,6 +186,7 @@ public class PublicController extends Controller{
 			return ok("404");
 		}
 	}
+
 
 
 }

@@ -339,6 +339,12 @@ public class PatientController extends Controller {
 		return ok(views.html.patient.static_patient_new_appointment.render());
 	}
 
+
+	public static Result staticPatientViewAppointments(){
+		return ok(views.html.patient.static_patient_view_appointments.render());
+	}
+
+
 	/**
 	 * @author Mitesh
 	 * Action to show a forms which have Doctor and it will show the available and booked appointment
@@ -347,10 +353,6 @@ public class PatientController extends Controller {
 	public static Result patientNewAppointment(final Long docclinicid) {
 		final DoctorClinicInfo clinicInfo=DoctorClinicInfo.find.byId(docclinicid);
 		return ok(views.html.patient.patientNewAppointment.render(clinicInfo));
-	}
-
-	public static Result staticPatientViewAppointments(){
-		return ok(views.html.patient.static_patient_view_appointments.render());
 	}
 
 

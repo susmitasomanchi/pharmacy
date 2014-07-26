@@ -179,7 +179,7 @@ You profile is available at
 	<img src="/assets/images/doctor.png" style="width:250px; height:275px;" class="thumbnail"/>
 }
 
-<span data-toggle="popover" title="Change Profile Pic" data-html="true" data-content="<form action=&quot;@routes.DoctorController.imagesUpdate()&quot; enctype=&quot;multipart/form-data&quot; method=&quot;POST&quot;><input type=&quot;file&quot; name=&quot;profileimage&quot;> <input type=&quot;hidden&quot; name=&quot;doctorId&quot; value=&quot;@doctor.id&quot;> <br><input class=&quot;pull-right btn btn-xs btn-primary&quot; type=&quot;submit&quot; onclick=&quot;submitimagesform('profileimage');&quot; value=&quot;save&quot;></form>" style="font-size:20px; position:relative; top:-295px; left:228px; cursor:pointer; text-shadow:1px 1px 20px white, 3px 3px 20px white;"><i id="spinner-profileimage" class="fa fa-cog"></i></span>
+<span data-toggle="popover" title="Change Profile Pic" data-html="true" data-content="<form action=&quot;@routes.DoctorController.imagesUpdate()&quot; enctype=&quot;multipart/form-data&quot; method=&quot;POST&quot;><input type=&quot;file&quot; name=&quot;profileimage&quot;> <input type=&quot;hidden&quot; name=&quot;doctorId&quot; value=&quot;@doctor.id&quot;> <br><input class=&quot;pull-right btn btn-xs btn-primary&quot; type=&quot;submit&quot; onclick=&quot;submitimagesform('profileimage');&quot; value=&quot;save&quot;></form>" style="font-size:20px; position:relative; top:-295px; left:228px; cursor:pointer; text-shadow:1px 1px 20px white, 3px 3px 20px white;"><i id="spinner-profileimage" class="fa fa-cog"></i></span>`
 </div>
 <div class="col-md-6">
 
@@ -464,7 +464,7 @@ You profile is available at
 		<input style=&quot;width:100%; color:#292929;&quot; placeholder=&quot;Degree&quot; type=&quot;text&quot; name=&quot;degree&quot; value=&quot;@edu.degree&quot;>
 		<input id=&quot;educationfrom&quot; style=&quot;width:100%; color:#292929;&quot; placeholder=&quot;From (Year)*&quot; type=&quot;text&quot; name=&quot;from&quot;  value=&quot;@edu.fromYear&quot; required>
 		<input style=&quot;width:100%; color:#292929;&quot; placeholder=&quot;To (Year)&quot; type=&quot;text&quot; name=&quot;to&quot; value=&quot;@edu.toYear&quot;>
-		<textarea placeholder=&quot;Description, Roles, Responsibilities etc.&quot; rows=&quot;12&quot; name=&quot;description&quot; style=&quot;color:#292929; width:100%; font-weight:bold;&quot;>@edu.description</textarea>
+		<textarea placeholder=&quot;Your experience &amp; opinion about this school etc.&quot; rows=&quot;12&quot; name=&quot;description&quot; style=&quot;color:#292929; width:100%; font-weight:bold;&quot;>@edu.description</textarea>
 		<input type=&quot;hidden&quot; name=&quot;doctorId&quot; value=&quot;@doctor.id&quot;>
 		<input type=&quot;hidden&quot; name=&quot;doctorEducationId&quot; value=&quot;@edu.id&quot;>
 		<br>
@@ -502,7 +502,7 @@ You profile is available at
 <input style=&quot;width:100%; color:#292929;&quot; placeholder=&quot;Degree&quot; type=&quot;text&quot; name=&quot;degree&quot;>
 <input id=&quot;educationfrom&quot; style=&quot;width:100%; color:#292929;&quot; placeholder=&quot;From (Year)*&quot; type=&quot;text&quot; name=&quot;from&quot; required>
 <input style=&quot;width:100%; color:#292929;&quot; placeholder=&quot;To (Year)&quot; type=&quot;text&quot; name=&quot;to&quot;>
-<textarea placeholder=&quot;Description, Roles, Responsibilities etc.&quot; rows=&quot;12&quot; name=&quot;description&quot; style=&quot;color:#292929; width:100%; font-weight:bold;&quot;></textarea>
+<textarea placeholder=&quot;Your experience &amp; opinion about this school etc.&quot; rows=&quot;12&quot; name=&quot;description&quot; style=&quot;color:#292929; width:100%; font-weight:bold;&quot;></textarea>
 <input type=&quot;hidden&quot; name=&quot;doctorId&quot; value=&quot;@doctor.id&quot;>
 <br>
 <input class=&quot;pull-right btn btn-xs btn-primary&quot; type=&quot;submit&quot; onclick=&quot;submiteducationform(0);&quot; value=&quot;save&quot;>

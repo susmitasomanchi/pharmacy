@@ -306,12 +306,6 @@ $(document).ready(function(){
 <h4><span style="text-shadow:1px 1px 20px white, 3px 3px 20px white;">Experience: @doctor.getYearsOfExperience() years</span></h4>
 <br>
 
-<!--
-<h5>Brand Name</h5>
-<h5>Main Clinic: <br><br><br></h5>
-<h5>Phone nos: 9999999999 </h5><br>
--->
-
 
 <br><br>
 </div>
@@ -326,89 +320,7 @@ $(document).ready(function(){
 </div>
 
 
-<script>
-	function submitworkexform(expid){
-		if(expid == 0){
-			if(($('#workexname').val().trim() != '') && ($('#workexfrom').val().trim() != '')){
-				$("[data-toggle=popover]").popover('hide');
-				$('#addworkex').html('&nbsp;<i class="fa fa-cog fa-spin"></i>&nbsp;');
-			}
-		}
-		else{
-			if(($('#workexnameedit').val().trim() != '') && ($('#workexfromedit').val().trim() != '')){
-				$("[data-toggle=popover]").popover('hide');
-				$('#editworkex-'+expid).html('&nbsp;<i class="fa fa-cog fa-spin"></i>&nbsp;');
-			}
-		}
-	}
 
-	function deleteworkex(id){
-			$("[data-toggle=popover]").popover('hide');
-			$('#removeworkex-'+id).html('&nbsp;<i class="fa fa-cog fa-spin"></i>&nbsp;');
-	}
-
-
-	function submitawardform(awardid){
-		if(expid == 0){
-			if($('#awardname').val().trim() != ''){
-				$("[data-toggle=popover]").popover('hide');
-				$('#addaward').html('&nbsp;<i class="fa fa-cog fa-spin"></i>&nbsp;');
-			}
-		}
-		else{
-			if($('#awardnameedit').val().trim() != ''){
-				$("[data-toggle=popover]").popover('hide');
-				$('#editaward-'+awardid).html('&nbsp;<i class="fa fa-cog fa-spin"></i>&nbsp;');
-			}	
-		}
-	}
-
-	function deleteaward(id){
-			$("[data-toggle=popover]").popover('hide');
-			$('#removeaward-'+id).html('&nbsp;<i class="fa fa-cog fa-spin"></i>&nbsp;');
-	}
-
-	function submiteducationform(eduid){
-		if(expid == 0){
-			if(($('#educationname').val().trim() != '') && ($('#educationfrom').val().trim() != '')){
-				$("[data-toggle=popover]").popover('hide');
-				$('#addeducation').html('&nbsp;<i class="fa fa-cog fa-spin"></i>&nbsp;');
-			}
-		}
-		else{
-			if(($('#educationnameedit').val().trim() != '') && ($('#educationfromedit').val().trim() != '')){
-				$("[data-toggle=popover]").popover('hide');
-				$('#editeducation-'+eduid).html('&nbsp;<i class="fa fa-cog fa-spin"></i>&nbsp;');
-			}
-		}
-	}
-
-	function deleteeducation(id){
-			$("[data-toggle=popover]").popover('hide');
-			$('#removeeducation-'+id).html('&nbsp;<i class="fa fa-cog fa-spin"></i>&nbsp;');
-	}
-
-	function submitsocialform(socid){
-		if(socid == 0){
-			if(($('#socialname').val().trim() != '') && ($('#socialdescription').val().trim() != '')){
-				$("[data-toggle=popover]").popover('hide');
-				$('#addsocial').html('&nbsp;<i class="fa fa-cog fa-spin"></i>&nbsp;');
-			}
-		}
-		else{
-			if(($('#socialnameedit').val().trim() != '') && ($('#socialdescriptionedit').val().trim() != '')){
-				$("[data-toggle=popover]").popover('hide');
-				$('#editsocial-'+socid).html('&nbsp;<i class="fa fa-cog fa-spin"></i>&nbsp;');
-			}	
-		}
-	}
-
-	function deletesocial(id){
-			$("[data-toggle=popover]").popover('hide');
-			$('#removesocial-'+id).html('&nbsp;<i class="fa fa-cog fa-spin"></i>&nbsp;');
-	}	
-
-</script>
 
 
 
@@ -585,6 +497,7 @@ $(document).ready(function(){
 <h5>
 @clinicInfo.clinic.contactPersonName
 <br>
+@if(clinicInfo.clinic.address != null){
 @clinicInfo.clinic.address.addressLine1
 <br>
 @clinicInfo.clinic.address.area
@@ -592,6 +505,9 @@ $(document).ready(function(){
 @clinicInfo.clinic.address.city
 <br>
 @clinicInfo.clinic.contactNo
+<br><br>
+<a class="btn btn-primary">Book Appointment</a>
+}
 </h5>
 </div>
 
