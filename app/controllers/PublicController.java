@@ -235,6 +235,7 @@ public class PublicController extends Controller{
 	public static Result displayAppointment(final Long docClinId,final Long timeMillis) {
 
 		int slots=0;
+		Date date=new Date();
 
 		final Map<Date, List<Appointment>> appointmentMap = new LinkedHashMap<Date, List<Appointment>>();
 
@@ -252,11 +253,7 @@ public class PublicController extends Controller{
 
 		final SimpleDateFormat dateFormat=new SimpleDateFormat("kk:mm");
 		int i=0;
-		while(true){
-
-			if(i==7){
-				break;
-			}
+		while(i<7){
 
 			Logger.warn("i:"+i);
 			for (final DaySchedule schedule : doctorClinicInfo.scheduleDays) {
@@ -268,7 +265,6 @@ public class PublicController extends Controller{
 						calendar1.setTime(dateFormat.parse(schedule.fromTime));
 
 						calendar2.setTime(dateFormat.parse(schedule.toTime));
-
 					}
 					catch(final ParseException exception){
 						exception.printStackTrace();
@@ -291,6 +287,7 @@ public class PublicController extends Controller{
 						Logger.debug("fetched",calendarFrom);
 						appointmentMap.put(calendarFrom.getTime(), listAppointments);
 						slots=Math.max(slots,listAppointments.size());
+						date=calendarFrom.getTime();
 						i++;
 
 					}
@@ -311,8 +308,8 @@ public class PublicController extends Controller{
 		/*return ok(views.html.patient.scheduleAppointment.render(appointmentMap,
 				 slots));*/
 		Logger.warn(""+appointmentMap.size());
-
-		return ok(views.html.patient.appointmentForm.render(appointmentMap,slots));
+		Logger.error(date+"");
+		return ok(views.html.patient.appointmentForm.render(appointmentMap,slots,date.getTime()));
 	}
 
 	/**

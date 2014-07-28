@@ -6,8 +6,7 @@
 @main("Book Appointment"){
 
 <script src="http://maps.googleapis.com/maps/api/js?sensor=false"></script>
-<script src="@routes.Assets.at("javascripts/jquery.carouFredSel-6.2.1-packed.js")" type="text/javascript"></script>
-<script src="http://ihle-brothers.com/packages/jquery/jquery.carouFred/jquery.ui.effects.js" type="text/javascript"></script>
+<script src="http://localhost:9000/assets/javascripts/jquery.carouFredSel-6.2.1-packed.js" type="text/javascript"></script>
 
 <style>
 #carousel {             
@@ -68,15 +67,17 @@ Phone nos: @doctorClinic.clinic.contactNo</h6>
 </div>
 <br>
 
-<script>
-//$('#carousel-example-generic').carousel({
-	//  interval: false,
-	 // wrap: false
-	//})
-</script> 
+
+<div id="carousel-example-generic" class="carousel slide" data-ride="carousel" style="box-shadow: 1px 1px 10px 5px #bbbbbb;padding-bottom:0px">
   <!-- Wrapper for slides -->
+  <script>
+$('#carousel-example-generic').carousel({
+	  interval: false,
+	  wrap: false
+	});
+</script> 
   <div class="carousel-inner"  id="inner" >
-    <div id="active" class="item active" style="padding:40px">
+    <div id="active" class="item active nextAppt" style="padding:40px">
 	</div>  
 	
 	<!-- 
@@ -172,8 +173,8 @@ Phone nos: @doctorClinic.clinic.contactNo</h6>
     <td class="success" style="cursor:pointer">18:00</td>
     <td class="active">18:00</td>
     </tr>
-    </table> 
-    </div> -->
+    </table> -->
+    </div> 
  
 
   <!-- Controls -->
@@ -185,7 +186,6 @@ Phone nos: @doctorClinic.clinic.contactNo</h6>
   </a>
   
 </div>
-
 
 @*
 <img alt="Previcon" class="carousel-sliders navigators" src="@routes.Assets.at("blog/images/previcon.png")" />
@@ -238,45 +238,26 @@ console.log('localhost:9000/patient/display-appointment/@doctorClinic.id/'+date.
 			     $('#active').html(htmldata);
 	    });
 	    
-	      		
  console.log("pass");
  
-    // Using custom configuration
-  /*  $('#carousel1').carouFredSel({
-        visible				:1,
-        items               : 2,
-        circular 			:false,
-        infinite			:false,
-		auto				:false,
-		prev : {
-            button        : "#prev-t",                         
-        },
-        next : {
-            button        : "#next-t",                         
-        },       
-        scroll : {
-            duration        : 500,                         
-        }     
-                      
-    });*/
-    
-    
     
 });
 
 
-  		/*date.setDate(date.getDate() + 7);
   		$(".right").click(function(){
+  		if($( ".active" ).hasClass( "nextAppt" )){
+  			$( ".active" ).removeClass( "nextAppt" );
+  		
   		console.log('localhost:9000/patient/display-appointment/@doctorClinic.id'+date.getTime());
+  		alert(date);
 		$.get('/patient/display-appointment/@doctorClinic.id/'+date.getTime(),function(htmldata){
-		  alert('<div class="item" style="padding:40px">'+htmldata+'</div>')
-			  $('#inner').append('<div class="item" style="padding:40px">'+htmldata+'</div>');
-   				     console.log("test courosel");
-   				
+			  $('#inner').append('<div class="item nextAppt" style="padding:40px">'+htmldata+'</div>');
+   				 console.log("test courosel");
    				$('.carousel').carousel('next');
-
+		});
+  	}
+  		
 });
-  		});*/
   		
 
 </script>
