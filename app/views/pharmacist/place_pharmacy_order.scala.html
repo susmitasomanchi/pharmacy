@@ -1,0 +1,64 @@
+@(pharmacy: models.pharmacist.Pharmacy)
+@main("Place the Order"){
+
+
+@helper.form(action=routes.PharmacistController.placePharmacyOrderProcess(),'method -> "POST"){
+      <div class="row" id="order">
+      <div class="col-md-4">
+      <p> Drug Names </p>
+      <select data-placeholder="Select the medicine" class="chosen-select" style="width:200px;" tabindex="2" name="productIds" >
+      <option value=""></option>
+      @for(pharmacyProduct <- pharmacy.pharmacyProductList){
+      <option  value="@pharmacyProduct.id">@pharmacyProduct.medicineName</option>
+      }
+     
+       </select>
+       <script>
+       $(".chosen-select").chosen();
+       </script>
+      </div>
+      <div class="col-md-3">
+      <p> Quantity</p>
+      <input type="text" name="quantity" placeholder="Enter Quantity">
+      </div>
+       <div class="col-md-3">
+      <p> MRP</p>
+      <input type="text" name="mrp" placeholder="Enter Price">
+      </div>
+      <div class="col-md-2" style="padding-top:15px;padding-left:25px">
+      <br>
+      <a href="#" class="btn btn-sm btn-success" onclick="addOrder();"> + </a>
+      
+      <script>
+			function addOrder(){
+			$("#order").append('<div class="row" id="removeOrder"><div class="col-md-4" style="padding-left:30px"><p> Drug Names </p><select data-placeholder="Select the medicine" class="chosen-select" style="width:200px;" tabindex="2" name="productIds"><option  value=""></option>@for(pharmacyProduct <- pharmacy.pharmacyProductList){<option  value="@pharmacyProduct.id">@pharmacyProduct.medicineName</option>}</select></div><div class="col-md-3"><p> Quantity</p><input type="text" name="quantity" placeholder="Quantity"></div><div class="col-md-3"><p> MRP</p><input type="text" name="mrp" placeholder="Price"></div><div class="col-md-2" style="padding-top:10px"><br><a class="btn btn-sm btn-danger" onclick="removeOrder();"> x </a></div></div>')
+				$(".chosen-select").chosen();
+			}
+	  </script>
+	  
+	  <script>
+			function removeOrder(){
+				$("#removeOrder").remove();
+			}
+	  </script>
+      </div>
+      <br>
+      </div>
+      <br>
+      <a type="submit" class="btn btn-primary btn-sm" onclick="newProduct();">Others</a>
+      <br><br>
+      <div id="neworder"></div>
+      <br>
+      <div>
+      <a href="#" class="btn btn-success btn-sm">Print</a>
+      <button type="submit" class="btn btn-primary btn-sm">Save</button>
+      </div>
+      <script>
+			function newProduct(){
+			$("#neworder").append('<div class="row" id="removeOrder"><div class="col-md-4" style="padding-left:30px"><p> Drug Names </p><input type="text" name="product_other" placeholder="Enter productName"></div><div class="col-md-3"><p> Quantity</p><input type="text" name="quantity_other" placeholder="Quantity"></div><div class="col-md-3"><p> MRP</p><input type="text" name="mrp_other" placeholder="Price"></div><div class="col-md-2" style="padding-top:10px;padding-left:25px"><br><a class="btn btn-sm btn-danger" onclick="removeOrder();"> x </a></div></div>')
+				$(".chosen-select").chosen();
+			}
+	  </script>
+      }
+
+    }			 

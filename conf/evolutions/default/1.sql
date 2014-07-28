@@ -417,8 +417,8 @@ create table medicine_line_item (
 
 create table order_line_item (
   id                        bigint not null,
-  pharmacy_order_id         bigint not null,
-  product_id                bigint,
+  pharmacy_id               bigint not null,
+  pharmacy_product_id       bigint,
   quantity                  float,
   batch_no                  varchar(255),
   expiry_date               timestamp,
@@ -518,7 +518,7 @@ create table pharmacy_product (
   salt                      varchar(255),
   strength                  varchar(255),
   type_of_medicine          varchar(255),
-  description               varchar(255),
+  description               TEXT,
   units_per_pack            bigint,
   full_name                 varchar(255),
   pharmacy_id               bigint,
@@ -912,10 +912,10 @@ alter table medical_representative add constraint fk_medical_representative_pha_
 create index ix_medical_representative_pha_47 on medical_representative (pharmaceutical_company_id);
 alter table medicine_line_item add constraint fk_medicine_line_item_prescri_48 foreign key (prescription_id) references prescription (id);
 create index ix_medicine_line_item_prescri_48 on medicine_line_item (prescription_id);
-alter table order_line_item add constraint fk_order_line_item_pharmacy_o_49 foreign key (pharmacy_order_id) references pharmacy_order (id);
-create index ix_order_line_item_pharmacy_o_49 on order_line_item (pharmacy_order_id);
-alter table order_line_item add constraint fk_order_line_item_product_50 foreign key (product_id) references product (id);
-create index ix_order_line_item_product_50 on order_line_item (product_id);
+alter table order_line_item add constraint fk_order_line_item_pharmacy_49 foreign key (pharmacy_id) references pharmacy (id);
+create index ix_order_line_item_pharmacy_49 on order_line_item (pharmacy_id);
+alter table order_line_item add constraint fk_order_line_item_pharmacyPr_50 foreign key (pharmacy_product_id) references pharmacy_product (id);
+create index ix_order_line_item_pharmacyPr_50 on order_line_item (pharmacy_product_id);
 alter table patient add constraint fk_patient_appUser_51 foreign key (app_user_id) references app_user (id);
 create index ix_patient_appUser_51 on patient (app_user_id);
 alter table patient_doctor_info add constraint fk_patient_doctor_info_doctor_52 foreign key (doctor_id) references doctor (id);

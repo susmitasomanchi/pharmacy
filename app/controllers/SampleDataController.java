@@ -199,6 +199,7 @@ public class SampleDataController extends Controller {
 
 
 
+
 	public static Result mrSampleData(){
 		final AppUser appUser = new AppUser();
 		appUser.name = "anand";

@@ -20,7 +20,7 @@ public class OrderLineItem extends BaseEntity {
 	public Long id;
 
 	@OneToOne
-	public Product product;
+	public PharmacyProduct pharmacyProduct;
 
 	public Double quantity;
 

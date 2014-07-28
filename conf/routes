@@ -139,9 +139,10 @@ GET		/edit-pharmacy-details					controllers.PharmacistController.editPharmacyDet
 #GET	/pharmacy/search-product							controllers.PharmacistController.productSearchProcess()	
 POST   /pharmacy/add-product-to-showcase                controllers.PharmacistController.addShowCasedProduct()
 GET    /pharmacy/remove-product-from-showcase/:id       controllers.PharmacistController.removeProductFromShowcaseList(id: Long)
-GET		/pharmacy/order/:id						controllers.PharmacistController.pharmacyPlaceOrder(id: Long)
+GET		/pharmacy/order						controllers.PharmacistController.placePharmacyOrder()
+POST		/pharmacy/order						controllers.PharmacistController.placePharmacyOrderProcess()
 
-GET 	/pharmacy/order									controllers.PharmacistController.orderManagement()
+#GET 	/pharmacy/order/management									controllers.PharmacistController.orderManagement()
 
 #GET 	/create-Mr-schedule				controllers.DoctorController.createMrSchedule()
 #POST	/create-Mr-appointment 			controllers.DoctorController.createMrAppointment()
