@@ -31,6 +31,38 @@ import beans.QuestionAndAnswerBean;
 @BasicAuth
 public class PatientController extends Controller {
 
+	/**
+	 * @author Mitesh
+	 * Action to display currently logged in Patient' Doctor List
+	 *  GET  /user/my-doctors
+	 */
+	public static Result myFavouriteDoctors() {
+		final Patient patient=LoginController.getLoggedInUser().getPatient();
+		return ok(views.html.patient.fav_doctors.render(patient.patientDoctorInfoList));
+	}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 	public static Result scheduleAppointment() {
 		final Map<Date, List<Appointment>> appointmentMap = null;
 		return ok(views.html.patient.scheduleAppointment.render(appointmentMap,null));
@@ -41,7 +73,7 @@ public class PatientController extends Controller {
 	 * Action to display a form which has lists of appointment as per date is provided
 	 *  GET/patient/display-appointment/:docClinicId/:timeMillis
 	 */
-	public static Result displayAppointment(final Long docClinId,Long timeMillis) {
+	public static Result displayAppointment(final Long docClinId,final Long timeMillis) {
 
 		int slots=0;
 
@@ -275,15 +307,6 @@ public class PatientController extends Controller {
 		return redirect(routes.PatientController.myDiagnosticCenters());
 
 	}
-	/**
-	 * @author Mitesh
-	 * Action to display currently logged in Patient'Doctor List
-	 *  GET /patient/favdoctors
-	 */
-	public static Result patientMyFavDoctors() {
-		final Patient patient=LoginController.getLoggedInUser().getPatient();
-		return ok(views.html.patient.fav_doctors.render(patient.patientDoctorInfos));
-	}
 
 	/**
 	 * @author Mitesh
@@ -295,7 +318,7 @@ public class PatientController extends Controller {
 		final PatientDoctorInfo patientDoctorInfo=PatientDoctorInfo.find.byId(patDocid);
 		patientDoctorInfo.delete();
 		flash().put("alert", new Alert("alert-success","Successfully Deleted:"+patientDoctorInfo.doctor.appUser.name).toString());
-		return redirect(routes.PatientController.patientMyFavDoctors());
+		return redirect(routes.PatientController.myFavouriteDoctors());
 	}
 
 	public static Result staticPatientMyFavDoctors() {
@@ -306,6 +329,12 @@ public class PatientController extends Controller {
 		return ok(views.html.patient.static_patient_new_appointment.render());
 	}
 
+
+	public static Result staticPatientViewAppointments(){
+		return ok(views.html.patient.static_patient_view_appointments.render());
+	}
+
+
 	/**
 	 * @author Mitesh
 	 * Action to show a forms which have Doctor and it will show the available and booked appointment
@@ -314,10 +343,6 @@ public class PatientController extends Controller {
 	public static Result patientNewAppointment(final Long docclinicid) {
 		final DoctorClinicInfo clinicInfo=DoctorClinicInfo.find.byId(docclinicid);
 		return ok(views.html.patient.patientNewAppointment.render(clinicInfo));
-	}
-
-	public static Result staticPatientViewAppointments(){
-		return ok(views.html.patient.static_patient_view_appointments.render());
 	}
 	/**
 	 * @author lakshmi
@@ -374,9 +399,9 @@ public class PatientController extends Controller {
 	 *  GET		/patient/my-appointments
 	 */
 	public static Result viewMyAppointments(){
-		AppUser patient=LoginController.getLoggedInUser();
+		final AppUser patient=LoginController.getLoggedInUser();
 
-		List<Appointment> patientApppointments=Appointment.find.where().eq("requestedBy", patient).findList();
+		final List<Appointment> patientApppointments=Appointment.find.where().eq("requestedBy", patient).findList();
 		return ok(views.html.patient.patientViewAppointments.render(patientApppointments));
 	}
 
@@ -385,11 +410,11 @@ public class PatientController extends Controller {
 	 * Action to process requested appointments
 	 *  POST 	/patient/process-appointment
 	 */
-	public static Result processAppointment(Long apptId) {
-		String remark=request().body().asFormUrlEncoded().get("remark")[0];
+	public static Result processAppointment(final Long apptId) {
+		final String remark=request().body().asFormUrlEncoded().get("remark")[0];
 
 		Logger.warn(remark);
-		Appointment appointment=Appointment.find.byId(apptId);
+		final Appointment appointment=Appointment.find.byId(apptId);
 		appointment.appointmentStatus=AppointmentStatus.APPROVED;
 		appointment.remarks=remark;
 		appointment.requestedBy=LoginController.getLoggedInUser();

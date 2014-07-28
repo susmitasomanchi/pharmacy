@@ -34,12 +34,12 @@ margin-bottom:0px;
 }
 <td class="col-md-6">
 <div class="row" style="padding-left:20px;padding-right:20px">
-<div style="cursor:pointer" onclick="location.href='';">@if(pharmacy.backgroundImage != null){<img src="@routes.PharmacistController.getPharmacyImages(pharmacy.id,0)" width="530" height="170" />}else{<img src="/assets/images/pharmacy-default-bg-image.jpg" width="530" height="170" />}
+<div style="cursor:pointer" onclick="location.href='@routes.PublicController.getPharmacyWithSlug(pharmacy.name)';">@if(pharmacy.backgroundImage != null){<img src="@routes.PharmacistController.getPharmacyImages(pharmacy.id,0)" width="530" height="170" />}else{<img src="/assets/images/pharmacy-default-bg-image.jpg" width="530" height="170" />}
         
         </div>
 
 <div class="row" style="margin-top:-55px;padding-left:15px">
-<div style="cursor:pointer;width:23%" onclick="location.href='';" class="col-md-3">
+<div style="cursor:pointer;width:23%" onclick="location.href='@routes.PublicController.getPharmacyWithSlug(pharmacy.name)';" class="col-md-3">
 @if(pharmacy.profileImageList.size() >0){
 <img src="@routes.PharmacistController.getPharmacyImages(pharmacy.id,pharmacy.profileImageList.get(0).id)" class="thumbnail" width="100" height="100"  />
  }else{
@@ -55,7 +55,7 @@ margin-bottom:0px;
 <div class="modal fade" id="myModal1@pharmacy.id" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
   <div class="modal-dialog" style="padding-top:200px">
     <div class="modal-content" style="padding-left:20px">
-      <h4>Are you to confirm to remove @pharmacy.name</h4>
+      <h4>Are you sure you wish to remove @pharmacy.name ?</h4>
       <div class="modal-footer">
         <button type="button" class="btn btn-default btn-xs" data-dismiss="modal">Close</button>
         @if(doctorId != 0){
@@ -100,5 +100,4 @@ margin-bottom:0px;
 
 
 }
-
 

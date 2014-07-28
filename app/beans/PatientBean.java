@@ -19,40 +19,18 @@ public class PatientBean implements Serializable{
 	@GeneratedValue(strategy=GenerationType.AUTO)
 	public Long id;
 
-
-
 	public String name;
 
 	public String username;
 
-
 	@Email
 	public String email;
 
-
 	public String password;
-
 
 	public Sex sex;;
 
 	public String age;
-
-	public String mbno;
-
-
-	public String date;
-
-
-	//	public String address;
-
-	public String disease;
-
-	public String appointmentId;
-
-
-	public String doctorAvailability;
-
-	public String isUrgentPatient;
 
 	public AppUser toAppUserEntity(){
 
@@ -93,30 +71,6 @@ public class PatientBean implements Serializable{
 		final Patient patient = new Patient();
 
 		patient.id = this.id;
-
-		if(this.mbno != null) {
-			patient.mbno= this.mbno;
-		}
-
-		if(this.date != null) {
-			patient.date= this.date;
-		}
-
-		//if(this.disease != null) {
-		//patient.disease= this.disease;
-		//}
-
-		if(this.appointmentId != null) {
-			patient.appointmentId= this.appointmentId;
-		}
-
-		if(this.doctorAvailability != null) {
-			patient.doctorAvailability= this.doctorAvailability;
-		}
-
-		if(this.isUrgentPatient != null) {
-			patient.isUrgentPatient= this.isUrgentPatient;
-		}
 
 		return patient;
 

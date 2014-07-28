@@ -29,20 +29,8 @@ public class Patient extends BaseEntity {
 	@OneToOne
 	public AppUser appUser;
 
-	public String mbno;
-
-	public String date;
-
-	public String disease;
-
-	public String appointmentId;
-
-	public String doctorAvailability;
-
-	public String isUrgentPatient;
-
 	@OneToMany(cascade = CascadeType.ALL)
-	public List<PatientDoctorInfo> patientDoctorInfos = new ArrayList<PatientDoctorInfo>();
+	public List<PatientDoctorInfo> patientDoctorInfoList = new ArrayList<PatientDoctorInfo>();
 
 	@ManyToMany(cascade = CascadeType.ALL)
 	public List<Pharmacy> pharmacyList = new ArrayList<Pharmacy>();

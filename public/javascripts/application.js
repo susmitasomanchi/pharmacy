@@ -5,6 +5,7 @@ window.onload=function(){
 	$(".chzn").chosen();
 	$(".boottip").tooltip();
 	$('.datepicker').datepicker();
+
 	$("[data-toggle=popover]").popover();
 	
 	var nowTemp = new Date();
@@ -16,5 +17,7 @@ window.onload=function(){
 	}).on('changeDate', function(ev) {
 		$(this).datepicker('hide');
 	});
+
+
 }
 

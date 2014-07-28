@@ -4,14 +4,18 @@
  *****/
 package models;
 
+import java.security.MessageDigest;
 import java.util.Date;
 
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Lob;
 import javax.persistence.OneToOne;
+
+import org.apache.commons.codec.binary.Base64;
 
 import models.diagnostic.DiagnosticRepresentative;
 import models.doctor.Doctor;
@@ -36,12 +40,16 @@ public class AppUser extends BaseEntity {
 
 	public String username;
 
-	public String mobileno;
+	public Long mobileNumber;
 
 	@Email
 	public String email;
 
+	@Column(columnDefinition="TEXT")
 	public String password;
+
+	@Column(columnDefinition="TEXT")
+	public String salt;
 
 	public Sex sex;
 
@@ -52,8 +60,15 @@ public class AppUser extends BaseEntity {
 	@OneToOne
 	Address address;
 
-	//@OneToOne(mappedBy="appUser")
-	//public MedicalRepresentative mr;
+	public boolean emailConfirmed = false;
+
+	public boolean mobileNumberConfirmed = false;
+
+	@Column(columnDefinition="TEXT")
+	public String emailConfirmationKey;
+
+	@Column(columnDefinition="TEXT")
+	public String mobileNumberConfirmationKey;
 
 	public static Model.Finder<Long, AppUser> find = new Finder<Long, AppUser>(Long.class, AppUser.class);
 
@@ -77,5 +92,22 @@ public class AppUser extends BaseEntity {
 		return DiagnosticRepresentative.find.where().eq("appUser.id", this.id).findUnique();
 	}
 
+	public Boolean matchPassword(final String password){
+		try{
+			final String passwordWithSalt = password+this.salt;
+			final MessageDigest sha256 = MessageDigest.getInstance("SHA-256");
+			final byte[] passBytes = passwordWithSalt.getBytes();
+			final String hashedPassword = Base64.encodeBase64String(sha256.digest(passBytes));
+			if(hashedPassword.compareTo(this.password) == 0){
+				return true;
+			}
+			else{
+				return false;
+			}
+		}
+		catch(final Exception e){
+			return false;
+		}
+	}
 
 }
