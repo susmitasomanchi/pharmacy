@@ -11,6 +11,7 @@ import java.util.Map;
 
 import models.Alert;
 import models.Role;
+import models.diagnostic.DiagnosticCentre;
 import models.doctor.Appointment;
 import models.doctor.Day;
 import models.doctor.DaySchedule;
@@ -52,7 +53,21 @@ public class PublicController extends Controller{
 			return ok(views.html.doctor.searchedDoctors.render(true, key, doctors));
 		}
 	}
-
+	/**
+	 * @author Lakshmi
+	 * Action to search Pharmacy by slug and display its profile page
+	 * GET /pharmacy/:slugUrl
+	 */
+	public static Result getPharmacyWithSlug(final String slug) {
+		final String cleanSlug = slug.trim().toLowerCase();
+		final Pharmacy pharmacy = Pharmacy.find.where().eq("slugUrl",cleanSlug).findUnique();
+		if(pharmacy != null){
+			return ok(views.html.pharmacist.publicPharmacyProfile.render(pharmacy));
+		}
+		else{
+			return ok("404");
+		}
+	}
 	/**
 	 * @author Mitesh
 	 * Action to add doctor to Users's page
@@ -61,7 +76,7 @@ public class PublicController extends Controller{
 	public static Result addToFavDoctor(final Long docId) {
 		if(!LoginController.isLoggedIn()){
 			flash().put("alert", new Alert("alert-info","Please Login To Add Your Favorite Doctor").toString());
-			return redirect(routes.LoginController.blogAdminLoginForm());
+			return redirect(routes.LoginController.loginForm());
 		}else{
 			final String loggedInRole=LoginController.getLoggedInUserRole();
 			if(loggedInRole.equalsIgnoreCase(Role.PATIENT.toString())){
@@ -69,7 +84,7 @@ public class PublicController extends Controller{
 				final PatientDoctorInfo patientInfo=new PatientDoctorInfo();
 				patientInfo.patient=patient;
 				patientInfo.doctor=Doctor.find.byId(docId);
-				patient.patientDoctorInfos.add(patientInfo);
+				patient.patientDoctorInfoList.add(patientInfo);
 				flash().put("alert", new Alert("alert-success","Added to Your Favorite Doctor").toString());
 
 				return redirect(routes.UserActions.dashboard());
@@ -107,6 +122,17 @@ public class PublicController extends Controller{
 		return ok(views.html.pharmacist.searched_pharmacies.render(false,"", new ArrayList<Pharmacy>()));
 	}
 
+
+
+	/**
+	 * @author lakshmi
+	 * Action to render the searchedPharmacies scala template
+	 * GET	/pharmacy/search
+	 */
+	public static Result searchPharmaciesPage(){
+		return ok(views.html.pharmacist.searched_pharmacies.render(false,"", new ArrayList<Pharmacy>()));
+	}
+
 	/**
 	 * @author lakshmi
 	 * Action to perform search operation for finding pharmacies based on
@@ -124,6 +150,56 @@ public class PublicController extends Controller{
 		}
 		return ok(views.html.pharmacist.searched_pharmacies.render(true,searchStr,pharmacyList));
 	}
+
+	/**
+	 * @author lakshmi
+	 * Action to perform search operation for finding pharmacies based on the searchKey
+	 * GET	/pharmacy/search/:searchKey
+	 */
+	public static Result processSearchPharmacies(final String searchKey) {
+		final String searchStr = searchKey.toLowerCase().trim();
+		final List<Pharmacy> pharmacyList = new ArrayList<Pharmacy>();
+		if(searchStr.length()>=4){
+			Logger.info("key: "+searchStr);
+			pharmacyList.addAll(Pharmacy.find.where().like("searchIndex","%"+searchStr+"%").findList());
+			Logger.info("size: "+pharmacyList.size());
+		}
+		else{
+			flash().put("alert", new Alert("alert-danger", "The searck key should contain atleast four charecters").toString());
+		}
+		return ok(views.html.pharmacist.searched_pharmacies.render(true,searchKey,pharmacyList));
+	}
+
+	/**
+	 * @author lakshmi
+	 * Action to add a Pharmacy to loggedInUser
+	 * GET /pharmacy/add-to-favourites
+	 */
+	public static Result addPharmacyToLoggedInUser(final Long pharmacyId) {
+		if(!LoginController.isLoggedIn()){
+			flash().put("alert", new Alert("alert-info","Please Login To Add Pharmacy.").toString());
+			return redirect(routes.LoginController.loginForm());
+		}else{
+			final String loggedInRole=LoginController.getLoggedInUserRole();
+			if(loggedInRole.compareTo(Role.PATIENT.toString()) == 0){
+
+			}
+			if(loggedInRole.compareTo(Role.DOCTOR.toString()) == 0){
+				final Doctor doctor = LoginController.getLoggedInUser().getDoctor();
+				final Pharmacy pharmacy = Pharmacy.find.byId(pharmacyId);
+				if(!doctor.pharmacyList.contains(pharmacy)){
+					doctor.pharmacyList.add(pharmacy);
+					doctor.update();
+				}
+				return redirect(routes.DoctorController.myFavoritePharmacies());
+			}
+			if(loggedInRole.compareTo(Role.ADMIN_DIAGREP.toString()) == 0){
+
+			}
+			return redirect(routes.UserActions.dashboard());
+		}
+	}
+
 	/**
 	 *@author lakshmi
 	 * Action to add pharmacy to the Logged in user list
@@ -134,7 +210,7 @@ public class PublicController extends Controller{
 			return redirect(routes.DoctorController.addFavoritePharmacy(pharmacyId,searchKey));
 		}
 		else if(LoginController.getLoggedInUserRole().equals("PATIENT")){
-			return redirect(routes.PatientController.addFavoritePharmacy(pharmacyId,searchKey));
+			return redirect(routes.DoctorController.addFavoritePharmacy(pharmacyId,searchKey));
 		}else{
 
 			return redirect(routes.UserController.processJoinUs());
@@ -154,9 +230,9 @@ public class PublicController extends Controller{
 	/**
 	 * @author Mitesh
 	 * Action to display a form which has lists of appointment as per date is provided
-	 *  GET/patient/display-appointment/:docClinicId/:days/:timeMillis
+	 *  GET/patient/display-appointment/:docClinicId/:timeMillis
 	 */
-	public static Result displayAppointment(final Long docClinId,int days,Long timeMillis) {
+	public static Result displayAppointment(final Long docClinId,final Long timeMillis) {
 
 		int slots=0;
 
@@ -237,6 +313,22 @@ public class PublicController extends Controller{
 		Logger.warn(""+appointmentMap.size());
 
 		return ok(views.html.patient.appointmentForm.render(appointmentMap,slots));
+	}
+
+	/**
+	 * @author Lakshmi
+	 * Action to search DiagnosticCentre by slug and display its profile page
+	 * GET /diagnostic/:slugUrl
+	 */
+	public static Result getDiagnosticCentreWithSlug(final String slug) {
+		final String cleanSlug = slug.trim().toLowerCase();
+		final DiagnosticCentre diagnosticCentre = DiagnosticCentre.find.where().eq("slugUrl",cleanSlug).findUnique();
+		if(diagnosticCentre != null){
+			return ok(views.html.diagnostic.publicDiagnosticProfile.render(diagnosticCentre));
+		}
+		else{
+			return ok("404");
+		}
 	}
 
 }

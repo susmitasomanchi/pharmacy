@@ -226,11 +226,6 @@ Phone nos: @doctorClinic.clinic.contactNo</h6>
 
 <script type="text/javascript"> 
 var date=new Date();
-var days=@doctorClinic.scheduleDays.size();
-var daytoshow;
-if(days>0){
-daytoshow= Math.floor((7/days)*7);
-}
 $( document ).ready(function() {
 @if(doctorClinic != null ){
 	lat=@doctorClinic.clinic.address.latitude
@@ -238,9 +233,8 @@ $( document ).ready(function() {
 	myLatLng= new google.maps.LatLng(lat, lng),
 	initialize();
 }
-alert(daytoshow);
-console.log('localhost:9000/patient/display-appointment/@doctorClinic.id/'+daytoshow+'/'+date.getTime());
- $.get('/patient/display-appointment/@doctorClinic.id/'+daytoshow+'/'+date.getTime(),function(htmldata){
+console.log('localhost:9000/patient/display-appointment/@doctorClinic.id/'+date.getTime());
+ $.get('/patient/display-appointment/@doctorClinic.id/'+date.getTime(),function(htmldata){
 			     $('#active').html(htmldata);
 	    });
 	    
@@ -303,8 +297,6 @@ console.log('localhost:9000/patient/display-appointment/@doctorClinic.id/'+dayto
 
 <script>
 $("#myModal").on('shown.bs.modal',function(evt){
-alert($(evt.relatedTarget).attr('clinic'));
-
 $("#model-content").html(
 '<form action="/patient/process-appointment/'+$(evt.relatedTarget).attr("id")+'" method="post" id="datetimeform">'
 +'<p> Are you sure you wish to request an appointment on <br>'

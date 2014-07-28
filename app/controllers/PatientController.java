@@ -1,22 +1,15 @@
 package controllers;
 
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Calendar;
 import java.util.Date;
-import java.util.LinkedHashMap;
 import java.util.List;
-import java.util.Map;
 
 import models.Alert;
 import models.AppUser;
 import models.diagnostic.DiagnosticCentre;
 import models.doctor.Appointment;
 import models.doctor.AppointmentStatus;
-import models.doctor.DaySchedule;
 import models.doctor.Doctor;
-import models.doctor.DoctorClinicInfo;
 import models.doctor.QuestionAndAnswer;
 import models.patient.Patient;
 import models.patient.PatientDoctorInfo;
@@ -37,6 +30,17 @@ public class PatientController extends Controller {
 
 	public static Form<QuestionAndAnswerBean> questionAndAnswerForm = Form
 			.form(QuestionAndAnswerBean.class);
+
+
+	/**
+	 * @author Mitesh
+	 * Action to display currently logged in Patient' Doctor List
+	 *  GET  /user/my-doctors
+	 */
+	public static Result myFavouriteDoctors() {
+		final Patient patient=LoginController.getLoggedInUser().getPatient();
+		return ok(views.html.patient.fav_doctors.render(patient.patientDoctorInfoList));
+	}
 
 	public static Result register() {
 		return ok(views.html.registerAppUser.render(registrationForm));
@@ -196,7 +200,7 @@ public class PatientController extends Controller {
 	 */
 	public static Result patientMyFavDoctors() {
 		final Patient patient=LoginController.getLoggedInUser().getPatient();
-		return ok(views.html.patient.fav_doctors.render(patient.patientDoctorInfos));
+		return ok(views.html.patient.fav_doctors.render(patient.patientDoctorInfoList));
 	}
 
 	/**
@@ -279,9 +283,9 @@ public class PatientController extends Controller {
 	 *  GET		/patient/my-appointments
 	 */
 	public static Result viewMyAppointments(){
-		AppUser patient=LoginController.getLoggedInUser();
+		final AppUser patient=LoginController.getLoggedInUser();
 
-		List<Appointment> patientApppointments=Appointment.find.where().eq("requestedBy", patient).findList();
+		final List<Appointment> patientApppointments=Appointment.find.where().eq("requestedBy", patient).findList();
 		return ok(views.html.patient.patientViewAppointments.render(patientApppointments));
 	}
 
@@ -290,11 +294,11 @@ public class PatientController extends Controller {
 	 * Action to process requested appointments
 	 *  POST 	/patient/process-appointment
 	 */
-	public static Result processAppointment(Long apptId) {
-		String remark=request().body().asFormUrlEncoded().get("remark")[0];
+	public static Result processAppointment(final Long apptId) {
+		final String remark=request().body().asFormUrlEncoded().get("remark")[0];
 
 		Logger.warn(remark);
-		Appointment appointment=Appointment.find.byId(apptId);
+		final Appointment appointment=Appointment.find.byId(apptId);
 		appointment.appointmentStatus=AppointmentStatus.APPROVED;
 		appointment.problemStatement=remark;
 		appointment.requestedBy=LoginController.getLoggedInUser();

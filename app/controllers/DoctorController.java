@@ -739,8 +739,7 @@ public class DoctorController extends Controller {
 	 */
 	private static Result reCreateAppointment(final DoctorClinicInfo clinicInfo) {
 		final List<Appointment> appointments = Appointment.find.where()
-				.eq("doctor",clinicInfo.doctor)
-				.eq("clinic",clinicInfo.clinic)
+				.eq("doctorClinicInfo", clinicInfo)
 				.eq("appointmentStatus",AppointmentStatus.AVAILABLE)
 				.findList();
 		Ebean.delete(appointments);
@@ -769,8 +768,7 @@ public class DoctorController extends Controller {
 		calendar.set(Calendar.MINUTE, 00);
 
 		final List<Appointment> approvedAppts=Appointment.find.where()
-				.eq("doctor", clinicInfo.doctor)
-				.eq("clinic", clinicInfo.clinic)
+				.eq("doctorClinicInfo", clinicInfo)
 				.eq("appointmentTime", calendar.getTime())
 				.eq("appointmentStatus", AppointmentStatus.APPROVED).findList();
 
