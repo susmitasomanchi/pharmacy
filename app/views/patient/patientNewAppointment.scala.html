@@ -77,7 +77,7 @@ $('#carousel-example-generic').carousel({
 	});
 </script> 
   <div class="carousel-inner"  id="inner" >
-    <div id="active" class="item active nextAppt" style="padding:40px">
+    <div id="active" class="item active nextAppt" style="padding:40px; height:600px;overflow:auto">
 	</div>  
 	
 	<!-- 
@@ -250,7 +250,7 @@ console.log('localhost:9000/patient/display-appointment/@doctorClinic.id/'+date.
   		
   		console.log('localhost:9000/patient/display-appointment/@doctorClinic.id'+date.getTime());
 		$.get('/patient/display-appointment/@doctorClinic.id/'+date.getTime(),function(htmldata){
-			  $('#inner').append('<div class="item nextAppt" style="padding:40px">'+htmldata+'</div>');
+			  $('#inner').append('<div class="item nextAppt" style="padding:100px;height:600px;overflow:auto">'+htmldata+'</div>');
    				 console.log("test courosel");
    				$('.carousel').carousel('next');
 		});
