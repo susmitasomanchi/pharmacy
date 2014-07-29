@@ -1,10 +1,8 @@
 @(apptMap : Map[Date,List[models.doctor.Appointment]],slotes:Integer,date:Long)
 @* appointmentForm Template File *@
 
-
-
 @for((date,value) <- apptMap){
-	<div class="col-md-1" style="width:14%"><table class="table table-hover table-bordered" style="text-align:center">
+	<div class="col-md-1" style="width:14%;padding: 0px;"><table class="table table-hover table-bordered" style="text-align:center;">
 	     <th class="danger" style="text-align:center">@date.format("dd-MMM-yy")<br>@date.format("EE")</th>
 		@for(appointment<-value){
 			@if(appointment.appointmentStatus.equals(models.doctor.AppointmentStatus.AVAILABLE)){
