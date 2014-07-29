@@ -6,7 +6,11 @@ import java.util.List;
 
 import models.AppUser;
 import models.Role;
+import models.diagnostic.DiagnosticCentre;
+import models.diagnostic.DiagnosticTest;
+import models.diagnostic.DiagnosticTestLineItem;
 import models.doctor.Doctor;
+import models.doctor.Prescription;
 import models.mr.MedicalRepresentative;
 import models.mr.PharmaceuticalCompany;
 import models.patient.Patient;
@@ -228,6 +232,26 @@ public class SampleDataController extends Controller {
 		final Patient patient = new Patient();
 		patient.appUser = appUser1;
 		patient.save();
+		return ok();
+	}
+	
+	public static Result prescripetionTest(){
+		DiagnosticCentre diagnosticCentre = DiagnosticCentre.find.byId(1L);
+		Prescription prescription = new Prescription();
+		DiagnosticTestLineItem diagnosticTestLineItem = new DiagnosticTestLineItem();
+		DiagnosticTest test = new DiagnosticTest();
+		test.name="x-ray";
+		test.description = "x-ray description";
+		DiagnosticTest test1 = new DiagnosticTest();
+		test1.name="scanning";
+		test1.description = "scanning description";
+		diagnosticTestLineItem.diagnosticTest = test;
+		prescription.diagnosticTestLineItemList.add(diagnosticTestLineItem);
+		DiagnosticTestLineItem diagnosticTestLineItem1 = new DiagnosticTestLineItem();
+		diagnosticTestLineItem1.diagnosticTest = test1;
+		prescription.diagnosticTestLineItemList.add(diagnosticTestLineItem1);
+		diagnosticCentre.prescriptionList.add(prescription);
+		diagnosticCentre.update();
 		return ok();
 
 	}

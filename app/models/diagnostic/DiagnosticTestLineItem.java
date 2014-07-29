@@ -4,6 +4,7 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.OneToOne;
 
 import models.BaseEntity;
 import play.db.ebean.Model;
@@ -16,6 +17,7 @@ public class DiagnosticTestLineItem extends BaseEntity{
 	@GeneratedValue(strategy = GenerationType.AUTO)
 	public  Long id;
 
+	@OneToOne
 	public DiagnosticTest diagnosticTest;
 
 	public String remarks;

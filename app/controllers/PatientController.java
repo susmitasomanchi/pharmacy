@@ -376,21 +376,21 @@ public class PatientController extends Controller {
 	 */
 	public static Result myFavoritePharmacies() {
 		final Patient patient = LoginController.getLoggedInUser().getPatient();
-		return ok(views.html.favorite_pharmacy_list.render(patient.pharmacyList,0L,patient.id));
+		return ok(views.html.pharmacist.favorite_pharmacy_list.render(patient.pharmacyList,0L,patient.id));
 	}
 	/**
 	 * @author lakshmi
 	 * Action to remove pharmacy from  favorite pharmacies List of Patient of loggedin PATIENT
 	 * GET/patient/remove-favorite-pharmacy/:patientId/:pharmacyId
 	 */
-	public static Result removeFavoritePharmacy(final Long patientId,final Long pharmacyId) {
+	public static Result removePatientFavoritePharmacy(final Long patientId,final Long pharmacyId) {
 		final Patient patient = Patient.find.byId(patientId);
 		Logger.info("before delete list size()==="+patient.pharmacyList.size());
 		patient.pharmacyList.remove(Pharmacy.find.byId(pharmacyId));
 		patient.update();
 		Logger.info("after delete list size()==="+patient.pharmacyList.size());
 		//return redirect(routes.UserActions.dashboard());
-		return ok(views.html.favorite_pharmacy_list.render(patient.pharmacyList,0L,patient.id));
+		return ok(views.html.pharmacist.favorite_pharmacy_list.render(patient.pharmacyList,0L,patient.id));
 	}
 
 	/**

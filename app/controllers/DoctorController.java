@@ -996,7 +996,7 @@ public class DoctorController extends Controller {
 
 	public static Result myFavoritePharmacies() {
 		final Doctor doctor = LoginController.getLoggedInUser().getDoctor();
-		return ok(views.html.favorite_pharmacy_list.render(doctor.pharmacyList,doctor.id,0L));
+		return ok(views.html.pharmacist.favorite_pharmacy_list.render(doctor.pharmacyList,doctor.id,0L));
 	}
 	/**
 	 * @author lakshmi
@@ -1010,7 +1010,7 @@ public class DoctorController extends Controller {
 		doctor.update();
 		Logger.info("after delete list size()==="+doctor.pharmacyList.size());
 		//return redirect(routes.UserActions.dashboard());
-		return ok(views.html.favorite_pharmacy_list.render(doctor.pharmacyList,doctor.id,0L));
+		return ok(views.html.pharmacist.favorite_pharmacy_list.render(doctor.pharmacyList,doctor.id,0L));
 	}
 
 

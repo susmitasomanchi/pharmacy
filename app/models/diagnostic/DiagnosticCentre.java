@@ -17,6 +17,7 @@ import models.Address;
 import models.BaseEntity;
 import models.FileEntity;
 import models.doctor.Doctor;
+import models.doctor.Prescription;
 import play.data.validation.Constraints.Email;
 import play.data.validation.Constraints.Required;
 import play.db.ebean.Model;
@@ -78,6 +79,9 @@ public class DiagnosticCentre extends BaseEntity {
 
 	@OneToMany(cascade=CascadeType.ALL)
 	public List<DiagnosticOrder> diagnosticOrderList = new ArrayList<DiagnosticOrder>();
+	
+	@ManyToMany(cascade=CascadeType.ALL)
+	public List<Prescription> prescriptionList = new ArrayList<Prescription>();
 
 	@Column(columnDefinition="TEXT")
 	public String searchIndex;

@@ -46,7 +46,6 @@ GET   	/pharmacy/search/:searchString                  controllers.PublicControl
 #GET   	/pharmacy/add-favourite-pharmacy/:pharmacyId/:str   controllers.PublicController.myFavoritePharmacy(pharmacyId : Long,str: String)
 GET    /pharmacy/search									controllers.PublicController.searchPharmaciesPage()
 
-GET		/public/add-to-Favorite/:docId						controllers.PublicController.addDoctorToLoggedInUser(docId: Long)
 # Sign up page
 GET    /doctor/join                              			controllers.UserController.joinUsDoctor()
 GET    /pharmacy/join                              			controllers.UserController.joinUsPharmacy()
@@ -71,6 +70,7 @@ POST	/doctor/add-social-work						controllers.DoctorController.addSocialWork()
 GET		/doctor/remove-social-work/:docId/:id		controllers.DoctorController.removeSocialWork(docId: Long, id: Long)
 GET		/doctor/add-favorite-pharmacy/:pharmacyId/:str							controllers.DoctorController.addFavoritePharmacy(pharmacyId: Long,str: String)
 GET		/doctor/my-favorite-pharmacies											controllers.DoctorController.myFavoritePharmacies()
+GET		/doctor/remove-pharmacy/:doctorId/:pharmacyId		controllers.DoctorController.removeFavoritePharmacy(doctorId: Long, pharmacyId:Long)
 
 # Doctor's Clinics
 GET    /doctor/new-clinic                 		controllers.DoctorController.newClinic()
@@ -82,14 +82,13 @@ GET    /doctor/edit-clinic-schedule/:id                 controllers.DoctorContro
 POST   /doctor/update-clinic                            controllers.DoctorController.processUpdateClinicInfo()
 POST   /doctor/update-clinic-schedule                   controllers.DoctorController.processUpdateClinicSchedule()
 GET    /doctor/delete-clinic/:id                        controllers.DoctorController.deleteClinic(id:Long)
-GET		/doctor/my-pharmacies							controllers.DoctorController.myFavoritePharmacies()
-GET		/doctor/remove-pharmacy/:doctorId/:pharmacyId		controllers.DoctorController.removeFavoritePharmacy(doctorId: Long, pharmacyId:Long)
+
 #slug url (must be the last route in /doctor/)
 GET 	/doctor/:slugUrl								controllers.PublicController.getDoctorWithSlug(slugUrl:String)
 
 # Patient Module
 GET    /user/my-doctors									controllers.PatientController.myFavouriteDoctors()
-GET		/user/remove-pharmacy/:patientId/:pharmacyId	controllers.PatientController.removeFavoritePharmacy(patientId: Long, pharmacyId: Long)
+GET		/user/remove-pharmacy/:patientId/:pharmacyId	controllers.PatientController.removePatientFavoritePharmacy(patientId: Long, pharmacyId: Long)
 
 POST	/pharmacy/upload-pharmacy-images					controllers.PharmacistController.uploadPharmacyImageProcess()
 POST	/pharmacy/basic-update								controllers.PharmacistController.pharmacyBasicUpdate()
@@ -103,7 +102,6 @@ GET /pharmacy/:slugUrl										controllers.PublicController.getPharmacyWithSlug
 
 # Doagnostic Centre Module
 
-POST   /diagnostic/upload-diagnostic-images             controllers.DiagnosticController.uploadDiagnosticImageProcess()
 
 #slug url (must be the last route in /diagnostic/)
 GET 	/diagnostic/:slugUrl								controllers.PublicController.getDiagnosticCentreWithSlug(slugUrl: String)
@@ -219,6 +217,7 @@ GET		/diagnostic/get-image/:diagnosticId/:imageId			controllers.DiagnosticContro
 POST	/diagnostic/basic-update								controllers.DiagnosticController.diagnosticBasicUpdate()
 POST	/diagnostic/address-update								controllers.DiagnosticController.diagnosticAddressUpdate()
 GET		/diagnostic/remove-image/:diagnosticId/:fileId			controllers.DiagnosticController.removeDiagnosticImage(diagnosticId: Long,fileId: Long)
+GET		/diagnostic/place-order									controllers.DiagnosticController.receive()	
 
 
 
@@ -240,14 +239,14 @@ GET		/diagnostic/remove-image-from-showcasedService			controllers.DiagnosticCont
 
 
 
-POST	/place-order							controllers.DiagnosticOrderController.receive()		
-GET		/display-orders							controllers.DiagnosticOrderController.viewOrders()	
-GET		/remove-order/:id						controllers.DiagnosticOrderController.removeOrder(id: Long)	
-GET		/received-tests/:id						controllers.DiagnosticOrderController.viewReceivedTest(id: Long)
-GET		/sample-collected/:id					controllers.DiagnosticOrderController.sampleCollect(id: Long)
-GET		/report-generated						controllers.DiagnosticOrderController.reoprtReady(id: Long)
-GET    /patient-search      					controllers.DiagnosticOrderController.patientSearch()
-GET    /patient-search/list 					controllers.DiagnosticOrderController.patientSearchProcess()
+	
+GET		/display-orders							controllers.DiagnosticController.viewOrders()	
+GET		/remove-order/:id						controllers.DiagnosticController.removeOrder(id: Long)	
+GET		/received-tests/:id						controllers.DiagnosticController.viewReceivedTest(id: Long)
+GET		/sample-collected/:id					controllers.DiagnosticController.sampleCollect(id: Long)
+GET		/report-generated						controllers.DiagnosticController.reoprtReady(id: Long)
+GET    /patient-search      					controllers.DiagnosticController.patientSearch()
+GET    /patient-search/list 					controllers.DiagnosticController.patientSearchProcess()
 
 																										
 #MR Module
@@ -303,6 +302,7 @@ POST   /register/                         controllers.PatientController.register
 #sample data
 #GET   /sampledata/day					controllers.SampleDataController.days()
 GET		/patient_data					controllers.SampleDataController.patientTest()
+GET		/prescription_data					controllers.SampleDataController.prescripetionTest()
 GET	/mr/sample-data					controllers.SampleDataController.mrSampleData()
 # Map static resources from the /public folder to the /assets URL path
 GET    /assets/*file                                    controllers.Assets.at(path="/public", file)
