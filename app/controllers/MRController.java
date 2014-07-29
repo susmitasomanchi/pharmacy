@@ -10,7 +10,7 @@ import java.util.Map;
 
 import models.Alert;
 import models.AppUser;
-import models.Product;
+import models.MasterProduct;
 import models.Role;
 import models.doctor.Appointment;
 import models.doctor.Doctor;
@@ -470,7 +470,7 @@ public class MRController extends Controller {
 
 			if((sampleList[i].compareToIgnoreCase("")==0)){
 			}else{
-				sample.product = Product.find.byId(Long.parseLong(sampleList[i]));
+				sample.product = MasterProduct.find.byId(Long.parseLong(sampleList[i]));
 				if(qtyList[i] == ""){
 					sample.quantity = 0;
 				}else{
@@ -483,7 +483,7 @@ public class MRController extends Controller {
 		if(promotionList == null){
 		}else{
 			for(int i=0;i<promotionList.length;i++){
-				dcrLineItem.promotionList.add(Product.find.byId(Long.parseLong(promotionList[i])));
+				dcrLineItem.promotionList.add(MasterProduct.find.byId(Long.parseLong(promotionList[i])));
 			}
 		}
 

@@ -9,7 +9,7 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.ManyToMany;
+import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 
 import models.BaseEntity;
@@ -27,7 +27,7 @@ public class DiagnosticOrder extends BaseEntity{
 	@OneToOne
 	public Prescription prescription;
 
-	@ManyToMany(cascade=CascadeType.ALL)
+	@OneToMany(cascade=CascadeType.ALL)
 	public List<DiagnosticReport> diagnosticReportList = new ArrayList<>();
 
 	public DiagnosticOrderStatus diagnosticOrderStatus;
@@ -35,7 +35,6 @@ public class DiagnosticOrder extends BaseEntity{
 	public Date receivedDate;
 
 	public Date confirmedDate;
-
 
 	public static Model.Finder<Long, DiagnosticOrder> find = new Finder<Long, DiagnosticOrder>(Long.class, DiagnosticOrder.class);
 

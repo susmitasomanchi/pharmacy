@@ -137,10 +137,9 @@
           Prescriptions
           <b class="caret"></b></a>
           <ul class="dropdown-menu">
-	            <li><a href="">Quick Prescription</a></li>
 	            <li><a href="">All Prescriptions</a></li>
 	            <li class="divider"></li>
-	            <li><a href="">Sig Codes</a></li>
+	            <li><a href="@routes.DoctorController.showSigCodes()">Sig Codes</a></li>
           </ul>
         </li>
         
@@ -343,7 +342,7 @@
 		
 		<ul class="nav navbar-nav navbar-right">
 		@if(LoginController.isLoggedIn()) {
-		<li class="dropdown"><a href="#" class="dropdown-toggle" data-toggle="dropdown">@LoginController.getLoggedInUser.name <b class="caret"></b></a>
+		<li class="dropdown"><a href="#" class="dropdown-toggle" data-toggle="dropdown">@LoginController.getLoggedInUser().name <b class="caret"></b></a>
 		<ul class="dropdown-menu">
 			<!--
 			<li><a href="/user/preferences"><i class="fa fa-gears"></i>&nbsp;&nbsp;Preferences</a></li>

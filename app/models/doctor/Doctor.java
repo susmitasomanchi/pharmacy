@@ -116,6 +116,9 @@ public class Doctor extends BaseEntity{
 		return DoctorClinicInfo.find.where().eq("doctor", this).eq("active", true).findList();
 	}
 
+	@OneToMany(cascade = CascadeType.ALL)
+	public List<SigCode> sigCodeList = new ArrayList<SigCode>();
+
 	@Override
 	public void save(){
 		final StringBuilder stringBuilder = new StringBuilder();

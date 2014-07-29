@@ -34,12 +34,12 @@ public class DiagnosticOrderController extends Controller {
 		if(LoginController.getLoggedInUserRole().equals("ADMIN_DIAGREP")){
 			final Long id = Long.valueOf(requestData.get("pateintId"));
 			dc = LoginController.getLoggedInUser().getDiagnosticRepresentative().diagnosticCentre;
-			diagnosticOrder.patient = Patient.find.byId(id);
+			//diagnosticOrder.patient = Patient.find.byId(id);
 		}
 		else{
 			final Long id = Long.valueOf(requestData.get("diagnosticCentreId"));
 			dc = DiagnosticCentre.find.byId(id);
-			diagnosticOrder.patient = LoginController.getLoggedInUser().getPatient();
+			//diagnosticOrder.patient = LoginController.getLoggedInUser().getPatient();
 		}
 		for (final String idStr : diagnosticTestIdStrings) {
 			final DiagnosticReport diagnosticReport=new DiagnosticReport();

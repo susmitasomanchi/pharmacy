@@ -14,7 +14,7 @@ import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 
 import models.BaseEntity;
-import models.Product;
+import models.MasterProduct;
 import models.doctor.Doctor;
 
 
@@ -33,7 +33,7 @@ public class DCRLineItem extends BaseEntity{
 	public List<Sample> sampleList = new ArrayList<Sample>();
 
 	@ManyToMany(cascade=CascadeType.ALL)
-	public List<Product> promotionList = new ArrayList<Product>();
+	public List<MasterProduct> promotionList = new ArrayList<MasterProduct>();
 
 	public Date inTime;
 

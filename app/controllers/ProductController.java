@@ -3,7 +3,7 @@ package controllers;
 import java.util.List;
 import java.util.Map;
 import models.Alert;
-import models.Product;
+import models.MasterProduct;
 import models.Role;
 import models.mr.MedicalRepresentative;
 import models.mr.PharmaceuticalProduct;
@@ -19,7 +19,7 @@ public class ProductController extends Controller{
 
 	public static Form<PharmaceuticalProduct> pharmaceuticalProductForm = Form.form(PharmaceuticalProduct.class);
 
-	public static Form<Product> productForm = Form.form(Product.class);
+	public static Form<MasterProduct> productForm = Form.form(MasterProduct.class);
 	/**
 	 * @autor:
 	 * 
@@ -57,7 +57,7 @@ public class ProductController extends Controller{
 					loggedInMr.pharmaceuticalCompany.productList.add(filledProduct);
 					loggedInMr.pharmaceuticalCompany.update();
 				}else{
-					final Product product = Product.find.byId(filledProduct.id);
+					final MasterProduct product = MasterProduct.find.byId(filledProduct.id);
 					product.update();
 				}
 				return redirect(routes.ProductController.displayProduct());
@@ -76,14 +76,14 @@ public class ProductController extends Controller{
 	public static Result saveProduct(){
 		//PharmaceuticalCompany pharmaceuticalCompany = new PharmaceuticalCompany();
 		final MedicalRepresentative loggedInMr = LoginController.getLoggedInUser().getMedicalRepresentative();
-		final Form<Product> productFilledForm = productForm.bindFromRequest();
+		final Form<MasterProduct> productFilledForm = productForm.bindFromRequest();
 
 		if(productFilledForm.hasErrors()) {
 			Logger.info("bad request");
 			return badRequest(views.html.common.createProduct.render(productFilledForm));
 		}
 		else {
-			final Product filledProduct = productFilledForm.get();
+			final MasterProduct filledProduct = productFilledForm.get();
 
 
 			if(LoginController.getLoggedInUserRole().compareToIgnoreCase(Role.ADMIN_PHARMACIST.toString()) == 0){

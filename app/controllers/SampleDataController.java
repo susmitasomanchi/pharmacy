@@ -1,11 +1,13 @@
 package controllers;
 
 
+import java.io.IOException;
 import java.util.Date;
 import java.util.List;
 
 import models.AppUser;
 import models.Role;
+import models.diagnostic.DiagnosticTest;
 import models.doctor.Doctor;
 import models.mr.MedicalRepresentative;
 import models.mr.PharmaceuticalCompany;
@@ -214,6 +216,17 @@ public class SampleDataController extends Controller {
 		mr.save();
 		return ok();
 
+	}
+
+
+	public static Result createDiagnosticTest() throws IOException{
+		for(int i=1; i<=5; i++){
+			final DiagnosticTest test = new DiagnosticTest();
+			test.name = "Diagnostic Test-"+i;
+			test.description = "Diagnostic Test Description-"+i;
+			test.save();
+		}
+		return ok();
 	}
 
 }

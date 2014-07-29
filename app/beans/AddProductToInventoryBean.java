@@ -8,7 +8,7 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 
 import models.AppUser;
-import models.Product;
+import models.MasterProduct;
 import models.pharmacist.Batch;
 import models.pharmacist.Inventory;
 import play.data.validation.Constraints.Required;
@@ -71,7 +71,7 @@ public class AddProductToInventoryBean implements Serializable{
 			batch.discount=this.discount;
 
 		if(this.product !=null)
-			batch.product=Product.find.byId(this.product);
+			batch.product=MasterProduct.find.byId(this.product);
 
 		return batch;
 
@@ -93,7 +93,7 @@ public class AddProductToInventoryBean implements Serializable{
 			inventory.remarks=this.remarks;
 
 		if(this.product !=null)
-			inventory.product=Product.find.byId(this.product);
+			inventory.product=MasterProduct.find.byId(this.product);
 
 
 		return inventory;

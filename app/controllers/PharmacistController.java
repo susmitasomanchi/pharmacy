@@ -11,7 +11,7 @@ import models.Address;
 import models.Alert;
 import models.Country;
 import models.FileEntity;
-import models.Product;
+import models.MasterProduct;
 import models.Role;
 import models.State;
 import models.pharmacist.Batch;
@@ -289,17 +289,19 @@ public class PharmacistController extends Controller {
 
 
 
+	/*
 	public static Result searchForm() {
-		final List<Product> products = Product.find.all();
+		final List<MasterProduct> products = MasterProduct.find.all();
 		return ok(views.html.pharmacist.searchProduct.render(products));
 	}
 
+	 */
 	public static Result searchProduct(final String search) {
 
 		// final List<Patient> patients=Patient.find.where().eq("appUser.email",
 		// "mitesh@greensoftware.in").findList();
 
-		final List<Product> products = Product.find
+		final List<MasterProduct> products = MasterProduct.find
 				.where()
 				.or(Expr.like("medicineName", search + "%"),
 						Expr.like("typeOfMedicine", search + "%")).findList();
@@ -315,8 +317,8 @@ public class PharmacistController extends Controller {
 
 	public static Result editProduct(final Long id) {
 
-		final Product product = Product.find.byId(id);
-		final Form<Product> editForm = ProductController.productForm.fill(product);
+		final MasterProduct product = MasterProduct.find.byId(id);
+		final Form<MasterProduct> editForm = ProductController.productForm.fill(product);
 
 		// productForm.fill(product);
 		return ok(views.html.common.createProduct.render(editForm));
@@ -368,12 +370,16 @@ public class PharmacistController extends Controller {
 		// return TODO;
 	}
 
+
+	/*
 	public static Result orderRecord() {
 
-		final List<Product> products = Product.find.all();
+		final List<MasterProduct> products = MasterProduct.find.all();
 		return ok(views.html.pharmacist.orderEntry.render(products));
 
 	}
+
+	 */
 
 	public static Result pharmacyPlaceOrder(final Long id) {
 		final Pharmacy pharmacy=Pharmacy.find.byId(id);

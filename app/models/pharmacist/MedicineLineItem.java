@@ -1,9 +1,13 @@
 package models.pharmacist;
 
 import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.OneToOne;
 
 import models.BaseEntity;
-import models.Product;
+import models.MasterProduct;
 import models.doctor.SigCode;
 import play.db.ebean.Model;
 
@@ -11,7 +15,12 @@ import play.db.ebean.Model;
 @Entity
 public class MedicineLineItem extends BaseEntity{
 
-	public Product medicine;
+	@Id
+	@GeneratedValue(strategy = GenerationType.AUTO)
+	public  Long id;
+
+	@OneToOne
+	public MasterProduct medicine;
 	public String frequency;
 	public SigCode sigCode;
 	public String remarks;

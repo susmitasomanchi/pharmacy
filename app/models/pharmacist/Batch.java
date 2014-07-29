@@ -10,7 +10,7 @@ import javax.persistence.OneToOne;
 import javax.persistence.Version;
 
 import models.BaseEntity;
-import models.Product;
+import models.MasterProduct;
 import play.data.validation.Constraints.Required;
 
 @SuppressWarnings("serial")
@@ -25,7 +25,7 @@ public class Batch extends BaseEntity {
 	//	public BatchStatus batchStatus;
 
 	@OneToOne
-	public Product product;
+	public MasterProduct product;
 
 	@Required
 	public String batchNo;

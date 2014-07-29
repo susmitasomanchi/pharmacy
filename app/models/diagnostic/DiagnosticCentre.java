@@ -17,6 +17,7 @@ import models.Address;
 import models.BaseEntity;
 import models.FileEntity;
 import models.doctor.Doctor;
+import models.doctor.Prescription;
 import play.data.validation.Constraints.Email;
 import play.data.validation.Constraints.Required;
 import play.db.ebean.Model;
@@ -67,11 +68,17 @@ public class DiagnosticCentre extends BaseEntity {
 	@OneToMany(cascade=CascadeType.ALL,mappedBy="diagnosticCentre")
 	public List<DiagnosticRepresentative> diagnosticRepresentativelist = new ArrayList<DiagnosticRepresentative>();
 
+	@ManyToMany(cascade=CascadeType.ALL)
+	public List<DiagnosticTest> masterDiagnosticTestList = new ArrayList<DiagnosticTest>();
+
 	@OneToMany(cascade=CascadeType.ALL)
 	public List<DiagnosticTest> diagnosticTestList = new ArrayList<DiagnosticTest>();
 
 	@OneToMany(cascade=CascadeType.ALL)
 	public List<DiagnosticOrder> diagnosticOrderList = new ArrayList<DiagnosticOrder>();
+
+	@ManyToMany(cascade=CascadeType.ALL)
+	public List<Prescription> prescriptionList = new ArrayList<Prescription>();
 
 	@Column(columnDefinition="TEXT")
 	public String searchIndex;
@@ -79,15 +86,13 @@ public class DiagnosticCentre extends BaseEntity {
 	@Column(columnDefinition="TEXT")
 	public String slugUrl;
 
-	public static Model.Finder<Long, DiagnosticCentre> find = new Finder<Long, DiagnosticCentre>(
-			Long.class, DiagnosticCentre.class);
+	public static Model.Finder<Long, DiagnosticCentre> find = new Finder<Long, DiagnosticCentre>(Long.class, DiagnosticCentre.class);
 
 
 	public DiagnosticBean toBean(){
 
 		final DiagnosticBean diagnosticBean = new DiagnosticBean();
 		diagnosticBean.id = this.id;
-
 
 		if(this.name != null) {
 			diagnosticBean.name= this.name;
@@ -106,7 +111,6 @@ public class DiagnosticCentre extends BaseEntity {
 		}
 		return diagnosticBean;
 	}
-
 
 
 

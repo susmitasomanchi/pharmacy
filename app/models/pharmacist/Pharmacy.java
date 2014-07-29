@@ -10,12 +10,14 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Lob;
+import javax.persistence.ManyToMany;
 import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 
 import models.Address;
 import models.BaseEntity;
 import models.FileEntity;
+import models.doctor.Prescription;
 import beans.PharmacyBean;
 
 @SuppressWarnings("serial")
@@ -52,6 +54,9 @@ public class Pharmacy extends BaseEntity {
 
 	@Column(columnDefinition="TEXT")
 	public String slugUrl;
+
+	@ManyToMany(cascade=CascadeType.ALL)
+	public List<Prescription> prescriptionList = new ArrayList<Prescription>();
 
 	@OneToMany(cascade=CascadeType.ALL)
 	public List<PharmacyProduct> pharmacyProductList = new ArrayList<PharmacyProduct>();
