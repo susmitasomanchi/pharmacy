@@ -11,9 +11,11 @@ public enum DiagnosticOrderStatus {
 	RECEIVED,
 
 	@EnumValue("CONFIRMED")
-	CONFIRMED;
+	CONFIRMED,
 
-	
+	@EnumValue("ORDER_READY")
+	ORDER_READY;
+
 
 	public static Map<String, String> options() {
 		final LinkedHashMap<String, String> vals = new LinkedHashMap<String, String>();

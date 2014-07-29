@@ -8,7 +8,7 @@ import javax.persistence.Id;
 import javax.persistence.OneToOne;
 
 import models.BaseEntity;
-import models.Product;
+import models.MasterProduct;
 
 
 @SuppressWarnings("serial")
@@ -20,7 +20,7 @@ public class OrderLineItem extends BaseEntity {
 	public Long id;
 
 	@OneToOne
-	public Product product;
+	public MasterProduct product;
 
 	public Double quantity;
 

@@ -7,6 +7,9 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 
+
+import models.AppUser;
+import models.MasterProduct;
 import models.pharmacist.Batch;
 import models.pharmacist.Inventory;
 import models.pharmacist.PharmacyProduct;

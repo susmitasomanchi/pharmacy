@@ -7,7 +7,7 @@ import javax.persistence.Id;
 import javax.persistence.OneToOne;
 
 import models.BaseEntity;
-import models.Product;
+import models.MasterProduct;
 
 
 
@@ -20,7 +20,7 @@ public class Sample extends BaseEntity{
 	public Long id;
 
 	@OneToOne
-	public Product product;
+	public MasterProduct product;
 
 	public Integer quantity;
 

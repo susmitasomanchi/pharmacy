@@ -22,6 +22,7 @@ import models.doctor.DoctorEducation;
 import models.doctor.DoctorExperience;
 import models.doctor.DoctorSocialWork;
 import models.doctor.QuestionAndAnswer;
+import models.doctor.SigCode;
 import models.pharmacist.Pharmacy;
 import play.Logger;
 import play.data.Form;
@@ -30,6 +31,7 @@ import play.mvc.Http.MultipartFormData;
 import play.mvc.Result;
 import actions.BasicAuth;
 import beans.DoctorClinicInfoBean;
+import beans.PrescriptionBean;
 import beans.QuestionAndAnswerBean;
 
 import com.avaje.ebean.Ebean;
@@ -41,7 +43,8 @@ public class DoctorController extends Controller {
 
 	public static Form<DoctorClinicInfoBean> clinicForm = Form.form(DoctorClinicInfoBean.class);
 	public static Form<QuestionAndAnswerBean> questionAndAnswerForm = Form.form(QuestionAndAnswerBean.class);
-	public static Form<DoctorClinicInfo> doctorClinicForm	=Form.form(DoctorClinicInfo.class);
+	public static Form<DoctorClinicInfo> doctorClinicForm = Form.form(DoctorClinicInfo.class);
+	public static Form<PrescriptionBean> prescriptionForm = Form.form(PrescriptionBean.class);
 
 
 
@@ -839,6 +842,75 @@ public class DoctorController extends Controller {
 
 
 
+	/**
+	 * Action to render list of Sig Codes of the loggedInDoctor
+	 * GET	/doctor/sig-codes
+	 */
+	public static Result showSigCodes(){
+		final Doctor doctor = LoginController.getLoggedInUser().getDoctor();
+		return ok(views.html.doctor.sigCodes.render(doctor.sigCodeList));
+	}
+
+
+
+	/**
+	 * Action to save a sig-code to the loggedInDoctor's sigcode List
+	 * POST		/doctor/add-sig-code
+	 */
+	public static Result addSigCode(){
+		final Doctor doctor = LoginController.getLoggedInUser().getDoctor();
+		final Map<String, String[]> requestMap = request().body().asFormUrlEncoded();
+		//server-side check
+		if(Long.parseLong(requestMap.get("doctorId")[0]) != doctor.id.longValue()){
+			return redirect(routes.LoginController.processLogout());
+		}
+		if(		requestMap.get("sigCode")!= null &&
+				requestMap.get("description")!= null &&
+				!requestMap.get("sigCode")[0].trim().isEmpty() &&
+				!requestMap.get("description")[0].trim().isEmpty()
+				){
+			final SigCode sigCode = new SigCode();
+			sigCode.code = requestMap.get("sigCode")[0].trim();
+			sigCode.description = requestMap.get("description")[0].trim();
+			doctor.sigCodeList.add(sigCode);
+			doctor.update();
+		}
+		return redirect(routes.DoctorController.showSigCodes());
+	}
+
+
+
+	/**
+	 * Action to render the prescription form to the loggedInDoctor
+	 * GET	/doctor/prescription
+	 */
+	public static Result showPrescriptionForm(){
+		return ok(views.html.doctor.doctorPrescription.render(prescriptionForm));
+	}
+
+	/**
+	 * Action to save prescription of the loggedInDoctor
+	 * POST		/doctor/save-prescription
+	 */
+	public static Result savePrescription(){
+		final Form<PrescriptionBean> filledForm = prescriptionForm.bindFromRequest();
+		final PrescriptionBean bean = filledForm.get();
+		final Doctor doctor = LoginController.getLoggedInUser().getDoctor();
+		//server-side check
+		if(bean.doctorId.longValue() != doctor.id.longValue()){
+			return redirect(routes.LoginController.processLogout());
+		}
+
+
+
+
+		return ok();
+	}
+
+
+
+
+
 
 
 
@@ -894,11 +966,6 @@ public class DoctorController extends Controller {
 
 
 
-
-	public static Result showPrescriptionForm(final Long appointmentId){
-		//final Appointment appointment = Appointment.find.byId(appointmentId);
-		return ok();
-	}
 
 
 
