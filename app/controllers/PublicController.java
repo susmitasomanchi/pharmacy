@@ -252,8 +252,11 @@ public class PublicController extends Controller{
 		final Calendar calendar2=Calendar.getInstance();
 
 		final SimpleDateFormat dateFormat=new SimpleDateFormat("kk:mm");
-		int i=0;
-		while(i<7){
+		int j=0;
+		for(int i=0;i<49;i++){
+			if(j==7){
+				break;
+			}
 
 			Logger.warn("i:"+i);
 			for (final DaySchedule schedule : doctorClinicInfo.scheduleDays) {
@@ -288,7 +291,7 @@ public class PublicController extends Controller{
 						appointmentMap.put(calendarFrom.getTime(), listAppointments);
 						slots=Math.max(slots,listAppointments.size());
 						date=calendarFrom.getTime();
-						i++;
+						j++;
 
 					}
 
@@ -301,6 +304,7 @@ public class PublicController extends Controller{
 
 			calendarFrom.add(Calendar.DATE, 1);
 			calendarTo.add(Calendar.DATE, 1);
+
 
 		}
 
