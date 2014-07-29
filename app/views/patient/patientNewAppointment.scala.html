@@ -249,7 +249,6 @@ console.log('localhost:9000/patient/display-appointment/@doctorClinic.id/'+date.
   			$( ".active" ).removeClass( "nextAppt" );
   		
   		console.log('localhost:9000/patient/display-appointment/@doctorClinic.id'+date.getTime());
-  		alert(date);
 		$.get('/patient/display-appointment/@doctorClinic.id/'+date.getTime(),function(htmldata){
 			  $('#inner').append('<div class="item nextAppt" style="padding:40px">'+htmldata+'</div>');
    				 console.log("test courosel");
