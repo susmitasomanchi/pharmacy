@@ -49,6 +49,7 @@
 		
 			<div ><input type="hidden" name="lat" id="lat1"></div>
 			<div ><input type="hidden" name="lng" id="lng1"></div>
+			<div ><input type="hidden" name="fetchpin" id="fetchPin"></div>
 			
 			 <div class="form-group">
     			<label for="clinicName">Clinic Name</label>
@@ -227,7 +228,7 @@
 			
  
     <script>
-					var lng, lat, marker;
+					var lng, lat, marker,state;
 					var dbclk = false;
 					var map, myLatLng;
 					function initialize() {
@@ -239,13 +240,15 @@
 								.getElementById("map_canvas"), mapOptions);
 
 						//  map.set("disableDoubleClickZoom", false);
-
 						marker = new google.maps.Marker({
 							position : myLatLng,
 							draggable : true,
 							animation : google.maps.Animation.DROP,
 							map : map
 						});
+						
+
+					   
 
 						$("#lat1").val(lat);
 						$("#lng1").val(lng);
@@ -286,12 +289,17 @@
 								myLatLng = results[0].geometry.location;
 								lat = results[0].geometry.location.lat();
 								lng = results[0].geometry.location.lng();
-								state = results[0].address_components[4].long_name;
 								
-								//var address = results[0].address_components;
-								//var zipcode = address[address.length].long_name;
-							console.log(JSON.stringify(results[0]));
-								alert(state);
+								geocoder.geocode({'latLng': myLatLng}, function(results, status){
+									if (status == google.maps.GeocoderStatus.OK) {
+										var address = results[0].address_components;
+										var zipcode = address[address.length - 1].long_name;
+										 state=address[address.length - 3].long_name;
+											$("#fetchPin").val(zipcode);
+								            $( "select" ).val(state.toUpperCase().replace(/\s+/g, '_'));
+								          $('select').trigger("chosen:updated");
+										 }
+									});
 								initialize();
 							} else {
 								//alert("Something got wrong " + status);
@@ -309,6 +317,8 @@
             $('.input-small').timepicker({
             	showMeridian:false
                 });
+
+            
     </script>
 
 

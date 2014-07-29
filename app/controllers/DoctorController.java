@@ -554,7 +554,7 @@ public class DoctorController extends Controller {
 			final Doctor doctor=LoginController.getLoggedInUser().getDoctor();
 			final Calendar calendar = Calendar.getInstance();
 			calendar.setTime(new Date());
-			for(int date=0;date<31;date++){
+			for(int date=0;date<90;date++){
 				for (final DaySchedule schedule : docClinicInfo.scheduleDays) {
 					if(schedule.day == Day.getDay(calendar.get(Calendar.DAY_OF_WEEK)-1)){
 						try {
@@ -739,8 +739,7 @@ public class DoctorController extends Controller {
 	 */
 	private static Result reCreateAppointment(final DoctorClinicInfo clinicInfo) {
 		final List<Appointment> appointments = Appointment.find.where()
-				.eq("doctor",clinicInfo.doctor)
-				.eq("clinic",clinicInfo.clinic)
+				.eq("doctorClinicInfo", clinicInfo)
 				.eq("appointmentStatus",AppointmentStatus.AVAILABLE)
 				.findList();
 		Ebean.delete(appointments);
@@ -769,8 +768,7 @@ public class DoctorController extends Controller {
 		calendar.set(Calendar.MINUTE, 00);
 
 		final List<Appointment> approvedAppts=Appointment.find.where()
-				.eq("doctor", clinicInfo.doctor)
-				.eq("clinic", clinicInfo.clinic)
+				.eq("doctorClinicInfo", clinicInfo)
 				.eq("appointmentTime", calendar.getTime())
 				.eq("appointmentStatus", AppointmentStatus.APPROVED).findList();
 
@@ -1020,7 +1018,7 @@ public class DoctorController extends Controller {
 		final String param[] =request().body().asFormUrlEncoded().get("datetime");
 		try{
 			final Appointment appointment=Appointment.find.byId(Long.parseLong(param[1]));
-			appointment.remarks=param[0];
+			appointment.problemStatement=param[0];
 			appointment.requestedBy=LoginController.getLoggedInUser();
 			appointment.appointmentStatus=AppointmentStatus.APPROVED;
 			appointment.update();

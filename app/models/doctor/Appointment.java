@@ -36,7 +36,7 @@ public class Appointment extends BaseEntity {
 	public AppUser apporovedBy;
 
 	@Column(columnDefinition="TEXT")
-	public String remarks;
+	public String problemStatement;
 
 	@OneToOne
 	public DoctorClinicInfo	doctorClinicInfo;
