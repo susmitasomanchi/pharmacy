@@ -1,13 +1,14 @@
-package models.pharmacist;
+package models.doctor;
 
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.OneToOne;
 
 import models.BaseEntity;
-import models.Product;
-import models.doctor.SigCode;
+import models.MasterProduct;
 import play.db.ebean.Model;
 
 @SuppressWarnings("serial")
@@ -18,12 +19,16 @@ public class MedicineLineItem extends BaseEntity{
 	@GeneratedValue(strategy = GenerationType.AUTO)
 	public  Long id;
 
-	public Product medicine;
+	@OneToOne
+	public MasterProduct medicine;
 
+	@Column(columnDefinition="TEXT")
+	public String dosage;
+
+	@Column(columnDefinition="TEXT")
 	public String frequency;
 
-	public SigCode sigCode;
-
+	@Column(columnDefinition="TEXT")
 	public String remarks;
 
 	public static Model.Finder<Long, MedicineLineItem> find = new Finder<Long, MedicineLineItem>(Long.class, MedicineLineItem.class);

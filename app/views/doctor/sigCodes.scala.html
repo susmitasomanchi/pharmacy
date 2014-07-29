@@ -1,0 +1,54 @@
+@(list: List[models.doctor.SigCode])
+
+
+@main("Sig Codes") {
+
+
+<div class="row col-md-offset-2">
+<div class="col-md-8 well">
+<form action="@routes.DoctorController.addSigCode()" method="POST">
+	<p>Add a Sig Code:</p>
+	<label for="sigCode">Sig Code*:</label>
+	<input id="sigCode" type="text" name="sigCode" required>
+	&nbsp;
+	<label for="description">Description*:</label>
+	<input id="description" type="text" name="description" required>
+	&nbsp;
+	<input type="hidden" name="doctorId" value="@LoginController.getLoggedInUser().getDoctor().id">
+	<input type="submit" class="btn btn-primary btn-xs" value="save">
+</form>
+</div>
+</div>
+
+<div class="row col-md-offset-2">
+<div class="col-md-8">
+<table class="table table-bordered table-condensed">
+<thead>
+<th style="text-align:center;">Sig Code</th>
+<th style="text-align:center;">Description</th>
+</thead>
+<tbody>
+
+@for(s <- models.doctor.MasterSigCode.find.all()){
+<tr>
+	<td>@s.code</td>
+	<td>@s.description</td>
+</tr>
+}
+
+
+@for(s <- list){
+<tr>
+	<td>@s.code</td>
+	<td>@s.description</td>
+</tr>
+}
+
+</tbody>
+
+</table>
+</div>
+</div>
+
+
+}

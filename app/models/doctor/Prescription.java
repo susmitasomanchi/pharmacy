@@ -18,7 +18,6 @@ import models.BaseEntity;
 import models.diagnostic.DiagnosticTestLineItem;
 import models.doctor.Doctor;
 import models.patient.Patient;
-import models.pharmacist.MedicineLineItem;
 import play.db.ebean.Model;
 
 

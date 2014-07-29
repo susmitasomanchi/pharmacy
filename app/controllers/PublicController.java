@@ -85,6 +85,7 @@ public class PublicController extends Controller{
 				patientInfo.patient=patient;
 				patientInfo.doctor=Doctor.find.byId(docId);
 				patient.patientDoctorInfoList.add(patientInfo);
+				patient.update();
 				flash().put("alert", new Alert("alert-success","Added to Your Favorite Doctor").toString());
 
 				return redirect(routes.UserActions.dashboard());

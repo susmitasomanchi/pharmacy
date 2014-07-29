@@ -13,6 +13,8 @@ import javax.persistence.OneToOne;
 
 import models.BaseEntity;
 
+import models.MasterProduct;
+
 @SuppressWarnings("serial")
 @Entity
 public class Inventory extends BaseEntity {
@@ -22,7 +24,7 @@ public class Inventory extends BaseEntity {
 	public Long id;
 
 	@OneToOne
-	public PharmacyProduct pharmacyProduct;
+	public MasterProduct product;
 
 	public String shelfNo;
 

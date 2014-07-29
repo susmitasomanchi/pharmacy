@@ -84,6 +84,12 @@ GET		/doctor/my-pharmacies							controllers.DoctorController.myFavoritePharmaci
 GET		/doctor/remove-pharmacy/:doctorId/:pharmacyId		controllers.DoctorController.removeFavoritePharmacy(doctorId: Long, pharmacyId:Long)
 GET    /doctor/today-appointment                        controllers.DoctorController.viewTodaysAppointment()	
 
+GET		/doctor/sig-codes									controllers.DoctorController.showSigCodes()
+POST	/doctor/add-sig-code								controllers.DoctorController.addSigCode()
+GET		/doctor/prescription								controllers.DoctorController.showPrescriptionForm()
+POST	/doctor/save-prescription							controllers.DoctorController.savePrescription()
+GET    /doctor/today-appointment                        controllers.DoctorController.viewTodaysAppointment()	
+
 #slug url (must be the last route in /doctor/)
 GET 	/doctor/:slugUrl								controllers.PublicController.getDoctorWithSlug(slugUrl:String)
 
@@ -117,7 +123,7 @@ GET		/static/fav/pharmacies							controllers.PharmacistController.staticFavPhar
 #############################	PRODUCTION	#################################################################################
 
 
-GET    /doctor/prescription						controllers.DoctorController.doctorPrescription()
+#GET    /doctor/prescription						controllers.DoctorController.doctorPrescription()
 
 GET 	/viewappointments							controllers.DoctorController.doctorViewAppointment()
 GET	   	/doctor/appointments						   controllers.DoctorController.doctorAppointments()
@@ -142,8 +148,8 @@ GET   	/edit-product/:id                      	controllers.PharmacistController.
 #GET     /remove-product/:id                      	controllers.PharmacistController.removeProduct(id: Long)
 POST	/addProductToInventory/					controllers.PharmacistController.addProductForm(id: Long)
 		
-GET		/order									controllers.PharmacistController.orderRecord()
-GET     /searchProduct                           controllers.PharmacistController.searchForm()
+#GET		/order									controllers.PharmacistController.orderRecord()
+#GET     /searchProduct                           controllers.PharmacistController.searchForm()
 POST  	/searchProduct                           controllers.PharmacistController.searchProduct(arg: String ?= "")
 GET   	/place-product-order                     	controllers.PharmacistController.placeProductOrder()
 GET   	/place-product-order/process              controllers.PharmacistController.placeProductOrderProcess()

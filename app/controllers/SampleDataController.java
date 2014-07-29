@@ -1,11 +1,13 @@
 package controllers;
 
 
+import java.io.IOException;
 import java.util.Date;
 import java.util.List;
 
 import models.AppUser;
 import models.Role;
+import models.diagnostic.DiagnosticTest;
 import models.doctor.Doctor;
 import models.mr.MedicalRepresentative;
 import models.mr.PharmaceuticalCompany;

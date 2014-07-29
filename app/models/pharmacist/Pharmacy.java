@@ -58,6 +58,9 @@ public class Pharmacy extends BaseEntity {
 	@OneToMany(cascade=CascadeType.ALL)
 	public List<PharmacyInfo> pharmacyInfoList = new ArrayList<PharmacyInfo>();
 
+	@ManyToMany(cascade=CascadeType.ALL)
+	public List<Prescription> prescriptionList = new ArrayList<Prescription>();
+
 	@OneToMany(cascade=CascadeType.ALL)
 	public List<PharmacyProduct> pharmacyProductList = new ArrayList<PharmacyProduct>();
 
@@ -66,9 +69,6 @@ public class Pharmacy extends BaseEntity {
 
 	@OneToMany(cascade=CascadeType.ALL)
 	public List<Pharmacist> pharmacistList = new ArrayList<Pharmacist>();
-
-	@OneToMany(cascade=CascadeType.ALL)
-	public List<Prescription> prescriptionList = new ArrayList<Prescription>();
 
 	@OneToMany(cascade=CascadeType.ALL)
 	public List<Inventory> inventoryList = new ArrayList<Inventory>();
