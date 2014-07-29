@@ -111,7 +111,6 @@ POST   /diagnostic/upload-diagnostic-images             controllers.DiagnosticCo
 GET 	/diagnostic/:slugUrl								controllers.PublicController.getDiagnosticCentreWithSlug(slugUrl: String)
 
 
-GET /diag-test 			controllers.SampleDataController.createDiagnosticTest()
 # Remove later (at Beta Launch)
 #GET    /                                  controllers.Application.index()
 #GET    /:str		                      controllers.Application.indexX(str: String)

@@ -10,11 +10,12 @@ import java.util.List;
 
 
 
-import views.doctor.MedicineLineItem;
+
 import models.diagnostic.DiagnosticTestLineItem;
 import models.doctor.Appointment;
 import models.doctor.Clinic;
 import models.doctor.Doctor;
+import models.doctor.MedicineLineItem;
 import models.doctor.Prescription;
 import models.patient.Patient;
 

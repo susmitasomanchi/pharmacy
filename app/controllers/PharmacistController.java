@@ -514,8 +514,9 @@ public class PharmacistController extends Controller {
 
 	public static Result pharmacyPlaceOrder(final Long id) {
 		final Pharmacy pharmacy=Pharmacy.find.byId(id);
+		//return ok(views.html.pharmacist.place_order.render(pharmacy.inventoryList,pharmacy));
+		return ok();
 
-		return ok(views.html.pharmacist.place_order.render(pharmacy.inventoryList,pharmacy));
 	}
 
 	public static Result placeProductOrder() {

@@ -72,7 +72,7 @@ public class AddProductToInventoryBean implements Serializable{
 			batch.discount=this.discount;
 
 		if(this.pharmacyProduct != null)
-			batch.pharmacyProduct = PharmacyProduct.find.byId(this.pharmacyProduct);
+			batch.product = MasterProduct.find.byId(this.pharmacyProduct);
 
 		return batch;
 
@@ -94,7 +94,7 @@ public class AddProductToInventoryBean implements Serializable{
 			inventory.remarks=this.remarks;
 
 		if(this.pharmacyProduct !=null)
-			inventory.pharmacyProduct=PharmacyProduct.find.byId(this.pharmacyProduct);
+			inventory.product=MasterProduct.find.byId(this.pharmacyProduct);
 
 
 		return inventory;

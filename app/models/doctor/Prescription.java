@@ -19,7 +19,6 @@ import models.diagnostic.DiagnosticTestLineItem;
 import models.doctor.Doctor;
 import models.patient.Patient;
 import play.db.ebean.Model;
-import views.doctor.MedicineLineItem;
 
 
 @SuppressWarnings("serial")

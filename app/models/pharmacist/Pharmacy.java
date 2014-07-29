@@ -71,9 +71,6 @@ public class Pharmacy extends BaseEntity {
 	public List<Pharmacist> pharmacistList = new ArrayList<Pharmacist>();
 
 	@OneToMany(cascade=CascadeType.ALL)
-	public List<Prescription> prescriptionList = new ArrayList<Prescription>();
-
-	@OneToMany(cascade=CascadeType.ALL)
 	public List<Inventory> inventoryList = new ArrayList<Inventory>();
 
 	public static Finder<Long, Pharmacy> find = new Finder<Long, Pharmacy>(Long.class, Pharmacy.class);
