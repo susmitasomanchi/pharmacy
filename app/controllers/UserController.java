@@ -129,6 +129,8 @@ public class UserController extends Controller {
 			}
 		}
 
+		//		appUser.emailConfirmed=EmailService.sendConformationEmail(appUser.email);
+
 		appUser.save();
 
 		if(appUser.role.equals(Role.DOCTOR)){
@@ -213,8 +215,6 @@ public class UserController extends Controller {
 
 		return redirect(routes.UserActions.dashboard());
 	}
-
-
 
 
 

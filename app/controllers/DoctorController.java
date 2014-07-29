@@ -942,7 +942,12 @@ public class DoctorController extends Controller {
 		return ok(views.html.doctor.doctor_view_appointment.render());
 	}
 
-	//Todays Appointment
+
+	/**
+	 * @author Mitesh
+	 * Action to Display appointment requested to logged-in DOCTOR
+	 * GET	/doctor/today-appointment
+	 */
 	public static Result viewTodaysAppointment() {
 
 		final Calendar calendar=Calendar.getInstance();
@@ -952,11 +957,13 @@ public class DoctorController extends Controller {
 		calendar.set(Calendar.SECOND,0);
 		calendar.set(Calendar.MILLISECOND,0);
 
-		final Doctor loggedIndoctor = LoginController.getLoggedInUser().getDoctor();
 
-		final List<Appointment> appointments=Appointment.find.where().eq("appointmentStatus", AppointmentStatus.APPROVED).eq("doctor", loggedIndoctor).ge("appointmentTime", calendar.getTime()).findList();
+
+		final Doctor loggedIndoctor = LoginController.getLoggedInUser().getDoctor();
+		List<DoctorClinicInfo> docclinicInfo=DoctorClinicInfo.find.where().eq("doctor", loggedIndoctor).findList();
+		final List<Appointment> appointments=Appointment.find.where().in("doctorClinicInfo", docclinicInfo).eq("appointmentStatus", AppointmentStatus.APPROVED).ge("appointmentTime", calendar.getTime()).findList();
 		Logger.warn(""+appointments.toString());
-		return ok(views.html.doctor.doctor_appointments.render(appointments));
+		return ok(views.html.doctor.doctor_appointments.render(appointments,docclinicInfo));
 
 	}
 	/**

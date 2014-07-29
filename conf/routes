@@ -82,6 +82,8 @@ POST   /doctor/update-clinic-schedule                   controllers.DoctorContro
 GET    /doctor/delete-clinic/:id                        controllers.DoctorController.deleteClinic(id:Long)
 GET		/doctor/my-pharmacies							controllers.DoctorController.myFavoritePharmacies()
 GET		/doctor/remove-pharmacy/:doctorId/:pharmacyId		controllers.DoctorController.removeFavoritePharmacy(doctorId: Long, pharmacyId:Long)
+GET    /doctor/today-appointment                        controllers.DoctorController.viewTodaysAppointment()	
+
 #slug url (must be the last route in /doctor/)
 GET 	/doctor/:slugUrl								controllers.PublicController.getDoctorWithSlug(slugUrl:String)
 
@@ -118,7 +120,6 @@ GET		/static/fav/pharmacies							controllers.PharmacistController.staticFavPhar
 GET    /doctor/prescription						controllers.DoctorController.doctorPrescription()
 
 GET 	/viewappointments							controllers.DoctorController.doctorViewAppointment()
-GET    /doctor/today-appointment                        controllers.DoctorController.viewTodaysAppointment()	
 GET	   	/doctor/appointments						   controllers.DoctorController.doctorAppointments()
 GET		/doctor/search/appointment					controllers.DoctorController.doctorSearchAppointment()
 
