@@ -1,5 +1,24 @@
-@(apptMap : Map[Date,List[models.doctor.Appointment]],slotes:Integer)
+@(apptMap : Map[Date,List[models.doctor.Appointment]],slotes:Integer,date:Long)
 @* appointmentForm Template File *@
+<div style="overflow:auto;height:100%;position: relative;">
+@for((date,value) <- apptMap){
+	<div class="col-md-1" style="width:14%;padding: 0px;"><table class="table table-hover table-bordered" style="text-align:center;">
+	     <th class="danger" style="text-align:center">@date.format("dd-MMM-yy")<br>@date.format("EE")</th>
+		@for(appointment<-value){
+			@if(appointment.appointmentStatus.equals(models.doctor.AppointmentStatus.AVAILABLE)){
+      	 			   <tr><td id="@appointment.id" clinic="@appointment.doctorClinicInfo.clinic.name" date="@appointment.appointmentTime.format("HH:mm")" class="success appointment" style="cursor:pointer" data-toggle="modal" data-target="#myModal">@appointment.appointmentTime.format("HH:mm") </td></tr>  
+      	 			
+      	 		}else{
+      	 		      	 <tr><td class="active" disabled>@appointment.appointmentTime.format("HH:mm")</td></tr>  
+      	 		}
+		}
+	
+	</table></div>
+}
+</div>
+@*
+
+
 <table class="table table-hover table-bordered" style="text-align:center">
     <tr class="danger">
     @for((date,value) <- apptMap){
@@ -24,5 +43,8 @@
       	  </tr>
       }
     </table>
-    
- 
+    <script>
+    date.setTime(@date);
+    alert("hii"+date); 		
+    </script>
+*@

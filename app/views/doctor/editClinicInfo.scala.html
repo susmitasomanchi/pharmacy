@@ -89,7 +89,7 @@
    		</form>
    
     <script>
-					var lng, lat, marker;
+					var lng, lat, marker,state;
 					var dbclk = false;
 					var map, myLatLng;
 					function initialize() {
@@ -147,6 +147,17 @@
 								myLatLng = results[0].geometry.location;
 								lat = results[0].geometry.location.lat();
 								lng = results[0].geometry.location.lng();
+								geocoder.geocode({'latLng': myLatLng}, function(results, status){
+									if (status == google.maps.GeocoderStatus.OK) {
+										var address = results[0].address_components;
+										var zipcode = address[address.length - 1].long_name;
+										 state=address[address.length - 3].long_name;
+											$("#fetchPin").val(zipcode);
+								            $( "select" ).val(state.toUpperCase().replace(/\s+/g, '_'));
+								          $('select').trigger("chosen:updated");
+										 }
+									});
+
 								initialize();
 							} else {
 								//alert("Something got wrong " + status);
