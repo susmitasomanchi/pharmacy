@@ -7,13 +7,11 @@ import java.util.Map;
 
 import javax.activation.MimetypesFileTypeMap;
 
-import org.apache.commons.logging.Log;
-
 import models.Address;
 import models.Alert;
 import models.Country;
 import models.FileEntity;
-import models.Product;
+import models.MasterProduct;
 import models.Role;
 import models.State;
 import models.pharmacist.Batch;
@@ -410,61 +408,6 @@ public class PharmacistController extends Controller {
 		// return TODO;
 	}
 
-	
-	/**
-	 * @author : lakshmi
-	 * GET/pharmacy/order
-	 * Action to render the place_pharmacy_order
-	 * of the loggedIn ADMIN_PHARMACIST
-	 */
-	public static Result placePharmacyOrder() {
-		final Pharmacy pharmacy=LoginController.getLoggedInUser().getPharmacist().pharmacy;
-
-		return ok(views.html.pharmacist.place_pharmacy_order.render(pharmacy));
-	}
-	/**
-	 * @author : lakshmi
-	 * POST/pharmacy/order
-	 *  Action to svae the placed pharmacy order
-	 * of the loggedIn ADMIN_PHARMACIST
-	 */
-	public static Result placePharmacyOrderProcess() {
-		OrderLineItem orderLineItem = new OrderLineItem();
-		Logger.info("inside 1");
-		final Pharmacy pharmacy=LoginController.getLoggedInUser().getPharmacist().pharmacy;
-		final String[] product = request().body().asFormUrlEncoded().get("productIds");
-		final String[] quantity = request().body().asFormUrlEncoded().get("quantity");
-		final String[] mrp = request().body().asFormUrlEncoded().get("mrp");
-		final String[] product_other = request().body().asFormUrlEncoded().get("product_other");
-		final String[] quantity_other = request().body().asFormUrlEncoded().get("quantity_other");
-		final String[] mrp_other = request().body().asFormUrlEncoded().get("mrp_other");
-		if(product.length>1){
-		for(int index=0;index<product.length;index++){
-			orderLineItem.pharmacyProduct = PharmacyProduct.find.byId(Long.parseLong(product[index]));
-			orderLineItem.quantity = Double.parseDouble(quantity[index]);
-			orderLineItem.price = Double.parseDouble(mrp[index]);
-			pharmacy.orderLineItemList.add(orderLineItem);
-		}	
-		}
-		if(product_other.length>0){
-			PharmacyProduct pharmacyProduct = new PharmacyProduct();
-			for(int index=0;index<product_other.length;index++){
-				pharmacyProduct.medicineName=	product_other[index];
-				orderLineItem.pharmacyProduct = pharmacyProduct;
-				orderLineItem.quantity = Double.parseDouble(quantity_other[index]);
-				orderLineItem.price = Double.parseDouble(mrp_other[index]);
-				
-				pharmacy.orderLineItemList.add(orderLineItem);
-			}	
-			}
-		pharmacy.update();
-		Logger.info("orderLineItemList size()=="+pharmacy.orderLineItemList.size());
-		Logger.info("product size()=="+product.length);
-		Logger.info("quantity size()=="+quantity.length);
-		Logger.info("mrp size()=="+mrp.length);
-
-		return ok(views.html.pharmacist.place_pharmacy_order.render(pharmacy));
-	}
 
 
 
@@ -506,17 +449,19 @@ public class PharmacistController extends Controller {
 
 
 
+	/*
 	public static Result searchForm() {
-		final List<Product> products = Product.find.all();
+		final List<MasterProduct> products = MasterProduct.find.all();
 		return ok(views.html.pharmacist.searchProduct.render(products));
 	}
 
+	 */
 	public static Result searchProduct(final String search) {
 
 		// final List<Patient> patients=Patient.find.where().eq("appUser.email",
 		// "mitesh@greensoftware.in").findList();
 
-		final List<Product> products = Product.find
+		final List<MasterProduct> products = MasterProduct.find
 				.where()
 				.or(Expr.like("medicineName", search + "%"),
 						Expr.like("typeOfMedicine", search + "%")).findList();
@@ -532,8 +477,8 @@ public class PharmacistController extends Controller {
 
 	public static Result editProduct(final Long id) {
 
-		final Product product = Product.find.byId(id);
-		final Form<Product> editForm = ProductController.productForm.fill(product);
+		final MasterProduct product = MasterProduct.find.byId(id);
+		final Form<MasterProduct> editForm = ProductController.productForm.fill(product);
 
 		// productForm.fill(product);
 		return ok(views.html.common.createProduct.render(editForm));
@@ -556,14 +501,23 @@ public class PharmacistController extends Controller {
 	}
 
 
+
+	/*
 	public static Result orderRecord() {
 
-		final List<Product> products = Product.find.all();
+		final List<MasterProduct> products = MasterProduct.find.all();
 		return ok(views.html.pharmacist.orderEntry.render(products));
 
 	}
 
+	 */
 
+	public static Result pharmacyPlaceOrder(final Long id) {
+		final Pharmacy pharmacy=Pharmacy.find.byId(id);
+		//return ok(views.html.pharmacist.place_order.render(pharmacy.inventoryList,pharmacy));
+		return ok();
+
+	}
 
 	public static Result placeProductOrder() {
 

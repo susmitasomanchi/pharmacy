@@ -1,17 +1,15 @@
 @* viewTodaysAppointment Template File *@
-@(appointments:List[models.doctor.Appointment])
+@(appointments:List[models.doctor.Appointment],docClincs:List[models.doctor.DoctorClinicInfo])
 @import play.i18n._
 
 @main("Today' Appointments"){
 	
-	<div class="container">
 	
 		<ul class="nav nav-tabs" role="tablist" id="my-tab">
   			<li  class="active"><a href="#all"  data-toggle="tab">Home</a></li>
-  			@for( a <-  appointments.get(0).doctorClinicInfo.doctor.doctorClinicInfoList){
+  			@for( docClinic <-  docClincs){
   				
- 			 <li><a href="#@a.clinic.id" data-toggle="tab">@a.clinic.name</a></li>
-  				
+ 			 <li><a href="#@docClinic.clinic.id" data-toggle="tab">@docClinic.clinic.name</a></li>
   			}
   			
   			
@@ -24,16 +22,10 @@
 			<tr>
 			<div class="row clearfix">
 				<th><div class="col-md-3 column">
-				Patient
-				</div></th>
-				<th><div class="col-md-3 column">
-				Age
+				Patient(Age/Sex)
 				</div></th>
 				<th><div class="col-md-3 column">
 				Time
-				</div></th>
-				<th><div class="col-md-3 column">
-				Sex
 				</div></th>
 				<th><div class="col-md-3 column">
 				Appointment
@@ -42,44 +34,35 @@
 			</tr>
 			</thead>
 			@for(appointment <- appointments){
-			<tr class="success">
+			<tr>
 			<div class="row clearfix">
 				<div class="col-md-3 column">
-				<td>@*@appointment.requestedBy.name*@</td>
+				<td>@{appointment.requestedBy.name}(Age/Sex)</td>
 				</div>
 				<div class="col-md-3 column">
-				<td>@*@appointment.requestedBy.dob*@</td>
+				<td>@appointment.appointmentTime.format("dd-MMM-yy HH:mm")</td>
 				</div>
 				<div class="col-md-3 column">
-				<td>@*@appointment.requestedBy.dob*@</td>
-				</div>
-				<div class="col-md-3 column">
-				<td>@*@appointment.requestedBy.sex*@</td>
-				</div>
-				<div class="col-md-3 column">
-				<td><a href="http://www.google.com" class="btn btn-primary btn-success"  role="button">Prescription</a>
-				<a href="http://www.google.com" class="btn btn-primary btn-default"  role="button">Delete</a>
-				<a href="http://www.google.com" class="btn btn-primary btn-danger"  role="button">Edit</a></td>
+				<td><a href="http://www.google.com" class="btn btn-sm btn-success"  role="button">Prescription</a>
+				@*<a href="http://www.google.com" class="btn btn-sm btn-default"  role="button">Delete</a>
+				<a href="http://www.google.com" class="btn btn-sm btn-danger"  role="button">Edit</a>*@</td>
 				</div>
 			</div>
 			</tr>
 			}
 		</table>
 		</div>
-		@for( a <-  appointments.get(0).doctorClinicInfo.doctor.doctorClinicInfoList){
-			<div class="tab-pane fade" id="@a.id">
+		@for(  docClinic <-  docClincs){
+			<div class="tab-pane fade" id="@docClinic.clinic.id">
 				<table class="table">
 			<thead>
 			<tr>
 			<div class="row clearfix">
 				<th><div class="col-md-3 column">
-				Patient
+				Patient(Age/Sex)
 				</div></th>
 				<th><div class="col-md-3 column">
-				Age
-				</div></th>
-				<th><div class="col-md-3 column">
-				Sex
+				Time
 				</div></th>
 				<th><div class="col-md-3 column">
 				Appointment
@@ -88,24 +71,24 @@
 			</tr>
 			</thead>
 			@for(appointment <- appointments){
-			<tr class="success">
+			@if(appointment.doctorClinicInfo.id==docClinic.id){
+				<tr>
 			<div class="row clearfix">
 				<div class="col-md-3 column">
-				<td>@*@appointment.requestedBy.name*@</td>
+				<td>@{appointment.requestedBy.name}(Age/Sex)</td>
 				</div>
 				<div class="col-md-3 column">
-				<td>@a@*@appointment.requestedBy.dob*@</td>
+				<td>@appointment.appointmentTime.format("dd-MMM-yy HH:mm")</td>
 				</div>
 				<div class="col-md-3 column">
-				<td>@*@appointment.requestedBy.sex*@</td>
-				</div>
-				<div class="col-md-3 column">
-				<td><a href="http://www.google.com" class="btn btn-primary btn-success"  role="button">Prescription</a>
-				<a href="http://www.google.com" class="btn btn-primary btn-default"  role="button">Delete</a>
-				<a href="http://www.google.com" class="btn btn-primary btn-danger"  role="button">Edit</a></td>
+				<td><a href="http://www.google.com" class="btn btn-sm btn-success"  role="button">Prescription</a>
+			@*	<a href="http://www.google.com" class="btn btn-sm btn-default"  role="button">Delete</a>
+				<a href="http://www.google.com" class="btn btn-sm btn-danger"  role="button">Edit</a>*@</td>
 				</div>
 			</div>
 			</tr>
+			}
+			
 			}
 		</table>
 			
@@ -113,7 +96,6 @@
 			}
 		
 	</div>
-</div>
 	
 	
 	<script>

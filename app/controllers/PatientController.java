@@ -296,7 +296,6 @@ public class PatientController extends Controller {
 	 */
 	public static Result processAppointment(final Long apptId) {
 		final String remark=request().body().asFormUrlEncoded().get("remark")[0];
-
 		Logger.warn(remark);
 		final Appointment appointment=Appointment.find.byId(apptId);
 		appointment.appointmentStatus=AppointmentStatus.APPROVED;

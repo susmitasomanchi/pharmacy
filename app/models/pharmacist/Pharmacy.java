@@ -27,7 +27,7 @@ public class Pharmacy extends BaseEntity {
 	@GeneratedValue(strategy = GenerationType.AUTO)
 	public  Long id;
 	
-	String test;
+	
 
 	public String name;
 
@@ -74,8 +74,7 @@ public class Pharmacy extends BaseEntity {
 	@OneToMany(cascade=CascadeType.ALL)
 	public List<Inventory> inventoryList = new ArrayList<Inventory>();
 	
-	@OneToMany(cascade=CascadeType.ALL)
-	public List<OrderLineItem> orderLineItemList = new ArrayList<OrderLineItem>();
+	
 
 	public static Finder<Long, Pharmacy> find = new Finder<Long, Pharmacy>(Long.class, Pharmacy.class);
 

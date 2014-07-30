@@ -18,7 +18,10 @@ import models.BaseEntity;
 import models.FileEntity;
 import models.doctor.Doctor;
 import models.doctor.Prescription;
+<<<<<<< HEAD
 import play.Logger;
+=======
+>>>>>>> branch 'master' of http://pharmacy.bz/green-software/mednetwork.git
 import play.data.validation.Constraints.Email;
 import play.data.validation.Constraints.Required;
 import play.db.ebean.Model;
@@ -68,6 +71,8 @@ public class DiagnosticCentre extends BaseEntity {
 	@OneToMany(cascade=CascadeType.ALL,mappedBy="diagnosticCentre")
 	public List<DiagnosticRepresentative> diagnosticRepresentativelist = new ArrayList<DiagnosticRepresentative>();
 
+	@ManyToMany(cascade=CascadeType.ALL)
+	public List<DiagnosticTest> masterDiagnosticTestList = new ArrayList<DiagnosticTest>();
 
 	@ManyToMany(cascade=CascadeType.ALL)
 	public List<MasterDiagnosticTest> masterDiagnosticTestList = new ArrayList<MasterDiagnosticTest>();
@@ -77,7 +82,11 @@ public class DiagnosticCentre extends BaseEntity {
 
 	@OneToMany(cascade=CascadeType.ALL)
 	public List<DiagnosticOrder> diagnosticOrderList = new ArrayList<DiagnosticOrder>();
+<<<<<<< HEAD
 	
+=======
+
+>>>>>>> branch 'master' of http://pharmacy.bz/green-software/mednetwork.git
 	@ManyToMany(cascade=CascadeType.ALL)
 	public List<Prescription> prescriptionList = new ArrayList<Prescription>();
 
@@ -87,15 +96,13 @@ public class DiagnosticCentre extends BaseEntity {
 	@Column(columnDefinition="TEXT")
 	public String slugUrl;
 
-	public static Model.Finder<Long, DiagnosticCentre> find = new Finder<Long, DiagnosticCentre>(
-			Long.class, DiagnosticCentre.class);
+	public static Model.Finder<Long, DiagnosticCentre> find = new Finder<Long, DiagnosticCentre>(Long.class, DiagnosticCentre.class);
 
 
 	public DiagnosticBean toBean(){
 
 		final DiagnosticBean diagnosticBean = new DiagnosticBean();
 		diagnosticBean.id = this.id;
-
 
 		if(this.name != null) {
 			diagnosticBean.name= this.name;
@@ -114,7 +121,6 @@ public class DiagnosticCentre extends BaseEntity {
 		}
 		return diagnosticBean;
 	}
-
 
 
 

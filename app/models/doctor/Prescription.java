@@ -17,7 +17,6 @@ import javax.persistence.OneToOne;
 import models.BaseEntity;
 import models.diagnostic.DiagnosticTestLineItem;
 import models.patient.Patient;
-import models.pharmacist.MedicineLineItem;
 import play.db.ebean.Model;
 import beans.PrescriptionBean;
 

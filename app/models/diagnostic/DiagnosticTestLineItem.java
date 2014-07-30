@@ -1,5 +1,6 @@
 package models.diagnostic;
 
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -20,6 +21,7 @@ public class DiagnosticTestLineItem extends BaseEntity{
 	@OneToOne
 	public MasterDiagnosticTest masterDiagnosticTest;
 
+	@Column(columnDefinition="TEXT")
 	public String remarks;
 
 	public static Model.Finder<Long, DiagnosticTestLineItem> find = new Finder<Long, DiagnosticTestLineItem>(Long.class, DiagnosticTestLineItem.class);

@@ -85,6 +85,7 @@ public class PublicController extends Controller{
 				patientInfo.patient=patient;
 				patientInfo.doctor=Doctor.find.byId(docId);
 				patient.patientDoctorInfoList.add(patientInfo);
+				patient.update();
 				flash().put("alert", new Alert("alert-success","Added to Your Favorite Doctor").toString());
 
 				return redirect(routes.UserActions.dashboard());
@@ -235,6 +236,7 @@ public class PublicController extends Controller{
 	public static Result displayAppointment(final Long docClinId,final Long timeMillis) {
 
 		int slots=0;
+		Date date=new Date();
 
 		final Map<Date, List<Appointment>> appointmentMap = new LinkedHashMap<Date, List<Appointment>>();
 
@@ -251,10 +253,9 @@ public class PublicController extends Controller{
 		final Calendar calendar2=Calendar.getInstance();
 
 		final SimpleDateFormat dateFormat=new SimpleDateFormat("kk:mm");
-		int i=0;
-		while(true){
-
-			if(i==7){
+		int j=0;
+		for(int i=0;i<49;i++){
+			if(j==7){
 				break;
 			}
 
@@ -268,7 +269,6 @@ public class PublicController extends Controller{
 						calendar1.setTime(dateFormat.parse(schedule.fromTime));
 
 						calendar2.setTime(dateFormat.parse(schedule.toTime));
-
 					}
 					catch(final ParseException exception){
 						exception.printStackTrace();
@@ -291,7 +291,8 @@ public class PublicController extends Controller{
 						Logger.debug("fetched",calendarFrom);
 						appointmentMap.put(calendarFrom.getTime(), listAppointments);
 						slots=Math.max(slots,listAppointments.size());
-						i++;
+						date=calendarFrom.getTime();
+						j++;
 
 					}
 
@@ -305,14 +306,15 @@ public class PublicController extends Controller{
 			calendarFrom.add(Calendar.DATE, 1);
 			calendarTo.add(Calendar.DATE, 1);
 
+
 		}
 
 
 		/*return ok(views.html.patient.scheduleAppointment.render(appointmentMap,
 				 slots));*/
 		Logger.warn(""+appointmentMap.size());
-
-		return ok(views.html.patient.appointmentForm.render(appointmentMap,slots));
+		Logger.error(date+"");
+		return ok(views.html.patient.appointmentForm.render(appointmentMap,slots,date.getTime()));
 	}
 
 	/**

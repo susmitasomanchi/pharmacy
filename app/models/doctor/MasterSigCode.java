@@ -8,12 +8,12 @@ import play.db.ebean.Model;
 
 @SuppressWarnings("serial")
 @Entity
-public class SigCode extends BaseEntity{
+public class MasterSigCode extends BaseEntity{
 
 	public String code;
 
 	@Column(columnDefinition="TEXT")
 	public String description;
 
-	public static Model.Finder<Long, SigCode> find = new Finder<Long, SigCode>(Long.class, SigCode.class);
+	public static Model.Finder<Long, MasterSigCode> find = new Finder<Long, MasterSigCode>(Long.class, MasterSigCode.class);
 }

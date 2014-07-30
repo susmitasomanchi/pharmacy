@@ -2,6 +2,7 @@ package models.diagnostic;
 
 import java.util.Date;
 
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -23,7 +24,7 @@ public class DiagnosticReport extends BaseEntity {
 
 	@Lob
 	public byte[] fileContent;
-    
+
 	@OneToOne
 	public MasterDiagnosticTest masterDiagnosticTest;
 
@@ -33,7 +34,9 @@ public class DiagnosticReport extends BaseEntity {
 
 	public Date reportGeneratedDate;
 
-	public static Model.Finder<Long, DiagnosticReport> find = new Finder<Long, DiagnosticReport>(
-			Long.class, DiagnosticReport.class);
+	@Column(columnDefinition="TEXT")
+	public String remarks;
+
+	public static Model.Finder<Long, DiagnosticReport> find = new Finder<Long, DiagnosticReport>(Long.class, DiagnosticReport.class);
 
 }

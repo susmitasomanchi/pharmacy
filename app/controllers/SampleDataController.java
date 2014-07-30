@@ -1,14 +1,19 @@
 package controllers;
 
 
+import java.io.IOException;
 import java.util.Date;
 import java.util.List;
 
 import models.AppUser;
 import models.Role;
+<<<<<<< HEAD
 import models.diagnostic.DiagnosticCentre;
 import models.diagnostic.MasterDiagnosticTest;
 import models.diagnostic.DiagnosticTestLineItem;
+=======
+import models.diagnostic.DiagnosticTest;
+>>>>>>> branch 'master' of http://pharmacy.bz/green-software/mednetwork.git
 import models.doctor.Doctor;
 import models.doctor.Prescription;
 import models.mr.MedicalRepresentative;
