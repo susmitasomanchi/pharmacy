@@ -23,10 +23,11 @@ import beans.PharmacyBean;
 @SuppressWarnings("serial")
 @Entity
 public class Pharmacy extends BaseEntity {
-
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO)
 	public  Long id;
+	
+	String test;
 
 	public String name;
 
@@ -67,7 +68,7 @@ public class Pharmacy extends BaseEntity {
 	@OneToMany(cascade=CascadeType.ALL)
 	public List<Pharmacist> pharmacistList = new ArrayList<Pharmacist>();
 
-	@OneToMany(cascade=CascadeType.ALL)
+	@ManyToMany(cascade=CascadeType.ALL)
 	public List<Prescription> prescriptionList = new ArrayList<Prescription>();
 
 	@OneToMany(cascade=CascadeType.ALL)

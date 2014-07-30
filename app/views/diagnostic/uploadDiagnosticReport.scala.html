@@ -1,0 +1,21 @@
+@* registerPatient Template File *@
+@(diagnosticReport : models.diagnostic.DiagnosticReport,orderId: Long)
+@import helper.twitterBootstrap._
+
+@main("Diagnostic Form"){
+<div class="row">
+@helper.form(action=routes.DiagnosticController.uploadDiagnosticReportProcess(orderId,diagnosticReport.id),'enctype -> "multipart/form-data",'method -> "post"){
+
+    
+   <label for="file">Filename:</label>
+<input type="file" name="file" id="file"><br>
+<input type="submit" name="submit" value="Upload">
+
+}
+			
+</div>
+
+
+
+	}		
+

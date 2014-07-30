@@ -18,7 +18,7 @@ public class DiagnosticTestLineItem extends BaseEntity{
 	public  Long id;
 
 	@OneToOne
-	public DiagnosticTest diagnosticTest;
+	public MasterDiagnosticTest masterDiagnosticTest;
 
 	public String remarks;
 

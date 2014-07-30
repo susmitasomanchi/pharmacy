@@ -7,11 +7,14 @@ import com.avaje.ebean.annotation.EnumValue;
 
 public enum DiagnosticOrderStatus {
 
-	@EnumValue("RECEIVED")
-	RECEIVED,
+	@EnumValue("ORDER_RECEIVED")
+	ORDER_RECEIVED,
 
-	@EnumValue("CONFIRMED")
-	CONFIRMED;
+	@EnumValue("ORDER_CONFIRMED")
+	ORDER_CONFIRMED,
+	
+	@EnumValue("ORDER_CANCELLED")
+	ORDER_CANCELLED;
 
 	
 

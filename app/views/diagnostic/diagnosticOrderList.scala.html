@@ -1,43 +1,57 @@
-@(list: List[models.diagnostic.DiagnosticOrder])
+@(diagnosticCentre: models.diagnostic.DiagnosticCentre)
 @main("Diagnostic Order List") {
 <table class="table table-bordered">
 <thead>
 <tr>
 <th>
+SNo
+</th>
+<th>
+From
+</th>
+<th>
 Patient Name
 </th>
 <th>
-Email Id
+Tests
 </th>
 <th>
-Order Status
-</th>
-<th>
-Ordered Date
+Status
 </th>
 </tr>
 </thead>
-
 <tbody>
-
-@for(diagnosticOrder <- list) {
+@for((diagnosticOrder,index) <- diagnosticCentre.diagnosticOrderList.zipWithIndex) {
 <tr>
 <td>
-@diagnosticOrder.patient.appUser.name
+@{index+1}
 </td>
 <td>
-@diagnosticOrder.patient.appUser.email
+@if(diagnosticOrder.prescription.doctor!= null){
+@diagnosticOrder.prescription.doctor.appUser.name
+}
 </td>
 <td>
-@diagnosticOrder.diagnosticOrderStatus
+@if(diagnosticOrder.prescription.patient!= null){
+@diagnosticOrder.prescription.patient.appUser.name
+}
 </td>
 <td>
-@diagnosticOrder.receivedDate
+@for((diagnosticTestLineItem,index) <- diagnosticOrder.prescription.diagnosticTestLineItemList.zipWithIndex) {
+@{index+1}.@diagnosticTestLineItem.masterDiagnosticTest.name<br>
+}
+</td>
+<td>
+<span style="padding-right:20px">@diagnosticOrder.diagnosticOrderStatus</span>
+@if(diagnosticOrder.diagnosticOrderStatus.equals(models.diagnostic.DiagnosticOrderStatus.ORDER_RECEIVED)){
+<a  href="@routes.DiagnosticController.orderConfirmed(diagnosticCentre.id,diagnosticOrder.id)" class="btn btn-xs btn-success">Confirm</a>
+}
+<a  href="@routes.DiagnosticController.orderCancelled(diagnosticCentre.id,diagnosticOrder.id)" class="btn btn-xs btn-danger">Cancel</a>
 </td>
 <th>
-<a href="/received-tests/@diagnosticOrder.id" class="btn btn-xs btn-default">View Received Test</a>
-<a href="/diagnostic-edit/@diagnosticOrder.id" class="btn btn-xs btn-default">Upload Report</a>
-<a href="/remove-order/@diagnosticOrder.id" class="btn btn-xs btn-default">Remove Order</a>
+<a href="@routes.DiagnosticController.viewOrderedTest(diagnosticCentre.id,diagnosticOrder.id)" class="btn btn-xs btn-default">View Received Test</a>
+<a href="@routes.DiagnosticController.removeDiagnosticOrder(diagnosticCentre.id,diagnosticOrder.id)" class="btn btn-xs btn-default">Remove Order</a>
+
 </th>
 }
 </tr>

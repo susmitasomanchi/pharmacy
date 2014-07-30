@@ -18,6 +18,7 @@ import models.BaseEntity;
 import models.FileEntity;
 import models.doctor.Doctor;
 import models.doctor.Prescription;
+import play.Logger;
 import play.data.validation.Constraints.Email;
 import play.data.validation.Constraints.Required;
 import play.db.ebean.Model;
@@ -26,8 +27,6 @@ import beans.DiagnosticBean;
 @SuppressWarnings("serial")
 @Entity
 public class DiagnosticCentre extends BaseEntity {
-
-
 
 	@GeneratedValue(strategy = GenerationType.AUTO)
 	@Id
@@ -45,6 +44,7 @@ public class DiagnosticCentre extends BaseEntity {
 
 	@Column(columnDefinition="TEXT")
 	public String description;
+	
 	@Lob
 	public byte[] backgroudImage;
 
@@ -55,7 +55,6 @@ public class DiagnosticCentre extends BaseEntity {
 	public List<ShowCasedService> showCasedServiceList = new ArrayList<ShowCasedService>();
 
 	@Email
-	@Required
 	public String emailId;
 
 	public String websiteName;
@@ -70,12 +69,11 @@ public class DiagnosticCentre extends BaseEntity {
 	public List<DiagnosticRepresentative> diagnosticRepresentativelist = new ArrayList<DiagnosticRepresentative>();
 
 
+	@ManyToMany(cascade=CascadeType.ALL)
+	public List<MasterDiagnosticTest> masterDiagnosticTestList = new ArrayList<MasterDiagnosticTest>();
+	
 	@OneToMany(cascade=CascadeType.ALL)
 	public List<DiagnosticTest> diagnosticTestList = new ArrayList<DiagnosticTest>();
-
-	//	@OneToMany(cascade=CascadeType.ALL)
-	//	 * 	public List<Patient> patientList = new ArrayList<Patient>();
-
 
 	@OneToMany(cascade=CascadeType.ALL)
 	public List<DiagnosticOrder> diagnosticOrderList = new ArrayList<DiagnosticOrder>();
@@ -148,6 +146,7 @@ public class DiagnosticCentre extends BaseEntity {
 
 	@Override
 	public void update() {
+		Logger.info("this.id=="+this.id);
 		final StringBuilder stringBuilder = new StringBuilder();
 		stringBuilder.append(this.name.trim().toLowerCase());
 		if(this.address != null){
@@ -169,7 +168,9 @@ public class DiagnosticCentre extends BaseEntity {
 		}
 		stringBuilder.append(this.slugUrl.toLowerCase());
 		this.searchIndex = stringBuilder.toString();
+		Logger.info("The heirarichy..."+this.toString());
 		super.update();
+		
 	}
 
 }

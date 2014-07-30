@@ -4,6 +4,7 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.OneToOne;
 
 import models.BaseEntity;
 import models.Product;
@@ -18,6 +19,7 @@ public class MedicineLineItem extends BaseEntity{
 	@GeneratedValue(strategy = GenerationType.AUTO)
 	public  Long id;
 
+	@OneToOne
 	public Product medicine;
 
 	public String frequency;
