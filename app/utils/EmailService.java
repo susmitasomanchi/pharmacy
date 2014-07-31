@@ -1,11 +1,18 @@
 package utils;
 
+import java.math.BigInteger;
 import java.security.SecureRandom;
 import java.util.Random;
 
+import models.AppUser;
+
 import org.apache.commons.mail.DefaultAuthenticator;
 import org.apache.commons.mail.Email;
+import org.apache.commons.mail.HtmlEmail;
 import org.apache.commons.mail.SimpleEmail;
+
+import play.Logger;
+import controllers.LoginController;
 
 public class EmailService {
 	/**
@@ -38,21 +45,32 @@ public class EmailService {
 	}
 	public static boolean sendConformationEmail(final String receiverEmailId,final Long appUserId){
 		final Random random = new SecureRandom();
-		final byte []bytes=new byte[32];
-		random.nextBytes(bytes);
+		final String randomString = new BigInteger(130, random).toString(32);
 		boolean result=true;
 		try{
-			final Email email = new SimpleEmail();
+			final StringBuilder builder=new StringBuilder();
+			builder.append("<html>");
+			builder.append("<a href=localhost:9000/user/confirmation/");
+			builder.append(appUserId);
+			builder.append("/"+randomString +">");
+			builder.append("<b>click here</b>");
+			builder.append("</a>");
+			builder.append("</html>");
+			final HtmlEmail email = new HtmlEmail();
 			email.setHostName("smtp.gmail.com");
 			email.setSmtpPort(587);
-			email.setAuthenticator(new DefaultAuthenticator("assistant@greensoftware.in", "test.assistant"));
+			email.setAuthenticator(new DefaultAuthenticator("mitesh.greensoftware@gmail.com", "mitesh@greensoftware.in"));
 			email.setSSLOnConnect(true);
 			email.setFrom("assistant@greensoftware.in");
 			email.setSubject("Conformation Email");
-			email.setMsg(appUserId+"/"+bytes);
+			email.setHtmlMsg(builder.toString());
 			email.addTo(receiverEmailId);
 			email.send();
 			System.out.println("Mail Sent Successfully!");
+			final AppUser appUser=LoginController.getLoggedInUser();
+			appUser.emailConfirmationKey=randomString;
+			appUser.update();
+			Logger.info(builder.toString());
 		}
 		catch (final Exception e){
 			System.out.println("ERROR While Sending Email");
