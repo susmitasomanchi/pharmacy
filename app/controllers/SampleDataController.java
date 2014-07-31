@@ -1,18 +1,21 @@
 package controllers;
 
 
-import java.io.IOException;
 import java.util.Date;
 import java.util.List;
 
 import models.AppUser;
 import models.Role;
-import models.diagnostic.DiagnosticTest;
+import models.diagnostic.DiagnosticCentre;
+import models.diagnostic.DiagnosticTestLineItem;
+import models.diagnostic.MasterDiagnosticTest;
 import models.doctor.Doctor;
+import models.doctor.Prescription;
 import models.mr.MedicalRepresentative;
 import models.mr.PharmaceuticalCompany;
 import models.patient.Patient;
 import models.patient.PatientDoctorInfo;
+import play.Logger;
 import play.mvc.Controller;
 import play.mvc.Result;
 
@@ -201,6 +204,7 @@ public class SampleDataController extends Controller {
 
 
 
+
 	public static Result mrSampleData(){
 		final AppUser appUser = new AppUser();
 		appUser.name = "anand";
@@ -230,6 +234,46 @@ public class SampleDataController extends Controller {
 		patient.appUser = appUser1;
 		patient.save();
 		return ok();
+	}
+	/**
+	 * Action to create Prescription for the Diagnostic Centre
+	 * @return
+	 */
+	
+	public static Result prescripetionTest(){
+		Logger.info("test1");
+		DiagnosticCentre diagnosticCentre = DiagnosticCentre.find.byId(1L);
+		Logger.info("test2");
+		Prescription prescription = new Prescription();
+		DiagnosticTestLineItem diagnosticTestLineItem = new DiagnosticTestLineItem();
+		MasterDiagnosticTest test = new MasterDiagnosticTest();
+		Logger.info("test3");
+		test.name="X-ray";
+		test.description = "X-ray description";
+		test.save();
+		diagnosticTestLineItem.masterDiagnosticTest = test;
+		prescription.diagnosticTestLineItemList.add(diagnosticTestLineItem);
+		DiagnosticTestLineItem diagnosticTestLineItem2 = new DiagnosticTestLineItem();
+		MasterDiagnosticTest test2 = new MasterDiagnosticTest();
+		test2.name="scanning";
+		test2.description = "scanning description";
+		test2.save();
+		diagnosticTestLineItem2.masterDiagnosticTest = test2;
+		prescription.diagnosticTestLineItemList.add(diagnosticTestLineItem2);
+		/*DiagnosticTestLineItem diagnosticTestLineItem3 = new DiagnosticTestLineItem();
+		MasterDiagnosticTest test3 = new MasterDiagnosticTest();
+		test3.name="CT scan";
+		test3.description = "CT Scan description";
+		test3.save();
+		diagnosticTestLineItem3.masterDiagnosticTest = test3;
+		prescription.diagnosticTestLineItemList.add(diagnosticTestLineItem3);*/
+		prescription.save();
+		diagnosticCentre.prescriptionList.add(prescription);
+		diagnosticCentre.update();
+		Logger.info("test34");
+		return redirect(routes.DiagnosticController.addOrderFromDoctor(diagnosticCentre.id,prescription.id));
+		//return ok();
+		
 
 	}
 

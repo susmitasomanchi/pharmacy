@@ -26,13 +26,13 @@ public class DiagnosticReport extends BaseEntity {
 	public byte[] fileContent;
 
 	@OneToOne
-	public DiagnosticTest diagnosticTest;
+	public MasterDiagnosticTest masterDiagnosticTest;
 
 	public DiagnosticReportStatus reportStatus = DiagnosticReportStatus.SAMPLE_NOT_COLLECTED;
 
-	public Date sampleCollectionDate;
+	public Date sampleCollectedDate;
 
-	public Date reportGenerationDate;
+	public Date reportGeneratedDate;
 
 	@Column(columnDefinition="TEXT")
 	public String remarks;

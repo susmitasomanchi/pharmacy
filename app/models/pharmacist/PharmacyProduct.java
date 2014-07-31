@@ -1,6 +1,7 @@
 package models.pharmacist;
 
 import javax.persistence.CascadeType;
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -11,6 +12,7 @@ import models.BaseEntity;
 import play.data.validation.Constraints.Required;
 
 
+@SuppressWarnings("serial")
 @Entity
 public class PharmacyProduct extends BaseEntity{
 
@@ -33,6 +35,7 @@ public class PharmacyProduct extends BaseEntity{
 	//@Required
 	public String typeOfMedicine;
 
+	@Column(columnDefinition="TEXT")
 	public String description;
 
 	//@Required

@@ -408,7 +408,49 @@ public class PharmacistController extends Controller {
 		// return TODO;
 	}
 
+/*	*//**
+	 * @author : lakshmi
+	 * GET/pharmacy/order
+	 * Action to render the place_pharmacy_order
+	 * of the loggedIn ADMIN_PHARMACIST
+	 *//*
+	public static Result placePharmacyOrder() {
+		final Pharmacy pharmacy=LoginController.getLoggedInUser().getPharmacist().pharmacy;
 
+		return ok(views.html.pharmacist.place_pharmacy_order.render(pharmacy));
+	}
+	*//**
+	 * @author : lakshmi
+	 * POST/pharmacy/order
+	 *  Action to svae the placed pharmacy order
+	 * of the loggedIn ADMIN_PHARMACIST
+	 *//*
+	public static Result placePharmacyOrderProcess() {
+		OrderLineItem orderLineItem = new OrderLineItem();
+		Logger.info("inside 1");
+		final Pharmacy pharmacy=LoginController.getLoggedInUser().getPharmacist().pharmacy;
+		final String[] product = request().body().asFormUrlEncoded().get("productIds");
+		final String[] quantity = request().body().asFormUrlEncoded().get("quantity");
+		final String[] mrp = request().body().asFormUrlEncoded().get("mrp");
+		for(int index=0;index<product.length;index++){
+			orderLineItem.product = MasterProduct.find.byId(Long.parseLong(product[index]));
+			orderLineItem.quantity = Double.parseDouble(quantity[index]);
+			orderLineItem.price = Double.parseDouble(mrp[index]);
+			if(orderLineItem.id == null){
+				orderLineItem.save();
+			}
+			pharmacy.orderLineItemList.add(orderLineItem);
+		}		
+		pharmacy.update();
+		Logger.info("orderLineItemList size()=="+pharmacy.orderLineItemList.size());
+		Logger.info("product size()=="+product.length);
+		Logger.info("quantity size()=="+quantity.length);
+		Logger.info("mrp size()=="+mrp.length);
+
+		return ok(views.html.pharmacist.place_pharmacy_order.render(pharmacy));
+	}
+
+*/
 
 
 

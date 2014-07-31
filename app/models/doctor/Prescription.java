@@ -10,15 +10,15 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.ManyToMany;
 import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 
-import beans.PrescriptionBean;
 import models.BaseEntity;
 import models.diagnostic.DiagnosticTestLineItem;
-import models.doctor.Doctor;
 import models.patient.Patient;
 import play.db.ebean.Model;
+import beans.PrescriptionBean;
 
 
 @SuppressWarnings("serial")

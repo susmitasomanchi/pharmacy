@@ -26,8 +26,8 @@ public class PharmacyOrder extends BaseEntity{
 
 	public Date date;
 
-	@OneToMany(cascade=CascadeType.ALL)
-	public List<OrderLineItem> orderLineItemList = new ArrayList<OrderLineItem>();
+	/*@OneToMany(cascade=CascadeType.ALL)
+	public List<OrderLineItem> orderLineItemList = new ArrayList<OrderLineItem>();*/
 
 	public Float totalAmount;
 
