@@ -27,9 +27,6 @@ import play.mvc.Result;
 
 public class PublicController extends Controller{
 
-
-
-
 	/**
 	 * Action to render search doctor page
 	 * GET /doctor/search
@@ -339,11 +336,12 @@ public class PublicController extends Controller{
 	 * Action to display user login page after conformation
 	 *  GET /user/confirmation/:userId/:randomString
 	 */
-	public static Result emailConfirmation(Long userId,String randomString) {
-		AppUser appUser=AppUser.find.byId(userId);
+	public static Result emailConfirmation(final Long userId,final String randomString) {
+		final AppUser appUser=AppUser.find.byId(userId);
 		if(appUser != null){
 			if(appUser.emailConfirmationKey.compareTo(randomString) == 0){
 				appUser.emailConfirmed = true;
+				appUser.update();
 				flash().put("alert", new Alert("alert-success","the Conformation done successfull").toString());
 				return redirect(routes.LoginController.loginForm());
 			}

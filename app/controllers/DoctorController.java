@@ -557,7 +557,7 @@ public class DoctorController extends Controller {
 			final Calendar calendar1=Calendar.getInstance();
 			final Calendar calendar2=Calendar.getInstance();
 			final SimpleDateFormat dateFormat=new SimpleDateFormat("kk:mm");
-			final Doctor doctor=LoginController.getLoggedInUser().getDoctor();
+			LoginController.getLoggedInUser().getDoctor();
 			final Calendar calendar = Calendar.getInstance();
 			calendar.setTime(new Date());
 			for(int date=0;date<90;date++){
@@ -953,7 +953,8 @@ public class DoctorController extends Controller {
 
 		if(key.compareTo(appUser.mobileNumberConfirmationKey) == 0){
 			flash().put("alert", new Alert("alert-success","Mobile number is verified").toString());
-
+			appUser.mobileNumberConfirmed=true;
+			appUser.update();
 			return redirect(routes.UserActions.dashboard());
 		}
 		else{
