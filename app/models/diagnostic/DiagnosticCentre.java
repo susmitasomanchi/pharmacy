@@ -18,10 +18,7 @@ import models.BaseEntity;
 import models.FileEntity;
 import models.doctor.Doctor;
 import models.doctor.Prescription;
-<<<<<<< HEAD
 import play.Logger;
-=======
->>>>>>> branch 'master' of http://pharmacy.bz/green-software/mednetwork.git
 import play.data.validation.Constraints.Email;
 import play.data.validation.Constraints.Required;
 import play.db.ebean.Model;
@@ -72,9 +69,6 @@ public class DiagnosticCentre extends BaseEntity {
 	public List<DiagnosticRepresentative> diagnosticRepresentativelist = new ArrayList<DiagnosticRepresentative>();
 
 	@ManyToMany(cascade=CascadeType.ALL)
-	public List<DiagnosticTest> masterDiagnosticTestList = new ArrayList<DiagnosticTest>();
-
-	@ManyToMany(cascade=CascadeType.ALL)
 	public List<MasterDiagnosticTest> masterDiagnosticTestList = new ArrayList<MasterDiagnosticTest>();
 	
 	@OneToMany(cascade=CascadeType.ALL)
@@ -82,11 +76,7 @@ public class DiagnosticCentre extends BaseEntity {
 
 	@OneToMany(cascade=CascadeType.ALL)
 	public List<DiagnosticOrder> diagnosticOrderList = new ArrayList<DiagnosticOrder>();
-<<<<<<< HEAD
 	
-=======
-
->>>>>>> branch 'master' of http://pharmacy.bz/green-software/mednetwork.git
 	@ManyToMany(cascade=CascadeType.ALL)
 	public List<Prescription> prescriptionList = new ArrayList<Prescription>();
 

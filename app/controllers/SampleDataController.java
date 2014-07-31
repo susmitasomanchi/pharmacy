@@ -1,25 +1,21 @@
 package controllers;
 
 
-import java.io.IOException;
 import java.util.Date;
 import java.util.List;
 
 import models.AppUser;
 import models.Role;
-<<<<<<< HEAD
 import models.diagnostic.DiagnosticCentre;
-import models.diagnostic.MasterDiagnosticTest;
 import models.diagnostic.DiagnosticTestLineItem;
-=======
-import models.diagnostic.DiagnosticTest;
->>>>>>> branch 'master' of http://pharmacy.bz/green-software/mednetwork.git
+import models.diagnostic.MasterDiagnosticTest;
 import models.doctor.Doctor;
 import models.doctor.Prescription;
 import models.mr.MedicalRepresentative;
 import models.mr.PharmaceuticalCompany;
 import models.patient.Patient;
 import models.patient.PatientDoctorInfo;
+import play.Logger;
 import play.mvc.Controller;
 import play.mvc.Result;
 
@@ -245,10 +241,13 @@ public class SampleDataController extends Controller {
 	 */
 	
 	public static Result prescripetionTest(){
+		Logger.info("test1");
 		DiagnosticCentre diagnosticCentre = DiagnosticCentre.find.byId(1L);
+		Logger.info("test2");
 		Prescription prescription = new Prescription();
 		DiagnosticTestLineItem diagnosticTestLineItem = new DiagnosticTestLineItem();
 		MasterDiagnosticTest test = new MasterDiagnosticTest();
+		Logger.info("test3");
 		test.name="X-ray";
 		test.description = "X-ray description";
 		test.save();
@@ -271,6 +270,7 @@ public class SampleDataController extends Controller {
 		prescription.save();
 		diagnosticCentre.prescriptionList.add(prescription);
 		diagnosticCentre.update();
+		Logger.info("test34");
 		return redirect(routes.DiagnosticController.addOrderFromDoctor(diagnosticCentre.id,prescription.id));
 		//return ok();
 		

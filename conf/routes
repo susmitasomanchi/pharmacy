@@ -81,15 +81,12 @@ GET    /doctor/edit-clinic-schedule/:id                 controllers.DoctorContro
 POST   /doctor/update-clinic                            controllers.DoctorController.processUpdateClinicInfo()
 POST   /doctor/update-clinic-schedule                   controllers.DoctorController.processUpdateClinicSchedule()
 GET    /doctor/delete-clinic/:id                        controllers.DoctorController.deleteClinic(id:Long)
-GET		/doctor/my-pharmacies							controllers.DoctorController.myFavoritePharmacies()
-GET		/doctor/remove-pharmacy/:doctorId/:pharmacyId		controllers.DoctorController.removeFavoritePharmacy(doctorId: Long, pharmacyId:Long)
 GET    /doctor/today-appointment                        controllers.DoctorController.viewTodaysAppointment()	
 
 GET		/doctor/sig-codes									controllers.DoctorController.showSigCodes()
 POST	/doctor/add-sig-code								controllers.DoctorController.addSigCode()
 GET		/doctor/prescription								controllers.DoctorController.showPrescriptionForm()
 POST	/doctor/save-prescription							controllers.DoctorController.savePrescription()
-GET    /doctor/today-appointment                        controllers.DoctorController.viewTodaysAppointment()	
                      
 
 #slug url (must be the last route in /doctor/)
@@ -160,8 +157,8 @@ GET   	/edit-product/:id                      	controllers.PharmacistController.
 #GET     /remove-product/:id                      	controllers.PharmacistController.removeProduct(id: Long)
 POST	/addProductToInventory/					controllers.PharmacistController.addProductForm(id: Long)
 		
-GET		/order									controllers.PharmacistController.orderRecord()
-GET     /searchProduct                           controllers.PharmacistController.searchForm()
+#GET		/order									controllers.PharmacistController.orderRecord()
+#GET     /searchProduct                           controllers.PharmacistController.searchForm()
 POST  	/searchProduct                           controllers.PharmacistController.searchProduct(arg: String ?= "")
 GET   	/place-product-order                     	controllers.PharmacistController.placeProductOrder()
 GET   	/place-product-order/process              controllers.PharmacistController.placeProductOrderProcess()
@@ -170,8 +167,8 @@ GET		/edit-pharmacy-details					controllers.PharmacistController.editPharmacyDet
 #GET	/pharmacy/search-product							controllers.PharmacistController.productSearchProcess()	
 POST   /pharmacy/add-product-to-showcase                controllers.PharmacistController.addShowCasedProduct()
 GET    /pharmacy/remove-product-from-showcase/:id       controllers.PharmacistController.removeProductFromShowcaseList(id: Long)
-GET		/pharmacy/order						controllers.PharmacistController.placePharmacyOrder()
-POST		/pharmacy/order						controllers.PharmacistController.placePharmacyOrderProcess()
+#GET		/pharmacy/order						controllers.PharmacistController.placePharmacyOrder()
+#POST		/pharmacy/order						controllers.PharmacistController.placePharmacyOrderProcess()
 
 #GET 	/pharmacy/order/management									controllers.PharmacistController.orderManagement()
 

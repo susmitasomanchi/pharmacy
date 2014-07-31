@@ -9,22 +9,6 @@ import javax.persistence.Id;
 import models.BaseEntity;
 import play.db.ebean.Model;
 
-<<<<<<< HEAD
-@SuppressWarnings("serial")
-@Entity
-public class MasterDiagnosticTest extends BaseEntity{
-	@Id
-	@GeneratedValue(strategy = GenerationType.AUTO)
-	public Long id;
-	
-	public String name;
-	
-	@Column(columnDefinition="TEXT")
-	public String description;
-	
-	public static Model.Finder<Long, MasterDiagnosticTest> find = new Finder<Long, MasterDiagnosticTest>(Long.class, MasterDiagnosticTest.class);
-	
-=======
 
 @SuppressWarnings("serial")
 @Entity
@@ -39,6 +23,5 @@ public class MasterDiagnosticTest extends BaseEntity{
 	public String description;
 
 	public static Model.Finder<Long, MasterDiagnosticTest> find = new Finder<Long, MasterDiagnosticTest>(Long.class, MasterDiagnosticTest.class);
->>>>>>> branch 'master' of http://pharmacy.bz/green-software/mednetwork.git
 
 }
