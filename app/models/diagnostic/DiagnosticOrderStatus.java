@@ -14,7 +14,10 @@ public enum DiagnosticOrderStatus {
 	ORDER_CONFIRMED,
 	
 	@EnumValue("ORDER_CANCELLED")
-	ORDER_CANCELLED;
+	ORDER_CANCELLED,
+	
+	@EnumValue("ORDER_SERVED")
+	ORDER_SERVED;
 
 
 

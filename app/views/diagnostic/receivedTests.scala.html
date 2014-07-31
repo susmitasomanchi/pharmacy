@@ -34,8 +34,9 @@ Test Status
 </td>
 
 <th>
+@if(!diagnosticReport.reportStatus.equals(models.diagnostic.DiagnosticReportStatus.REPORT_READY)){
 <a href="@routes.DiagnosticController.uploadDiagnosticReport(diagnosticOrder.id,diagnosticReport.id)" class="btn btn-xs btn-default">Upload Report</a>
-@*<a href="/remove-order/@diagnosticOrder.id" class="btn btn-xs btn-default">Remove Order</a>*@
+}
 </th>
 }
 </tr>

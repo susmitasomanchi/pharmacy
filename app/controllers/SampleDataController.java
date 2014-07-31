@@ -260,13 +260,13 @@ public class SampleDataController extends Controller {
 		test2.save();
 		diagnosticTestLineItem2.masterDiagnosticTest = test2;
 		prescription.diagnosticTestLineItemList.add(diagnosticTestLineItem2);
-		DiagnosticTestLineItem diagnosticTestLineItem3 = new DiagnosticTestLineItem();
+		/*DiagnosticTestLineItem diagnosticTestLineItem3 = new DiagnosticTestLineItem();
 		MasterDiagnosticTest test3 = new MasterDiagnosticTest();
 		test3.name="CT scan";
 		test3.description = "CT Scan description";
 		test3.save();
 		diagnosticTestLineItem3.masterDiagnosticTest = test3;
-		prescription.diagnosticTestLineItemList.add(diagnosticTestLineItem3);
+		prescription.diagnosticTestLineItemList.add(diagnosticTestLineItem3);*/
 		prescription.save();
 		diagnosticCentre.prescriptionList.add(prescription);
 		diagnosticCentre.update();

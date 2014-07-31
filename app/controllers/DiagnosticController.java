@@ -278,7 +278,6 @@ public class DiagnosticController extends Controller {
 					
 				}
 				diagnosticOrder.receivedDate = new Date();
-				diagnosticOrder.diagnosticOrderStatus = DiagnosticOrderStatus.ORDER_RECEIVED;
 				diagnosticCentre.diagnosticOrderList.add(diagnosticOrder);
 			}
 			diagnosticCentre.update();
@@ -371,19 +370,8 @@ public class DiagnosticController extends Controller {
 	 * Action to display all DiagnosticTest for the current order
 	 */
 	public static Result viewOrderedTest(Long diagnosticId,final Long orderId) {
-		//DiagnosticCentre diagnosticCentre = DiagnosticCentre.find.byId(diagnosticId);
 		final DiagnosticOrder diagnosticOrder = DiagnosticOrder.find.byId(orderId);
 		
-		/*Logger.info("list size()==="+diagnosticOrder.prescription.diagnosticTestLineItemList.size());
-		for (final DiagnosticTestLineItem diagnosticTestLineItem : diagnosticOrder.prescription.diagnosticTestLineItemList) {
-			DiagnosticReport diagnosticReport = new DiagnosticReport();
-		diagnosticReport.masterDiagnosticTest = diagnosticTestLineItem.masterDiagnosticTest;
-		if(!diagnosticOrder.diagnosticReportList.contains(diagnosticReport)){
-		diagnosticOrder.diagnosticReportList.add(diagnosticReport);
-		}
-		
-		}
-		diagnosticOrder.update();*/
 		return ok(views.html.diagnostic.receivedTests.render(diagnosticOrder));
 	}
 
@@ -436,6 +424,18 @@ public class DiagnosticController extends Controller {
 			diagnosticReport.reportGeneratedDate = new Date();
 			diagnosticReport.update();
 		}
+		DiagnosticOrderStatus statusOfOrder = diagnosticOrder.diagnosticOrderStatus;
+		for (DiagnosticReport diagnosticReport : diagnosticOrder.diagnosticReportList) {
+			if(diagnosticReport.reportStatus.equals(DiagnosticReportStatus.REPORT_READY)){
+				diagnosticOrder.diagnosticOrderStatus = DiagnosticOrderStatus.ORDER_SERVED;
+			}
+			else{
+				diagnosticOrder.diagnosticOrderStatus = statusOfOrder;
+			}
+			diagnosticOrder.update();
+		}
+		
+		
 
 		return ok(views.html.diagnostic.receivedTests.render(diagnosticOrder));
 

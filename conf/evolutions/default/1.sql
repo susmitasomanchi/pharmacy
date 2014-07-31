@@ -206,7 +206,7 @@ create table diagnostic_order (
   confirmed_date            timestamp,
   cancelled_date            timestamp,
   last_update               timestamp not null,
-  constraint ck_diagnostic_order_diagnostic_order_status check (diagnostic_order_status in ('ORDER_CANCELLED','ORDER_RECEIVED','ORDER_CONFIRMED')),
+  constraint ck_diagnostic_order_diagnostic_order_status check (diagnostic_order_status in ('ORDER_CANCELLED','ORDER_RECEIVED','ORDER_CONFIRMED','ORDER_SERVED')),
   constraint pk_diagnostic_order primary key (id))
 ;
 

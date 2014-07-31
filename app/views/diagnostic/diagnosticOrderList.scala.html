@@ -46,17 +46,16 @@ Status
 @if(diagnosticOrder.diagnosticOrderStatus.equals(models.diagnostic.DiagnosticOrderStatus.ORDER_RECEIVED)){
 <a  href="@routes.DiagnosticController.orderConfirmed(diagnosticCentre.id,diagnosticOrder.id)" class="btn btn-xs btn-success">Confirm</a>
 }
+@if(!diagnosticOrder.diagnosticOrderStatus.equals(models.diagnostic.DiagnosticOrderStatus.ORDER_CANCELLED)&& !diagnosticOrder.diagnosticOrderStatus.equals(models.diagnostic.DiagnosticOrderStatus.ORDER_SERVED)){
 <a  href="@routes.DiagnosticController.orderCancelled(diagnosticCentre.id,diagnosticOrder.id)" class="btn btn-xs btn-danger">Cancel</a>
+}
 </td>
 <th>
-<a href="@routes.DiagnosticController.viewOrderedTest(diagnosticCentre.id,diagnosticOrder.id)" class="btn btn-xs btn-default">View Received Test</a>
+<a href="@routes.DiagnosticController.viewOrderedTest(diagnosticCentre.id,diagnosticOrder.id)" class="btn btn-xs btn-default">View Ordered Test</a>
 <a href="@routes.DiagnosticController.removeDiagnosticOrder(diagnosticCentre.id,diagnosticOrder.id)" class="btn btn-xs btn-default">Remove Order</a>
-
 </th>
 }
 </tr>
-
-
 </tbody>
 </table>
 }

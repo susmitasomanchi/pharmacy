@@ -30,7 +30,7 @@ public class DiagnosticOrder extends BaseEntity{
 	@OneToMany(cascade=CascadeType.ALL)
 	public List<DiagnosticReport> diagnosticReportList = new ArrayList<>();
 
-	public DiagnosticOrderStatus diagnosticOrderStatus;
+	public DiagnosticOrderStatus diagnosticOrderStatus = DiagnosticOrderStatus.ORDER_RECEIVED;
 
 	public Date receivedDate;
 
