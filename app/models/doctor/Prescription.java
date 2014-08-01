@@ -17,6 +17,7 @@ import javax.persistence.OneToOne;
 import models.BaseEntity;
 import models.diagnostic.DiagnosticTestLineItem;
 import models.patient.Patient;
+import models.pharmacist.PharmacyPrescriptionStatus;
 import play.db.ebean.Model;
 import beans.PrescriptionBean;
 
@@ -42,7 +43,7 @@ public class Prescription extends BaseEntity{
 	public Appointment appointment;
 
 	public Date prescriptionDate;
-
+	
 	@Column(columnDefinition="TEXT")
 	public String problemStatement;
 

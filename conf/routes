@@ -105,9 +105,24 @@ POST	/pharmacy/address-update			  				controllers.PharmacistController.pharmacyA
 GET		/pharmacy/get-image/:pharmacyId/:fileId				controllers.PharmacistController.getPharmacyImages(pharmacyId: Long,fileId: Long)
 GET		/pharmacy/remove-image/:pharmacyId/:fileId			controllers.PharmacistController.removeImage(pharmacyId: Long,fileId: Long)
 GET		/pharmacy/add-to-user/:pharmacyId					controllers.PublicController.addPharmacyToLoggedInUser(pharmacyId: Long)
+#GET 	/pharmacy/add-pharmacy-order/:pharmacyId/:prescriptionId		controllers.PharmacistController.addPharmacyOrderFromDoctor(pharmacyId: Long,prescriptionId: Long)
+GET 	/pharmacy/view-pharmacy-prescriptions						controllers.PharmacistController.pharmacyPrescriptionList()
+GET 	/pharmacy/received-prescriptions						controllers.PharmacistController.receivedPrescriptionList()
+GET 	/pharmacy/served-prescriptions						controllers.PharmacistController.servedPrescriptionList()
+GET 	/pharmacy/todays-prescriptions						controllers.PharmacistController.viewTodaysPrescriptions()
+
+GET 	/pharmacy/view-prescription-data/:pharmacyPrescriptionInfoId						controllers.PharmacistController.getPrescriptionDetails(pharmacyPrescriptionInfoId: Long)
+GET 	/pharmacy/confirm-prescription/:pharmacyPrescriptionInfoId               controllers.PharmacistController.confirmPrescription(pharmacyPrescriptionInfoId: Long)
+GET 	/pharmacy/served-prescription/:pharmacyPrescriptionInfoId                controllers.PharmacistController.servedPrescription(pharmacyPrescriptionInfoId: Long)
+#GET		/pharmacy/order						controllers.PharmacistController.placePharmacyOrder()
+#POST		/pharmacy/order						controllers.PharmacistController.placePharmacyOrderProcess()
+
 
 #slug url (must be the last route in /pharmacy/)
+
+
 GET /pharmacy/:slugUrl										controllers.PublicController.getPharmacyWithSlug(slugUrl: String)
+
 
 
 # Doagnostic Centre Module
@@ -170,8 +185,7 @@ GET		/edit-pharmacy-details					controllers.PharmacistController.editPharmacyDet
 #GET	/pharmacy/search-product							controllers.PharmacistController.productSearchProcess()	
 POST   /pharmacy/add-product-to-showcase                controllers.PharmacistController.addShowCasedProduct()
 GET    /pharmacy/remove-product-from-showcase/:id       controllers.PharmacistController.removeProductFromShowcaseList(id: Long)
-#GET		/pharmacy/order						controllers.PharmacistController.placePharmacyOrder()
-#POST		/pharmacy/order						controllers.PharmacistController.placePharmacyOrderProcess()
+
 
 #GET 	/pharmacy/order/management									controllers.PharmacistController.orderManagement()
 

@@ -101,6 +101,15 @@
              <li><a href="@routes.PharmacistController.getPharmacyProducts()">View Pharmacy products</a></li>
             </ul>
         </li>
+        <li class="dropdown">
+          <a href="#" class="dropdown-toggle" data-toggle="dropdown">
+          Prescriptions
+          <b class="caret"></b></a>
+          <ul class="dropdown-menu">
+            <li><a href="@routes.PharmacistController.pharmacyPrescriptionList()">All Prescriptions</a></li>
+            <li><a href="@routes.PharmacistController.viewTodaysPrescriptions()">Today's Prescriptions</a></li>
+            </ul>
+        </li>
         @*<li class="dropdown">
           <a href="#" class="dropdown-toggle" data-toggle="dropdown">
 				        Orders <b class="caret"> </b></a>
