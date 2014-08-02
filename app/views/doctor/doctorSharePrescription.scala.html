@@ -5,59 +5,78 @@
 
 @main("Share Prescription"){
 
-<div class="row">
-<h3>@prescription.doctor.appUser.name</h3>
+<div class="row" style="padding-left:20px; padding-right:100px;">
+
+<h3>Dr. @prescription.doctor.appUser.name <span class="pull-right" style="font-size:18px;">@prescription.prescriptionDate.format("dd-MMM-yyyy HH:mm")</span></h3>
 <h4>@prescription.doctor.degree</h4>
 <h4>@prescription.doctor.specialization</h4>
-</div>
+
 <hr>
 
+<h4 style="margin:0px; padding:0px;">@prescription.patient.appUser.name</h4>
+<p style="margin:0px; padding:0px;">Age: @prescription.patient.appUser.getAge()</p>
+<p>Sex: @org.apache.commons.lang3.text.WordUtils.capitalizeFully(prescription.patient.appUser.sex.toString())</p>
+
+<br>
+
+<h4><u>Problem Statement:</u></h4>
+<p>@prescription.problemStatement</p>
+<br>
+
+<h4><u>Prognosis:</u></h4>
+<p>@prescription.prognosis</p>
+<br>
+
 <div class="row">
-<h3>@prescription.patient.appUser.name</h3>
-<h4>@prescription.patient.appUser.getAge()</h4>
-<h4>@prescription.patient.appUser.sex</h4>
+<div class="col-md-6">
+<h4><u>Medicines:</u></h4>
+<table class="table table-bordered table-condensed">
+<thead>
+	<tr>
+		<th>S No</th>
+		<th>Medicine</th>
+		<th>Dosage</th>
+		<th>Remarks</th>
+	</tr>
+</thead>
+<tbody>
+	@for((medicine, index) <- prescription.medicineLineItemList.zipWithIndex){
+	<tr>
+		<td>@(index+1)</td>
+		<td>@medicine.medicineFullName</td>
+		<td>@medicine.dosage</td>
+		<td>@medicine.remarks</td>
+	</tr>
+	}
+</tbody>
+</table>
 </div>
-<hr>
 
-<div class="row">
-<h3>Problem Statement:</h3>
-<h4>@prescription.problemStatement</h4>
+<div class="col-md-6">
+<h4><u>Diagnostic Tests:</u></h4>
+<table class="table table-bordered table-condensed">
+<thead>
+	<tr>
+		<th>S No</th>
+		<th>Test</th>
+		<th>Remarks</th>
+	</tr>
+</thead>
+<tbody>
+	@for((test, index) <- prescription.diagnosticTestLineItemList.zipWithIndex){
+	<tr>
+		<td>@(index+1)</td>
+		<td>@test.diagnosticTestFullName</td>
+		<td>@test.remarks</td>
+	</tr>
+	}
+</tbody>
+</table>
 </div>
-<hr>
-
-<div class="row">
-<h3>Prognosis:</h3>
-<h4>@prescription.prognosis</h4>
 </div>
-<hr>
 
-
-<div class="row">
-<h3>Medicines:</h3>
-
-@for(medicine <- prescription.medicineLineItemList){
-	@medicine.medicineFullName ; @medicine.dosage ; @medicine.remarks
-	<br>
-}
-
-</div>
-<hr>
-
-<div class="row">
-<h3>Diagnostic Tests:</h3>
-
-@for(test <- prescription.diagnosticTestLineItemList){
-	@test.diagnosticTestFullName ; @test.remarks
-	<br>
-}
-
-</div>
-<hr>
-
-
-<div class="row">
-<h3>Remarks:</h3>
-<h4>@prescription.remarks</h4>
+<h4><u>Remarks:</u></h4>
+<p>@prescription.remarks</p>
 </div>
 
 
