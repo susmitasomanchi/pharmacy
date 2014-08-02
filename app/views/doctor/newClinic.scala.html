@@ -117,7 +117,7 @@
 			<tbody>
 			@for((day,index) <- models.doctor.Day.getList().zipWithIndex){
 				
-					<tr>
+					<tr class="active">
 					<td style="width:20%;"><input class="checkday" id="p-@day" type="checkbox" name="daysOfWeek[]" value="@day.toString()">@day</input></td>
 					<td> 
 						<div class="input-append bootstrap-timepicker">
@@ -192,11 +192,19 @@
 <script>
 	$('.checkday').change(function() {
 		if ($(this).is(":checked")) {
+			var row=$(this).parent().parent();
+			alert(row);
+			$(row).removeClass( "active" );
+			$(row).addClass( "info" );
 			var id = $(this).attr("id");
 			$("#" + id + "-from").prop("disabled", false);
 			$("#" + id + "-to").prop("disabled", false);
 		} else {
 			var id = $(this).attr("id");
+			var row=$(this).parent().parent();
+			alert(row);
+			$(row).removeClass( "info" );
+			$(row).addClass( "active");
 			$("#" + id + "-from").val("");
 			$("#" + id + "-from").attr("disabled", "disabled");
 			$("#" + id + "-to").val("");
