@@ -13,11 +13,9 @@ import javax.persistence.Id;
 import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 
-import beans.PrescriptionBean;
 import models.BaseEntity;
-import models.diagnostic.DiagnosticTestLineItem;
-import models.doctor.Doctor;
 import models.patient.Patient;
+import play.data.validation.Constraints.Required;
 import play.db.ebean.Model;
 
 
@@ -29,12 +27,14 @@ public class Prescription extends BaseEntity{
 	@GeneratedValue(strategy = GenerationType.AUTO)
 	public  Long id;
 
+	@Required
 	@OneToOne
 	public Doctor doctor;
 
 	@OneToOne
 	public Clinic clinic;
 
+	@Required
 	@OneToOne
 	public Patient patient;
 
@@ -60,6 +60,14 @@ public class Prescription extends BaseEntity{
 
 	public static Model.Finder<Long, Prescription> find = new Finder<Long, Prescription>(Long.class, Prescription.class);
 
+
+
+
+
+	/**
+	 * Not required in this format. Gotta come up with a better way to
+	 * edit existing prescriptions (if that is desired in the first place)
+	 * 
 	public PrescriptionBean toBean() {
 
 		final PrescriptionBean bean = new PrescriptionBean();
@@ -88,16 +96,21 @@ public class Prescription extends BaseEntity{
 		if(this.prognosis != null) {
 			bean.prognosis = this.prognosis;
 		}
-		for(final MedicineLineItem item:this.medicineLineItemList) {
-			bean.medicineLineItemListIds.add(item.id);
-		}
-		for(final DiagnosticTestLineItem item:this.diagnosticTestLineItemList) {
-			bean.diagnosticTestLineItemListIds.add(item.id);
-		}
+
+		//for(final MedicineLineItem item:this.medicineLineItemList) {
+		//	bean.medicineLineItemListIds.add(item.id);
+		//}
+		//for(final DiagnosticTestLineItem item:this.diagnosticTestLineItemList) {
+		//	bean.diagnosticTestLineItemListIds.add(item.id);
+		//}
+
 		if(this.remarks != null) {
 			bean.remarks = this.remarks;
 		}
 
-		return bean;
+			return bean;
 	}
+	 */
+
 }
+

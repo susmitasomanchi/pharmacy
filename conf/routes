@@ -44,6 +44,7 @@ GET	   /doctor/search/:key								controllers.PublicController.processSearchDoct
 GET   	/pharmacy/search/:searchString                  controllers.PublicController.processSearchPharmacies(searchString: String)
 #GET   	/pharmacy/add-favourite-pharmacy/:pharmacyId/:str   controllers.PublicController.myFavoritePharmacy(pharmacyId : Long,str: String)
 GET    /pharmacy/search									controllers.PublicController.searchPharmaciesPage()
+GET		/doctor/add-to-favorite/:docId					controllers.PublicController.addToFavDoctor(docId: Long)
 
 # Sign up page
 GET    /doctor/join                              			controllers.UserController.joinUsDoctor()
@@ -84,8 +85,13 @@ GET		/doctor/my-pharmacies							controllers.DoctorController.myFavoritePharmaci
 GET		/doctor/remove-pharmacy/:doctorId/:pharmacyId		controllers.DoctorController.removeFavoritePharmacy(doctorId: Long, pharmacyId:Long)
 GET		/doctor/sig-codes									controllers.DoctorController.showSigCodes()
 POST	/doctor/add-sig-code								controllers.DoctorController.addSigCode()
-GET		/doctor/prescription								controllers.DoctorController.showPrescriptionForm()
+GET		/doctor/all-appointments							controllers.DoctorController.viewAllAppointments()
+GET		/doctor/todays-appointments							controllers.DoctorController.viewTodaysAppointments()
+GET		/doctor/prescription/:appointmentId					controllers.DoctorController.showPrescriptionForm(appointmentId: Long)
 POST	/doctor/save-prescription							controllers.DoctorController.savePrescription()
+GET		/doctor/show-prescription/:prescriptionId			controllers.DoctorController.sharePrescription(prescriptionId: Long)							
+GET		/doctor/products/get-json							controllers.DoctorController.getAllProductsJson()
+GET		/doctor/diagnostic-tests/get-json					controllers.DoctorController.getAllDiagnosticJson()
 #slug url (must be the last route in /doctor/)
 GET 	/doctor/:slugUrl								controllers.PublicController.getDoctorWithSlug(slugUrl:String)
 
@@ -115,15 +121,16 @@ GET 	/diagnostic/:slugUrl								controllers.PublicController.getDiagnosticCentr
 #GET    /                                  controllers.Application.index()
 #GET    /:str		                      controllers.Application.indexX(str: String)
 
-GET		/static/fav/pharmacies							controllers.PharmacistController.staticFavPharmacies()
 
+GET		/static/fav/pharmacies							controllers.PharmacistController.staticFavPharmacies()
+GET		/create/master									controllers.SampleDataController.createMasterMedicinesAndTests()
 #############################	PRODUCTION	#################################################################################
 
 
 #GET    /doctor/prescription						controllers.DoctorController.doctorPrescription()
 
 GET 	/viewappointments							controllers.DoctorController.doctorViewAppointment()
-GET    /doctor/today-appointment                        controllers.DoctorController.viewTodaysAppointment()	
+#GET    /doctor/today-appointment                        controllers.DoctorController.viewTodaysAppointment()	
 GET	   	/doctor/appointments						   controllers.DoctorController.doctorAppointments()
 GET		/doctor/search/appointment					controllers.DoctorController.doctorSearchAppointment()
 

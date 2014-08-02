@@ -72,7 +72,7 @@
 	 <div class="col-md-6">
 	 <button type="button" class="btn btn-default btn-lg btn-block">Registration Form</button>
 	 
-	 <form id="doctorForm" class="form-horizontal" action="@routes.UserController.processJoinUs()" method="POST">
+	 <form id="userForm" class="form-horizontal" action="@routes.UserController.processJoinUs()" method="POST">
   <fieldset>
     <p class="text-success" style="text-align:center;">Please Fill the following entries to get yourself registered on MedNetwork. </p>
     
@@ -107,61 +107,27 @@
       </div>
     </div>
     
-    
-    @*
-    
     <div class="form-group">
-      <label for="textArea" class="col-lg-2 control-label">Message </label>
+      <label for="inputSex" class="col-lg-2 control-label">Sex*</label>
       <div class="col-lg-10">
-        <textarea class="form-control" rows="3" id="textArea"></textarea>
-        <span class="help-block">Any Other Information you may want to add up.</span>
-      </div>
-    </div>
-    
-    
-    <div class="form-group">
-      <label class="col-lg-2 control-label">Choose one of these options</label>
-      <div class="col-lg-10">
-        <div class="radio">
-          <label>
-            <input type="radio" name="optionsRadios" id="optionsRadios1" value="option1" checked="">
-            Own Clinic
-          </label>
-        </div>
-        <div class="radio">
-          <label>
-            <input type="radio" name="optionsRadios" id="optionsRadios2" value="option2">
-            Practicing as attached pratictioner on call in other clinics/hospital
-          </label>
-        </div>
-      </div>
-    </div>
-    
-    
-    
-    <div class="form-group">
-      <label for="select" class="col-lg-2 control-label">Area of specialization</label>
-      <div class="col-lg-10">
-        <select class="form-control" id="select">
-          <option>1</option>
-          <option>2</option>
-          <option>3</option>
-          <option>4</option>
-          <option>5</option>
-        </select>
-        <br>
-        <select multiple="" class="form-control">
-          <option>1</option>
-          <option>2</option>
-          <option>3</option>
-          <option>4</option>
-          <option>5</option>
+        <select id="inputSex" name="sex">
+			@for((k,v) <- Sex.options()){
+				<option value="@k">@v</option>
+			}
         </select>
       </div>
     </div>
     
     
-    *@
+    <div class="form-group">
+      <label for="inputDOB" class="col-lg-2 control-label">Birth Date*</label>
+      <div class="col-lg-10">
+		<div class="input-append date" id="dp3" data-date="01-01-1990" data-date-format="dd-mm-yyyy">
+			<input class="span2 dob-datepicker" size="16" type="text" name="dob" value="01-01-1990">
+			<span class="add-on"><i class="icon-th"></i></span>
+		</div>
+      </div>
+    </div>
     
     <input type="hidden" name="role" value="PATIENT">
     
@@ -170,6 +136,8 @@
         <input type="submit" onclick="validateAndSubmit();" class="btn btn-primary" value="Submit" >
       </div>
     </div>
+    
+    <br><br><br>
   </fieldset>
 </form>
 	 </div>
@@ -182,7 +150,6 @@ function validateAndSubmit(e){
 	if(
 		($('#inputConfirmPassword').val() == $('#inputPassword').val())
 		){
-		//$('#doctorForm').submit();			
 	}
 	else{
 		e.preventDefault();
@@ -216,7 +183,21 @@ function validateAndSubmit(e){
 
     
 
+<script>
 
+
+var nowTemp = new Date();
+var now = new Date(nowTemp.getFullYear(), nowTemp.getMonth(), nowTemp.getDate(), 0, 0, 0, 0);
+$('.dob-datepicker').datepicker({
+	  format: 'dd-mm-yyyy',
+	  onRender: function(date) {
+		    return date.valueOf() > now.valueOf() ? 'disabled' : '';
+	  }
+}).on('changeDate', function(ev) {
+	$(this).datepicker('hide');
+});
+
+</script>
 
 
 

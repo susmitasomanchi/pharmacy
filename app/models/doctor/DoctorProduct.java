@@ -1,18 +1,16 @@
-package models;
-
-import java.util.LinkedHashMap;
-import java.util.Map;
+package models.doctor;
 
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 
+import models.BaseEntity;
 import play.data.validation.Constraints.Required;
 
 @SuppressWarnings("serial")
 @Entity
-public class MasterProduct extends BaseEntity {
+public class DoctorProduct extends BaseEntity{
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO)
@@ -33,16 +31,6 @@ public class MasterProduct extends BaseEntity {
 
 	public String fullName;
 
-	public static Finder<Long, MasterProduct> find = new Finder<Long, MasterProduct>(Long.class, MasterProduct.class);
-
-	public static Map<String, String> options() {
-
-		final LinkedHashMap<String, String> vals = new LinkedHashMap<String, String>();
-		for (final MasterProduct val : MasterProduct.find.all()) {
-			vals.put(val.toString(), val.toString());
-		}
-		return vals;
-	}
-
+	public static Finder<Long, DoctorProduct> find = new Finder<Long, DoctorProduct>(Long.class, DoctorProduct.class);
 
 }

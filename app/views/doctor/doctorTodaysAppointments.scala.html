@@ -1,17 +1,15 @@
 @* viewTodaysAppointment Template File *@
-@(appointments:List[models.doctor.Appointment])
+@(appointments:List[models.doctor.Appointment],docClincs:List[models.doctor.DoctorClinicInfo])
 @import play.i18n._
 
-@main("Today' Appointments"){
+@main("Today's Appointments"){
 	
-	<div class="container">
 	
 		<ul class="nav nav-tabs" role="tablist" id="my-tab">
-  			<li  class="active"><a href="#all"  data-toggle="tab">Home</a></li>
-  			@for( a <-  appointments.get(0).doctorClinicInfo.doctor.doctorClinicInfoList){
+  			<li  class="active"><a href="#all"  data-toggle="tab">All Clinics</a></li>
+  			@for( docClinic <-  docClincs){
   				
- 			 <li><a href="#@a.clinic.id" data-toggle="tab">@a.clinic.name</a></li>
-  				
+ 			 <li><a href="#@docClinic.clinic.id" data-toggle="tab">@docClinic.clinic.name</a></li>
   			}
   			
   			
@@ -19,67 +17,69 @@
 	<div id="myTabContent" class="tab-content">
 		
 		<div class="tab-pane fade in active" id="all">
-			<table class="table">
+			<table class="table table-condensed table-hover">
 			<thead>
 			<tr>
 			<div class="row clearfix">
-				<th><div class="col-md-3 column">
-				Patient
+				<th><div class="col-md-4 column">
+				Clinic
 				</div></th>
-				<th><div class="col-md-3 column">
-				Age
+				<th><div class="col-md-4 column">
+				Date &amp; Time
 				</div></th>
-				<th><div class="col-md-3 column">
-				Time
+				<th><div class="col-md-4 column">
+				Patient&nbsp;(Sex/Age)
 				</div></th>
-				<th><div class="col-md-3 column">
-				Sex
-				</div></th>
-				<th><div class="col-md-3 column">
+				<th><div class="col-md-4 column">
 				Appointment
 				</div></th>
 			</div>
 			</tr>
 			</thead>
 			@for(appointment <- appointments){
-			<tr class="success">
+			<tr>
 			<div class="row clearfix">
 				<div class="col-md-3 column">
-				<td>@*@appointment.requestedBy.name*@</td>
+				<td>@appointment.doctorClinicInfo.clinic.name</td>
 				</div>
 				<div class="col-md-3 column">
-				<td>@*@appointment.requestedBy.dob*@</td>
+				<td>@appointment.appointmentTime.format("dd-MMM-yy HH:mm")</td>
 				</div>
 				<div class="col-md-3 column">
-				<td>@*@appointment.requestedBy.dob*@</td>
+				<td>@{appointment.requestedBy.name}&nbsp;(@appointment.requestedBy.sex.toString().substring(0,1)/@appointment.requestedBy.getAge())</td>
 				</div>
 				<div class="col-md-3 column">
-				<td>@*@appointment.requestedBy.sex*@</td>
-				</div>
-				<div class="col-md-3 column">
-				<td><a href="http://www.google.com" class="btn btn-primary btn-success"  role="button">Prescription</a>
-				<a href="http://www.google.com" class="btn btn-primary btn-default"  role="button">Delete</a>
-				<a href="http://www.google.com" class="btn btn-primary btn-danger"  role="button">Edit</a></td>
+				<td>
+
+				@if(appointment.appointmentStatus.equals(models.doctor.AppointmentStatus.APPROVED)){
+					<a href="@routes.DoctorController.showPrescriptionForm(appointment.id)" class="btn btn-sm btn-success"  role="button">Prescription</a>	
+				}
+				@if(appointment.appointmentStatus.equals(models.doctor.AppointmentStatus.SERVED)){
+					<a href="@routes.DoctorController.sharePrescription(appointment.getPrescription().id)" class="btn btn-sm btn-primary"  role="button">View Prescription</a>				
+				}
+				@*
+				<a href="http://www.google.com" class="btn btn-sm btn-default"  role="button">Delete</a>
+				<a href="http://www.google.com" class="btn btn-sm btn-danger"  role="button">Edit</a>
+				*@
+
+				</td>
 				</div>
 			</div>
 			</tr>
 			}
 		</table>
 		</div>
-		@for( a <-  appointments.get(0).doctorClinicInfo.doctor.doctorClinicInfoList){
-			<div class="tab-pane fade" id="@a.id">
-				<table class="table">
+		@for(  docClinic <-  docClincs){
+			<div class="tab-pane fade" id="@docClinic.clinic.id">
+				<table class="table table-condensed table-hover">
 			<thead>
 			<tr>
 			<div class="row clearfix">
-				<th><div class="col-md-3 column">
-				Patient
+				<th><div class="col-md-4 column">
+				Date &amp; Time
 				</div></th>
 				<th><div class="col-md-3 column">
-				Age
-				</div></th>
-				<th><div class="col-md-3 column">
-				Sex
+				Patient&nbsp;(Sex/Age)
 				</div></th>
 				<th><div class="col-md-3 column">
 				Appointment
@@ -88,24 +88,36 @@
 			</tr>
 			</thead>
 			@for(appointment <- appointments){
-			<tr class="success">
+			@if(appointment.doctorClinicInfo.id==docClinic.id){
+				<tr>
 			<div class="row clearfix">
 				<div class="col-md-3 column">
-				<td>@*@appointment.requestedBy.name*@</td>
+				<td>@appointment.appointmentTime.format("dd-MMM-yy HH:mm")</td>
 				</div>
 				<div class="col-md-3 column">
-				<td>@a@*@appointment.requestedBy.dob*@</td>
+				<td>@{appointment.requestedBy.name}&nbsp;(@appointment.requestedBy.sex.toString().substring(0,1)/@appointment.requestedBy.getAge())</td>
 				</div>
 				<div class="col-md-3 column">
-				<td>@*@appointment.requestedBy.sex*@</td>
-				</div>
-				<div class="col-md-3 column">
-				<td><a href="http://www.google.com" class="btn btn-primary btn-success"  role="button">Prescription</a>
-				<a href="http://www.google.com" class="btn btn-primary btn-default"  role="button">Delete</a>
-				<a href="http://www.google.com" class="btn btn-primary btn-danger"  role="button">Edit</a></td>
+				<td>
+				
+				@if(appointment.appointmentStatus.equals(models.doctor.AppointmentStatus.APPROVED)){
+					<a href="@routes.DoctorController.showPrescriptionForm(appointment.id)" class="btn btn-sm btn-success"  role="button">Prescription</a>	
+				}
+				@if(appointment.appointmentStatus.equals(models.doctor.AppointmentStatus.SERVED)){
+					<a href="@routes.DoctorController.sharePrescription(appointment.getPrescription().id)" class="btn btn-sm btn-primary"  role="button">View Prescription</a>				
+				}
+				
+				@*
+				<a href="http://www.google.com" class="btn btn-sm btn-default"  role="button">Delete</a>
+				<a href="http://www.google.com" class="btn btn-sm btn-danger"  role="button">Edit</a>
+				*@
+				
+				</td>
 				</div>
 			</div>
 			</tr>
+			}
+			
 			}
 		</table>
 			
@@ -113,7 +125,6 @@
 			}
 		
 	</div>
-</div>
 	
 	
 	<script>

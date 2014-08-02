@@ -57,41 +57,40 @@ public class Doctor extends BaseEntity{
 	@Lob
 	public byte[] profileImage;
 
-	//education
 	@OneToMany(cascade=CascadeType.ALL)
 	public List<DoctorEducation> doctorEducationList = new ArrayList<DoctorEducation>();
 
-	//experience
 	@OneToMany(cascade=CascadeType.ALL)
 	public List<DoctorExperience> doctorExperienceList = new ArrayList<DoctorExperience>();
 
-	//publications
 	@OneToMany(cascade=CascadeType.ALL)
 	public List<DoctorPublication> doctorPublicationList = new ArrayList<DoctorPublication>();
 
-	//awards
 	@OneToMany(cascade=CascadeType.ALL)
 	public List<DoctorAward> doctorAwardList = new ArrayList<DoctorAward>();
 
-	//language
 	@ManyToMany(cascade=CascadeType.ALL)
 	public List<DoctorLanguage> doctorLanguageList = new ArrayList<DoctorLanguage>();
 
-	//socialwork
 	@OneToMany(cascade=CascadeType.ALL)
 	public List<DoctorSocialWork> doctorSocialWorkList = new ArrayList<DoctorSocialWork>();
 
 	@OneToMany(cascade=CascadeType.ALL)
 	public List<DoctorEducation> doctorEducation = new ArrayList<DoctorEducation>();
 
+	@OneToMany(cascade=CascadeType.ALL)
+	public List<DoctorProduct> myProductList = new ArrayList<DoctorProduct>();
+
+	@OneToMany(cascade=CascadeType.ALL)
+	public List<DoctorDiagnosticTest> myDiagnosticTestList = new ArrayList<DoctorDiagnosticTest>();
+
 	@ManyToMany(cascade=CascadeType.ALL)
-	public List<Pharmacy> pharmacyList=new ArrayList<Pharmacy>();
+	public List<Pharmacy> pharmacyList = new ArrayList<Pharmacy>();
 
 	/** Using it to capture starting year of experience.
 	 * 	So, Doctor's experience = currentYear - this.experience
 	 */
 	public Integer experience;
-
 
 	@Column(columnDefinition="TEXT")
 	public String searchIndex;

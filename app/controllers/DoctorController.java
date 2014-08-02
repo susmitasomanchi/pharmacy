@@ -3,13 +3,18 @@ package controllers;
 import java.io.File;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
+import org.json.JSONArray;
+
 import models.Alert;
 import models.AppUser;
+import models.MasterDiagnosticTest;
+import models.MasterProduct;
 import models.Role;
 import models.doctor.Appointment;
 import models.doctor.AppointmentStatus;
@@ -18,14 +23,18 @@ import models.doctor.DaySchedule;
 import models.doctor.Doctor;
 import models.doctor.DoctorAward;
 import models.doctor.DoctorClinicInfo;
+import models.doctor.DoctorDiagnosticTest;
 import models.doctor.DoctorEducation;
 import models.doctor.DoctorExperience;
+import models.doctor.DoctorProduct;
 import models.doctor.DoctorSocialWork;
+import models.doctor.Prescription;
 import models.doctor.QuestionAndAnswer;
 import models.doctor.SigCode;
 import models.pharmacist.Pharmacy;
 import play.Logger;
 import play.data.Form;
+import play.mvc.BodyParser;
 import play.mvc.Controller;
 import play.mvc.Http.MultipartFormData;
 import play.mvc.Result;
@@ -833,8 +842,72 @@ public class DoctorController extends Controller {
 
 
 
+	/**
+	 * @author Mitesh
+	 * Action to Display appointment requested to logged-in DOCTOR
+	 * GET	/doctor/all-appointments
+	 */
+	public static Result viewAllAppointments() {
+
+		/*
+		final Calendar calendar=Calendar.getInstance();
+		calendar.setTime(new Date());
+		calendar.set(Calendar.HOUR_OF_DAY, 0);
+		calendar.set(Calendar.MINUTE, 0);
+		calendar.set(Calendar.SECOND,0);
+		calendar.set(Calendar.MILLISECOND,0);
+		 */
+		final Doctor loggedIndoctor = LoginController.getLoggedInUser().getDoctor();
+		final List<DoctorClinicInfo> docclinicInfo = DoctorClinicInfo.find.where().eq("doctor", loggedIndoctor).findList();
+		//final List<Appointment> appointments = Appointment.find.where().in("doctorClinicInfo", docclinicInfo).eq("appointmentStatus", AppointmentStatus.APPROVED).ge("appointmentTime", calendar.getTime()).findList();
+		final List<AppointmentStatus> statusList = new ArrayList<AppointmentStatus>();
+		statusList.add(AppointmentStatus.APPROVED);
+		statusList.add(AppointmentStatus.SERVED);
+		final List<Appointment> appointments = Appointment.find.where().in("doctorClinicInfo", docclinicInfo).in("appointmentStatus", statusList).orderBy("appointmentTime").findList();
+		return ok(views.html.doctor.doctorAllAppointments.render(appointments,docclinicInfo));
+
+	}
 
 
+
+	/**
+	 * @author Mitesh
+	 * Action to Display appointment requested to logged-in DOCTOR
+	 * GET	/doctor/todays-appointments
+	 */
+	public static Result viewTodaysAppointments() {
+
+		final Date today =  new Date();
+
+		final Calendar calendarFrom = Calendar.getInstance();
+		calendarFrom.setTime(today);
+		calendarFrom.set(Calendar.HOUR_OF_DAY, 0);
+		calendarFrom.set(Calendar.MINUTE, 0);
+		calendarFrom.set(Calendar.SECOND,0);
+		calendarFrom.set(Calendar.MILLISECOND,0);
+
+		final Calendar calendarTo = Calendar.getInstance();
+		calendarTo.setTime(today);
+		calendarTo.set(Calendar.HOUR_OF_DAY, 23);
+		calendarTo.set(Calendar.MINUTE, 59);
+		calendarTo.set(Calendar.SECOND,59);
+		calendarTo.set(Calendar.MILLISECOND,999);
+
+		final Doctor loggedIndoctor = LoginController.getLoggedInUser().getDoctor();
+		final List<DoctorClinicInfo> docclinicInfo = DoctorClinicInfo.find.where().eq("doctor", loggedIndoctor).findList();
+		final List<AppointmentStatus> statusList = new ArrayList<AppointmentStatus>();
+		statusList.add(AppointmentStatus.APPROVED);
+		statusList.add(AppointmentStatus.SERVED);
+		final List<Appointment> appointments = Appointment.find.where()
+				.in("doctorClinicInfo", docclinicInfo)
+				.in("appointmentStatus", statusList)
+				.ge("appointmentTime", calendarFrom.getTime())
+				.le("appointmentTime", calendarTo.getTime())
+				.orderBy("appointmentTime")
+				.findList();
+		return ok(views.html.doctor.doctorTodaysAppointments.render(appointments,docclinicInfo));
+
+	}
 
 
 
@@ -880,10 +953,15 @@ public class DoctorController extends Controller {
 
 	/**
 	 * Action to render the prescription form to the loggedInDoctor
-	 * GET	/doctor/prescription
+	 * GET	/doctor/prescription/:appointmentId
 	 */
-	public static Result showPrescriptionForm(){
-		return ok(views.html.doctor.doctorPrescription.render(prescriptionForm));
+	public static Result showPrescriptionForm(final Long appointmentId){
+		final Appointment appointment = Appointment.find.byId(appointmentId);
+		//server-side check
+		if(appointment.doctorClinicInfo.doctor.id.longValue() != LoginController.getLoggedInUser().getDoctor().id.longValue()){
+			return redirect(routes.LoginController.processLogout());
+		}
+		return ok(views.html.doctor.doctorPrescription.render(prescriptionForm, appointment));
 	}
 
 	/**
@@ -899,18 +977,83 @@ public class DoctorController extends Controller {
 			return redirect(routes.LoginController.processLogout());
 		}
 
+		Prescription prescription = new Prescription();
+		prescription = bean.toEntity();
+		prescription.save();
+
+		final Appointment appointment = prescription.appointment;
+		appointment.appointmentStatus = AppointmentStatus.SERVED;
+		appointment.update();
 
 
+		flash().put("alert", new Alert("alert-success", "Prescription saved!").toString());
+		return redirect(routes.DoctorController.sharePrescription(prescription.id));
+	}
 
-		return ok();
+
+	/**
+	 * Action to show logged In doctor a page to
+	 * assign a prescription to a pharmacy / diagnostic centre
+	 * GET	/doctor/share-prescription
+	 */
+	public static Result sharePrescription(final Long prescriptionId){
+		final Doctor doctor = LoginController.getLoggedInUser().getDoctor();
+		final Prescription prescription = Prescription.find.byId(prescriptionId);
+		//server-side check
+		if(prescription.doctor.id.longValue() != doctor.id.longValue()){
+			return redirect(routes.LoginController.processLogout());
+		}
+		return ok(views.html.doctor.doctorSharePrescription.render(prescription));
 	}
 
 
 
+	/**
+	 * Action to get all Products' names
+	 * GET	/doctor/products/get-json
+	 */
+	@BodyParser.Of(BodyParser.Json.class)
+	public static Result getAllProductsJson(){
+		final List<DoctorProduct> loggedInDoctorProductList = LoginController.getLoggedInUser().getDoctor().myProductList;
+		final int arrayLength = MasterProduct.find.findRowCount()+loggedInDoctorProductList.size();
+		final String[] result = new String[arrayLength];
+		int i=0;
+		for (final DoctorProduct product : loggedInDoctorProductList){
+			result[i] = product.fullName;
+			i++;
+		}
+		final List<MasterProduct> masterProductList = MasterProduct.find.all();
+		for (final MasterProduct product : masterProductList){
+			result[i] = product.fullName;
+			i++;
+		}
+		final JSONArray jsonArray = new JSONArray(Arrays.asList(result));
+		return ok(jsonArray.toString());
+	}
 
 
-
-
+	/**
+	 * Action to get all Products' names
+	 * GET	/doctor/diagnostic-tests/get-json
+	 */
+	@BodyParser.Of(BodyParser.Json.class)
+	public static Result getAllDiagnosticJson(){
+		final List<DoctorDiagnosticTest> loggedInDoctorDiagTestList = LoginController.getLoggedInUser().getDoctor().myDiagnosticTestList;
+		final int arrayLength = MasterDiagnosticTest.find.findRowCount()+loggedInDoctorDiagTestList.size();
+		final String[] result = new String[arrayLength];
+		int i=0;
+		for (final DoctorDiagnosticTest diagTest : loggedInDoctorDiagTestList){
+			result[i] = diagTest.name;
+			i++;
+		}
+		final List<MasterDiagnosticTest> masterDiagnosticTestList = MasterDiagnosticTest.find.all();
+		for (final MasterDiagnosticTest diagTest : masterDiagnosticTestList){
+			result[i] = diagTest.name;
+			i++;
+		}
+		final JSONArray jsonArray = new JSONArray(Arrays.asList(result));
+		return ok(jsonArray.toString());
+	}
 
 
 
@@ -946,8 +1089,8 @@ public class DoctorController extends Controller {
 			qaList = QuestionAndAnswer.find.where().eq("answerBy.id", doctor.id).findList();
 		}
 		return ok(views.html.doctor.ansQuestion.render(qaList));
-
 	}
+
 	//Question Answered By Doctor
 	public static Result answerQuestion(final Long qaId) {
 		final QuestionAndAnswerBean qaBean = questionAndAnswerForm.bindFromRequest().get();
@@ -957,8 +1100,6 @@ public class DoctorController extends Controller {
 		qa.update();
 		flash().put("alert", "saved answer successfully");
 		return redirect(routes.DoctorController.displayAnswer());
-
-
 	}
 
 
@@ -1009,23 +1150,11 @@ public class DoctorController extends Controller {
 		return ok(views.html.doctor.doctor_view_appointment.render());
 	}
 
-	//Todays Appointment
-	public static Result viewTodaysAppointment() {
 
-		final Calendar calendar=Calendar.getInstance();
-		calendar.setTime(new Date());
-		calendar.set(Calendar.HOUR_OF_DAY, 0);
-		calendar.set(Calendar.MINUTE, 0);
-		calendar.set(Calendar.SECOND,0);
-		calendar.set(Calendar.MILLISECOND,0);
 
-		final Doctor loggedIndoctor = LoginController.getLoggedInUser().getDoctor();
 
-		final List<Appointment> appointments=Appointment.find.where().eq("appointmentStatus", AppointmentStatus.APPROVED).eq("doctor", loggedIndoctor).ge("appointmentTime", calendar.getTime()).findList();
-		Logger.warn(""+appointments.toString());
-		return ok(views.html.doctor.doctor_appointments.render(appointments));
 
-	}
+
 	/**
 	 * @author lakshmi
 	 * Action to add favorite pharmacy of the Doctor to the list of Doctor of loggedin DOCTOR
@@ -1063,6 +1192,8 @@ public class DoctorController extends Controller {
 		final Doctor doctor = LoginController.getLoggedInUser().getDoctor();
 		return ok(views.html.favorite_pharmacy_list.render(doctor.pharmacyList,doctor.id,0L));
 	}
+
+
 	/**
 	 * @author lakshmi
 	 * Action to remove Pharmacy from  favorite pharmacies List of Doctor of loggedin DOCTOR
@@ -1080,8 +1211,6 @@ public class DoctorController extends Controller {
 
 
 	public static Result requestAppointment(){
-
-
 		final String param[] =request().body().asFormUrlEncoded().get("datetime");
 		try{
 			final Appointment appointment=Appointment.find.byId(Long.parseLong(param[1]));
@@ -1095,8 +1224,6 @@ public class DoctorController extends Controller {
 			e.printStackTrace();
 			return ok("-1");
 		}
-
-
 	}
 
 }

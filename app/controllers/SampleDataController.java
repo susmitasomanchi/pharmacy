@@ -1,13 +1,13 @@
 package controllers;
 
 
-import java.io.IOException;
 import java.util.Date;
 import java.util.List;
 
 import models.AppUser;
+import models.MasterDiagnosticTest;
+import models.MasterProduct;
 import models.Role;
-import models.diagnostic.DiagnosticTest;
 import models.doctor.Doctor;
 import models.mr.MedicalRepresentative;
 import models.mr.PharmaceuticalCompany;
@@ -231,6 +231,20 @@ public class SampleDataController extends Controller {
 		patient.save();
 		return ok();
 
+	}
+
+
+	public static Result createMasterMedicinesAndTests(){
+		for(int i=10; i<=15; i++){
+			final MasterProduct product = new MasterProduct();
+			product.fullName = "Medicine-"+i;
+			product.save();
+
+			final MasterDiagnosticTest test = new MasterDiagnosticTest();
+			test.name = "Test-"+i;
+			test.save();
+		}
+		return ok();
 	}
 
 }
