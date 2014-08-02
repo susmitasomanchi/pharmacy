@@ -106,7 +106,7 @@
 			<div class="col-md-6">
    				<h3 id="patient"><b>For Patient</b></h3>
    				
-   					<table class="table">
+   					<table class="table table-striped">
 			<head>
 			<tr>		
 				<th style="text-align:center;">Day</th>
@@ -118,16 +118,16 @@
 			@for((day,index) <- models.doctor.Day.getList().zipWithIndex){
 				
 					<tr class="active">
-					<td style="width:20%;"><input class="checkday" id="p-@day" type="checkbox" name="daysOfWeek[]" value="@day.toString()">&nbsp; @day</input></td>
+					<td style="width:20%;"><input class="checkday" id="p-@day" type="checkbox" name="daysOfWeek[]" value="@day.toString()">@day</input></td>
 					<td> 
 						<div class="input-append bootstrap-timepicker">
-							 <input id="p-@day-from" type="text" class="input-small" style="padding-left:20px; width:40%; margin-left:30%;" name="fromHrs[]" value="@clinicForm("fromHrs["+index+"]").value" disabled required/>
+							 <input id="p-@day-from" type="text" class="input-small intime" style="padding-left:20px; width:40%; margin-left:30%;" name="fromHrs[]" value="@clinicForm("fromHrs["+index+"]").value" disabled required/>
            				 	 <span class="add-on"><i class="fa fa-clock-o"></i></span>
       					</div>
 					</td>
 					<td> 
 						<div class="input-append bootstrap-timepicker">
-							<input id="p-@day-to"  type="text" class="input-small" style="padding-left:20px; width:40%; margin-left:30%;"  name="toHrs[]" value="@clinicForm("toHrs["+index+"]").value" disabled required/>
+							<input id="p-@day-to"  type="text" class="input-small outtime" style="padding-left:20px; width:40%; margin-left:30%;"  name="toHrs[]" value="@clinicForm("toHrs["+index+"]").value" disabled required/>
             				<span class="add-on"><i class="fa fa-clock-o"></i></span>
       					</div>
 					</td>
@@ -139,7 +139,7 @@
 			</table>
 			<div class="form-group">
     <label for="slotp" class="col-md-3" style="padding-left:10px">Slot Timings<br>(in minutes)</label>
-    <input type="text" class="col-md-1" id="slotp" name="slot" value="5" placeholder="Slot Timings for Patient">
+    <input type="text"  id="slotp" name="slot" value="5" maxlength="2" size="1" placeholder="Slot Timings for Patient">
   </div>	
    					
    		</div>
@@ -178,8 +178,8 @@
 			</table>	
 
 			<div class="form-group">
-   				 <label for="slotmr" class="col-md-3" style="padding-left:10px"><br>Slot Timings(in minutes)</label>
-    			 <input type="text" class="col-md-6" id="slotmr" value="5" placeholder="Slot Timings for MR">
+   				 <label for="slotmr" class="col-md-12 " style="padding-left:10px"><br>Slot Timings(in minutes)</label>
+    			 <input type="text" class="col-md-12" id="slotmr" value="5" maxlength="2" size="15" placeholder="Slot Timings for MR">
  	 		</div>
 
 	</div>
@@ -192,11 +192,17 @@
 <script>
 	$('.checkday').change(function() {
 		if ($(this).is(":checked")) {
+			var row=$(this).parent().parent();
+			$(row).removeClass( "active" );
+			$(row).addClass( "info" );
 			var id = $(this).attr("id");
 			$("#" + id + "-from").prop("disabled", false);
 			$("#" + id + "-to").prop("disabled", false);
 		} else {
 			var id = $(this).attr("id");
+			var row=$(this).parent().parent();
+			$(row).removeClass( "info" );
+			$(row).addClass( "active");
 			$("#" + id + "-from").val("");
 			$("#" + id + "-from").attr("disabled", "disabled");
 			$("#" + id + "-to").val("");
@@ -314,9 +320,14 @@
     </script>
 
 	<script type="text/javascript"> 
-            $('.input-small').timepicker({
-            	showMeridian:false
-                });
+            $('.outtime').timepicker({
+            	showMeridian:false,
+            	defaultTime:'20:00'
+                 });
+            $('.intime').timepicker({
+            	showMeridian:false,
+            	defaultTime:'10:00'
+                 });
 
             
     </script>
