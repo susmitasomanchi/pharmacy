@@ -193,7 +193,6 @@
 	$('.checkday').change(function() {
 		if ($(this).is(":checked")) {
 			var row=$(this).parent().parent();
-			alert(row);
 			$(row).removeClass( "active" );
 			$(row).addClass( "info" );
 			var id = $(this).attr("id");
@@ -202,7 +201,6 @@
 		} else {
 			var id = $(this).attr("id");
 			var row=$(this).parent().parent();
-			alert(row);
 			$(row).removeClass( "info" );
 			$(row).addClass( "active");
 			$("#" + id + "-from").val("");
