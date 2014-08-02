@@ -205,7 +205,7 @@ public class UserController extends Controller {
 		session().clear();
 		session(Constants.LOGGED_IN_USER_ID, appUser.id + "");
 		session(Constants.LOGGED_IN_USER_ROLE, appUser.role+ "");
-		appUser.emailConfirmed=EmailService.sendConformationEmail(appUser.email, appUser.id);
+		appUser.emailConfirmed = EmailService.sendConfirmationEmail(appUser.email, appUser.id);
 		if(appUser.emailConfirmed){
 			flash().put("alert", new Alert("alert-success","A conformation messege has been send to you").toString());
 		}

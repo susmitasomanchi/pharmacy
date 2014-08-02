@@ -1,0 +1,130 @@
+@(prescriptions:List[models.doctor.Prescription],docClincs:List[models.doctor.DoctorClinicInfo])
+@import play.i18n._
+@main("Prescription"){
+	
+	
+		<ul class="nav nav-tabs" role="tablist" id="my-tab">
+  			<li  class="active"><a href="#all"  data-toggle="tab">All Clinics</a></li>
+  			@for( docClinic <-  docClincs){
+ 			 <li><a href="#@docClinic.clinic.id" data-toggle="tab">@docClinic.clinic.name</a></li>
+  			}
+  			
+  			
+		</ul>
+	<div id="myTabContent" class="tab-content">
+		
+		<div class="tab-pane fade in active" id="all">
+			<table class="table table-condensed table-hover table-bordered">
+			<thead>
+			<tr>
+			<div class="row clearfix">
+				<th>Clinic</th>
+				<th>Date &amp; Time</th>
+				<th>Patient&nbsp;(Sex/Age)</th>
+				<th>Shared With</th>
+				<th>Prescription</th>
+			</div>
+			</tr>
+			</thead>
+			@for(prescription <- prescriptions){
+			<tr>
+			<div class="row clearfix">
+				<div class="col-md-3 column">
+				<td>@prescription.clinic.name</td>
+				</div>
+				<div class="col-md-3 column">
+				<td>@prescription.prescriptionDate.format("dd-MMM-yy HH:mm")</td>
+				</div>
+				<div class="col-md-3 column">
+				<td>@{prescription.patient.appUser.name}&nbsp;(@prescription.patient.appUser.sex.toString().substring(0,1)/@prescription.patient.appUser.getAge())</td>
+				</div>
+				<td>
+				
+				</td>
+				<div class="col-md-3 column">
+				<td>
+					<a href="@routes.DoctorController.showPrescription(prescription.id)" class="btn btn-sm btn-primary"  role="button">View Prescription</a>				
+				</td>
+				</div>
+			</div>
+			</tr>
+			}
+		</table>
+		</div>
+		@for(docClinic <-  docClincs){
+			<div class="tab-pane fade" id="@docClinic.clinic.id">
+			<table class="table table-condensed table-hover table-bordered">
+			<thead>
+			<tr>
+			<div class="row clearfix">
+				<th>Clinic</th>
+				<th>Date &amp; Time</th>
+				<th>Patient&nbsp;(Sex/Age)</th>
+				<th>Shared With</th>
+				<th>Prescription</th>
+			</div>
+			</tr>
+			</thead>
+			@for(prescription <- prescriptions){
+			@if(prescription.clinic.id == docClinic.id){
+			<tr>
+			<div class="row clearfix">
+				<div class="col-md-3 column">
+				<td>@prescription.clinic.name</td>
+				</div>
+				<div class="col-md-3 column">
+				<td>@prescription.prescriptionDate.format("dd-MMM-yy HH:mm")</td>
+				</div>
+				<div class="col-md-3 column">
+				<td>@{prescription.patient.appUser.name}&nbsp;(@prescription.patient.appUser.sex.toString().substring(0,1)/@prescription.patient.appUser.getAge())</td>
+				</div>
+				<td>
+				
+				</td>
+				<div class="col-md-3 column">
+				<td>
+					<a href="@routes.DoctorController.showPrescription(prescription.id)" class="btn btn-sm btn-primary"  role="button">View Prescription</a>				
+				</td>
+				</div>
+			</div>
+			</tr>
+			}
+			
+			}
+		</table>
+			
+			</div>
+			}
+		
+	</div>
+	
+	
+	<script>
+	$('#my-tab a').click(function (e) {
+		  //e.preventDefault()
+		  $(this).tab('show')
+		})
+	</script>
+	
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+}
+
+
+
+
+
+
+

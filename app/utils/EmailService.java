@@ -2,6 +2,7 @@ package utils;
 
 import java.math.BigInteger;
 import java.security.SecureRandom;
+import java.util.List;
 import java.util.Random;
 
 import models.AppUser;
@@ -40,10 +41,10 @@ public class EmailService {
 			e.printStackTrace();
 			result=false;
 		}
-
 		return result;
 	}
-	public static boolean sendConformationEmail(final String receiverEmailId,final Long appUserId){
+
+	public static boolean sendConfirmationEmail(final String receiverEmailId,final Long appUserId){
 		final Random random = new SecureRandom();
 		final String randomString = new BigInteger(130, random).toString(32);
 		boolean result=true;
@@ -77,8 +78,11 @@ public class EmailService {
 			e.printStackTrace();
 			result=false;
 		}
-
 		return result;
+	}
+
+	public void sendHTMLEmailWithAttachments(final String receiverEmailId, final String subject, final String htmlMessage, final List<byte[]> imageList){
+
 	}
 
 }
