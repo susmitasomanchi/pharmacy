@@ -121,13 +121,13 @@
 					<td style="width:20%;"><input class="checkday" id="p-@day" type="checkbox" name="daysOfWeek[]" value="@day.toString()">@day</input></td>
 					<td> 
 						<div class="input-append bootstrap-timepicker">
-							 <input id="p-@day-from" type="text" class="input-small" style="padding-left:20px; width:40%; margin-left:30%;" name="fromHrs[]" value="@clinicForm("fromHrs["+index+"]").value" disabled required/>
+							 <input id="p-@day-from" type="text" class="input-small intime" style="padding-left:20px; width:40%; margin-left:30%;" name="fromHrs[]" value="@clinicForm("fromHrs["+index+"]").value" disabled required/>
            				 	 <span class="add-on"><i class="fa fa-clock-o"></i></span>
       					</div>
 					</td>
 					<td> 
 						<div class="input-append bootstrap-timepicker">
-							<input id="p-@day-to"  type="text" class="input-small" style="padding-left:20px; width:40%; margin-left:30%;"  name="toHrs[]" value="@clinicForm("toHrs["+index+"]").value" disabled required/>
+							<input id="p-@day-to"  type="text" class="input-small outtime" style="padding-left:20px; width:40%; margin-left:30%;"  name="toHrs[]" value="@clinicForm("toHrs["+index+"]").value" disabled required/>
             				<span class="add-on"><i class="fa fa-clock-o"></i></span>
       					</div>
 					</td>
@@ -314,9 +314,14 @@
     </script>
 
 	<script type="text/javascript"> 
-            $('.input-small').timepicker({
-            	showMeridian:false
-                });
+            $('.outtime').timepicker({
+            	showMeridian:false,
+            	defaultTime:'20:00'
+                 });
+            $('.intime').timepicker({
+            	showMeridian:false,
+            	defaultTime:'10:00'
+                 });
 
             
     </script>
