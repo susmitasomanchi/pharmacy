@@ -1,10 +1,8 @@
 package controllers;
 
-import java.util.ArrayList;
-
 import models.AppUser;
 import models.Role;
-import models.patient.PatientDoctorInfo;
+import models.patient.Patient;
 import play.mvc.Controller;
 import play.mvc.Result;
 import actions.BasicAuth;
@@ -30,7 +28,9 @@ public class UserActions extends Controller {
 			return ok(views.html.doctor.doctorProfile.render(appUser.getDoctor()));
 		}
 		if(appUser.role.equals(Role.PATIENT)){
-			return ok(views.html.patient.fav_doctors.render(new ArrayList<PatientDoctorInfo>()));
+			final Patient patient = appUser.getPatient();
+
+			return ok(views.html.patient.fav_doctors.render(patient.patientDoctorInfoList));
 		}
 
 		//@TODO: none should render the dashboard of patient
