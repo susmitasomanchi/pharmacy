@@ -1,0 +1,14 @@
+@(prescription: models.doctor.Prescription)
+@main("Prescription Details"){
+<div><h6><b>NAME:</b> @*if(prescription.patient!= null){@prescription.patient.appUser.name}else{PatientName}*@PatientName</h6> 
+<table class="table table-bordered">
+<tr>
+<th>Medicines</th>
+</tr>
+@for(medicine <- prescription.medicineLineItemList){
+<tr>
+<td>@medicine.fullNameOfMedicine</td>
+}
+</table>
+</div>
+}

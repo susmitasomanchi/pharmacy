@@ -17,6 +17,7 @@ import javax.persistence.OneToOne;
 import models.Address;
 import models.BaseEntity;
 import models.FileEntity;
+import models.diagnostic.DiagnosticOrder;
 import models.doctor.Prescription;
 import beans.PharmacyBean;
 
@@ -27,7 +28,7 @@ public class Pharmacy extends BaseEntity {
 	@GeneratedValue(strategy = GenerationType.AUTO)
 	public  Long id;
 	
-	
+	String s;
 
 	public String name;
 
@@ -68,9 +69,9 @@ public class Pharmacy extends BaseEntity {
 	@OneToMany(cascade=CascadeType.ALL)
 	public List<Pharmacist> pharmacistList = new ArrayList<Pharmacist>();
 
-	@ManyToMany(cascade=CascadeType.ALL)
-	public List<Prescription> prescriptionList = new ArrayList<Prescription>();
-
+	/*@OneToMany(cascade=CascadeType.ALL)
+	public List<PharmacyOrder> pharmacyOrderList = new ArrayList<PharmacyOrder>();
+*/
 	@OneToMany(cascade=CascadeType.ALL)
 	public List<Inventory> inventoryList = new ArrayList<Inventory>();
 	
