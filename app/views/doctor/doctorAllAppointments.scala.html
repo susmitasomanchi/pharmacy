@@ -55,7 +55,7 @@
 					<a href="@routes.DoctorController.showPrescriptionForm(appointment.id)" class="btn btn-sm btn-success"  role="button">Prescription</a>	
 				}
 				@if(appointment.appointmentStatus.equals(models.doctor.AppointmentStatus.SERVED)){
-					<a href="@routes.DoctorController.sharePrescription(appointment.getPrescription().id)" class="btn btn-sm btn-primary"  role="button">View Prescription</a>				
+					<a href="@routes.DoctorController.showPrescription(appointment.getPrescription().id)" class="btn btn-sm btn-primary"  role="button">View Prescription</a>				
 				}
 				@*
 				<a href="http://www.google.com" class="btn btn-sm btn-default"  role="button">Delete</a>
@@ -104,7 +104,7 @@
 					<a href="@routes.DoctorController.showPrescriptionForm(appointment.id)" class="btn btn-sm btn-success"  role="button">Prescription</a>	
 				}
 				@if(appointment.appointmentStatus.equals(models.doctor.AppointmentStatus.SERVED)){
-					<a href="@routes.DoctorController.sharePrescription(appointment.getPrescription().id)" class="btn btn-sm btn-primary"  role="button">View Prescription</a>				
+					<a href="@routes.DoctorController.showPrescription(appointment.getPrescription().id)" class="btn btn-sm btn-primary"  role="button">View Prescription</a>				
 				}
 				
 				@*

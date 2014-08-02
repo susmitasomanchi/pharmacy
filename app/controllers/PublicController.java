@@ -10,6 +10,7 @@ import java.util.List;
 import java.util.Map;
 
 import models.Alert;
+import models.AppUser;
 import models.Role;
 import models.diagnostic.DiagnosticCentre;
 import models.doctor.Appointment;
@@ -25,9 +26,6 @@ import play.mvc.Controller;
 import play.mvc.Result;
 
 public class PublicController extends Controller{
-
-
-
 
 	/**
 	 * Action to render search doctor page
@@ -333,4 +331,29 @@ public class PublicController extends Controller{
 		}
 	}
 
+	/**
+	 * @author Mitesh
+	 * Action to display user login page after conformation
+	 *  GET /user/confirmation/:userId/:randomString
+	 */
+	public static Result emailConfirmation(final Long userId,final String randomString) {
+		final AppUser appUser=AppUser.find.byId(userId);
+		if(appUser != null){
+			if(appUser.emailConfirmationKey.compareTo(randomString) == 0){
+				appUser.emailConfirmed = true;
+				appUser.update();
+				flash().put("alert", new Alert("alert-success","the Conformation done successfull").toString());
+				return redirect(routes.LoginController.loginForm());
+			}
+			else{
+				Logger.debug("key not match");
+				flash().put("alert", new Alert("alert-danger","the conformation String not matched").toString());
+				return badRequest();
+			}
+		}
+		else{
+			Logger.debug("user is null");
+			return badRequest();
+		}
+	}
 }

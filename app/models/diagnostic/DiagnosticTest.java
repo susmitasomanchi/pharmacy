@@ -13,9 +13,11 @@ import play.db.ebean.Model;
 @SuppressWarnings("serial")
 @Entity
 public class DiagnosticTest extends BaseEntity{
+
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO)
 	public Long id;
+
 
 	public String name;
 

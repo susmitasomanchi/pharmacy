@@ -28,6 +28,8 @@ public class Patient extends BaseEntity {
 
 	@OneToOne
 	public AppUser appUser;
+	
+	public String age;
 
 	@OneToMany(cascade = CascadeType.ALL)
 	public List<PatientDoctorInfo> patientDoctorInfoList = new ArrayList<PatientDoctorInfo>();

@@ -17,16 +17,18 @@ import javax.persistence.OneToOne;
 import models.Address;
 import models.BaseEntity;
 import models.FileEntity;
+import models.diagnostic.DiagnosticOrder;
 import models.doctor.Prescription;
 import beans.PharmacyBean;
 
 @SuppressWarnings("serial")
 @Entity
 public class Pharmacy extends BaseEntity {
-
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO)
 	public  Long id;
+	
+	String s;
 
 	public String name;
 
@@ -42,7 +44,7 @@ public class Pharmacy extends BaseEntity {
 
 	@OneToOne
 	public Pharmacist adminPharmacist;
-
+	
 	@Lob
 	public byte[] backgroundImage;
 
@@ -58,9 +60,6 @@ public class Pharmacy extends BaseEntity {
 	@OneToMany(cascade=CascadeType.ALL)
 	public List<PharmacyInfo> pharmacyInfoList = new ArrayList<PharmacyInfo>();
 
-	@ManyToMany(cascade=CascadeType.ALL)
-	public List<Prescription> prescriptionList = new ArrayList<Prescription>();
-
 	@OneToMany(cascade=CascadeType.ALL)
 	public List<PharmacyProduct> pharmacyProductList = new ArrayList<PharmacyProduct>();
 
@@ -70,8 +69,13 @@ public class Pharmacy extends BaseEntity {
 	@OneToMany(cascade=CascadeType.ALL)
 	public List<Pharmacist> pharmacistList = new ArrayList<Pharmacist>();
 
+	/*@OneToMany(cascade=CascadeType.ALL)
+	public List<PharmacyOrder> pharmacyOrderList = new ArrayList<PharmacyOrder>();
+*/
 	@OneToMany(cascade=CascadeType.ALL)
 	public List<Inventory> inventoryList = new ArrayList<Inventory>();
+	
+	
 
 	public static Finder<Long, Pharmacy> find = new Finder<Long, Pharmacy>(Long.class, Pharmacy.class);
 

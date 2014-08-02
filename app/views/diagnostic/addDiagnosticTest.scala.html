@@ -1,9 +1,9 @@
-@* registerPatient Template File *@
 @(dataForm:play.data.Form[models.diagnostic.DiagnosticTest])
 @import helper.twitterBootstrap._
 
 @main("Add a Test"){
 
+@*
      @helper.form(action=routes.DiagnosticController.addTestProcess(),'method -> "post") {
 
 
@@ -21,6 +21,7 @@
 		
 }
 
+*@
 
 }
 

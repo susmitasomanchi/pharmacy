@@ -2,11 +2,11 @@
 @(appointments:List[models.doctor.Appointment],docClincs:List[models.doctor.DoctorClinicInfo])
 @import play.i18n._
 
-@main("Today's Appointments"){
+@main("Today' Appointments"){
 	
 	
 		<ul class="nav nav-tabs" role="tablist" id="my-tab">
-  			<li  class="active"><a href="#all"  data-toggle="tab">All Clinics</a></li>
+  			<li  class="active"><a href="#all"  data-toggle="tab">Home</a></li>
   			@for( docClinic <-  docClincs){
   				
  			 <li><a href="#@docClinic.clinic.id" data-toggle="tab">@docClinic.clinic.name</a></li>
@@ -17,20 +17,17 @@
 	<div id="myTabContent" class="tab-content">
 		
 		<div class="tab-pane fade in active" id="all">
-			<table class="table table-condensed table-hover">
+			<table class="table">
 			<thead>
 			<tr>
 			<div class="row clearfix">
-				<th><div class="col-md-4 column">
-				Clinic
+				<th><div class="col-md-3 column">
+				Patient(Age/Sex)
 				</div></th>
-				<th><div class="col-md-4 column">
-				Date &amp; Time
+				<th><div class="col-md-3 column">
+				Time
 				</div></th>
-				<th><div class="col-md-4 column">
-				Patient&nbsp;(Sex/Age)
-				</div></th>
-				<th><div class="col-md-4 column">
+				<th><div class="col-md-3 column">
 				Appointment
 				</div></th>
 			</div>
@@ -40,29 +37,15 @@
 			<tr>
 			<div class="row clearfix">
 				<div class="col-md-3 column">
-				<td>@appointment.doctorClinicInfo.clinic.name</td>
+				<td>@{appointment.requestedBy.name}(Age/Sex)</td>
 				</div>
 				<div class="col-md-3 column">
 				<td>@appointment.appointmentTime.format("dd-MMM-yy HH:mm")</td>
 				</div>
 				<div class="col-md-3 column">
-				<td>@{appointment.requestedBy.name}&nbsp;(@appointment.requestedBy.sex.toString().substring(0,1)/@appointment.requestedBy.getAge())</td>
-				</div>
-				<div class="col-md-3 column">
-				<td>
-
-				@if(appointment.appointmentStatus.equals(models.doctor.AppointmentStatus.APPROVED)){
-					<a href="@routes.DoctorController.showPrescriptionForm(appointment.id)" class="btn btn-sm btn-success"  role="button">Prescription</a>	
-				}
-				@if(appointment.appointmentStatus.equals(models.doctor.AppointmentStatus.SERVED)){
-					<a href="@routes.DoctorController.showPrescription(appointment.getPrescription().id)" class="btn btn-sm btn-primary"  role="button">View Prescription</a>				
-				}
-				@*
-				<a href="http://www.google.com" class="btn btn-sm btn-default"  role="button">Delete</a>
-				<a href="http://www.google.com" class="btn btn-sm btn-danger"  role="button">Edit</a>
-				*@
-
-				</td>
+				<td><a href="http://www.google.com" class="btn btn-sm btn-success"  role="button">Prescription</a>
+				@*<a href="http://www.google.com" class="btn btn-sm btn-default"  role="button">Delete</a>
+				<a href="http://www.google.com" class="btn btn-sm btn-danger"  role="button">Edit</a>*@</td>
 				</div>
 			</div>
 			</tr>
@@ -71,15 +54,15 @@
 		</div>
 		@for(  docClinic <-  docClincs){
 			<div class="tab-pane fade" id="@docClinic.clinic.id">
-				<table class="table table-condensed table-hover">
+				<table class="table">
 			<thead>
 			<tr>
 			<div class="row clearfix">
-				<th><div class="col-md-4 column">
-				Date &amp; Time
+				<th><div class="col-md-3 column">
+				Patient(Age/Sex)
 				</div></th>
 				<th><div class="col-md-3 column">
-				Patient&nbsp;(Sex/Age)
+				Time
 				</div></th>
 				<th><div class="col-md-3 column">
 				Appointment
@@ -92,27 +75,15 @@
 				<tr>
 			<div class="row clearfix">
 				<div class="col-md-3 column">
+				<td>@{appointment.requestedBy.name}(Age/Sex)</td>
+				</div>
+				<div class="col-md-3 column">
 				<td>@appointment.appointmentTime.format("dd-MMM-yy HH:mm")</td>
 				</div>
 				<div class="col-md-3 column">
-				<td>@{appointment.requestedBy.name}&nbsp;(@appointment.requestedBy.sex.toString().substring(0,1)/@appointment.requestedBy.getAge())</td>
-				</div>
-				<div class="col-md-3 column">
-				<td>
-				
-				@if(appointment.appointmentStatus.equals(models.doctor.AppointmentStatus.APPROVED)){
-					<a href="@routes.DoctorController.showPrescriptionForm(appointment.id)" class="btn btn-sm btn-success"  role="button">Prescription</a>	
-				}
-				@if(appointment.appointmentStatus.equals(models.doctor.AppointmentStatus.SERVED)){
-					<a href="@routes.DoctorController.showPrescription(appointment.getPrescription().id)" class="btn btn-sm btn-primary"  role="button">View Prescription</a>				
-				}
-				
-				@*
-				<a href="http://www.google.com" class="btn btn-sm btn-default"  role="button">Delete</a>
-				<a href="http://www.google.com" class="btn btn-sm btn-danger"  role="button">Edit</a>
-				*@
-				
-				</td>
+				<td><a href="http://www.google.com" class="btn btn-sm btn-success"  role="button">Prescription</a>
+			@*	<a href="http://www.google.com" class="btn btn-sm btn-default"  role="button">Delete</a>
+				<a href="http://www.google.com" class="btn btn-sm btn-danger"  role="button">Edit</a>*@</td>
 				</div>
 			</div>
 			</tr>

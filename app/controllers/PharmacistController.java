@@ -2,6 +2,8 @@ package controllers;
 
 import java.io.File;
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
@@ -18,6 +20,8 @@ import models.pharmacist.Batch;
 import models.pharmacist.OrderLineItem;
 import models.pharmacist.Pharmacist;
 import models.pharmacist.Pharmacy;
+import models.pharmacist.PharmacyPrescriptionInfo;
+import models.pharmacist.PharmacyPrescriptionStatus;
 import models.pharmacist.PharmacyProduct;
 import models.pharmacist.ShowCasedProduct;
 import play.Logger;
@@ -407,6 +411,223 @@ public class PharmacistController extends Controller {
 		return redirect(routes.UserActions.dashboard());
 		// return TODO;
 	}
+
+	/**
+	 * @author : lakshmi
+	 * GET/pharmacy/order
+	 * Action to render the place_pharmacy_order
+	 * of the loggedIn ADMIN_PHARMACIST
+	 */
+	/*public static Result placePharmacyOrder() {
+		final Pharmacy pharmacy=LoginController.getLoggedInUser().getPharmacist().pharmacy;
+
+		return ok(views.html.pharmacist.place_pharmacy_order.render(pharmacy));
+	}*/
+	/**
+	 * @author : lakshmi
+	 * POST/pharmacy/order
+	 *  Action to svae the placed pharmacy order
+	 * of the loggedIn ADMIN_PHARMACIST
+	 */
+	/*public static Result placePharmacyOrderProcess() {
+		OrderLineItem orderLineItem = new OrderLineItem();
+		Logger.info("inside 1");
+		final Pharmacy pharmacy=LoginController.getLoggedInUser().getPharmacist().pharmacy;
+		final String[] product = request().body().asFormUrlEncoded().get("productIds");
+		final String[] quantity = request().body().asFormUrlEncoded().get("quantity");
+		final String[] mrp = request().body().asFormUrlEncoded().get("mrp");
+		for(int index=0;index<product.length;index++){
+			orderLineItem.product = MasterProduct.find.byId(Long.parseLong(product[index]));
+			orderLineItem.quantity = Double.parseDouble(quantity[index]);
+			orderLineItem.price = Double.parseDouble(mrp[index]);
+			if(orderLineItem.id == null){
+				orderLineItem.save();
+			}
+			pharmacy.orderLineItemList.add(orderLineItem);
+		}
+		pharmacy.update();
+		Logger.info("orderLineItemList size()=="+pharmacy.orderLineItemList.size());
+		Logger.info("product size()=="+product.length);
+		Logger.info("quantity size()=="+quantity.length);
+		Logger.info("mrp size()=="+mrp.length);
+
+		return ok(views.html.pharmacist.place_pharmacy_order.render(pharmacy));
+	}
+	 */
+
+
+
+	/**
+	 * @author lakshmi
+	 * Action to add Prescription data to the Pharmacy
+	 * GET /pharmacy/add-pharmacy-order/:pharmacyId/:prescriptionId
+	 */
+	/*public static Result addPharmacyOrderFromDoctor(Long pharmacyId,Long prescriptionId){
+		Pharmacy pharmcy = Pharmacy.find.byId(pharmacyId);
+		for (Prescription prescription : pharmcy.prescriptionList) {
+			if(prescription.id == prescriptionId){
+				PharmacyOrder pharmacyOrder = new PharmacyOrder();
+				pharmacyOrder.prescription = prescription;
+				pharmacyOrder.OrderedDate = new Date();
+				pharmcy.pharmacyOrderList.add(pharmacyOrder);
+			}
+			pharmcy.update();
+			Logger.info("size of list=="+pharmcy.pharmacyOrderList.size());
+		}
+		return ok();
+	}*/
+
+
+
+	/**
+	 * @author lakshmi
+	 * Action to display prescriptions of Pharmacy
+	 * GET 	/pharmacy/prescriptions
+	 */
+	public static Result pharmacyPrescriptionList(final String status){
+		final List<PharmacyPrescriptionStatus> statusList = new ArrayList<PharmacyPrescriptionStatus>();
+		if(status == null || status.trim().isEmpty() || status.trim().compareToIgnoreCase("any")==0){
+			for (final PharmacyPrescriptionStatus ppStatus : PharmacyPrescriptionStatus.values()) {
+				statusList.add(ppStatus);
+			}
+		}
+		else{
+			statusList.add(PharmacyPrescriptionStatus.valueOf(status.trim().toUpperCase()));
+		}
+		final Pharmacy pharmacy = LoginController.getLoggedInUser().getPharmacist().pharmacy;
+		final List<PharmacyPrescriptionInfo> pharmacyPrescriptionInfos =
+				PharmacyPrescriptionInfo.find.where()
+				.eq("pharmacy", pharmacy)
+				.in("pharmacyPrescriptionStatus", statusList)
+				.findList();
+		return ok(views.html.pharmacist.viewPharmacyPrescriptionList.render(pharmacyPrescriptionInfos, status.trim().toUpperCase()));
+	}
+
+
+	/*
+	public static Result receivedPrescriptionList(){
+		final Pharmacy pharmacy = LoginController.getLoggedInUser().getPharmacist().pharmacy;
+		final List<PharmacyPrescriptionInfo> pharmacyPrescriptionInfos = PharmacyPrescriptionInfo.find.where().eq("pharmacy", pharmacy).eq("pharmacyPrescriptionStatus",models.pharmacist.PharmacyPrescriptionStatus.RECEIVED).findList() ;
+		Logger.info("list size==="+pharmacyPrescriptionInfos.size());
+		return ok(views.html.pharmacist.viewPharmacyPrescriptionList.render(pharmacyPrescriptionInfos));
+		//return ok();
+	}
+	public static Result servedPrescriptionList(){
+		final Pharmacy pharmacy = LoginController.getLoggedInUser().getPharmacist().pharmacy;
+		final List<PharmacyPrescriptionInfo> pharmacyPrescriptionInfos = PharmacyPrescriptionInfo.find.where().eq("pharmacy", pharmacy).eq("pharmacyPrescriptionStatus",models.pharmacist.PharmacyPrescriptionStatus.SERVED).findList() ;
+		Logger.info("list size==="+pharmacyPrescriptionInfos.size());
+		return ok(views.html.pharmacist.viewPharmacyPrescriptionList.render(pharmacyPrescriptionInfos));
+		//return ok();
+	}
+	 */
+
+
+	public static Result getPrescriptionDetails(final Long pharmacyPrescriptionInfoId){
+		final PharmacyPrescriptionInfo pharmacyPrescriptionInfo = PharmacyPrescriptionInfo.find.byId(pharmacyPrescriptionInfoId);
+		//server-side check
+		if(pharmacyPrescriptionInfo.pharmacy.id.longValue() != LoginController.getLoggedInUser().getPharmacist().pharmacy.id.longValue()){
+			return redirect(routes.LoginController.processLogout());
+		}
+		return ok(views.html.pharmacist.viewPrescriptionDetails.render(pharmacyPrescriptionInfo.prescription));
+	}
+
+
+	/*
+	public static Result confirmPrescription(final Long pharmacyPrescriptionInfoId){
+		final PharmacyPrescriptionInfo pharmacyPrescriptionInfo =PharmacyPrescriptionInfo.find.byId(pharmacyPrescriptionInfoId);
+		pharmacyPrescriptionInfo.pharmacyPrescriptionStatus = PharmacyPrescriptionStatus.CONFIRMED;
+		pharmacyPrescriptionInfo.update();
+		final Pharmacy pharmacy = LoginController.getLoggedInUser().getPharmacist().pharmacy;
+		final List<PharmacyPrescriptionInfo> pharmacyPrescriptionInfos = PharmacyPrescriptionInfo.find.where().eq("pharmacy", pharmacy).findList();
+		return ok(views.html.pharmacist.viewPharmacyPrescriptionList.render(pharmacyPrescriptionInfos, ""));
+
+	}
+
+	 */
+
+	public static Result servedPrescription(final Long pharmacyPrescriptionInfoId){
+		final PharmacyPrescriptionInfo pharmacyPrescriptionInfo =PharmacyPrescriptionInfo.find.byId(pharmacyPrescriptionInfoId);
+		pharmacyPrescriptionInfo.pharmacyPrescriptionStatus = PharmacyPrescriptionStatus.SERVED;
+		pharmacyPrescriptionInfo.update();
+		final Pharmacy pharmacy = LoginController.getLoggedInUser().getPharmacist().pharmacy;
+		final List<PharmacyPrescriptionInfo> pharmacyPrescriptionInfos = PharmacyPrescriptionInfo.find.where().eq("pharmacy", pharmacy).findList();
+		return ok(views.html.pharmacist.viewPharmacyPrescriptionList.render(pharmacyPrescriptionInfos, ""));
+	}
+
+	/**
+	 * @author lakshmi
+	 * Action to Display Todays Prescriptions requested to logged-in ADMIN_PHARMACIST
+	 */
+	public static Result viewTodaysPrescriptions() {
+
+		final Date now = new Date();
+
+		final Calendar calendarFrom = Calendar.getInstance();
+		calendarFrom.setTime(now);
+		calendarFrom.set(Calendar.HOUR_OF_DAY, 0);
+		calendarFrom.set(Calendar.MINUTE, 0);
+		calendarFrom.set(Calendar.SECOND,0);
+		calendarFrom.set(Calendar.MILLISECOND,0);
+
+		final Calendar calendarTo = Calendar.getInstance();
+		calendarTo.setTime(now);
+		calendarTo.set(Calendar.HOUR_OF_DAY, 23);
+		calendarTo.set(Calendar.MINUTE, 59);
+		calendarTo.set(Calendar.SECOND,59);
+		calendarTo.set(Calendar.MILLISECOND,999);
+
+		final Pharmacy pharmacy = LoginController.getLoggedInUser().getPharmacist().pharmacy;
+
+		final List<PharmacyPrescriptionInfo> pharmacyPrescriptionInfos =
+				PharmacyPrescriptionInfo.find.where()
+				.eq("pharmacy", pharmacy)
+				.ge("receivedDate", calendarFrom.getTime())
+				.le("receivedDate", calendarTo.getTime())
+				.findList();
+
+
+		return ok(views.html.pharmacist.viewPharmacyPrescriptionList.render(pharmacyPrescriptionInfos, ""));
+	}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 

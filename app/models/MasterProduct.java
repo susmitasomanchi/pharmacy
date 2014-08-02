@@ -3,6 +3,7 @@ package models;
 import java.util.LinkedHashMap;
 import java.util.Map;
 
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -27,6 +28,7 @@ public class MasterProduct extends BaseEntity {
 
 	public String strength;
 
+	@Column(columnDefinition="TEXT")
 	public String description;
 
 	public Long unitsPerPack;

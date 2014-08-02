@@ -79,7 +79,59 @@
 <p>@prescription.remarks</p>
 </div>
 
+<hr>
 
+
+
+
+<div class="row" style="padding-left:20px; padding-right:100px;">
+<h4>Prescription shared with:</h4>
+<ul>
+@for(ppinfo <- prescription.getPharmacyInfoList()){
+	<li><a href="/pharmacy/@ppinfo.pharmacy.slugUrl">@ppinfo.pharmacy.name</a> on @ppinfo.receivedDate.format("dd-MMM-yyyy HH:mm")</li>
+}
+</ul>
+</div>
+
+<hr>
+
+<div class="row" style="padding-left:20px; padding-right:100px;">
+<div class="col-md-5">
+<h4>Share With Pharmacy:</h4>
+
+<select id="sharePharmacy" class="chzn" style="width:100%;">
+<option></option>
+@for(pharmacy <- prescription.doctor.pharmacyList){
+	<option value="@pharmacy.id">@pharmacy.name @if(pharmacy.address != null){&#40;@pharmacy.address.area&#41;}</option>
+}
+</select>
+
+</div>
+
+
+<div class="col-md-5">
+<h4>Share With Diagnostic Centre:</h4>
+<select class="chzn" name="shareDiagnostic">
+
+</select>
+</div>
+
+<div class="col-md-2">
+<a style="position:relative; top:35px;" class="btn btn-primary btn-sm" onclick="sharePrescription();">Share</a>
+</div>
+
+</div>
+
+<div class="row">
+<br><br><br><br><br>
+</div>
+
+<script>
+function sharePrescription(){
+	var pharId = $('#sharePharmacy').val();
+	window.location.href='/doctor/share-prescription/@prescription.id/'+pharId;
+}
+</script>
 
 
 }

@@ -11,6 +11,7 @@ import javax.persistence.Lob;
 import javax.persistence.OneToOne;
 
 import models.BaseEntity;
+import models.MasterDiagnosticTest;
 import play.db.ebean.Model;
 
 @SuppressWarnings("serial")
@@ -26,13 +27,13 @@ public class DiagnosticReport extends BaseEntity {
 	public byte[] fileContent;
 
 	@OneToOne
-	public DiagnosticTest diagnosticTest;
+	public MasterDiagnosticTest masterDiagnosticTest;
 
 	public DiagnosticReportStatus reportStatus = DiagnosticReportStatus.SAMPLE_NOT_COLLECTED;
 
-	public Date sampleCollectionDate;
+	public Date sampleCollectedDate;
 
-	public Date reportGenerationDate;
+	public Date reportGeneratedDate;
 
 	@Column(columnDefinition="TEXT")
 	public String remarks;

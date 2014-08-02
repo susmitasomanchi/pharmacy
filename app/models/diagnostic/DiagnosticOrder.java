@@ -30,12 +30,15 @@ public class DiagnosticOrder extends BaseEntity{
 	@OneToMany(cascade=CascadeType.ALL)
 	public List<DiagnosticReport> diagnosticReportList = new ArrayList<>();
 
-	public DiagnosticOrderStatus diagnosticOrderStatus;
+	public DiagnosticOrderStatus diagnosticOrderStatus = DiagnosticOrderStatus.ORDER_RECEIVED;
 
 	public Date receivedDate;
 
 	public Date confirmedDate;
 
-	public static Model.Finder<Long, DiagnosticOrder> find = new Finder<Long, DiagnosticOrder>(Long.class, DiagnosticOrder.class);
-
+	public Date cancelledDate;
+	
+	
+	public static Model.Finder<Long, DiagnosticOrder> find = new Finder<Long, DiagnosticOrder>(
+			Long.class, DiagnosticOrder.class);
 }

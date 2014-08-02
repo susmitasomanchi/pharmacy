@@ -15,6 +15,8 @@ import javax.persistence.OneToOne;
 
 import models.BaseEntity;
 import models.patient.Patient;
+import models.pharmacist.Pharmacy;
+import models.pharmacist.PharmacyPrescriptionInfo;
 import play.data.validation.Constraints.Required;
 import play.db.ebean.Model;
 
@@ -61,7 +63,9 @@ public class Prescription extends BaseEntity{
 	public static Model.Finder<Long, Prescription> find = new Finder<Long, Prescription>(Long.class, Prescription.class);
 
 
-
+	public List<PharmacyPrescriptionInfo> getPharmacyInfoList(){
+		return PharmacyPrescriptionInfo.find.where().eq("prescription", this).findList();
+	}
 
 
 	/**
