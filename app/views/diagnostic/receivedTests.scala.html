@@ -1,4 +1,4 @@
-@(diagnosticOrder: models.diagnostic.DiagnosticOrder)
+@(diagnosticCentrePrescriptionInfo: models.diagnostic.DiagnosticCentrePrescriptionInfo)
 @main("Diagnostic Order List") {
 <table class="table table-bordered">
 <thead>
@@ -9,34 +9,33 @@ SNo
 <th>
 Test
 </th>
-<th>
-Test Status
-</th>
 </tr>
 </thead>
 
 <tbody>
 
-@for((diagnosticReport,index) <- diagnosticOrder.diagnosticReportList.zipWithIndex) {
+@for((diagnosticTestLineItem,index) <- diagnosticCentrePrescriptionInfo.prescription.diagnosticTestLineItemList.zipWithIndex) {
 <tr>
 <td>
 @{index+1}
 </td>
 <td>
-@diagnosticReport.masterDiagnosticTest.name
+@diagnosticTestLineItem.fullNameOfDiagnosticTest
 </td>
-<td>
 
+@*
 <span style="padding-right:20px">@diagnosticReport.reportStatus</span>
-@if(diagnosticReport.reportStatus.equals(models.diagnostic.DiagnosticReportStatus.SAMPLE_NOT_COLLECTED)){
+@if(diagnosticCentrePrescriptionInfo.reportStatus.equals(models.diagnostic.DiagnosticReportStatus.SAMPLE_NOT_COLLECTED)){
 <a href="@routes.DiagnosticController.sampleCollected(diagnosticOrder.id,diagnosticReport.id)" class="btn btn-xs btn-default">Sample Collected</a>
 }
 </td>
 
 <th>
-@if(!diagnosticReport.reportStatus.equals(models.diagnostic.DiagnosticReportStatus.REPORT_READY)){
+@if(!diagnosticCentrePrescriptionInfo.reportStatus.equals(models.diagnostic.DiagnosticReportStatus.REPORT_READY)){
 <a href="@routes.DiagnosticController.uploadDiagnosticReport(diagnosticOrder.id,diagnosticReport.id)" class="btn btn-xs btn-default">Upload Report</a>
-}
+}*@
+<th>
+<a href="@routes.DiagnosticController.uploadDiagnosticReport(diagnosticCentrePrescriptionInfo.id)" class="btn btn-xs btn-default">Upload Report</a>
 </th>
 }
 </tr>

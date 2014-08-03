@@ -10,14 +10,13 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.ManyToMany;
 import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 
 import models.BaseEntity;
+import models.diagnostic.DiagnosticCentre;
 import models.diagnostic.DiagnosticTestLineItem;
 import models.patient.Patient;
-import models.pharmacist.PharmacyPrescriptionStatus;
 import play.db.ebean.Model;
 import beans.PrescriptionBean;
 
@@ -61,6 +60,9 @@ public class Prescription extends BaseEntity{
 
 	public static Model.Finder<Long, Prescription> find = new Finder<Long, Prescription>(Long.class, Prescription.class);
 
+	public List<DiagnosticCentre> getDiagnosticCentres(){
+		return null;
+	}
 	public PrescriptionBean toBean() {
 
 		final PrescriptionBean bean = new PrescriptionBean();

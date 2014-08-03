@@ -30,7 +30,7 @@ public class PharmacyPrescriptionInfo extends BaseEntity{
 	
 	public PharmacyPrescriptionStatus pharmacyPrescriptionStatus = PharmacyPrescriptionStatus.RECEIVED;
 	
-	public Date receivedDate = new Date();
+	public Date receivedDate;
 	
 	public static Model.Finder<Long, PharmacyPrescriptionInfo> find = new Finder<Long, PharmacyPrescriptionInfo>(Long.class, PharmacyPrescriptionInfo.class);
 	

@@ -110,19 +110,6 @@ public class PublicController extends Controller{
 		final Doctor doctor = Doctor.find.where().eq("slugUrl",cleanSlug).findUnique();
 		return ok(views.html.doctor.publicDoctorProfile.render(doctor));
 	}
-
-
-	/**
-	 * @author lakshmi
-	 * Action to render the searchedPharmacies scala template
-	 * GET/pharmacy/search
-	 */
-	public static Result searchPhamacy(){
-		return ok(views.html.pharmacist.searched_pharmacies.render(false,"", new ArrayList<Pharmacy>()));
-	}
-
-
-
 	/**
 	 * @author lakshmi
 	 * Action to render the searchedPharmacies scala template
@@ -131,25 +118,6 @@ public class PublicController extends Controller{
 	public static Result searchPharmaciesPage(){
 		return ok(views.html.pharmacist.searched_pharmacies.render(false,"", new ArrayList<Pharmacy>()));
 	}
-
-	/**
-	 * @author lakshmi
-	 * Action to perform search operation for finding pharmacies based on
-	 * name and area
-	 * GET/pharmacy/search/:searchString
-	 */
-	public static Result searchPharmacies(final String searchString) {
-		final String searchStr = searchString.toLowerCase().trim();
-		List<Pharmacy> pharmacyList = new ArrayList<Pharmacy>();
-		if(searchStr.length()>=4){
-			pharmacyList = Pharmacy.find.where().like("searchIndex","%"+searchStr+"%").findList();
-		}
-		else{
-			flash().put("alert", new Alert("alert-danger", "The searck key should contain atleast four charecters").toString());
-		}
-		return ok(views.html.pharmacist.searched_pharmacies.render(true,searchStr,pharmacyList));
-	}
-
 	/**
 	 * @author lakshmi
 	 * Action to perform search operation for finding pharmacies based on the searchKey
@@ -356,4 +324,90 @@ public class PublicController extends Controller{
 			return badRequest();
 		}
 	}
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	/**
+	 * @author lakshmi
+	 * Action to render the searched-_diagnostic_centres scala template
+	 * GET	/diagnostic/search
+	 */
+	public static Result searchDiagnosticPage(){
+		return ok(views.html.diagnostic.searched_diagnostic_Centres.render(false,"", new ArrayList<DiagnosticCentre>()));
+	}
+	/**
+	 * @author lakshmi
+	 * Action to perform search operation for finding Diagnostic based on the searchKey
+	 * GET	/diagnostic/search/:searchKey
+	 */
+	public static Result processSearchDiagnosticCentres(final String searchKey) {
+		final String searchStr = searchKey.toLowerCase().trim();
+		final List<DiagnosticCentre> diagnosticCentreList = new ArrayList<DiagnosticCentre>();
+		if(searchStr.length()>=4){
+			Logger.info("key: "+searchStr);
+			diagnosticCentreList.addAll(DiagnosticCentre.find.where().like("searchIndex","%"+searchStr+"%").findList());
+		}
+		else{
+			flash().put("alert", new Alert("alert-danger", "The searck key should contain atleast four charecters").toString());
+		}
+		return ok(views.html.diagnostic.searched_diagnostic_Centres.render(true,searchKey,diagnosticCentreList));
+	}
+
+	/**
+	 * @author lakshmi
+	 * Action to add a Diagnostic Centre to loggedInUser
+	 * GET /diagnostic/add-to-favourites
+	 */
+	public static Result addDiagnosticCentreToLoggedInUser(final Long diagnosticId) {
+		Logger.info("test1");
+		if(!LoginController.isLoggedIn()){
+			flash().put("alert", new Alert("alert-info","Please Login To Add DiagnosticCentre.").toString());
+			return redirect(routes.LoginController.loginForm());
+		}else{
+			final String loggedInRole=LoginController.getLoggedInUserRole();
+			if(loggedInRole.compareTo(Role.PATIENT.toString()) == 0){
+
+			}
+			if(loggedInRole.compareTo(Role.DOCTOR.toString()) == 0){
+				final Doctor doctor = LoginController.getLoggedInUser().getDoctor();
+				final DiagnosticCentre diagnosticCentre = DiagnosticCentre.find.byId(diagnosticId);
+				if(!doctor.diagnosticCentreList.contains(diagnosticCentre)){
+					doctor.diagnosticCentreList.add(diagnosticCentre);
+					doctor.update();
+				}
+				return redirect(routes.DoctorController.myFavoriteDiagnosticCentres());
+			}
+			if(loggedInRole.compareTo(Role.ADMIN_DIAGREP.toString()) == 0){
+
+			}
+			Logger.info("test10");
+			return redirect(routes.UserActions.dashboard());
+		}
+	}	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
 }

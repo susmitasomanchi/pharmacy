@@ -10,6 +10,7 @@ import models.AppUser;
 import models.MasterProduct;
 import models.Role;
 import models.diagnostic.DiagnosticCentre;
+import models.diagnostic.DiagnosticCentrePrescriptionInfo;
 import models.diagnostic.DiagnosticTestLineItem;
 import models.diagnostic.MasterDiagnosticTest;
 import models.doctor.Doctor;
@@ -247,25 +248,48 @@ public class SampleDataController extends Controller {
 	 * @throws ParseException 
 	 */
 	
-	public static Result prescripetionTest() throws ParseException{
-		Prescription prescription = new Prescription();
-		PharmacyPrescriptionInfo pharmacyPrescriptionInfo = new PharmacyPrescriptionInfo();
-		pharmacyPrescriptionInfo.pharmacy = LoginController.getLoggedInUser().getPharmacist().pharmacy;
-		MedicineLineItem medicineLineItem1 = new MedicineLineItem();
-		medicineLineItem1.fullNameOfMedicine = "medicine1";
-		prescription.medicineLineItemList.add(medicineLineItem1);
-		MedicineLineItem medicineLineItem2 = new MedicineLineItem();
-		medicineLineItem2.fullNameOfMedicine = "medicine2";
-		prescription.medicineLineItemList.add(medicineLineItem2);
-		pharmacyPrescriptionInfo.prescription = prescription;
-		pharmacyPrescriptionInfo.receivedDate = new SimpleDateFormat("dd-MMM-yyyy").parse("7-Jun-2013");
-		pharmacyPrescriptionInfo.save();
-//		return redirect(routes.PharmacistController.addPharmacyOrderFromDoctor(pharmacy.id,prescription.id));
-		
+//	public static Result prescripetionTest() throws ParseException{
+//		Prescription prescription = new Prescription();
+//		PharmacyPrescriptionInfo pharmacyPrescriptionInfo = new PharmacyPrescriptionInfo();
+//		pharmacyPrescriptionInfo.pharmacy = LoginController.getLoggedInUser().getPharmacist().pharmacy;
+//		MedicineLineItem medicineLineItem1 = new MedicineLineItem();
+//		medicineLineItem1.fullNameOfMedicine = "medicine1";
+//		prescription.medicineLineItemList.add(medicineLineItem1);
+//		MedicineLineItem medicineLineItem2 = new MedicineLineItem();
+//		medicineLineItem2.fullNameOfMedicine = "medicine2";
+//		prescription.medicineLineItemList.add(medicineLineItem2);
+//		pharmacyPrescriptionInfo.prescription = prescription;
+//		pharmacyPrescriptionInfo.receivedDate = new SimpleDateFormat("dd-MMM-yyyy").parse("7-Jun-2013");
+//		pharmacyPrescriptionInfo.save();
+////		return redirect(routes.PharmacistController.addPharmacyOrderFromDoctor(pharmacy.id,prescription.id));
+//		
+//return ok();
+//	}
+//
+//}
+
+/**
+ * Action to create Prescription for the Diagnostic Centre
+ * @return
+ */
+
+public static Result prescripetionTest(){
+	Prescription prescription = new Prescription();
+	DiagnosticCentrePrescriptionInfo diagnosticCentrePrescriptionInfo = new DiagnosticCentrePrescriptionInfo();
+	diagnosticCentrePrescriptionInfo.diagnosticCentre = LoginController.getLoggedInUser().getDiagnosticRepresentative().diagnosticCentre;
+	DiagnosticTestLineItem medicineLineItem1 = new DiagnosticTestLineItem();
+	medicineLineItem1.fullNameOfDiagnosticTest = "X-ray";
+	prescription.diagnosticTestLineItemList.add(medicineLineItem1);
+	DiagnosticTestLineItem medicineLineItem2 = new DiagnosticTestLineItem();
+	medicineLineItem2.fullNameOfDiagnosticTest = "Scanning";
+	prescription.diagnosticTestLineItemList.add(medicineLineItem2);
+	diagnosticCentrePrescriptionInfo.prescription = prescription;
+	diagnosticCentrePrescriptionInfo.sharedDate = new Date();
+	diagnosticCentrePrescriptionInfo.save();
+//	return redirect(routes.PharmacistController.addPharmacyOrderFromDoctor(pharmacy.id,prescription.id));
+//	
 return ok();
-	}
 
 }
-
-
+}
 

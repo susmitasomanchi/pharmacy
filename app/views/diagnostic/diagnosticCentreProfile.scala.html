@@ -18,7 +18,6 @@
 	
 	<div class="row clearfix">
 		<div class="col-md-12 column">	
-			@helper.form(action=routes.DiagnosticController.receive()){
 			<table class="table table-bordered table-hover">
 					<thead>
 					<tr>
@@ -45,7 +44,7 @@
 			}
 			@*<a href="/place-order/@diagnosticCenter.id" class="btn btn-xs btn-default">place order</a>*@
 			<input type="submit" name="submit" value="place order">
-			}
+			
 		</div>
 	</div>
 </div>

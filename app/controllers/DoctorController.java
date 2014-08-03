@@ -14,6 +14,7 @@ import java.util.Random;
 import models.Alert;
 import models.AppUser;
 import models.Role;
+import models.diagnostic.DiagnosticCentre;
 import models.doctor.Appointment;
 import models.doctor.AppointmentStatus;
 import models.doctor.Day;
@@ -1133,12 +1134,52 @@ public class DoctorController extends Controller {
 	 */
 	public static Result removeFavoritePharmacy(final Long doctorId,final Long pharmacyId) {
 		final Doctor doctor = Doctor.find.byId(doctorId);
-		Logger.info("before delete list size()==="+doctor.pharmacyList.size());
 		doctor.pharmacyList.remove(Pharmacy.find.byId(pharmacyId));
 		doctor.update();
-		Logger.info("after delete list size()==="+doctor.pharmacyList.size());
 		//return redirect(routes.UserActions.dashboard());
 		return ok(views.html.pharmacist.favorite_pharmacy_list.render(doctor.pharmacyList,doctor.id,0L));
+	}
+	/**
+	 * @author lakshmi
+	 * Action to add favorite pharmacy of the Doctor to the list of Doctor of loggedin DOCTOR
+	 * GET/doctor/add-favorite-pharmacy/:pharmacyId/:str
+	 */
+	public static Result addFavoriteDiagnosticCentre(final Long diagnosticId,final String searchStr) {
+		final Doctor doctor = LoginController.getLoggedInUser().getDoctor();
+		final DiagnosticCentre diagnosticCentre = DiagnosticCentre.find.byId(diagnosticId);
+
+		if(!doctor.diagnosticCentreList.contains(diagnosticCentre)){
+			doctor.diagnosticCentreList.add(diagnosticCentre);
+			doctor.update();
+
+		}
+		else{
+			flash().put("alert", new Alert("alert-info", diagnosticCentre.name+" Already existed in the Favorite List.").toString());
+		}
+		return ok(views.html.diagnostic.searched_diagnostic_Centres.render(true,searchStr,doctor.diagnosticCentreList));
+		//		return redirect(routes.UserActions.dashboard());
+	}
+	/**
+	 * @author lakshmi
+	 * Action to list out favorite Diagnostic Centre of Doctor of loggedin DOCTOR
+	 * GET/doctor/favorite-diagnostic-centres
+	 */
+
+	public static Result myFavoriteDiagnosticCentres() {
+		final Doctor doctor = LoginController.getLoggedInUser().getDoctor();
+		return ok(views.html.diagnostic.favorite_diagnosticCentre_list.render(doctor.diagnosticCentreList,doctor.id,0L));
+	}
+	/**
+	 * @author lakshmi
+	 * Action to remove Pharmacy from  favorite pharmacies List of Doctor of loggedin DOCTOR
+	 * GET/doctor/remove-favorite-diagnosticCentre/:doctorId/:pharmacyId
+	 */
+	public static Result removeFavoriteDiagnosticCentre(final Long doctorId,final Long diagnosticId) {
+		final Doctor doctor = Doctor.find.byId(doctorId);
+		doctor.diagnosticCentreList.remove(DiagnosticCentre.find.byId(diagnosticId));
+		doctor.update();
+		//return redirect(routes.UserActions.dashboard());
+		return ok(views.html.diagnostic.favorite_diagnosticCentre_list.render(doctor.diagnosticCentreList,doctor.id,0L));
 	}
 
 

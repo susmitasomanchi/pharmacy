@@ -106,7 +106,7 @@
           Prescriptions
           <b class="caret"></b></a>
           <ul class="dropdown-menu">
-            <li><a href="@routes.PharmacistController.pharmacyPrescriptionList()">All Prescriptions</a></li>
+            <li><a href="@routes.PharmacistController.viewPharmacyPrescriptionList()">All Prescriptions</a></li>
             <li><a href="@routes.PharmacistController.viewTodaysPrescriptions()">Today's Prescriptions</a></li>
             </ul>
         </li>
@@ -182,16 +182,7 @@
     	        -->
           </ul>
         </li>
-        <li class="dropdown">
-          <a href="#" class="dropdown-toggle" data-toggle="dropdown">
-          Pharmacies
-          <b class="caret"></b></a>
-          <ul class="dropdown-menu">
-	           	<li><a href="">Search Pharmacies</a></li>
-	            <li><a href="@routes.DoctorController.myFavoritePharmacies()">My Pharmacies</a></li>
-	           </ul>
-        </li>
-        
+          
         <li class="dropdown">
           <a href="#" class="dropdown-toggle" data-toggle="dropdown">
           Pharmacies
@@ -199,6 +190,18 @@
           <ul class="dropdown-menu">
 	            <li><a href="@routes.PublicController.searchPharmaciesPage()">Search Pharmacies</a></li>
 	            <li><a href="@routes.DoctorController.myFavoritePharmacies()">My Pharmacies</a></li>
+    	        <!--
+    	        <li><a href="">New Assistant</a></li>
+    	        -->
+          </ul>
+        </li>
+        <li class="dropdown">
+          <a href="#" class="dropdown-toggle" data-toggle="dropdown">
+          Diagnosticcentres
+          <b class="caret"></b></a>
+          <ul class="dropdown-menu">
+	            <li><a href="@routes.PublicController.searchDiagnosticPage()">Search Diagnostic Centre</a></li>
+	            <li><a href="@routes.DoctorController.myFavoriteDiagnosticCentres()">Favorite DiagnosticCentres</a></li>
     	        <!--
     	        <li><a href="">New Assistant</a></li>
     	        -->
@@ -350,7 +353,8 @@
           Diagnostic Orders
           <b class="caret"></b></a>
           <ul class="dropdown-menu">
-          <li><a href="@routes.DiagnosticController.viewDiagnosticOrders()">View Diagnostic Orders</a></li> 
+          <li><a href="@routes.DiagnosticController.getDiagnosticCentrePrescriptions()">Al Prescriptions</a></li>
+          <li><a href="@routes.DiagnosticController.TodaysDiagnosticPrescriptions()">View Diagnostic Orders</a></li> 
             
           </ul>
         </li> 
