@@ -35,8 +35,6 @@ import models.pharmacist.Pharmacy;
 
 import org.apache.commons.codec.binary.Base64;
 
-import com.fasterxml.jackson.databind.module.SimpleAbstractTypeResolver;
-
 import play.Logger;
 import play.data.Form;
 import play.libs.F.Function0;
@@ -212,7 +210,7 @@ public class UserController extends Controller {
 			//@Override
 			public Integer apply() {
 
-				if(EmailService.sendConformationEmail(appUser.email, appUser.id)){
+				if(EmailService.sendConfirmationEmail(appUser.email, appUser.id)){
 					flash().put("alert", new Alert("alert-success","A conformation messege has been send to you").toString());
 				}
 				else{
