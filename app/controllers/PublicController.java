@@ -99,8 +99,7 @@ public class PublicController extends Controller{
 		}
 		return ok();
 	}
-
-
+	
 	/**
 	 * Action to get images associated with a doctor
 	 * GET  /doctor/get-image/:id/:type
@@ -322,22 +321,6 @@ public class PublicController extends Controller{
 	}
 
 	/**
-	 * @author Lakshmi
-	 * Action to search DiagnosticCentre by slug and display its profile page
-	 * GET /diagnostic/:slugUrl
-	 */
-	public static Result getDiagnosticCentreWithSlug(final String slug) {
-		final String cleanSlug = slug.trim().toLowerCase();
-		final DiagnosticCentre diagnosticCentre = DiagnosticCentre.find.where().eq("slugUrl",cleanSlug).findUnique();
-		if(diagnosticCentre != null){
-			return ok(views.html.diagnostic.publicDiagnosticProfile.render(diagnosticCentre));
-		}
-		else{
-			return ok("404");
-		}
-	}
-
-	/**
 	 * @author Mitesh
 	 * Action to display user login page after conformation
 	 *  GET /user/confirmation/:userId/:randomString
@@ -370,6 +353,43 @@ public class PublicController extends Controller{
 		else{
 			Logger.debug("user is null");
 			return badRequest();
+		}
+	}
+	/**
+	 * @author lakshmi
+	 *  Action to get byteData as image of DiagnosticCentre	
+	 * GET/diagnostic/get-image/:diagnosticId/:fileId
+	 */
+	public static Result getDiagnosticImages(final Long diagnosticId,final Long imageId){
+		byte[] byteContent = null;
+		if(imageId == 0){
+			byteContent=DiagnosticCentre.find.byId(diagnosticId).backgroudImage;
+		}
+		else{
+			for (final FileEntity file : DiagnosticCentre.find.byId(diagnosticId).profileImageList) {
+				if(file.id == imageId){
+					byteContent = file.byteContent;
+				}
+			}
+		}
+
+		return ok(byteContent).as("image/jpeg");
+
+	}
+
+	/**
+	 * @author Lakshmi
+	 * Action to search DiagnosticCentre by slug and display its profile page
+	 * GET /diagnostic/:slugUrl
+	 */
+	public static Result getDiagnosticCentreWithSlug(final String slug) {
+		final String cleanSlug = slug.trim().toLowerCase();
+		final DiagnosticCentre diagnosticCentre = DiagnosticCentre.find.where().eq("slugUrl",cleanSlug).findUnique();
+		if(diagnosticCentre != null){
+			return ok(views.html.diagnostic.publicDiagnosticProfile.render(diagnosticCentre));
+		}
+		else{
+			return ok("404");
 		}
 	}
 
@@ -429,6 +449,9 @@ public class PublicController extends Controller{
 			Logger.info("test10");
 			return redirect(routes.UserActions.dashboard());
 		}
+		
+		
+
 	}
 
 

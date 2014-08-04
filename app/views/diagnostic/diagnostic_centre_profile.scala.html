@@ -96,7 +96,7 @@ function validateSlugUrl(){
 
 
 @if(diagnosticCentre.backgroudImage != null){
-	<div style="background-image:url('@routes.DiagnosticController.getDiagnosticImages(diagnosticCentre.id,0)');background-size:940px 400px; background-repeat:no-repeat; height:400px;"></div>
+	<div style="background-image:url('@routes.PublicController.getDiagnosticImages(diagnosticCentre.id,0)');background-size:940px 400px; background-repeat:no-repeat; height:400px;"></div>
 }else{
 	<div style="background-image:url('/assets/images/pharmacy-default-bg-image.jpg');background-size:940px 400px; background-repeat:no-repeat; height:400px;"></div>
 }
@@ -122,7 +122,7 @@ function validateSlugUrl(){
       <table class="table table-striped">     
       @for(profileImages <- diagnosticCentre.profileImageList){
       <tr>
-      <td style="width:200px"> <img src="@routes.DiagnosticController.getDiagnosticImages(diagnosticCentre.id,profileImages.id)" width="150" height="75" /> </td>
+      <td style="width:200px"> <img src="@routes.PublicController.getDiagnosticImages(diagnosticCentre.id,profileImages.id)" width="150" height="75" /> </td>
       <td> <button class="btn btn-danger btn-xs"><a href="/diagnostic/remove-image/@diagnosticCentre.id/@profileImages.id" style="color:white">Delete</a></button> </td>
       </tr>
       }      
@@ -216,7 +216,7 @@ $('#slugpopover').on('shown.bs.popover', function () {
   <div class="carousel-inner">
   @for((profileImages,index) <- diagnosticCentre.profileImageList.zipWithIndex){
     <div class="item @if(index == 0){active}">
-      <img src="@routes.DiagnosticController.getDiagnosticImages(diagnosticCentre.id,profileImages.id)" alt="diagnostic1" style="height:300px; width:800px;"/>
+      <img src="@routes.PublicController.getDiagnosticImages(diagnosticCentre.id,profileImages.id)" alt="diagnostic1" style="height:300px; width:800px;"/>
     </div>
 	}
   </div>
@@ -573,7 +573,7 @@ $("#city").blur(function() {
       <td width="15px">
       </td>
       <td style="width:200px">      
-		<img src="@routes.DiagnosticController.getDiagnosticImages(0,0,diagnosticService.id,serviceImage.id)" style="width:80px; height:80px;" class="thumbnail" />     
+		<img src="@routes.PublicController.getDiagnosticImages(0,0,diagnosticService.id,serviceImage.id)" style="width:80px; height:80px;" class="thumbnail" />     
       
       </td>
       <td width="110px">

@@ -36,6 +36,9 @@ GET    /                                 			controllers.Application.index()
 POST   /login                             			controllers.LoginController.processLogin()
 GET    /logout                            			controllers.LoginController.processLogout()
 GET    /edit-password                            	controllers.LoginController.editPassword()
+GET	   /edit-login-details							controllers.LoginController.editLoginDetails()
+POST   /edit-login-details							controllers.LoginController.editLoginDetailsProcess()
+
 POST   /update-password                            	controllers.LoginController.updatePassword()
 GET		/not-confirmed-yet							controllers.UserController.confirmAppUserPage()
 GET		/user/verify-email							controllers.DoctorController.sendConformationEmail()
@@ -50,8 +53,9 @@ GET	   /doctor/search									controllers.PublicController.searchDoctorsPage()
 GET	   /doctor/search/:key								controllers.PublicController.processSearchDoctors(key: String)
 GET   	/pharmacy/search/:searchString                  controllers.PublicController.processSearchPharmacies(searchString: String)
 #GET   	/pharmacy/add-favourite-pharmacy/:pharmacyId/:str   controllers.PublicController.myFavoritePharmacy(pharmacyId : Long,str: String)
-GET    /pharmacy/search									controllers.PublicController.searchPharmaciesPage()
+GET     /pharmacy/search									controllers.PublicController.searchPharmaciesPage()
 GET		/doctor/add-to-favorite/:docId					controllers.PublicController.addToFavDoctor(docId: Long)
+GET		/diagnostic/get-image/:diagnosticId/:imageId	controllers.PublicController.getDiagnosticImages(diagnosticId: Long,imageId: Long)
 
 # Sign up page
 GET    /doctor/join                              			controllers.UserController.joinUsDoctor()
@@ -148,8 +152,8 @@ GET   	/diagnostic/search/:searchString                  				controllers.PublicC
 GET    /diagnostic/search												controllers.PublicController.searchDiagnosticPage()
 GET		/diagnostic/add-to-user/:diagnosticId							controllers.PublicController.addDiagnosticCentreToLoggedInUser(diagnosticId: Long)
 GET 	/diagnostic/prescriptions										controllers.DiagnosticController.getDiagnosticCentrePrescriptions(status: String ?= "any")
-GET		/diagnostic/order-confirmed/:diagInfoId							controllers.DiagnosticController.orderConfirmed(diagInfoId: Long)
-GET		/diagnostic/order-cancelled/:diagInfoId							controllers.DiagnosticController.orderCancelled(diagInfoId: Long)
+GET		/diagnostic/order-confirmed/:diagInfoId							controllers.DiagnosticController.orderServed(diagInfoId: Long)
+#GET		/diagnostic/order-cancelled/:diagInfoId							controllers.DiagnosticController.orderCancelled(diagInfoId: Long)
 GET		/diagnostic/ordered-tests/:diagInfoId							controllers.DiagnosticController.viewOrderedTest(diagInfoId: Long)
 GET   	/diagnostic/upload-diagnostic-Report/:diagInfoId				controllers.DiagnosticController.uploadDiagnosticReport(diagInfoId: Long)
 POST    /diagnostic/upload-diagnostic-Report/:diagInfoId		  			controllers.DiagnosticController.uploadDiagnosticReportProcess(diagInfoId: Long)
@@ -265,7 +269,7 @@ GET    /diagnosticrep/remove-doctor/:id   		controllers.DRController.removeDocto
 GET    /diagnostic-centre/all-doctors      		controllers.DRController.displayDiagnosticCentreDoctors()
 
 #Diagnostic Profile
-GET		/diagnostic/get-image/:diagnosticId/:imageId			controllers.DiagnosticController.getDiagnosticImages(diagnosticId: Long,imageId: Long)
+
 POST	/diagnostic/basic-update								controllers.DiagnosticController.diagnosticBasicUpdate()
 POST	/diagnostic/address-update								controllers.DiagnosticController.diagnosticAddressUpdate()
 GET		/diagnostic/remove-image/:diagnosticId/:fileId			controllers.DiagnosticController.removeDiagnosticImage(diagnosticId: Long,fileId: Long)
