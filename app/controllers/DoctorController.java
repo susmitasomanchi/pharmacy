@@ -1,8 +1,6 @@
 package controllers;
 
 import java.io.File;
-import java.math.BigInteger;
-import java.security.SecureRandom;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -10,7 +8,6 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 import java.util.Map;
-import java.util.Random;
 
 import models.Alert;
 import models.AppUser;
@@ -48,6 +45,7 @@ import play.mvc.Controller;
 import play.mvc.Http.MultipartFormData;
 import play.mvc.Result;
 import utils.EmailService;
+import utils.SMSService;
 import actions.BasicAuth;
 import actions.ConfirmAppUser;
 import beans.DoctorClinicInfoBean;
@@ -1311,26 +1309,20 @@ public class DoctorController extends Controller {
 
 	/**
 	 * @author Mitesh Action to send mobileNumberConfirmationKey to currently
-	 *         logged in user's mobile GET /user/send-verificaion-code
+	 *         logged in user's mobile
+	 *         GET /user/send-verificaion-code
 	 */
 	public static Result sendMobVerificationCode() {
-		final Random random = new SecureRandom();
-		String randomString = new BigInteger(130, random)
-		.toString(Character.MAX_RADIX);
-		randomString = randomString.substring(randomString.length() - 5).trim();
-		final AppUser appUser = LoginController.getLoggedInUser();
-		appUser.mobileNumberConfirmationKey = randomString;
-		appUser.update();
-		Logger.debug(randomString);
-		/***
-		 * Code to send verification code to mobile
-		 */
-		return ok("code send successfully");
+
+		SMSService.sendConfirmationSMS(LoginController.getLoggedInUser());
+
+		return redirect(routes.DoctorController.newClinic());
 	}
 
 	/**
 	 * @author Mitesh Action to Display form to verify the mobile number of
-	 *         currently logged in user GET /user/verify-mobile-number
+	 *         currently logged in user
+	 *         GET /user/verify-mobile-number
 	 */
 	public static Result displayMobVerificationForm() {
 		return ok(views.html.common.verifyMobileNumber.render());
@@ -1339,12 +1331,15 @@ public class DoctorController extends Controller {
 	/**
 	 * @author Mitesh
 	 *  Action to verify the mobileNumberConfirmationKey send to
-	 *	 currently logged in user'mobile POST /user/verify-mobile-number
+	 *	 currently logged in user'mobile
+	 *	POST /user/verify-mobile-number
 	 */
 	public static Result verifyMobileNumberConfirmationKey() {
 
 		final String key = request().body().asFormUrlEncoded()
 				.get("mobileNumber")[0];
+		Logger.debug(key);
+
 		final AppUser appUser = LoginController.getLoggedInUser();
 
 		if (key.compareTo(appUser.mobileNumberConfirmationKey) == 0) {
@@ -1356,6 +1351,8 @@ public class DoctorController extends Controller {
 			appUser.update();
 			return redirect(routes.UserActions.dashboard());
 		} else {
+			Logger.debug("enterd");
+
 			Logger.info("fail");
 			flash().put(
 					"alert",
