@@ -10,6 +10,7 @@ THIS IS AN AUTO GENERATED CODE
 PLEASE DO NOT MODIFY IT BY HAND
  *****/
 package controllers;
+import static play.libs.F.Promise.promise;
 
 import java.security.MessageDigest;
 import java.security.SecureRandom;
@@ -36,6 +37,7 @@ import org.apache.commons.codec.binary.Base64;
 
 import play.Logger;
 import play.data.Form;
+import play.libs.F.Function0;
 import play.mvc.Controller;
 import play.mvc.Result;
 import utils.Constants;
@@ -204,16 +206,28 @@ public class UserController extends Controller {
 		session().clear();
 		session(Constants.LOGGED_IN_USER_ID, appUser.id + "");
 		session(Constants.LOGGED_IN_USER_ROLE, appUser.role+ "");
-		if(EmailService.sendConfirmationEmail(appUser)){
-			flash().put("alert", new Alert("alert-success","A conformation messege has been send to you").toString());
-		}
-		else{
-			flash().put("alert", new Alert("alert-danger","Sorry the message cant be sent").toString());
-		}
+		// Async Execution
+		promise(new Function0<Integer>() {
+			//@Override
+			public Integer apply() {
+
+				if(EmailService.sendConfirmationEmail(appUser)){
+					flash().put("alert", new Alert("alert-success","A conformation messege has been send to you").toString());
+				}
+				else{
+					flash().put("alert", new Alert("alert-danger","Sorry the message cant be sent").toString());
+					System.out.println("Send");
+
+				}
+
+				return 0;
+			}
+		});
+		// End of async
+
+
 		return redirect(routes.UserActions.dashboard());
 	}
-
-
 
 
 	/**
@@ -305,7 +319,6 @@ public class UserController extends Controller {
 
 		return redirect(routes.UserActions.dashboard());
 	}
-
 
 
 

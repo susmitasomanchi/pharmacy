@@ -16,7 +16,7 @@
 				<p>
 				Your email address <strong>@appUser.email</strong> has not been confirmed yet.
 				Please click on the link provided in the confirmation mail to proceed.<br>
-				<a href="">Click here</a> to receive the confirmation mail again.
+				<a href="@routes.DoctorController.sendConformationEmail()">Click here</a> to receive the confirmation mail again.
 				</p>
 			}
 			
@@ -25,9 +25,11 @@
 				Your Mobile Number <strong>@appUser.mobileNumber</strong> has not been confirmed yet.
 				<br>
 				Please enter the confirmation code sent to your mobile number.<br>
-				<input>&nbsp;<a class="btn btn-primary btn-sm">Confirm</a>
+				<form action="@routes.DoctorController.verifyMobileNumberConfirmationKey()" method="POST">
+				<input name="mobileNumber">&nbsp;<input type="submit" value="Confirm" class="btn btn-primary btn-sm"/>
+				</form>
 				<br>
-				<a href="">Click here</a> to receive the code again.
+				<a href="@routes.DoctorController.sendMobVerificationCode()">Click here</a> to receive the code again.
 				</p>
 			}
 		</div>

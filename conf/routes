@@ -41,6 +41,7 @@ POST   /edit-login-details							controllers.LoginController.editLoginDetailsPro
 
 POST   /update-password                            	controllers.LoginController.updatePassword()
 GET		/not-confirmed-yet							controllers.UserController.confirmAppUserPage()
+GET		/user/verify-email							controllers.DoctorController.sendConformationEmail()
 GET 	/user/confirmation/:userId/:randomString	controllers.PublicController.emailConfirmation(userId: Long, randomString:String)
 GET		/user/send-verificaion-code					controllers.DoctorController.sendMobVerificationCode()
 GET 	 /user/verify-mobile-number						controllers.DoctorController.displayMobVerificationForm()

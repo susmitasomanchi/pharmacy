@@ -1,27 +1,18 @@
 package controllers;
 
-import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 
 import models.Alert;
-import models.MasterDiagnosticTest;
 import models.MasterProduct;
 import models.Role;
-import models.doctor.DoctorDiagnosticTest;
-import models.doctor.DoctorProduct;
 import models.mr.MedicalRepresentative;
 import models.mr.PharmaceuticalProduct;
 import models.pharmacist.Pharmacist;
 import models.pharmacist.Pharmacy;
 import models.pharmacist.PharmacyProduct;
-
-import org.json.JSONArray;
-
 import play.Logger;
 import play.data.Form;
-import play.mvc.BodyParser;
 import play.mvc.Controller;
 import play.mvc.Result;
 
