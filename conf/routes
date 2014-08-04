@@ -37,6 +37,8 @@ POST   /login                             			controllers.LoginController.process
 GET    /logout                            			controllers.LoginController.processLogout()
 GET    /edit-password                            	controllers.LoginController.editPassword()
 POST   /update-password                            	controllers.LoginController.updatePassword()
+GET		/not-confirmed-yet							controllers.UserController.confirmAppUserPage()
+GET		/user/verify-email							controllers.DoctorController.sendConformationEmail()
 GET 	/user/confirmation/:userId/:randomString	controllers.PublicController.emailConfirmation(userId: Long, randomString:String)
 GET		/user/send-verificaion-code					controllers.DoctorController.sendMobVerificationCode()
 GET 	 /user/verify-mobile-number						controllers.DoctorController.displayMobVerificationForm()
@@ -64,7 +66,7 @@ GET		/dashboard                                  controllers.UserActions.dashboa
 # Doctor's Actions
 POST	/doctor/doctor-basic-update					controllers.DoctorController.basicUpdate()
 POST	/doctor/doctor-images-update				controllers.DoctorController.imagesUpdate()
-GET    	/doctor/get-image/:id/:type                 controllers.DoctorController.getImage(id: Long, type :String)
+GET    	/doctor/get-image/:id/:type                 controllers.PublicController.getImage(id: Long, type :String)
 POST	/doctor/add-work-experience					controllers.DoctorController.addWorkExperience()
 GET		/doctor/remove-work-experience/:docId/:id	controllers.DoctorController.removeWorkExperience(docId: Long, id: Long)
 POST	/doctor/add-award							controllers.DoctorController.addAward()
@@ -101,7 +103,7 @@ GET		/doctor/prescription/:appointmentId					controllers.DoctorController.showPr
 POST	/doctor/save-prescription							controllers.DoctorController.savePrescription()
 GET		/doctor/show-prescription/:prescriptionId			controllers.DoctorController.showPrescription(prescriptionId: Long)
 GET		/doctor/share-prescription/:prId/:pharmacyId		controllers.DoctorController.sharePrescription(prId: Long, pharmacyId: Long)							
-GET		/doctor/doctor/all-prescriptions					controllers.DoctorController.viewAllPrescription()
+GET		/doctor/all-prescriptions					controllers.DoctorController.viewAllPrescription()
 GET		/doctor/todays-prescriptions						controllers.DoctorController.viewTodaysPrescription()
 GET		/doctor/products/get-json							controllers.DoctorController.getAllProductsJson()
 GET		/doctor/diagnostic-tests/get-json					controllers.DoctorController.getAllDiagnosticJson()
@@ -116,7 +118,7 @@ GET		/user/remove-diagnosticCentre/:patientId/:pharmacyId	controllers.PatientCon
 POST	/pharmacy/upload-pharmacy-images					controllers.PharmacistController.uploadPharmacyImageProcess()
 POST	/pharmacy/basic-update								controllers.PharmacistController.pharmacyBasicUpdate()
 POST	/pharmacy/address-update			  				controllers.PharmacistController.pharmacyAddressUpdate()
-GET		/pharmacy/get-image/:pharmacyId/:fileId				controllers.PharmacistController.getPharmacyImages(pharmacyId: Long,fileId: Long)
+GET		/pharmacy/get-image/:pharmacyId/:fileId				controllers.PublicController.getPharmacyImages(pharmacyId: Long,fileId: Long)
 GET		/pharmacy/remove-image/:pharmacyId/:fileId			controllers.PharmacistController.removeImage(pharmacyId: Long,fileId: Long)
 GET		/pharmacy/add-to-user/:pharmacyId					controllers.PublicController.addPharmacyToLoggedInUser(pharmacyId: Long)
 
@@ -124,7 +126,6 @@ GET		/pharmacy/add-to-user/:pharmacyId					controllers.PublicController.addPharm
 
 GET 	/pharmacy/prescriptions								controllers.PharmacistController.pharmacyPrescriptionList(status: String ?= "any")
 #GET 	/pharmacy/received-prescriptions					controllers.PharmacistController.receivedPrescriptionList()
-#GET 	/pharmacy/served-prescriptions						controllers.PharmacistController.servedPrescriptionList()
 
 GET 	/pharmacy/todays-prescriptions						controllers.PharmacistController.viewTodaysPrescriptions()
 POST 	/pharmacy/from-and-to-date-prescriptions						controllers.PharmacistController.getFromAndToDatePrescriptions()
@@ -202,9 +203,6 @@ POST	/addProductToInventory/					controllers.PharmacistController.addProductForm
 POST  	/searchProduct                           controllers.PharmacistController.searchProduct(arg: String ?= "")
 GET   	/place-product-order                     	controllers.PharmacistController.placeProductOrder()
 GET   	/place-product-order/process              controllers.PharmacistController.placeProductOrderProcess()
-#GET	 /pharmacy/profile							controllers.PharmacistController.pharmacyProfile()
-GET		/edit-pharmacy-details					controllers.PharmacistController.editPharmacyDetails()
-#GET	/pharmacy/search-product							controllers.PharmacistController.productSearchProcess()	
 POST   /pharmacy/add-product-to-showcase                controllers.PharmacistController.addShowCasedProduct()
 GET    /pharmacy/remove-product-from-showcase/:id       controllers.PharmacistController.removeProductFromShowcaseList(id: Long)
 GET		/pharmacy/order/:id						controllers.PharmacistController.pharmacyPlaceOrder(id: Long)

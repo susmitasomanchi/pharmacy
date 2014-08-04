@@ -64,7 +64,8 @@
 		
 			<div class="form-group">
    				 <label for="state">State</label>
-    			 <select data-placeholder="Select the state" name="state" class="form-control chosen-select">
+    			 <select data-placeholder="Select State" name="state" class="form-control chosen-select">
+    			 <option></option>
   				 	@for((state,state1) <-State.options()){
   				 		@if(state.equals(clinicForm("state").value)){
   				 			<option value="@state" selected>@state1</option>

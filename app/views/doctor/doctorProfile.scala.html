@@ -144,7 +144,7 @@ function submitimagesform(name){
 
 
 @if(doctor.backgroundImage != null){
-	<div style="background-image:url('@routes.DoctorController.getImage(doctor.id,"backgroundImage")');background-repeat:no-repeat; background-size:940px 400px; height:400px; font-size:40px;">
+	<div style="background-image:url('@routes.PublicController.getImage(doctor.id,"backgroundImage")');background-repeat:no-repeat; background-size:940px 400px; height:400px; font-size:40px;">
 }else{
 	<div style="background-image:url('/assets/images/sunrise.png'); background-repeat:no-repeat; background-size:940px 400px; height:400px; font-size:40px;">
 }
@@ -174,7 +174,7 @@ You profile is available at
 <div class="col-md-4" >
 <br>
 @if(doctor.profileImage != null){
-	<img src="@routes.DoctorController.getImage(doctor.id,"profileImage")" style="width:250px; height:275px;" class="thumbnail"/>
+	<img src="@routes.PublicController.getImage(doctor.id,"profileImage")" style="width:250px; height:275px;" class="thumbnail"/>
 }else{
 	<img src="/assets/images/doctor.png" style="width:250px; height:275px;" class="thumbnail"/>
 }

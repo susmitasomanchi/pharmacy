@@ -28,23 +28,23 @@ margin-bottom:0px;
 				<tr class="row">
 				<td class="col-md-6">
 				<div class="row" style="padding-left:20px;padding-right:20px">
-				<div style="cursor:pointer" onclick="location.href='/dashboard';"><img src="/assets/images/sunrise.png" width="530" height="170" />
+				<div style="cursor:pointer" onclick="window.location.href='@routes.PublicController.getDoctorWithSlug(patDoc.doctor.slugUrl)';"><img src="/assets/images/sunrise.png" width="530" height="170" />
 				@if(patDoc.doctor.backgroundImage != null){
-				<img id="coverborder" src="@routes.DoctorController.getImage(patDoc.doctor.id,"backgroundImage")"  width="530" style="position:relative;top:-65px"/>
+				<img id="coverborder" src="@routes.PublicController.getImage(patDoc.doctor.id,"backgroundImage")"  width="530" style="position:relative;top:-65px"/>
 				}else{
 				<img id="coverborder" src="/assets/images/bordercover.png" width="530" style="position:relative;top:-65px"/>
 				}
 				</div>
 				<div class="row" style="margin-top:-120px;padding-left:15px">
-				<div style="cursor:pointer;width:23%" onclick="location.href='/dashboard';" class="col-md-3">
+				<div style="cursor:pointer;width:23%" onclick="window.location.href='@routes.PublicController.getDoctorWithSlug(patDoc.doctor.slugUrl)';" class="col-md-3">
 				<br>
 				@if(patDoc.doctor.backgroundImage != null){
-				<img src="@routes.DoctorController.getImage(patDoc.doctor.id,"profileImage")" class="thumbnail" width="100" height="100"  />
+				<img src="@routes.PublicController.getImage(patDoc.doctor.id,"profileImage")" class="thumbnail" width="100" height="100"  />
 					}else{
 				<img src="/assets/images/doctor.png" class="thumbnail" width="100" height="100"  />
 					}
 				</div>
-				<div style="cursor:pointer" onclick="location.href='@routes.PublicController.getDoctorWithSlug(patDoc.doctor.slugUrl)';" class="col-md-5">
+				<div style="cursor:pointer" onclick="window.location.href='@routes.PublicController.getDoctorWithSlug(patDoc.doctor.slugUrl)';" class="col-md-5">
 				<p style="font-size:18px"><b>@patDoc.doctor.appUser.name</b></p>
 				<p style="font-size:14px"><b>@patDoc.doctor.specialization</b></p>
 				<h6>@patDoc.doctor.degree</h6>
@@ -161,23 +161,23 @@ margin-bottom:0px;
 			}else{
 			<td class="col-md-6">
 				<div class="row" style="padding-left:20px;padding-right:20px">
-				<div style="cursor:pointer" onclick="location.href='/dashboard';"><img src="/assets/images/sunrise.png" width="530" height="170" />
+				<div style="cursor:pointer" onclick="window.location.href='@routes.PublicController.getDoctorWithSlug(patDoc.doctor.slugUrl)';"><img src="/assets/images/sunrise.png" width="530" height="170" />
 				@if(patDoc.doctor.backgroundImage != null){
-				<img id="coverborder" src="@routes.DoctorController.getImage(patDoc.doctor.id,"backgroundImage")"  width="530" style="position:relative;top:-65px"/>
+				<img id="coverborder" src="@routes.PublicController.getImage(patDoc.doctor.id,"backgroundImage")"  width="530" style="position:relative;top:-65px"/>
 				}else{
 				<img id="coverborder" src="/assets/images/bordercover.png" width="530" style="position:relative;top:-65px"/>
 				}
 				</div>
 				<div class="row" style="margin-top:-120px;padding-left:15px">
-				<div style="cursor:pointer;width:23%" onclick="location.href='/dashboard';" class="col-md-3">
+				<div style="cursor:pointer;width:23%" onclick="window.location.href='@routes.PublicController.getDoctorWithSlug(patDoc.doctor.slugUrl)';" class="col-md-3">
 				<br>
 				@if(patDoc.doctor.backgroundImage != null){
-				<img src="@routes.DoctorController.getImage(patDoc.doctor.id,"profileImage")" class="thumbnail" width="100" height="100"  />
+				<img src="@routes.PublicController.getImage(patDoc.doctor.id,"profileImage")" class="thumbnail" width="100" height="100"  />
 					}else{
 				<img src="/assets/images/doctor.png" class="thumbnail" width="100" height="100"  />
 					}
 				</div>
-				<div style="cursor:pointer" onclick="location.href='@routes.PublicController.getDoctorWithSlug(patDoc.doctor.slugUrl)';" class="col-md-5">
+				<div style="cursor:pointer" onclick="window.location.href='@routes.PublicController.getDoctorWithSlug(patDoc.doctor.slugUrl)';" class="col-md-5">
 				<p style="font-size:18px"><b>@patDoc.doctor.appUser.name</b></p>
 				<p style="font-size:14px"><b>@patDoc.doctor.specialization</b></p>
 				<h6>@patDoc.doctor.degree</h6>

@@ -90,7 +90,7 @@
             <li><a href="/searchProduct">Add Product to Inventory</a></li>
           </ul>
         </li>
-        *@
+        
        <li class="dropdown">
           <a href="#" class="dropdown-toggle" data-toggle="dropdown">
           Inventory
@@ -101,6 +101,7 @@
              <li><a href="@routes.PharmacistController.getPharmacyProducts()">View Pharmacy products</a></li>
             </ul>
         </li>
+        *@
         <li class="dropdown">
           <a href="#" class="dropdown-toggle" data-toggle="dropdown">
           Prescriptions
@@ -176,11 +177,11 @@
              
         <li class="dropdown">
           <a href="#" class="dropdown-toggle" data-toggle="dropdown">
-          Diagnosticcentres
+          Diagnostic Centres
           <b class="caret"></b></a>
           <ul class="dropdown-menu">
 	            <li><a href="@routes.PublicController.searchDiagnosticPage()">Search Diagnostic Centre</a></li>
-	            <li><a href="@routes.DoctorController.myFavoriteDiagnosticCentres()">Favorite DiagnosticCentres</a></li>
+	            <li><a href="@routes.DoctorController.myFavoriteDiagnosticCentres()">Favorite Diagnostic Centres</a></li>
     	        <!--
     	        <li><a href="">New Assistant</a></li>
     	        -->
@@ -372,6 +373,9 @@
 			<li><a href="/user/preferences"><i class="fa fa-gears"></i>&nbsp;&nbsp;Preferences</a></li>
 			<li><a href="/doctor-profile"><i class="fa fa-gears"></i>&nbsp;&nbsp;My Profile</a></li>
 			-->
+			@if(!LoginController.getLoggedInUser().emailConfirmed || !LoginController.getLoggedInUser().mobileNumberConfirmed){
+				<li><a href="@routes.UserController.confirmAppUserPage()"><i class="fa fa-check-square-o"></i>&nbsp;&nbsp;Confirm Details</a></li>
+			}
 			<li><a href="@routes.LoginController.editPassword()"><i class="fa fa-lock"></i>&nbsp;&nbsp;Change Password</a></li>
 			<li class="divider"></li>
 			<li><a href="@routes.LoginController.processLogout()"><i class="fa fa-sign-out"></i>&nbsp;&nbsp;Logout</a></li>
