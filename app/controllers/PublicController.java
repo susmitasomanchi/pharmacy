@@ -343,18 +343,28 @@ public class PublicController extends Controller{
 	 *  GET /user/confirmation/:userId/:randomString
 	 */
 	public static Result emailConfirmation(final Long userId,final String randomString) {
-		final AppUser appUser=AppUser.find.byId(userId);
+		final AppUser appUser =AppUser.find.byId(userId);
 		if(appUser != null){
 			if(appUser.emailConfirmationKey.compareTo(randomString) == 0){
 				appUser.emailConfirmed = true;
 				appUser.update();
-				flash().put("alert", new Alert("alert-success","the Conformation done successfull").toString());
-				return redirect(routes.LoginController.loginForm());
+				flash().put("alert", new Alert("alert-success","Thank you for confirming your email.").toString());
+				if(LoginController.isLoggedIn()){
+					return redirect(routes.UserActions.dashboard());
+				}
+				else{
+					return redirect(routes.LoginController.loginForm());
+				}
 			}
 			else{
-				Logger.debug("key not match");
-				flash().put("alert", new Alert("alert-danger","the conformation String not matched").toString());
-				return badRequest();
+				Logger.debug("email confirmation key does not match");
+				flash().put("alert", new Alert("alert-danger","Sorry. Your email could not be confirmed. Please try again.").toString());
+				if(LoginController.isLoggedIn()){
+					return redirect(routes.UserController.confirmAppUserPage());
+				}
+				else{
+					return redirect(routes.LoginController.loginForm());
+				}
 			}
 		}
 		else{
@@ -362,7 +372,7 @@ public class PublicController extends Controller{
 			return badRequest();
 		}
 	}
-	
+
 	/**
 	 * @author lakshmi
 	 * Action to render the searched-_diagnostic_centres scala template
@@ -419,21 +429,21 @@ public class PublicController extends Controller{
 			Logger.info("test10");
 			return redirect(routes.UserActions.dashboard());
 		}
-	}	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
+	}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 }

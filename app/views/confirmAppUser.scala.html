@@ -8,6 +8,10 @@
 				<p>Please confirm your contact details to use services like Clinic Scheduling, Practice Management etc.</p>
 			}
 			
+			@if(appUser.role.equals(models.Role.ADMIN_PHARMACIST)){
+				<p>Please confirm your contact details to use services like Prescription Management etc.</p>
+			}
+			
 			@if(!appUser.emailConfirmed){
 				<p>
 				Your email address <strong>@appUser.email</strong> has not been confirmed yet.

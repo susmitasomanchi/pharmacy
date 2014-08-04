@@ -1183,9 +1183,6 @@ public class DoctorController extends Controller {
 
 		final String key = request().body().asFormUrlEncoded().get("mobileNumber")[0];
 		final AppUser appUser=LoginController.getLoggedInUser();
-		Logger.warn(key);
-		Logger.warn(appUser.mobileNumberConfirmationKey);
-
 
 		if(key.compareTo(appUser.mobileNumberConfirmationKey) == 0){
 			flash().put("alert", new Alert("alert-success","Mobile number is verified").toString());

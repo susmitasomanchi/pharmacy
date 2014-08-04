@@ -34,8 +34,6 @@ import models.pharmacist.Pharmacy;
 
 import org.apache.commons.codec.binary.Base64;
 
-import com.fasterxml.jackson.databind.module.SimpleAbstractTypeResolver;
-
 import play.Logger;
 import play.data.Form;
 import play.mvc.Controller;
@@ -206,8 +204,7 @@ public class UserController extends Controller {
 		session().clear();
 		session(Constants.LOGGED_IN_USER_ID, appUser.id + "");
 		session(Constants.LOGGED_IN_USER_ROLE, appUser.role+ "");
-		appUser.emailConfirmed = EmailService.sendConfirmationEmail(appUser.email, appUser.id);
-		if(appUser.emailConfirmed){
+		if(EmailService.sendConfirmationEmail(appUser)){
 			flash().put("alert", new Alert("alert-success","A conformation messege has been send to you").toString());
 		}
 		else{
@@ -233,7 +230,7 @@ public class UserController extends Controller {
 		if(appUser.emailConfirmed && appUser.mobileNumberConfirmed){
 			return redirect(routes.UserActions.dashboard());
 		}
-		return ok(views.html.comfirmAppUser.render(appUser));
+		return ok(views.html.confirmAppUser.render(appUser));
 	}
 
 

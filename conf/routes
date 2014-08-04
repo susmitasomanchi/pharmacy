@@ -125,7 +125,6 @@ GET		/pharmacy/add-to-user/:pharmacyId					controllers.PublicController.addPharm
 
 GET 	/pharmacy/prescriptions								controllers.PharmacistController.pharmacyPrescriptionList(status: String ?= "any")
 #GET 	/pharmacy/received-prescriptions					controllers.PharmacistController.receivedPrescriptionList()
-#GET 	/pharmacy/served-prescriptions						controllers.PharmacistController.servedPrescriptionList()
 
 GET 	/pharmacy/todays-prescriptions						controllers.PharmacistController.viewTodaysPrescriptions()
 POST 	/pharmacy/from-and-to-date-prescriptions						controllers.PharmacistController.getFromAndToDatePrescriptions()
@@ -203,9 +202,6 @@ POST	/addProductToInventory/					controllers.PharmacistController.addProductForm
 POST  	/searchProduct                           controllers.PharmacistController.searchProduct(arg: String ?= "")
 GET   	/place-product-order                     	controllers.PharmacistController.placeProductOrder()
 GET   	/place-product-order/process              controllers.PharmacistController.placeProductOrderProcess()
-#GET	 /pharmacy/profile							controllers.PharmacistController.pharmacyProfile()
-GET		/edit-pharmacy-details					controllers.PharmacistController.editPharmacyDetails()
-#GET	/pharmacy/search-product							controllers.PharmacistController.productSearchProcess()	
 POST   /pharmacy/add-product-to-showcase                controllers.PharmacistController.addShowCasedProduct()
 GET    /pharmacy/remove-product-from-showcase/:id       controllers.PharmacistController.removeProductFromShowcaseList(id: Long)
 GET		/pharmacy/order/:id						controllers.PharmacistController.pharmacyPlaceOrder(id: Long)
