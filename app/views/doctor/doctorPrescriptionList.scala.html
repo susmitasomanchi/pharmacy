@@ -1,6 +1,6 @@
 @(prescriptions:List[models.doctor.Prescription],docClincs:List[models.doctor.DoctorClinicInfo])
 @import play.i18n._
-@main("Prescription"){
+@main("Prescriptions"){
 	
 	
 		<ul class="nav nav-tabs" role="tablist" id="my-tab">
@@ -19,7 +19,8 @@
 			<tr>
 			<div class="row clearfix">
 				<th>Clinic</th>
-				<th>Date &amp; Time</th>
+				<th>Prescription <br> Date &amp; Time</th>
+				<th>Appointment <br> Date &amp; Time</th>
 				<th>Patient&nbsp;(Sex/Age)</th>
 				<th>Shared With</th>
 				<th>Prescription</th>
@@ -33,7 +34,10 @@
 				<td>@prescription.clinic.name</td>
 				</div>
 				<div class="col-md-3 column">
-				<td>@prescription.prescriptionDate.format("dd-MMM-yy HH:mm")</td>
+				<td>@prescription.prescriptionDate.format("dd-MMM-yyyy HH:mm")</td>
+				</div>
+				<div class="col-md-3 column">
+				<td>@if(prescription.appointment != null){@prescription.appointment.appointmentTime.format("dd-MMM-yyyy HH:mm")}</td>
 				</div>
 				<div class="col-md-3 column">
 				<td>@{prescription.patient.appUser.name}&nbsp;(@prescription.patient.appUser.sex.toString().substring(0,1)/@prescription.patient.appUser.getAge())</td>
@@ -58,7 +62,8 @@
 			<tr>
 			<div class="row clearfix">
 				<th>Clinic</th>
-				<th>Date &amp; Time</th>
+				<th>Prescription <br> Date &amp; Time</th>
+				<th>Appointment <br> Date &amp; Time</th>
 				<th>Patient&nbsp;(Sex/Age)</th>
 				<th>Shared With</th>
 				<th>Prescription</th>
@@ -73,7 +78,10 @@
 				<td>@prescription.clinic.name</td>
 				</div>
 				<div class="col-md-3 column">
-				<td>@prescription.prescriptionDate.format("dd-MMM-yy HH:mm")</td>
+				<td>@prescription.prescriptionDate.format("dd-MMM-yyyy HH:mm")</td>
+				</div>
+				<div class="col-md-3 column">
+				<td>@if(prescription.appointment != null){@prescription.appointment.appointmentTime.format("dd-MMM-yyyy HH:mm")}</td>
 				</div>
 				<div class="col-md-3 column">
 				<td>@{prescription.patient.appUser.name}&nbsp;(@prescription.patient.appUser.sex.toString().substring(0,1)/@prescription.patient.appUser.getAge())</td>

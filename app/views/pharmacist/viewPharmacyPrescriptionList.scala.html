@@ -4,7 +4,7 @@
 
 <div class=" row col-md-6 btn-group">
    
-<select class="chzn" id="status-select" style="width:50%;">
+<select class="chzn" id="status-select" style="width:50%;" data-placeholder="Select Order Status">
 <option></option>
 <option value="any" @if(status.trim.toLowerCase().compareTo("any")==0){selected}>Any</option>
 <option value="received" @if(status.trim.toLowerCase().compareTo("received")==0){selected}>Received</option>
@@ -42,7 +42,7 @@ $('#status-select').on('change', function(){
 <tr>
 <td>@{index+1}</td>
 <td>
-Dr. @pharmacyPrescriptionInfo.prescription.doctor.appUser.name
+<a href="@routes.PublicController.getDoctorWithSlug(pharmacyPrescriptionInfo.prescription.doctor.slugUrl)">Dr. @pharmacyPrescriptionInfo.prescription.doctor.appUser.name</a>
 <br>
 <small>@pharmacyPrescriptionInfo.prescription.doctor.degree</small>
 <br>

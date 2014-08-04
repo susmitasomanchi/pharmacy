@@ -11,6 +11,7 @@ import java.util.Map;
 
 import models.Alert;
 import models.AppUser;
+import models.FileEntity;
 import models.Role;
 import models.diagnostic.DiagnosticCentre;
 import models.doctor.Appointment;
@@ -97,6 +98,43 @@ public class PublicController extends Controller{
 			}
 		}
 		return ok();
+	}
+
+
+	/**
+	 * Action to get images associated with a doctor
+	 * GET  /doctor/get-image/:id/:type
+	 */
+	public static Result getImage(final Long id, final String type){
+		final Doctor doctor = Doctor.find.byId(id);
+		if(type.compareToIgnoreCase("backgroundImage") == 0){
+			return ok(doctor.backgroundImage).as("image/jpeg");
+		}
+		if(type.compareToIgnoreCase("profileImage") == 0){
+			return ok(doctor.profileImage).as("image/jpeg");
+		}
+		return ok().as("image/jpeg");
+	}
+
+
+	/**
+	 * @author lakshmi
+	 * GET /pharmacy/get-image/:pharmacyId/:fileId
+	 * Action to get byte data as image of Pharmacy's Background and Profile Images
+	 */
+	public static Result getPharmacyImages(final Long pharmacyId,final Long imageId) {
+		byte[] byteContent = null;
+		if(imageId == 0){
+			byteContent=Pharmacy.find.byId(pharmacyId).backgroundImage;
+		}
+		else{
+			for (final FileEntity file : Pharmacy.find.byId(pharmacyId).profileImageList) {
+				if(file.id == imageId){
+					byteContent = file.byteContent;
+				}
+			}
+		}
+		return ok(byteContent).as("image/jpeg");
 	}
 
 

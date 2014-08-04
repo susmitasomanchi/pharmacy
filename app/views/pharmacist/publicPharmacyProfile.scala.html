@@ -77,7 +77,7 @@ $('body').on('click', function (e) {
 
 
 @if(pharmacy.backgroundImage != null){
-	<div style="background-image:url('@routes.PharmacistController.getPharmacyImages(pharmacy.id,0)');background-size:940px 400px; background-repeat:no-repeat; height:400px;"></div>
+	<div style="background-image:url('@routes.PublicController.getPharmacyImages(pharmacy.id,0)');background-size:940px 400px; background-repeat:no-repeat; height:400px;"></div>
 }else{
 	<div style="background-image:url('/assets/images/pharmacy-default-bg-image.jpg');background-size:940px 400px; background-repeat:no-repeat; height:400px;"></div>
 }
@@ -104,7 +104,7 @@ $('body').on('click', function (e) {
   <div class="carousel-inner">
   @for((profileImages,index) <- pharmacy.profileImageList.zipWithIndex){
     <div class="item @if(index == 0){active}">
-      <img src="/pharmacy/get-image/@pharmacy.id/@profileImages.id" alt="pharmacy1" style="height:300px; width:800px;"/>
+      <img src="@routes.PublicController.getPharmacyImages(pharmacy.id,profileImages.id)" alt="pharmacy1" style="height:300px; width:800px;"/>
     </div>
     }
   </div>

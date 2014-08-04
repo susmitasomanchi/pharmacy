@@ -7,7 +7,7 @@
 
 <div class="row" style="padding-left:20px; padding-right:100px;">
 
-<h3>Dr. @prescription.doctor.appUser.name</h3>
+<h3><a href="@routes.PublicController.getDoctorWithSlug(prescription.doctor.slugUrl)">Dr. @prescription.doctor.appUser.name</a></h3>
 <h4>@prescription.doctor.degree</h4>
 <h4>@prescription.doctor.specialization</h4>
 

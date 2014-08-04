@@ -22,7 +22,7 @@
 <div class="col-md-6">
 <div class="col-md-5">
 @if(doctorClinic.doctor.profileImage != null){
-	<img src="@routes.DoctorController.getImage(doctorClinic.doctor.id,"profileImage")" width="120" height="110" class="thumbnail"/>
+	<img src="@routes.PublicController.getImage(doctorClinic.doctor.id,"profileImage")" width="120" height="110" class="thumbnail"/>
 }else{
 <img src="/assets/images/doctor.png" class="thumbnail" width="120" height="110" />
 }

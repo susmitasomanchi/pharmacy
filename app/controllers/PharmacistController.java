@@ -243,25 +243,6 @@ public class PharmacistController extends Controller {
 		return redirect(routes.UserActions.dashboard());
 	}
 
-	/**
-	 * @author lakshmi
-	 * GET /pharmacy/get-image/:pharmacyId/:fileId
-	 * Action to get byte data as image of Pharmacy's Background and Profile Images
-	 */
-	public static Result getPharmacyImages(final Long pharmacyId,final Long imageId) {
-		byte[] byteContent = null;
-		if(imageId == 0){
-			byteContent=Pharmacy.find.byId(pharmacyId).backgroundImage;
-		}
-		else{
-			for (final FileEntity file : Pharmacy.find.byId(pharmacyId).profileImageList) {
-				if(file.id == imageId){
-					byteContent = file.byteContent;
-				}
-			}
-		}
-		return ok(byteContent).as("image/jpeg");
-	}
 
 	/**
 	 *@author lakshmi
@@ -546,12 +527,20 @@ public class PharmacistController extends Controller {
 	 */
 
 	public static Result servedPrescription(final Long pharmacyPrescriptionInfoId){
-		final PharmacyPrescriptionInfo pharmacyPrescriptionInfo =PharmacyPrescriptionInfo.find.byId(pharmacyPrescriptionInfoId);
+		final PharmacyPrescriptionInfo pharmacyPrescriptionInfo = PharmacyPrescriptionInfo.find.byId(pharmacyPrescriptionInfoId);
+		if((pharmacyPrescriptionInfo.pharmacy.id.longValue() != LoginController.getLoggedInUser().getPharmacist().pharmacy.id.longValue()) || (!LoginController.getLoggedInUser().role.equals(Role.ADMIN_PHARMACIST))){
+			Logger.warn("COULD NOT VALIDATE LOGGED IN USER TO PERFORM THIS TASK");
+			Logger.warn("update attempted for Pharmacy id: "+pharmacyPrescriptionInfo.pharmacy.id);
+			Logger.warn("logged in AppUser: "+LoginController.getLoggedInUser().id);
+			Logger.warn("logged in Pharmacist: "+LoginController.getLoggedInUser().getPharmacist().id);
+			return redirect(routes.LoginController.processLogout());
+		}
 		pharmacyPrescriptionInfo.pharmacyPrescriptionStatus = PharmacyPrescriptionStatus.SERVED;
 		pharmacyPrescriptionInfo.update();
-		final Pharmacy pharmacy = LoginController.getLoggedInUser().getPharmacist().pharmacy;
-		final List<PharmacyPrescriptionInfo> pharmacyPrescriptionInfos = PharmacyPrescriptionInfo.find.where().eq("pharmacy", pharmacy).findList();
-		return ok(views.html.pharmacist.viewPharmacyPrescriptionList.render(pharmacyPrescriptionInfos, ""));
+		//final Pharmacy pharmacy = LoginController.getLoggedInUser().getPharmacist().pharmacy;
+		//final List<PharmacyPrescriptionInfo> pharmacyPrescriptionInfos = PharmacyPrescriptionInfo.find.where().eq("pharmacy", pharmacy).findList();
+		//return ok(views.html.pharmacist.viewPharmacyPrescriptionList.render(pharmacyPrescriptionInfos, ""));
+		return redirect(routes.PharmacistController.pharmacyPrescriptionList("any"));
 	}
 
 	/**

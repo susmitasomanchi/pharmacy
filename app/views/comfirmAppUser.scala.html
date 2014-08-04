@@ -1,0 +1,31 @@
+@(appUser:models.AppUser)
+@import play.i18n._
+
+@main("User Confirmation"){
+
+		<div class="row well">
+			@if(appUser.role.equals(models.Role.DOCTOR)){
+				<p>Please confirm your contact details to use services like Clinic Scheduling, Practice Management etc.</p>
+			}
+			
+			@if(!appUser.emailConfirmed){
+				<p>
+				Your email address <strong>@appUser.email</strong> has not been confirmed yet.
+				Please click on the link provided in the confirmation mail to proceed.<br>
+				<a href="">Click here</a> to receive the confirmation mail again.
+				</p>
+			}
+			
+			@if(!appUser.emailConfirmed){
+				<p>
+				Your Mobile Number <strong>@appUser.mobileNumber</strong> has not been confirmed yet.
+				<br>
+				Please enter the confirmation code sent to your mobile number.<br>
+				<input>&nbsp;<a class="btn btn-primary btn-sm">Confirm</a>
+				<br>
+				<a href="">Click here</a> to receive the code again.
+				</p>
+			}
+		</div>
+	
+}
