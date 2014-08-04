@@ -1359,8 +1359,7 @@ public class DoctorController extends Controller {
 					"alert",
 					new Alert("alert-danger",
 							"Wrong code Please enter correct code").toString());
-			return redirect(routes.DoctorController
-					.displayMobVerificationForm());
+			return redirect(routes.UserController.confirmAppUserPage());
 		}
 	}
 
