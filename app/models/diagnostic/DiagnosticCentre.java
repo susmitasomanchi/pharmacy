@@ -16,6 +16,7 @@ import javax.persistence.OneToOne;
 import models.Address;
 import models.BaseEntity;
 import models.FileEntity;
+import models.MasterDiagnosticTest;
 import models.doctor.Doctor;
 import models.doctor.Prescription;
 import play.Logger;
@@ -44,7 +45,7 @@ public class DiagnosticCentre extends BaseEntity {
 
 	@Column(columnDefinition="TEXT")
 	public String description;
-	
+
 	@Lob
 	public byte[] backgroudImage;
 
@@ -58,7 +59,7 @@ public class DiagnosticCentre extends BaseEntity {
 	public String emailId;
 
 	public String websiteName;
-	
+
 	@ManyToMany(cascade=CascadeType.ALL)
 	public List<Doctor> doctorList = new ArrayList<Doctor>();
 
@@ -70,13 +71,13 @@ public class DiagnosticCentre extends BaseEntity {
 
 	@ManyToMany(cascade=CascadeType.ALL)
 	public List<MasterDiagnosticTest> masterDiagnosticTestList = new ArrayList<MasterDiagnosticTest>();
-	
+
 	@OneToMany(cascade=CascadeType.ALL)
 	public List<DiagnosticTest> diagnosticTestList = new ArrayList<DiagnosticTest>();
 
 	@OneToMany(cascade=CascadeType.ALL)
 	public List<DiagnosticOrder> diagnosticOrderList = new ArrayList<DiagnosticOrder>();
-	
+
 	@ManyToMany(cascade=CascadeType.ALL)
 	public List<Prescription> prescriptionList = new ArrayList<Prescription>();
 
@@ -166,7 +167,7 @@ public class DiagnosticCentre extends BaseEntity {
 		this.searchIndex = stringBuilder.toString();
 		Logger.info("The heirarichy..."+this.toString());
 		super.update();
-		
+
 	}
 
 }

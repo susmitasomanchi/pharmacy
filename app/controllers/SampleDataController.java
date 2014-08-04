@@ -1,27 +1,19 @@
 package controllers;
 
 
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
 
 import models.AppUser;
-import models.MasterProduct;
 import models.Role;
-import models.diagnostic.DiagnosticCentre;
 import models.diagnostic.DiagnosticCentrePrescriptionInfo;
-import models.diagnostic.DiagnosticTestLineItem;
-import models.diagnostic.MasterDiagnosticTest;
+import models.doctor.DiagnosticTestLineItem;
 import models.doctor.Doctor;
-import models.doctor.MedicineLineItem;
 import models.doctor.Prescription;
 import models.mr.MedicalRepresentative;
 import models.mr.PharmaceuticalCompany;
 import models.patient.Patient;
 import models.patient.PatientDoctorInfo;
-import models.pharmacist.Pharmacy;
-import models.pharmacist.PharmacyPrescriptionInfo;
 import play.Logger;
 import play.mvc.Controller;
 import play.mvc.Result;
@@ -283,13 +275,44 @@ public static Result prescripetionTest(){
 	DiagnosticTestLineItem medicineLineItem2 = new DiagnosticTestLineItem();
 	medicineLineItem2.fullNameOfDiagnosticTest = "Scanning";
 	prescription.diagnosticTestLineItemList.add(medicineLineItem2);
+	prescription.save();
 	diagnosticCentrePrescriptionInfo.prescription = prescription;
 	diagnosticCentrePrescriptionInfo.sharedDate = new Date();
 	diagnosticCentrePrescriptionInfo.save();
-//	return redirect(routes.PharmacistController.addPharmacyOrderFromDoctor(pharmacy.id,prescription.id));
-//	
 return ok();
 
 }
+
+/*	public static Result testXXX() {
+		promise(new Function0<Integer>() {
+			@Override
+			public Integer apply() {
+				//return intensiveComputation();
+				try {
+					System.out.println("1");
+					Thread.sleep(1000);
+					System.out.println("2");
+					Thread.sleep(1000);
+					System.out.println("3");
+					Thread.sleep(1000);
+					System.out.println("4");
+					Thread.sleep(1000);
+					System.out.println("5");
+					Thread.sleep(1000);
+					System.out.println("6");
+					Thread.sleep(1000);
+					System.out.println("7");
+					Thread.sleep(1000);
+				} catch (final InterruptedException e) {
+					e.printStackTrace();
+				}
+				return 0;
+			}
+		});
+
+		return ok("Right Now!");
+	}
+*/
+
 }
 

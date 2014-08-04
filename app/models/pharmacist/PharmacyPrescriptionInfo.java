@@ -8,10 +8,9 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.OneToOne;
 
-import play.db.ebean.Model;
-import play.db.ebean.Model.Finder;
 import models.BaseEntity;
 import models.doctor.Prescription;
+import play.db.ebean.Model;
 
 @SuppressWarnings("serial")
 @Entity
@@ -21,8 +20,7 @@ public class PharmacyPrescriptionInfo extends BaseEntity{
 	@GeneratedValue(strategy = GenerationType.AUTO)
 	public  Long id;	
 	
-	@OneToOne
-	
+	@OneToOne	
 	public Pharmacy pharmacy;
 	
 	@OneToOne

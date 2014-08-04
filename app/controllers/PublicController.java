@@ -69,7 +69,7 @@ public class PublicController extends Controller{
 	/**
 	 * @author Mitesh
 	 * Action to add doctor to Users's page
-	 * GET /doctor/add-to-Favorite/:docId
+	 * GET /doctor/add-to-favorite/:docId
 	 */
 	public static Result addToFavDoctor(final Long docId) {
 		if(!LoginController.isLoggedIn()){
@@ -324,18 +324,6 @@ public class PublicController extends Controller{
 			return badRequest();
 		}
 	}
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
 	
 	/**
 	 * @author lakshmi

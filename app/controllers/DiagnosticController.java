@@ -23,13 +23,15 @@ import models.diagnostic.DiagnosticOrder;
 import models.diagnostic.DiagnosticOrderStatus;
 import models.diagnostic.DiagnosticReport;
 import models.diagnostic.DiagnosticReportStatus;
-import models.diagnostic.DiagnosticTestLineItem;
-import models.diagnostic.MasterDiagnosticTest;
+import models.diagnostic.DiagnosticTest;
+import models.MasterDiagnosticTest;
+import models.doctor.DiagnosticTestLineItem;
 import models.diagnostic.ShowCasedService;
 import models.doctor.Prescription;
 import models.patient.Patient;
 import models.pharmacist.Pharmacy;
 import models.pharmacist.PharmacyPrescriptionInfo;
+import models.pharmacist.PharmacyPrescriptionStatus;
 
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.logging.Log;
@@ -51,7 +53,7 @@ import com.google.common.io.Files;
 public class DiagnosticController extends Controller {
 	public static Form<DiagnosticBean> diagnosticBeanForm = Form.form(DiagnosticBean.class);
 	public static Form<DiagnosticCentre> diagnosticForm = Form.form(DiagnosticCentre.class);
-	public static Form<MasterDiagnosticTest> diagnosticTestForm = Form.form(MasterDiagnosticTest.class);
+	public static Form<DiagnosticTest> diagnosticTestForm = Form.form(DiagnosticTest.class);
 	public static Form<DiagnosticReport> diagReport = Form.form(DiagnosticReport.class);
 
 	/**
@@ -272,31 +274,23 @@ public class DiagnosticController extends Controller {
  * Action To get List of Diagnostic Prescriptions	
  * Get /diagnostic/prescriptions	
  */
-	public static Result getDiagnosticCentrePrescriptions(){
+	public static Result getDiagnosticCentrePrescriptions(String status){
 		DiagnosticCentre diagnosticCentre = LoginController.getLoggedInUser().getDiagnosticRepresentative().diagnosticCentre;
-		List<DiagnosticCentrePrescriptionInfo> diagnosticCentrePrescriptionInfos = new ArrayList<DiagnosticCentrePrescriptionInfo>();
-		/*Map<String, String[]> requestMap =request().body().asFormUrlEncoded();
-		String status = "";
-		
-		diagnosticCentrePrescriptionInfos = DiagnosticCentrePrescriptionInfo.find.where().eq("diagnosticCentre", diagnosticCentre).findList();
-		if(requestMap.get("name")[0] == null){
-			diagnosticCentrePrescriptionInfos = DiagnosticCentrePrescriptionInfo.find.where().eq("diagnosticCentre", diagnosticCentre).findList();
-		}
-		else if(requestMap.get("name")[0].trim().toUpperCase().equals(DiagnosticCentrePrescritionStatus.RECEIVED)){
-			diagnosticCentrePrescriptionInfos = DiagnosticCentrePrescriptionInfo.find.where().eq("diagnosticCentre", diagnosticCentre).eq("diagnosticOrderStatus", DiagnosticOrderStatus.ORDER_RECEIVED).findList();
-			status = "RECEIVED";
+		List<DiagnosticCentrePrescritionStatus> dcpStatuses = new ArrayList<DiagnosticCentrePrescritionStatus>();
+		if(status == null || status.trim().isEmpty() || status.trim().compareToIgnoreCase("any")==0){
+			for (final DiagnosticCentrePrescritionStatus dcpStatus : DiagnosticCentrePrescritionStatus.values()) {
+				dcpStatuses.add(dcpStatus);
 			}
-		
-		else if(requestMap.get("name")[0].trim().toUpperCase().equals(DiagnosticCentrePrescritionStatus.CANCELLED)){
-			diagnosticCentrePrescriptionInfos = DiagnosticCentrePrescriptionInfo.find.where().eq("diagnosticCentre", diagnosticCentre).eq("diagnosticOrderStatus", DiagnosticOrderStatus.ORDER_CANCELLED).findList();
-			status = "CANCELLED";
 		}
-			else{
-				diagnosticCentrePrescriptionInfos = DiagnosticCentrePrescriptionInfo.find.where().eq("diagnosticCentre", diagnosticCentre).eq("diagnosticOrderStatus", DiagnosticOrderStatus.ORDER_SERVED).findList();
-				status = "SERVED";
-			}
-				*/
-		return ok(views.html.diagnostic.diagnosticPrescriptionList.render(diagnosticCentrePrescriptionInfos,""));
+		else{
+			dcpStatuses.add(DiagnosticCentrePrescritionStatus.valueOf(status.trim().toUpperCase()));
+		}
+		final List<DiagnosticCentrePrescriptionInfo> diagnosticPrescriptionInfos =
+				DiagnosticCentrePrescriptionInfo.find.where()
+				.eq("diagnosticCentre", diagnosticCentre)
+				.in("diagnosticCentrePrescritionStatus", dcpStatuses)
+				.findList();
+		return ok(views.html.diagnostic.diagnosticPrescriptionList.render(diagnosticPrescriptionInfos,status));
 	}
 	
 	/**
@@ -405,7 +399,7 @@ public class DiagnosticController extends Controller {
 					.findList();
 			
 			
-			return ok(views.html.diagnostic.diagnosticPrescriptionList.render(diagnosticCentrePrescriptionInfos,null));
+			return ok(views.html.diagnostic.diagnosticPrescriptionList.render(diagnosticCentrePrescriptionInfos,""));
 		}
 		/**
 		 * @author lakshmi
@@ -508,84 +502,86 @@ public class DiagnosticController extends Controller {
 		
 		
 		
-		
-	/**
+	/*	
+	*//**
 	 * @author lakshmi
-	 * Action to add order to DiagnosticCentre 
+	 * Action to add order to DiagnosticCentre
 	 * GET/diagnostic/add-order-from-doctor/:diagnosticId/:prescriptionI
 	 *//*
 	public static Result addOrderFromDoctor(Long diagnosticCentreId,Long prescriptionId){
 		DiagnosticCentre diagnosticCentre = DiagnosticCentre.find.byId(diagnosticCentreId);
 		for (Prescription prescription : diagnosticCentre.prescriptionList) {
-			if(prescription.id == prescriptionId){
-				DiagnosticOrder diagnosticOrder = new DiagnosticOrder();
+				final DiagnosticOrder diagnosticOrder = new DiagnosticOrder();
 				diagnosticOrder.prescription = prescription;
-				for (DiagnosticTestLineItem diagnosticTestLineItem : diagnosticOrder.prescription.diagnosticTestLineItemList) {
-					DiagnosticReport diagnosticReport = new DiagnosticReport();
+				for (final DiagnosticTestLineItem diagnosticTestLineItem : diagnosticOrder.prescription.diagnosticTestLineItemList) {
+					final DiagnosticReport diagnosticReport = new DiagnosticReport();
 					diagnosticReport.masterDiagnosticTest = diagnosticTestLineItem.masterDiagnosticTest;
 					diagnosticOrder.diagnosticReportList.add(diagnosticReport);
-					
+
 				}
 				diagnosticOrder.receivedDate = new Date();
 				diagnosticCentre.diagnosticOrderList.add(diagnosticOrder);
 			}
 			diagnosticCentre.update();
-			
+
 			Logger.info("list of diagnostic orders=="+diagnosticCentre.diagnosticOrderList.size());
 		}
 		return ok();
 	}
-	
-	
-	*//**
+
+
+	/**
 	 * @author : lakshmi
 	 * @url:
 	 * Action to change OrderStatus as ORDER_CONFIRMED
-	 *//*
-	public static Result orderConfirmed(Long diagnosticId,final Long orderId) {
-		DiagnosticCentre diagnosticCentre = DiagnosticCentre.find.byId(diagnosticId);
+
+	public static Result orderConfirmed(final Long diagnosticId,final Long orderId) {
+		final DiagnosticCentre diagnosticCentre = DiagnosticCentre.find.byId(diagnosticId);
 		final DiagnosticOrder diagnosticOrder = DiagnosticOrder.find.byId(orderId);
 		diagnosticOrder.diagnosticOrderStatus = DiagnosticOrderStatus.ORDER_CONFIRMED;
-		
+
 		diagnosticOrder.confirmedDate = new Date();
 		diagnosticOrder.update();
 		return ok(views.html.diagnostic.diagnosticPrescriptionList.render(diagnosticCentre.diagnosticOrderList,diagnosticCentre.id,""));
 		}
 		
-	*//**
+
+	/**
 	 * @author : lakshmi
 	 * @url:
 	 * Action to change OrderStatus as ORDER_CONFIRMED
-	 *//*
-	public static Result orderCancelled(Long diagnosticId,final Long orderId) {
-		DiagnosticCentre diagnosticCentre = DiagnosticCentre.find.byId(diagnosticId);
+	 
+	
+	public static Result orderCancelled(final Long diagnosticId,final Long orderId) {
+		final DiagnosticCentre diagnosticCentre = DiagnosticCentre.find.byId(diagnosticId);
 		final DiagnosticOrder diagnosticOrder = DiagnosticOrder.find.byId(orderId);
 		diagnosticOrder.diagnosticOrderStatus = DiagnosticOrderStatus.ORDER_CANCELLED;
 		diagnosticOrder.cancelledDate = new Date();
 		diagnosticOrder.update();
 		return ok(views.html.diagnostic.diagnosticPrescriptionList.render(diagnosticCentre.diagnosticOrderList,diagnosticCentre.id));
-		}
+	}
+
 
 
 	*//**
-	 * @author : lakshmi	  
-	 * GET  /diagnostic/place-order	 
+	 * @author : lakshmi
+	 * GET  /diagnostic/place-order
 	 * Action to persist the orders placed by Prescription
 	 *//*
 	public static Result receive() {
-			Logger.info("test1");
-		DiagnosticCentre diagnosticCentre = DiagnosticCentre.find.byId(1L);
+		Logger.info("test1");
+		final DiagnosticCentre diagnosticCentre = DiagnosticCentre.find.byId(1L);
 		Logger.info("test2");
-		DiagnosticOrder diagnosticOrder = new DiagnosticOrder();
-		for (Prescription prescription : diagnosticCentre.prescriptionList) {
+		final DiagnosticOrder diagnosticOrder = new DiagnosticOrder();
+		for (final Prescription prescription : diagnosticCentre.prescriptionList) {
 			Logger.info("test3");
 			diagnosticOrder.prescription = prescription;
 			diagnosticOrder.diagnosticOrderStatus = DiagnosticOrderStatus.ORDER_RECEIVED;
 			diagnosticOrder.receivedDate = new Date();
-			diagnosticCentre.diagnosticOrderList.add(diagnosticOrder);	
+			diagnosticCentre.diagnosticOrderList.add(diagnosticOrder);
 			diagnosticCentre.update();
 		}
-		
+
 		return ok();
 	}
 	*//**
@@ -603,7 +599,7 @@ public class DiagnosticController extends Controller {
 	 * GET/diagnostic/remove-order/:diagnosticId/:orderId
 	 * Action to remove DiagnosticOrder of loggedin ADMIN_DIAGREP
 	 *//*
-	public static Result removeDiagnosticOrder(Long diagnosticId, Long orderId) {
+	public static Result removeDiagnosticOrder(final Long diagnosticId, final Long orderId) {
 		final DiagnosticCentre dc = DiagnosticCentre.find.byId(diagnosticId);
 		Logger.info("loggerrrrrrrrrr....."
 				+ dc.diagnosticOrderList.size());
@@ -614,13 +610,13 @@ public class DiagnosticController extends Controller {
 	}
 
 	*//**
-	 * @author : lakshmi 
+	 * @author : lakshmi
 	 * GET/diagnostic/ordered-tests/:diagnosticId/:orderId
 	 * Action to display all DiagnosticTest for the current order
 	 *//*
-	public static Result viewOrderedTest(Long diagnosticId,final Long orderId) {
+	public static Result viewOrderedTest(final Long diagnosticId,final Long orderId) {
 		final DiagnosticOrder diagnosticOrder = DiagnosticOrder.find.byId(orderId);
-		
+
 		return ok(views.html.diagnostic.receivedTests.render(diagnosticOrder));
 	}
 
@@ -631,10 +627,7 @@ public class DiagnosticController extends Controller {
 	 * Action to make status of report to sample_collected
 	 *//*
 	
-	 * status for the report sample colected
-	 
-
-	public static Result sampleCollected(Long orderId,final Long reportId) {
+	public static Result sampleCollected(final Long orderId,final Long reportId) {
 		final DiagnosticReport diagnosticReport = DiagnosticReport.find.byId(reportId);
 		diagnosticReport.reportStatus = DiagnosticReportStatus.SAMPLE_COLLECTED;
 		diagnosticReport.sampleCollectedDate = new Date();
@@ -643,13 +636,13 @@ public class DiagnosticController extends Controller {
 	}
 
 
-	*//**
-	 * @author : lakshmi
+*//**
+ 	 * @author : lakshmi
 	 * GET/diagnostic/upload-diagnostic-Report/:orderId/:reportId
 	 * Action to render to the uploadPatientReort.scala to get upload form
 	 *//*
-	public static Result uploadDiagnosticReport(Long orderId,final Long reportId) {
-		DiagnosticReport report = DiagnosticReport.find.byId(reportId);
+	public static Result uploadDiagnosticReport(final Long orderId,final Long reportId) {
+		final DiagnosticReport report = DiagnosticReport.find.byId(reportId);
 		return ok(views.html.diagnostic.uploadDiagnosticReport.render(report,orderId));
 	}
 	*//**
@@ -657,15 +650,14 @@ public class DiagnosticController extends Controller {
 	 * POST/diagnostic/upload-diagnostic-Report/:orderId/:reportId
 	 * Action to upload DiagnosticReport
 	 *//*
-	
-	public static Result uploadDiagnosticReportProcess(Long orderId,final Long reportId) {
-		DiagnosticOrder diagnosticOrder = DiagnosticOrder.find.byId(orderId);
+	public static Result uploadDiagnosticReportProcess(final Long orderId,final Long reportId) {
+		final DiagnosticOrder diagnosticOrder = DiagnosticOrder.find.byId(orderId);
 		if (request().body().asMultipartFormData().getFile("file") != null) {
 			final File report = request().body().asMultipartFormData().getFile("file").getFile();
-			DiagnosticReport diagnosticReport = DiagnosticReport.find.byId(reportId);
+			final DiagnosticReport diagnosticReport = DiagnosticReport.find.byId(reportId);
 			try {
 				diagnosticReport.fileContent = Files.toByteArray(report);
-			} catch (IOException e) {
+			} catch (final IOException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
@@ -673,8 +665,8 @@ public class DiagnosticController extends Controller {
 			diagnosticReport.reportGeneratedDate = new Date();
 			diagnosticReport.update();
 		}
-		DiagnosticOrderStatus statusOfOrder = diagnosticOrder.diagnosticOrderStatus;
-		for (DiagnosticReport diagnosticReport : diagnosticOrder.diagnosticReportList) {
+		final DiagnosticOrderStatus statusOfOrder = diagnosticOrder.diagnosticOrderStatus;
+		for (final DiagnosticReport diagnosticReport : diagnosticOrder.diagnosticReportList) {
 			if(diagnosticReport.reportStatus.equals(DiagnosticReportStatus.REPORT_READY)){
 				diagnosticOrder.diagnosticOrderStatus = DiagnosticOrderStatus.ORDER_SERVED;
 			}
@@ -683,8 +675,8 @@ public class DiagnosticController extends Controller {
 			}
 			diagnosticOrder.update();
 		}
-		
-		
+
+
 
 		return ok(views.html.diagnostic.receivedTests.render(diagnosticOrder));
 
@@ -751,10 +743,10 @@ public class DiagnosticController extends Controller {
 		
 		return ok(views.html.pharmacist.viewPharmacyPrescriptionList.render(pharmacyPrescriptionInfos,null));
 	}
-	*//**
+	/**
 	 * @author lakshmi
 	 * Action to Display Todays Prescriptions requested to logged-in ADMIN_PHARMACIST
-	 *//*
+	 
 	public static Result getFromAndToDatePrescriptions() {
 		
 		final Map<String, String[]> requestMap = request().body().asFormUrlEncoded();
@@ -788,9 +780,39 @@ public class DiagnosticController extends Controller {
 		
 		return ok(views.html.pharmacist.viewPharmacyPrescriptionList.render(pharmacyPrescriptionInfos,null));
 	}
+	}
 
-	
-	*/
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 	/**
 	 * @author : lakshmi
 	 * GET /diagnosticlist
@@ -899,44 +921,43 @@ public class DiagnosticController extends Controller {
 
 	}
 
-	
-	
+
+
 	/**
 	 * @author : lakshmi
 	 * GET/test
 	 * Action for rendering to addDiagnosticTest scala to add test to the diagnostic center
 	 */
 
-//	public static Result addTest() {
-//		return ok(views.html.diagnostic.addDiagnosticTest.render(diagnosticTestForm));
-//	}
+	public static Result addTest() {
+		//return ok(views.html.diagnostic.addDiagnosticTest.render(diagnosticTestForm));
+		return ok();
+	}
 
 	/**
 	 * @author : lakshmi
-	 * 
 	 * POST /test/save
-	 * 
 	 * Action for updating diagnostic centre with added test
 	 */
-/*
 	public static Result addTestProcess() {
-		final Form<MasterDiagnosticTest> filledForm = diagnosticTestForm.bindFromRequest();
+		final Form<DiagnosticTest> filledForm = diagnosticTestForm.bindFromRequest();
 		if (filledForm.hasErrors()) {
 			Logger.info("*** user bad request");
-			return badRequest(views.html.diagnostic.addDiagnosticTest.render(filledForm));
-		} else {
-			final MasterDiagnosticTest diagTestForm = filledForm.get();
+			//return badRequest(views.html.diagnostic.addDiagnosticTest.render(filledForm));
+		}
+		else {
+			final DiagnosticTest diagTestForm = filledForm.get();
 			Logger.info("*** user object ");
 			final Long id=LoginController.getLoggedInUser().getDiagnosticRepresentative().id;
 			final DiagnosticCentre dc=DiagnosticCentre.find.byId(id);
 			dc.diagnosticTestList.add(diagTestForm);
 			dc.update();
-			return ok(views.html.diagnostic.addDiagnosticTest.render(diagnosticTestForm));
+			//return ok(views.html.diagnostic.addDiagnosticTest.render(diagnosticTestForm));
+			return ok();
 		}
-
+		return ok();
 	}
-	*/
-	
+
 	/*
 	 * @author : lakshmi
 	 * 
@@ -983,14 +1004,7 @@ public class DiagnosticController extends Controller {
 		return ok(views.html.diagnostic.diagnosticCentreTestProfile.render(dc));
 	}
 
-	/*
-	
-
-	/*
-	 * @author : lakshmi
-	
-
-	/*
+	/**
 	 * @author : lakshmi
 	 * 
 	 * @url:/download
@@ -1119,14 +1133,14 @@ public class DiagnosticController extends Controller {
 
 		return redirect(routes.UserActions.dashboard());
 	}
-	
-	
-	
-	
 
-	
-	
-	
+
+
+
+
+
+
+
 	/*
 	 * status for the report generated
 	 * 
@@ -1135,7 +1149,6 @@ public class DiagnosticController extends Controller {
 	 * description: making the status of report to REPORT_READY
 	 */
 	public static Result reoprtReady(final Long id) {
-
 		final DiagnosticReport diagnosticReport = DiagnosticReport.find.byId(id);
 		diagnosticReport.reportStatus = DiagnosticReportStatus.REPORT_READY;
 		diagnosticReport.reportGeneratedDate = new Date();

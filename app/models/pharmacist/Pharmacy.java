@@ -28,8 +28,6 @@ public class Pharmacy extends BaseEntity {
 	@GeneratedValue(strategy = GenerationType.AUTO)
 	public  Long id;
 	
-	String s;
-
 	public String name;
 
 	@OneToOne

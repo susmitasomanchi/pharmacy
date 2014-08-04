@@ -24,6 +24,8 @@ public class MedicineLineItem extends BaseEntity{
 	
 	public String fullNameOfMedicine;
 
+	public String medicineFullName;
+
 	@Column(columnDefinition="TEXT")
 	public String dosage;
 

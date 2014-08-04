@@ -13,13 +13,17 @@ package controllers;
 
 import java.security.MessageDigest;
 import java.security.SecureRandom;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.Map;
 import java.util.Random;
 
 import models.Alert;
 import models.AppUser;
 import models.Role;
+import models.Sex;
 import models.diagnostic.DiagnosticCentre;
 import models.diagnostic.DiagnosticRepresentative;
 import models.doctor.Doctor;
@@ -29,6 +33,8 @@ import models.pharmacist.Pharmacist;
 import models.pharmacist.Pharmacy;
 
 import org.apache.commons.codec.binary.Base64;
+
+import com.fasterxml.jackson.databind.module.SimpleAbstractTypeResolver;
 
 import play.Logger;
 import play.data.Form;
@@ -88,10 +94,43 @@ public class UserController extends Controller {
 	 * POST   /join
 	 */
 	public static Result processJoinUs(){
+		final Map<String, String[]> requestMap = request().body().asFormUrlEncoded();
 		final AppUser appUser = new AppUser();
-		appUser.name = request().body().asFormUrlEncoded().get("fullname")[0].trim();
-		appUser.email = request().body().asFormUrlEncoded().get("email")[0].toLowerCase().trim();
-		final String password = request().body().asFormUrlEncoded().get("password")[0].trim();
+		appUser.name = requestMap.get("fullname")[0].trim();
+		appUser.email = requestMap.get("email")[0].toLowerCase().trim();
+		appUser.role = Role.valueOf(requestMap.get("role")[0]);
+		if(AppUser.find.where().eq("email", appUser.email).findRowCount()>0){
+			flash().put("alert", new Alert("alert-danger", "Sorry! User with email id "+appUser.email.trim()+" already exists!").toString());
+			if(appUser.role == Role.PATIENT){
+				return redirect(routes.UserController.joinUsPatient());
+			}
+			if(appUser.role == Role.DOCTOR){
+				return redirect(routes.UserController.joinUsDoctor());
+			}
+			if(appUser.role == Role.ADMIN_PHARMACIST){
+				return redirect(routes.UserController.joinUsPharmacy());
+			}
+			if(appUser.role == Role.ADMIN_DIAGREP){
+				return redirect(routes.UserController.joinUsDiagnostic());
+			}
+		}
+
+		if(requestMap.get("sex") != null && !(requestMap.get("sex")[0].trim().isEmpty())){
+			appUser.sex = Sex.valueOf(requestMap.get("sex")[0].trim());
+		}
+
+		if(requestMap.get("dob") != null && !(requestMap.get("dob")[0].trim().isEmpty())){
+			final String dobStr = requestMap.get("dob")[0].replaceAll(" ","").trim();
+			final SimpleDateFormat sdf = new SimpleDateFormat("dd-MM-yyyy");
+			try {
+				appUser.dob =  sdf.parse(dobStr);
+			} catch (final ParseException e) {
+				Logger.error("ERROR WHILE PARSING DOB");
+				e.printStackTrace();
+			}
+		}
+
+		final String password = requestMap.get("password")[0].trim();
 		try {
 
 			final Random random = new SecureRandom();
@@ -110,24 +149,6 @@ public class UserController extends Controller {
 		} catch (final Exception e) {
 			Logger.error("ERROR WHILE CREATING SHA2 HASH");
 			e.printStackTrace();
-		}
-
-		appUser.role = Role.valueOf(request().body().asFormUrlEncoded().get("role")[0]);
-
-		if(AppUser.find.where().eq("email", appUser.email).findRowCount()>0){
-			flash().put("alert", new Alert("alert-danger", "Sorry! User with email id "+appUser.email.trim()+" already exists!").toString());
-			if(appUser.role == Role.PATIENT){
-				return redirect(routes.UserController.joinUsPatient());
-			}
-			if(appUser.role == Role.DOCTOR){
-				return redirect(routes.UserController.joinUsDoctor());
-			}
-			if(appUser.role == Role.ADMIN_PHARMACIST){
-				return redirect(routes.UserController.joinUsPharmacy());
-			}
-			if(appUser.role == Role.ADMIN_DIAGREP){
-				return redirect(routes.UserController.joinUsDiagnostic());
-			}
 		}
 
 		appUser.save();
@@ -184,7 +205,7 @@ public class UserController extends Controller {
 		session().clear();
 		session(Constants.LOGGED_IN_USER_ID, appUser.id + "");
 		session(Constants.LOGGED_IN_USER_ROLE, appUser.role+ "");
-		appUser.emailConfirmed=EmailService.sendConformationEmail(appUser.email, appUser.id);
+		appUser.emailConfirmed = EmailService.sendConfirmationEmail(appUser.email, appUser.id);
 		if(appUser.emailConfirmed){
 			flash().put("alert", new Alert("alert-success","A conformation messege has been send to you").toString());
 		}

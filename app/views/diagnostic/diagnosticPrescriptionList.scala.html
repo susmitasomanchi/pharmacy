@@ -1,17 +1,21 @@
-@(diagnosticCentrePrescriptionInfos: List[models.diagnostic.DiagnosticCentrePrescriptionInfo],searchString: String)
+@(diagnosticCentrePrescriptionInfos: List[models.diagnostic.DiagnosticCentrePrescriptionInfo],status: String)
 @main("Diagnostic Order List") {
+<script>
+$('#status-select').on('change', function(){
+  var selValue = $('#status-select').val();
+  window.location.href='//diagnostic/prescriptions?status='+selValue;  
+});
+</script>
 <div class="row col-md-12">
 <div class="col-md-2">
-  <form action="@routes.DiagnosticController.getDiagnosticCentrePrescriptions()" method="POST">
-   <select name="name"  id="diagnosticStatus">
-   <option ></option>
-  <option  value="All">All</option>
-  <option  value="Received">Received</option>
-  <option  value="Cancelled">Cancelled</option>
-  <option  value="Served">Served</option>
+  <select class="chzn" id="status-select" style="width:50%;">
+<option></option>
+<option value="any" @if(status.trim.toLowerCase().compareTo("any")==0){selected}>Any</option>
+<option value="received" @if(status.trim.toLowerCase().compareTo("received")==0){selected}>Received</option>
+<option value="confirmed" @if(status.trim.toLowerCase().compareTo("confirmed")==0){selected}>Confirmed</option>
+<option value="cancelled" @if(status.trim.toLowerCase().compareTo("cancelled")==0){selected}>Cancelled</option>
+<option value="served" @if(status.trim.toLowerCase().compareTo("served")==0){selected}>Served</option>
 </select>
-<input type="submit" value="Find"/>
-</form>
    </div>
    <div class="col-md-9">
    <form action="@routes.DiagnosticController.getFromToDatePrescriptions()" method="POST">
@@ -62,9 +66,10 @@
 }*@
 </td>
 <td>
-@for((diagnosticTestLineItem,index) <- diagnosticCentrePrescriptionInfo.prescription.diagnosticTestLineItemList.zipWithIndex) {
+@diagnosticCentrePrescriptionInfo.prescription
+@*for((diagnosticTestLineItem,index) <- diagnosticCentrePrescriptionInfo.prescription.diagnosticTestLineItemList.zipWithIndex) {
 @{index+1}.@diagnosticTestLineItem.fullNameOfDiagnosticTest<br>
-}
+}*@
 </td>
 <td>
 <span style="padding-right:20px">@diagnosticCentrePrescriptionInfo.diagnosticCentrePrescritionStatus</span>
@@ -83,4 +88,6 @@
 </tr>
 </tbody>
 </table>
+</div>
+</div>
 }

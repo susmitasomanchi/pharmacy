@@ -300,7 +300,7 @@ public class PatientController extends Controller {
 	/**
 	 * @author Mitesh
 	 * Action to process requested appointments
-	 *  POST 	/patient/process-appointment
+	 * POST		/patient/process-appointment
 	 */
 	public static Result processAppointment(final Long apptId) {
 		final String remark=request().body().asFormUrlEncoded().get("remark")[0];
@@ -309,6 +309,7 @@ public class PatientController extends Controller {
 		appointment.appointmentStatus=AppointmentStatus.APPROVED;
 		appointment.problemStatement=remark;
 		appointment.requestedBy=LoginController.getLoggedInUser();
+		appointment.bookedOn = new Date();
 		appointment.update();
 		return ok("appointment save");
 	}
