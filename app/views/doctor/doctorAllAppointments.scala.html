@@ -1,0 +1,248 @@
+@* viewTodaysAppointment Template File *@
+@(appointments:List[models.doctor.Appointment],docClincs:List[models.doctor.DoctorClinicInfo])
+@import play.i18n._
+
+@main("All Appointments"){
+	
+	
+		<ul class="nav nav-tabs" role="tablist" id="my-tab">
+  			<li  class="active"><a href="#all"  data-toggle="tab">All Clinics</a></li>
+  			@for( docClinic <-  docClincs){
+  				
+ 			 <li><a href="#@docClinic.clinic.id" data-toggle="tab">@docClinic.clinic.name</a></li>
+  			}
+  			
+  			
+		</ul>
+	<div id="myTabContent" class="tab-content">
+		
+		<div class="tab-pane fade in active" id="all">
+			<table class="table table-condensed table-hover">
+			<thead>
+			<tr>
+			<div class="row clearfix">
+				<th><div class="col-md-4 column">
+				Clinic
+				</div></th>
+				<th><div class="col-md-4 column">
+				Date &amp; Time
+				</div></th>
+				<th><div class="col-md-4 column">
+				Patient&nbsp;(Sex/Age)
+				</div></th>
+				<th><div class="col-md-4 column">
+				Appointment
+				</div></th>
+			</div>
+			</tr>
+			</thead>
+			@for(appointment <- appointments){
+			<tr>
+			<div class="row clearfix">
+				<div class="col-md-3 column">
+				<td>@appointment.doctorClinicInfo.clinic.name</td>
+				</div>
+				<div class="col-md-3 column">
+				<td>@appointment.appointmentTime.format("dd-MMM-yy HH:mm")</td>
+				</div>
+				<div class="col-md-3 column">
+				<td>@{appointment.requestedBy.name}&nbsp;(@appointment.requestedBy.sex.toString().substring(0,1)/@appointment.requestedBy.getAge())</td>
+				</div>
+				<div class="col-md-3 column">
+				<td>
+
+				@if(appointment.appointmentStatus.equals(models.doctor.AppointmentStatus.APPROVED)){
+					<a href="@routes.DoctorController.showPrescriptionForm(appointment.id)" class="btn btn-sm btn-success"  role="button">Prescription</a>	
+				}
+				@if(appointment.appointmentStatus.equals(models.doctor.AppointmentStatus.SERVED)){
+					<a href="@routes.DoctorController.showPrescription(appointment.getPrescription().id)" class="btn btn-sm btn-primary"  role="button">View Prescription</a>				
+				}
+				@*
+				<a href="http://www.google.com" class="btn btn-sm btn-default"  role="button">Delete</a>
+				<a href="http://www.google.com" class="btn btn-sm btn-danger"  role="button">Edit</a>
+				*@
+
+				</td>
+				</div>
+			</div>
+			</tr>
+			}
+		</table>
+		</div>
+		@for(  docClinic <-  docClincs){
+			<div class="tab-pane fade" id="@docClinic.clinic.id">
+				<table class="table table-condensed table-hover">
+			<thead>
+			<tr>
+			<div class="row clearfix">
+				<th><div class="col-md-4 column">
+				Date &amp; Time
+				</div></th>
+				<th><div class="col-md-3 column">
+				Patient&nbsp;(Sex/Age)
+				</div></th>
+				<th><div class="col-md-3 column">
+				Appointment
+				</div></th>
+			</div>
+			</tr>
+			</thead>
+			@for(appointment <- appointments){
+			@if(appointment.doctorClinicInfo.id==docClinic.id){
+				<tr>
+			<div class="row clearfix">
+				<div class="col-md-3 column">
+				<td>@appointment.appointmentTime.format("dd-MMM-yy HH:mm")</td>
+				</div>
+				<div class="col-md-3 column">
+				<td>@{appointment.requestedBy.name}&nbsp;(@appointment.requestedBy.sex.toString().substring(0,1)/@appointment.requestedBy.getAge())</td>
+				</div>
+				<div class="col-md-3 column">
+				<td>
+				
+				@if(appointment.appointmentStatus.equals(models.doctor.AppointmentStatus.APPROVED)){
+					<a href="@routes.DoctorController.showPrescriptionForm(appointment.id)" class="btn btn-sm btn-success"  role="button">Prescription</a>	
+				}
+				@if(appointment.appointmentStatus.equals(models.doctor.AppointmentStatus.SERVED)){
+					<a href="@routes.DoctorController.showPrescription(appointment.getPrescription().id)" class="btn btn-sm btn-primary"  role="button">View Prescription</a>				
+				}
+				
+				@*
+				<a href="http://www.google.com" class="btn btn-sm btn-default"  role="button">Delete</a>
+				<a href="http://www.google.com" class="btn btn-sm btn-danger"  role="button">Edit</a>
+				*@
+				
+				</td>
+				</div>
+			</div>
+			</tr>
+			}
+			
+			}
+		</table>
+			
+			</div>
+			}
+		
+	</div>
+	
+	
+	<script>
+	$('#my-tab a').click(function (e) {
+		  //e.preventDefault()
+		  $(this).tab('show')
+		})
+	</script>
+	
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+@*
+
+@()
+@import play.i18n._
+@import helper.twitterBootstrap._
+@import helper._
+
+@main("Doctor's Appointments"){
+	
+<div class="row">
+<div class="col-md-1" style="padding-top:160px;padding-left:60px">
+<img src="/assets/images/prev.png" width="15" height="15"/>
+</div>
+<div class="col-md-10">
+<h4 style="text-align:center"> Today's Appointments </h4><br>
+<table  class="table table-bordered" style="border:2px solid black;">
+  <tr>
+    <th>S No</th>
+    <th>Date</th>
+    <th>Time slot</th>
+    <th>User 0</th>
+    <th>Clinic</th>
+    <th>Action</th>
+  </tr>
+  <tr>
+    <td>1</td>
+    <td>06/06/2014</td>
+    <td>4:00pm to 4:15pm</td>
+    <td>User 1</td>
+    <td>ABC clinic</td>
+    <td>
+    <button class="btn btn-success btn-sm"><a href="/doctor/view/appointment" style="color:white">view</a></button>
+	<button class="btn btn-default btn-sm"><a href="#" style="color:black">edit</a></button>
+	<button class="btn btn-danger btn-sm"><a href="#" style="color:white">delete</a></button></td>
+  </tr>
+  <tr>
+    <td>2</td>
+    <td>17/06/2014</td>
+    <td>5:00pm to 5:15pm</td>
+    <td>User 2</td>
+    <td>XYZ clinic</td>
+    <td>
+    <button class="btn btn-success btn-sm"><a href="/doctor/view/appointment" style="color:white">view</a></button>
+	<button class="btn btn-default btn-sm"><a href="#" style="color:black">edit</a></button>
+	<button class="btn btn-danger btn-sm"><a href="#" style="color:white">delete</a></button></td>
+  </tr>
+  <tr>
+    <td>3</td>
+    <td>24/06/2014</td>
+    <td>4:30pm to 5:00pm</td>
+    <td>User 3</td>
+    <td>ABC clinic</td>
+    <td>
+    <button class="btn btn-success btn-sm"><a href="/doctor/view/appointment" style="color:white">view</a></button>
+	<button class="btn btn-default btn-sm"><a href="#" style="color:black">edit</a></button>
+	<button class="btn btn-danger btn-sm"><a href="#" style="color:white">delete</a></button></td>
+  </tr>
+</table>
+</div>
+<div class="col-md-1" style="padding-top:160px">
+<img src="/assets/images/next.png" width="15" height="15"/>
+</div>
+</div>
+}*@

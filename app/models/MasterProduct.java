@@ -37,7 +37,6 @@ public class MasterProduct extends BaseEntity {
 
 	public static Finder<Long, MasterProduct> find = new Finder<Long, MasterProduct>(Long.class, MasterProduct.class);
 
-
 	public static Map<String, String> options() {
 
 		final LinkedHashMap<String, String> vals = new LinkedHashMap<String, String>();
@@ -46,5 +45,6 @@ public class MasterProduct extends BaseEntity {
 		}
 		return vals;
 	}
+
 
 }

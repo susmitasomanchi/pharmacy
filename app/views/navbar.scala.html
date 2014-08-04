@@ -121,38 +121,15 @@
 		}
 		
 		
-		@if(LoginController.getLoggedInUserRole().equals(Role.DOCTOR.toString())){
+			@if(LoginController.getLoggedInUserRole().equals(Role.DOCTOR.toString())){
         
-        <!--
-        <li class="dropdown">
-          <a href="#" class="dropdown-toggle" data-toggle="dropdown">
-          Appointments
-          <b class="caret"></b></a>mr
-          <ul class="dropdown-menu">
-            <li><a href="/doctor/appointments">Today</a></li>
-            <li><a href="/doctor/search/appointment">Search</a></li>
-          </ul>
-        </li>
-    	-->
-    	
-    	<!--
-    	<li class="dropdown">
-          <a href="#" class="dropdown-toggle" data-toggle="dropdown">
-          Prescriptions
-          <b class="caret"></b></a>
-          <ul class="dropdown-menu">
-    	        <li><a href="">List</a></li>
-          </ul>
-        </li>
-		-->
-	
 		<li class="dropdown">
           <a href="#" class="dropdown-toggle" data-toggle="dropdown">
           Appointments
           <b class="caret"></b></a>
           <ul class="dropdown-menu">
-	            <li><a href="">Today's Appointments</a></li>
-	            <li><a href="">All Appointments</a></li>
+	            <li><a href="@routes.DoctorController.viewTodaysAppointments()">Today's Appointments</a></li>
+	            <li><a href="@routes.DoctorController.viewAllAppointments()">All Appointments</a></li>
           </ul>
         </li>
         
@@ -161,8 +138,9 @@
           Prescriptions
           <b class="caret"></b></a>
           <ul class="dropdown-menu">
-	            <li><a href="">All Prescriptions</a></li>
-	            <li class="divider"></li>
+	         <li><a href="@routes.PharmacistController.pharmacyPrescriptionList()">All Prescriptions</a></li>
+	       <li><a href="@routes.PharmacistController.viewTodaysPrescriptions()">Today's Prescriptions</a></li>
+   <li class="divider"></li>
 	            <li><a href="@routes.DoctorController.showSigCodes()">Sig Codes</a></li>
           </ul>
         </li>
@@ -182,15 +160,6 @@
     	        -->
           </ul>
         </li>
-        <li class="dropdown">
-          <a href="#" class="dropdown-toggle" data-toggle="dropdown">
-          Pharmacies
-          <b class="caret"></b></a>
-          <ul class="dropdown-menu">
-	           	<li><a href="">Search Pharmacies</a></li>
-	            <li><a href="@routes.DoctorController.myFavoritePharmacies()">My Pharmacies</a></li>
-	           </ul>
-        </li>
         
         <li class="dropdown">
           <a href="#" class="dropdown-toggle" data-toggle="dropdown">
@@ -204,9 +173,21 @@
     	        -->
           </ul>
         </li>
+             
+        <li class="dropdown">
+          <a href="#" class="dropdown-toggle" data-toggle="dropdown">
+          Diagnosticcentres
+          <b class="caret"></b></a>
+          <ul class="dropdown-menu">
+	            <li><a href="@routes.PublicController.searchDiagnosticPage()">Search Diagnostic Centre</a></li>
+	            <li><a href="@routes.DoctorController.myFavoriteDiagnosticCentres()">Favorite DiagnosticCentres</a></li>
+    	        <!--
+    	        <li><a href="">New Assistant</a></li>
+    	        -->
+          </ul>
+        </li>
         
-        }
-        
+        }    
         
         @if(LoginController.getLoggedInUserRole().equals(Role.ADMIN_MR.toString())){
          <li class="dropdown">
@@ -347,10 +328,11 @@
         *@
          <li class="dropdown">
           <a href="#" class="dropdown-toggle" data-toggle="dropdown">
-          Diagnostic Orders
+          Prescriptions
           <b class="caret"></b></a>
           <ul class="dropdown-menu">
-          <li><a href="@routes.DiagnosticController.viewDiagnosticOrders()">View Diagnostic Orders</a></li> 
+          <li><a href="@routes.DiagnosticController.getDiagnosticCentrePrescriptions()">Al Prescriptions</a></li>
+          <li><a href="@routes.DiagnosticController.TodaysDiagnosticPrescriptions()">View Today's Prescriptions</a></li> 
             
           </ul>
         </li> 

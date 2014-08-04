@@ -1,26 +1,19 @@
 package controllers;
 
 
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
 
 import models.AppUser;
-import models.MasterProduct;
 import models.Role;
-import models.diagnostic.DiagnosticCentre;
-import models.diagnostic.DiagnosticTestLineItem;
-import models.diagnostic.MasterDiagnosticTest;
+import models.diagnostic.DiagnosticCentrePrescriptionInfo;
+import models.doctor.DiagnosticTestLineItem;
 import models.doctor.Doctor;
-import models.doctor.MedicineLineItem;
 import models.doctor.Prescription;
 import models.mr.MedicalRepresentative;
 import models.mr.PharmaceuticalCompany;
 import models.patient.Patient;
 import models.patient.PatientDoctorInfo;
-import models.pharmacist.Pharmacy;
-import models.pharmacist.PharmacyPrescriptionInfo;
 import play.Logger;
 import play.mvc.Controller;
 import play.mvc.Result;
@@ -247,25 +240,79 @@ public class SampleDataController extends Controller {
 	 * @throws ParseException 
 	 */
 	
-	public static Result prescripetionTest() throws ParseException{
-		Prescription prescription = new Prescription();
-		PharmacyPrescriptionInfo pharmacyPrescriptionInfo = new PharmacyPrescriptionInfo();
-		pharmacyPrescriptionInfo.pharmacy = LoginController.getLoggedInUser().getPharmacist().pharmacy;
-		MedicineLineItem medicineLineItem1 = new MedicineLineItem();
-		medicineLineItem1.fullNameOfMedicine = "medicine1";
-		prescription.medicineLineItemList.add(medicineLineItem1);
-		MedicineLineItem medicineLineItem2 = new MedicineLineItem();
-		medicineLineItem2.fullNameOfMedicine = "medicine2";
-		prescription.medicineLineItemList.add(medicineLineItem2);
-		pharmacyPrescriptionInfo.prescription = prescription;
-		pharmacyPrescriptionInfo.receivedDate = new SimpleDateFormat("dd-MMM-yyyy").parse("7-Jun-2013");
-		pharmacyPrescriptionInfo.save();
-//		return redirect(routes.PharmacistController.addPharmacyOrderFromDoctor(pharmacy.id,prescription.id));
-		
+//	public static Result prescripetionTest() throws ParseException{
+//		Prescription prescription = new Prescription();
+//		PharmacyPrescriptionInfo pharmacyPrescriptionInfo = new PharmacyPrescriptionInfo();
+//		pharmacyPrescriptionInfo.pharmacy = LoginController.getLoggedInUser().getPharmacist().pharmacy;
+//		MedicineLineItem medicineLineItem1 = new MedicineLineItem();
+//		medicineLineItem1.fullNameOfMedicine = "medicine1";
+//		prescription.medicineLineItemList.add(medicineLineItem1);
+//		MedicineLineItem medicineLineItem2 = new MedicineLineItem();
+//		medicineLineItem2.fullNameOfMedicine = "medicine2";
+//		prescription.medicineLineItemList.add(medicineLineItem2);
+//		pharmacyPrescriptionInfo.prescription = prescription;
+//		pharmacyPrescriptionInfo.receivedDate = new SimpleDateFormat("dd-MMM-yyyy").parse("7-Jun-2013");
+//		pharmacyPrescriptionInfo.save();
+////		return redirect(routes.PharmacistController.addPharmacyOrderFromDoctor(pharmacy.id,prescription.id));
+//		
+//return ok();
+//	}
+//
+//}
+
+/**
+ * Action to create Prescription for the Diagnostic Centre
+ * @return
+ */
+
+public static Result prescripetionTest(){
+	Prescription prescription = new Prescription();
+	DiagnosticCentrePrescriptionInfo diagnosticCentrePrescriptionInfo = new DiagnosticCentrePrescriptionInfo();
+	diagnosticCentrePrescriptionInfo.diagnosticCentre = LoginController.getLoggedInUser().getDiagnosticRepresentative().diagnosticCentre;
+	DiagnosticTestLineItem medicineLineItem1 = new DiagnosticTestLineItem();
+	medicineLineItem1.fullNameOfDiagnosticTest = "X-ray";
+	prescription.diagnosticTestLineItemList.add(medicineLineItem1);
+	DiagnosticTestLineItem medicineLineItem2 = new DiagnosticTestLineItem();
+	medicineLineItem2.fullNameOfDiagnosticTest = "Scanning";
+	prescription.diagnosticTestLineItemList.add(medicineLineItem2);
+	prescription.save();
+	diagnosticCentrePrescriptionInfo.prescription = prescription;
+	diagnosticCentrePrescriptionInfo.sharedDate = new Date();
+	diagnosticCentrePrescriptionInfo.save();
 return ok();
-	}
 
 }
 
+/*	public static Result testXXX() {
+		promise(new Function0<Integer>() {
+			@Override
+			public Integer apply() {
+				//return intensiveComputation();
+				try {
+					System.out.println("1");
+					Thread.sleep(1000);
+					System.out.println("2");
+					Thread.sleep(1000);
+					System.out.println("3");
+					Thread.sleep(1000);
+					System.out.println("4");
+					Thread.sleep(1000);
+					System.out.println("5");
+					Thread.sleep(1000);
+					System.out.println("6");
+					Thread.sleep(1000);
+					System.out.println("7");
+					Thread.sleep(1000);
+				} catch (final InterruptedException e) {
+					e.printStackTrace();
+				}
+				return 0;
+			}
+		});
 
+		return ok("Right Now!");
+	}
+*/
+
+}
 

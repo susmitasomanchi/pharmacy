@@ -1,35 +1,72 @@
-@(pharmacyPrescriptionInfos : List[models.pharmacist.PharmacyPrescriptionInfo])
+@(pharmacyPrescriptionInfos : List[models.pharmacist.PharmacyPrescriptionInfo],status:String)
 
 @main("Pharmacy Prescription and Order"){
-
-<div class=" row col-md-6 btn-group">
-   <button type="button" class="btn btn-default dropdown-toggle" 
-      data-toggle="dropdown">
-      All <span class="caret"></span>
-   </button>
-   <ul class="dropdown-menu" role="menu">
-      <li><a href="@routes.PharmacistController.pharmacyPrescriptionList()">All</a></li>
-      <li><a href="@routes.PharmacistController.receivedPrescriptionList()">Received</a></li>
-      <li><a href="@routes.PharmacistController.servedPrescriptionList()">Served</a></li>
-      
-   </ul>
+<script>
+$('#status-select').on('change', function(){
+	var selValue = $('#status-select').val();
+	window.location.href='/pharmacy/prescriptions?status='+selValue;	
+});
+</script>
+<div class="row col-md-12">
+  <div class="col-md-2">
+   <<select class="chzn" id="status-select" style="width:50%;">
+<option></option>
+<option value="any" @if(status.trim.toLowerCase().compareTo("any")==0){selected}>Any</option>
+<option value="received" @if(status.trim.toLowerCase().compareTo("received")==0){selected}>Received</option>
+<option value="served" @if(status.trim.toLowerCase().compareTo("served")==0){selected}>Served</option>
+</select>
+   </div>
+   <div class="col-md-10">
+   <form action="@routes.PharmacistController.getFromAndToDatePrescriptions()" method="POST">
+   	<div class="col-md-4 form-group">
+    <label for="from" class="col-md-3 control-label" style="padding-top:10px">From</label>
+    <div class="col-lg-9">
+      <input type="date" name="from" class="form-control" id="from" placeholder="From Date">
+      </div>
+    </div>
+    <div class="col-md-4 form-group">
+    <label for="to" class="col-md-3 control-label" style="padding-top:10px" >To</label>
+    <div class="col-lg-9">
+      <input type="date" name="to" class="form-control" id="to" placeholder="To Date">
+      </div>
+    </div>
+    <div class="col-md-4">
+      <input type="submit" class="btn btn-success btn-sm" value="Find Prescriptions">
+    </div>
+    </form>
+    </div>
 </div>
+<br><br><br>
+
 <br><br>
 <div class="row">
 <div class="col-md-8">
 <table class="table table-striped table-bordered">
 <tr>
 <th>S.No</th>
-<th> Doctor Name</th>
-<th> Date</th>
+<th>Doctor</th>
+<th>Patient</th>
+<th>Date</th>
 <th>Order Status</th>
-<th> Action</th>
+<th>Action</th>
 </tr>
 
 @for((pharmacyPrescriptionInfo,index) <- pharmacyPrescriptionInfos.zipWithIndex){
 <tr>
 <td>@{index+1}</td>
-<td>@*if(pharmacyPrescriptionInfo.prescription.doctor!= null){@pharmacyPrescriptionInfo.prescription.doctor.appUser.name }*@ </td>
+<td>
+Dr. @pharmacyPrescriptionInfo.prescription.doctor.appUser.name
+<br>
+<small>@pharmacyPrescriptionInfo.prescription.doctor.degree</small>
+<br>
+<small>@pharmacyPrescriptionInfo.prescription.doctor.specialization</small>
+</td>
+
+<td>@pharmacyPrescriptionInfo.prescription.patient.appUser.name
+<br>
+@pharmacyPrescriptionInfo.prescription.patient.appUser.mobileNumber
+</td>
+
 <td>@pharmacyPrescriptionInfo.receivedDate.format("dd-MMM-yyyy HH:mm") </td>
 <td>
 <span style="padding-right:20px">@pharmacyPrescriptionInfo.pharmacyPrescriptionStatus</span>
@@ -48,6 +85,7 @@
 
 </table>
 </div>
+
 
 </div>
 

@@ -14,7 +14,8 @@ libraryDependencies ++= Seq(
   "org.elasticsearch" % "elasticsearch" % "1.1.1",
   "org.apache.commons" % "commons-email" % "1.3.2",
   "commons-codec" % "commons-codec" % "1.7",
-  "joda-time" % "joda-time" % "2.3"
+  "joda-time" % "joda-time" % "2.3",
+  "org.json" % "json" % "20140107"
 )     
  
 play.Project.playJavaSettings

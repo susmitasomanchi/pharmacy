@@ -9,6 +9,8 @@ import java.util.Map;
 
 import javax.activation.MimetypesFileTypeMap;
 
+import org.joda.time.DateTime;
+
 import models.Address;
 import models.Alert;
 import models.Country;
@@ -16,19 +18,10 @@ import models.FileEntity;
 import models.MasterProduct;
 import models.Role;
 import models.State;
-import models.diagnostic.DiagnosticReport;
-import models.diagnostic.DiagnosticTestLineItem;
-import models.doctor.Appointment;
-import models.doctor.AppointmentStatus;
-import models.doctor.Doctor;
-import models.doctor.DoctorClinicInfo;
-import models.doctor.MedicineLineItem;
-import models.doctor.Prescription;
 import models.pharmacist.Batch;
 import models.pharmacist.OrderLineItem;
 import models.pharmacist.Pharmacist;
 import models.pharmacist.Pharmacy;
-import models.pharmacist.PharmacyOrder;
 import models.pharmacist.PharmacyPrescriptionInfo;
 import models.pharmacist.PharmacyPrescriptionStatus;
 import models.pharmacist.PharmacyProduct;
@@ -45,7 +38,6 @@ import beans.PharmacyBean;
 
 import com.avaje.ebean.Expr;
 import com.google.common.io.Files;
-import com.sun.media.sound.ModelSource;
 
 @BasicAuth
 public class PharmacistController extends Controller {
@@ -273,22 +265,7 @@ public class PharmacistController extends Controller {
 		return ok(byteContent).as("image/jpeg");
 	}
 
-	/**
-	 *@author lakshmi
-	 * Action to render the pharmacy_profile page
-	 * GET		/pharmacy/profile/:id
-	 *//*
-	public static Result myFavoritePharmacy(final Long pharmacyId,final String searchKey){
-		if(LoginController.getLoggedInUserRole().equals("DOCTOR")){
-			return redirect(routes.DoctorController.addFavoritePharmacy(pharmacyId,searchKey));
-		}
-		else if(LoginController.getLoggedInUserRole().equals("PATIENT")){
-			return redirect(routes.PatientController.addFavoritePharmacy(pharmacyId));
-		}else{
-
-			return redirect(routes.UserController.processJoinUs());
-		}*/
-
+	
 
 
 
@@ -486,39 +463,59 @@ public class PharmacistController extends Controller {
 		}
 		return ok();
 	}*/
+	public static Result viewPharmacyPrescriptionList(){
+		Pharmacy pharmacy = LoginController.getLoggedInUser().getPharmacist().pharmacy;
+	
+		List<PharmacyPrescriptionInfo> pharmacyPrescriptionInfos = PharmacyPrescriptionInfo.find.where().eq("pharmacy", pharmacy).findList();
+		return ok(views.html.pharmacist.viewPharmacyPrescriptionList.render(pharmacyPrescriptionInfos,""));
+	}
 	/**
 	 * @author lakshmi
 	 * Action to display prescriptions of Pharmacy 
 	 * GET/pharmacy/view-pharmacy-prescriptions
 	 */
 	
-	public static Result pharmacyPrescriptionList(){
-		Pharmacy pharmacy = LoginController.getLoggedInUser().getPharmacist().pharmacy;
-		List<PharmacyPrescriptionInfo> pharmacyPrescriptionInfos = PharmacyPrescriptionInfo.find.where().eq("pharmacy", pharmacy).findList();
-		Logger.info("list size==="+pharmacyPrescriptionInfos.size());
-		return ok(views.html.pharmacist.viewPharmacyPrescriptionList.render(pharmacyPrescriptionInfos));
-		//return ok();
+	public static Result pharmacyPrescriptionList(final String status){
+		final List<PharmacyPrescriptionStatus> statusList = new ArrayList<PharmacyPrescriptionStatus>();
+		if(status == null || status.trim().isEmpty() || status.trim().compareToIgnoreCase("any")==0){
+			for (final PharmacyPrescriptionStatus ppStatus : PharmacyPrescriptionStatus.values()) {
+				statusList.add(ppStatus);
+			}
+		}
+		else{
+			statusList.add(PharmacyPrescriptionStatus.valueOf(status.trim().toUpperCase()));
+		}
+		final Pharmacy pharmacy = LoginController.getLoggedInUser().getPharmacist().pharmacy;
+		final List<PharmacyPrescriptionInfo> pharmacyPrescriptionInfos =
+				PharmacyPrescriptionInfo.find.where()
+				.eq("pharmacy", pharmacy)
+				.in("pharmacyPrescriptionStatus", statusList)
+				.findList();
+		return ok(views.html.pharmacist.viewPharmacyPrescriptionList.render(pharmacyPrescriptionInfos, status.trim().toUpperCase()));
 	}
+
+	
+	
 	public static Result getPrescriptionDetails(Long pharmacyPrescriptionInfoId){
 		PharmacyPrescriptionInfo pharmacyPrescriptionInfo = PharmacyPrescriptionInfo.find.byId(pharmacyPrescriptionInfoId);
 				return ok(views.html.pharmacist.viewPrescriptionDetails.render(pharmacyPrescriptionInfo.prescription));
-	}
+	}/*
 	public static Result confirmPrescription(Long pharmacyPrescriptionInfoId){
 		PharmacyPrescriptionInfo pharmacyPrescriptionInfo =PharmacyPrescriptionInfo.find.byId(pharmacyPrescriptionInfoId);
 		pharmacyPrescriptionInfo.pharmacyPrescriptionStatus = PharmacyPrescriptionStatus.CONFIRMED;
 		pharmacyPrescriptionInfo.update();
 		Pharmacy pharmacy = LoginController.getLoggedInUser().getPharmacist().pharmacy;
 		List<PharmacyPrescriptionInfo> pharmacyPrescriptionInfos = PharmacyPrescriptionInfo.find.where().eq("pharmacy", pharmacy).findList();
-		return ok(views.html.pharmacist.viewPharmacyPrescriptionList.render(pharmacyPrescriptionInfos));
+		return ok(views.html.pharmacist.viewPharmacyPrescriptionList.render(pharmacyPrescriptionInfos,null));
 		
-	}
+	}*/
 	public static Result servedPrescription(Long pharmacyPrescriptionInfoId){
 		PharmacyPrescriptionInfo pharmacyPrescriptionInfo =PharmacyPrescriptionInfo.find.byId(pharmacyPrescriptionInfoId);
 		pharmacyPrescriptionInfo.pharmacyPrescriptionStatus = PharmacyPrescriptionStatus.SERVED;
 		pharmacyPrescriptionInfo.update();
 		Pharmacy pharmacy = LoginController.getLoggedInUser().getPharmacist().pharmacy;
 		List<PharmacyPrescriptionInfo> pharmacyPrescriptionInfos = PharmacyPrescriptionInfo.find.where().eq("pharmacy", pharmacy).findList();
-		return ok(views.html.pharmacist.viewPharmacyPrescriptionList.render(pharmacyPrescriptionInfos));		
+		return ok(views.html.pharmacist.viewPharmacyPrescriptionList.render(pharmacyPrescriptionInfos,""));		
 	}
 	
 	/**
@@ -553,24 +550,47 @@ public class PharmacistController extends Controller {
 				.findList();
 		
 		
-		return ok(views.html.pharmacist.viewPharmacyPrescriptionList.render(pharmacyPrescriptionInfos));
+		return ok(views.html.pharmacist.viewPharmacyPrescriptionList.render(pharmacyPrescriptionInfos,""));
 	}
+	/**
+	 * @author lakshmi
+	 * Action to Display Todays Prescriptions requested to logged-in ADMIN_PHARMACIST
+	 */
+	public static Result getFromAndToDatePrescriptions() {
+		
+		final Map<String, String[]> requestMap = request().body().asFormUrlEncoded();
+		Date dateFrom = null,dateTo=null;
+		Logger.info(""+requestMap.get("from")[0]);
+		
+		
+		Logger.info(""+requestMap.get("to")[0]);
+		if(requestMap.get("from") != null && (requestMap.get("from")[0].trim().compareToIgnoreCase("")!=0)){
+			dateFrom = new DateTime(requestMap.get("from")[0]).toDate();
+		}
+		if(requestMap.get("to") != null && (requestMap.get("to")[0]).trim().compareToIgnoreCase("")!=0){
+			dateTo = new DateTime(requestMap.get("to")[0]).toDate();
+}
+		Logger.info("dateFrom===="+dateFrom+"        DateTo==="+dateTo);
+				
+		final Pharmacy pharmacy = LoginController.getLoggedInUser().getPharmacist().pharmacy;
+		
+		 
+				/*PharmacyPrescriptionInfo.find.where()
+				.eq("pharmacy", pharmacy).between("receivedDate", dateFrom, dateTo).findList();*/
+		final List<PharmacyPrescriptionInfo> pharmacyPrescriptionInfos = PharmacyPrescriptionInfo.find.where()
+				.eq("pharmacy", pharmacy).ge("receivedDate", dateFrom).le("receivedDate",dateTo).findList();
+			Logger.info("hello");
+			Logger.info("list in data : "+pharmacyPrescriptionInfos);
+				
+				/*.ge("receivedDate", dateFrom)
+				.le("receivedDate", dateTo)
+				.findList();*/
+		
+		
+		return ok(views.html.pharmacist.viewPharmacyPrescriptionList.render(pharmacyPrescriptionInfos,""));
+	}
+
 	
-	
-	public static Result receivedPrescriptionList(){
-		Pharmacy pharmacy = LoginController.getLoggedInUser().getPharmacist().pharmacy;
-		List<PharmacyPrescriptionInfo> pharmacyPrescriptionInfos = PharmacyPrescriptionInfo.find.where().eq("pharmacy", pharmacy).eq("pharmacyPrescriptionStatus",models.pharmacist.PharmacyPrescriptionStatus.RECEIVED).findList() ;
-		Logger.info("list size==="+pharmacyPrescriptionInfos.size());
-		return ok(views.html.pharmacist.viewPharmacyPrescriptionList.render(pharmacyPrescriptionInfos));
-		//return ok();
-	}
-	public static Result servedPrescriptionList(){
-		Pharmacy pharmacy = LoginController.getLoggedInUser().getPharmacist().pharmacy;
-		List<PharmacyPrescriptionInfo> pharmacyPrescriptionInfos = PharmacyPrescriptionInfo.find.where().eq("pharmacy", pharmacy).eq("pharmacyPrescriptionStatus",models.pharmacist.PharmacyPrescriptionStatus.SERVED).findList() ;
-		Logger.info("list size==="+pharmacyPrescriptionInfos.size());
-		return ok(views.html.pharmacist.viewPharmacyPrescriptionList.render(pharmacyPrescriptionInfos));
-		//return ok();
-	}
 	
 	
 	

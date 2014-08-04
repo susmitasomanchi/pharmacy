@@ -18,6 +18,7 @@ import javax.persistence.OneToOne;
 
 import models.AppUser;
 import models.BaseEntity;
+import models.diagnostic.DiagnosticCentre;
 import models.pharmacist.Pharmacy;
 import play.data.validation.Constraints.Required;
 import play.db.ebean.Model;
@@ -84,8 +85,17 @@ public class Doctor extends BaseEntity{
 	@OneToMany(cascade=CascadeType.ALL)
 	public List<DoctorEducation> doctorEducation = new ArrayList<DoctorEducation>();
 
+	@OneToMany(cascade=CascadeType.ALL)
+	public List<DoctorProduct> myProductList = new ArrayList<DoctorProduct>();
+
+	@OneToMany(cascade=CascadeType.ALL)
+	public List<DoctorDiagnosticTest> myDiagnosticTestList = new ArrayList<DoctorDiagnosticTest>();
+
 	@ManyToMany(cascade=CascadeType.ALL)
 	public List<Pharmacy> pharmacyList=new ArrayList<Pharmacy>();
+	
+	@ManyToMany(cascade=CascadeType.ALL)
+	public List<DiagnosticCentre> diagnosticCentreList=new ArrayList<DiagnosticCentre>();
 
 	/** Using it to capture starting year of experience.
 	 * 	So, Doctor's experience = currentYear - this.experience

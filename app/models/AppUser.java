@@ -15,14 +15,15 @@ import javax.persistence.Id;
 import javax.persistence.Lob;
 import javax.persistence.OneToOne;
 
+import org.apache.commons.codec.binary.Base64;
+import org.joda.time.LocalDate;
+import org.joda.time.Years;
+
 import models.diagnostic.DiagnosticRepresentative;
 import models.doctor.Doctor;
 import models.mr.MedicalRepresentative;
 import models.patient.Patient;
 import models.pharmacist.Pharmacist;
-
-import org.apache.commons.codec.binary.Base64;
-
 import play.data.validation.Constraints.Email;
 import play.db.ebean.Model;
 
@@ -109,6 +110,15 @@ public class AppUser extends BaseEntity {
 		catch(final Exception e){
 			return false;
 		}
+	}
+
+	public int getAge(){
+		if(this.dob != null){
+			final LocalDate birthdate = new LocalDate (this.dob);
+			final LocalDate now = new LocalDate();
+			return Years.yearsBetween(birthdate, now).getYears();
+		}
+		return 0;
 	}
 
 }

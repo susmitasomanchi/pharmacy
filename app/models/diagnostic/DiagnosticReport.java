@@ -11,6 +11,7 @@ import javax.persistence.Lob;
 import javax.persistence.OneToOne;
 
 import models.BaseEntity;
+import models.MasterDiagnosticTest;
 import play.db.ebean.Model;
 
 @SuppressWarnings("serial")

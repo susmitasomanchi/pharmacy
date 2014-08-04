@@ -1,0 +1,93 @@
+@(diagnosticCentrePrescriptionInfos: List[models.diagnostic.DiagnosticCentrePrescriptionInfo],status: String)
+@main("Diagnostic Order List") {
+<script>
+$('#status-select').on('change', function(){
+  var selValue = $('#status-select').val();
+  window.location.href='//diagnostic/prescriptions?status='+selValue;  
+});
+</script>
+<div class="row col-md-12">
+<div class="col-md-2">
+  <select class="chzn" id="status-select" style="width:50%;">
+<option></option>
+<option value="any" @if(status.trim.toLowerCase().compareTo("any")==0){selected}>Any</option>
+<option value="received" @if(status.trim.toLowerCase().compareTo("received")==0){selected}>Received</option>
+<option value="confirmed" @if(status.trim.toLowerCase().compareTo("confirmed")==0){selected}>Confirmed</option>
+<option value="cancelled" @if(status.trim.toLowerCase().compareTo("cancelled")==0){selected}>Cancelled</option>
+<option value="served" @if(status.trim.toLowerCase().compareTo("served")==0){selected}>Served</option>
+</select>
+   </div>
+   <div class="col-md-9">
+   <form action="@routes.DiagnosticController.getFromToDatePrescriptions()" method="POST">
+   	<div class="col-md-4 form-group">
+    <label for="from" class="col-md-3 control-label" style="padding-top:10px">From</label>
+    <div class="col-lg-9">
+      <input type="date" name="from" class="form-control" id="from" placeholder="From Date">
+      </div>
+    </div>
+    <div class="col-md-4 form-group">
+    <label for="to" class="col-md-3 control-label" style="padding-top:10px" >To</label>
+    <div class="col-lg-9">
+      <input type="date" name="to" class="form-control" id="to" placeholder="To Date">
+      </div>
+    </div>
+    <div class="col-md-4">
+      <input type="submit" class="btn btn-success btn-sm" value="Find Prescriptions">
+    </div>
+    </form>
+    </div>
+</div>
+<br><br><br>
+<div class="row">
+<div class="col-md-1"></div>
+<div class="col-md-10">
+<table class="table table-striped table-bordered" style="vertical-align:center">
+<tr>
+<th style="text-align:center;width:50px">S.No</th>
+<th style="text-align:center;width:150px"> From</th>
+<th style="text-align:center;width:150px"> Patient Name</th>
+<th style="text-align:center;width:150px"> Tests</th>
+<th style="text-align:center;width:350px"> Status</th>
+<th style="text-align:center;width:300px"> Action</th>
+</tr>
+@for((diagnosticCentrePrescriptionInfo,index) <- diagnosticCentrePrescriptionInfos.zipWithIndex) {
+<tr>
+<td>
+@{index+1}
+</td>
+<td>
+@*if(diagnosticCentrePrescriptionInfo.prescription.doctor!= null){
+@diagnosticCentrePrescriptionInfo.prescription.doctor.appUser.name
+}*@
+</td>
+<td>
+@*if(diagnosticCentrePrescriptionInfo.prescription.patient!= null){
+@diagnosticCentrePrescriptionInfo.prescription.patient.appUser.name
+}*@
+</td>
+<td>
+@diagnosticCentrePrescriptionInfo.prescription
+@*for((diagnosticTestLineItem,index) <- diagnosticCentrePrescriptionInfo.prescription.diagnosticTestLineItemList.zipWithIndex) {
+@{index+1}.@diagnosticTestLineItem.fullNameOfDiagnosticTest<br>
+}*@
+</td>
+<td>
+<span style="padding-right:20px">@diagnosticCentrePrescriptionInfo.diagnosticCentrePrescritionStatus</span>
+@if(diagnosticCentrePrescriptionInfo.diagnosticCentrePrescritionStatus.equals(models.diagnostic.DiagnosticCentrePrescritionStatus.RECEIVED)){
+<a  href="@routes.DiagnosticController.orderConfirmed(diagnosticCentrePrescriptionInfo.id)" class="btn btn-xs btn-success">Confirm</a>
+}
+@if(!diagnosticCentrePrescriptionInfo.diagnosticCentrePrescritionStatus.equals(models.diagnostic.DiagnosticCentrePrescritionStatus.CANCELLED)&& !diagnosticCentrePrescriptionInfo.diagnosticCentrePrescritionStatus.equals(models.diagnostic.DiagnosticCentrePrescritionStatus.SERVED)){
+<a  href="@routes.DiagnosticController.orderCancelled(diagnosticCentrePrescriptionInfo.id)" class="btn btn-xs btn-danger">Cancel</a>
+}
+</td>
+<td>
+<a href="@routes.DiagnosticController.viewOrderedTest(diagnosticCentrePrescriptionInfo.id)" class="btn btn-xs btn-default">All Tests</a>
+
+</td>
+}
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+}

@@ -1,0 +1,137 @@
+@(prescription:models.doctor.Prescription)
+@import play.i18n._
+@import helper.twitterBootstrap._
+@import helper._
+
+@main("Share Prescription"){
+
+<div class="row" style="padding-left:20px; padding-right:100px;">
+
+<h3>Dr. @prescription.doctor.appUser.name <span class="pull-right" style="font-size:18px;">@prescription.prescriptionDate.format("dd-MMM-yyyy HH:mm")</span></h3>
+<h4>@prescription.doctor.degree</h4>
+<h4>@prescription.doctor.specialization</h4>
+
+<hr>
+
+<h4 style="margin:0px; padding:0px;">@prescription.patient.appUser.name</h4>
+<p style="margin:0px; padding:0px;">Age: @prescription.patient.appUser.getAge()</p>
+<p>Sex: @org.apache.commons.lang3.text.WordUtils.capitalizeFully(prescription.patient.appUser.sex.toString())</p>
+
+<br>
+
+<h4><u>Problem Statement:</u></h4>
+<p>@prescription.problemStatement</p>
+<br>
+
+<h4><u>Prognosis:</u></h4>
+<p>@prescription.prognosis</p>
+<br>
+
+<div class="row">
+<div class="col-md-6">
+<h4><u>Medicines:</u></h4>
+<table class="table table-bordered table-condensed">
+<thead>
+	<tr>
+		<th>S No</th>
+		<th>Medicine</th>
+		<th>Dosage</th>
+		<th>Remarks</th>
+	</tr>
+</thead>
+<tbody>
+	@for((medicine, index) <- prescription.medicineLineItemList.zipWithIndex){
+	<tr>
+		<td>@(index+1)</td>
+		<td>@medicine.medicineFullName</td>
+		<td>@medicine.dosage</td>
+		<td>@medicine.remarks</td>
+	</tr>
+	}
+</tbody>
+</table>
+</div>
+
+<div class="col-md-6">
+<h4><u>Diagnostic Tests:</u></h4>
+<table class="table table-bordered table-condensed">
+<thead>
+	<tr>
+		<th>S No</th>
+		<th>Test</th>
+		<th>Remarks</th>
+	</tr>
+</thead>
+<tbody>
+	@for((test, index) <- prescription.diagnosticTestLineItemList.zipWithIndex){
+	<tr>
+		<td>@(index+1)</td>
+		<td>@test.fullNameOfDiagnosticTest</td>
+		<td>@test.remarks</td>
+	</tr>
+	}
+</tbody>
+</table>
+</div>
+</div>
+
+<h4><u>Remarks:</u></h4>
+<p>@prescription.remarks</p>
+</div>
+
+<hr>
+
+
+
+
+<div class="row" style="padding-left:20px; padding-right:100px;">
+<h4>Prescription shared with:</h4>
+<ul>
+@for(ppinfo <- prescription.getPharmacyInfoList()){
+	<li><a href="/pharmacy/@ppinfo.pharmacy.slugUrl">@ppinfo.pharmacy.name</a> on @ppinfo.receivedDate.format("dd-MMM-yyyy HH:mm")</li>
+}
+</ul>
+</div>
+
+<hr>
+
+<div class="row" style="padding-left:20px; padding-right:100px;">
+<div class="col-md-5">
+<h4>Share With Pharmacy:</h4>
+
+<select id="sharePharmacy" class="chzn" style="width:100%;">
+<option></option>
+@for(pharmacy <- prescription.doctor.pharmacyList){
+	<option value="@pharmacy.id">@pharmacy.name @if(pharmacy.address != null){&#40;@pharmacy.address.area&#41;}</option>
+}
+</select>
+
+</div>
+
+
+<div class="col-md-5">
+<h4>Share With Diagnostic Centre:</h4>
+<select class="chzn" name="shareDiagnostic">
+
+</select>
+</div>
+
+<div class="col-md-2">
+<a style="position:relative; top:35px;" class="btn btn-primary btn-sm" onclick="sharePrescription();">Share</a>
+</div>
+
+</div>
+
+<div class="row">
+<br><br><br><br><br>
+</div>
+
+<script>
+function sharePrescription(){
+	var pharId = $('#sharePharmacy').val();
+	window.location.href='/doctor/share-prescription/@prescription.id/'+pharId;
+}
+</script>
+
+
+}

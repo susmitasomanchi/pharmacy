@@ -5,6 +5,7 @@ import java.math.BigInteger;
 import java.security.SecureRandom;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
@@ -13,7 +14,10 @@ import java.util.Random;
 
 import models.Alert;
 import models.AppUser;
+import models.MasterDiagnosticTest;
+import models.MasterProduct;
 import models.Role;
+import models.diagnostic.DiagnosticCentre;
 import models.doctor.Appointment;
 import models.doctor.AppointmentStatus;
 import models.doctor.Day;
@@ -21,14 +25,23 @@ import models.doctor.DaySchedule;
 import models.doctor.Doctor;
 import models.doctor.DoctorAward;
 import models.doctor.DoctorClinicInfo;
+import models.doctor.DoctorDiagnosticTest;
 import models.doctor.DoctorEducation;
 import models.doctor.DoctorExperience;
+import models.doctor.DoctorProduct;
 import models.doctor.DoctorSocialWork;
+import models.doctor.Prescription;
 import models.doctor.QuestionAndAnswer;
 import models.doctor.SigCode;
 import models.pharmacist.Pharmacy;
+import models.pharmacist.PharmacyPrescriptionInfo;
+import models.pharmacist.PharmacyPrescriptionStatus;
+
+import org.json.JSONArray;
+
 import play.Logger;
 import play.data.Form;
+import play.mvc.BodyParser;
 import play.mvc.Controller;
 import play.mvc.Http.MultipartFormData;
 import play.mvc.Result;
@@ -557,7 +570,7 @@ public class DoctorController extends Controller {
 			final Calendar calendar1=Calendar.getInstance();
 			final Calendar calendar2=Calendar.getInstance();
 			final SimpleDateFormat dateFormat=new SimpleDateFormat("kk:mm");
-			LoginController.getLoggedInUser().getDoctor();
+			final Doctor doctor=LoginController.getLoggedInUser().getDoctor();
 			final Calendar calendar = Calendar.getInstance();
 			calendar.setTime(new Date());
 			for(int date=0;date<90;date++){
@@ -836,8 +849,70 @@ public class DoctorController extends Controller {
 
 
 
+	/**
+	 * @author Mitesh
+	 * Action to Display appointment requested to logged-in DOCTOR
+	 * GET	/doctor/all-appointments
+	 */
+	public static Result viewAllAppointments() {
+
+		/*
+		final Calendar calendar=Calendar.getInstance();
+		calendar.setTime(new Date());
+		calendar.set(Calendar.HOUR_OF_DAY, 0);
+		calendar.set(Calendar.MINUTE, 0);
+		calendar.set(Calendar.SECOND,0);
+		calendar.set(Calendar.MILLISECOND,0);
+		 */
+		final Doctor loggedIndoctor = LoginController.getLoggedInUser().getDoctor();
+		final List<DoctorClinicInfo> docclinicInfo = DoctorClinicInfo.find.where().eq("doctor", loggedIndoctor).findList();
+		//final List<Appointment> appointments = Appointment.find.where().in("doctorClinicInfo", docclinicInfo).eq("appointmentStatus", AppointmentStatus.APPROVED).ge("appointmentTime", calendar.getTime()).findList();
+		final List<AppointmentStatus> statusList = new ArrayList<AppointmentStatus>();
+		statusList.add(AppointmentStatus.APPROVED);
+		statusList.add(AppointmentStatus.SERVED);
+		final List<Appointment> appointments = Appointment.find.where().in("doctorClinicInfo", docclinicInfo).in("appointmentStatus", statusList).orderBy("appointmentTime").findList();
+		return ok(views.html.doctor.doctorAllAppointments.render(appointments,docclinicInfo));
+
+	}
 
 
+
+	/**
+	 * @author Mitesh
+	 * Action to Display appointment requested to logged-in DOCTOR
+	 * GET	/doctor/todays-appointments
+	 */
+	public static Result viewTodaysAppointments() {
+		final Date now =  new Date();
+		final Calendar calendarFrom = Calendar.getInstance();
+		calendarFrom.setTime(now);
+		calendarFrom.set(Calendar.HOUR_OF_DAY, 0);
+		calendarFrom.set(Calendar.MINUTE, 0);
+		calendarFrom.set(Calendar.SECOND,0);
+		calendarFrom.set(Calendar.MILLISECOND,0);
+
+		final Calendar calendarTo = Calendar.getInstance();
+		calendarTo.setTime(now);
+		calendarTo.set(Calendar.HOUR_OF_DAY, 23);
+		calendarTo.set(Calendar.MINUTE, 59);
+		calendarTo.set(Calendar.SECOND,59);
+		calendarTo.set(Calendar.MILLISECOND,999);
+
+		final Doctor loggedIndoctor = LoginController.getLoggedInUser().getDoctor();
+		final List<DoctorClinicInfo> docclinicInfo = DoctorClinicInfo.find.where().eq("doctor", loggedIndoctor).findList();
+		final List<AppointmentStatus> statusList = new ArrayList<AppointmentStatus>();
+		statusList.add(AppointmentStatus.APPROVED);
+		statusList.add(AppointmentStatus.SERVED);
+		final List<Appointment> appointments = Appointment.find.where()
+				.in("doctorClinicInfo", docclinicInfo)
+				.in("appointmentStatus", statusList)
+				.ge("appointmentTime", calendarFrom.getTime())
+				.le("appointmentTime", calendarTo.getTime())
+				.orderBy("appointmentTime")
+				.findList();
+		return ok(views.html.doctor.doctorTodaysAppointments.render(appointments,docclinicInfo));
+
+	}
 
 
 
@@ -883,10 +958,15 @@ public class DoctorController extends Controller {
 
 	/**
 	 * Action to render the prescription form to the loggedInDoctor
-	 * GET	/doctor/prescription
+	 * GET	/doctor/prescription/:appointmentId
 	 */
-	public static Result showPrescriptionForm(){
-		return ok(views.html.doctor.doctorPrescription.render(prescriptionForm));
+	public static Result showPrescriptionForm(final Long appointmentId){
+		final Appointment appointment = Appointment.find.byId(appointmentId);
+		//server-side check
+		if(appointment.doctorClinicInfo.doctor.id.longValue() != LoginController.getLoggedInUser().getDoctor().id.longValue()){
+			return redirect(routes.LoginController.processLogout());
+		}
+		return ok(views.html.doctor.doctorPrescription.render(prescriptionForm, appointment));
 	}
 
 	/**
@@ -902,11 +982,160 @@ public class DoctorController extends Controller {
 			return redirect(routes.LoginController.processLogout());
 		}
 
+		Prescription prescription = new Prescription();
+		prescription = bean.toEntity();
+		prescription.save();
+
+		final Appointment appointment = prescription.appointment;
+		appointment.appointmentStatus = AppointmentStatus.SERVED;
+		appointment.update();
+
+
+		flash().put("alert", new Alert("alert-success", "Prescription saved!").toString());
+		return redirect(routes.DoctorController.showPrescription(prescription.id));
+	}
 
 
 
+	/**
+	 * Action to show logged In doctor a page to
+	 * assign a prescription to a pharmacy / diagnostic centre
+	 * GET	/doctor/show-prescription
+	 */
+	public static Result showPrescription(final Long prescriptionId){
+		final Doctor doctor = LoginController.getLoggedInUser().getDoctor();
+		final Prescription prescription = Prescription.find.byId(prescriptionId);
+		//server-side check
+		if(prescription.doctor.id.longValue() != doctor.id.longValue()){
+			return redirect(routes.LoginController.processLogout());
+		}
+		return ok(views.html.doctor.doctorSharePrescription.render(prescription));
+	}
+
+
+	/**
+	 * Action to show logged In doctor a page to
+	 * assign a prescription to a pharmacy / diagnostic centre
+	 * GET	/doctor/share-prescription
+	 */
+	public static Result sharePrescription(final Long prId, final Long pharmacyId){
+		final Doctor doctor = LoginController.getLoggedInUser().getDoctor();
+		final Prescription prescription = Prescription.find.byId(prId);
+		//server-side check
+		if(prescription.doctor.id.longValue() != doctor.id.longValue()){
+			return redirect(routes.LoginController.processLogout());
+		}
+		final Pharmacy pharmacy = Pharmacy.find.byId(pharmacyId);
+		final PharmacyPrescriptionInfo ppInfo = PharmacyPrescriptionInfo.find.where().eq("pharmacy", pharmacy).eq("prescription", prescription).findUnique();
+		if(ppInfo == null){
+			final PharmacyPrescriptionInfo phprInfo = new PharmacyPrescriptionInfo();
+			phprInfo.pharmacy = pharmacy;
+			phprInfo.prescription = prescription;
+			phprInfo.receivedDate = new Date();
+			phprInfo.pharmacyPrescriptionStatus = PharmacyPrescriptionStatus.RECEIVED;
+			phprInfo.save();
+		}
+		flash().put("alert", new Alert("alert-success","Prescription shared with "+pharmacy.name).toString());
 		return ok();
 	}
+
+
+
+	/**
+	 * Action to show todays prescription created by loggedIn doctor
+	 * GET	/doctor/todays-prescriptions
+	 */
+	public static Result viewTodaysPrescription(){
+		final Date now =  new Date();
+		final Calendar calendarFrom = Calendar.getInstance();
+		calendarFrom.setTime(now);
+		calendarFrom.set(Calendar.HOUR_OF_DAY, 0);
+		calendarFrom.set(Calendar.MINUTE, 0);
+		calendarFrom.set(Calendar.SECOND,0);
+		calendarFrom.set(Calendar.MILLISECOND,0);
+
+		final Calendar calendarTo = Calendar.getInstance();
+		calendarTo.setTime(now);
+		calendarTo.set(Calendar.HOUR_OF_DAY, 23);
+		calendarTo.set(Calendar.MINUTE, 59);
+		calendarTo.set(Calendar.SECOND,59);
+		calendarTo.set(Calendar.MILLISECOND,999);
+		final Doctor doctor = LoginController.getLoggedInUser().getDoctor();
+		final List<Prescription> prescriptionList = Prescription.find.where()
+				.eq("doctor",doctor)
+				.ge("prescriptionDate", calendarFrom.getTime())
+				.le("prescriptionDate", calendarTo.getTime())
+				.orderBy("prescriptionDate")
+				.findList();
+		final List<DoctorClinicInfo> docclinicInfo = DoctorClinicInfo.find.where().eq("doctor", doctor).findList();
+		return ok(views.html.doctor.doctorPrescriptionList.render(prescriptionList, docclinicInfo));
+	}
+
+	/**
+	 * Action to show all prescription created by loggedIn doctor
+	 * GET	/doctor/all-prescriptions
+	 */
+	public static Result viewAllPrescription(){
+		final Doctor doctor = LoginController.getLoggedInUser().getDoctor();
+		final List<Prescription> prescriptionList = Prescription.find.where().eq("doctor",doctor).orderBy("prescriptionDate").findList();
+		final List<DoctorClinicInfo> docclinicInfo = DoctorClinicInfo.find.where().eq("doctor", doctor).findList();
+		return ok(views.html.doctor.doctorPrescriptionList.render(prescriptionList, docclinicInfo));
+	}
+
+
+
+
+
+
+	/**
+	 * Action to get all Products' names
+	 * GET	/doctor/products/get-json
+	 */
+	@BodyParser.Of(BodyParser.Json.class)
+	public static Result getAllProductsJson(){
+		final List<DoctorProduct> loggedInDoctorProductList = LoginController.getLoggedInUser().getDoctor().myProductList;
+		final int arrayLength = MasterProduct.find.findRowCount()+loggedInDoctorProductList.size();
+		final String[] result = new String[arrayLength];
+		int i=0;
+		for (final DoctorProduct product : loggedInDoctorProductList){
+			result[i] = product.fullName;
+			i++;
+		}
+		final List<MasterProduct> masterProductList = MasterProduct.find.all();
+		for (final MasterProduct product : masterProductList){
+			result[i] = product.fullName;
+			i++;
+		}
+		final JSONArray jsonArray = new JSONArray(Arrays.asList(result));
+		return ok(jsonArray.toString());
+	}
+
+
+	/**
+	 * Action to get all Products' names
+	 * GET	/doctor/diagnostic-tests/get-json
+	 */
+	@BodyParser.Of(BodyParser.Json.class)
+	public static Result getAllDiagnosticJson(){
+		final List<DoctorDiagnosticTest> loggedInDoctorDiagTestList = LoginController.getLoggedInUser().getDoctor().myDiagnosticTestList;
+		final int arrayLength = MasterDiagnosticTest.find.findRowCount()+loggedInDoctorDiagTestList.size();
+		final String[] result = new String[arrayLength];
+		int i=0;
+		for (final DoctorDiagnosticTest diagTest : loggedInDoctorDiagTestList){
+			result[i] = diagTest.name;
+			i++;
+		}
+		final List<MasterDiagnosticTest> masterDiagnosticTestList = MasterDiagnosticTest.find.all();
+		for (final MasterDiagnosticTest diagTest : masterDiagnosticTestList){
+			result[i] = diagTest.name;
+			i++;
+		}
+		final JSONArray jsonArray = new JSONArray(Arrays.asList(result));
+		return ok(jsonArray.toString());
+	}
+
+
+
 
 	/**
 	 * @author Mitesh
@@ -926,8 +1155,6 @@ public class DoctorController extends Controller {
 		 */
 		return ok("code send successfully");
 	}
-
-
 
 	/**
 	 * @author Mitesh
@@ -991,9 +1218,6 @@ public class DoctorController extends Controller {
 
 
 
-
-
-
 	public static Result displayAnswer(){
 		final AppUser user = LoginController.getLoggedInUser();
 		final Doctor doctor=user.getDoctor();
@@ -1002,8 +1226,8 @@ public class DoctorController extends Controller {
 			qaList = QuestionAndAnswer.find.where().eq("answerBy.id", doctor.id).findList();
 		}
 		return ok(views.html.doctor.ansQuestion.render(qaList));
-
 	}
+
 	//Question Answered By Doctor
 	public static Result answerQuestion(final Long qaId) {
 		final QuestionAndAnswerBean qaBean = questionAndAnswerForm.bindFromRequest().get();
@@ -1013,8 +1237,6 @@ public class DoctorController extends Controller {
 		qa.update();
 		flash().put("alert", "saved answer successfully");
 		return redirect(routes.DoctorController.displayAnswer());
-
-
 	}
 
 
@@ -1066,29 +1288,10 @@ public class DoctorController extends Controller {
 	}
 
 
-	/**
-	 * @author Mitesh
-	 * Action to Display appointment requested to logged-in DOCTOR
-	 * GET	/doctor/today-appointment
-	 */
-	public static Result viewTodaysAppointment() {
-
-		final Calendar calendar=Calendar.getInstance();
-		calendar.setTime(new Date());
-		calendar.set(Calendar.HOUR_OF_DAY, 0);
-		calendar.set(Calendar.MINUTE, 0);
-		calendar.set(Calendar.SECOND,0);
-		calendar.set(Calendar.MILLISECOND,0);
 
 
 
-		final Doctor loggedIndoctor = LoginController.getLoggedInUser().getDoctor();
-		final List<DoctorClinicInfo> docclinicInfo=DoctorClinicInfo.find.where().eq("doctor", loggedIndoctor).findList();
-		final List<Appointment> appointments=Appointment.find.where().in("doctorClinicInfo", docclinicInfo).eq("appointmentStatus", AppointmentStatus.APPROVED).ge("appointmentTime", calendar.getTime()).findList();
-		Logger.warn(""+appointments.toString());
-		return ok(views.html.doctor.doctor_appointments.render(appointments,docclinicInfo));
 
-	}
 	/**
 	 * @author lakshmi
 	 * Action to add favorite pharmacy of the Doctor to the list of Doctor of loggedin DOCTOR
@@ -1113,19 +1316,20 @@ public class DoctorController extends Controller {
 			}
 		}
 		return ok(views.html.pharmacist.searched_pharmacies.render(true,searchStr,pharmacyList));
-		//		return redirect(routes.UserActions.dashboard());
 	}
+
 
 	/**
 	 * @author lakshmi
 	 * Action to list out favorite Pharmacies of Doctor of loggedin DOCTOR
 	 * GET/doctor/my-favorite-pharmacies
 	 */
-
 	public static Result myFavoritePharmacies() {
 		final Doctor doctor = LoginController.getLoggedInUser().getDoctor();
 		return ok(views.html.pharmacist.favorite_pharmacy_list.render(doctor.pharmacyList,doctor.id,0L));
 	}
+
+
 	/**
 	 * @author lakshmi
 	 * Action to remove Pharmacy from  favorite pharmacies List of Doctor of loggedin DOCTOR
@@ -1133,18 +1337,56 @@ public class DoctorController extends Controller {
 	 */
 	public static Result removeFavoritePharmacy(final Long doctorId,final Long pharmacyId) {
 		final Doctor doctor = Doctor.find.byId(doctorId);
-		Logger.info("before delete list size()==="+doctor.pharmacyList.size());
 		doctor.pharmacyList.remove(Pharmacy.find.byId(pharmacyId));
 		doctor.update();
-		Logger.info("after delete list size()==="+doctor.pharmacyList.size());
 		//return redirect(routes.UserActions.dashboard());
 		return ok(views.html.pharmacist.favorite_pharmacy_list.render(doctor.pharmacyList,doctor.id,0L));
+	}
+	/**
+	 * @author lakshmi
+	 * Action to add favorite pharmacy of the Doctor to the list of Doctor of loggedin DOCTOR
+	 * GET/doctor/add-favorite-pharmacy/:pharmacyId/:str
+	 */
+	public static Result addFavoriteDiagnosticCentre(final Long diagnosticId,final String searchStr) {
+		final Doctor doctor = LoginController.getLoggedInUser().getDoctor();
+		final DiagnosticCentre diagnosticCentre = DiagnosticCentre.find.byId(diagnosticId);
+
+		if(!doctor.diagnosticCentreList.contains(diagnosticCentre)){
+			doctor.diagnosticCentreList.add(diagnosticCentre);
+			doctor.update();
+
+		}
+		else{
+			flash().put("alert", new Alert("alert-info", diagnosticCentre.name+" Already existed in the Favorite List.").toString());
+		}
+		return ok(views.html.diagnostic.searched_diagnostic_Centres.render(true,searchStr,doctor.diagnosticCentreList));
+		//		return redirect(routes.UserActions.dashboard());
+	}
+	/**
+	 * @author lakshmi
+	 * Action to list out favorite Diagnostic Centre of Doctor of loggedin DOCTOR
+	 * GET/doctor/favorite-diagnostic-centres
+	 */
+
+	public static Result myFavoriteDiagnosticCentres() {
+		final Doctor doctor = LoginController.getLoggedInUser().getDoctor();
+		return ok(views.html.diagnostic.favorite_diagnosticCentre_list.render(doctor.diagnosticCentreList,doctor.id,0L));
+	}
+	/**
+	 * @author lakshmi
+	 * Action to remove Pharmacy from  favorite pharmacies List of Doctor of loggedin DOCTOR
+	 * GET/doctor/remove-favorite-diagnosticCentre/:doctorId/:pharmacyId
+	 */
+	public static Result removeFavoriteDiagnosticCentre(final Long doctorId,final Long diagnosticId) {
+		final Doctor doctor = Doctor.find.byId(doctorId);
+		doctor.diagnosticCentreList.remove(DiagnosticCentre.find.byId(diagnosticId));
+		doctor.update();
+		//return redirect(routes.UserActions.dashboard());
+		return ok(views.html.diagnostic.favorite_diagnosticCentre_list.render(doctor.diagnosticCentreList,doctor.id,0L));
 	}
 
 
 	public static Result requestAppointment(){
-
-
 		final String param[] =request().body().asFormUrlEncoded().get("datetime");
 		try{
 			final Appointment appointment=Appointment.find.byId(Long.parseLong(param[1]));
@@ -1158,8 +1400,6 @@ public class DoctorController extends Controller {
 			e.printStackTrace();
 			return ok("-1");
 		}
-
-
 	}
 
 }

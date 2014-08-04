@@ -269,12 +269,20 @@ public class PatientController extends Controller {
 	 */
 	public static Result removePatientFavoritePharmacy(final Long patientId,final Long pharmacyId) {
 		final Patient patient = Patient.find.byId(patientId);
-		Logger.info("before delete list size()==="+patient.pharmacyList.size());
 		patient.pharmacyList.remove(Pharmacy.find.byId(pharmacyId));
 		patient.update();
-		Logger.info("after delete list size()==="+patient.pharmacyList.size());
-		//return redirect(routes.UserActions.dashboard());
 		return ok(views.html.pharmacist.favorite_pharmacy_list.render(patient.pharmacyList,0L,patient.id));
+	}
+	/**
+	 * @author lakshmi
+	 * Action to remove diagnosticCentre from  favorite diagnosticCentres List of loggedin PATIENT
+	 * GET/patient/remove-favorite-diagnosticCentre/:patientId/:pharmacyId
+	 */
+	public static Result removePatientFavoriteDiagnostic(final Long patientId,final Long diagnosticId) {
+		final Patient patient = Patient.find.byId(patientId);
+		patient.diagnosticCenterList.remove(DiagnosticCentre.find.byId(diagnosticId));
+		patient.update();
+		return ok(views.html.diagnostic.favorite_diagnosticCentre_list.render(patient.diagnosticCenterList,0L,patient.id));
 	}
 
 	/**
@@ -292,7 +300,7 @@ public class PatientController extends Controller {
 	/**
 	 * @author Mitesh
 	 * Action to process requested appointments
-	 *  POST 	/patient/process-appointment
+	 * POST		/patient/process-appointment
 	 */
 	public static Result processAppointment(final Long apptId) {
 		final String remark=request().body().asFormUrlEncoded().get("remark")[0];
@@ -301,6 +309,7 @@ public class PatientController extends Controller {
 		appointment.appointmentStatus=AppointmentStatus.APPROVED;
 		appointment.problemStatement=remark;
 		appointment.requestedBy=LoginController.getLoggedInUser();
+		appointment.bookedOn = new Date();
 		appointment.update();
 		return ok("appointment save");
 	}

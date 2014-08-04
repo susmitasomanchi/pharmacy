@@ -2,7 +2,9 @@
  * 
  */
 window.onload=function(){
-	$(".chzn").chosen();
+	
+	$(".chzn").chosen({allow_single_deselect: true});
+	
 	$(".boottip").tooltip();
 	$('.datepicker').datepicker();
 
