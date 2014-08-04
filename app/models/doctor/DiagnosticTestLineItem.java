@@ -22,7 +22,7 @@ public class DiagnosticTestLineItem extends BaseEntity{
 	@OneToOne
 	public MasterDiagnosticTest masterDiagnosticTest;
 
-	public String diagnosticTestFullName;
+	public String fullNameOfDiagnosticTest;
 
 	@Column(columnDefinition="TEXT")
 	public String remarks;

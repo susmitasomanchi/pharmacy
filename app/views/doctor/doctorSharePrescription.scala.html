@@ -66,7 +66,7 @@
 	@for((test, index) <- prescription.diagnosticTestLineItemList.zipWithIndex){
 	<tr>
 		<td>@(index+1)</td>
-		<td>@test.diagnosticTestFullName</td>
+		<td>@test.fullNameOfDiagnosticTest</td>
 		<td>@test.remarks</td>
 	</tr>
 	}

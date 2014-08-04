@@ -14,6 +14,27 @@
 </div>
 
 
+
+   <div class="col-md-10">
+   <form action="@routes.PharmacistController.getFromAndToDatePrescriptions()" method="POST">
+   	<div class="col-md-4 form-group">
+    <label for="from" class="col-md-3 control-label" style="padding-top:10px">From</label>
+    <div class="col-lg-9">
+      <input type="date" name="from" class="form-control" id="from" placeholder="From Date">
+      </div>
+    </div>
+    <div class="col-md-4 form-group">
+    <label for="to" class="col-md-3 control-label" style="padding-top:10px" >To</label>
+    <div class="col-lg-9">
+      <input type="date" name="to" class="form-control" id="to" placeholder="To Date">
+      </div>
+    </div>
+    <div class="col-md-4">
+      <input type="submit" class="btn btn-success btn-sm" value="Find Prescriptions">
+    </div>
+    </form>
+    </div>
+
 <script>
 $('#status-select').on('change', function(){
 	var selValue = $('#status-select').val();

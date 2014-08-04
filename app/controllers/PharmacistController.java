@@ -24,6 +24,9 @@ import models.pharmacist.PharmacyPrescriptionInfo;
 import models.pharmacist.PharmacyPrescriptionStatus;
 import models.pharmacist.PharmacyProduct;
 import models.pharmacist.ShowCasedProduct;
+
+import org.joda.time.DateTime;
+
 import play.Logger;
 import play.data.Form;
 import play.mvc.Controller;
@@ -582,7 +585,43 @@ public class PharmacistController extends Controller {
 
 
 
+	/**
+	 * @author lakshmi
+	 * Action to Display Todays Prescriptions requested to logged-in ADMIN_PHARMACIST
+	 */
+	public static Result getFromAndToDatePrescriptions() {
 
+		final Map<String, String[]> requestMap = request().body().asFormUrlEncoded();
+		Date dateFrom = null,dateTo=null;
+		Logger.info(""+requestMap.get("from")[0]);
+
+
+		Logger.info(""+requestMap.get("to")[0]);
+		if(requestMap.get("from") != null && (requestMap.get("from")[0].trim().compareToIgnoreCase("")!=0)){
+			dateFrom = new DateTime(requestMap.get("from")[0]).toDate();
+		}
+		if(requestMap.get("to") != null && (requestMap.get("to")[0]).trim().compareToIgnoreCase("")!=0){
+			dateTo = new DateTime(requestMap.get("to")[0]).toDate();
+		}
+		Logger.info("dateFrom===="+dateFrom+"        DateTo==="+dateTo);
+
+		final Pharmacy pharmacy = LoginController.getLoggedInUser().getPharmacist().pharmacy;
+
+
+		/*PharmacyPrescriptionInfo.find.where()
+				.eq("pharmacy", pharmacy).between("receivedDate", dateFrom, dateTo).findList();*/
+		final List<PharmacyPrescriptionInfo> pharmacyPrescriptionInfos = PharmacyPrescriptionInfo.find.where()
+				.eq("pharmacy", pharmacy).ge("receivedDate", dateFrom).le("receivedDate",dateTo).findList();
+		Logger.info("hello");
+		Logger.info("list in data : "+pharmacyPrescriptionInfos);
+
+		/*.ge("receivedDate", dateFrom)
+				.le("receivedDate", dateTo)
+				.findList();*/
+
+
+		return ok(views.html.pharmacist.viewPharmacyPrescriptionList.render(pharmacyPrescriptionInfos,""));
+	}
 
 
 

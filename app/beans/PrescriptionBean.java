@@ -130,7 +130,7 @@ public class PrescriptionBean implements Serializable{
 			final String dTestName = this.diagnosticTestNameArray[d];
 			if(dTestName != null && !dTestName.trim().isEmpty()){
 				final DiagnosticTestLineItem dTestLineItem = new DiagnosticTestLineItem();
-				dTestLineItem.diagnosticTestFullName = dTestName;
+				dTestLineItem.fullNameOfDiagnosticTest = dTestName;
 				if(this.diagnosticTestRemarksArray != null && this.diagnosticTestRemarksArray[d]!= null && !this.diagnosticTestRemarksArray[d].isEmpty()){
 					dTestLineItem.remarks = this.diagnosticTestRemarksArray[d].trim();
 				}

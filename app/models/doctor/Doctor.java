@@ -18,6 +18,7 @@ import javax.persistence.OneToOne;
 
 import models.AppUser;
 import models.BaseEntity;
+import models.diagnostic.DiagnosticCentre;
 import models.pharmacist.Pharmacy;
 import play.data.validation.Constraints.Required;
 import play.db.ebean.Model;
@@ -57,21 +58,27 @@ public class Doctor extends BaseEntity{
 	@Lob
 	public byte[] profileImage;
 
+	//education
 	@OneToMany(cascade=CascadeType.ALL)
 	public List<DoctorEducation> doctorEducationList = new ArrayList<DoctorEducation>();
 
+	//experience
 	@OneToMany(cascade=CascadeType.ALL)
 	public List<DoctorExperience> doctorExperienceList = new ArrayList<DoctorExperience>();
 
+	//publications
 	@OneToMany(cascade=CascadeType.ALL)
 	public List<DoctorPublication> doctorPublicationList = new ArrayList<DoctorPublication>();
 
+	//awards
 	@OneToMany(cascade=CascadeType.ALL)
 	public List<DoctorAward> doctorAwardList = new ArrayList<DoctorAward>();
 
+	//language
 	@ManyToMany(cascade=CascadeType.ALL)
 	public List<DoctorLanguage> doctorLanguageList = new ArrayList<DoctorLanguage>();
 
+	//socialwork
 	@OneToMany(cascade=CascadeType.ALL)
 	public List<DoctorSocialWork> doctorSocialWorkList = new ArrayList<DoctorSocialWork>();
 
@@ -85,12 +92,16 @@ public class Doctor extends BaseEntity{
 	public List<DoctorDiagnosticTest> myDiagnosticTestList = new ArrayList<DoctorDiagnosticTest>();
 
 	@ManyToMany(cascade=CascadeType.ALL)
-	public List<Pharmacy> pharmacyList = new ArrayList<Pharmacy>();
+	public List<Pharmacy> pharmacyList=new ArrayList<Pharmacy>();
+	
+	@ManyToMany(cascade=CascadeType.ALL)
+	public List<DiagnosticCentre> diagnosticCentreList=new ArrayList<DiagnosticCentre>();
 
 	/** Using it to capture starting year of experience.
 	 * 	So, Doctor's experience = currentYear - this.experience
 	 */
 	public Integer experience;
+
 
 	@Column(columnDefinition="TEXT")
 	public String searchIndex;

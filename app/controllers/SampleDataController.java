@@ -1,25 +1,20 @@
 package controllers;
 
-import static play.libs.F.Promise.promise;
 
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
 
 import models.AppUser;
-import models.MasterDiagnosticTest;
-import models.MasterProduct;
 import models.Role;
+import models.diagnostic.DiagnosticCentrePrescriptionInfo;
+import models.doctor.DiagnosticTestLineItem;
 import models.doctor.Doctor;
-import models.doctor.MedicineLineItem;
 import models.doctor.Prescription;
 import models.mr.MedicalRepresentative;
 import models.mr.PharmaceuticalCompany;
 import models.patient.Patient;
 import models.patient.PatientDoctorInfo;
-import models.pharmacist.PharmacyPrescriptionInfo;
-import play.libs.F.Function0;
+import play.Logger;
 import play.mvc.Controller;
 import play.mvc.Result;
 
@@ -242,44 +237,53 @@ public class SampleDataController extends Controller {
 	/**
 	 * Action to create Prescription for the Diagnostic Centre
 	 * @return
-	 * @throws ParseException
+	 * @throws ParseException 
 	 */
+	
+//	public static Result prescripetionTest() throws ParseException{
+//		Prescription prescription = new Prescription();
+//		PharmacyPrescriptionInfo pharmacyPrescriptionInfo = new PharmacyPrescriptionInfo();
+//		pharmacyPrescriptionInfo.pharmacy = LoginController.getLoggedInUser().getPharmacist().pharmacy;
+//		MedicineLineItem medicineLineItem1 = new MedicineLineItem();
+//		medicineLineItem1.fullNameOfMedicine = "medicine1";
+//		prescription.medicineLineItemList.add(medicineLineItem1);
+//		MedicineLineItem medicineLineItem2 = new MedicineLineItem();
+//		medicineLineItem2.fullNameOfMedicine = "medicine2";
+//		prescription.medicineLineItemList.add(medicineLineItem2);
+//		pharmacyPrescriptionInfo.prescription = prescription;
+//		pharmacyPrescriptionInfo.receivedDate = new SimpleDateFormat("dd-MMM-yyyy").parse("7-Jun-2013");
+//		pharmacyPrescriptionInfo.save();
+////		return redirect(routes.PharmacistController.addPharmacyOrderFromDoctor(pharmacy.id,prescription.id));
+//		
+//return ok();
+//	}
+//
+//}
 
-	public static Result prescripetionTest() throws ParseException{
-		final Prescription prescription = new Prescription();
-		final PharmacyPrescriptionInfo pharmacyPrescriptionInfo = new PharmacyPrescriptionInfo();
-		pharmacyPrescriptionInfo.pharmacy = LoginController.getLoggedInUser().getPharmacist().pharmacy;
-		final MedicineLineItem medicineLineItem1 = new MedicineLineItem();
-		medicineLineItem1.fullNameOfMedicine = "medicine1";
-		prescription.medicineLineItemList.add(medicineLineItem1);
-		final MedicineLineItem medicineLineItem2 = new MedicineLineItem();
-		medicineLineItem2.fullNameOfMedicine = "medicine2";
-		prescription.medicineLineItemList.add(medicineLineItem2);
-		pharmacyPrescriptionInfo.prescription = prescription;
-		pharmacyPrescriptionInfo.receivedDate = new SimpleDateFormat("dd-MMM-yyyy").parse("7-Jun-2013");
-		pharmacyPrescriptionInfo.save();
-		//		return redirect(routes.PharmacistController.addPharmacyOrderFromDoctor(pharmacy.id,prescription.id));
+/**
+ * Action to create Prescription for the Diagnostic Centre
+ * @return
+ */
 
-		return ok();
-	}
+public static Result prescripetionTest(){
+	Prescription prescription = new Prescription();
+	DiagnosticCentrePrescriptionInfo diagnosticCentrePrescriptionInfo = new DiagnosticCentrePrescriptionInfo();
+	diagnosticCentrePrescriptionInfo.diagnosticCentre = LoginController.getLoggedInUser().getDiagnosticRepresentative().diagnosticCentre;
+	DiagnosticTestLineItem medicineLineItem1 = new DiagnosticTestLineItem();
+	medicineLineItem1.fullNameOfDiagnosticTest = "X-ray";
+	prescription.diagnosticTestLineItemList.add(medicineLineItem1);
+	DiagnosticTestLineItem medicineLineItem2 = new DiagnosticTestLineItem();
+	medicineLineItem2.fullNameOfDiagnosticTest = "Scanning";
+	prescription.diagnosticTestLineItemList.add(medicineLineItem2);
+	prescription.save();
+	diagnosticCentrePrescriptionInfo.prescription = prescription;
+	diagnosticCentrePrescriptionInfo.sharedDate = new Date();
+	diagnosticCentrePrescriptionInfo.save();
+return ok();
 
+}
 
-	public static Result createMasterMedicinesAndTests(){
-		for(int i=10; i<=15; i++){
-			final MasterProduct product = new MasterProduct();
-			product.fullName = "Medicine-"+i;
-			product.save();
-
-			final MasterDiagnosticTest test = new MasterDiagnosticTest();
-			test.name = "Test-"+i;
-			test.save();
-		}
-		return ok();
-	}
-
-
-
-	public static Result testXXX() {
+/*	public static Result testXXX() {
 		promise(new Function0<Integer>() {
 			@Override
 			public Integer apply() {
@@ -308,10 +312,7 @@ public class SampleDataController extends Controller {
 
 		return ok("Right Now!");
 	}
-
-
+*/
 
 }
-
-
 

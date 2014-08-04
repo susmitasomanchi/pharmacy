@@ -18,18 +18,18 @@ public class PharmacyPrescriptionInfo extends BaseEntity{
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO)
-	public  Long id;
-
-	@OneToOne
+	public  Long id;	
+	
+	@OneToOne	
 	public Pharmacy pharmacy;
-
+	
 	@OneToOne
 	public Prescription prescription;
-
+	
 	public PharmacyPrescriptionStatus pharmacyPrescriptionStatus = PharmacyPrescriptionStatus.RECEIVED;
-
-	public Date receivedDate = new Date();
-
+	
+	public Date receivedDate;
+	
 	public static Model.Finder<Long, PharmacyPrescriptionInfo> find = new Finder<Long, PharmacyPrescriptionInfo>(Long.class, PharmacyPrescriptionInfo.class);
-
+	
 }
