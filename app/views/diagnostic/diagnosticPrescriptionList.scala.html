@@ -74,11 +74,11 @@ Dr.@diagnosticCentrePrescriptionInfo.prescription.doctor.appUser.name
 <td>
 <span style="padding-right:20px">@diagnosticCentrePrescriptionInfo.diagnosticCentrePrescritionStatus</span>
 @if(diagnosticCentrePrescriptionInfo.diagnosticCentrePrescritionStatus.equals(models.diagnostic.DiagnosticCentrePrescritionStatus.RECEIVED)){
-<a  href="@routes.DiagnosticController.orderConfirmed(diagnosticCentrePrescriptionInfo.id)" class="btn btn-xs btn-success">Confirm</a>
+<a  href="@routes.DiagnosticController.orderServed(diagnosticCentrePrescriptionInfo.id)" class="btn btn-xs btn-success">Served</a>
 }
-@if(!diagnosticCentrePrescriptionInfo.diagnosticCentrePrescritionStatus.equals(models.diagnostic.DiagnosticCentrePrescritionStatus.CANCELLED)&& !diagnosticCentrePrescriptionInfo.diagnosticCentrePrescritionStatus.equals(models.diagnostic.DiagnosticCentrePrescritionStatus.SERVED)){
+@*if(!diagnosticCentrePrescriptionInfo.diagnosticCentrePrescritionStatus.equals(models.diagnostic.DiagnosticCentrePrescritionStatus.CANCELLED)&& !diagnosticCentrePrescriptionInfo.diagnosticCentrePrescritionStatus.equals(models.diagnostic.DiagnosticCentrePrescritionStatus.SERVED)){
 <a  href="@routes.DiagnosticController.orderCancelled(diagnosticCentrePrescriptionInfo.id)" class="btn btn-xs btn-danger">Cancel</a>
-}
+}*@
 </td>
 <td>
 <a href="@routes.DiagnosticController.viewOrderedTest(diagnosticCentrePrescriptionInfo.id)" class="btn btn-xs btn-default">All Tests</a>

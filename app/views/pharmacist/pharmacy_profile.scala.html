@@ -96,7 +96,7 @@ function validateSlugUrl(){
 
 
 @if(pharmacy.backgroundImage != null){
-	<div style="background-image:url('@routes.PharmacistController.getPharmacyImages(pharmacy.id,0)');background-size:940px 400px; background-repeat:no-repeat; height:400px;"></div>
+	<div style="background-image:url('@routes.PublicController.getPharmacyImages(pharmacy.id,0)');background-size:940px 400px; background-repeat:no-repeat; height:400px;"></div>
 }else{
 	<div style="background-image:url('/assets/images/pharmacy-default-bg-image.jpg');background-size:940px 400px; background-repeat:no-repeat; height:400px;"></div>
 }
@@ -122,7 +122,7 @@ function validateSlugUrl(){
       <table class="table table-striped">
       @for(profileImages <- pharmacy.profileImageList){
       <tr>
-      <td style="width:200px"> <img src="@routes.PharmacistController.getPharmacyImages(pharmacy.id,profileImages.id)" width="150" height="75" /> </td>
+      <td style="width:200px"> <img src="@routes.PublicController.getPharmacyImages(pharmacy.id,profileImages.id)" width="150" height="75" /> </td>
       <td> <button class="btn btn-danger btn-xs"><a href="@routes.PharmacistController.removeImage(pharmacy.id,profileImages.id)" style="color:white">Delete</a></button> </td>
       </tr>
       }
@@ -216,7 +216,7 @@ $('#slugpopover').on('shown.bs.popover', function () {
   <div class="carousel-inner">
   @for((profileImages,index) <- pharmacy.profileImageList.zipWithIndex){
     <div class="item @if(index == 0){active}">
-      <img src="/pharmacy/get-image/@pharmacy.id/@profileImages.id" alt="pharmacy1" style="height:300px; width:800px;"/>
+      <img src="@routes.PublicController.getPharmacyImages(pharmacy.id,profileImages.id)" alt="pharmacy1" style="height:300px; width:800px;"/>
     </div>
     }
   </div>

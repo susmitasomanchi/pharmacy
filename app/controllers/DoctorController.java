@@ -46,6 +46,7 @@ import play.mvc.Controller;
 import play.mvc.Http.MultipartFormData;
 import play.mvc.Result;
 import actions.BasicAuth;
+import actions.ConfirmAppUser;
 import beans.DoctorClinicInfoBean;
 import beans.PrescriptionBean;
 import beans.QuestionAndAnswerBean;
@@ -158,21 +159,6 @@ public class DoctorController extends Controller {
 		}
 	}
 
-
-	/**
-	 * Action to get images associated with a doctor
-	 * GET  /doctor/get-image/:id/:type
-	 */
-	public static Result getImage(final Long id, final String type){
-		final Doctor doctor = Doctor.find.byId(id);
-		if(type.compareToIgnoreCase("backgroundImage") == 0){
-			return ok(doctor.backgroundImage).as("image/jpeg");
-		}
-		if(type.compareToIgnoreCase("profileImage") == 0){
-			return ok(doctor.profileImage).as("image/jpeg");
-		}
-		return ok().as("image/jpeg");
-	}
 
 
 	/**
@@ -520,11 +506,14 @@ public class DoctorController extends Controller {
 	}
 
 
+
+
 	/**
 	 * @author Mitesh
 	 * Action to render a page with form for adding new clinic of the loggedInDoctor
 	 * GET /doctor/new-clinic
 	 */
+	@ConfirmAppUser
 	public static Result newClinic(){
 		return ok(views.html.doctor.newClinic.render(clinicForm));
 	}
@@ -537,6 +526,7 @@ public class DoctorController extends Controller {
 	 * and then calls DoctorController.createAppointment(clinicInfo) method to create requisite appointments
 	 * POST /doctor/new-clinic
 	 */
+	@ConfirmAppUser
 	public static Result processNewClinic(){
 		final Form<DoctorClinicInfoBean> filledForm = clinicForm.bindFromRequest();
 		if(filledForm.hasErrors()){
@@ -557,6 +547,7 @@ public class DoctorController extends Controller {
 	 * NO ROUTE - called internally from DoctorController.processNewClinic() and from
 	 * DoctorController.reCreateAppointment(clinicInfo)
 	 */
+	@ConfirmAppUser
 	private static Result createAppointment(final DoctorClinicInfo docClinicInfo) {
 		// Server side validation
 		if(docClinicInfo.doctor.id.longValue() != LoginController.getLoggedInUser().getDoctor().id.longValue()){
@@ -644,6 +635,7 @@ public class DoctorController extends Controller {
 	 * Action to show all active clinics of the loggedIn Doctor
 	 * GET /doctor/clinics
 	 */
+	@ConfirmAppUser
 	public static Result myClinics(){
 		final Doctor loggedInDoctor = LoginController.getLoggedInUser().getDoctor();
 		return ok(views.html.doctor.myClinics.render(loggedInDoctor.getActiveClinic()));
@@ -656,6 +648,7 @@ public class DoctorController extends Controller {
 	 * GET /doctor/edit-clinic/:id
 	 * Depricated on 18th July 2014. Use DoctorController.editClinicInfo(Long docClinicId) and DoctorController.editClinicSchedule(Long docClinicId) instead.
 	 */
+	@ConfirmAppUser
 	@Deprecated
 	public static Result manageClinic(final Long docClinicId) {
 		final DoctorClinicInfo doctorClinicInfo = DoctorClinicInfo.find.byId(docClinicId);
@@ -681,6 +674,7 @@ public class DoctorController extends Controller {
 	 * Action to update one of loggedInDoctor's clinics (non-schedule) information like name, address etc.
 	 * POST   /doctor/update-clinic
 	 */
+	@ConfirmAppUser
 	public static Result processUpdateClinicInfo() {
 		final Form<DoctorClinicInfoBean> filledForm = clinicForm.bindFromRequest();
 		if(filledForm.hasErrors()){
@@ -719,6 +713,7 @@ public class DoctorController extends Controller {
 	 * Action to update one of loggedInDoctor's clinics appointments/schedule information
 	 * POST   /doctor/update-clinic-schedule
 	 */
+	@ConfirmAppUser
 	public static Result processUpdateClinicSchedule() {
 		final Form<DoctorClinicInfoBean> filledForm = clinicForm.bindFromRequest();
 		if(filledForm.hasErrors()){
@@ -756,6 +751,7 @@ public class DoctorController extends Controller {
 	 * to create new appointments with the changed timings.
 	 * NO ROUTE - called internally from DoctorController.processUpdateClinicSchedule()
 	 */
+	@ConfirmAppUser
 	private static Result reCreateAppointment(final DoctorClinicInfo clinicInfo) {
 		final List<Appointment> appointments = Appointment.find.where()
 				.eq("doctorClinicInfo", clinicInfo)
@@ -771,6 +767,7 @@ public class DoctorController extends Controller {
 	 * Action to delete (make inActive) one of loggedInDoctor's clinics
 	 * GET	/doctor/delete-clinic/:id
 	 */
+	@ConfirmAppUser
 	public static Result deleteClinic(final Long id) {
 		final DoctorClinicInfo clinicInfo = DoctorClinicInfo.find.byId(id);
 		// Server side validation
@@ -816,6 +813,7 @@ public class DoctorController extends Controller {
 	 * Action to show form to edit one of loggedIn doctor's clinic information
 	 * GET /doctor/edit-clinic-info/:id
 	 */
+	@ConfirmAppUser
 	public static Result editClinicInfo(final Long docClinicId) {
 
 		final DoctorClinicInfo doctorClinicInfo=DoctorClinicInfo.find.byId(docClinicId);
@@ -834,6 +832,7 @@ public class DoctorController extends Controller {
 	 * Action to show form to edit one of loggedIn doctor's clinic schedule
 	 * GET /doctor/edit-clinic-schedule/:id
 	 */
+	@ConfirmAppUser
 	public static Result editClinicSchedule(final Long docClinicId) {
 		final DoctorClinicInfo doctorClinicInfo=DoctorClinicInfo.find.byId(docClinicId);
 		//server-side check
@@ -854,6 +853,7 @@ public class DoctorController extends Controller {
 	 * Action to Display appointment requested to logged-in DOCTOR
 	 * GET	/doctor/all-appointments
 	 */
+	@ConfirmAppUser
 	public static Result viewAllAppointments() {
 
 		/*
@@ -882,6 +882,7 @@ public class DoctorController extends Controller {
 	 * Action to Display appointment requested to logged-in DOCTOR
 	 * GET	/doctor/todays-appointments
 	 */
+	@ConfirmAppUser
 	public static Result viewTodaysAppointments() {
 		final Date now =  new Date();
 		final Calendar calendarFrom = Calendar.getInstance();
@@ -922,6 +923,7 @@ public class DoctorController extends Controller {
 	 * Action to render list of Sig Codes of the loggedInDoctor
 	 * GET	/doctor/sig-codes
 	 */
+	@ConfirmAppUser
 	public static Result showSigCodes(){
 		final Doctor doctor = LoginController.getLoggedInUser().getDoctor();
 		return ok(views.html.doctor.sigCodes.render(doctor.sigCodeList));
@@ -933,6 +935,7 @@ public class DoctorController extends Controller {
 	 * Action to save a sig-code to the loggedInDoctor's sigcode List
 	 * POST		/doctor/add-sig-code
 	 */
+	@ConfirmAppUser
 	public static Result addSigCode(){
 		final Doctor doctor = LoginController.getLoggedInUser().getDoctor();
 		final Map<String, String[]> requestMap = request().body().asFormUrlEncoded();
@@ -960,6 +963,7 @@ public class DoctorController extends Controller {
 	 * Action to render the prescription form to the loggedInDoctor
 	 * GET	/doctor/prescription/:appointmentId
 	 */
+	@ConfirmAppUser
 	public static Result showPrescriptionForm(final Long appointmentId){
 		final Appointment appointment = Appointment.find.byId(appointmentId);
 		//server-side check
@@ -973,6 +977,7 @@ public class DoctorController extends Controller {
 	 * Action to save prescription of the loggedInDoctor
 	 * POST		/doctor/save-prescription
 	 */
+	@ConfirmAppUser
 	public static Result savePrescription(){
 		final Form<PrescriptionBean> filledForm = prescriptionForm.bindFromRequest();
 		final PrescriptionBean bean = filledForm.get();
@@ -1002,6 +1007,7 @@ public class DoctorController extends Controller {
 	 * assign a prescription to a pharmacy / diagnostic centre
 	 * GET	/doctor/show-prescription
 	 */
+	@ConfirmAppUser
 	public static Result showPrescription(final Long prescriptionId){
 		final Doctor doctor = LoginController.getLoggedInUser().getDoctor();
 		final Prescription prescription = Prescription.find.byId(prescriptionId);
@@ -1018,6 +1024,7 @@ public class DoctorController extends Controller {
 	 * assign a prescription to a pharmacy / diagnostic centre
 	 * GET	/doctor/share-prescription
 	 */
+	@ConfirmAppUser
 	public static Result sharePrescription(final Long prId, final Long pharmacyId){
 		final Doctor doctor = LoginController.getLoggedInUser().getDoctor();
 		final Prescription prescription = Prescription.find.byId(prId);
@@ -1045,6 +1052,7 @@ public class DoctorController extends Controller {
 	 * Action to show todays prescription created by loggedIn doctor
 	 * GET	/doctor/todays-prescriptions
 	 */
+	@ConfirmAppUser
 	public static Result viewTodaysPrescription(){
 		final Date now =  new Date();
 		final Calendar calendarFrom = Calendar.getInstance();
@@ -1075,6 +1083,7 @@ public class DoctorController extends Controller {
 	 * Action to show all prescription created by loggedIn doctor
 	 * GET	/doctor/all-prescriptions
 	 */
+	@ConfirmAppUser
 	public static Result viewAllPrescription(){
 		final Doctor doctor = LoginController.getLoggedInUser().getDoctor();
 		final List<Prescription> prescriptionList = Prescription.find.where().eq("doctor",doctor).orderBy("prescriptionDate").findList();
@@ -1174,9 +1183,6 @@ public class DoctorController extends Controller {
 
 		final String key = request().body().asFormUrlEncoded().get("mobileNumber")[0];
 		final AppUser appUser=LoginController.getLoggedInUser();
-		Logger.warn(key);
-		Logger.warn(appUser.mobileNumberConfirmationKey);
-
 
 		if(key.compareTo(appUser.mobileNumberConfirmationKey) == 0){
 			flash().put("alert", new Alert("alert-success","Mobile number is verified").toString());
@@ -1297,6 +1303,7 @@ public class DoctorController extends Controller {
 	 * Action to add favorite pharmacy of the Doctor to the list of Doctor of loggedin DOCTOR
 	 * GET/doctor/add-favorite-pharmacy/:pharmacyId/:str
 	 */
+	@ConfirmAppUser
 	public static Result addFavoritePharmacy(final Long pharmacyId,final String searchStr) {
 		final Doctor doctor = LoginController.getLoggedInUser().getDoctor();
 		final Pharmacy pharmacy = Pharmacy.find.byId(pharmacyId);
@@ -1324,6 +1331,7 @@ public class DoctorController extends Controller {
 	 * Action to list out favorite Pharmacies of Doctor of loggedin DOCTOR
 	 * GET/doctor/my-favorite-pharmacies
 	 */
+	@ConfirmAppUser
 	public static Result myFavoritePharmacies() {
 		final Doctor doctor = LoginController.getLoggedInUser().getDoctor();
 		return ok(views.html.pharmacist.favorite_pharmacy_list.render(doctor.pharmacyList,doctor.id,0L));
@@ -1335,6 +1343,7 @@ public class DoctorController extends Controller {
 	 * Action to remove Pharmacy from  favorite pharmacies List of Doctor of loggedin DOCTOR
 	 * GET/doctor/remove-favorite-pharmacy/:patientId/:pharmacyId
 	 */
+	@ConfirmAppUser
 	public static Result removeFavoritePharmacy(final Long doctorId,final Long pharmacyId) {
 		final Doctor doctor = Doctor.find.byId(doctorId);
 		doctor.pharmacyList.remove(Pharmacy.find.byId(pharmacyId));
@@ -1386,6 +1395,7 @@ public class DoctorController extends Controller {
 	}
 
 
+	@ConfirmAppUser
 	public static Result requestAppointment(){
 		final String param[] =request().body().asFormUrlEncoded().get("datetime");
 		try{

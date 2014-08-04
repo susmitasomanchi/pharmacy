@@ -34,8 +34,6 @@ import models.pharmacist.Pharmacy;
 
 import org.apache.commons.codec.binary.Base64;
 
-import com.fasterxml.jackson.databind.module.SimpleAbstractTypeResolver;
-
 import play.Logger;
 import play.data.Form;
 import play.mvc.Controller;
@@ -43,6 +41,7 @@ import play.mvc.Result;
 import utils.Constants;
 import utils.EmailService;
 import utils.Util;
+import actions.BasicAuth;
 import beans.JoinUsBean;
 
 
@@ -205,8 +204,7 @@ public class UserController extends Controller {
 		session().clear();
 		session(Constants.LOGGED_IN_USER_ID, appUser.id + "");
 		session(Constants.LOGGED_IN_USER_ROLE, appUser.role+ "");
-		appUser.emailConfirmed = EmailService.sendConfirmationEmail(appUser.email, appUser.id);
-		if(appUser.emailConfirmed){
+		if(EmailService.sendConfirmationEmail(appUser)){
 			flash().put("alert", new Alert("alert-success","A conformation messege has been send to you").toString());
 		}
 		else{
@@ -214,6 +212,70 @@ public class UserController extends Controller {
 		}
 		return redirect(routes.UserActions.dashboard());
 	}
+
+
+
+
+	/**
+	 * Action to render a page asking loggedInAppUser to
+	 * confirm his email and/or mobile number
+	 * Uses a generic scala template: views.html.comfirmAppUser.scala.html
+	 * LoggedInUser specific content needs to be specified in the template
+	 * GET /not-confirmed-yet
+	 */
+	@BasicAuth
+	public static Result confirmAppUserPage(){
+		final AppUser appUser = LoginController.getLoggedInUser();
+		// Redirect to dashboard id email AND mobile number are already confirmed
+		if(appUser.emailConfirmed && appUser.mobileNumberConfirmed){
+			return redirect(routes.UserActions.dashboard());
+		}
+		return ok(views.html.confirmAppUser.render(appUser));
+	}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 	/**
@@ -246,119 +308,5 @@ public class UserController extends Controller {
 
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-	/*
-	public static Result processJoinUs(){
-		final Form<JoinUsBean> filledForm = joinUsForm.bindFromRequest();
-		final Form<MedicalRepresentative> mR = mrForm.bindFromRequest();
-		final Form<DiagnosticRepresentative> dr = drForm.bindFromRequest();
-		if(filledForm.hasErrors()) {
-			Logger.info("Form Errors");
-			Logger.error(filledForm.errors().toString());
-			return badRequest(views.html.joinus.render(filledForm));
-		}
-		else {
-			final AppUser appUser = filledForm.get().toAppUser();
-			appUser.save();
-			if(appUser.role == Role.PATIENT){
-				final Patient patient = new Patient();
-				patient.appUser = appUser;
-				patient.save();
-			}
-
-			if(appUser.role == Role.DOCTOR){
-				final Doctor doctor = new Doctor();
-				doctor.appUser = appUser;
-				doctor.save();
-
-			}
-
-			if(appUser.role == Role.ADMIN_PHARMACIST){
-				final Pharmacist pharmacist = new Pharmacist();
-				pharmacist.appUser = appUser;
-				pharmacist.save();
-
-				//final Pharmacy pharmacy = filledForm.get();
-				final Pharmacy pharmacy = new Pharmacy();
-				pharmacy.name=filledForm.get().pharmacyName;
-				pharmacy.pharmacistList.add(pharmacist);
-				pharmacy.save();
-				pharmacist.pharmacy=pharmacy;
-				pharmacist.update();
-			}
-
-			if(appUser.role == Role.ADMIN_MR){
-				final MedicalRepresentative medicalRepresentative = new MedicalRepresentative();
-				final PharmaceuticalCompany pharmaCompany = new PharmaceuticalCompany();
-				medicalRepresentative.appUser = appUser;
-				medicalRepresentative.save();
-				pharmaCompany.name = filledForm.get().pharmaceuticalCompanyName;
-
-				pharmaCompany.mrList.add(medicalRepresentative);
-				pharmaCompany.save();
-				medicalRepresentative.pharmaceuticalCompany = pharmaCompany;
-				medicalRepresentative.update();
-
-			}
-
-			if(appUser.role == Role.MR){
-				//				final MedicalRepresentative medicalRepresentative = new MedicalRepresentative();
-				//				medicalRepresentative.appUser = appUser;
-				//				medicalRepresentative.regionAlloted=mR.regionAlloted;
-				//				medicalRepresentative.save();
-				final MedicalRepresentative medicalRepresentative = mR.get();
-				medicalRepresentative.appUser = appUser;
-				medicalRepresentative.mrAdminId =  LoginController.getLoggedInUser().id;
-				medicalRepresentative.save();
-			}
-
-
-
-			if(appUser.role == Role.ADMIN_DIAGREP){
-				final DiagnosticRepresentative diagRep = new DiagnosticRepresentative();
-				diagRep.appUser = appUser;
-				diagRep.save();
-				final DiagnosticCentre diagnosticCenter = new DiagnosticCentre();
-				diagnosticCenter.name = filledForm.get().diagnosticCenterName;
-				diagnosticCenter.diagnosticRepAdmin = diagRep;
-				diagnosticCenter.save();
-				diagRep.diagnosticCentre = diagnosticCenter;
-				diagRep.update();
-
-				Logger.info(diagRep.diagnosticCentre.name);
-
-			}
-
-			session().clear();
-			session(Constants.LOGGED_IN_USER_ID, appUser.id + "");
-			session(Constants.LOGGED_IN_USER_ROLE, appUser.role+ "");
-
-			return redirect(routes.UserActions.dashboard());
-		}
-
-
-	}
-	 */
 
 }

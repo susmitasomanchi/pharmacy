@@ -11,6 +11,8 @@ import org.apache.commons.codec.binary.Base64;
 import models.Alert;
 import models.AppUser;
 import models.Role;
+import models.diagnostic.DiagnosticCentre;
+import models.diagnostic.DiagnosticRepresentative;
 import play.Logger;
 import play.data.Form;
 import play.mvc.Controller;
@@ -174,6 +176,35 @@ public class LoginController extends Controller {
 			return true;
 		}
 		return false;
+	}
+	/**
+	 * Action to render the page to edit emailId and mobileNumber of loggedInUser
+	 * GET	   /edit-login-details
+	 */
+	public static Result editLoginDetails(){
+		
+		return ok(views.html.editLoginDetails.render(LoginController.getLoggedInUser()));
+	}
+	/**
+	 * Action to edit emailId and mobileNumber of loggedInUser
+	 * POST /edit-login-details
+	 */
+	public static Result editLoginDetailsProcess(){
+		Map<String, String[]> requestMap = request().body().asFormUrlEncoded();
+		final Long appUserId = Long.parseLong(requestMap.get("appUserId")[0]);
+		final AppUser loggedInUser = LoginController.getLoggedInUser();
+		if(appUserId.longValue() != loggedInUser.id.longValue()){
+			session().clear();
+			return redirect(routes.LoginController.processLogout());
+		}
+		if(requestMap.get("email")[0]!=null && requestMap.get("email")[0].trim()!=""){
+			loggedInUser.email = requestMap.get("email")[0];
+		}
+		if(requestMap.get("contactNo")[0]!=null && requestMap.get("contactNo")[0].trim()!=""){
+			loggedInUser.mobileNumber = Long.parseLong(requestMap.get("contactNo")[0]);
+		}
+		loggedInUser.update();
+		return redirect(routes.UserActions.dashboard());
 	}
 
 }

@@ -1,21 +1,20 @@
-@(pharmacyPrescriptionInfos : List[models.pharmacist.PharmacyPrescriptionInfo],status:String)
+@(pharmacyPrescriptionInfos : List[models.pharmacist.PharmacyPrescriptionInfo], status:String)
 
 @main("Pharmacy Prescription and Order"){
-<script>
-$('#status-select').on('change', function(){
-	var selValue = $('#status-select').val();
-	window.location.href='/pharmacy/prescriptions?status='+selValue;	
-});
-</script>
-<div class="row col-md-12">
-  <div class="col-md-2">
-   <<select class="chzn" id="status-select" style="width:50%;">
+
+<div class=" row col-md-6 btn-group">
+   
+<select class="chzn" id="status-select" style="width:50%;" data-placeholder="Select Order Status">
 <option></option>
 <option value="any" @if(status.trim.toLowerCase().compareTo("any")==0){selected}>Any</option>
 <option value="received" @if(status.trim.toLowerCase().compareTo("received")==0){selected}>Received</option>
 <option value="served" @if(status.trim.toLowerCase().compareTo("served")==0){selected}>Served</option>
 </select>
-   </div>
+   
+</div>
+
+
+
    <div class="col-md-10">
    <form action="@routes.PharmacistController.getFromAndToDatePrescriptions()" method="POST">
    	<div class="col-md-4 form-group">
@@ -35,8 +34,17 @@ $('#status-select').on('change', function(){
     </div>
     </form>
     </div>
-</div>
-<br><br><br>
+
+<script>
+$('#status-select').on('change', function(){
+	var selValue = $('#status-select').val();
+	window.location.href='/pharmacy/prescriptions?status='+selValue;	
+});
+
+
+
+</script>
+
 
 <br><br>
 <div class="row">
@@ -55,7 +63,7 @@ $('#status-select').on('change', function(){
 <tr>
 <td>@{index+1}</td>
 <td>
-Dr. @pharmacyPrescriptionInfo.prescription.doctor.appUser.name
+<a href="@routes.PublicController.getDoctorWithSlug(pharmacyPrescriptionInfo.prescription.doctor.slugUrl)">Dr. @pharmacyPrescriptionInfo.prescription.doctor.appUser.name</a>
 <br>
 <small>@pharmacyPrescriptionInfo.prescription.doctor.degree</small>
 <br>
@@ -85,7 +93,6 @@ Dr. @pharmacyPrescriptionInfo.prescription.doctor.appUser.name
 
 </table>
 </div>
-
 
 </div>
 

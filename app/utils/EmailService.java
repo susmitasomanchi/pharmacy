@@ -44,19 +44,19 @@ public class EmailService {
 		return result;
 	}
 
-	public static boolean sendConfirmationEmail(final String receiverEmailId,final Long appUserId){
+	public static boolean sendConfirmationEmail(final AppUser appUser){
 		final Random random = new SecureRandom();
-		final String randomString = new BigInteger(130, random).toString(32);
-		boolean result=true;
+		final String randomString = new BigInteger(32, random).toString();
+		boolean result = true;
 		try{
 			final StringBuilder builder=new StringBuilder();
-			builder.append("<html>");
-			builder.append("<a href=localhost:9000/user/confirmation/");
-			builder.append(appUserId);
+			builder.append("<html><body>");
+			builder.append("<a href=\"http://mednetwork.in/user/confirmation/\"");
+			builder.append(appUser.id);
 			builder.append("/"+randomString +">");
 			builder.append("<b>click here</b>");
 			builder.append("</a>");
-			builder.append("</html>");
+			builder.append("</body></html>");
 			final HtmlEmail email = new HtmlEmail();
 			email.setHostName("smtp.gmail.com");
 			email.setSmtpPort(587);
@@ -65,11 +65,10 @@ public class EmailService {
 			email.setFrom("assistant@greensoftware.in");
 			email.setSubject("Conformation Email");
 			email.setHtmlMsg(builder.toString());
-			email.addTo(receiverEmailId);
+			email.addTo(appUser.email);
 			email.send();
 			System.out.println("Mail Sent Successfully!");
-			final AppUser appUser=LoginController.getLoggedInUser();
-			appUser.emailConfirmationKey=randomString;
+			appUser.emailConfirmationKey = randomString;
 			appUser.update();
 			Logger.info(builder.toString());
 		}
