@@ -58,9 +58,9 @@ public class EmailService {
 		try{
 			final StringBuilder builder=new StringBuilder();
 			builder.append("<html><body>");
-			builder.append("<a href=\"http://mednetwork.in/user/confirmation/\"");
+			builder.append("<a href=\"http://mednetwork.in/user/confirmation/");
 			builder.append(appUser.id);
-			builder.append("/"+randomString +">");
+			builder.append("/"+randomString +"\">");
 			builder.append("<b>click here</b>");
 			builder.append("</a>");
 			builder.append("</body></html>");

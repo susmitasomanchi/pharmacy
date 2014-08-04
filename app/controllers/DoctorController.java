@@ -1316,7 +1316,8 @@ public class DoctorController extends Controller {
 
 		SMSService.sendConfirmationSMS(LoginController.getLoggedInUser());
 
-		return redirect(routes.DoctorController.newClinic());
+		return redirect(routes.UserController.confirmAppUserPage());
+
 	}
 
 	/**
@@ -1390,7 +1391,8 @@ public class DoctorController extends Controller {
 				"alert",
 				new Alert("alert-success","A conformation messege has been send to you").toString());
 
-		return redirect(routes.UserActions.dashboard());
+		return redirect(routes.UserController.confirmAppUserPage());
+
 
 	}
 
