@@ -104,27 +104,7 @@ public class DiagnosticController extends Controller {
 		return redirect(routes.UserActions.dashboard());
 
 	}
-	/**
-	 * @author lakshmi
-	 *  Action to get byteData as image of DiagnosticCentre	 *
-	 * GET/diagnostic/get-image/:diagnosticId/:fileId
-	 */
-	public static Result getDiagnosticImages(final Long diagnosticId,final Long imageId) {
-		byte[] byteContent = null;
-		if(imageId == 0){
-			byteContent=DiagnosticCentre.find.byId(diagnosticId).backgroudImage;
-		}
-		else{
-			for (final FileEntity file : DiagnosticCentre.find.byId(diagnosticId).profileImageList) {
-				if(file.id == imageId){
-					byteContent = file.byteContent;
-				}
-			}
-		}
-
-		return ok(byteContent).as("image/jpeg");
-
-	}
+	
 
 	/**
 	 * @author : lakshmi
@@ -419,89 +399,8 @@ public class DiagnosticController extends Controller {
 	final List<DiagnosticCentrePrescriptionInfo> diagnosticCentrePrescriptionInfos =  
 			DiagnosticCentrePrescriptionInfo.find.where()
 					.eq("diagnosticCentre", diagnosticCentre).ge("sharedDate", dateFrom).le("sharedDate",dateTo).findList();
-			return ok(views.html.diagnostic.diagnosticPrescriptionList.render(diagnosticCentrePrescriptionInfos,null));
+			return ok(views.html.diagnostic.diagnosticPrescriptionList.render(diagnosticCentrePrescriptionInfos,""));
 		}
-
-		
-		
-		
-		
-		
-		
-		
-		
-		
-		
-		
-		
-		
-		
-		
-		
-		
-		
-		
-		
-		
-		
-		
-		
-		
-		
-		
-		
-		
-		
-		
-		
-		
-		
-		
-		
-		
-		
-		
-		
-		
-		
-		
-		
-		
-		
-		
-		
-		
-		
-		
-		
-		
-		
-		
-		
-		
-		
-		
-		
-		
-		
-		
-		
-		
-		
-		
-		
-		
-		
-		
-		
-		
-		
-		
-		
-		
-		
-		
-		
 	/*	
 	*//**
 	 * @author lakshmi

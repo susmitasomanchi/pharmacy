@@ -80,7 +80,7 @@ function submitbasicform(id){
 
 
 @if(diagnosticCentre.backgroudImage != null){
-	<div style="background-image:url('@routes.DiagnosticController.getDiagnosticImages(diagnosticCentre.id,0)');background-size:940px 400px; background-repeat:no-repeat; height:400px;"></div>
+	<div style="background-image:url('@routes.PublicController.getDiagnosticImages(diagnosticCentre.id,0)');background-size:940px 400px; background-repeat:no-repeat; height:400px;"></div>
 }else{
 	<div style="background-image:url('/assets/images/pharmacy-default-bg-image.jpg');background-size:940px 400px; background-repeat:no-repeat; height:400px;"></div>
 }
@@ -106,7 +106,7 @@ function submitbasicform(id){
   
    @for((profileImages,index) <- diagnosticCentre.profileImageList.zipWithIndex){
     <div class="item @if(index == 0){active}">
-      <img src="@routes.DiagnosticController.getDiagnosticImages(diagnosticCentre.id,profileImages.id)" alt="diagnostic1" style="height:300px; width:800px;"/>
+      <img src="@routes.PublicController.getDiagnosticImages(diagnosticCentre.id,profileImages.id)" alt="diagnostic1" style="height:300px; width:800px;"/>
     </div>
     }
   </div>
@@ -467,7 +467,7 @@ $("#city").blur(function() {
       <td width="15px">
       </td>
       <td style="width:200px">      
-		<img src="@routes.DiagnosticController.getDiagnosticImages(0,0,diagnosticService.id,serviceImage.id)" style="width:80px; height:80px;" class="thumbnail" />     
+		<img src="@routes.PublicController.getDiagnosticImages(0,0,diagnosticService.id,serviceImage.id)" style="width:80px; height:80px;" class="thumbnail" />     
       
       </td>
       <td width="110px">
@@ -521,7 +521,7 @@ $("#city").blur(function() {
 <div class="panel-body">
 <div class="col-md-3">
 @if(diagnosticService.showcasedImagesList.size()>0){
-<img src="@routes.DiagnosticController.getDiagnosticImages(0,0,diagnosticService.id,diagnosticService.showcasedImagesList.get(0).id)" class="thumbnail" width="180" height="200" style="float:left;cursor:pointer" data-toggle="modal" data-target="#myModal1@diagnosticService.id" />
+<img src="@routes.PublicController.getDiagnosticImages(0,0,diagnosticService.id,diagnosticService.showcasedImagesList.get(0).id)" class="thumbnail" width="180" height="200" style="float:left;cursor:pointer" data-toggle="modal" data-target="#myModal1@diagnosticService.id" />
 }else{
 	<img src="/assets/images/pharmacy-default-profile-image.jpg" class="thumbnail" width="180" height="200" style="float:left;cursor:pointer" data-toggle="modal" data-target="#myModal1" />
 }
