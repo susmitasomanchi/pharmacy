@@ -11,7 +11,7 @@
 			@if(appUser.role.equals(models.Role.ADMIN_PHARMACIST)){
 				<p>Please confirm your contact details to use services like Prescription Management etc.</p>
 			}
-			
+		
 			@if(!appUser.emailConfirmed){
 				<p>
 				Your email address <strong>@appUser.email</strong> has not been confirmed yet.
@@ -20,7 +20,7 @@
 				</p>
 			}
 			
-			@if(!appUser.emailConfirmed){
+			@if(!appUser.mobileNumberConfirmed){
 				<p>
 				Your Mobile Number <strong>@appUser.mobileNumber</strong> has not been confirmed yet.
 				<br>

@@ -1,9 +1,5 @@
 
 package utils;
-import java.math.BigInteger;
-import java.security.SecureRandom;
-import java.util.Random;
-
 import models.AppUser;
 import play.Logger;
 
@@ -17,10 +13,10 @@ public class SMSService {
 	}
 
 	public static void sendConfirmationSMS(final AppUser appUser){
-		final Random random = new SecureRandom();
-		final String randomString = new BigInteger(6, random).toString();
-		appUser.mobileNumberConfirmationKey = randomString;
-
+		appUser.mobileNumberConfirmationKey="0";
+		/*
+		appUser.mobileNumberConfirmationKey = RandomStringUtils.randomAlphanumeric(5).toLowerCase();
+		 */
 		//@TODO Send the SMS
 
 		appUser.update();

@@ -1316,7 +1316,8 @@ public class DoctorController extends Controller {
 
 		SMSService.sendConfirmationSMS(LoginController.getLoggedInUser());
 
-		return redirect(routes.DoctorController.newClinic());
+		return redirect(routes.UserController.confirmAppUserPage());
+
 	}
 
 	/**
@@ -1337,12 +1338,12 @@ public class DoctorController extends Controller {
 	public static Result verifyMobileNumberConfirmationKey() {
 
 		final String key = request().body().asFormUrlEncoded()
-				.get("mobileNumber")[0];
+				.get("mobileNumber")[0].trim();
 		Logger.debug(key);
 
 		final AppUser appUser = LoginController.getLoggedInUser();
 
-		if (key.compareTo(appUser.mobileNumberConfirmationKey) == 0) {
+		if (key.compareToIgnoreCase(appUser.mobileNumberConfirmationKey) == 0) {
 			flash().put(
 					"alert",
 					new Alert("alert-success", "Mobile number is verified")
@@ -1358,8 +1359,7 @@ public class DoctorController extends Controller {
 					"alert",
 					new Alert("alert-danger",
 							"Wrong code Please enter correct code").toString());
-			return redirect(routes.DoctorController
-					.displayMobVerificationForm());
+			return redirect(routes.UserController.confirmAppUserPage());
 		}
 	}
 
@@ -1390,7 +1390,8 @@ public class DoctorController extends Controller {
 				"alert",
 				new Alert("alert-success","A conformation messege has been send to you").toString());
 
-		return redirect(routes.UserActions.dashboard());
+		return redirect(routes.UserController.confirmAppUserPage());
+
 
 	}
 
