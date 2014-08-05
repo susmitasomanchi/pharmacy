@@ -311,7 +311,8 @@ public class PatientController extends Controller {
 		appointment.requestedBy=LoginController.getLoggedInUser();
 		appointment.bookedOn = new Date();
 		appointment.update();
-		return ok("appointment save");
+		return redirect(routes.PatientController. viewMyAppointments());
 	}
+
 
 }
