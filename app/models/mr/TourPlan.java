@@ -35,6 +35,6 @@ public class TourPlan extends BaseEntity{
 	public DCRStatus status;
 
 	public Date submitDate;
-
+	
 	public static Finder<Long, TourPlan> find = new Finder<Long, TourPlan>(Long.class, TourPlan.class);
 }
