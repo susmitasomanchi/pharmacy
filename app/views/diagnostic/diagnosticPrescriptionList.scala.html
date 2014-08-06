@@ -1,11 +1,6 @@
 @(diagnosticCentrePrescriptionInfos: List[models.diagnostic.DiagnosticCentrePrescriptionInfo],status: String)
 @main("Diagnostic Order List") {
-<script>
-$('#status-select').on('change', function(){
-  var setValue = $('#status-select').val();
-  window.location.href='//diagnostic/prescriptions?status='+setValue;  
-});
-</script>
+
 <div class="row col-md-12">
 <div class="col-md-2">
   <select class="chzn" id="status-select" style="width:50%;">
@@ -16,6 +11,12 @@ $('#status-select').on('change', function(){
 <option value="cancelled" @if(status.trim.toLowerCase().compareTo("cancelled")==0){selected}>Cancelled</option>
 <option value="served" @if(status.trim.toLowerCase().compareTo("served")==0){selected}>Served</option>
 </select>
+<script>
+$('#status-select').on('change', function(){
+  var setValue = $('#status-select').val();
+  window.location.href='/diagnostic/prescriptions?status='+setValue;  
+});
+</script>
    </div>
    <div class="col-md-9">
    <form action="@routes.DiagnosticController.getFromToDatePrescriptions()" method="POST">
