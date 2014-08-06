@@ -10,6 +10,8 @@ import models.diagnostic.DiagnosticCentre;
 import models.doctor.Appointment;
 import models.doctor.AppointmentStatus;
 import models.doctor.Doctor;
+import models.doctor.DoctorClinicInfo;
+import models.doctor.Prescription;
 import models.doctor.QuestionAndAnswer;
 import models.patient.Patient;
 import models.patient.PatientDoctorInfo;
@@ -19,6 +21,7 @@ import play.data.Form;
 import play.mvc.Controller;
 import play.mvc.Result;
 import actions.BasicAuth;
+import actions.ConfirmAppUser;
 import beans.QuestionAndAnswerBean;
 
 @BasicAuth
@@ -30,7 +33,11 @@ public class PatientController extends Controller {
 
 	public static Form<QuestionAndAnswerBean> questionAndAnswerForm = Form
 			.form(QuestionAndAnswerBean.class);
-
+	
+	
+	
+	
+	
 
 	/**
 	 * @author Mitesh
@@ -314,4 +321,33 @@ public class PatientController extends Controller {
 		return ok("appointment save");
 	}
 
+	/**@author lakshmi
+	 * Action to show all prescription created by loggedIn doctor GET
+	 * /doctor/all-prescriptions
+	 */
+//	@ConfirmAppUser
+	public static Result viewAllPatientPrescriptions() {
+		final Patient patient = LoginController.getLoggedInUser().getPatient();
+		final List<Prescription> prescriptionList = Prescription.find.where()
+				.eq("patient", patient).orderBy("prescriptionDate").findList();
+		return ok(views.html.patient.patientPrescriptionList.render(prescriptionList));
+	}
+	
+	/**
+	 * Action to show logged In doctor a page to assign a prescription to a
+	 * pharmacy / diagnostic centre GET /doctor/show-prescription
+	 */
+//	@ConfirmAppUser
+	public static Result viewPrescription(final Long prescriptionId) {
+		final Patient patient = LoginController.getLoggedInUser().getPatient();
+		final Prescription prescription = Prescription.find
+				.byId(prescriptionId);
+		// server-side check
+		if (prescription.patient.id.longValue() != patient.id.longValue()) {
+			return redirect(routes.LoginController.processLogout());
+		}
+		return ok(views.html.patient.patientSharedPrescription.render(prescription));
+	}
+	
+	
 }

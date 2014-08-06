@@ -58,6 +58,7 @@ GET     /pharmacy/search									controllers.PublicController.searchPharmaciesPa
 GET		/doctor/add-to-favorite/:docId					controllers.PublicController.addToFavDoctor(docId: Long)
 GET		/diagnostic/get-image/:diagnosticId/:imageId	controllers.PublicController.getDiagnosticImages(diagnosticId: Long,imageId: Long)
 
+
 # Sign up page
 GET    /doctor/join                              			controllers.UserController.joinUsDoctor()
 GET    /pharmacy/join                              			controllers.UserController.joinUsPharmacy()
@@ -119,6 +120,9 @@ GET 	/doctor/:slugUrl								controllers.PublicController.getDoctorWithSlug(slug
 GET    /user/my-doctors									controllers.PatientController.myFavouriteDoctors()
 GET		/user/remove-pharmacy/:patientId/:pharmacyId	controllers.PatientController.removePatientFavoritePharmacy(patientId: Long, pharmacyId: Long)
 GET		/user/remove-diagnosticCentre/:patientId/:pharmacyId	controllers.PatientController.removePatientFavoriteDiagnostic(patientId: Long, pharmacyId: Long)
+GET		/user/prescriptions										controllers.PatientController.viewAllPatientPrescriptions()
+GET		/user/show-prescription/:prescriptionId			controllers.PatientController.viewPrescription(prescriptionId: Long)
+
 
 POST	/pharmacy/upload-pharmacy-images					controllers.PharmacistController.uploadPharmacyImageProcess()
 POST	/pharmacy/basic-update								controllers.PharmacistController.pharmacyBasicUpdate()

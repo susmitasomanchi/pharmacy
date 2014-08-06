@@ -8,7 +8,9 @@ import models.AppUser;
 import models.MasterDiagnosticTest;
 import models.MasterProduct;
 import models.Role;
+import models.Sex;
 import models.diagnostic.DiagnosticCentrePrescriptionInfo;
+import models.doctor.Appointment;
 import models.doctor.DiagnosticTestLineItem;
 import models.doctor.Doctor;
 import models.doctor.Prescription;
@@ -269,9 +271,19 @@ public class SampleDataController extends Controller {
 
 	public static Result prescripetionTest(){
 		final Prescription prescription = new Prescription();
-		final DiagnosticCentrePrescriptionInfo diagnosticCentrePrescriptionInfo = new DiagnosticCentrePrescriptionInfo();
-		diagnosticCentrePrescriptionInfo.diagnosticCentre = LoginController.getLoggedInUser().getDiagnosticRepresentative().diagnosticCentre;
-		final DiagnosticTestLineItem medicineLineItem1 = new DiagnosticTestLineItem();
+		Patient patient = Patient.find.byId(1L);
+		patient.age="20";
+		patient.appUser.sex = Sex.FEMALE;
+		patient.update();
+		prescription.patient = patient;
+		 Doctor doctor= Doctor.find.byId(1L);		 	 
+		prescription.doctor= doctor;
+		Appointment appointment = new Appointment();
+		appointment.appointmentTime = new Date();
+		prescription.appointment= appointment;
+		prescription.prescriptionDate = new Date();
+		prescription.save();
+		/*final DiagnosticTestLineItem medicineLineItem1 = new DiagnosticTestLineItem();
 		medicineLineItem1.fullNameOfDiagnosticTest = "X-ray";
 		prescription.diagnosticTestLineItemList.add(medicineLineItem1);
 		final DiagnosticTestLineItem medicineLineItem2 = new DiagnosticTestLineItem();
@@ -280,7 +292,7 @@ public class SampleDataController extends Controller {
 		prescription.save();
 		diagnosticCentrePrescriptionInfo.prescription = prescription;
 		diagnosticCentrePrescriptionInfo.sharedDate = new Date();
-		diagnosticCentrePrescriptionInfo.save();
+		diagnosticCentrePrescriptionInfo.save();*/
 		return ok();
 
 	}

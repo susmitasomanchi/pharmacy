@@ -48,7 +48,7 @@ public class DiagnosticCentre extends BaseEntity {
 
 	@Lob
 	public byte[] backgroudImage;
-
+	
 	@ManyToMany(cascade = CascadeType.ALL)
 	public List<FileEntity> profileImageList = new ArrayList<FileEntity>();
 

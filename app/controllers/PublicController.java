@@ -1,5 +1,6 @@
 package controllers;
 
+import java.io.IOException;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -9,11 +10,14 @@ import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
+import com.google.common.io.Files;
+
 import models.Alert;
 import models.AppUser;
 import models.FileEntity;
 import models.Role;
 import models.diagnostic.DiagnosticCentre;
+import models.diagnostic.DiagnosticCentrePrescriptionInfo;
 import models.doctor.Appointment;
 import models.doctor.Day;
 import models.doctor.DaySchedule;
@@ -25,6 +29,7 @@ import models.pharmacist.Pharmacy;
 import play.Logger;
 import play.mvc.Controller;
 import play.mvc.Result;
+import play.mvc.Http.MultipartFormData.FilePart;
 
 public class PublicController extends Controller{
 
@@ -453,20 +458,7 @@ public class PublicController extends Controller{
 		
 
 	}
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+	
+	
 
 }
