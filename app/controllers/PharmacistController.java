@@ -76,10 +76,10 @@ public class PharmacistController extends Controller {
 				pharmacy.backgroundImage = Files.toByteArray(image);
 			}
 			if (request().body().asMultipartFormData().getFile("profileImage") != null) {
-				final File image = request().body().asMultipartFormData().getFile("profileImage").getFile();
-				fileEntity.fileName = image.getName();
-				fileEntity.mimeType = new MimetypesFileTypeMap().getContentType(image);
-				fileEntity.byteContent = Files.toByteArray(image);
+				final FilePart image = request().body().asMultipartFormData().getFile("profileImage");
+				fileEntity.fileName = image.getFilename();
+				fileEntity.mimeType = image.getContentType();
+				fileEntity.byteContent = Files.toByteArray(image.getFile());
 				pharmacy.profileImageList.add(fileEntity);
 
 			} else {

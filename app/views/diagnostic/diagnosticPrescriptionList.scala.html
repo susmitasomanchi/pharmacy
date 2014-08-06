@@ -1,4 +1,4 @@
-@(diagnosticCentrePrescriptionInfos: List[models.diagnostic.DiagnosticCentrePrescriptionInfo],status: String)
+@(diagnosticCentrePrescriptionInfos: List[models.diagnostic.DiagnosticCentrePrescriptionInfo],status: String,check: Boolean)
 @main("Diagnostic Order List") {
 
 <div class="row col-md-12">
@@ -7,8 +7,8 @@
 <option></option>
 <option value="any" @if(status.trim.toLowerCase().compareTo("any")==0){selected}>Any</option>
 <option value="received" @if(status.trim.toLowerCase().compareTo("received")==0){selected}>Received</option>
-<option value="confirmed" @if(status.trim.toLowerCase().compareTo("confirmed")==0){selected}>Confirmed</option>
-<option value="cancelled" @if(status.trim.toLowerCase().compareTo("cancelled")==0){selected}>Cancelled</option>
+@*<option value="confirmed" @if(status.trim.toLowerCase().compareTo("confirmed")==0){selected}>Confirmed</option>
+<option value="cancelled" @if(status.trim.toLowerCase().compareTo("cancelled")==0){selected}>Cancelled</option>*@
 <option value="served" @if(status.trim.toLowerCase().compareTo("served")==0){selected}>Served</option>
 </select>
 <script>
@@ -16,7 +16,9 @@ $('#status-select').on('change', function(){
   var setValue = $('#status-select').val();
   window.location.href='/diagnostic/prescriptions?status='+setValue;  
 });
+
 </script>
+@if(check==true){
    </div>
    <div class="col-md-9">
    <form action="@routes.DiagnosticController.getFromToDatePrescriptions()" method="POST">
@@ -37,7 +39,9 @@ $('#status-select').on('change', function(){
     </div>
     </form>
     </div>
+    }
 </div>
+
 <br><br><br>
 <div class="row">
 <div class="col-md-1"></div>

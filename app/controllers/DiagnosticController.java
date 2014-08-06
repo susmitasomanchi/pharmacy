@@ -74,10 +74,10 @@ public class DiagnosticController extends Controller {
 
 			if (request().body().asMultipartFormData().getFile("profileImage") != null) {
 				final FileEntity fileEntity = new FileEntity();
-				final File image = request().body().asMultipartFormData().getFile("profileImage").getFile();
-				fileEntity.fileName = image.getName();
-				fileEntity.mimeType = new MimetypesFileTypeMap().getContentType(image);
-				fileEntity.byteContent = Files.toByteArray(image);
+				final FilePart image = request().body().asMultipartFormData().getFile("profileImage");
+				fileEntity.fileName = image.getFilename();
+				fileEntity.mimeType = image.getContentType();
+				fileEntity.byteContent = Files.toByteArray(image.getFile());
 				fileEntity.save();
 				final Long imageId=fileEntity.id;
 				diagnosticCentre.profileImageList.add(FileEntity.find.byId(imageId));
@@ -245,7 +245,7 @@ public class DiagnosticController extends Controller {
 				.eq("diagnosticCentre", diagnosticCentre)
 				.in("diagnosticCentrePrescritionStatus", dcpStatuses)
 				.findList();
-		return ok(views.html.diagnostic.diagnosticPrescriptionList.render(diagnosticPrescriptionInfos,status));
+		return ok(views.html.diagnostic.diagnosticPrescriptionList.render(diagnosticPrescriptionInfos,status,true));
 	}
 	
 	/**
@@ -304,10 +304,12 @@ public class DiagnosticController extends Controller {
 		public static Result uploadDiagnosticReportProcess(Long DiagnosticInfoId) {
 			DiagnosticCentrePrescriptionInfo diagnosticCentrePrescriptionInfo= DiagnosticCentrePrescriptionInfo.find.byId(DiagnosticInfoId);
 			if (request().body().asMultipartFormData().getFile("file") != null) {
-				final File report = request().body().asMultipartFormData().getFile("file").getFile();
+				final FilePart report = request().body().asMultipartFormData().getFile("file");
 				FileEntity fileEntity = new FileEntity();
 				try {
-					fileEntity.byteContent = Files.toByteArray(report);
+					fileEntity.mimeType = report.getContentType();
+					fileEntity.fileName = report.getFilename();
+					fileEntity.byteContent = Files.toByteArray(report.getFile());
 					diagnosticCentrePrescriptionInfo.fileEntities.add(fileEntity);
 				} catch (IOException e) {
 					// TODO Auto-generated catch block
@@ -325,7 +327,7 @@ public class DiagnosticController extends Controller {
 		 * @author lakshmi
 		 * Action to Display Todays Prescriptions requested to logged-in ADMIN_PHARMACIST
 		 */
-	@ConfirmAppUser
+//	@ConfirmAppUser
 		public static Result TodaysDiagnosticPrescriptions() {
 			Date now = new Date();
 			final Calendar calendarFrom = Calendar.getInstance();
@@ -349,13 +351,13 @@ public class DiagnosticController extends Controller {
 					.ge("sharedDate", calendarFrom.getTime())
 					.le("sharedDate", calendarTo.getTime())
 					.findList();
-			return ok(views.html.diagnostic.diagnosticPrescriptionList.render(diagnosticCentrePrescriptionInfos,""));
+			return ok(views.html.diagnostic.diagnosticPrescriptionList.render(diagnosticCentrePrescriptionInfos,"",false));
 		}
 		/**
 		 * @author lakshmi
 		 * Action to Display Todays Prescriptions requested to logged-in ADMIN_DIAGREP
 		 */
-	@ConfirmAppUser
+	//@ConfirmAppUser
 		public static Result getFromToDatePrescriptions() {
 			final Map<String, String[]> requestMap = request().body().asFormUrlEncoded();
 			Date dateFrom = null,dateTo=null;
@@ -372,7 +374,7 @@ public class DiagnosticController extends Controller {
 					.ge("sharedDate", dateFrom)
 					.le("sharedDate",dateTo)
 					.findList();
-			return ok(views.html.diagnostic.diagnosticPrescriptionList.render(diagnosticCentrePrescriptionInfos,""));
+			return ok(views.html.diagnostic.diagnosticPrescriptionList.render(diagnosticCentrePrescriptionInfos,"",true));
 		}
 	/**
 	 * @author lakshmi

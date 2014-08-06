@@ -33,8 +33,11 @@ margin-bottom:0px;
 }
 
 </style>	
-	
+	@if(diagnosticCentreList.size() == 0){
+    <h5> No Diagnostic Centres available with <b>@searchKey</b></h5>
+}
 <table class="table table-bordered">
+
 @for((diagnosticCentre,index) <- diagnosticCentreList.zipWithIndex){
 @if(index%2==0){
  <tr class="row"> 

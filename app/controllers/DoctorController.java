@@ -15,6 +15,8 @@ import models.MasterDiagnosticTest;
 import models.MasterProduct;
 import models.Role;
 import models.diagnostic.DiagnosticCentre;
+import models.diagnostic.DiagnosticCentrePrescriptionInfo;
+import models.diagnostic.DiagnosticCentrePrescritionStatus;
 import models.doctor.Appointment;
 import models.doctor.AppointmentStatus;
 import models.doctor.Day;
@@ -117,26 +119,23 @@ public class DoctorController extends Controller {
 				doctor.description = requestMap.get("description")[0].trim();
 			}
 
-			if (requestMap.get("email") != null
-					&& !(requestMap.get("email")[0].trim().isEmpty())) {
+			if (requestMap.get("email") != null && !(requestMap.get("email")[0].trim().isEmpty())) {
 				final String oldEmail = doctor.appUser.email;
-				if (oldEmail.trim().compareToIgnoreCase(
-						requestMap.get("email")[0].trim()) != 0) {
-					doctor.appUser.email = requestMap.get("email")[0].trim()
-							.toLowerCase();
+				if (oldEmail.trim().compareToIgnoreCase(requestMap.get("email")[0].trim()) != 0) {
+					if(AppUser.find.where().ieq("email", requestMap.get("email")[0].trim()).findRowCount()>0){
+						flash().put("alert", new Alert("alert-danger", "Sorry! Another User with email id "+requestMap.get("email")[0].trim()+" already exists!").toString());
+						return redirect(routes.UserActions.dashboard());
+					}
+					doctor.appUser.email = requestMap.get("email")[0].trim().toLowerCase();
 					doctor.appUser.emailConfirmed = false;
 				}
 			}
 
-			if (requestMap.get("mobileNumber") != null
-					&& !(requestMap.get("mobileNumber")[0].trim().isEmpty())) {
+			if (requestMap.get("mobileNumber") != null && !(requestMap.get("mobileNumber")[0].trim().isEmpty())) {
 				final Long oldNumber = doctor.appUser.mobileNumber;
-				final Long newNumber = Long.parseLong(requestMap
-						.get("mobileNumber")[0].trim());
-				if (oldNumber == null
-						|| (oldNumber.longValue() != newNumber.longValue())) {
-					doctor.appUser.mobileNumber = Long.parseLong(requestMap
-							.get("mobileNumber")[0].trim());
+				final Long newNumber = Long.parseLong(requestMap.get("mobileNumber")[0].trim());
+				if (oldNumber == null || (oldNumber.longValue() != newNumber.longValue())) {
+					doctor.appUser.mobileNumber = Long.parseLong(requestMap.get("mobileNumber")[0].trim());
 					doctor.appUser.mobileNumberConfirmed = false;
 				}
 			}
@@ -1184,31 +1183,52 @@ public class DoctorController extends Controller {
 	 * pharmacy / diagnostic centre GET /doctor/share-prescription
 	 */
 	@ConfirmAppUser
-	public static Result sharePrescription(final Long prId,
-			final Long pharmacyId) {
+	public static Result sharePrescription(final Long prId,final String pharmacyId, final String diagnosticId) {
 		final Doctor doctor = LoginController.getLoggedInUser().getDoctor();
 		final Prescription prescription = Prescription.find.byId(prId);
 		// server-side check
 		if (prescription.doctor.id.longValue() != doctor.id.longValue()) {
 			return redirect(routes.LoginController.processLogout());
 		}
-		final Pharmacy pharmacy = Pharmacy.find.byId(pharmacyId);
-		final PharmacyPrescriptionInfo ppInfo = PharmacyPrescriptionInfo.find
-				.where().eq("pharmacy", pharmacy)
-				.eq("prescription", prescription).findUnique();
-		if (ppInfo == null) {
-			final PharmacyPrescriptionInfo phprInfo = new PharmacyPrescriptionInfo();
-			phprInfo.pharmacy = pharmacy;
-			phprInfo.prescription = prescription;
-			phprInfo.receivedDate = new Date();
-			phprInfo.pharmacyPrescriptionStatus = PharmacyPrescriptionStatus.RECEIVED;
-			phprInfo.save();
+		final StringBuilder sharedWith = new StringBuilder();
+
+		if(pharmacyId != null && !pharmacyId.trim().isEmpty()){
+			final Pharmacy pharmacy = Pharmacy.find.byId(Long.parseLong(pharmacyId));
+			final PharmacyPrescriptionInfo ppInfo = PharmacyPrescriptionInfo.find
+					.where().eq("pharmacy", pharmacy)
+					.eq("prescription", prescription).findUnique();
+			if (ppInfo == null) {
+				final PharmacyPrescriptionInfo phprInfo = new PharmacyPrescriptionInfo();
+				phprInfo.pharmacy = pharmacy;
+				phprInfo.prescription = prescription;
+				phprInfo.receivedDate = new Date();
+				phprInfo.pharmacyPrescriptionStatus = PharmacyPrescriptionStatus.RECEIVED;
+				phprInfo.save();
+				sharedWith.append(phprInfo.pharmacy.name);
+			}
 		}
-		flash().put(
-				"alert",
-				new Alert("alert-success", "Prescription shared with "
-						+ pharmacy.name).toString());
-		return ok();
+
+		if(diagnosticId != null && !diagnosticId.trim().isEmpty()){
+			final DiagnosticCentre diagnosticCentre = DiagnosticCentre.find.byId(Long.parseLong(diagnosticId));
+			final DiagnosticCentrePrescriptionInfo dcpInfo = DiagnosticCentrePrescriptionInfo.find
+					.where().eq("diagnosticCentre", diagnosticCentre)
+					.eq("prescription", prescription).findUnique();
+			if (dcpInfo == null) {
+				final DiagnosticCentrePrescriptionInfo diagPrescriptionInfo = new DiagnosticCentrePrescriptionInfo();
+				diagPrescriptionInfo.diagnosticCentre = diagnosticCentre;
+				diagPrescriptionInfo.prescription = prescription;
+				diagPrescriptionInfo.sharedDate = new Date();
+				diagPrescriptionInfo.diagnosticCentrePrescritionStatus = DiagnosticCentrePrescritionStatus.RECEIVED;
+				diagPrescriptionInfo.save();
+				if(sharedWith.length() > 0){
+					sharedWith.append(" and ");
+				}
+				sharedWith.append(diagnosticCentre.name);
+			}
+		}
+
+		flash().put("alert",new Alert("alert-success", "Prescription shared with "+sharedWith.toString()).toString());
+		return redirect(routes.DoctorController.viewTodaysAppointments());
 	}
 
 	/**
@@ -1377,6 +1397,7 @@ public class DoctorController extends Controller {
 		Promise.promise(new Function0<Integer>() {
 
 			// @Override
+			@Override
 			public Integer apply() {
 
 				final boolean result1 = EmailService.sendConfirmationEmail(LoginController

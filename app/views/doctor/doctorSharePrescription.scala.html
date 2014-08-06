@@ -91,6 +91,13 @@
 	<li><a href="@routes.PublicController.getPharmacyWithSlug(ppinfo.pharmacy.slugUrl)">@ppinfo.pharmacy.name</a> on @ppinfo.receivedDate.format("dd-MMM-yyyy HH:mm")</li>
 }
 </ul>
+
+<ul>
+@for(dpinfo <- prescription.getDiagnoticInfoList()){
+	<li><a href="@routes.PublicController.getDiagnosticCentreWithSlug(dpinfo.diagnosticCentre.slugUrl)">@dpinfo.diagnosticCentre.name</a> on @dpinfo.sharedDate.format("dd-MMM-yyyy HH:mm")</li>
+}
+</ul>
+
 </div>
 
 <hr>
@@ -111,8 +118,13 @@
 
 <div class="col-md-5">
 <h4>Share With Diagnostic Centre:</h4>
-<select class="chzn" name="shareDiagnostic">
 
+
+<select id="shareDiagnostic" class="chzn" style="width:100%;">
+<option></option>
+@for(diagnostic <- prescription.doctor.diagnosticCentreList){
+	<option value="@diagnostic.id">@diagnostic.name @if(diagnostic.address != null){&#40;@diagnostic.address.area&#41;}</option>
+}
 </select>
 </div>
 
@@ -129,7 +141,8 @@
 <script>
 function sharePrescription(){
 	var pharId = $('#sharePharmacy').val();
-	window.location.href='/doctor/share-prescription/@prescription.id/'+pharId;
+	var diagId = $('#shareDiagnostic').val();
+	window.location.href='/doctor/share-prescription?prId=@prescription.id&pharmacyId='+pharId+'&diagnosticId='+diagId;
 }
 </script>
 
