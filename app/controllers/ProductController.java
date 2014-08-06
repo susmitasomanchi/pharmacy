@@ -167,5 +167,4 @@ public class ProductController extends Controller{
 
 	}
 
-
 }

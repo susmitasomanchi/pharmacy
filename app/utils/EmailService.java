@@ -1,8 +1,9 @@
 package utils;
 
 import java.math.BigInteger;
+import java.net.MalformedURLException;
+import java.net.URL;
 import java.security.SecureRandom;
-import java.util.List;
 import java.util.Random;
 
 import models.AppUser;
@@ -87,14 +88,18 @@ public class EmailService {
 		return result;
 	}
 
-	public void sendHTMLEmailWithAttachments(final String receiverEmailId, final String subject, final String htmlMessage, final List<byte[]> imageList){
+	public static void sendHTMLEmailWithAttachments(final String receiverEmailId, final String subject, final String htmlMessage, final Long id){
 
 		// Create the attachment
 		final EmailAttachment attachment = new EmailAttachment();
-		attachment.setPath("mypictures/john.jpg");
+		try {
+			attachment.setURL(new URL("http://localhost:9000/get-file/"+id));
+		} catch (final MalformedURLException e1) {
+			e1.printStackTrace();
+		}
 		attachment.setDisposition(EmailAttachment.ATTACHMENT);
-		attachment.setDescription("");
-		attachment.setName("filename");
+		attachment.setDescription("Apache logo");
+		attachment.setName("Apache logo");
 
 		// Create the email message
 		final MultiPartEmail email = new MultiPartEmail();
@@ -107,6 +112,7 @@ public class EmailService {
 			email.setFrom("me@apache.org", "Me");
 			email.setSubject("The picture");
 			email.setMsg("Here is the picture you wanted");
+			email.addTo(receiverEmailId);
 			// add the attachment
 			email.attach(attachment);
 			email.send();

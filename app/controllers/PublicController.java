@@ -99,7 +99,7 @@ public class PublicController extends Controller{
 		}
 		return ok();
 	}
-	
+
 	/**
 	 * Action to get images associated with a doctor
 	 * GET  /doctor/get-image/:id/:type
@@ -114,6 +114,7 @@ public class PublicController extends Controller{
 		}
 		return ok().as("image/jpeg");
 	}
+
 
 
 	/**
@@ -357,7 +358,7 @@ public class PublicController extends Controller{
 	}
 	/**
 	 * @author lakshmi
-	 *  Action to get byteData as image of DiagnosticCentre	
+	 *  Action to get byteData as image of DiagnosticCentre
 	 * GET/diagnostic/get-image/:diagnosticId/:fileId
 	 */
 	public static Result getDiagnosticImages(final Long diagnosticId,final Long imageId){
@@ -449,8 +450,8 @@ public class PublicController extends Controller{
 			Logger.info("test10");
 			return redirect(routes.UserActions.dashboard());
 		}
-		
-		
+
+
 
 	}
 

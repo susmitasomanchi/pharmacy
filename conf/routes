@@ -56,7 +56,8 @@ GET   	/pharmacy/search/:searchString                  controllers.PublicControl
 GET     /pharmacy/search									controllers.PublicController.searchPharmaciesPage()
 GET		/doctor/add-to-favorite/:docId					controllers.PublicController.addToFavDoctor(docId: Long)
 GET		/diagnostic/get-image/:diagnosticId/:imageId	controllers.PublicController.getDiagnosticImages(diagnosticId: Long,imageId: Long)
-
+GET		/get-file/:id									controllers.DiagnosticController.getFile(id : Long)
+GET 	/sendTestmail									controllers.DiagnosticController.sendSampleAttchEmail() 
 # Sign up page
 GET    /doctor/join                              			controllers.UserController.joinUsDoctor()
 GET    /pharmacy/join                              			controllers.UserController.joinUsPharmacy()
