@@ -42,6 +42,7 @@ import play.mvc.Controller;
 import play.mvc.Result;
 import utils.Constants;
 import utils.EmailService;
+import utils.SMSService;
 import utils.Util;
 import actions.BasicAuth;
 import beans.JoinUsBean;
@@ -209,6 +210,7 @@ public class UserController extends Controller {
 		// Async Execution
 		promise(new Function0<Integer>() {
 			//@Override
+			@Override
 			public Integer apply() {
 
 				if(EmailService.sendConfirmationEmail(appUser)){
@@ -217,8 +219,9 @@ public class UserController extends Controller {
 				else{
 					flash().put("alert", new Alert("alert-danger","Sorry the message cant be sent").toString());
 					System.out.println("Send");
-
 				}
+
+				SMSService.sendConfirmationSMS(appUser);
 
 				return 0;
 			}
@@ -249,7 +252,61 @@ public class UserController extends Controller {
 
 
 
+	/**
+	 * @author Lakshmi
+	 * Action to render the page to edit emailId and mobileNumber of loggedInUser
+	 * GET	   /edit-contact-details
+	 */
+	public static Result editAppUserProfile(){
+		return ok(views.html.editAppUserDetails.render(LoginController.getLoggedInUser()));
+	}
 
+
+	/**
+	 * @author Lakshmi
+	 * Action to edit emailId and mobileNumber of loggedInUser
+	 * POST   /edit-contact-details
+	 */
+	public static Result updateAppUserProfile(){
+		final Map<String, String[]> requestMap = request().body().asFormUrlEncoded();
+		final Long appUserId = Long.parseLong(requestMap.get("appUserId")[0]);
+		final AppUser loggedInUser = LoginController.getLoggedInUser();
+		// server-side check
+		if(appUserId.longValue() != loggedInUser.id.longValue()){
+			session().clear();
+			return redirect(routes.LoginController.processLogout());
+		}
+
+		if(requestMap.get("name") != null && !requestMap.get("name")[0].trim().isEmpty()){
+			loggedInUser.name = requestMap.get("name")[0];
+		}
+
+		if(requestMap.get("email")[0]!=null && requestMap.get("email")[0].trim()!=""){
+			final String oldEmail = loggedInUser.email;
+			if (oldEmail.trim().compareToIgnoreCase(requestMap.get("email")[0].trim()) != 0) {
+				if(AppUser.find.where().ieq("email", requestMap.get("email")[0].trim()).findRowCount()>0){
+					flash().put("alert", new Alert("alert-danger", "Sorry! Another User with email id "+requestMap.get("email")[0].trim()+" already exists!").toString());
+					return redirect(routes.UserController.editAppUserProfile());
+				}
+				loggedInUser.email = requestMap.get("email")[0].trim().toLowerCase();;
+				loggedInUser.emailConfirmed = false;
+				//TODO: make it async
+				EmailService.sendConfirmationEmail(loggedInUser);
+			}
+		}
+		if(requestMap.get("contactNo")[0]!=null && requestMap.get("contactNo")[0].trim()!=""){
+			final Long oldNumber = loggedInUser.mobileNumber;
+			final Long newNumber = Long.parseLong(requestMap.get("contactNo")[0].trim());
+			if (oldNumber == null || (oldNumber.longValue() != newNumber.longValue())) {
+				loggedInUser.mobileNumber = newNumber;
+				loggedInUser.mobileNumberConfirmed = false;
+				//TODO: make it async
+				SMSService.sendConfirmationSMS(loggedInUser);
+			}
+		}
+		loggedInUser.update();
+		return redirect(routes.UserActions.dashboard());
+	}
 
 
 
