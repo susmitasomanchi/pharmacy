@@ -21,6 +21,7 @@ import models.doctor.Appointment;
 import models.doctor.AppointmentStatus;
 import models.doctor.Day;
 import models.doctor.DaySchedule;
+import models.doctor.DiagnosticTestLineItem;
 import models.doctor.Doctor;
 import models.doctor.DoctorAward;
 import models.doctor.DoctorClinicInfo;
@@ -29,6 +30,7 @@ import models.doctor.DoctorEducation;
 import models.doctor.DoctorExperience;
 import models.doctor.DoctorProduct;
 import models.doctor.DoctorSocialWork;
+import models.doctor.MedicineLineItem;
 import models.doctor.Prescription;
 import models.doctor.QuestionAndAnswer;
 import models.doctor.SigCode;
@@ -60,14 +62,10 @@ import com.google.common.io.Files;
 @BasicAuth
 public class DoctorController extends Controller {
 
-	public static Form<DoctorClinicInfoBean> clinicForm = Form
-			.form(DoctorClinicInfoBean.class);
-	public static Form<QuestionAndAnswerBean> questionAndAnswerForm = Form
-			.form(QuestionAndAnswerBean.class);
-	public static Form<DoctorClinicInfo> doctorClinicForm = Form
-			.form(DoctorClinicInfo.class);
-	public static Form<PrescriptionBean> prescriptionForm = Form
-			.form(PrescriptionBean.class);
+	public static Form<DoctorClinicInfoBean> clinicForm = Form.form(DoctorClinicInfoBean.class);
+	public static Form<QuestionAndAnswerBean> questionAndAnswerForm = Form.form(QuestionAndAnswerBean.class);
+	public static Form<DoctorClinicInfo> doctorClinicForm = Form.form(DoctorClinicInfo.class);
+	public static Form<PrescriptionBean> prescriptionForm = Form.form(PrescriptionBean.class);
 
 	/**
 	 * Action to update basic field of doctor like name, specialization, degree
@@ -1138,8 +1136,7 @@ public class DoctorController extends Controller {
 	 */
 	@ConfirmAppUser
 	public static Result savePrescription() {
-		final Form<PrescriptionBean> filledForm = prescriptionForm
-				.bindFromRequest();
+		final Form<PrescriptionBean> filledForm = prescriptionForm.bindFromRequest();
 		final PrescriptionBean bean = filledForm.get();
 		final Doctor doctor = LoginController.getLoggedInUser().getDoctor();
 		// server-side check
@@ -1155,10 +1152,38 @@ public class DoctorController extends Controller {
 		appointment.appointmentStatus = AppointmentStatus.SERVED;
 		appointment.update();
 
-		flash().put("alert",
-				new Alert("alert-success", "Prescription saved!").toString());
-		return redirect(routes.DoctorController
-				.showPrescription(prescription.id));
+		final List<MedicineLineItem> medLineItemList = prescription.medicineLineItemList;
+		final List<DoctorProduct> doctorProductList = new ArrayList<DoctorProduct>();
+		for (final MedicineLineItem medLineItem : medLineItemList) {
+			if(DoctorProduct.find.where().ieq("fullName", medLineItem.medicineFullName.trim()).findRowCount() == 0){
+				final DoctorProduct doctorProduct = new DoctorProduct();
+				doctorProduct.fullName = medLineItem.medicineFullName.trim();
+				doctorProductList.add(doctorProduct);
+			}
+		}
+
+		if(doctorProductList.size()>0){
+			doctor.myProductList.addAll(doctorProductList);
+			doctor.update();
+		}
+
+		final List<DiagnosticTestLineItem> diagnosticTestLineItemList = prescription.diagnosticTestLineItemList;
+		final List<DoctorDiagnosticTest> doctorDiagnosticTestList = new ArrayList<DoctorDiagnosticTest>();
+		for (final DiagnosticTestLineItem diagLineItem : diagnosticTestLineItemList) {
+			if(DoctorDiagnosticTest.find.where().ieq("name", diagLineItem.fullNameOfDiagnosticTest.trim()).findRowCount() == 0){
+				final DoctorDiagnosticTest doctorDiagnosticTest = new DoctorDiagnosticTest();
+				doctorDiagnosticTest.name = diagLineItem.fullNameOfDiagnosticTest.trim();
+				doctorDiagnosticTestList.add(doctorDiagnosticTest);
+			}
+		}
+
+		if(doctorDiagnosticTestList.size()>0){
+			doctor.myDiagnosticTestList.addAll(doctorDiagnosticTestList);
+			doctor.update();
+		}
+
+		flash().put("alert",new Alert("alert-success", "Prescription saved!").toString());
+		return redirect(routes.DoctorController.showPrescription(prescription.id));
 	}
 
 	/**
