@@ -1,25 +1,187 @@
-@(tourPlanMap: Map[Integer,models.mr.TourPlan])
+@(tourPlan: models.mr.TourPlan,tpLineItemMap: Map[Integer,models.mr.TPLineItem],mr:models.mr.MedicalRepresentative,doctorList: List[models.doctor.Doctor],pharmaceuticalProductList: List[models.mr.PharmaceuticalProduct])
 @import play.i18n._
 @import helper.twitterBootstrap._
 @import helper._
 
 @main("T P Line Item"){
+	<style>
+		th {
+   		 text-align: center;
+		}
+	</style>
+	<script>
+	var proList = '<option></option>@for(pharmaceuticalProduct <-pharmaceuticalProductList){<option value="@pharmaceuticalProduct.id">@pharmaceuticalProduct.medicineName</option>}';
+	function removeSamples(id){
+	$('#sample'+id).remove();
+    }	
 	
+	var i=0;
+	function addSamples(index){
+		$('#samplestbl'+index).append('<tr id="sample'+i+'"><td valign="top"><select id="selsam-'+i+'" class="chzn" style="width:120px" name="sampleList'+index+'" data-placeholder="Select Sample">'+proList+'</select></td><td><input id="qty" class="qty-class numeric-textbox" name="qtyList'+index+'" placeholder="quantity" style="width:70px;height:24px"/></td><td><a class="btn btn-danger btn-xs" onclick="removeSamples('+i+');" >-</a></td></tr>');
+	    $('#selsam-'+i).chosen();
+	    i++;
+	    numericValidation();
+	    $('.qty-class').bind('copy paste cut',function(e) { 
+	 					e.preventDefault(); //disable cut,copy,paste
+	 				});
+	}
+	
+	</script>
+
 	<table class="table table-bordered table-condensed col-md-3">
 	<thead>
 	<th>Sr.No.</th>
 	<th>Day</th>
+	<th>DayStatus</th>
+	@if(mr.tourPlanConfiguration.isDoctorVisible == false){
+	<th>Select Doctor</th>
+	}
+	@if(mr.tourPlanConfiguration.isSampleVisible == false){
+	<th>Samples(Qty)</th>
+	}
+	@if(mr.tourPlanConfiguration.isPromotionVisible == false){
+	<th>Promotions</th>
+	}
+	@if(mr.tourPlanConfiguration.isPobVisible == false){
+	<th>POB</th>
+	}
+	@if(mr.tourPlanConfiguration.isRemarksVisible == false){
+	<th>Remarks</th>
+	}
 	<th>Action</th>
 	</thead>
 	<tbody>
-	@for((index,tourplan)<- tourPlanMap){
-	<tr>
-		<td>@index</td>
-		<td><input value='@tourPlanMap.get(index).forMonth.format(index+"-MM-yyyy")' disabled style="width:100px;"/></td>
-		<td>&nbsp;</td>
+	
+	@for((index,tpLineItem)<- tpLineItemMap){
+		<tr name="tourplanlineitem@{index+1}" id="tourplanlineitem@{index+1}">
+	<form name="tplineitemform@{index+1}" id="tplineitemform@{index+1}">
+		
+		<td valign="top">@{index+1}</td>
+		
+		<td valign="top">@tpLineItem.date.format("dd-MMM-yyyy")</td>
+		@if(tpLineItem.isAddedtoTourplan == true){
+			
+			<td valign="top">
+			@tpLineItem.dayStatus
+		</td>
+		@if(mr.tourPlanConfiguration.isDoctorVisible == false){
+		<td valign="top">
+				@for(doctor <- tpLineItem.doctorList){
+					@doctor.appUser.name
+					<br>
+				}
+		</td>
+		}
+		@if(mr.tourPlanConfiguration.isSampleVisible == false){
+		<td>
+			@for(sample <- tpLineItem.sampleList){
+				@if(sample != null){
+				@sample.pharmaceuticalProduct.medicineName (@sample.quantity)
+				<br>
+				}
+			}
+	   	</td>
+	   	}
+	   	@if(mr.tourPlanConfiguration.isPromotionVisible == false){
+		<td>
+				@for(promotedPharmaceuticalProduct <- tpLineItem.promotionList){
+					@promotedPharmaceuticalProduct.medicineName
+					<br>
+				}
+		</td>
+		}
+		@if(mr.tourPlanConfiguration.isPobVisible == false){
+			@if(tpLineItem.pob == 0){
+			<td>&nbsp;</td>
+			}else{
+			<td>@tpLineItem.pob</td>
+			}
+		}
+		@if(mr.tourPlanConfiguration.isRemarksVisible == false){
+		<td>@tpLineItem.remarks</td>
+		}
+		}else{
+		<td valign="top">
+			<select name="day-status@{index+1}" class="chzn">
+			@for(status <- models.mr.DayStatus.values()){
+				<option value="@status">@status</option>
+			}
+			</select>
+		</td>
+		@if(mr.tourPlanConfiguration.isDoctorVisible == false){
+		<td valign="top">
+			<select name="selectdoctor@{index+1}" class="chzn" multiple="multiple" data-placeholder="choose some doctor" style="width:150px;">
+				@for(doctor <- doctorList){
+					<option value="@doctor.id">@doctor.appUser.name</option>
+				}
+			</select>
+		</td>
+		}
+		@if(mr.tourPlanConfiguration.isSampleVisible == false){
+		<td valign="top">
+			<div id="samplesdiv">
+			<table id="samplestbl@{index+1}">
+			   <tbody>
+				<tr>
+					<td valign="top">
+				  	   	<select id="select-samples" data-placeholder="Select Sample" class="chzn" name="sampleList@{index+1}" style="width:120px;" >
+							<option></option>
+							@for(pharmaceuticalProduct <- pharmaceuticalProductList){
+					      	<option value="@pharmaceuticalProduct.id">@pharmaceuticalProduct.medicineName</option>
+					        }
+			   		    </select>
+					</td>
+					<td valign="top">
+						<input id="qty" class="qty-class numeric-textbox" name="qtyList@{index+1}" placeholder="quantity" style="width:70px;height:24px"/>
+					</td>
+					<td>
+						&nbsp;
+					</td>
+				</tr>
+				</tbody>
+			</table>
+			</div>   
+			<button  type="button" class="btn btn-primary btn-xs" onclick="addSamples(@{index+1});">+</button>
+	   	</td>
+	   	}
+	   	@if(mr.tourPlanConfiguration.isPromotionVisible == false){
+		<td>
+			<select class="chzn" name="promotion@{index+1}" multiple="multiple" data-placeholder="Promote some product" style="width:160px;">
+				@for(pharmaceuticalProduct <- pharmaceuticalProductList){
+					<option value="@pharmaceuticalProduct.id">@pharmaceuticalProduct.medicineName</option>
+				}
+			</select>
+		</td>
+		}
+		@if(mr.tourPlanConfiguration.isPobVisible == false){
+		<td valign="top" ><input id="pob@{index+1}" class="numeric-textbox-pob" name="pob@{index+1}" style="width:50px;height:24px"/></td>
+		}
+		@if(mr.tourPlanConfiguration.isRemarksVisible == false){
+		<td valign="top" ><input id="remarks@{index+1}" name="remarks@{index+1}" type="text" placeholder="Remarks" style="width:150px;height:24px"/></td>
+		}
+		<td><a class="btn btn-primary btn-xs" onclick="add_lineitem(@tourPlan.id,@tpLineItem.id,@{index+1});">Add</a></td>
+		}
+	</form>
 	</tr>
-	}
-	</tbody>
-	</table>
+	
+	
 	
 	}
+	
+	</tbody>
+	</table>
+	<input type="submit" class="btn btn-primary btn-md pull-right" value="Submit Tour Plan" />
+	
+	<script>
+	function add_lineitem(tourplanid,tplineitemid,index){
+		alert('/mr/tourplan/add-line-item/'+tourplanid+'/'+tplineitemid+'/'+index);
+		$.post('/mr/tourplan/add-line-item/'+tourplanid+'/'+tplineitemid+'/'+index,$('#tplineitemform'+index).serialize(),function(htmldata){
+			alert("inside post");
+			$('#tourplanlineitem'+index).html(htmldata);
+		});
+		
+	}
+	</script>
+	
+	}
+	

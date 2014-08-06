@@ -30,7 +30,7 @@ public class PharmaceuticalCompany extends BaseEntity {
 	public MedicalRepresentative adminMR;
 
 	@OneToMany(cascade=CascadeType.ALL)
-	public List<PharmaceuticalProduct> productList = new ArrayList<PharmaceuticalProduct>();
+	public List<PharmaceuticalProduct> pharmaceuticalProductList = new ArrayList<PharmaceuticalProduct>();
 
 	@OneToMany(cascade = CascadeType.ALL)
 	public List<MedicalRepresentative> mrList = new ArrayList<MedicalRepresentative>();

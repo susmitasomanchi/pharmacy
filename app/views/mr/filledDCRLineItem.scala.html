@@ -25,7 +25,7 @@
 		<td>
 			@for(sample <- dcrLineItem.sampleList){
 				@if(sample != null){
-				@sample.product.medicineName (@sample.quantity)
+				@sample.pharmaceuticalProduct.medicineName (@sample.quantity)
 				<br>
 				}
 			}
@@ -33,10 +33,10 @@
 	   	<td valign="top">
 			<div id="samplesdiv">
 			      <table> 	
-				  	@for(promotedProduct <- dcrLineItem.promotionList){
-				  		@if(promotedProduct != null){
+				  	@for(promotedPharmaceuticalProduct <- dcrLineItem.promotionList){
+				  		@if(promotedPharmaceuticalProduct != null){
 					  <tr>
-						 <td>@promotedProduct.medicineName</td>
+						 <td>@promotedPharmaceuticalProduct.medicineName</td>
 					  </tr>
 					  }
 					 }

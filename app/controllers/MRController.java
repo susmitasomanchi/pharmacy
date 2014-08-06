@@ -1,5 +1,7 @@
 package controllers;
 
+import java.security.MessageDigest;
+import java.security.SecureRandom;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
@@ -7,22 +9,27 @@ import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Random;
 
 import models.Alert;
 import models.AppUser;
-import models.mr.PharmaceuticalProduct;
+import models.Role;
 import models.State;
 import models.doctor.Appointment;
 import models.doctor.Doctor;
 import models.mr.DCRLineItem;
 import models.mr.DCRStatus;
 import models.mr.DailyCallReport;
+import models.mr.DayStatus;
 import models.mr.HeadQuarter;
 import models.mr.MedicalRepresentative;
 import models.mr.PharmaceuticalCompany;
+import models.mr.PharmaceuticalProduct;
 import models.mr.Sample;
+import models.mr.TPLineItem;
 import models.mr.TourPlan;
 
+import org.apache.commons.codec.binary.Base64;
 import org.joda.time.DateTime;
 import org.joda.time.Days;
 import org.joda.time.format.DateTimeFormat;
@@ -98,7 +105,6 @@ public class MRController extends Controller {
 
 			final MedicalRepresentative mr = medicalRepresentativeBean
 					.toMedicalRepresentative();
-
 			final AppUser appUser = medicalRepresentativeBean.toAppUser();
 
 			final PharmaceuticalCompany company = LoginController
@@ -482,7 +488,7 @@ public class MRController extends Controller {
 
 		return ok(views.html.mr.dcrLineItem.render(dcr, dcrLineItemForm,
 				loggedInMr.doctorList, disabledDoctorList,
-				loggedInMr.pharmaceuticalCompany.productList,loggedInMr));
+				loggedInMr.pharmaceuticalCompany.pharmaceuticalProductList,loggedInMr));
 
 	}
 
@@ -597,7 +603,7 @@ public class MRController extends Controller {
 
 			if ((sampleList[i].compareToIgnoreCase("") == 0)) {
 			} else {
-				sample.product = PharmaceuticalProduct.find.byId(Long
+				sample.pharmaceuticalProduct = PharmaceuticalProduct.find.byId(Long
 						.parseLong(sampleList[i]));
 				if (qtyList[i] == "") {
 					sample.quantity = 0;
@@ -869,6 +875,7 @@ public class MRController extends Controller {
 	 * */
 	public static Result addTourPlan(){
 
+		boolean isTourPlanAdded = false;
 		final MedicalRepresentative loggedInmr = LoginController.getLoggedInUser().getMedicalRepresentative();
 		final String monthForTourPlanStr = request().body().asFormUrlEncoded().get("dateForTourPlan")[0];
 		Logger.info("Date for tour plan : "+monthForTourPlanStr);
@@ -876,9 +883,35 @@ public class MRController extends Controller {
 		final Date monthForTourPlan = formatter.parseDateTime(monthForTourPlanStr).toDate();
 		Logger.info("Date for tour plan : "+monthForTourPlan);
 		final TourPlan tourPlan = new TourPlan();
-		tourPlan.forMonth = monthForTourPlan;
-		loggedInmr.tourPlanList.add(tourPlan);
-		loggedInmr.update();
+
+		for(final TourPlan tp : loggedInmr.tourPlanList){
+			if(monthForTourPlan.equals(tp.forMonth)){
+				Logger.info("yes");
+				isTourPlanAdded = true;
+				flash().put(
+						"alert",
+						new Alert("alert-danger", "U already select tour plan for this month. ")
+						.toString());
+				break;
+			}
+		}
+		if(isTourPlanAdded == false){
+			tourPlan.forMonth = monthForTourPlan;
+
+			final Calendar calender = Calendar.getInstance();
+			calender.setTime(tourPlan.forMonth);
+			final int maxDaysInMonth = calender.getActualMaximum(Calendar.DAY_OF_MONTH);
+			final DateTime dt = new DateTime(tourPlan.forMonth);
+			final List<TPLineItem> tpLineItemList = new ArrayList<TPLineItem>();
+			for(int i=0;i<maxDaysInMonth;i++){
+				final TPLineItem tpLineItem = new TPLineItem();
+				tpLineItem.date= dt.plusDays(i).toDate();
+				tpLineItemList.add(tpLineItem);
+			}
+			tourPlan.tpLineItemList.addAll(tpLineItemList);
+			loggedInmr.tourPlanList.add(tourPlan);
+			loggedInmr.update();
+		}
 
 
 		return ok(views.html.mr.tourPlan.render(loggedInmr.tourPlanList));
@@ -893,17 +926,181 @@ public class MRController extends Controller {
 	 * 
 	 * 
 	 * */
-	public static Result tourPlanLineItem(final Long lineItemId){
+	public static Result tourPlanLineItem(final Long tourPlanid){
 
-		final TourPlan tourPlan = TourPlan.find.byId(lineItemId);
+		final MedicalRepresentative loggedInMr = LoginController.getLoggedInUser().getMedicalRepresentative();
+
+		final TourPlan tourPlan = TourPlan.find.byId(tourPlanid);
 		final Calendar calender = Calendar.getInstance();
 		calender.setTime(tourPlan.forMonth);
 		final int maxDaysInMonth = calender.getActualMaximum(Calendar.DAY_OF_MONTH);
-		final Map<Integer,TourPlan> tourPlanMap = new LinkedHashMap<Integer,TourPlan>();
-
-		for(int i=1;i<=maxDaysInMonth;i++){
-			tourPlanMap.put(i, tourPlan);
+		final Map<Integer,TPLineItem> tourPlanLineItemMap = new LinkedHashMap<Integer,TPLineItem>();
+		final List<TPLineItem> tpLineItemList = TPLineItem.find.where().eq("tour_plan_id",tourPlanid).orderBy("date asc").findList();
+		Integer i=0;
+		for(final TPLineItem tpLineItem :tpLineItemList){
+			tourPlanLineItemMap.put(i,tpLineItem);
+			i++;
 		}
-		return ok(views.html.mr.tpLineItem.render(tourPlanMap));
+
+		return ok(views.html.mr.tpLineItem.render(tourPlan,tourPlanLineItemMap,loggedInMr,loggedInMr.doctorList,loggedInMr.pharmaceuticalCompany.pharmaceuticalProductList));
+	}
+	/**
+	 * @author anand
+	 * 
+	 * @description : this method is used to add lineitem for particular date
+	 * 
+	 *  url : POST   /mr/tourplan/add-line-item
+	 * 
+	 * */
+	public static Result addTourPlanLineItem(final Long tourPlanid,final Long tpLineid,final Long index){
+		final MedicalRepresentative loggedInMr = LoginController.getLoggedInUser().getMedicalRepresentative();
+
+		final TPLineItem tpLineItem = TPLineItem.find.byId(tpLineid);
+		final Map<String,String[]> mapForm = request().body().asFormUrlEncoded();
+		Logger.info("key : "+mapForm.keySet());
+
+		final String dayStatus	= mapForm.get("day-status"+index)[0];
+
+		if("WORKING_DAY".compareToIgnoreCase(dayStatus)==0){
+			tpLineItem.dayStatus = DayStatus.WORKING_DAY;
+		}else{
+			tpLineItem.dayStatus = DayStatus.HOLIDAY;
+		}
+		if(mapForm.containsKey("selectdoctor"+index)){
+			final String doctorsId[] = mapForm.get("selectdoctor"+index);
+			if(doctorsId != null){
+				for(int i=0;i<doctorsId.length;i++){
+					tpLineItem.doctorList.add(Doctor.find.byId(Long.parseLong(doctorsId[i])));
+				}
+			}
+		}
+		if(mapForm.containsKey("sampleList"+index)){
+			final String samples[] = mapForm.get("sampleList"+index);
+			final String quantities[] = mapForm.get("qtyList"+index);
+
+			if(samples != null){
+				for (int i = 0; i < samples.length; i++) {
+					final Sample sample = new Sample();
+
+					if ((samples[i].compareToIgnoreCase("") == 0)) {
+					} else {
+						sample.pharmaceuticalProduct = PharmaceuticalProduct.find.byId(Long
+								.parseLong(samples[i]));
+						if (quantities[i] == "") {
+							sample.quantity = 0;
+						} else {
+							sample.quantity = Integer.parseInt(quantities[i]);
+						}
+						tpLineItem.sampleList.add(sample);
+					}
+				}
+			}
+		}
+
+		if(mapForm.containsKey("promotion"+index)){
+			final String promotions[] = mapForm.get("promotion"+index);
+			if(promotions != null){
+				for(int i=0;i<promotions.length;i++){
+					tpLineItem.promotionList.add(PharmaceuticalProduct.find.byId(Long.parseLong(promotions[i])));
+				}
+			}
+		}
+		if(mapForm.containsKey("pob"+index)){
+			final String pob = mapForm.get("pob"+index)[0];
+
+			if (pob == "") {
+				tpLineItem.pob = 0;
+			} else {
+				tpLineItem.pob = Integer.parseInt(pob);
+			}
+		}
+
+		if(mapForm.containsKey("remarks"+index)){
+			final String remarks = mapForm.get("remarks"+index)[0];
+			tpLineItem.remarks = remarks;
+		}
+
+
+		tpLineItem.isAddedtoTourplan = true;
+
+		final TourPlan tourPlan = TourPlan.find.byId(tourPlanid);
+		tourPlan.tpLineItemList.add(tpLineItem);
+		tourPlan.update();
+		return ok(views.html.mr.filledTPLineItem.render(loggedInMr,tpLineItem,index));
+	}
+
+	/**
+	 * @author anand
+	 * 
+	 * @description : this method is used to indicate tour plan of this month is submitted.
+	 * 
+	 * url : POST	/mr/submit-tourplan
+	 * 
+	 * */
+	public static Result submitTourPlan(){
+		return ok();
+	}
+	/**
+	 * @author anand
+	 * 
+	 * @description : this method is only access by admin mr and its show which filed will be visible in particular mr tour plan.
+	 * 
+	 * url : GET		/mr/tourplan-lineitem-visibity
+	 * 
+	 * */
+	public static Result tpLineItemVisibility(){
+		final MedicalRepresentative loggedInMr = LoginController.getLoggedInUser().getMedicalRepresentative();
+		final List<MedicalRepresentative> myMrList = MedicalRepresentative.find.where().eq("pharmaceuticalCompany", loggedInMr.pharmaceuticalCompany).eq("appUser.role", Role.MR).findList();
+		return ok(views.html.mr.tpLineItemVisibility.render(myMrList));
+	}
+
+	/**
+	 * @author anand
+	 * 
+	 * @description :
+	 * 
+	 * url : POST		/mr/tourplan-lineitem-visibity-proccess/:mrid/:index
+	 * 
+	 * */
+
+	public static Result tpLineItemVisibilityProccess(final Long medicalRepresentativeId,final Long index){
+		final MedicalRepresentative myMr = MedicalRepresentative.find.byId(medicalRepresentativeId);
+		final Map<String,String[]> tourPlanVisibilityMap = request().body().asFormUrlEncoded();
+		Logger.info("tourPlanVisibilityMap : "+tourPlanVisibilityMap);
+		if(tourPlanVisibilityMap == null){
+			myMr.tourPlanConfiguration.isDoctorVisible = true;
+			myMr.tourPlanConfiguration.isSampleVisible = true;
+			myMr.tourPlanConfiguration.isPromotionVisible = true;
+			myMr.tourPlanConfiguration.isPobVisible = true;
+			myMr.tourPlanConfiguration.isRemarksVisible = true;
+		}else{
+			if(tourPlanVisibilityMap.containsKey("is_doctor_visible"+index)){
+				myMr.tourPlanConfiguration.isDoctorVisible = false;
+			}else{
+				myMr.tourPlanConfiguration.isDoctorVisible = true;
+			}
+			if(tourPlanVisibilityMap.containsKey("is_sample_visible"+index)){
+				myMr.tourPlanConfiguration.isSampleVisible = false;
+			}else{
+				myMr.tourPlanConfiguration.isSampleVisible = true;
+			}
+			if(tourPlanVisibilityMap.containsKey("is_promotion_visible"+index)){
+				myMr.tourPlanConfiguration.isPromotionVisible = false;
+			}else{
+				myMr.tourPlanConfiguration.isPromotionVisible = true;
+			}
+			if(tourPlanVisibilityMap.containsKey("is_pob_visible"+index)){
+				myMr.tourPlanConfiguration.isPobVisible = false;
+			}else{
+				myMr.tourPlanConfiguration.isPobVisible = true;
+			}
+			if(tourPlanVisibilityMap.containsKey("is_remarks_visible"+index)){
+				myMr.tourPlanConfiguration.isRemarksVisible = false;
+			}else{
+				myMr.tourPlanConfiguration.isRemarksVisible = true;
+			}
+		}
+		myMr.update();
+		return ok("visibility modified successfully");
 	}
 }

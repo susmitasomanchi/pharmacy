@@ -27,14 +27,7 @@ public class TourPlan extends BaseEntity{
 	@OneToMany(cascade=CascadeType.ALL)
 	public List<TPLineItem> tpLineItemList  = new ArrayList<TPLineItem>();
 
-	/*@OneToOne
-	public MedicalRepresentative submitter;*/
-
-	//public MedicalRepresentative approver;
-
-	public DCRStatus status;
-
 	public Date submitDate;
-	
+
 	public static Finder<Long, TourPlan> find = new Finder<Long, TourPlan>(Long.class, TourPlan.class);
 }
