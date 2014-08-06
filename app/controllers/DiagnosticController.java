@@ -229,7 +229,8 @@ public class DiagnosticController extends Controller {
  * Action to Display Todays Prescriptions requested by logged-in ADMIN_PHARMACIST	
  * Get /diagnostic/prescriptions	
  */
-//	@ConfirmAppUser
+
+	@ConfirmAppUser
 	public static Result getDiagnosticCentrePrescriptions(String status){
 		DiagnosticCentre diagnosticCentre = LoginController.getLoggedInUser().getDiagnosticRepresentative().diagnosticCentre;
 		List<DiagnosticCentrePrescritionStatus> dcpStatuses = new ArrayList<DiagnosticCentrePrescritionStatus>();
@@ -328,7 +329,7 @@ public class DiagnosticController extends Controller {
 		 * @author lakshmi
 		 * Action to Display Todays Prescriptions requested to logged-in ADMIN_PHARMACIST
 		 */
-//	@ConfirmAppUser
+		@ConfirmAppUser
 		public static Result TodaysDiagnosticPrescriptions() {
 			Date now = new Date();
 			final Calendar calendarFrom = Calendar.getInstance();
@@ -358,7 +359,7 @@ public class DiagnosticController extends Controller {
 		 * @author lakshmi
 		 * Action to Display Todays Prescriptions requested to logged-in ADMIN_DIAGREP
 		 */
-	//@ConfirmAppUser
+	@ConfirmAppUser
 		public static Result getFromToDatePrescriptions() {
 			final Map<String, String[]> requestMap = request().body().asFormUrlEncoded();
 			Date dateFrom = null,dateTo=null;

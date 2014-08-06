@@ -322,10 +322,10 @@ public class PatientController extends Controller {
 	}
 
 	/**@author lakshmi
-	 * Action to show all prescription created by loggedIn doctor GET
-	 * /doctor/all-prescriptions
+	 * Action to show all prescription created by loggedInPatient
+	 *GET /user/prescriptions
 	 */
-//	@ConfirmAppUser
+	@ConfirmAppUser
 	public static Result viewAllPatientPrescriptions() {
 		final Patient patient = LoginController.getLoggedInUser().getPatient();
 		final List<Prescription> prescriptionList = Prescription.find.where()
@@ -334,10 +334,11 @@ public class PatientController extends Controller {
 	}
 	
 	/**
-	 * Action to show logged In doctor a page to assign a prescription to a
-	 * pharmacy / diagnostic centre GET /doctor/show-prescription
+	 * @author lakshmi
+	 * Action to show the prescription to the loggedInPatient 
+	 * GET/user/show-prescription/:prescriptionId
 	 */
-//	@ConfirmAppUser
+	@ConfirmAppUser
 	public static Result viewPrescription(final Long prescriptionId) {
 		final Patient patient = LoginController.getLoggedInUser().getPatient();
 		final Prescription prescription = Prescription.find
