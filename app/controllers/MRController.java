@@ -113,6 +113,31 @@ public class MRController extends Controller {
 			final MedicalRepresentative adminMr = LoginController
 					.getLoggedInUser().getMedicalRepresentative();
 			if (mr.id == null) {
+				/*if(AppUser.find.where().eq("email", appUser.email).findRowCount()>0){
+					flash().put("alert", new Alert("alert-danger", "Sorry! User with email id "+appUser.email.trim()+" already exists!").toString());
+					if(appUser.role == Role.ADMIN_MR){
+						return ok("User already exist");
+					}
+				}
+				try {
+
+					final Random random = new SecureRandom();
+					final byte[] saltArray = new byte[32];
+					random.nextBytes(saltArray);
+					final String randomSalt = Base64.encodeBase64String(saltArray);
+
+					final String passwordWithSalt = medicalRepresentativeBean.password+randomSalt;
+					final MessageDigest sha256 = MessageDigest.getInstance("SHA-256");
+					final byte[] passBytes = passwordWithSalt.getBytes();
+					final String hashedPasswordWithSalt = Base64.encodeBase64String(sha256.digest(passBytes));
+
+					appUser.salt = randomSalt;
+					appUser.password = hashedPasswordWithSalt;
+
+				} catch (final Exception e) {
+					Logger.error("ERROR WHILE CREATING SHA2 HASH");
+					e.printStackTrace();
+				}*/
 				appUser.save();
 				mr.pharmaceuticalCompany = company;
 				mr.appUser = appUser;
