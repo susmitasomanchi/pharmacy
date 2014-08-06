@@ -198,7 +198,7 @@
         
         }    
         
-        @if(LoginController.getLoggedInUserRole().equals(Role.ADMIN_MR.toString())){
+       @if(LoginController.getLoggedInUserRole().equals(Role.ADMIN_MR.toString()) || LoginController.getLoggedInUserRole().equals(Role.MR.toString())){
          <li class="dropdown">
           <a href="#" class="dropdown-toggle" data-toggle="dropdown">
          User
@@ -208,7 +208,7 @@
             <li><a href="@routes.MRController.mrList()">View Medical Representative</a></li>            
           </ul>
         </li> 
-        
+        @if(LoginController.getLoggedInUserRole().equals(Role.ADMIN_MR.toString())){
         <li class="dropdown">
           <a href="#" class="dropdown-toggle" data-toggle="dropdown">
          Geography
@@ -218,13 +218,13 @@
             <li><a href="">Fieldstations</a></li>            
           </ul>
         </li>         
-        
+        }
         <li class="dropdown">
           <a href="#" class="dropdown-toggle" data-toggle="dropdown">
           Doctors
           <b class="caret"></b></a>
           <ul class="dropdown-menu">
-            <li><a href="/doctor-list">Search Doctor</a></li>
+            <li><a href="/mr/search-doctor-list">Search Doctor</a></li>
             <li><a href="/mr/doctor-list">My Doctor</a></li>
             <li><a href="/mr/schedule-appointment ">Schedule Appointment</a></li>
           </ul>
@@ -275,10 +275,13 @@
           <b class="caret"></b></a>
           <ul class="dropdown-menu">
             <li><a href="@routes.MRController.tourPlan()">Monthly Tour Plan</a></li>
-           
+            @if(LoginController.getLoggedInUserRole().equals(Role.ADMIN_MR.toString())){
+            <li><a href="@routes.MRController.tpLineItemVisibility()">TourPlanLineItemVisibility</a></li>
+            }
           </ul>
         </li>
         }
+        
     	@if(LoginController.getLoggedInUserRole().equals(Role.ADMIN_DIAGREP.toString())){
          
          @*

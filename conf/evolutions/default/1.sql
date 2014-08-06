@@ -468,6 +468,11 @@ create table medical_representative (
   status                    varchar(255),
   manager_id                bigint,
   pharmaceutical_company_id bigint,
+  is_doctor_visible         boolean,
+  is_sample_visible         boolean,
+  is_promotion_visible      boolean,
+  is_pob_visible            boolean,
+  is_remarks_visible        boolean,
   last_update               timestamp not null,
   constraint pk_medical_representative primary key (id))
 ;
@@ -632,8 +637,9 @@ create table question_and_answer (
 
 create table sample (
   id                        bigint not null,
-  dcrline_item_id           bigint not null,
-  product_id                bigint,
+  tpline_item_id            bigint not null,
+  dcr_line_item_id          bigint,
+  pharmaceutical_product_id bigint,
   quantity                  integer,
   last_update               timestamp not null,
   constraint pk_sample primary key (id))
@@ -684,8 +690,13 @@ create table social_user (
 create table tpline_item (
   id                        bigint not null,
   tour_plan_id              bigint not null,
-  month                     timestamp,
+  date                      timestamp,
+  day_status                varchar(11),
+  pob                       integer,
+  remarks                   varchar(255),
+  is_addedto_tourplan       boolean,
   last_update               timestamp not null,
+  constraint ck_tpline_item_day_status check (day_status in ('HOLIDAY','WORKING_DAY')),
   constraint pk_tpline_item primary key (id))
 ;
 
@@ -693,10 +704,8 @@ create table tour_plan (
   id                        bigint not null,
   medical_representative_id bigint not null,
   for_month                 timestamp,
-  status                    varchar(9),
   submit_date               timestamp,
   last_update               timestamp not null,
-  constraint ck_tour_plan_status check (status in ('REJECTED','DRAFT','APPROVED','REOPENED','SUBMITTED')),
   constraint pk_tour_plan primary key (id))
 ;
 
@@ -789,6 +798,18 @@ create table show_cased_service_file_entity (
   show_cased_service_id          bigint not null,
   file_entity_id                 bigint not null,
   constraint pk_show_cased_service_file_entity primary key (show_cased_service_id, file_entity_id))
+;
+
+create table tpline_item_doctor (
+  tpline_item_id                 bigint not null,
+  doctor_id                      bigint not null,
+  constraint pk_tpline_item_doctor primary key (tpline_item_id, doctor_id))
+;
+
+create table tpline_item_pharmaceutical_produ (
+  tpline_item_id                 bigint not null,
+  pharmaceutical_product_id      bigint not null,
+  constraint pk_tpline_item_pharmaceutical_produ primary key (tpline_item_id, pharmaceutical_product_id))
 ;
 create sequence address_seq;
 
@@ -1054,20 +1075,22 @@ alter table question_and_answer add constraint fk_question_and_answer_questi_74 
 create index ix_question_and_answer_questi_74 on question_and_answer (question_by_id);
 alter table question_and_answer add constraint fk_question_and_answer_answer_75 foreign key (answer_by_id) references app_user (id);
 create index ix_question_and_answer_answer_75 on question_and_answer (answer_by_id);
-alter table sample add constraint fk_sample_dcrline_item_76 foreign key (dcrline_item_id) references dcrline_item (id);
-create index ix_sample_dcrline_item_76 on sample (dcrline_item_id);
-alter table sample add constraint fk_sample_product_77 foreign key (product_id) references pharmaceutical_product (id);
-create index ix_sample_product_77 on sample (product_id);
-alter table show_cased_product add constraint fk_show_cased_product_pharmac_78 foreign key (pharmacy_id) references pharmacy (id);
-create index ix_show_cased_product_pharmac_78 on show_cased_product (pharmacy_id);
-alter table show_cased_service add constraint fk_show_cased_service_diagnos_79 foreign key (diagnostic_centre_id) references diagnostic_centre (id);
-create index ix_show_cased_service_diagnos_79 on show_cased_service (diagnostic_centre_id);
-alter table sig_code add constraint fk_sig_code_doctor_80 foreign key (doctor_id) references doctor (id);
-create index ix_sig_code_doctor_80 on sig_code (doctor_id);
-alter table tpline_item add constraint fk_tpline_item_tour_plan_81 foreign key (tour_plan_id) references tour_plan (id);
-create index ix_tpline_item_tour_plan_81 on tpline_item (tour_plan_id);
-alter table tour_plan add constraint fk_tour_plan_medical_represen_82 foreign key (medical_representative_id) references medical_representative (id);
-create index ix_tour_plan_medical_represen_82 on tour_plan (medical_representative_id);
+alter table sample add constraint fk_sample_tpline_item_76 foreign key (tpline_item_id) references tpline_item (id);
+create index ix_sample_tpline_item_76 on sample (tpline_item_id);
+alter table sample add constraint fk_sample_dcrLineItem_77 foreign key (dcr_line_item_id) references dcrline_item (id);
+create index ix_sample_dcrLineItem_77 on sample (dcr_line_item_id);
+alter table sample add constraint fk_sample_pharmaceuticalProdu_78 foreign key (pharmaceutical_product_id) references pharmaceutical_product (id);
+create index ix_sample_pharmaceuticalProdu_78 on sample (pharmaceutical_product_id);
+alter table show_cased_product add constraint fk_show_cased_product_pharmac_79 foreign key (pharmacy_id) references pharmacy (id);
+create index ix_show_cased_product_pharmac_79 on show_cased_product (pharmacy_id);
+alter table show_cased_service add constraint fk_show_cased_service_diagnos_80 foreign key (diagnostic_centre_id) references diagnostic_centre (id);
+create index ix_show_cased_service_diagnos_80 on show_cased_service (diagnostic_centre_id);
+alter table sig_code add constraint fk_sig_code_doctor_81 foreign key (doctor_id) references doctor (id);
+create index ix_sig_code_doctor_81 on sig_code (doctor_id);
+alter table tpline_item add constraint fk_tpline_item_tour_plan_82 foreign key (tour_plan_id) references tour_plan (id);
+create index ix_tpline_item_tour_plan_82 on tpline_item (tour_plan_id);
+alter table tour_plan add constraint fk_tour_plan_medical_represen_83 foreign key (medical_representative_id) references medical_representative (id);
+create index ix_tour_plan_medical_represen_83 on tour_plan (medical_representative_id);
 
 
 
@@ -1130,6 +1153,14 @@ alter table pharmacy_file_entity add constraint fk_pharmacy_file_entity_file__02
 alter table show_cased_service_file_entity add constraint fk_show_cased_service_file_en_01 foreign key (show_cased_service_id) references show_cased_service (id);
 
 alter table show_cased_service_file_entity add constraint fk_show_cased_service_file_en_02 foreign key (file_entity_id) references file_entity (id);
+
+alter table tpline_item_doctor add constraint fk_tpline_item_doctor_tpline__01 foreign key (tpline_item_id) references tpline_item (id);
+
+alter table tpline_item_doctor add constraint fk_tpline_item_doctor_doctor_02 foreign key (doctor_id) references doctor (id);
+
+alter table tpline_item_pharmaceutical_produ add constraint fk_tpline_item_pharmaceutical_01 foreign key (tpline_item_id) references tpline_item (id);
+
+alter table tpline_item_pharmaceutical_produ add constraint fk_tpline_item_pharmaceutical_02 foreign key (pharmaceutical_product_id) references pharmaceutical_product (id);
 
 # --- !Downs
 
@@ -1278,6 +1309,10 @@ drop table if exists sig_code cascade;
 drop table if exists social_user cascade;
 
 drop table if exists tpline_item cascade;
+
+drop table if exists tpline_item_doctor cascade;
+
+drop table if exists tpline_item_pharmaceutical_produ cascade;
 
 drop table if exists tour_plan cascade;
 

@@ -18,7 +18,7 @@
 		     <input id="dateForTourPlan" name="dateForTourPlan" class="span2" size="16" type="text" >
 		     <span class="add-on"><i class="icon-th"></i></span>
 	   	    </div>
-	   		<input type="submit" value="Add Tour Plan" />
+	   		<input type="submit" class="btn btn-primary btn-sm"value="Add Tour Plan" />
 	   	</form>
 	   	
 	 <br>
@@ -30,9 +30,9 @@
 	<th>Action</th>
 	</thead>
 	<tbody>
-	@for(tourPlan <- tourPlanList){
+	@for((tourPlan,index) <- tourPlanList.zipWithIndex){
 	<tr>
-		<td>&nbsp;</td>
+		<td>@{index+1}</td>
 		<td>@tourPlan.forMonth.format("MMM-yyyy")</td>
 		<td><a class="btn btn-primary btn-xs" href="@routes.MRController.tourPlanLineItem(tourPlan.id)">View Tour Plan</a></td>
 	</tr>

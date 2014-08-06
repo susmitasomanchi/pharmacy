@@ -1,0 +1,47 @@
+@(mr: models.mr.MedicalRepresentative,tpLineItem: models.mr.TPLineItem,index:Long)
+@import play.i18n._
+@import helper.twitterBootstrap._
+@import helper._
+
+		<td valign="top">@index</td>
+		
+		<td valign="top">@tpLineItem.date.format("dd-MMM-yyyy")</td>
+		<td valign="top">
+			@tpLineItem.dayStatus
+		</td>
+		@if(mr.tourPlanConfiguration.isDoctorVisible == false){
+		<td valign="top">
+				@for(doctor <- tpLineItem.doctorList){
+					@doctor.appUser.name
+					<br>
+				}
+		</td>
+		}
+		@if(mr.tourPlanConfiguration.isSampleVisible == false){
+		<td>
+			@for(sample <- tpLineItem.sampleList){
+				@if(sample != null){
+				@sample.pharmaceuticalProduct.medicineName (@sample.quantity)
+				<br>
+				}
+			}
+	   	</td>
+	   	}
+	   	@if(mr.tourPlanConfiguration.isPromotionVisible == false){
+		<td>
+				@for(promotedPharmaceuticalProduct <- tpLineItem.promotionList){
+					@promotedPharmaceuticalProduct.medicineName
+					<br>
+				}
+		</td>
+		}
+		@if(mr.tourPlanConfiguration.isPobVisible == false){
+		@if(tpLineItem.pob == 0){
+		<td>&nbsp;</td>
+		}else{
+		<td>@tpLineItem.pob</td>
+		}
+		}
+		@if(mr.tourPlanConfiguration.isRemarksVisible == false){
+		<td>@tpLineItem.remarks</td>
+		}
