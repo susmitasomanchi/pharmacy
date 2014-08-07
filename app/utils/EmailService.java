@@ -1,19 +1,18 @@
 package utils;
 
+import java.io.BufferedInputStream;
+import java.io.InputStream;
 import java.math.BigInteger;
 import java.security.SecureRandom;
 import java.util.List;
 import java.util.Random;
 
-import models.AppUser;
+import javax.activation.DataSource;
 
-import org.apache.commons.mail.DefaultAuthenticator;
-import org.apache.commons.mail.Email;
-import org.apache.commons.mail.EmailAttachment;
-import org.apache.commons.mail.EmailException;
-import org.apache.commons.mail.HtmlEmail;
-import org.apache.commons.mail.MultiPartEmail;
-import org.apache.commons.mail.SimpleEmail;
+import models.AppUser;
+import models.FileEntity;
+
+import org.apache.commons.mail.*;
 
 import play.Logger;
 
@@ -87,37 +86,9 @@ public class EmailService {
 		return result;
 	}
 
-	public void sendHTMLEmailWithAttachments(final String receiverEmailId, final String subject, final String htmlMessage, final List<byte[]> imageList){
-
-		// Create the attachment
-		final EmailAttachment attachment = new EmailAttachment();
-		attachment.setPath("mypictures/john.jpg");
-		attachment.setDisposition(EmailAttachment.ATTACHMENT);
-		attachment.setDescription("");
-		attachment.setName("filename");
-
-		// Create the email message
-		final MultiPartEmail email = new MultiPartEmail();
-		email.setHostName("mail.myserver.com");
-		try {
-			email.setHostName("smtp.gmail.com");
-			email.setSmtpPort(587);
-			email.setAuthenticator(new DefaultAuthenticator("mitesh.greensoftware@gmail.com", "mitesh@greensoftware.in"));
-			email.setSSLOnConnect(true);
-			email.setFrom("me@apache.org", "Me");
-			email.setSubject("The picture");
-			email.setMsg("Here is the picture you wanted");
-			// add the attachment
-			email.attach(attachment);
-			email.send();
-		} catch (final EmailException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
+	public static void sendHTMLEmailWithAttachments(final String receiverEmailId, final String subject, final String htmlMessage, final List<FileEntity> fileEntityList){
 
 
-
-		// send the email
 
 	}
 
