@@ -1,16 +1,20 @@
 package utils;
 
+import java.io.ByteArrayInputStream;
+import java.io.IOException;
 import java.math.BigInteger;
-import java.net.MalformedURLException;
-import java.net.URL;
 import java.security.SecureRandom;
+import java.util.List;
 import java.util.Random;
 
-import models.AppUser;
+import javax.activation.DataSource;
 
+import models.AppUser;
+import models.FileEntity;
+
+import org.apache.commons.mail.ByteArrayDataSource;
 import org.apache.commons.mail.DefaultAuthenticator;
 import org.apache.commons.mail.Email;
-import org.apache.commons.mail.EmailAttachment;
 import org.apache.commons.mail.EmailException;
 import org.apache.commons.mail.HtmlEmail;
 import org.apache.commons.mail.MultiPartEmail;
@@ -88,18 +92,9 @@ public class EmailService {
 		return result;
 	}
 
-	public static void sendHTMLEmailWithAttachments(final String receiverEmailId, final String subject, final String htmlMessage, final Long id){
+	@SuppressWarnings({ "deprecation", "deprecation" })
+	public static void sendHTMLEmailWithAttachments(final String receiverEmailId, final String subject, final String htmlMessage, final List<FileEntity> files){
 
-		// Create the attachment
-		final EmailAttachment attachment = new EmailAttachment();
-		try {
-			attachment.setURL(new URL("http://localhost:9000/get-file/"+id));
-		} catch (final MalformedURLException e1) {
-			e1.printStackTrace();
-		}
-		attachment.setDisposition(EmailAttachment.ATTACHMENT);
-		attachment.setDescription("Apache logo");
-		attachment.setName("Apache logo");
 
 		// Create the email message
 		final MultiPartEmail email = new MultiPartEmail();
@@ -114,9 +109,18 @@ public class EmailService {
 			email.setMsg("Here is the picture you wanted");
 			email.addTo(receiverEmailId);
 			// add the attachment
-			email.attach(attachment);
+			for (final FileEntity fileEntity : files) {
+				if(fileEntity.mimeType.compareToIgnoreCase(null) == 0 || fileEntity.mimeType.compareToIgnoreCase("") == 0 ){
+					fileEntity.mimeType = "application/pdf";
+				}
+				final DataSource source = new ByteArrayDataSource(new ByteArrayInputStream(fileEntity.byteContent), fileEntity.mimeType);
+				email.attach(source,fileEntity.fileName,"No description");
+			}
 			email.send();
 		} catch (final EmailException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (final IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
