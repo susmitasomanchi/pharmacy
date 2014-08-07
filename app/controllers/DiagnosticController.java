@@ -2,6 +2,7 @@ package controllers;
 
 
 import java.io.File;
+
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -19,22 +20,13 @@ import models.State;
 import models.diagnostic.DiagnosticCentre;
 import models.diagnostic.DiagnosticCentrePrescriptionInfo;
 import models.diagnostic.DiagnosticCentrePrescritionStatus;
-import models.diagnostic.DiagnosticOrder;
-import models.diagnostic.DiagnosticOrderStatus;
 import models.diagnostic.DiagnosticReport;
 import models.diagnostic.DiagnosticReportStatus;
 import models.diagnostic.DiagnosticTest;
-import models.MasterDiagnosticTest;
-import models.doctor.DiagnosticTestLineItem;
 import models.diagnostic.ShowCasedService;
-import models.doctor.Prescription;
 import models.patient.Patient;
-import models.pharmacist.Pharmacy;
-import models.pharmacist.PharmacyPrescriptionInfo;
-import models.pharmacist.PharmacyPrescriptionStatus;
 
 import org.apache.commons.io.FileUtils;
-import org.apache.commons.logging.Log;
 import org.joda.time.DateTime;
 
 import play.Logger;
@@ -83,10 +75,10 @@ public class DiagnosticController extends Controller {
 
 			if (request().body().asMultipartFormData().getFile("profileImage") != null) {
 				final FileEntity fileEntity = new FileEntity();
-				final File image = request().body().asMultipartFormData().getFile("profileImage").getFile();
-				fileEntity.fileName = image.getName();
-				fileEntity.mimeType = new MimetypesFileTypeMap().getContentType(image);
-				fileEntity.byteContent = Files.toByteArray(image);
+				final FilePart image = request().body().asMultipartFormData().getFile("profileImage");
+				fileEntity.fileName = image.getFilename();
+				fileEntity.mimeType = image.getContentType();
+				fileEntity.byteContent = Files.toByteArray(image.getFile());
 				fileEntity.save();
 				final Long imageId=fileEntity.id;
 				diagnosticCentre.profileImageList.add(FileEntity.find.byId(imageId));
@@ -237,6 +229,7 @@ public class DiagnosticController extends Controller {
  * Action to Display Todays Prescriptions requested by logged-in ADMIN_PHARMACIST	
  * Get /diagnostic/prescriptions	
  */
+
 	@ConfirmAppUser
 	public static Result getDiagnosticCentrePrescriptions(String status){
 		DiagnosticCentre diagnosticCentre = LoginController.getLoggedInUser().getDiagnosticRepresentative().diagnosticCentre;
@@ -254,22 +247,20 @@ public class DiagnosticController extends Controller {
 				.eq("diagnosticCentre", diagnosticCentre)
 				.in("diagnosticCentrePrescritionStatus", dcpStatuses)
 				.findList();
-		return ok(views.html.diagnostic.diagnosticPrescriptionList.render(diagnosticPrescriptionInfos,status));
+		return ok(views.html.diagnostic.diagnosticPrescriptionList.render(diagnosticPrescriptionInfos,status,true));
 	}
 	
 	/**
 		 * @author : lakshmi
 		 * Action to change the status of loggedInDiagnostics's prescription to SERVED
+		 * GET/diagnostic/order-confirmed/:diagInfoId
 		 */
 	@ConfirmAppUser
 		public static Result orderServed(Long DiagnosticInfoId) {
-			DiagnosticCentre diagnosticCentre = LoginController.getLoggedInUser().getDiagnosticRepresentative().diagnosticCentre;
 			DiagnosticCentrePrescriptionInfo diagnosticCentrePrescriptionInfo= DiagnosticCentrePrescriptionInfo.find.byId(DiagnosticInfoId);
-			/*diagnosticCentrePrescriptionInfo.diagnosticCentrePrescritionStatus = DiagnosticCentrePrescritionStatus.SERVED;
-			diagnosticCentrePrescriptionInfo.update();*/
+			diagnosticCentrePrescriptionInfo.diagnosticCentrePrescritionStatus = DiagnosticCentrePrescritionStatus.SERVED;
+			diagnosticCentrePrescriptionInfo.update();
 			return redirect(routes.DiagnosticController.getDiagnosticCentrePrescriptions("any"));
-			/*return ok(views.html.diagnostic.diagnosticPrescriptionList.render(DiagnosticCentrePrescriptionInfo
-					.find.where().eq("diagnosticCentre", diagnosticCentre).findList(),""));*/
 			}
 			
 		/**
@@ -315,10 +306,12 @@ public class DiagnosticController extends Controller {
 		public static Result uploadDiagnosticReportProcess(Long DiagnosticInfoId) {
 			DiagnosticCentrePrescriptionInfo diagnosticCentrePrescriptionInfo= DiagnosticCentrePrescriptionInfo.find.byId(DiagnosticInfoId);
 			if (request().body().asMultipartFormData().getFile("file") != null) {
-				final File report = request().body().asMultipartFormData().getFile("file").getFile();
+				final FilePart report = request().body().asMultipartFormData().getFile("file");
 				FileEntity fileEntity = new FileEntity();
 				try {
-					fileEntity.byteContent = Files.toByteArray(report);
+					fileEntity.mimeType = report.getContentType();
+					fileEntity.fileName = report.getFilename();
+					fileEntity.byteContent = Files.toByteArray(report.getFile());
 					diagnosticCentrePrescriptionInfo.fileEntities.add(fileEntity);
 				} catch (IOException e) {
 					// TODO Auto-generated catch block
@@ -336,7 +329,7 @@ public class DiagnosticController extends Controller {
 		 * @author lakshmi
 		 * Action to Display Todays Prescriptions requested to logged-in ADMIN_PHARMACIST
 		 */
-	@ConfirmAppUser
+		@ConfirmAppUser
 		public static Result TodaysDiagnosticPrescriptions() {
 			Date now = new Date();
 			final Calendar calendarFrom = Calendar.getInstance();
@@ -360,7 +353,7 @@ public class DiagnosticController extends Controller {
 					.ge("sharedDate", calendarFrom.getTime())
 					.le("sharedDate", calendarTo.getTime())
 					.findList();
-			return ok(views.html.diagnostic.diagnosticPrescriptionList.render(diagnosticCentrePrescriptionInfos,""));
+			return ok(views.html.diagnostic.diagnosticPrescriptionList.render(diagnosticCentrePrescriptionInfos,"",false));
 		}
 		/**
 		 * @author lakshmi
@@ -383,13 +376,8 @@ public class DiagnosticController extends Controller {
 					.ge("sharedDate", dateFrom)
 					.le("sharedDate",dateTo)
 					.findList();
-			return ok(views.html.diagnostic.diagnosticPrescriptionList.render(diagnosticCentrePrescriptionInfos,""));
+			return ok(views.html.diagnostic.diagnosticPrescriptionList.render(diagnosticCentrePrescriptionInfos,"",true));
 		}
-
-	
-	
-	
-
 	/**
 	 * @author lakshmi
 	 * Action to get byteData as image of ShowcasedService Of DiagnosticCentre
@@ -405,7 +393,6 @@ public class DiagnosticController extends Controller {
 			}
 		}
 		return ok(byteContent).as("image/jpeg");
-
 	}
 	/*	
 	*//**

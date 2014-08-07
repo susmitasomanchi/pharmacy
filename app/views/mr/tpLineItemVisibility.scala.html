@@ -1,0 +1,88 @@
+@(myMrList: List[models.mr.MedicalRepresentative])
+
+@main("Tour Plan Visibility"){
+	<script>
+	
+	if($('#is_doctor_visible'+index).is(":checked")){
+		alert("hiiii");
+		return true;
+		}
+	if($('#is_sample_visible'+index).is(":checked")){
+		return true;
+		}
+	if($('#is_promotion_visible'+index).is(":checked")){
+		return true;
+		}
+	if($('#is_pob_visible'+index).is(":checked")){
+		return true;
+	}
+	if($('#is_remarks_visible'+index).is(":checked")){
+		return true;
+			}
+	</script>
+	<table class="table table-bordered table-condensed ">
+		<thead>
+			<th>Sr No.</th>
+			<th>Medical Representative</th>
+			<th>Post As</th>
+			<th>Select Doctor</th>
+			<th>Select Samples</th>
+			<th>Select Promotion</th>
+			<th>Select Pob</th>
+			<th>Select Remarks</th>
+			<th>Action</th>
+		</thead>
+		<tbody>
+		<div id="checkboxdiv">
+			@for((mr,index) <- myMrList.zipWithIndex){
+				
+			<tr>
+				<form id="lineitemvisibilityform@index">
+					<td>@{index+1}</td>
+					<td>@mr.appUser.name</td>
+					@if(mr.manager != null){
+						<td>Admin</td>
+					}else{
+					<td>Admin's Manager</td>
+					}
+					<td>
+						<input id="is_doctor_visible@index"    name="is_doctor_visible@index" 	 type="checkbox" @if(mr.tourPlanConfiguration.isDoctorVisible == false){checked}else{unchecked}/>
+					</td>
+					
+					<td>
+						<input id="is_sample_visible@index"    name="is_sample_visible@index" 	 type="checkbox" @if(mr.tourPlanConfiguration.isSampleVisible == false){checked}else{unchecked}/>
+					</td>
+					<td>
+						<input id="is_promotion_visible@index" name="is_promotion_visible@index" type="checkbox" @if(mr.tourPlanConfiguration.isPromotionVisible == false){checked}else{unchecked}/>
+					</td>
+					<td>
+						<input id="is_pob_visible@index"       name="is_pob_visible@index"       type="checkbox" @if(mr.tourPlanConfiguration.isPobVisible == false){checked}else{unchecked}/>
+					</td>
+					<td>
+						<input id="is_remarks_visible@index"   name="is_remarks_visible@index"   type="checkbox" @if(mr.tourPlanConfiguration.isRemarksVisible == false){checked}else{unchecked}/>
+					</td>
+					<td>
+						<a class="btn btn-primary btn-xs" onclick="applyTourPlan(@mr.id,@index);">Apply To TourPlan</a>
+					</td>
+				</form>
+			</tr>	
+			}
+		</div>
+		</tbody>
+	</table>
+	<script>
+	
+	function applyTourPlan(mrId,index){
+		//alert('/mr/tourplan-lineitem-visibity-proccess/'+mrId+'/'+index);
+		$.post('/mr/tourplan-lineitem-visibity-proccess/'+mrId+'/'+index,$('#lineitemvisibilityform'+index).serialize(),function(data){
+			alert(data);
+		});
+		
+	}
+		
+		
+	</script>
+	
+	
+}
+

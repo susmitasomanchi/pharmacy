@@ -33,7 +33,11 @@ margin-bottom:0px;
 }
 
 </style>	
-	
+	@if(pharmacyList.size() == 0){
+    @if(searchKey != "" && searchKey!= null){   
+    <h5> No Pharmacies available with <b>@searchKey</b></h5>
+    }
+}
 <table class="table table-bordered">
 @for((pharmacy,index) <- pharmacyList.zipWithIndex){
 @if(index%2==0){

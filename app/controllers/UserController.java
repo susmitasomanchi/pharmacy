@@ -210,7 +210,6 @@ public class UserController extends Controller {
 		// Async Execution
 		promise(new Function0<Integer>() {
 			//@Override
-			@Override
 			public Integer apply() {
 
 				if(EmailService.sendConfirmationEmail(appUser)){
@@ -219,9 +218,8 @@ public class UserController extends Controller {
 				else{
 					flash().put("alert", new Alert("alert-danger","Sorry the message cant be sent").toString());
 					System.out.println("Send");
-				}
 
-				SMSService.sendConfirmationSMS(appUser);
+				}
 
 				return 0;
 			}
@@ -250,8 +248,8 @@ public class UserController extends Controller {
 		return ok(views.html.confirmAppUser.render(appUser));
 	}
 
-
-
+	
+	
 	/**
 	 * @author Lakshmi
 	 * Action to render the page to edit emailId and mobileNumber of loggedInUser
@@ -307,48 +305,24 @@ public class UserController extends Controller {
 		loggedInUser.update();
 		return redirect(routes.UserActions.dashboard());
 	}
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
 	/**
 	 * **************************** DEPRICATED ON 14 JUL 2014 ****************************
 	 * @deprecated Use UserController.processJoinUs() instead which is generic for all AppUser roles

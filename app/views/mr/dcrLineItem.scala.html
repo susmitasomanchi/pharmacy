@@ -1,4 +1,4 @@
-@(dcr: models.mr.DailyCallReport, dcrLineItemForm:play.data.Form[models.mr.DCRLineItem],doctorList: List[models.doctor.Doctor],disabledDoctorList: List[models.doctor.Doctor],productList: List[models.mr.PharmaceuticalProduct],loggedInMr: models.mr.MedicalRepresentative)
+@(dcr: models.mr.DailyCallReport, dcrLineItemForm:play.data.Form[models.mr.DCRLineItem],doctorList: List[models.doctor.Doctor],disabledDoctorList: List[models.doctor.Doctor],pharmaceuticalProductList: List[models.mr.PharmaceuticalProduct],loggedInMr: models.mr.MedicalRepresentative)
 
 @import play.i18n._
 @import helper.twitterBootstrap._
@@ -19,7 +19,7 @@
 	</style>
 	
 	<script>
-	var proList = '<option></option>@for(product <-productList){<option value="@product.id">@product.medicineName</option>}';
+	var proList = '<option></option>@for(pharmaceuticalProduct <-pharmaceuticalProductList){<option value="@pharmaceuticalProduct.id">@pharmaceuticalProduct.medicineName</option>}';
 	function removeSamples(id){
 	$('#sample'+id).remove();
     }	
@@ -75,8 +75,8 @@
 		<td>@dcrLineItem.doctor.appUser.name</td>
 		<td>
 			@for(sample <- dcrLineItem.sampleList){
-				@if(sample.product != null){
-				@sample.product.medicineName (@sample.quantity)
+				@if(sample.pharmaceuticalProduct != null){
+				@sample.pharmaceuticalProduct.medicineName (@sample.quantity)
 				<br>
 				}
 			}
@@ -161,8 +161,8 @@
 					<td valign="top">
 				  	   	<select id="select-samples" data-placeholder="Select Sample" class="chzn" name="sampleList" style="width:200px;" onchange="changeSample()">
 				  	   	   <option></option>
-							@for(product <- productList){
-					      	<option value="@product.id">@product.medicineName</option>
+							@for(pharmaceuticalProduct <- pharmaceuticalProductList){
+					      	<option value="@pharmaceuticalProduct.id">@pharmaceuticalProduct.medicineName</option>
 					        }
 			   		    </select>
 					</td>
@@ -183,8 +183,8 @@
 	   <td valign="top" >
 			    <select id="promotionList" data-placeholder="Select Promotions" class="chzn" name="promotionList" multiple="true" style="width:150px;height:24px">
 			    <option></option>
-				@for(product <- productList){
-				<option value=@product.id >@product.medicineName</option>
+				@for(pharmaceuticalProduct <- pharmaceuticalProductList){
+				<option value=@pharmaceuticalProduct.id >@pharmaceuticalProduct.medicineName</option>
 				}
 				</select>
 		</td>
@@ -240,8 +240,8 @@
 		<td>@dcrLineItem.doctor.appUser.name</td>
 		<td>
 			@for(sample <- dcrLineItem.sampleList){
-				@if(sample.product != null){
-				@sample.product.medicineName (@sample.quantity)
+				@if(sample.pharmaceuticalProduct != null){
+				@sample.pharmaceuticalProduct.medicineName (@sample.quantity)
 				<br>
 				}
 			}

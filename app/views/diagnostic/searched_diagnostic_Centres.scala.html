@@ -32,9 +32,14 @@ background-color:#cccccc;
 margin-bottom:0px;
 }
 
-</style>	
-	
+</style>
+	@if(diagnosticCentreList.size() == 0){
+    @if(searchKey != "" && searchKey!= null){   
+    <h5> No Diagnostic Centres available with <b>@searchKey</b></h5>
+    }
+}
 <table class="table table-bordered">
+
 @for((diagnosticCentre,index) <- diagnosticCentreList.zipWithIndex){
 @if(index%2==0){
  <tr class="row"> 

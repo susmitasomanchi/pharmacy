@@ -10,6 +10,8 @@ import models.diagnostic.DiagnosticCentre;
 import models.doctor.Appointment;
 import models.doctor.AppointmentStatus;
 import models.doctor.Doctor;
+import models.doctor.DoctorClinicInfo;
+import models.doctor.Prescription;
 import models.doctor.QuestionAndAnswer;
 import models.patient.Patient;
 import models.patient.PatientDoctorInfo;
@@ -19,6 +21,7 @@ import play.data.Form;
 import play.mvc.Controller;
 import play.mvc.Result;
 import actions.BasicAuth;
+import actions.ConfirmAppUser;
 import beans.QuestionAndAnswerBean;
 
 @BasicAuth
@@ -30,7 +33,11 @@ public class PatientController extends Controller {
 
 	public static Form<QuestionAndAnswerBean> questionAndAnswerForm = Form
 			.form(QuestionAndAnswerBean.class);
-
+	
+	
+	
+	
+	
 
 	/**
 	 * @author Mitesh
@@ -258,33 +265,21 @@ public class PatientController extends Controller {
 	 * Action to list out favorite pharmacies of Patient of loggedin PATIENT
 	 * GET/patient/my-favorite-pharmacies
 	 */
-	public static Result myFavoritePharmacies() {
+	public static Result patientFavoritePharmacies() {
 		final Patient patient = LoginController.getLoggedInUser().getPatient();
-		return ok(views.html.pharmacist.favorite_pharmacy_list.render(patient.pharmacyList,0L,patient.id));
+		return ok(views.html.pharmacist.favorite_pharmacy_list.render(patient.pharmacyList));
 	}
+	
 	/**
-	 * @author lakshmi
-	 * Action to remove pharmacy from  favorite pharmacies List of Patient of loggedin PATIENT
-	 * GET/patient/remove-favorite-pharmacy/:patientId/:pharmacyId
+	 * @author lakshmi Action to list out favorite Diagnostic Centre of Patient
+	 *         of loggedin DOCTOR GET/patient/favorite-diagnostic-centres
 	 */
-	public static Result removePatientFavoritePharmacy(final Long patientId,final Long pharmacyId) {
-		final Patient patient = Patient.find.byId(patientId);
-		patient.pharmacyList.remove(Pharmacy.find.byId(pharmacyId));
-		patient.update();
-		return ok(views.html.pharmacist.favorite_pharmacy_list.render(patient.pharmacyList,0L,patient.id));
-	}
-	/**
-	 * @author lakshmi
-	 * Action to remove diagnosticCentre from  favorite diagnosticCentres List of loggedin PATIENT
-	 * GET/patient/remove-favorite-diagnosticCentre/:patientId/:pharmacyId
-	 */
-	public static Result removePatientFavoriteDiagnostic(final Long patientId,final Long diagnosticId) {
-		final Patient patient = Patient.find.byId(patientId);
-		patient.diagnosticCenterList.remove(DiagnosticCentre.find.byId(diagnosticId));
-		patient.update();
-		return ok(views.html.diagnostic.favorite_diagnosticCentre_list.render(patient.diagnosticCenterList,0L,patient.id));
-	}
 
+	public static Result patientFavoriteDiagnosticCentres() {
+		final Patient patient = LoginController.getLoggedInUser().getPatient();
+		return ok(views.html.diagnostic.favorite_diagnosticCentre_list.render(patient.diagnosticCenterList));
+	}
+	
 	/**
 	 * @author Mitesh
 	 * Action to show a forms which have currently logged in patient requested appointments
@@ -314,4 +309,50 @@ public class PatientController extends Controller {
 		return ok("appointment save");
 	}
 
+	/**@author lakshmi
+	 * Action to show all prescription created by loggedInPatient
+	 *GET /user/prescriptions
+	 */
+	//@ConfirmAppUser
+	public static Result viewAllPatientPrescriptions() {
+		final Patient patient = LoginController.getLoggedInUser().getPatient();
+		final List<Prescription> prescriptionList = Prescription.find.where()
+				.eq("patient", patient).orderBy("prescriptionDate").findList();
+		return ok(views.html.patient.patientPrescriptionList.render(prescriptionList));
+	}
+	
+	/**
+	 * @author lakshmi
+	 * Action to show the prescription to the loggedInPatient 
+	 * GET/user/show-prescription/:prescriptionId
+	 */
+	//@ConfirmAppUser
+	public static Result viewPrescription(final Long prescriptionId) {
+		final Patient patient = LoginController.getLoggedInUser().getPatient();
+		final Prescription prescription = Prescription.find
+				.byId(prescriptionId);
+		// server-side check
+		if (prescription.patient.id.longValue() != patient.id.longValue()) {
+			return redirect(routes.LoginController.processLogout());
+		}
+		return ok(views.html.patient.patientSharedPrescription.render(prescription));
+	}
+	/**
+	 * @author Mitesh Action to Display appointment requested to logged-in
+	 *         DOCTOR GET /doctor/all-appointments
+	 */
+//	@ConfirmAppUser
+	public static Result viewPatientAppointments() {
+
+		final Patient patient = LoginController.getLoggedInUser().getPatient();
+		/*final List<DoctorClinicInfo> docclinicInfo = DoctorClinicInfo.find.where().eq("patient", patient).findList();
+		final List<AppointmentStatus> statusList = new ArrayList<AppointmentStatus>();
+		final List<Appointment> appointments = Appointment.find.where()
+				.eq("requestedBy", patient.appUser.id)
+				.findList();*/
+		return ok(views.html.patient.patientAllAppointments.render(patient));
+
+	}
+
+	
 }
