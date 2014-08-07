@@ -1,7 +1,13 @@
 package beans;
 
 import java.io.Serializable;
+import java.security.MessageDigest;
+import java.security.SecureRandom;
+import java.util.Random;
 
+import org.apache.commons.codec.binary.Base64;
+
+import models.Alert;
 import models.AppUser;
 import models.Role;
 import models.mr.MedicalRepresentative;

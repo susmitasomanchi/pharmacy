@@ -19,15 +19,7 @@
     
 		
 		@if(LoginController.getLoggedInUserRole().equals(Role.PATIENT.toString())){
-		<li class="dropdown">
-          <a href="#" class="dropdown-toggle" data-toggle="dropdown">
-          Pharmacies
-          <b class="caret"></b></a>
-          <ul class="dropdown-menu">
-	           	<li><a href="">Search Pharmacies</a></li>
-	            <li><a href="">My Pharmacies</a></li>
-	           </ul>
-        </li>
+		
 		<li class="dropdown">
           <a href="#" class="dropdown-toggle" data-toggle="dropdown">
         	Doctors
@@ -37,9 +29,36 @@
             <li><a href="@routes.PatientController.myFavouriteDoctors()">My Doctors</a></li>
             <li class="divider"></li>
             <li><a href="">Schedule an Appointment</a></li>
+            <li><a href="@routes.PatientController.viewPatientAppointments()">Appointments</a></li>
+            <li><a href="@routes.PatientController.viewAllPatientPrescriptions()">Prescriptions</a></li>
           </ul>
         </li>
         
+        @*<li class="dropdown">
+          <a href="#" class="dropdown-toggle" data-toggle="dropdown">
+          Prescriptions
+          <b class="caret"></b></a>
+          <ul class="dropdown-menu">
+	           	<li><a href="@routes.PatientController.viewAllPatientPrescriptions()">All Prescriptions</a></li>
+	           </ul>*@
+       <li class="dropdown">
+          <a href="#" class="dropdown-toggle" data-toggle="dropdown">
+          Pharmacies
+          <b class="caret"></b></a>
+          <ul class="dropdown-menu">
+	            <li><a href="@routes.PublicController.searchPharmaciesPage()">Search Pharmacies</a></li>
+	            <li><a href="@routes.PatientController.patientFavoritePharmacies()">My Pharmacies</a></li>
+          </ul>
+        </li>
+        <li class="dropdown">
+          <a href="#" class="dropdown-toggle" data-toggle="dropdown">
+          Diagnostic Centres
+          <b class="caret"></b></a>
+          <ul class="dropdown-menu">
+	           	<li><a href="@routes.PublicController.searchDiagnosticPage()">Search Diagnostic Centres</a></li>
+	            <li><a href="@routes.PatientController.patientFavoriteDiagnosticCentres()">My Diagnostic Centres</a></li>
+	           </ul>
+        </li>
         @*
         <li class="dropdown">
           <a href="#" class="dropdown-toggle" data-toggle="dropdown">
@@ -190,7 +209,7 @@
         
         }    
         
-        @if(LoginController.getLoggedInUserRole().equals(Role.ADMIN_MR.toString())){
+       @if(LoginController.getLoggedInUserRole().equals(Role.ADMIN_MR.toString()) || LoginController.getLoggedInUserRole().equals(Role.MR.toString())){
          <li class="dropdown">
           <a href="#" class="dropdown-toggle" data-toggle="dropdown">
          User
@@ -200,7 +219,7 @@
             <li><a href="@routes.MRController.mrList()">View Medical Representative</a></li>            
           </ul>
         </li> 
-        
+        @if(LoginController.getLoggedInUserRole().equals(Role.ADMIN_MR.toString())){
         <li class="dropdown">
           <a href="#" class="dropdown-toggle" data-toggle="dropdown">
          Geography
@@ -210,13 +229,13 @@
             <li><a href="">Fieldstations</a></li>            
           </ul>
         </li>         
-        
+        }
         <li class="dropdown">
           <a href="#" class="dropdown-toggle" data-toggle="dropdown">
           Doctors
           <b class="caret"></b></a>
           <ul class="dropdown-menu">
-            <li><a href="/doctor-list">Search Doctor</a></li>
+            <li><a href="/mr/search-doctor-list">Search Doctor</a></li>
             <li><a href="/mr/doctor-list">My Doctor</a></li>
             <li><a href="/mr/schedule-appointment ">Schedule Appointment</a></li>
           </ul>
@@ -267,10 +286,13 @@
           <b class="caret"></b></a>
           <ul class="dropdown-menu">
             <li><a href="@routes.MRController.tourPlan()">Monthly Tour Plan</a></li>
-           
+            @if(LoginController.getLoggedInUserRole().equals(Role.ADMIN_MR.toString())){
+            <li><a href="@routes.MRController.tpLineItemVisibility()">TourPlanLineItemVisibility</a></li>
+            }
           </ul>
         </li>
         }
+        
     	@if(LoginController.getLoggedInUserRole().equals(Role.ADMIN_DIAGREP.toString())){
          
          @*

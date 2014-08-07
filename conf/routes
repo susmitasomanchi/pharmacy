@@ -57,6 +57,8 @@ GET   	/pharmacy/search/:searchString                  controllers.PublicControl
 GET     /pharmacy/search									controllers.PublicController.searchPharmaciesPage()
 GET		/doctor/add-to-favorite/:docId					controllers.PublicController.addToFavDoctor(docId: Long)
 GET		/diagnostic/get-image/:diagnosticId/:imageId	controllers.PublicController.getDiagnosticImages(diagnosticId: Long,imageId: Long)
+GET		/diagnostic/remove-diagnostic/:diagnosticId					controllers.PublicController.removeFavoriteDiagnosticCentre(diagnosticId: Long)
+GET		/doctor/remove-pharmacy/:pharmacyId							controllers.PublicController.removeFavoritePharmacy(pharmacyId:Long)
 GET 	/sendTestmail									controllers.DiagnosticController.sendSampleAttchEmail() 
 # Sign up page
 GET    /doctor/join                              			controllers.UserController.joinUsDoctor()
@@ -82,9 +84,7 @@ POST	/doctor/add-social-work						controllers.DoctorController.addSocialWork()
 GET		/doctor/remove-social-work/:docId/:id		controllers.DoctorController.removeSocialWork(docId: Long, id: Long)
 GET		/doctor/add-favorite-pharmacy/:pharmacyId/:str							controllers.DoctorController.addFavoritePharmacy(pharmacyId: Long,str: String)
 GET		/doctor/my-favorite-pharmacies											controllers.DoctorController.myFavoritePharmacies()
-GET		/doctor/remove-pharmacy/:doctorId/:pharmacyId		controllers.DoctorController.removeFavoritePharmacy(doctorId: Long, pharmacyId:Long)
 GET		/doctor/favorite-diagnostic-centres											controllers.DoctorController.myFavoriteDiagnosticCentres()
-GET		/doctor/remove-favorite-diagnosticCentre/:doctorId/:pharmacyId				controllers.DoctorController.removeFavoriteDiagnosticCentre(doctorId: Long, pharmacyId:Long)
 GET		/doctor/add-favorite-diagnosticCentre/:diagnosticId/:str					controllers.DoctorController.addFavoriteDiagnosticCentre(diagnosticId: Long,str: String)
 
 
@@ -93,7 +93,6 @@ GET		/doctor/add-favorite-diagnosticCentre/:diagnosticId/:str					controllers.Do
 GET    /doctor/new-clinic                 		controllers.DoctorController.newClinic()
 POST   /doctor/new-clinic                 		controllers.DoctorController.processNewClinic()
 GET    /doctor/clinics                    		controllers.DoctorController.myClinics()
-GET    /doctor/edit-clinic/:id                          controllers.DoctorController.manageClinic(id:Long)
 GET    /doctor/edit-clinic-info/:id                  	controllers.DoctorController.editClinicInfo(id:Long)
 GET    /doctor/edit-clinic-schedule/:id                 controllers.DoctorController.editClinicSchedule(id:Long)
 POST   /doctor/update-clinic                            controllers.DoctorController.processUpdateClinicInfo()
@@ -117,8 +116,13 @@ GET 	/doctor/:slugUrl								controllers.PublicController.getDoctorWithSlug(slug
 
 # Patient Module
 GET    /user/my-doctors									controllers.PatientController.myFavouriteDoctors()
-GET		/user/remove-pharmacy/:patientId/:pharmacyId	controllers.PatientController.removePatientFavoritePharmacy(patientId: Long, pharmacyId: Long)
-GET		/user/remove-diagnosticCentre/:patientId/:pharmacyId	controllers.PatientController.removePatientFavoriteDiagnostic(patientId: Long, pharmacyId: Long)
+GET		/user/prescriptions										controllers.PatientController.viewAllPatientPrescriptions()
+GET		/user/show-prescription/:prescriptionId			controllers.PatientController.viewPrescription(prescriptionId: Long)
+GET		/user/favorite-diagnostic-centres				controllers.PatientController.patientFavoriteDiagnosticCentres()
+GET		/user/favorite-pharmacies						controllers.PatientController.patientFavoritePharmacies()
+GET		/user/appointments								controllers.PatientController.viewPatientAppointments()
+
+
 
 POST	/pharmacy/upload-pharmacy-images					controllers.PharmacistController.uploadPharmacyImageProcess()
 POST	/pharmacy/basic-update								controllers.PharmacistController.pharmacyBasicUpdate()
@@ -340,6 +344,10 @@ POST   /mr/add-head-quarter                              controllers.MRControlle
 GET    /mr/tour-plan                                     controllers.MRController.tourPlan()
 POST   /mr/add-tour-plan                                 controllers.MRController.addTourPlan()
 GET    /mr/tourplan-lineitem/:tourplanid                 controllers.MRController.tourPlanLineItem(tourplanid: Long)
+POST   /mr/tourplan/add-line-item/:tourplanid/:lineitemid/:index       controllers.MRController.addTourPlanLineItem(tourplanid: Long,lineitemid: Long,index: Long)
+POST   /mr/submit-tourplan                                             controllers.MRController.submitTourPlan()
+GET    /mr/tourplan-lineitem-visibity                                  controllers.MRController.tpLineItemVisibility()
+POST   /mr/tourplan-lineitem-visibity-proccess/:mrid/:index                         controllers.MRController.tpLineItemVisibilityProccess(mrid: Long,index: Long)
 POST    /mr/add                                    controllers.MRController.medicalRepresentativeProccess()
 #POST    /mr/editmr                                 controllers.MRController.medicalRepresentativeProccessUpdate()
 GET     /mr/del	                                   controllers.MRController.removeMR(id: Long)

@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import javax.persistence.CascadeType;
+import javax.persistence.Embedded;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -64,6 +65,9 @@ public class MedicalRepresentative extends BaseEntity {
 
 	@OneToMany(cascade = CascadeType.ALL)
 	public List<TourPlan> tourPlanList = new ArrayList<TourPlan>();
+
+	@Embedded
+	public TourPlanConfiguration tourPlanConfiguration = new TourPlanConfiguration();
 
 	public MedicalRepresentativeBean toBean() {
 		final MedicalRepresentativeBean bean = new MedicalRepresentativeBean();

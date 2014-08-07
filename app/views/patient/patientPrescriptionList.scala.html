@@ -1,0 +1,59 @@
+@(prescriptions:List[models.doctor.Prescription])
+@import play.i18n._
+@main("Prescriptions"){
+	
+	
+		<div  class="tab-content">
+		
+		<div class="tab-pane fade in active" id="all">
+			<table class="table table-condensed table-hover table-bordered">
+			<thead>
+			<tr>
+			<div class="row clearfix">
+			<th>Doctor</th>
+				<th>Prescription <br> Date &amp; Time</th>
+				<th>Appointment <br> Date &amp; Time</th>
+				<th>Patient&nbsp;(Sex/Age)</th>
+				<th>Action</th>				
+			</div>
+			</tr>
+			</thead>
+			@for(prescription <- prescriptions){
+			<tr>
+			<div class="row clearfix">
+			<div class="col-md-3 column">
+				<td>@prescription.doctor.appUser.name</td>
+				</div>
+				<div class="col-md-3 column">
+				<td>@prescription.prescriptionDate.format("dd-MMM-yyyy HH:mm")</td>
+				</div>
+				<div class="col-md-3 column">
+				<td>@if(prescription.appointment != null){@prescription.appointment.appointmentTime.format("dd-MMM-yyyy HH:mm")}</td>
+				</div>
+				<div class="col-md-3 column">
+				<td>@{prescription.patient.appUser.name}&nbsp;(@prescription.patient.appUser.sex.toString().substring(0,1)/@prescription.patient.appUser.getAge())</td>
+				</div>
+				<div class="col-md-3 column">
+				<td>
+					<a href="@routes.PatientController.viewPrescription(prescription.id)" class="btn btn-sm btn-primary"  role="button">View Prescription</a>				
+				</td>
+				</div>
+			</div>
+			</tr>
+			}
+		</table>
+		</div>
+		
+			
+			</div>
+			}
+	
+
+
+
+
+
+
+
+
+

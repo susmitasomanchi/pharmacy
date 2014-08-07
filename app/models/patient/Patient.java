@@ -15,13 +15,13 @@ import javax.persistence.OneToOne;
 import models.AppUser;
 import models.BaseEntity;
 import models.diagnostic.DiagnosticCentre;
+import models.doctor.Appointment;
 import models.pharmacist.Pharmacy;
 import play.db.ebean.Model;
 
 @SuppressWarnings("serial")
 @Entity
 public class Patient extends BaseEntity {
-
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO)
 	public Long id;
@@ -41,5 +41,13 @@ public class Patient extends BaseEntity {
 	public List<DiagnosticCentre> diagnosticCenterList = new ArrayList<DiagnosticCentre>();
 
 	public static Model.Finder<Long, Patient> find = new Finder<Long, Patient>(Long.class, Patient.class);
+	
+	public List<Appointment> getAppointments(){
+		final List<Appointment> appointments = Appointment.find.where()
+				.eq("requestedBy", this.appUser).orderBy("appointmentTime")
+				.findList();
+		return appointments;
+		//return ok(views.html.patient.patientAllAppointments.render(appointments,docclinicInfo));
+	}
 
 }

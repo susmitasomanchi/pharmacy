@@ -9,6 +9,8 @@ import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
+import javax.activation.MimetypesFileTypeMap;
+
 import models.Address;
 import models.Alert;
 import models.FileEntity;
@@ -253,8 +255,8 @@ public class DiagnosticController extends Controller {
 	 * GET/diagnostic/order-confirmed/:diagInfoId
 	 */
 	@ConfirmAppUser
-	public static Result orderServed(final Long DiagnosticInfoId) {
-		final DiagnosticCentrePrescriptionInfo diagnosticCentrePrescriptionInfo= DiagnosticCentrePrescriptionInfo.find.byId(DiagnosticInfoId);
+		public static Result orderServed(Long DiagnosticInfoId) {
+			DiagnosticCentrePrescriptionInfo diagnosticCentrePrescriptionInfo= DiagnosticCentrePrescriptionInfo.find.byId(DiagnosticInfoId);
 		diagnosticCentrePrescriptionInfo.diagnosticCentrePrescritionStatus = DiagnosticCentrePrescritionStatus.SERVED;
 		diagnosticCentrePrescriptionInfo.update();
 		return redirect(routes.DiagnosticController.getDiagnosticCentrePrescriptions("any"));
@@ -281,8 +283,8 @@ public class DiagnosticController extends Controller {
 	 * Action to display all DiagnosticTest for the current order
 	 */
 	@ConfirmAppUser
-	public static Result viewOrderedTest(final Long DiagnosticInfoId) {
-		final DiagnosticCentrePrescriptionInfo diagnosticCentrePrescriptionInfo= DiagnosticCentrePrescriptionInfo.find.byId(DiagnosticInfoId);
+		public static Result viewOrderedTest(Long DiagnosticInfoId) {
+			DiagnosticCentrePrescriptionInfo diagnosticCentrePrescriptionInfo= DiagnosticCentrePrescriptionInfo.find.byId(DiagnosticInfoId);			
 		return ok(views.html.diagnostic.receivedTests.render(diagnosticCentrePrescriptionInfo));
 	}
 	/**
@@ -291,7 +293,7 @@ public class DiagnosticController extends Controller {
 	 * Action to render to the uploadPatientReort.scala to get upload form
 	 */
 	@ConfirmAppUser
-	public static Result uploadDiagnosticReport(final Long DiagnosticInfoId) {
+		public static Result uploadDiagnosticReport(Long DiagnosticInfoId) {
 		return ok(views.html.diagnostic.uploadDiagnosticReport.render(DiagnosticInfoId));
 	}
 	/**
@@ -300,17 +302,17 @@ public class DiagnosticController extends Controller {
 	 * Action to upload DiagnosticReport
 	 */
 	@ConfirmAppUser
-	public static Result uploadDiagnosticReportProcess(final Long DiagnosticInfoId) {
-		final DiagnosticCentrePrescriptionInfo diagnosticCentrePrescriptionInfo= DiagnosticCentrePrescriptionInfo.find.byId(DiagnosticInfoId);
+		public static Result uploadDiagnosticReportProcess(Long DiagnosticInfoId) {
+			DiagnosticCentrePrescriptionInfo diagnosticCentrePrescriptionInfo= DiagnosticCentrePrescriptionInfo.find.byId(DiagnosticInfoId);
 		if (request().body().asMultipartFormData().getFile("file") != null) {
 			final FilePart report = request().body().asMultipartFormData().getFile("file");
-			final FileEntity fileEntity = new FileEntity();
+				FileEntity fileEntity = new FileEntity();
 			try {
 				fileEntity.mimeType = report.getContentType();
 				fileEntity.fileName = report.getFilename();
 				fileEntity.byteContent = Files.toByteArray(report.getFile());
 				diagnosticCentrePrescriptionInfo.fileEntities.add(fileEntity);
-			} catch (final IOException e) {
+				} catch (IOException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
@@ -328,7 +330,7 @@ public class DiagnosticController extends Controller {
 	 */
 	@ConfirmAppUser
 	public static Result TodaysDiagnosticPrescriptions() {
-		final Date now = new Date();
+			Date now = new Date();
 		final Calendar calendarFrom = Calendar.getInstance();
 		calendarFrom.setTime(now);
 		calendarFrom.set(Calendar.HOUR_OF_DAY, 0);
@@ -343,7 +345,7 @@ public class DiagnosticController extends Controller {
 		calendarTo.set(Calendar.SECOND,59);
 		calendarTo.set(Calendar.MILLISECOND,999);
 
-		final DiagnosticCentre diagnosticCentre = LoginController.getLoggedInUser().getDiagnosticRepresentative().diagnosticCentre;
+			DiagnosticCentre diagnosticCentre = LoginController.getLoggedInUser().getDiagnosticRepresentative().diagnosticCentre;
 		final List<DiagnosticCentrePrescriptionInfo> diagnosticCentrePrescriptionInfos =
 				DiagnosticCentrePrescriptionInfo.find.where()
 				.eq("diagnosticCentre", diagnosticCentre)
@@ -365,7 +367,7 @@ public class DiagnosticController extends Controller {
 		}
 		if(requestMap.get("to") != null && (requestMap.get("to")[0]).trim().compareToIgnoreCase("")!=0){
 			dateTo = new DateTime(requestMap.get("to")[0]).toDate();
-		}final DiagnosticCentre diagnosticCentre = LoginController.getLoggedInUser().getDiagnosticRepresentative().diagnosticCentre;
+				}DiagnosticCentre diagnosticCentre = LoginController.getLoggedInUser().getDiagnosticRepresentative().diagnosticCentre;
 
 		final List<DiagnosticCentrePrescriptionInfo> diagnosticCentrePrescriptionInfos =
 				DiagnosticCentrePrescriptionInfo.find.where()

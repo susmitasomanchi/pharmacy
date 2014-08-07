@@ -55,7 +55,7 @@ public class ProductController extends Controller{
 				Logger.info("pharmaceutical company is : "+loggedInMr.pharmaceuticalCompany.name);
 				if(filledProduct.id == null){
 					//Logger.info("Saving product for MR");
-					loggedInMr.pharmaceuticalCompany.productList.add(filledProduct);
+					loggedInMr.pharmaceuticalCompany.pharmaceuticalProductList.add(filledProduct);
 					loggedInMr.pharmaceuticalCompany.update();
 				}else{
 					final MasterProduct product = MasterProduct.find.byId(filledProduct.id);
