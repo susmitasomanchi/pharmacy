@@ -1,4 +1,4 @@
-@(diagnosticCentreList  : List[models.diagnostic.DiagnosticCentre],doctorId: Long,patientId: Long)
+@(diagnosticCentreList  : List[models.diagnostic.DiagnosticCentre])
 
 @import play.i18n._
 @import helper.twitterBootstrap._
@@ -58,13 +58,8 @@ margin-bottom:0px;
       <h4>Are you sure you wish to remove @diagnosticCentre.name ?</h4>
       <div class="modal-footer">
         <button type="button" class="btn btn-default btn-xs" data-dismiss="modal">Close</button>
-        @if(doctorId != 0){
-        <a href="@routes.DoctorController.removeFavoriteDiagnosticCentre(doctorId,diagnosticCentre.id)" class="btn btn-danger btn-xs ">Remove</a>
-        }
-        @if(patientId != 0){
-        <a href="@routes.PatientController.removePatientFavoriteDiagnostic(patientId,diagnosticCentre.id)" class="btn btn-danger btn-xs ">Remove</a>
-        }
-       
+        <a href="@routes.PublicController.removeFavoriteDiagnosticCentre(diagnosticCentre.id)" class="btn btn-danger btn-xs ">Remove</a>
+           
       </div>
     </div>
   </div>

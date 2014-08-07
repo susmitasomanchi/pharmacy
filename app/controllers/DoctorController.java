@@ -1520,25 +1520,9 @@ public class DoctorController extends Controller {
 	@ConfirmAppUser
 	public static Result myFavoritePharmacies() {
 		final Doctor doctor = LoginController.getLoggedInUser().getDoctor();
-		return ok(views.html.pharmacist.favorite_pharmacy_list.render(
-				doctor.pharmacyList, doctor.id, 0L));
+		return ok(views.html.pharmacist.favorite_pharmacy_list.render(doctor.pharmacyList));
 	}
 
-	/**
-	 * @author lakshmi Action to remove Pharmacy from favorite pharmacies List
-	 *         of Doctor of loggedin DOCTOR
-	 *         GET/doctor/remove-favorite-pharmacy/:patientId/:pharmacyId
-	 */
-	@ConfirmAppUser
-	public static Result removeFavoritePharmacy(final Long doctorId,
-			final Long pharmacyId) {
-		final Doctor doctor = Doctor.find.byId(doctorId);
-		doctor.pharmacyList.remove(Pharmacy.find.byId(pharmacyId));
-		doctor.update();
-		// return redirect(routes.UserActions.dashboard());
-		return ok(views.html.pharmacist.favorite_pharmacy_list.render(
-				doctor.pharmacyList, doctor.id, 0L));
-	}
 
 	/**
 	 * @author lakshmi Action to add favorite pharmacy of the Doctor to the list
@@ -1574,25 +1558,10 @@ public class DoctorController extends Controller {
 
 	public static Result myFavoriteDiagnosticCentres() {
 		final Doctor doctor = LoginController.getLoggedInUser().getDoctor();
-		return ok(views.html.diagnostic.favorite_diagnosticCentre_list.render(
-				doctor.diagnosticCentreList, doctor.id, 0L));
+		return ok(views.html.diagnostic.favorite_diagnosticCentre_list.render(doctor.diagnosticCentreList));
 	}
 
-	/**
-	 * @author lakshmi Action to remove Pharmacy from favorite pharmacies List
-	 *         of Doctor of loggedin DOCTOR
-	 *         GET/doctor/remove-favorite-diagnosticCentre/:doctorId/:pharmacyId
-	 */
-	public static Result removeFavoriteDiagnosticCentre(final Long doctorId,
-			final Long diagnosticId) {
-		final Doctor doctor = Doctor.find.byId(doctorId);
-		doctor.diagnosticCentreList.remove(DiagnosticCentre.find
-				.byId(diagnosticId));
-		doctor.update();
-		// return redirect(routes.UserActions.dashboard());
-		return ok(views.html.diagnostic.favorite_diagnosticCentre_list.render(
-				doctor.diagnosticCentreList, doctor.id, 0L));
-	}
+	
 
 	@ConfirmAppUser
 	public static Result requestAppointment() {

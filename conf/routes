@@ -57,6 +57,8 @@ GET   	/pharmacy/search/:searchString                  controllers.PublicControl
 GET     /pharmacy/search									controllers.PublicController.searchPharmaciesPage()
 GET		/doctor/add-to-favorite/:docId					controllers.PublicController.addToFavDoctor(docId: Long)
 GET		/diagnostic/get-image/:diagnosticId/:imageId	controllers.PublicController.getDiagnosticImages(diagnosticId: Long,imageId: Long)
+GET		/diagnostic/remove-diagnostic/:diagnosticId					controllers.PublicController.removeFavoriteDiagnosticCentre(diagnosticId: Long)
+GET		/doctor/remove-pharmacy/:pharmacyId							controllers.PublicController.removeFavoritePharmacy(pharmacyId:Long)
 
 
 # Sign up page
@@ -83,9 +85,7 @@ POST	/doctor/add-social-work						controllers.DoctorController.addSocialWork()
 GET		/doctor/remove-social-work/:docId/:id		controllers.DoctorController.removeSocialWork(docId: Long, id: Long)
 GET		/doctor/add-favorite-pharmacy/:pharmacyId/:str							controllers.DoctorController.addFavoritePharmacy(pharmacyId: Long,str: String)
 GET		/doctor/my-favorite-pharmacies											controllers.DoctorController.myFavoritePharmacies()
-GET		/doctor/remove-pharmacy/:doctorId/:pharmacyId		controllers.DoctorController.removeFavoritePharmacy(doctorId: Long, pharmacyId:Long)
 GET		/doctor/favorite-diagnostic-centres											controllers.DoctorController.myFavoriteDiagnosticCentres()
-GET		/doctor/remove-favorite-diagnosticCentre/:doctorId/:pharmacyId				controllers.DoctorController.removeFavoriteDiagnosticCentre(doctorId: Long, pharmacyId:Long)
 GET		/doctor/add-favorite-diagnosticCentre/:diagnosticId/:str					controllers.DoctorController.addFavoriteDiagnosticCentre(diagnosticId: Long,str: String)
 
 
@@ -117,10 +117,11 @@ GET 	/doctor/:slugUrl								controllers.PublicController.getDoctorWithSlug(slug
 
 # Patient Module
 GET    /user/my-doctors									controllers.PatientController.myFavouriteDoctors()
-GET		/user/remove-pharmacy/:patientId/:pharmacyId	controllers.PatientController.removePatientFavoritePharmacy(patientId: Long, pharmacyId: Long)
-GET		/user/remove-diagnosticCentre/:patientId/:pharmacyId	controllers.PatientController.removePatientFavoriteDiagnostic(patientId: Long, pharmacyId: Long)
 GET		/user/prescriptions										controllers.PatientController.viewAllPatientPrescriptions()
 GET		/user/show-prescription/:prescriptionId			controllers.PatientController.viewPrescription(prescriptionId: Long)
+GET		/user/favorite-diagnostic-centres				controllers.PatientController.patientFavoriteDiagnosticCentres()
+GET		/user/favorite-pharmacies						controllers.PatientController.patientFavoritePharmacies()
+
 
 
 POST	/pharmacy/upload-pharmacy-images					controllers.PharmacistController.uploadPharmacyImageProcess()

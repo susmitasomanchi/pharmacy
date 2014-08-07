@@ -265,33 +265,21 @@ public class PatientController extends Controller {
 	 * Action to list out favorite pharmacies of Patient of loggedin PATIENT
 	 * GET/patient/my-favorite-pharmacies
 	 */
-	public static Result myFavoritePharmacies() {
+	public static Result patientFavoritePharmacies() {
 		final Patient patient = LoginController.getLoggedInUser().getPatient();
-		return ok(views.html.pharmacist.favorite_pharmacy_list.render(patient.pharmacyList,0L,patient.id));
+		return ok(views.html.pharmacist.favorite_pharmacy_list.render(patient.pharmacyList));
 	}
+	
 	/**
-	 * @author lakshmi
-	 * Action to remove pharmacy from  favorite pharmacies List of Patient of loggedin PATIENT
-	 * GET/patient/remove-favorite-pharmacy/:patientId/:pharmacyId
+	 * @author lakshmi Action to list out favorite Diagnostic Centre of Patient
+	 *         of loggedin DOCTOR GET/patient/favorite-diagnostic-centres
 	 */
-	public static Result removePatientFavoritePharmacy(final Long patientId,final Long pharmacyId) {
-		final Patient patient = Patient.find.byId(patientId);
-		patient.pharmacyList.remove(Pharmacy.find.byId(pharmacyId));
-		patient.update();
-		return ok(views.html.pharmacist.favorite_pharmacy_list.render(patient.pharmacyList,0L,patient.id));
-	}
-	/**
-	 * @author lakshmi
-	 * Action to remove diagnosticCentre from  favorite diagnosticCentres List of loggedin PATIENT
-	 * GET/patient/remove-favorite-diagnosticCentre/:patientId/:pharmacyId
-	 */
-	public static Result removePatientFavoriteDiagnostic(final Long patientId,final Long diagnosticId) {
-		final Patient patient = Patient.find.byId(patientId);
-		patient.diagnosticCenterList.remove(DiagnosticCentre.find.byId(diagnosticId));
-		patient.update();
-		return ok(views.html.diagnostic.favorite_diagnosticCentre_list.render(patient.diagnosticCenterList,0L,patient.id));
-	}
 
+	public static Result patientFavoriteDiagnosticCentres() {
+		final Patient patient = LoginController.getLoggedInUser().getPatient();
+		return ok(views.html.diagnostic.favorite_diagnosticCentre_list.render(patient.diagnosticCenterList));
+	}
+	
 	/**
 	 * @author Mitesh
 	 * Action to show a forms which have currently logged in patient requested appointments

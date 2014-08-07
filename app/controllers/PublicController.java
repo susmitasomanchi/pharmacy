@@ -10,6 +10,8 @@ import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
+import actions.ConfirmAppUser;
+
 import com.google.common.io.Files;
 
 import models.Alert;
@@ -191,7 +193,13 @@ public class PublicController extends Controller{
 		}else{
 			final String loggedInRole=LoginController.getLoggedInUserRole();
 			if(loggedInRole.compareTo(Role.PATIENT.toString()) == 0){
-
+				Patient patient = LoginController.getLoggedInUser().getPatient();
+				Pharmacy pharmacy = Pharmacy.find.byId(pharmacyId);
+				if(!patient.pharmacyList.contains(pharmacy)){
+					patient.pharmacyList.add(pharmacy);
+					patient.update();
+					return redirect(routes.PatientController.patientFavoritePharmacies());
+			}
 			}
 			if(loggedInRole.compareTo(Role.DOCTOR.toString()) == 0){
 				final Doctor doctor = LoginController.getLoggedInUser().getDoctor();
@@ -206,9 +214,8 @@ public class PublicController extends Controller{
 
 			}
 			return redirect(routes.UserActions.dashboard());
-		}
 	}
-
+	}
 	/**
 	 *@author lakshmi
 	 * Action to add pharmacy to the Logged in user list
@@ -430,13 +437,19 @@ public class PublicController extends Controller{
 	 * GET /diagnostic/add-to-favourites
 	 */
 	public static Result addDiagnosticCentreToLoggedInUser(final Long diagnosticId) {
-		Logger.info("test1");
 		if(!LoginController.isLoggedIn()){
 			flash().put("alert", new Alert("alert-info","Please Login To Add DiagnosticCentre.").toString());
 			return redirect(routes.LoginController.loginForm());
 		}else{
 			final String loggedInRole=LoginController.getLoggedInUserRole();
 			if(loggedInRole.compareTo(Role.PATIENT.toString()) == 0){
+				Patient patient = LoginController.getLoggedInUser().getPatient();
+				final DiagnosticCentre diagnosticCentre = DiagnosticCentre.find.byId(diagnosticId);
+				if(!patient.diagnosticCenterList.contains(diagnosticCentre)){
+					patient.diagnosticCenterList.add(diagnosticCentre);
+					patient.update();
+				}
+				return redirect(routes.PatientController.patientFavoriteDiagnosticCentres());
 
 			}
 			if(loggedInRole.compareTo(Role.DOCTOR.toString()) == 0){
@@ -451,14 +464,69 @@ public class PublicController extends Controller{
 			if(loggedInRole.compareTo(Role.ADMIN_DIAGREP.toString()) == 0){
 
 			}
-			Logger.info("test10");
 			return redirect(routes.UserActions.dashboard());
 		}
 		
 		
 
 	}
+	/**
+	 * @author lakshmi Action to remove Pharmacy from favorite pharmacies List
+	 *         of Doctor of loggedin DOCTOR
+	 *         GET/doctor/remove-favorite-diagnosticCentre/:doctorId/:pharmacyId
+	 */
+	public static Result removeFavoriteDiagnosticCentre(Long diagnosticId) {
+		if(!LoginController.isLoggedIn()){
+			flash().put("alert", new Alert("alert-info","Please Login To Delete DiagnosticCentre.").toString());
+			return redirect(routes.LoginController.loginForm());
+		}else{
+			final String loggedInRole=LoginController.getLoggedInUserRole();
+			if(loggedInRole.compareTo(Role.PATIENT.toString()) == 0){
+				Patient patient = LoginController.getLoggedInUser().getPatient();
+				patient.diagnosticCenterList.remove(DiagnosticCentre.find.byId(diagnosticId));
+				patient.update();
+				return redirect(routes.PatientController.patientFavoriteDiagnosticCentres());
+			}
+			if(loggedInRole.compareTo(Role.DOCTOR.toString()) == 0){
+			Doctor doctor = LoginController.getLoggedInUser().getDoctor();
+			doctor.diagnosticCentreList.remove(DiagnosticCentre.find.byId(diagnosticId));
+			doctor.update();
+			return redirect(routes.DoctorController.myFavoriteDiagnosticCentres());
+			}
+			return redirect(routes.UserActions.dashboard());
+		}
+	}
+		
+
+		/**
+		 * @author lakshmi Action to remove Pharmacy from favorite pharmacies List
+		 *         of Doctor of loggedin DOCTOR
+		 *         GET/doctor/remove-favorite-pharmacy/:patientId/:pharmacyId
+		 */
+		@ConfirmAppUser
+		public static Result removeFavoritePharmacy(final Long pharmacyId) {
+			if(!LoginController.isLoggedIn()){
+				flash().put("alert", new Alert("alert-info","Please Login To Delete DiagnosticCentre.").toString());
+				return redirect(routes.LoginController.loginForm());
+			}else{
+				final String loggedInRole=LoginController.getLoggedInUserRole();
+				if(loggedInRole.compareTo(Role.PATIENT.toString()) == 0){
+					Patient patient = LoginController.getLoggedInUser().getPatient();
+					patient.pharmacyList.remove(Pharmacy.find.byId(pharmacyId));
+					patient.update();
+					return redirect(routes.PatientController.patientFavoritePharmacies());
+				}
+				if(loggedInRole.compareTo(Role.DOCTOR.toString()) == 0){
+				Doctor doctor = LoginController.getLoggedInUser().getDoctor();
+				doctor.pharmacyList.remove(Pharmacy.find.byId(pharmacyId));
+				doctor.update();
+				return redirect(routes.DoctorController.myFavoritePharmacies());
+				}
+				return redirect(routes.UserActions.dashboard());
+			}
+		}
 	
 	
+
 
 }
