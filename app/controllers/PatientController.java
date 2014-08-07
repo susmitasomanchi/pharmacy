@@ -337,6 +337,22 @@ public class PatientController extends Controller {
 		}
 		return ok(views.html.patient.patientSharedPrescription.render(prescription));
 	}
-	
+	/**
+	 * @author Mitesh Action to Display appointment requested to logged-in
+	 *         DOCTOR GET /doctor/all-appointments
+	 */
+//	@ConfirmAppUser
+	public static Result viewPatientAppointments() {
+
+		final Patient patient = LoginController.getLoggedInUser().getPatient();
+		/*final List<DoctorClinicInfo> docclinicInfo = DoctorClinicInfo.find.where().eq("patient", patient).findList();
+		final List<AppointmentStatus> statusList = new ArrayList<AppointmentStatus>();
+		final List<Appointment> appointments = Appointment.find.where()
+				.eq("requestedBy", patient.appUser.id)
+				.findList();*/
+		return ok(views.html.patient.patientAllAppointments.render(patient));
+
+	}
+
 	
 }

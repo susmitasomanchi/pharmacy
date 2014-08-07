@@ -305,9 +305,6 @@ public class SampleDataController extends Controller {
 	public static Result prescripetionTest(){
 		final Prescription prescription = new Prescription();
 		Patient patient = Patient.find.byId(1L);
-		patient.age="20";
-		patient.appUser.sex = Sex.FEMALE;
-		patient.update();
 		prescription.patient = patient;
 		 Doctor doctor= Doctor.find.byId(1L);		 	 
 		prescription.doctor= doctor;

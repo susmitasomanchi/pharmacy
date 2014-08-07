@@ -88,12 +88,16 @@ public class PublicController extends Controller{
 			if(loggedInRole.equalsIgnoreCase(Role.PATIENT.toString())){
 				final Patient patient=LoginController.getLoggedInUser().getPatient();
 				final PatientDoctorInfo patientInfo=new PatientDoctorInfo();
+				Doctor doctor = Doctor.find.byId(docId);
 				patientInfo.patient=patient;
-				patientInfo.doctor=Doctor.find.byId(docId);
+				patientInfo.doctor=doctor;
+				if(PatientDoctorInfo.find.where().eq("doctor", doctor).eq("patient",patient).findList().size()==0){
 				patient.patientDoctorInfoList.add(patientInfo);
 				patient.update();
 				flash().put("alert", new Alert("alert-success","Added to Your Favorite Doctor").toString());
-
+				}else{
+					flash().put("alert", new Alert("alert-success","Already added to Your Favorite Doctor").toString());
+				}
 				return redirect(routes.UserActions.dashboard());
 
 			}
