@@ -10,7 +10,6 @@ import models.diagnostic.DiagnosticCentre;
 import models.doctor.Appointment;
 import models.doctor.AppointmentStatus;
 import models.doctor.Doctor;
-import models.doctor.DoctorClinicInfo;
 import models.doctor.Prescription;
 import models.doctor.QuestionAndAnswer;
 import models.patient.Patient;
@@ -21,7 +20,6 @@ import play.data.Form;
 import play.mvc.Controller;
 import play.mvc.Result;
 import actions.BasicAuth;
-import actions.ConfirmAppUser;
 import beans.QuestionAndAnswerBean;
 
 @BasicAuth
@@ -33,11 +31,7 @@ public class PatientController extends Controller {
 
 	public static Form<QuestionAndAnswerBean> questionAndAnswerForm = Form
 			.form(QuestionAndAnswerBean.class);
-	
-	
-	
-	
-	
+
 
 	/**
 	 * @author Mitesh
@@ -269,7 +263,6 @@ public class PatientController extends Controller {
 		final Patient patient = LoginController.getLoggedInUser().getPatient();
 		return ok(views.html.pharmacist.favorite_pharmacy_list.render(patient.pharmacyList));
 	}
-	
 	/**
 	 * @author lakshmi Action to list out favorite Diagnostic Centre of Patient
 	 *         of loggedin DOCTOR GET/patient/favorite-diagnostic-centres
@@ -279,7 +272,7 @@ public class PatientController extends Controller {
 		final Patient patient = LoginController.getLoggedInUser().getPatient();
 		return ok(views.html.diagnostic.favorite_diagnosticCentre_list.render(patient.diagnosticCenterList));
 	}
-	
+
 	/**
 	 * @author Mitesh
 	 * Action to show a forms which have currently logged in patient requested appointments
@@ -306,7 +299,7 @@ public class PatientController extends Controller {
 		appointment.requestedBy=LoginController.getLoggedInUser();
 		appointment.bookedOn = new Date();
 		appointment.update();
-		return ok("appointment save");
+		return redirect(routes.PatientController. viewMyAppointments());
 	}
 
 	/**@author lakshmi
@@ -320,10 +313,9 @@ public class PatientController extends Controller {
 				.eq("patient", patient).orderBy("prescriptionDate").findList();
 		return ok(views.html.patient.patientPrescriptionList.render(prescriptionList));
 	}
-	
 	/**
 	 * @author lakshmi
-	 * Action to show the prescription to the loggedInPatient 
+	 * Action to show the prescription to the loggedInPatient
 	 * GET/user/show-prescription/:prescriptionId
 	 */
 	//@ConfirmAppUser
@@ -337,11 +329,12 @@ public class PatientController extends Controller {
 		}
 		return ok(views.html.patient.patientSharedPrescription.render(prescription));
 	}
+
 	/**
 	 * @author Mitesh Action to Display appointment requested to logged-in
 	 *         DOCTOR GET /doctor/all-appointments
 	 */
-//	@ConfirmAppUser
+	//	@ConfirmAppUser
 	public static Result viewPatientAppointments() {
 
 		final Patient patient = LoginController.getLoggedInUser().getPatient();
@@ -354,5 +347,6 @@ public class PatientController extends Controller {
 
 	}
 
-	
+
+
 }

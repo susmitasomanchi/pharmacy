@@ -1382,12 +1382,22 @@ public class DoctorController extends Controller {
 	 */
 	public static Result verifyMobileNumberConfirmationKey() {
 
+
 		final String key = request().body().asFormUrlEncoded()
 				.get("mobileNumber")[0].trim();
+
 		Logger.debug(key);
 
 		final AppUser appUser = LoginController.getLoggedInUser();
+		Logger.info(appUser.mobileNumberConfirmationKey);
+		if(appUser.mobileNumberConfirmationKey == null){
+			flash().put(
+					"alert",
+					new Alert("alert-danger",
+							"You hav'nt genrated acode yet").toString());
+			return redirect(routes.UserController.confirmAppUserPage());
 
+		}
 		if (key.compareToIgnoreCase(appUser.mobileNumberConfirmationKey) == 0) {
 			flash().put(
 					"alert",
