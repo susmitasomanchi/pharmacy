@@ -1,15 +1,20 @@
 package utils;
 
+import java.io.ByteArrayInputStream;
+import java.io.IOException;
 import java.math.BigInteger;
 import java.security.SecureRandom;
 import java.util.List;
 import java.util.Random;
 
-import models.AppUser;
+import javax.activation.DataSource;
 
+import models.AppUser;
+import models.FileEntity;
+
+import org.apache.commons.mail.ByteArrayDataSource;
 import org.apache.commons.mail.DefaultAuthenticator;
 import org.apache.commons.mail.Email;
-import org.apache.commons.mail.EmailAttachment;
 import org.apache.commons.mail.EmailException;
 import org.apache.commons.mail.HtmlEmail;
 import org.apache.commons.mail.MultiPartEmail;
@@ -87,14 +92,9 @@ public class EmailService {
 		return result;
 	}
 
-	public void sendHTMLEmailWithAttachments(final String receiverEmailId, final String subject, final String htmlMessage, final List<byte[]> imageList){
+	@SuppressWarnings({ "deprecation", "deprecation" })
+	public static void sendHTMLEmailWithAttachments(final String receiverEmailId, final String subject, final String htmlMessage, final List<FileEntity> files){
 
-		// Create the attachment
-		final EmailAttachment attachment = new EmailAttachment();
-		attachment.setPath("mypictures/john.jpg");
-		attachment.setDisposition(EmailAttachment.ATTACHMENT);
-		attachment.setDescription("");
-		attachment.setName("filename");
 
 		// Create the email message
 		final MultiPartEmail email = new MultiPartEmail();
@@ -107,10 +107,20 @@ public class EmailService {
 			email.setFrom("me@apache.org", "Me");
 			email.setSubject("The picture");
 			email.setMsg("Here is the picture you wanted");
+			email.addTo(receiverEmailId);
 			// add the attachment
-			email.attach(attachment);
+			for (final FileEntity fileEntity : files) {
+				if(fileEntity.mimeType.compareToIgnoreCase(null) == 0 || fileEntity.mimeType.compareToIgnoreCase("") == 0 ){
+					fileEntity.mimeType = "application/pdf";
+				}
+				final DataSource source = new ByteArrayDataSource(new ByteArrayInputStream(fileEntity.byteContent), fileEntity.mimeType);
+				email.attach(source,fileEntity.fileName,"No description");
+			}
 			email.send();
 		} catch (final EmailException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (final IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}

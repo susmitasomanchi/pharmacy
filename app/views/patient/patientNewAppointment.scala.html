@@ -37,12 +37,12 @@
 <div class="btn-group" data-toggle="buttons" style="padding-left:20px; font-size:12px;">
 @for(clinicinfo <- doctorClinic.doctor.getActiveClinic()){
 	@if(clinicinfo.id==doctorClinic.id){
-	<label class="btn btn-primary btn-sm active">
-    	<input type="checkbox" checked> @clinicinfo.clinic.name<br>@clinicinfo.clinic.address.area
+	<label class="btn btn-primary btn-sm active" onclick="window.location.href = '@routes.PublicController.scheduleAppointment(clinicinfo.id)'">
+    	<input type="checkbox"  checked> @clinicinfo.clinic.name<br>@clinicinfo.clinic.address.area
 	 </label>	
 	}else{
-	<label class="btn btn-primary btn-sm ">
-   	 <input type="checkbox"> @clinicinfo.clinic.name<br>@clinicinfo.clinic.address.area
+	<label class="btn btn-primary btn-sm "onclick="window.location.href ='@routes.PublicController.scheduleAppointment(clinicinfo.id)'">
+   	 <input type="checkbox" > @clinicinfo.clinic.name<br>@clinicinfo.clinic.address.area
 	</label>	
 	}
 }
@@ -225,6 +225,7 @@ $('#carousel-example-generic').carousel({
 </script>
 
 <script type="text/javascript"> 
+var avbl;
 var date=new Date();
 $( document ).ready(function() {
 @if(doctorClinic != null ){
@@ -245,7 +246,7 @@ console.log('localhost:9000/patient/display-appointment/@doctorClinic.id/'+date.
 
 
   		$(".right").click(function(){
-  		if($( ".active" ).hasClass( "nextAppt" )){
+  		if($( ".active" ).hasClass( "nextAppt" ) && avbl>0){
   			$( ".active" ).removeClass( "nextAppt" );
   		
   		console.log('localhost:9000/patient/display-appointment/@doctorClinic.id'+date.getTime());

@@ -122,17 +122,17 @@
 					<td style="width:20%;"><input class="checkday" id="p-@day" type="checkbox" name="daysOfWeek[]" value="@day.toString()">@day</input></td>
 					<td> 
 						<div class="input-append bootstrap-timepicker">
-							 <input id="p-@day-from" type="text" class="input-small intime" style="padding-left:20px; width:40%; margin-left:30%;" name="fromHrs[]" value="@clinicForm("fromHrs["+index+"]").value" disabled required/>
+							 <input id="p-@day-from" type="text" class="input-small intime" style="padding-left:20px; width:40%; margin-left:30%;" name="fromHrs[]" value="@clinicForm("fromHrs").value" disabled required/>
            				 	 <span class="add-on"><i class="fa fa-clock-o"></i></span>
       					</div>
 					</td>
 					<td> 
 						<div class="input-append bootstrap-timepicker">
-							<input id="p-@day-to"  type="text" class="input-small outtime" style="padding-left:20px; width:40%; margin-left:30%;"  name="toHrs[]" value="@clinicForm("toHrs["+index+"]").value" disabled required/>
+							<input id="p-@day-to"  type="text" class="input-small outtime" style="padding-left:20px; width:40%; margin-left:30%;"  name="toHrs[]" value="@clinicForm("toHrs").value" disabled required/>
             				<span class="add-on"><i class="fa fa-clock-o"></i></span>
       					</div>
 					</td>
-					</tr>
+						</tr>
 					
 						
 				}
@@ -140,7 +140,7 @@
 			</table>
 			<div class="form-group">
     <label for="slotp" class="col-md-3" style="padding-left:10px">Slot Timings<br>(in minutes)</label>
-    <input type="text"  id="slotp" name="slot" value="5" maxlength="2" size="1" placeholder="Slot Timings for Patient">
+    <input type="text"  id="slotp" name="slot" value="15" maxlength="2" size="1" placeholder="Slot Timings for Patient">
   </div>	
    					
    		</div>
@@ -180,7 +180,7 @@
 
 			<div class="form-group">
    				 <label for="slotmr" class="col-md-12 " style="padding-left:10px"><br>Slot Timings(in minutes)</label>
-    			 <input type="text" class="col-md-12" id="slotmr" value="5" maxlength="2" size="15" placeholder="Slot Timings for MR">
+    			 <input type="text" class="col-md-12" id="slotmr" value="15" maxlength="2" size="15" placeholder="Slot Timings for MR">
  	 		</div>
 
 	</div>
@@ -199,6 +199,9 @@
 			var id = $(this).attr("id");
 			$("#" + id + "-from").prop("disabled", false);
 			$("#" + id + "-to").prop("disabled", false);
+			$("#" + id + "-from").val("10:00");
+			$("#" + id + "-to").val("20:00");
+			
 		} else {
 			var id = $(this).attr("id");
 			var row=$(this).parent().parent();
@@ -323,11 +326,11 @@
 	<script type="text/javascript"> 
             $('.outtime').timepicker({
             	showMeridian:false,
-            	defaultTime:'20:00'
+            	defaultTime:''
                  });
             $('.intime').timepicker({
             	showMeridian:false,
-            	defaultTime:'10:00'
+            	defaultTime:''
                  });
 
             

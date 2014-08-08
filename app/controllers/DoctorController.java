@@ -1355,15 +1355,25 @@ public class DoctorController extends Controller {
 	 *	 currently logged in user'mobile
 	 *	POST /user/verify-mobile-number
 	 */
-	public static Result verifyMobileNumberConfirmationKey() {
+public static Result verifyMobileNumberConfirmationKey() {
+
 
 		final String key = request().body().asFormUrlEncoded()
 				.get("mobileNumber")[0].trim();
+
 		Logger.debug(key);
 
 		final AppUser appUser = LoginController.getLoggedInUser();
-		/*if (key.compareToIgnoreCase(appUser.mobileNumberConfirmationKey) == 0) {*/
-		if(Integer.parseInt(key.trim()) == 0){
+		Logger.info(appUser.mobileNumberConfirmationKey);
+		if(appUser.mobileNumberConfirmationKey == null){
+			flash().put(
+					"alert",
+					new Alert("alert-danger",
+							"You hav'nt genrated acode yet").toString());
+			return redirect(routes.UserController.confirmAppUserPage());
+
+		}
+		if (key.compareToIgnoreCase(appUser.mobileNumberConfirmationKey) == 0) {
 			flash().put(
 					"alert",
 					new Alert("alert-success", "Mobile number is verified")
@@ -1382,6 +1392,7 @@ public class DoctorController extends Controller {
 			return redirect(routes.UserController.confirmAppUserPage());
 		}
 	}
+
 
 	/**
 	 * @author Mitesh
