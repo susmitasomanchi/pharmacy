@@ -129,16 +129,15 @@ margin-bottom:0px;
 								<div class="row" style="padding-left:10px">
 									@for((key,value)<-docclinic.getScheduleMap()){
 										@if(docclinic.getScheduleMap().get(key)!=null){
-											<span class="col-md-2" style="font-size:12px;width:14%">@key</span>
-										}else{
-										<span class="badge col-md-2" style="font-size:12px;width:14%">@key</span>
+											<span class="col-md-2" style="font-size:12px;width:14%">@key</span>										}else{
+											<span class="badge col-md-2" style="font-size:12px;width:14%">@key</span>
 										}
 									}
 								</div>	
 									<div class="row" style="padding-left:10px">
 										@for((key,value)<-docclinic.getScheduleMap()){
 											@if(docclinic.getScheduleMap().get(key)!=null){
-												<span class="col-md-2" style="font-size:12px;width:14%">@docclinic.getScheduleMap().get(key)</span>
+									<span class="col-md-2" style="font-size:12px;width:14%">@docclinic.getScheduleMap().get(key)</span>
 											}else{
 											<span class="badge col-md-2" style="font-size:12px;width:14%"></span>
 											}
