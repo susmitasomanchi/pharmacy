@@ -88,9 +88,9 @@ public class PublicController extends Controller{
 				if(PatientDoctorInfo.find.where().eq("doctor", doctor).eq("patient",patient).findList().size()==0){
 					patient.patientDoctorInfoList.add(patientInfo);
 					patient.update();
-					flash().put("alert", new Alert("alert-success","Added to Your Favorite Doctor").toString());
+					flash().put("alert", new Alert("alert-success",doctor.appUser.name+" Added to Your Favorite Doctor").toString());
 				}else{
-					flash().put("alert", new Alert("alert-success",doctor.appUser.name +"Already added to Your Favorite Doctor").toString());
+					flash().put("alert", new Alert("alert-success",doctor.appUser.name +" Already added to Your Favorite Doctor").toString());
 				}
 				return redirect(routes.UserActions.dashboard());
 
@@ -220,13 +220,13 @@ public class PublicController extends Controller{
 
 			}
 			return redirect(routes.UserActions.dashboard());
-		
+		}
 	}
 	/**
 	 *@author lakshmi
 	 * Action to add pharmacy to the Logged in user list
 	 * 
-	 */
+	 *//*
 	public static Result myFavoritePharmacy(final Long pharmacyId,final String searchKey){
 		if(LoginController.getLoggedInUserRole().equals("DOCTOR")){
 			return redirect(routes.DoctorController.addFavoritePharmacy(pharmacyId,searchKey));
@@ -238,6 +238,7 @@ public class PublicController extends Controller{
 			return redirect(routes.UserController.processJoinUs());
 		}
 	}
+	}*/
 
 	/**
 	 * @author Mitesh
@@ -554,8 +555,9 @@ public class PublicController extends Controller{
 			return redirect(routes.UserActions.dashboard());
 		}
 	}
+	}
 
 
 
 
-}
+
