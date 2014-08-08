@@ -1362,8 +1362,8 @@ public class DoctorController extends Controller {
 		Logger.debug(key);
 
 		final AppUser appUser = LoginController.getLoggedInUser();
-
-		if (key.compareToIgnoreCase(appUser.mobileNumberConfirmationKey) == 0) {
+		/*if (key.compareToIgnoreCase(appUser.mobileNumberConfirmationKey) == 0) {*/
+		if(Integer.parseInt(key.trim()) == 0){
 			flash().put(
 					"alert",
 					new Alert("alert-success", "Mobile number is verified")
