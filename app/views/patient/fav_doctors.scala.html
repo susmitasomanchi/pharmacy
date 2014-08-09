@@ -41,9 +41,9 @@ margin-bottom:0px;
 				<div style="cursor:pointer;width:23%" onclick="window.location.href='@routes.PublicController.getDoctorWithSlug(patDoc.doctor.slugUrl)';" class="col-md-3">
 				@if(patDoc.doctor.profileImage != null){
 				<img src="@routes.PublicController.getImage(patDoc.doctor.id,"profileImage")" class="thumbnail" width="100" height="100"  />
-					}else{
+				}else{
 				<img src="/assets/images/doctor.png" class="thumbnail" width="100" height="100"  />
-					}
+				}
 				</div>
 				<div style="cursor:pointer" onclick="window.location.href='@routes.PublicController.getDoctorWithSlug(patDoc.doctor.slugUrl)';" class="col-md-4">
 				<p style="font-size:18px"><b>@patDoc.doctor.appUser.name</b></p>
@@ -75,11 +75,11 @@ margin-bottom:0px;
 				<div class="well" style="padding-left:20px;padding-right:0px;padding-top:0px;padding-bottom:20px">
 				<h4 style="color:#006687;font-weight:bold">Clinics</h4>
 				<ul class="nav nav-tabs">			
-				@if(patDoc.doctor.doctorClinicInfoList.size()==0){
-					No clinic created yet
+				@if(patDoc.doctor.doctorActiveClinicInfoList().size()==0){
+					Clinic information hasn't been provided yet.
 				}
 				<ul class="nav nav-tabs">				
-				@for((docclinic,index) <- patDoc.doctor.doctorClinicInfoList.zipWithIndex){
+				@for((docclinic,index) <- patDoc.doctor.doctorActiveClinicInfoList().zipWithIndex){
 					@if( index==0){
 					  <li  class="active"><a href="#clinic@docclinic.id" data-toggle="tab">@docclinic.clinic.name</a></li>
 					}else{
@@ -89,7 +89,7 @@ margin-bottom:0px;
 				</ul>
 				
 				<div class="tab-content">
-					@for((docclinic,index) <- patDoc.doctor.doctorClinicInfoList.zipWithIndex){
+					@for((docclinic,index) <- patDoc.doctor.doctorActiveClinicInfoList().zipWithIndex){
 						@if(index == 0){
 						<div class="tab-pane active" id="clinic@docclinic.id">
 						}else{

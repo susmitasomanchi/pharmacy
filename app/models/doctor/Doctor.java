@@ -93,7 +93,7 @@ public class Doctor extends BaseEntity{
 
 	@ManyToMany(cascade=CascadeType.ALL)
 	public List<Pharmacy> pharmacyList=new ArrayList<Pharmacy>();
-	
+
 	@ManyToMany(cascade=CascadeType.ALL)
 	public List<DiagnosticCentre> diagnosticCentreList=new ArrayList<DiagnosticCentre>();
 
@@ -195,5 +195,9 @@ public class Doctor extends BaseEntity{
 		}
 	}
 
+
+	public List<DoctorClinicInfo> doctorActiveClinicInfoList(){
+		return DoctorClinicInfo.find.where().eq("doctor", this).eq("active", true).findList();
+	}
 
 }

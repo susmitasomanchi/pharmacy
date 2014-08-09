@@ -1,5 +1,6 @@
 package controllers;
 
+import java.io.IOException;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -9,11 +10,16 @@ import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
+import actions.ConfirmAppUser;
+
+import com.google.common.io.Files;
+
 import models.Alert;
 import models.AppUser;
 import models.FileEntity;
 import models.Role;
 import models.diagnostic.DiagnosticCentre;
+import models.diagnostic.DiagnosticCentrePrescriptionInfo;
 import models.doctor.Appointment;
 import models.doctor.Day;
 import models.doctor.DaySchedule;
@@ -25,7 +31,7 @@ import models.pharmacist.Pharmacy;
 import play.Logger;
 import play.mvc.Controller;
 import play.mvc.Result;
-import actions.ConfirmAppUser;
+import play.mvc.Http.MultipartFormData.FilePart;
 
 public class PublicController extends Controller{
 
@@ -82,15 +88,15 @@ public class PublicController extends Controller{
 			if(loggedInRole.equalsIgnoreCase(Role.PATIENT.toString())){
 				final Patient patient=LoginController.getLoggedInUser().getPatient();
 				final PatientDoctorInfo patientInfo=new PatientDoctorInfo();
-				Doctor doctor = Doctor.find.byId(docId);
+				final Doctor doctor = Doctor.find.byId(docId);
 				patientInfo.patient=patient;
 				patientInfo.doctor=doctor;
 				if(PatientDoctorInfo.find.where().eq("doctor", doctor).eq("patient",patient).findList().size()==0){
 					patient.patientDoctorInfoList.add(patientInfo);
 					patient.update();
-					flash().put("alert", new Alert("alert-success",doctor.appUser.name+" Added to Your Favorite Doctor").toString());
+					flash().put("alert", new Alert("alert-success","Added to Your Favorite Doctor").toString());
 				}else{
-					flash().put("alert", new Alert("alert-success",doctor.appUser.name +" Already added to Your Favorite Doctor").toString());
+					flash().put("alert", new Alert("alert-success","Already added to Your Favorite Doctor").toString());
 				}
 				return redirect(routes.UserActions.dashboard());
 
@@ -192,16 +198,13 @@ public class PublicController extends Controller{
 		}else{
 			final String loggedInRole=LoginController.getLoggedInUserRole();
 			if(loggedInRole.compareTo(Role.PATIENT.toString()) == 0){
-				Patient patient = LoginController.getLoggedInUser().getPatient();
-				Pharmacy pharmacy = Pharmacy.find.byId(pharmacyId);
+				final Patient patient = LoginController.getLoggedInUser().getPatient();
+				final Pharmacy pharmacy = Pharmacy.find.byId(pharmacyId);
 				if(!patient.pharmacyList.contains(pharmacy)){
 					patient.pharmacyList.add(pharmacy);
 					patient.update();
-					flash().put("alert", new Alert("alert-success",pharmacy.name +" Added To Your Favorite Pharmacies").toString());
 					return redirect(routes.PatientController.patientFavoritePharmacies());
-			}else{
-				flash().put("alert", new Alert("alert-success",pharmacy.name +" Already Added To Your Favorite Pharmacies").toString());
-			}
+				}
 			}
 			if(loggedInRole.compareTo(Role.DOCTOR.toString()) == 0){
 				final Doctor doctor = LoginController.getLoggedInUser().getDoctor();
@@ -209,12 +212,8 @@ public class PublicController extends Controller{
 				if(!doctor.pharmacyList.contains(pharmacy)){
 					doctor.pharmacyList.add(pharmacy);
 					doctor.update();
-					flash().put("alert", new Alert("alert-success",pharmacy.name +" Added To Your Favorite Pharmacies").toString());
-					return redirect(routes.DoctorController.myFavoritePharmacies());
-				}else{
-					flash().put("alert", new Alert("alert-success",pharmacy.name +" AlReady Added To Your Favorite Pharmacies").toString());
 				}
-				
+				return redirect(routes.DoctorController.myFavoritePharmacies());
 			}
 			if(loggedInRole.compareTo(Role.ADMIN_DIAGREP.toString()) == 0){
 
@@ -226,7 +225,7 @@ public class PublicController extends Controller{
 	 *@author lakshmi
 	 * Action to add pharmacy to the Logged in user list
 	 * 
-	 *//*
+	 */
 	public static Result myFavoritePharmacy(final Long pharmacyId,final String searchKey){
 		if(LoginController.getLoggedInUserRole().equals("DOCTOR")){
 			return redirect(routes.DoctorController.addFavoritePharmacy(pharmacyId,searchKey));
@@ -238,12 +237,11 @@ public class PublicController extends Controller{
 			return redirect(routes.UserController.processJoinUs());
 		}
 	}
-	}*/
 
 	/**
 	 * @author Mitesh
 	 * Action to show a forms which have Doctor and it will show the available and booked appointment
-	 *  GET /doctor/schedule-appointment/:docclinicid
+	 *  GET	/doctor/schedule-appointment/:docclinicid
 	 */
 	public static Result scheduleAppointment(final Long docclinicid) {
 		final DoctorClinicInfo clinicInfo=DoctorClinicInfo.find.byId(docclinicid);
@@ -274,8 +272,8 @@ public class PublicController extends Controller{
 		final Calendar calendar1=Calendar.getInstance();
 		final Calendar calendar2=Calendar.getInstance();
 
-		Calendar futureCalendarfrom = Calendar.getInstance();
-		Calendar futureCalendarto	= Calendar.getInstance();
+		final Calendar futureCalendarfrom = Calendar.getInstance();
+		final Calendar futureCalendarto	= Calendar.getInstance();
 		final SimpleDateFormat dateFormat=new SimpleDateFormat("kk:mm");
 		int j=0;
 		for(int i=0;i<49;i++){
@@ -336,7 +334,8 @@ public class PublicController extends Controller{
 		futureCalendarfrom.add(Calendar.DATE, 1);
 		futureCalendarto.setTime(calendarFrom.getTime());
 		futureCalendarto.add(Calendar.DATE, 7);
-		int available= Appointment.find.where().eq("doctorClinicInfo.id", doctorClinicInfo.id).between("appointmentTime", futureCalendarfrom.getTime(), futureCalendarto.getTime()).order().asc("appointmentTime").findRowCount();
+		final int available= Appointment.find.where().eq("doctorClinicInfo.id", doctorClinicInfo.id).between("appointmentTime", futureCalendarfrom.getTime(), futureCalendarto.getTime()).order().asc("appointmentTime").findRowCount();
+
 
 		/*return ok(views.html.patient.scheduleAppointment.render(appointmentMap,
 				 slots));*/
@@ -444,6 +443,8 @@ public class PublicController extends Controller{
 		return ok(views.html.diagnostic.searched_diagnostic_Centres.render(true,searchKey,diagnosticCentreList));
 	}
 
+
+
 	/**
 	 * @author lakshmi
 	 * Action to add a Diagnostic Centre to loggedInUser
@@ -456,7 +457,7 @@ public class PublicController extends Controller{
 		}else{
 			final String loggedInRole=LoginController.getLoggedInUserRole();
 			if(loggedInRole.compareTo(Role.PATIENT.toString()) == 0){
-				Patient patient = LoginController.getLoggedInUser().getPatient();
+				final Patient patient = LoginController.getLoggedInUser().getPatient();
 				final DiagnosticCentre diagnosticCentre = DiagnosticCentre.find.byId(diagnosticId);
 				if(!patient.diagnosticCenterList.contains(diagnosticCentre)){
 					patient.diagnosticCenterList.add(diagnosticCentre);
@@ -467,7 +468,7 @@ public class PublicController extends Controller{
 				else{
 					flash().put("alert", new Alert("alert-success",diagnosticCentre.name +" Already Added To Your Favorite Diagnostic Centres").toString());
 				}
-				
+
 
 			}
 			if(loggedInRole.compareTo(Role.DOCTOR.toString()) == 0){
@@ -478,75 +479,74 @@ public class PublicController extends Controller{
 					doctor.update();
 					flash().put("alert", new Alert("alert-success",diagnosticCentre.name +" Added To Your Favorite Diagnostic Centres").toString());
 					return redirect(routes.DoctorController.myFavoriteDiagnosticCentres());
-					
+
 				}else{
 					flash().put("alert", new Alert("alert-success",diagnosticCentre.name +" Already Added To Your Favorite Diagnostic Centres").toString());
 				}
-				
+
 			}
 			if(loggedInRole.compareTo(Role.ADMIN_DIAGREP.toString()) == 0){
 
 			}
 			return redirect(routes.UserActions.dashboard());
 		}
-
-
-
 	}
+
+
+
+
+
 	/**
 	 * @author lakshmi Action to remove Pharmacy from favorite pharmacies List
 	 *         of Doctor of loggedin DOCTOR
 	 *         GET/doctor/remove-favorite-diagnosticCentre/:doctorId/:pharmacyId
 	 */
-	public static Result removeFavoriteDiagnosticCentre(Long diagnosticId) {
+	public static Result removeFavoriteDiagnosticCentre(final Long diagnosticId) {
 		if(!LoginController.isLoggedIn()){
 			flash().put("alert", new Alert("alert-info","Please Login To Delete DiagnosticCentre.").toString());
 			return redirect(routes.LoginController.loginForm());
 		}else{
 			final String loggedInRole=LoginController.getLoggedInUserRole();
 			if(loggedInRole.compareTo(Role.PATIENT.toString()) == 0){
-				Patient patient = LoginController.getLoggedInUser().getPatient();
-				DiagnosticCentre diagnosticCentre = DiagnosticCentre.find.byId(diagnosticId);
-				patient.diagnosticCenterList.remove(diagnosticCentre);
+				final Patient patient = LoginController.getLoggedInUser().getPatient();
+				patient.diagnosticCenterList.remove(DiagnosticCentre.find.byId(diagnosticId));
 				patient.update();
-				flash().put("alert", new Alert("alert-success",diagnosticCentre.name+" Deleted From The Favorite Diagnostic Centres").toString());
 				return redirect(routes.PatientController.patientFavoriteDiagnosticCentres());
 			}
 			if(loggedInRole.compareTo(Role.DOCTOR.toString()) == 0){
-			Doctor doctor = LoginController.getLoggedInUser().getDoctor();
-			DiagnosticCentre diagnosticCentre = DiagnosticCentre.find.byId(diagnosticId);
-			doctor.diagnosticCentreList.remove(diagnosticCentre);
-			doctor.update();
-			flash().put("alert", new Alert("alert-success",diagnosticCentre.name+" Deleted From The Favorite Diagnostic Centres").toString());
-			return redirect(routes.DoctorController.myFavoriteDiagnosticCentres());
+				final Doctor doctor = LoginController.getLoggedInUser().getDoctor();
+				doctor.diagnosticCentreList.remove(DiagnosticCentre.find.byId(diagnosticId));
+				doctor.update();
+				return redirect(routes.DoctorController.myFavoriteDiagnosticCentres());
 			}
 			return redirect(routes.UserActions.dashboard());
 		}
 	}
 
-		/**
-		 * @author lakshmi Action to remove Pharmacy from favorite pharmacies List
-		 *         of Doctor of loggedin DOCTOR
-		 *         GET/doctor/remove-favorite-pharmacy/:patientId/:pharmacyId
-		 */
-		@ConfirmAppUser
-		public static Result removeFavoritePharmacy(final Long pharmacyId) {
-			if(!LoginController.isLoggedIn()){
-				flash().put("alert", new Alert("alert-info","Please Login To Delete DiagnosticCentre.").toString());
-				return redirect(routes.LoginController.loginForm());
-			}else{
-				final String loggedInRole=LoginController.getLoggedInUserRole();
-				if(loggedInRole.compareTo(Role.PATIENT.toString()) == 0){
-					Patient patient = LoginController.getLoggedInUser().getPatient();
-					Pharmacy pharmacy = Pharmacy.find.byId(pharmacyId);
-					patient.pharmacyList.remove(pharmacy);
-					patient.update();
-					flash().put("alert", new Alert("alert-success",pharmacy.name+" Deleted From The Favorite Pharmacies").toString());
-					return redirect(routes.PatientController.patientFavoritePharmacies());
-				}
-				if(loggedInRole.compareTo(Role.DOCTOR.toString()) == 0){
-				Doctor doctor = LoginController.getLoggedInUser().getDoctor();
-				Pharmacy pharmacy = Pharmacy.find.byId(pharmacyId);
+
+	/**
+	 * @author lakshmi Action to remove Pharmacy from favorite pharmacies List
+	 *         of Doctor of loggedin DOCTOR
+	 *         GET/doctor/remove-favorite-pharmacy/:patientId/:pharmacyId
+	 */
+	@ConfirmAppUser
+	public static Result removeFavoritePharmacy(final Long pharmacyId) {
+		if(!LoginController.isLoggedIn()){
+			flash().put("alert", new Alert("alert-info","Please Login To Delete DiagnosticCentre.").toString());
+			return redirect(routes.LoginController.loginForm());
+		}else{
+			final String loggedInRole=LoginController.getLoggedInUserRole();
+			if(loggedInRole.compareTo(Role.PATIENT.toString()) == 0){
+				final Patient patient = LoginController.getLoggedInUser().getPatient();
+				final Pharmacy pharmacy = Pharmacy.find.byId(pharmacyId);
+				patient.pharmacyList.remove(pharmacy);
+				patient.update();
+				flash().put("alert", new Alert("alert-success",pharmacy.name+" Deleted From The Favorite Pharmacies").toString());
+				return redirect(routes.PatientController.patientFavoritePharmacies());
+			}
+			if(loggedInRole.compareTo(Role.DOCTOR.toString()) == 0){
+				final Doctor doctor = LoginController.getLoggedInUser().getDoctor();
+				final Pharmacy pharmacy = Pharmacy.find.byId(pharmacyId);
 				doctor.pharmacyList.remove(pharmacy);
 				doctor.update();
 				flash().put("alert", new Alert("alert-success",pharmacy.name+" Deleted From The Favorite Pharmacies").toString());
@@ -555,9 +555,4 @@ public class PublicController extends Controller{
 			return redirect(routes.UserActions.dashboard());
 		}
 	}
-	}
-
-
-
-
-
+}

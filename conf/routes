@@ -45,16 +45,16 @@ GET		/not-confirmed-yet							controllers.UserController.confirmAppUserPage()
 GET		/user/verify-email							controllers.DoctorController.sendConformationEmail()
 GET 	/user/confirmation/:userId/:randomString	controllers.PublicController.emailConfirmation(userId: Long, randomString:String)
 GET		/user/send-verificaion-code					controllers.DoctorController.sendMobVerificationCode()
-GET 	 /user/verify-mobile-number					controllers.DoctorController.displayMobVerificationForm()
-POST 	 /user/verify-mobile-number					controllers.DoctorController.verifyMobileNumberConfirmationKey()
+GET 	/user/verify-mobile-number					controllers.DoctorController.displayMobVerificationForm()
+POST 	/user/verify-mobile-number					controllers.DoctorController.verifyMobileNumberConfirmationKey()
 
 
 # Public Pages
-GET	   /doctor/search									controllers.PublicController.searchDoctorsPage()
-GET	   /doctor/search/:key								controllers.PublicController.processSearchDoctors(key: String)
-GET   	/pharmacy/search/:searchString                  controllers.PublicController.processSearchPharmacies(searchString: String)
+GET		/doctor/search									controllers.PublicController.searchDoctorsPage()
+GET		/doctor/search/:key								controllers.PublicController.processSearchDoctors(key: String)
+GET		/pharmacy/search/:searchString                  controllers.PublicController.processSearchPharmacies(searchString: String)
 #GET   	/pharmacy/add-favourite-pharmacy/:pharmacyId/:str   controllers.PublicController.myFavoritePharmacy(pharmacyId : Long,str: String)
-GET     /pharmacy/search									controllers.PublicController.searchPharmaciesPage()
+GET		/pharmacy/search									controllers.PublicController.searchPharmaciesPage()
 GET		/doctor/add-to-favorite/:docId					controllers.PublicController.addToFavDoctor(docId: Long)
 GET		/diagnostic/get-image/:diagnosticId/:imageId	controllers.PublicController.getDiagnosticImages(diagnosticId: Long,imageId: Long)
 GET		/diagnostic/remove-diagnostic/:diagnosticId					controllers.PublicController.removeFavoriteDiagnosticCentre(diagnosticId: Long)
@@ -119,8 +119,9 @@ GET    /user/my-doctors									controllers.PatientController.myFavouriteDoctors
 GET		/user/prescriptions										controllers.PatientController.viewAllPatientPrescriptions()
 GET		/user/show-prescription/:prescriptionId			controllers.PatientController.viewPrescription(prescriptionId: Long)
 GET		/user/favorite-diagnostic-centres				controllers.PatientController.patientFavoriteDiagnosticCentres()
-GET		/user/favorite-pharmacies						controllers.PatientController.patientFavoritePharmacies()
-GET		/user/appointments								controllers.PatientController.viewPatientAppointments()
+GET		/user/my-pharmacies						controllers.PatientController.patientFavoritePharmacies()
+#GET		/user/appointments								controllers.PatientController.viewPatientAppointments()
+GET		/user/appointments									controllers.PatientController.viewMyAppointments()
 
 
 
@@ -255,7 +256,6 @@ GET    /static/new/appointment					controllers.PatientController.staticPatientNe
 GET 	/doctor/schedule-appointment/:docclinicid		controllers.PublicController.scheduleAppointment(docclinicid:Long)
 GET    /patient/display-appointment/:docClinicId/:timeMillis	controllers.PublicController.displayAppointment(docClinicId:Long,timeMillis:Long)
 GET    /static/patient/view/appointments		controllers.PatientController.staticPatientViewAppointments()
-GET		/user/my-appointments			controllers.PatientController.viewMyAppointments()
 #GET    /diagnosticlist                   	 	controllers.DiagnosticController.diagnosticlist()
 #GET    /diagnostic-service-list/:id            controllers.DiagnosticController.diagnosticServiceslist(id: Long)
 GET    /diagnostic-delete/:id             		controllers.DiagnosticController.deleteCenter(id: Long)

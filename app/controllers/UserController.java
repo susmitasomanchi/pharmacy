@@ -153,6 +153,7 @@ public class UserController extends Controller {
 			e.printStackTrace();
 		}
 
+		appUser.mobileNumber = 9999999999L;
 		appUser.save();
 
 		if(appUser.role.equals(Role.DOCTOR)){
@@ -164,8 +165,6 @@ public class UserController extends Controller {
 			doctor.experience = cal.get(Calendar.YEAR);
 			doctor.registrationNumber = "00000";
 			doctor.slugUrl = Util.simpleSlugify(appUser.name)+appUser.id;
-			appUser.mobileNumber = 9999999999L;
-			appUser.update();
 			doctor.appUser = appUser;
 			doctor.save();
 		}
@@ -211,16 +210,13 @@ public class UserController extends Controller {
 		promise(new Function0<Integer>() {
 			//@Override
 			public Integer apply() {
-
 				if(EmailService.sendConfirmationEmail(appUser)){
-					flash().put("alert", new Alert("alert-success","A conformation messege has been send to you").toString());
+					flash().put("alert", new Alert("alert-success","A confirmation mail has been sent to your email id.").toString());
 				}
 				else{
-					flash().put("alert", new Alert("alert-danger","Sorry the message cant be sent").toString());
+					flash().put("alert", new Alert("alert-danger","Sorry! Confirmation mail could not be sent. Please try again.").toString());
 					System.out.println("Send");
-
 				}
-
 				return 0;
 			}
 		});
@@ -248,8 +244,8 @@ public class UserController extends Controller {
 		return ok(views.html.confirmAppUser.render(appUser));
 	}
 
-	
-	
+
+
 	/**
 	 * @author Lakshmi
 	 * Action to render the page to edit emailId and mobileNumber of loggedInUser
@@ -305,24 +301,24 @@ public class UserController extends Controller {
 		loggedInUser.update();
 		return redirect(routes.UserActions.dashboard());
 	}
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 	/**
 	 * **************************** DEPRICATED ON 14 JUL 2014 ****************************
 	 * @deprecated Use UserController.processJoinUs() instead which is generic for all AppUser roles
