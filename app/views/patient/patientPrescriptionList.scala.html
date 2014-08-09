@@ -10,31 +10,36 @@
 			<thead>
 			<tr>
 			<div class="row clearfix">
-			<th>Doctor</th>
-				<th>Prescription <br> Date &amp; Time</th>
-				<th>Appointment <br> Date &amp; Time</th>
-				<th>Patient&nbsp;(Sex/Age)</th>
-				<th>Action</th>				
+			<th style="text-align:center">S.NO</th>
+			<th style="text-align:center">Prescription Time</th>
+			<th style="text-align:center">Doctor</th>
+			<th style="text-align:center">Clinic</th>			
+			<th style="text-align:center">Action</th>				
 			</div>
 			</tr>
 			</thead>
-			@for(prescription <- prescriptions){
+			@for((prescription,index) <- prescriptions.zipWithIndex){
 			<tr>
 			<div class="row clearfix">
 			<div class="col-md-3 column">
-				<td>@prescription.doctor.appUser.name</td>
-				</div>
-				<div class="col-md-3 column">
-				<td>@prescription.prescriptionDate.format("dd-MMM-yyyy HH:mm")</td>
-				</div>
-				<div class="col-md-3 column">
-				<td>@if(prescription.appointment != null){@prescription.appointment.appointmentTime.format("dd-MMM-yyyy HH:mm")}</td>
-				</div>
-				<div class="col-md-3 column">
-				<td>@{prescription.patient.appUser.name}&nbsp;(@prescription.patient.appUser.sex.toString().substring(0,1)/@prescription.patient.appUser.getAge())</td>
-				</div>
-				<div class="col-md-3 column">
+				<td style="vertical-align:middle;text-align:center;font-size:12px">@{index+1}</td>
+				<td  style="vertical-align:middle;text-align:center;font-size:12px">@prescription.prescriptionDate.format("dd-MMM-yyyy")<br>@prescription.prescriptionDate.format("EE")<br>@prescription.prescriptionDate.format("HH:mm")</td>
 				<td>
+				 <div class="row" style="cursor:pointer" onclick="location.href='/dashboard';">
+					<div class="col-md-4">
+					@if(prescription.doctor.profileImage != null){
+					<img src="@routes.PublicController.getImage(prescription.doctor.id,"profileImage")" class="thumbnail" width="100" height="100"  />
+					}else{
+					<img src="/assets/images/doctor.png" class="thumbnail" width="100" height="100"  />
+					}</div>
+					<div class="col-md-6" style="padding-left:35px">
+					<h4>@prescription.doctor.appUser.name</h4>
+					<h6>@prescription.doctor.specialization</h6>
+					<h6>@prescription.doctor.degree</h6>
+					</div>
+					</div></td>
+				<td style="vertical-align:middle;text-align:center;font-size:12px">@if(prescription.clinic != null){@prescription.clinic.name}</td>
+					<td style="vertical-align:middle;text-align:center">
 					<a href="@routes.PatientController.viewPrescription(prescription.id)" class="btn btn-sm btn-primary"  role="button">View Prescription</a>				
 				</td>
 				</div>

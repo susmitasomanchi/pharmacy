@@ -53,8 +53,8 @@ margin-bottom:0px;
 				<br>
 				</div>
 				<div class="col-md-4 pull-right" style="width:30%;padding-left:3px;padding-top:60px">
-				<a class="btn btn-primary btn-xs" href="#">Ask Query</a>
-				<button id="@patDoc.id" class="btn btn-danger btn-xs" data-toggle="modal" data-target="#myModal1@patDoc.id">Remove</button>
+				@*<a class="btn btn-primary btn-xs" href="#">Ask Query</a>*@
+				<button id="@patDoc.id" class="btn btn-danger btn-xs pull-right" data-toggle="modal" data-target="#myModal1@patDoc.id">Remove</button>
 				<div class="modal fade" id="myModal1@patDoc.id" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
   <div class="modal-dialog" style="padding-top:200px">
     <div class="modal-content" style="padding-left:20px">
@@ -98,11 +98,11 @@ margin-bottom:0px;
 								<div class="row">
 									<div class="col-md-8">
 									<h5 style="color:#006687">
-									<b><a href="#" >@docclinic.clinic.name</a></b>
+									<b><a href="#" >@docclinic.clinic.name</a></b><br>
 										<span style="font-size:12px;color:black">@docclinic.clinic.address.addressLine1
-										@docclinic.clinic.address.area
-										@docclinic.clinic.address.city
-										@docclinic.clinic.address.state</h5>
+										@docclinic.clinic.address.area<br>
+										@docclinic.clinic.address.city<br>
+										@docclinic.clinic.address.state<br>
 									<i class="fa fa-phone-square"></i> @docclinic.clinic.contactNo<br><br>
 									</div>
 									<div class="col-md-4">
@@ -111,6 +111,7 @@ margin-bottom:0px;
 								</div>
 								<div class="row">
 								<div class="col-md-12">
+								@*
 								<table class="table table-boarder">
 								<tr>
 								@for((key,value)<-docclinic.getScheduleMap()){
@@ -124,7 +125,7 @@ margin-bottom:0px;
 										<tr>
 										@for((key,value)<-docclinic.getScheduleMap()){
 										@if(docclinic.getScheduleMap().get(key)!=null){
-												<td style="text-align:centre;font-size:12px">@docclinic.getScheduleMap().get(key)</td>
+												<td style="text-align:centre;font-size:12px">@docclinic.getScheduleMap().get(key).replace("-", "\r\n")</td>
 											}else{
 											<td style="vertical-align:middle;text-align:font-size:12px">@docclinic.getScheduleMap().get(key)</td>
 											}
@@ -132,6 +133,94 @@ margin-bottom:0px;
 										</tr>
 										
 								</table>
+								*@
+								<div class="row" style="padding-left:20px">
+
+@if(docclinic.getScheduleMap().get("MONDAY") != null){
+	<span class="badge col-md-2" style="font-size:12px">Mon</span>
+}else{
+	<span class="col-md-1" style="font-size:12px">Mon</span>
+}
+
+@if(docclinic.getScheduleMap().get("TUESDAY") != null){
+	<span class="badge col-md-2" style="font-size:12px">Tue</span>
+}else{
+	<span class="col-md-1" style="font-size:12px">Tue</span>
+}
+
+@if(docclinic.getScheduleMap().get("WEDNESDAY") != null){
+	<span class="badge col-md-2" style="font-size:12px">Wed</span>
+}else{
+	<span class="col-md-1" style="font-size:12px">Wed</span>
+}
+
+@if(docclinic.getScheduleMap().get("THURSDAY") != null){
+	<span class="badge col-md-2" style="font-size:12px">Thu</span>
+}else{
+	<span class="col-md-1" style="font-size:12px">Thu</span>
+}
+
+@if(docclinic.getScheduleMap().get("FRIDAY") != null){
+	<span class="badge col-md-2" style="font-size:12px">Fri</span>
+}else{
+	<span class="col-md-1" style="font-size:12px">Fri</span>
+}
+@if(docclinic.getScheduleMap().get("SATURDAY") != null){
+	<span class="badge col-md-2" style="font-size:12px">Sat</span>
+}else{
+	<span class="col-md-1" style="font-size:12px">Sat</span>
+}
+
+@if(docclinic.getScheduleMap().get("SUNDAY") != null){
+	<span class="badge col-md-2" style="font-size:12px">Sun</span>
+}else{
+	<span class="col-md-1" style="font-size:12px">Sun</span>
+}
+
+</div>
+<div class="row" style="padding-left:20px">
+
+
+@if(docclinic.getScheduleMap().get("MONDAY") != null){
+	<span class="col-md-2" style=" font-size:11px;padding-right:0px; margin:0px; margin-left:-7px;">@docclinic.getScheduleMap().get("MONDAY")</span>
+}else{
+	<span class="col-md-2" style=" font-size:11px;padding-right:0px; margin:0px; margin-left:-7px;"></span>
+}
+
+@if(docclinic.getScheduleMap().get("TUESDAY") != null){
+	<span class="col-md-2" style=" font-size:11px;padding-right:0px; margin:0px; margin-left:-7px;">@docclinic.getScheduleMap().get("TUESDAY")</span>
+}else{
+	<span class="col-md-2" style=" font-size:11px;padding-right:0px; margin:0px; margin-left:-7px;"></span>
+}
+
+@if(docclinic.getScheduleMap().get("WEDNESDAY") != null){
+	<span class="col-md-2" style="font-size:11px;padding-right:0px; margin:0px; margin-left:-7px;">@docclinic.getScheduleMap().get("WEDNESDAY")</span>
+}else{
+	<span class="col-md-2" style="font-size:11px;padding-right:0px; margin:0px; margin-left:-7px;"></span>
+}
+
+@if(docclinic.getScheduleMap().get("THURSDAY") != null){
+	<span class="col-md-2" style="font-size:11px;padding-right:0px; margin:0px; margin-left:5px;">@docclinic.getScheduleMap().get("THURSDAY")</span>
+}else{
+	<span class="col-md-2" style="font-size:11px;padding-right:0px; margin:0px; margin-left:5px;"></span>
+}
+
+@if(docclinic.getScheduleMap().get("FRIDAY") != null){ 
+	<span class="col-md-2" style="font-size:11px;padding-right:0px; margin:0px;margin-left:5px;">@docclinic.getScheduleMap().get("FRIDAY")</span>
+}else{
+	<span class="col-md-2" style="font-size:11px;padding-right:0px; margin:0px;margin-left:5px;"></span>
+}
+@if(docclinic.getScheduleMap().get("SATURDAY") != null){ 
+	<span class="col-md-2" style="font-size:11px;padding-right:0px; margin:0px;margin-left:5px;">@docclinic.getScheduleMap().get("SATURDAY")</span>
+}else{
+	<span class="col-md-2" style="font-size:11px;padding-right:0px; margin:0px;margin-left:5px;"></span>
+}
+@if(docclinic.getScheduleMap().get("SUNDAY") != null){ 
+	<span class="col-md-2" style="font-size:11px;padding-right:0px; margin:0px;margin-left:5px;">&nbsp;&nbsp;&nbsp;&nbsp;@docclinic.getScheduleMap().get("SUNDAY")</span>
+}else{
+	<span class="col-md-2" style="font-size:11px;padding-right:0px; margin:0px;margin-left:5px; "></span>
+}
+</div>
 								</div>
 								</div>
 							</div>

@@ -44,7 +44,7 @@ public class Patient extends BaseEntity {
 	
 	public List<Appointment> getAppointments(){
 		final List<Appointment> appointments = Appointment.find.where()
-				.eq("requestedBy", this.appUser).orderBy("appointmentTime")
+				.eq("requestedBy", this.appUser).orderBy().desc("appointmentTime")
 				.findList();
 		return appointments;
 		//return ok(views.html.patient.patientAllAppointments.render(appointments,docclinicInfo));

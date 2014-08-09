@@ -20,6 +20,7 @@ import play.data.Form;
 import play.mvc.Controller;
 import play.mvc.Result;
 import actions.BasicAuth;
+import actions.ConfirmAppUser;
 import beans.QuestionAndAnswerBean;
 
 @BasicAuth
@@ -280,7 +281,7 @@ public class PatientController extends Controller {
 	 */
 	public static Result viewMyAppointments(){
 		final AppUser patient=LoginController.getLoggedInUser();
-		final List<Appointment> patientApppointments=Appointment.find.where().eq("requestedBy", patient).findList();
+		final List<Appointment> patientApppointments=Appointment.find.where().eq("requestedBy", patient).orderBy().desc("appointmentTime").findList();
 		return ok(views.html.patient.patientViewAppointments.render(patientApppointments));
 	}
 
@@ -298,18 +299,21 @@ public class PatientController extends Controller {
 		appointment.requestedBy=LoginController.getLoggedInUser();
 		appointment.bookedOn = new Date();
 		appointment.update();
+		flash().put("alert",
+				new Alert("alert-success", "Appointment Created With The Dr."+appointment.doctorClinicInfo.doctor.appUser.name
+						+ " At The Clinic "+appointment.doctorClinicInfo.clinic.name + " Successfully.").toString());
 		return redirect(routes.PatientController. viewMyAppointments());
 	}
 
 	/**@author lakshmi
 	 * Action to show all prescription created by loggedInPatient
 	 *GET /user/prescriptions
-	 */
-	//@ConfirmAppUser
+	*/
+	@ConfirmAppUser
 	public static Result viewAllPatientPrescriptions() {
 		final Patient patient = LoginController.getLoggedInUser().getPatient();
 		final List<Prescription> prescriptionList = Prescription.find.where()
-				.eq("patient", patient).orderBy("prescriptionDate").findList();
+				.eq("patient", patient).orderBy().desc("prescriptionDate").findList();
 		return ok(views.html.patient.patientPrescriptionList.render(prescriptionList));
 	}
 	/**
@@ -317,7 +321,7 @@ public class PatientController extends Controller {
 	 * Action to show the prescription to the loggedInPatient
 	 * GET/user/show-prescription/:prescriptionId
 	 */
-	//@ConfirmAppUser
+	@ConfirmAppUser
 	public static Result viewPrescription(final Long prescriptionId) {
 		final Patient patient = LoginController.getLoggedInUser().getPatient();
 		final Prescription prescription = Prescription.find
@@ -333,7 +337,7 @@ public class PatientController extends Controller {
 	 * @author Mitesh Action to Display appointment requested to logged-in
 	 *         DOCTOR GET /doctor/all-appointments
 	 */
-	//	@ConfirmAppUser
+	@ConfirmAppUser
 	public static Result viewPatientAppointments() {
 
 		final Patient patient = LoginController.getLoggedInUser().getPatient();

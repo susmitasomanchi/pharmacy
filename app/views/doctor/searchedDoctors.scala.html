@@ -64,8 +64,8 @@ margin-bottom:0px;
 				<br>
 				</div>
 				<div class="col-md-3 pull-right" style="width:30%;padding-left:15px;padding-top:60px">
-				<a class="btn btn-primary btn-xs" href="#">Ask Query</a>
-				<a id="@doctor.id" class="btn btn-success btn-xs" href="@routes.PublicController.addToFavDoctor(doctor.id)" class="pull-right">Fav&nbsp<i class="fa fa-plus"></i></a>
+				@*<a class="btn btn-primary btn-xs" href="#">Ask Query</a>*@
+				<a id="@doctor.id" class="btn btn-success btn-xs pull-right" href="@routes.PublicController.addToFavDoctor(doctor.id)" class="pull-right">Fav&nbsp<i class="fa fa-plus"></i></a>
 				@*<a class="btn btn-danger btn-sm" href="@routes.PatientController.deleteMyFavDoctors(patDoc.id)">Remove</a>*@
 				</div>
 				</div>
@@ -92,12 +92,12 @@ margin-bottom:0px;
 							<div class="tab-pane active" id="@{docclinic.id}_clinic">
 								<div class="row">
 									<div class="col-md-8">
-									<h5 style="color:#006687">
-									<b><a href="#" >@docclinic.clinic.name</a></b>
-										<span style="font-size:12px;color:black">@docclinic.clinic.address.addressLine1
-										@docclinic.clinic.address.area
-										@docclinic.clinic.address.city
-										@docclinic.clinic.address.state</h5>
+									<h5><b><a href="#" style="color:#006687"
+									>@docclinic.clinic.name</a></b></h5>
+										@docclinic.clinic.address.addressLine1<br>
+										@docclinic.clinic.address.area<br>
+										@docclinic.clinic.address.city<br>
+										@docclinic.clinic.address.state<br>
 									<i class="fa fa-phone-square"></i> @docclinic.clinic.contactNo<br><br>
 									</div>
 									<div class="col-md-4">
@@ -126,13 +126,12 @@ margin-bottom:0px;
 						}else{<div class="tab-pane" id="clinic1">
 								<div class="row">
 									<div class="col-md-8">
-									<h5 style="color:#006687">
 									<b><a href="@{docclinic.id}_clinic" >@docclinic.clinic.name</a></b>
-										<span style="font-size:12px;color:black">@docclinic.clinic.address.addressLine1
-										@docclinic.clinic.address.area
-										@docclinic.clinic.address.city
-										@docclinic.clinic.address.state</h5>
-									<i class="fa fa-phone-square"></i> @docclinic.clinic.contactNo<br><br>
+										<span style="font-size:12px;color:black">@docclinic.clinic.address.addressLine1<br>
+										@docclinic.clinic.address.area<br>
+										@docclinic.clinic.address.city<br>
+										@docclinic.clinic.address.state<br>
+									<i class="fa fa-phone-square"></i> @docclinic.clinic.contactNo<br><br></span>
 									</div>
 									<div class="col-md-4">
 										<a class="btn btn-success btn-xs" style="float:right" href="/static/new/appointment">Book Appointment</a>
@@ -195,8 +194,8 @@ margin-bottom:0px;
 				<br>
 				</div>
 				<div class="col-md-4 pull-right" style="width:30%;padding-left:15px;padding-top:60px">
-				<a class="btn btn-primary btn-xs" href="#">Ask Query</a>
-				<a id="@doctor.id" class="btn btn-success btn-xs" href="@routes.PublicController.addToFavDoctor(doctor.id)" class="pull-right">Fav&nbsp<i class="fa fa-plus"></i></a>
+				@*<a class="btn btn-primary btn-xs" href="#">Ask Query</a>*@
+				<a id="@doctor.id" class="btn btn-success btn-xs pull-right" href="@routes.PublicController.addToFavDoctor(doctor.id)">Fav&nbsp<i class="fa fa-plus"></i></a>
 				@*<a class="btn btn-danger btn-sm" href="@routes.PatientController.deleteMyFavDoctors(patDoc.id)">Remove</a>*@
 				</div>
 				</div>
@@ -224,11 +223,11 @@ margin-bottom:0px;
 								<div class="row">
 									<div class="col-md-8">
 									<h5 style="color:#006687">
-									<b><a href="#" >@docclinic.clinic.name</a></b>
-										<span style="font-size:12px;color:black">@docclinic.clinic.address.addressLine1
-										@docclinic.clinic.address.area
-										@docclinic.clinic.address.city
-										@docclinic.clinic.address.state</h5>
+									<b><a href="#" >@docclinic.clinic.name</a></b></h5>
+										@docclinic.clinic.address.addressLine1<br>
+										@docclinic.clinic.address.area<br>
+										@docclinic.clinic.address.city<br>
+										@docclinic.clinic.address.state<br>
 									<i class="fa fa-phone-square"></i> @docclinic.clinic.contactNo<br><br>
 									</div>
 									<div class="col-md-4">
