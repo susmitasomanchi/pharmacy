@@ -56,14 +56,14 @@ margin-bottom:0px;
 				<img src="/assets/images/doctor.png" class="thumbnail" width="100" height="100"  />
 					}
 				</div>
-				<div style="cursor:pointer;width:47%" onclick="window.location.href='@routes.PublicController.getDoctorWithSlug(doctor.slugUrl)';" class="col-md-6">
+				<div style="cursor:pointer;width:47%" onclick="window.location.href='@routes.PublicController.getDoctorWithSlug(doctor.slugUrl)';" class="col-md-5">
 				<p style="font-size:18px"><b>@doctor.appUser.name</b></p>
 				<p style="font-size:14px"><b>@doctor.specialization</b></p>
 				<h6>@doctor.degree</h6>
 				<h6>@doctor.experience</h6>
 				<br>
 				</div>
-				<div class="col-md-3" style="width:30%;padding-left:20px;padding-top:60px">
+				<div class="col-md-3 pull-right" style="width:30%;padding-left:15px;padding-top:60px">
 				<a class="btn btn-primary btn-xs" href="#">Ask Query</a>
 				<a id="@doctor.id" class="btn btn-success btn-xs" href="@routes.PublicController.addToFavDoctor(doctor.id)" class="pull-right">Fav&nbsp<i class="fa fa-plus"></i></a>
 				@*<a class="btn btn-danger btn-sm" href="@routes.PatientController.deleteMyFavDoctors(patDoc.id)">Remove</a>*@
@@ -71,7 +71,7 @@ margin-bottom:0px;
 				</div>
 				
 				
-				<div class="well" style="padding-left:20px;padding-right:0px;padding-top:0px;padding-bottom:20px">
+				<div class="well" style="padding-left:3px;padding-right:0px;padding-top:0px;padding-bottom:20px">
 				<h4 style="color:#006687;font-weight:bold">Clinics</h4>
 				@if(doctor.doctorClinicInfoList.size()==0){
 					No clinic created yet
@@ -187,14 +187,14 @@ margin-bottom:0px;
 				<img src="/assets/images/doctor.png" class="thumbnail" width="100" height="100"  />
 					}
 				</div>
-				<div style="cursor:pointer;width:47%" onclick="window.location.href='@routes.PublicController.getDoctorWithSlug(doctor.slugUrl)';" class="col-md-6">
+				<div style="cursor:pointer;width:47%" onclick="window.location.href='@routes.PublicController.getDoctorWithSlug(doctor.slugUrl)';" class="col-md-4">
 				<p style="font-size:18px"><b>@doctor.appUser.name</b></p>
 				<p style="font-size:14px"><b>@doctor.specialization</b></p>
 				<h6>@doctor.degree</h6>
 				<h6>@doctor.experience</h6>
 				<br>
 				</div>
-				<div class="col-md-3" style="width:30%;padding-left:20px;padding-top:60px">
+				<div class="col-md-4 pull-right" style="width:30%;padding-left:15px;padding-top:60px">
 				<a class="btn btn-primary btn-xs" href="#">Ask Query</a>
 				<a id="@doctor.id" class="btn btn-success btn-xs" href="@routes.PublicController.addToFavDoctor(doctor.id)" class="pull-right">Fav&nbsp<i class="fa fa-plus"></i></a>
 				@*<a class="btn btn-danger btn-sm" href="@routes.PatientController.deleteMyFavDoctors(patDoc.id)">Remove</a>*@
@@ -202,7 +202,7 @@ margin-bottom:0px;
 				</div>
 				
 				
-				<div class="well" style="padding-left:20px;padding-right:0px;padding-top:0px;padding-bottom:20px">
+				<div class="well" style="padding-left:3px;padding-right:0px;padding-top:0px;padding-bottom:20px">
 				<h4 style="color:#006687;font-weight:bold">Clinics</h4>
 				@if(doctor.doctorClinicInfoList.size()==0){
 					No clinic created yet
