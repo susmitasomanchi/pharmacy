@@ -1379,7 +1379,7 @@ public class DoctorController extends Controller {
 	 *	 currently logged in user'mobile
 	 *	POST /user/verify-mobile-number
 	 */
-	public static Result verifyMobileNumberConfirmationKey() {
+public static Result verifyMobileNumberConfirmationKey() {
 
 
 		final String key = request().body().asFormUrlEncoded()
@@ -1416,6 +1416,7 @@ public class DoctorController extends Controller {
 			return redirect(routes.UserController.confirmAppUserPage());
 		}
 	}
+
 
 	/**
 	 * @author Mitesh

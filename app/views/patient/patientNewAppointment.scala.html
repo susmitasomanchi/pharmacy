@@ -224,6 +224,7 @@ $('#carousel-example-generic').carousel({
 </script>
 
 <script type="text/javascript"> 
+var avbl;
 var date=new Date();
 $( document ).ready(function() {
 @if(doctorClinic != null ){
@@ -244,7 +245,7 @@ console.log('localhost:9000/patient/display-appointment/@doctorClinic.id/'+date.
 
 
   		$(".right").click(function(){
-  		if($( ".active" ).hasClass( "nextAppt" )){
+  		if($( ".active" ).hasClass( "nextAppt" ) && avbl>0){
   			$( ".active" ).removeClass( "nextAppt" );
   		
   		console.log('localhost:9000/patient/display-appointment/@doctorClinic.id'+date.getTime());

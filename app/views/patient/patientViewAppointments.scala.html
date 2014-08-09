@@ -7,28 +7,27 @@
 
 <table class="table table-striped table-bordered">
 <tr>
-<th style="text-align:center">S No</th>
-<th style="text-align:center">Date/Time</th>
-<th style="text-align:center">Doctor</th>
-<th style="text-align:center">Clinic</th>
-<th style="text-align:center">Complaint</th>
+<th style="text-align:center">S.NO</th>
+<th style="text-align:center">DOCTOR</th>
+<th style="text-align:center">CLINIC</th>
+<th style="text-align:center">DATE/TIME</th>
+<th style="text-align:center">Problem</th>
+<th style="text-align:center">Status</th>
 <th style="text-align:center">Booked On</th>
-<th style="text-align:center">Action</th>
+<th style="text-align:center">ACTION</th>
 </tr>
 @for((appointment,index) <- appList.zipWithIndex){
 <tr>
 <td style="vertical-align:middle;text-align:center;font-size:16px">@{index+1}</td>
-<td style="vertical-align:middle;text-align:center;font-size:16px">@appointment.appointmentTime.format("dd-MMM-yyyy")<br>@appointment.appointmentTime.format("EE")<br>@appointment.appointmentTime.format("hh:mm")</td>
 <td>
 <div class="row" style="cursor:pointer" onclick="location.href='/dashboard';">
 <div class="col-md-4">
-@if(appointment.doctorClinicInfo.doctor.backgroundImage != null){
+@if(appointment.doctorClinicInfo.doctor.profileImage != null){
 		<img src="@routes.PublicController.getImage(appointment.doctorClinicInfo.doctor.id,"profileImage")" class="thumbnail" width="100" height="100"  />
 	}else{
 		<img src="/assets/images/doctor.png" class="thumbnail" width="100" height="100"  />
-	}
-</div>
-<div class="col-md-8">
+	}</div>
+<div class="col-md-8" style="padding-left:35px">
 <h4>@appointment.doctorClinicInfo.doctor.appUser.name</h4>
 <h6>@appointment.doctorClinicInfo.doctor.specialization</h6>
 <h6>@appointment.doctorClinicInfo.doctor.degree</h6>
@@ -37,16 +36,20 @@
 </td>
 <td>
 <div class="row">
-<div class="col-md-11">
+<div class="col-md-4" style="padding-left:25px">
 <h4>@appointment.doctorClinicInfo.clinic.name</h4>
 </div>
 </div>
 </td>
+
+<td style="vertical-align:middle;text-align:center;font-size:16px">@appointment.appointmentTime.format("dd-MM-yyyy")<br>@appointment.appointmentTime.format("EE")<br>@appointment.appointmentTime.format("hh:mm")</td>
 <td style="vertical-align:middle;text-align:center;font-size:16px">@appointment.problemStatement</td>
-<td style="vertical-align:middle;text-align:center;font-size:16px">@appointment.bookedOn.format("dd-MMM-yyyy hh:mm")</td>
+<td style="vertical-align:middle;text-align:center;font-size:16px">@appointment.appointmentStatus</td>
+<td style="vertical-align:middle;text-align:center;font-size:16px">@appointment.bookedOn.format("dd-MMM-yy HH:mm")</td>
 <td style="vertical-align:middle;text-align:center">
 <button class="btn btn-success btn-sm" >Prescription</button>
 </td>
+
 </tr>
 }
 </table>
