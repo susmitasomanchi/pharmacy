@@ -1358,7 +1358,7 @@ public class DoctorController extends Controller {
 	 *         GET /user/send-verificaion-code
 	 */
 	public static Result sendMobVerificationCode() {
-		AppUser appUser = LoginController.getLoggedInUser();
+		final AppUser appUser = LoginController.getLoggedInUser();
 		SMSService.sendConfirmationSMS(appUser);
 		flash().put("alert",new Alert("alert-info","A confirmation code has been SMSed to your Mobile Number ("+appUser.mobileNumber+")").toString());
 		return redirect(routes.UserController.confirmAppUserPage());
@@ -1379,7 +1379,7 @@ public class DoctorController extends Controller {
 	 *	 currently logged in user'mobile
 	 *	POST /user/verify-mobile-number
 	 */
-public static Result verifyMobileNumberConfirmationKey() {
+	public static Result verifyMobileNumberConfirmationKey() {
 
 
 		final String key = request().body().asFormUrlEncoded()
@@ -1427,25 +1427,19 @@ public static Result verifyMobileNumberConfirmationKey() {
 	public static Result sendConformationEmail() {
 
 		final boolean result;
-
+		final AppUser loggedInUser = LoginController.getLoggedInUser();
 
 		Promise.promise(new Function0<Integer>() {
 
 			// @Override
 			@Override
 			public Integer apply() {
-
-				final boolean result1 = EmailService.sendConfirmationEmail(LoginController
-						.getLoggedInUser());
-
+				final boolean result1 = EmailService.sendConfirmationEmail(loggedInUser);
 				return 0;
 			}
 		});
 		// End of async
-		flash().put(
-				"alert",
-				new Alert("alert-success","A conformation messege has been send to you").toString());
-
+		flash().put("alert",new Alert("alert-success","A confirmation email has been sent to you at "+loggedInUser.email+". Kindly verify the same.").toString());
 		return redirect(routes.UserController.confirmAppUserPage());
 
 
