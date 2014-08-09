@@ -921,40 +921,28 @@ public class DoctorController extends Controller {
 	public static Result deleteClinic(final Long id) {
 		final DoctorClinicInfo clinicInfo = DoctorClinicInfo.find.byId(id);
 		// Server side validation
-		if (clinicInfo.doctor.id.longValue() != LoginController
-				.getLoggedInUser().getDoctor().id.longValue()) {
+		if (clinicInfo.doctor.id.longValue() != LoginController.getLoggedInUser().getDoctor().id.longValue()) {
 			Logger.warn("COULD NOT VALIDATE LOGGED IN USER TO PERFORM THIS TASK");
-			Logger.warn("update attempted for doctor id: "
-					+ clinicInfo.doctor.id);
-			Logger.warn("logged in AppUser: "
-					+ LoginController.getLoggedInUser().id);
-			Logger.warn("logged in Doctor: "
-					+ LoginController.getLoggedInUser().getDoctor().id);
+			Logger.warn("update attempted for doctor id: "+ clinicInfo.doctor.id);
+			Logger.warn("logged in AppUser: "+ LoginController.getLoggedInUser().id);
+			Logger.warn("logged in Doctor: "+ LoginController.getLoggedInUser().getDoctor().id);
 			return redirect(routes.LoginController.processLogout());
 		}
 		final Calendar calendar = Calendar.getInstance();
 		calendar.setTime(new Date());
 		calendar.set(Calendar.HOUR_OF_DAY, 00);
 		calendar.set(Calendar.MINUTE, 00);
+		calendar.set(Calendar.SECOND, 00);
+		calendar.set(Calendar.MILLISECOND, 00);
 
-		final List<Appointment> approvedAppts = Appointment.find.where()
+		final List<Appointment> futureApptList = Appointment.find.where()
 				.eq("doctorClinicInfo", clinicInfo)
-				.eq("appointmentTime", calendar.getTime())
-				.eq("appointmentStatus", AppointmentStatus.APPROVED).findList();
-
-		/*
-		 * @TODO: Notify patients / MRs / doctor (via mail, sms etc.) regarding
-		 * cancelled appointments due to deletion of clinic
-		 */
-
-		Ebean.delete(approvedAppts);
-		final List<Appointment> availableAppts = Appointment.find.where()
-				.eq("doctor", clinicInfo.doctor)
-				.eq("clinic", clinicInfo.clinic)
-				.eq("appointmentStatus", AppointmentStatus.AVAILABLE)
+				.ge("appointmentTime", calendar.getTime())
+				.ne("appointmentStatus", AppointmentStatus.SERVED)
 				.findList();
 
-		Ebean.delete(availableAppts);
+		Ebean.delete(futureApptList);
+
 		clinicInfo.active = false;
 		clinicInfo.doctor.update();
 		clinicInfo.update();

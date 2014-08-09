@@ -119,7 +119,7 @@ GET    /user/my-doctors									controllers.PatientController.myFavouriteDoctors
 GET		/user/prescriptions										controllers.PatientController.viewAllPatientPrescriptions()
 GET		/user/show-prescription/:prescriptionId			controllers.PatientController.viewPrescription(prescriptionId: Long)
 GET		/user/favorite-diagnostic-centres				controllers.PatientController.patientFavoriteDiagnosticCentres()
-GET		/user/favorite-pharmacies						controllers.PatientController.patientFavoritePharmacies()
+GET		/user/my-pharmacies						controllers.PatientController.patientFavoritePharmacies()
 #GET		/user/appointments								controllers.PatientController.viewPatientAppointments()
 GET		/user/appointments									controllers.PatientController.viewMyAppointments()
 
