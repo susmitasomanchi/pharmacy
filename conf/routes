@@ -120,7 +120,8 @@ GET		/user/prescriptions										controllers.PatientController.viewAllPatientPr
 GET		/user/show-prescription/:prescriptionId			controllers.PatientController.viewPrescription(prescriptionId: Long)
 GET		/user/favorite-diagnostic-centres				controllers.PatientController.patientFavoriteDiagnosticCentres()
 GET		/user/favorite-pharmacies						controllers.PatientController.patientFavoritePharmacies()
-GET		/user/appointments								controllers.PatientController.viewPatientAppointments()
+#GET		/user/appointments								controllers.PatientController.viewPatientAppointments()
+GET		/user/appointments									controllers.PatientController.viewMyAppointments()
 
 
 
@@ -255,7 +256,6 @@ GET    /static/new/appointment					controllers.PatientController.staticPatientNe
 GET 	/doctor/schedule-appointment/:docclinicid		controllers.PublicController.scheduleAppointment(docclinicid:Long)
 GET    /patient/display-appointment/:docClinicId/:timeMillis	controllers.PublicController.displayAppointment(docClinicId:Long,timeMillis:Long)
 GET    /static/patient/view/appointments		controllers.PatientController.staticPatientViewAppointments()
-GET		/patient/my-appointments			controllers.PatientController.viewMyAppointments()
 #GET    /diagnosticlist                   	 	controllers.DiagnosticController.diagnosticlist()
 #GET    /diagnostic-service-list/:id            controllers.DiagnosticController.diagnosticServiceslist(id: Long)
 GET    /diagnostic-delete/:id             		controllers.DiagnosticController.deleteCenter(id: Long)

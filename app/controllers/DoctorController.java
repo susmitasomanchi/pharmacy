@@ -607,7 +607,7 @@ public class DoctorController extends Controller {
 	 * @author Mitesh Action to render a page with form for adding new clinic of
 	 *         the loggedInDoctor GET /doctor/new-clinic
 	 */
-//	@ConfirmAppUser
+	//	@ConfirmAppUser
 	public static Result newClinic() {
 		return ok(views.html.doctor.newClinic.render(clinicForm));
 	}
@@ -1358,11 +1358,10 @@ public class DoctorController extends Controller {
 	 *         GET /user/send-verificaion-code
 	 */
 	public static Result sendMobVerificationCode() {
-
-		SMSService.sendConfirmationSMS(LoginController.getLoggedInUser());
-
+		AppUser appUser = LoginController.getLoggedInUser();
+		SMSService.sendConfirmationSMS(appUser);
+		flash().put("alert",new Alert("alert-info","A confirmation code has been SMSed to your Mobile Number ("+appUser.mobileNumber+")").toString());
 		return redirect(routes.UserController.confirmAppUserPage());
-
 	}
 
 	/**
@@ -1596,7 +1595,7 @@ public class DoctorController extends Controller {
 		return ok(views.html.diagnostic.favorite_diagnosticCentre_list.render(doctor.diagnosticCentreList));
 	}
 
-	
+
 
 	@ConfirmAppUser
 	public static Result requestAppointment() {

@@ -40,9 +40,9 @@ margin-bottom:0px;
 				<br>
 				@if(patDoc.doctor.backgroundImage != null){
 				<img src="@routes.PublicController.getImage(patDoc.doctor.id,"profileImage")" class="thumbnail" width="100" height="100"  />
-					}else{
+				}else{
 				<img src="/assets/images/doctor.png" class="thumbnail" width="100" height="100"  />
-					}
+				}
 				</div>
 				<div style="cursor:pointer" onclick="window.location.href='@routes.PublicController.getDoctorWithSlug(patDoc.doctor.slugUrl)';" class="col-md-5">
 				<p style="font-size:18px"><b>@patDoc.doctor.appUser.name</b></p>
