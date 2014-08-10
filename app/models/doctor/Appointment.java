@@ -64,13 +64,12 @@ public class Appointment extends BaseEntity {
 	}
 
 	public Prescription getPrescription(){
-		try{
-			return Prescription.find.where().eq("appointment", this).findList().get(0);
-		}
-		catch(final Exception e){
+		int rows = Prescription.find.where().eq("appointment", this).findRowCount();
 			Logger.error("No Prescription found for appointment Id: "+this.id);
+			if(rows==0){
 			return null;
-		}
+			}
+			return Prescription.find.where().eq("appointment", this).findList().get(0);
 	}
 
 

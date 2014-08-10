@@ -607,7 +607,7 @@ public class DoctorController extends Controller {
 	 * @author Mitesh Action to render a page with form for adding new clinic of
 	 *         the loggedInDoctor GET /doctor/new-clinic
 	 */
-	//	@ConfirmAppUser
+	@ConfirmAppUser
 	public static Result newClinic() {
 		return ok(views.html.doctor.newClinic.render(clinicForm));
 	}
@@ -618,7 +618,7 @@ public class DoctorController extends Controller {
 	 *         DoctorController.createAppointment(clinicInfo) method to create
 	 *         requisite appointments POST /doctor/new-clinic
 	 */
-	//@ConfirmAppUser
+	@ConfirmAppUser
 	public static Result processNewClinic() {
 		final Form<DoctorClinicInfoBean> filledForm = clinicForm
 				.bindFromRequest();

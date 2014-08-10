@@ -196,29 +196,41 @@ public class PublicController extends Controller{
 		if(!LoginController.isLoggedIn()){
 			flash().put("alert", new Alert("alert-info","Please Login To Add Pharmacy.").toString());
 			return redirect(routes.LoginController.loginForm());
-		}else{
+		}
+		else{
 			final String loggedInRole=LoginController.getLoggedInUserRole();
 			if(loggedInRole.compareTo(Role.PATIENT.toString()) == 0){
 				final Patient patient = LoginController.getLoggedInUser().getPatient();
 				final Pharmacy pharmacy = Pharmacy.find.byId(pharmacyId);
 				if(!patient.pharmacyList.contains(pharmacy)){
 					patient.pharmacyList.add(pharmacy);
+					flash().put("alert", new Alert("alert-info",pharmacy.name+" added to your pharmacy list.").toString());
 					patient.update();
-					return redirect(routes.PatientController.patientFavoritePharmacies());
 				}
+				else{
+					flash().put("alert", new Alert("alert-info",pharmacy.name+" is already in your pharmacy list.").toString());
+				}
+				return redirect(routes.PatientController.patientFavoritePharmacies());
 			}
+
 			if(loggedInRole.compareTo(Role.DOCTOR.toString()) == 0){
 				final Doctor doctor = LoginController.getLoggedInUser().getDoctor();
 				final Pharmacy pharmacy = Pharmacy.find.byId(pharmacyId);
 				if(!doctor.pharmacyList.contains(pharmacy)){
 					doctor.pharmacyList.add(pharmacy);
 					doctor.update();
+					flash().put("alert", new Alert("alert-info",pharmacy.name+" added to your pharmacy list.").toString());
+				}
+				else{
+					flash().put("alert", new Alert("alert-info",pharmacy.name+" is already in your pharmacy list.").toString());
 				}
 				return redirect(routes.DoctorController.myFavoritePharmacies());
 			}
+
 			if(loggedInRole.compareTo(Role.ADMIN_DIAGREP.toString()) == 0){
 
 			}
+
 			return redirect(routes.UserActions.dashboard());
 		}
 	}
@@ -455,7 +467,8 @@ public class PublicController extends Controller{
 		if(!LoginController.isLoggedIn()){
 			flash().put("alert", new Alert("alert-info","Please Login To Add DiagnosticCentre.").toString());
 			return redirect(routes.LoginController.loginForm());
-		}else{
+		}
+		else{
 			final String loggedInRole=LoginController.getLoggedInUserRole();
 			if(loggedInRole.compareTo(Role.PATIENT.toString()) == 0){
 				final Patient patient = LoginController.getLoggedInUser().getPatient();
@@ -463,29 +476,28 @@ public class PublicController extends Controller{
 				if(!patient.diagnosticCenterList.contains(diagnosticCentre)){
 					patient.diagnosticCenterList.add(diagnosticCentre);
 					patient.update();
-					flash().put("alert", new Alert("alert-success",diagnosticCentre.name +" Added To Your Favorite Diagnostic Centres").toString());
-					return redirect(routes.PatientController.patientFavoriteDiagnosticCentres());
+					flash().put("alert", new Alert("alert-info",diagnosticCentre.name+" added to your diagnostic centres list.").toString());
 				}
 				else{
-					flash().put("alert", new Alert("alert-success",diagnosticCentre.name +" Already Added To Your Favorite Diagnostic Centres").toString());
+					flash().put("alert", new Alert("alert-info",diagnosticCentre.name+" is already in your diagnostic centres list.").toString());
 				}
-
-
+				return redirect(routes.PatientController.patientFavoriteDiagnosticCentres());
 			}
+
 			if(loggedInRole.compareTo(Role.DOCTOR.toString()) == 0){
 				final Doctor doctor = LoginController.getLoggedInUser().getDoctor();
 				final DiagnosticCentre diagnosticCentre = DiagnosticCentre.find.byId(diagnosticId);
 				if(!doctor.diagnosticCentreList.contains(diagnosticCentre)){
 					doctor.diagnosticCentreList.add(diagnosticCentre);
 					doctor.update();
-					flash().put("alert", new Alert("alert-success",diagnosticCentre.name +" Added To Your Favorite Diagnostic Centres").toString());
-					return redirect(routes.DoctorController.myFavoriteDiagnosticCentres());
-
-				}else{
-					flash().put("alert", new Alert("alert-success",diagnosticCentre.name +" Already Added To Your Favorite Diagnostic Centres").toString());
+					flash().put("alert", new Alert("alert-info",diagnosticCentre.name+" added to your diagnostic centres list.").toString());
 				}
-
+				else{
+					flash().put("alert", new Alert("alert-info",diagnosticCentre.name+" is already in your diagnostic centres list.").toString());
+				}
+				return redirect(routes.DoctorController.myFavoriteDiagnosticCentres());
 			}
+
 			if(loggedInRole.compareTo(Role.ADMIN_DIAGREP.toString()) == 0){
 
 			}

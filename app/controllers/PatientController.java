@@ -284,8 +284,7 @@ public class PatientController extends Controller {
 	@ConfirmAppUser
 	public static Result viewPrescription(final Long prescriptionId) {
 		final Patient patient = LoginController.getLoggedInUser().getPatient();
-		final Prescription prescription = Prescription.find
-				.byId(prescriptionId);
+		final Prescription prescription = Prescription.find.byId(prescriptionId);
 		// server-side check
 		if (prescription.patient.id.longValue() != patient.id.longValue()) {
 			return redirect(routes.LoginController.processLogout());
@@ -315,7 +314,7 @@ public class PatientController extends Controller {
 
 
 	/**
-	 * Action to show logged In doctor a page to assign a prescription to a pharmacy / diagnostic centre
+	 * Action to show logged In patient a page to assign a prescription to a pharmacy / diagnostic centre
 	 * GET /user/share-prescription
 	 */
 	@ConfirmAppUser
