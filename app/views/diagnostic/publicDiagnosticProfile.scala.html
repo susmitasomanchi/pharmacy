@@ -148,17 +148,19 @@ function submitbasicform(id){
 <div class="row">
 <div class="col-md-10">
 <div class="col-md-5">
+
+
+@diagnosticCentre.contactPerson<br>
 @if(diagnosticCentre.address != null){
-<h5>@diagnosticCentre.contactPerson</h5>
-<h5>@diagnosticCentre.address.addressLine1</h5>
-<h5>@diagnosticCentre.address.area</h5>
-<h5>@diagnosticCentre.address.city</h5>
+@diagnosticCentre.address.addressLine1<br>
+@diagnosticCentre.address.area<br>
+@diagnosticCentre.address.city<br>
+@diagnosticCentre.address.pinCode<br>
 @if(diagnosticCentre.address.state != null){
-<h5>@models.State.options().get(diagnosticCentre.address.state.toString())</h5>	
+@diagnosticCentre.address.state.capitalize()<br>	
 }
-<h5>@diagnosticCentre.address.pinCode</h5>
-<h5>Phones: @diagnosticCentre.mobileNo </h5>
 }
+<i class="fa fa-phone-square"></i> @diagnosticCentre.mobileNo
 </div>
 
 <div class="col-md-7">

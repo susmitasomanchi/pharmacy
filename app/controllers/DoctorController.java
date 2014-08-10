@@ -21,6 +21,7 @@ import models.doctor.Appointment;
 import models.doctor.AppointmentStatus;
 import models.doctor.Day;
 import models.doctor.DaySchedule;
+import models.doctor.DiagnosticTestLineItem;
 import models.doctor.Doctor;
 import models.doctor.DoctorAward;
 import models.doctor.DoctorClinicInfo;
@@ -29,6 +30,7 @@ import models.doctor.DoctorEducation;
 import models.doctor.DoctorExperience;
 import models.doctor.DoctorProduct;
 import models.doctor.DoctorSocialWork;
+import models.doctor.MedicineLineItem;
 import models.doctor.Prescription;
 import models.doctor.QuestionAndAnswer;
 import models.doctor.SigCode;
@@ -60,14 +62,10 @@ import com.google.common.io.Files;
 @BasicAuth
 public class DoctorController extends Controller {
 
-	public static Form<DoctorClinicInfoBean> clinicForm = Form
-			.form(DoctorClinicInfoBean.class);
-	public static Form<QuestionAndAnswerBean> questionAndAnswerForm = Form
-			.form(QuestionAndAnswerBean.class);
-	public static Form<DoctorClinicInfo> doctorClinicForm = Form
-			.form(DoctorClinicInfo.class);
-	public static Form<PrescriptionBean> prescriptionForm = Form
-			.form(PrescriptionBean.class);
+	public static Form<DoctorClinicInfoBean> clinicForm = Form.form(DoctorClinicInfoBean.class);
+	public static Form<QuestionAndAnswerBean> questionAndAnswerForm = Form.form(QuestionAndAnswerBean.class);
+	public static Form<DoctorClinicInfo> doctorClinicForm = Form.form(DoctorClinicInfo.class);
+	public static Form<PrescriptionBean> prescriptionForm = Form.form(PrescriptionBean.class);
 
 	/**
 	 * Action to update basic field of doctor like name, specialization, degree
@@ -609,7 +607,7 @@ public class DoctorController extends Controller {
 	 * @author Mitesh Action to render a page with form for adding new clinic of
 	 *         the loggedInDoctor GET /doctor/new-clinic
 	 */
-	//	@ConfirmAppUser
+	@ConfirmAppUser
 	public static Result newClinic() {
 		return ok(views.html.doctor.newClinic.render(clinicForm));
 	}
@@ -620,7 +618,7 @@ public class DoctorController extends Controller {
 	 *         DoctorController.createAppointment(clinicInfo) method to create
 	 *         requisite appointments POST /doctor/new-clinic
 	 */
-	//@ConfirmAppUser
+	@ConfirmAppUser
 	public static Result processNewClinic() {
 		final Form<DoctorClinicInfoBean> filledForm = clinicForm
 				.bindFromRequest();
@@ -922,40 +920,28 @@ public class DoctorController extends Controller {
 	public static Result deleteClinic(final Long id) {
 		final DoctorClinicInfo clinicInfo = DoctorClinicInfo.find.byId(id);
 		// Server side validation
-		if (clinicInfo.doctor.id.longValue() != LoginController
-				.getLoggedInUser().getDoctor().id.longValue()) {
+		if (clinicInfo.doctor.id.longValue() != LoginController.getLoggedInUser().getDoctor().id.longValue()) {
 			Logger.warn("COULD NOT VALIDATE LOGGED IN USER TO PERFORM THIS TASK");
-			Logger.warn("update attempted for doctor id: "
-					+ clinicInfo.doctor.id);
-			Logger.warn("logged in AppUser: "
-					+ LoginController.getLoggedInUser().id);
-			Logger.warn("logged in Doctor: "
-					+ LoginController.getLoggedInUser().getDoctor().id);
+			Logger.warn("update attempted for doctor id: "+ clinicInfo.doctor.id);
+			Logger.warn("logged in AppUser: "+ LoginController.getLoggedInUser().id);
+			Logger.warn("logged in Doctor: "+ LoginController.getLoggedInUser().getDoctor().id);
 			return redirect(routes.LoginController.processLogout());
 		}
 		final Calendar calendar = Calendar.getInstance();
 		calendar.setTime(new Date());
 		calendar.set(Calendar.HOUR_OF_DAY, 00);
 		calendar.set(Calendar.MINUTE, 00);
+		calendar.set(Calendar.SECOND, 00);
+		calendar.set(Calendar.MILLISECOND, 00);
 
-		final List<Appointment> approvedAppts = Appointment.find.where()
+		final List<Appointment> futureApptList = Appointment.find.where()
 				.eq("doctorClinicInfo", clinicInfo)
-				.eq("appointmentTime", calendar.getTime())
-				.eq("appointmentStatus", AppointmentStatus.APPROVED).findList();
-
-		/*
-		 * @TODO: Notify patients / MRs / doctor (via mail, sms etc.) regarding
-		 * cancelled appointments due to deletion of clinic
-		 */
-
-		Ebean.delete(approvedAppts);
-		final List<Appointment> availableAppts = Appointment.find.where()
-				.eq("doctor", clinicInfo.doctor)
-				.eq("clinic", clinicInfo.clinic)
-				.eq("appointmentStatus", AppointmentStatus.AVAILABLE)
+				.ge("appointmentTime", calendar.getTime())
+				.ne("appointmentStatus", AppointmentStatus.SERVED)
 				.findList();
 
-		Ebean.delete(availableAppts);
+		Ebean.delete(futureApptList);
+
 		clinicInfo.active = false;
 		clinicInfo.doctor.update();
 		clinicInfo.update();
@@ -1137,8 +1123,7 @@ public class DoctorController extends Controller {
 	 */
 	@ConfirmAppUser
 	public static Result savePrescription() {
-		final Form<PrescriptionBean> filledForm = prescriptionForm
-				.bindFromRequest();
+		final Form<PrescriptionBean> filledForm = prescriptionForm.bindFromRequest();
 		final PrescriptionBean bean = filledForm.get();
 		final Doctor doctor = LoginController.getLoggedInUser().getDoctor();
 		// server-side check
@@ -1154,10 +1139,38 @@ public class DoctorController extends Controller {
 		appointment.appointmentStatus = AppointmentStatus.SERVED;
 		appointment.update();
 
-		flash().put("alert",
-				new Alert("alert-success", "Prescription saved!").toString());
-		return redirect(routes.DoctorController
-				.showPrescription(prescription.id));
+		final List<MedicineLineItem> medLineItemList = prescription.medicineLineItemList;
+		final List<DoctorProduct> doctorProductList = new ArrayList<DoctorProduct>();
+		for (final MedicineLineItem medLineItem : medLineItemList) {
+			if(DoctorProduct.find.where().ieq("fullName", medLineItem.medicineFullName.trim()).findRowCount() == 0){
+				final DoctorProduct doctorProduct = new DoctorProduct();
+				doctorProduct.fullName = medLineItem.medicineFullName.trim();
+				doctorProductList.add(doctorProduct);
+			}
+		}
+
+		if(doctorProductList.size()>0){
+			doctor.myProductList.addAll(doctorProductList);
+			doctor.update();
+		}
+
+		final List<DiagnosticTestLineItem> diagnosticTestLineItemList = prescription.diagnosticTestLineItemList;
+		final List<DoctorDiagnosticTest> doctorDiagnosticTestList = new ArrayList<DoctorDiagnosticTest>();
+		for (final DiagnosticTestLineItem diagLineItem : diagnosticTestLineItemList) {
+			if(DoctorDiagnosticTest.find.where().ieq("name", diagLineItem.fullNameOfDiagnosticTest.trim()).findRowCount() == 0){
+				final DoctorDiagnosticTest doctorDiagnosticTest = new DoctorDiagnosticTest();
+				doctorDiagnosticTest.name = diagLineItem.fullNameOfDiagnosticTest.trim();
+				doctorDiagnosticTestList.add(doctorDiagnosticTest);
+			}
+		}
+
+		if(doctorDiagnosticTestList.size()>0){
+			doctor.myDiagnosticTestList.addAll(doctorDiagnosticTestList);
+			doctor.update();
+		}
+
+		flash().put("alert",new Alert("alert-success", "Prescription saved!").toString());
+		return redirect(routes.DoctorController.showPrescription(prescription.id));
 	}
 
 	/**
@@ -1200,7 +1213,8 @@ public class DoctorController extends Controller {
 				final PharmacyPrescriptionInfo phprInfo = new PharmacyPrescriptionInfo();
 				phprInfo.pharmacy = pharmacy;
 				phprInfo.prescription = prescription;
-				phprInfo.receivedDate = new Date();
+				phprInfo.sharedBy = doctor.appUser;
+				phprInfo.sharedDate = new Date();
 				phprInfo.pharmacyPrescriptionStatus = PharmacyPrescriptionStatus.RECEIVED;
 				phprInfo.save();
 				sharedWith.append(phprInfo.pharmacy.name);
@@ -1216,6 +1230,7 @@ public class DoctorController extends Controller {
 				final DiagnosticCentrePrescriptionInfo diagPrescriptionInfo = new DiagnosticCentrePrescriptionInfo();
 				diagPrescriptionInfo.diagnosticCentre = diagnosticCentre;
 				diagPrescriptionInfo.prescription = prescription;
+				diagPrescriptionInfo.sharedBy = doctor.appUser;
 				diagPrescriptionInfo.sharedDate = new Date();
 				diagPrescriptionInfo.diagnosticCentrePrescritionStatus = DiagnosticCentrePrescritionStatus.RECEIVED;
 				diagPrescriptionInfo.save();
@@ -1231,8 +1246,8 @@ public class DoctorController extends Controller {
 	}
 
 	/**
-	 * Action to show todays prescription created by loggedIn doctor GET
-	 * /doctor/todays-prescriptions
+	 * Action to show todays prescription created by loggedIn doctor
+	 * GET	/doctor/todays-prescriptions
 	 */
 	@ConfirmAppUser
 	public static Result viewTodaysPrescription() {
@@ -1332,9 +1347,9 @@ public class DoctorController extends Controller {
 	 *         GET /user/send-verificaion-code
 	 */
 	public static Result sendMobVerificationCode() {
-
-		SMSService.sendConfirmationSMS(LoginController.getLoggedInUser());
-
+		final AppUser appUser = LoginController.getLoggedInUser();
+		SMSService.sendConfirmationSMS(appUser);
+		flash().put("alert",new Alert("alert-info","A confirmation code has been SMSed to your Mobile Number ("+appUser.mobileNumber+")").toString());
 		return redirect(routes.UserController.confirmAppUserPage());
 
 	}
@@ -1401,6 +1416,7 @@ public class DoctorController extends Controller {
 	public static Result sendConformationEmail() {
 
 		final boolean result;
+		final AppUser loggedInUser = LoginController.getLoggedInUser();
 
 
 		Promise.promise(new Function0<Integer>() {
@@ -1408,18 +1424,12 @@ public class DoctorController extends Controller {
 			// @Override
 			@Override
 			public Integer apply() {
-
-				final boolean result1 = EmailService.sendConfirmationEmail(LoginController
-						.getLoggedInUser());
-
+				final boolean result1 = EmailService.sendConfirmationEmail(loggedInUser);
 				return 0;
 			}
 		});
 		// End of async
-		flash().put(
-				"alert",
-				new Alert("alert-success","A conformation messege has been send to you").toString());
-
+		flash().put("alert",new Alert("alert-success","A confirmation email has been sent to you at "+loggedInUser.email+". Kindly verify the same.").toString());
 		return redirect(routes.UserController.confirmAppUserPage());
 
 

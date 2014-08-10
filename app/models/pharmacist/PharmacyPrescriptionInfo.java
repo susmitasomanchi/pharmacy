@@ -8,6 +8,7 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.OneToOne;
 
+import models.AppUser;
 import models.BaseEntity;
 import models.doctor.Prescription;
 import play.db.ebean.Model;
@@ -18,18 +19,21 @@ public class PharmacyPrescriptionInfo extends BaseEntity{
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO)
-	public  Long id;	
-	
-	@OneToOne	
+	public  Long id;
+
+	@OneToOne
 	public Pharmacy pharmacy;
-	
+
 	@OneToOne
 	public Prescription prescription;
-	
+
 	public PharmacyPrescriptionStatus pharmacyPrescriptionStatus = PharmacyPrescriptionStatus.RECEIVED;
-	
-	public Date receivedDate;
-	
+
+	@OneToOne
+	public AppUser sharedBy;
+
+	public Date sharedDate;
+
 	public static Model.Finder<Long, PharmacyPrescriptionInfo> find = new Finder<Long, PharmacyPrescriptionInfo>(Long.class, PharmacyPrescriptionInfo.class);
-	
+
 }

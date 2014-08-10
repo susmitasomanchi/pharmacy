@@ -44,7 +44,8 @@ public class DRController extends Controller {
 		final Form<AppUser> filledForm = registrationForm.bindFromRequest();
 
 		if (filledForm.hasErrors()) {
-			return badRequest(views.html.registerAppUser.render(filledForm));
+			//return badRequest(views.html.registerAppUser.render(filledForm));
+			return ok();
 		} else {
 			final AppUser appUser = filledForm.get();
 			final DiagnosticRepresentative diagnosticRepresentative = new DiagnosticRepresentative();

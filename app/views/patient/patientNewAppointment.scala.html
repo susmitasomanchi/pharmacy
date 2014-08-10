@@ -31,7 +31,7 @@
 <h4><b>@doctorClinic.doctor.appUser.name</b></h4>
 <h4>@doctorClinic.doctor.specialization</h4>
 <h6>@doctorClinic.doctor.degree</h6>
-<h6>@doctorClinic.doctor.experience</h6><br>
+<h6>Ex: @doctorClinic.doctor.getYearsOfExperience() years</h6><br>
 </div>
 
 <div class="btn-group" data-toggle="buttons" style="padding-left:20px; font-size:12px;">
@@ -53,7 +53,7 @@
 @doctorClinic.clinic.address.area<br>
 @doctorClinic.clinic.address.city<br>
 @doctorClinic.clinic.address.state.capitalize()<br>
-Phone nos: @doctorClinic.clinic.contactNo</h5>
+<i class="fa fa-phone-square"></i> @doctorClinic.clinic.contactNo</h5>
 </div>
 </div>
 
@@ -263,13 +263,19 @@ console.log('localhost:9000/patient/display-appointment/@doctorClinic.id/'+date.
  <div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
   <div class="modal-dialog">
     <div class="modal-content">
-     <h4 class="modal-title">Book Appointment</h4>
+     
+     
+     <div class="modal-header alert-info">
+        <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+        <h4 class="modal-title">Book Appointment with Dr. @doctorClinic.doctor.appUser.name</h4>
+      </div>
+     
       <div class="modal-body" id="model-content">
      
       </div>
      	 <div class="modal-footer">
         <a class="btn btn-default" data-dismiss="modal">Close</a>
-        <a class="btn btn-primary" onclick="$('#datetimeform').submit();" id="confirm">Confirm</a>
+        <a class="btn btn-info" onclick="$('#datetimeform').submit();" id="confirm">Confirm</a>
       </div>
     </div>
   </div>
@@ -279,13 +285,11 @@ console.log('localhost:9000/patient/display-appointment/@doctorClinic.id/'+date.
 $("#myModal").on('shown.bs.modal',function(evt){
 $("#model-content").html(
 '<form action="/patient/process-appointment/'+$(evt.relatedTarget).attr("id")+'" method="post" id="datetimeform">'
-+'<p> Are you sure you wish to request an appointment on <br>'
++'<p> Are you sure you wish to book an appointment on Sunday, 10-Aug-2014 at '
 +$(evt.relatedTarget).attr("date")
 +' at '
 +$(evt.relatedTarget).attr("clinic")
-+' on '+$(evt.relatedTarget).text()
-+' Hrs ?</p><br><textarea class="col-md-12" name="remark"></textarea></br></form>'
-);
++' ?</p><br><textarea name="remark" placeholder="Complaint (I am suffering from...)" style="width:100%;" rows="4"></textarea></form>'
 
 });
 

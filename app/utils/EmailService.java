@@ -1,7 +1,9 @@
 package utils;
 
+import java.io.BufferedInputStream;
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
+import java.io.InputStream;
 import java.math.BigInteger;
 import java.security.SecureRandom;
 import java.util.List;
@@ -63,11 +65,12 @@ public class EmailService {
 		try{
 			final StringBuilder builder=new StringBuilder();
 			builder.append("<html><body>");
+			builder.append("<p>Dear "+appUser.name+",<br><br>Thank you for signing up at MedNetwork. Please ");
 			builder.append("<a href=\"http://mednetwork.in/user/confirmation/");
 			builder.append(appUser.id);
 			builder.append("/"+randomString +"\">");
 			builder.append("<b>click here</b>");
-			builder.append("</a>");
+			builder.append("</a> to confirm your email address.<br><br>Best regards,<br>MedNetwork.in</p>");
 			builder.append("</body></html>");
 			final HtmlEmail email = new HtmlEmail();
 			email.setHostName("smtp.gmail.com");
@@ -75,7 +78,7 @@ public class EmailService {
 			email.setAuthenticator(new DefaultAuthenticator("mitesh.greensoftware@gmail.com", "mitesh@greensoftware.in"));
 			email.setSSLOnConnect(true);
 			email.setFrom("assistant@greensoftware.in");
-			email.setSubject("Conformation Email");
+			email.setSubject("Please Confirmation Email at MedNetwork");
 			email.setHtmlMsg(builder.toString());
 			email.addTo(appUser.email);
 			email.send();

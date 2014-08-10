@@ -4,7 +4,7 @@
 @import helper.twitterBootstrap._
 @import helper._
 
-@main("Favorite Pharmacies"){
+@main("My Pharmacies"){
 @if(pharmacyList.size()==0){
 <h5> No Favorite Pharmacies In The List Yet</h5>
 }
@@ -34,19 +34,19 @@ margin-bottom:0px;
 }
 <td class="col-md-6">
 <div class="row" style="padding-left:20px;padding-right:20px">
-<div style="cursor:pointer" onclick="location.href='@routes.PublicController.getPharmacyWithSlug(pharmacy.name)';">@if(pharmacy.backgroundImage != null){<img src="@routes.PublicController.getPharmacyImages(pharmacy.id,0)" width="530" height="170" />}else{<img src="/assets/images/pharmacy-default-bg-image.jpg" width="530" height="170" />}
+<div style="cursor:pointer" onclick="location.href='@routes.PublicController.getPharmacyWithSlug(pharmacy.slugUrl)';">@if(pharmacy.backgroundImage != null){<img src="@routes.PublicController.getPharmacyImages(pharmacy.id,0)" width="530" height="170" />}else{<img src="/assets/images/pharmacy-default-bg-image.jpg" width="530" height="170" />}
         
         </div>
 
 <div class="row" style="margin-top:-55px;padding-left:15px">
-<div style="cursor:pointer;width:23%" onclick="location.href='@routes.PublicController.getPharmacyWithSlug(pharmacy.name)';" class="col-md-3">
+<div style="cursor:pointer;width:23%" onclick="location.href='@routes.PublicController.getPharmacyWithSlug(pharmacy.slugUrl)';" class="col-md-3">
 @if(pharmacy.profileImageList.size() >0){
 <img src="@routes.PublicController.getPharmacyImages(pharmacy.id,pharmacy.profileImageList.get(0).id)" class="thumbnail" width="100" height="100"  />
  }else{
  <img src="/assets/images/pharmacy-default-profile-image.jpg" class="thumbnail" width="100" height="100"  />
  }
 </div>
-<div style="cursor:pointer;padding-left:0px;padding-top:50px;padding-right:0px;width:46%" onclick="location.href='/dashboard';" class="col-md-6">
+<div style="cursor:pointer;padding-left:0px;padding-top:50px;padding-right:0px;width:46%" onclick="location.href='@routes.PublicController.getPharmacyWithSlug(pharmacy.slugUrl)';" class="col-md-6">
 <h5><b>@pharmacy.name</b></h5>
 <br>
 </div>
@@ -68,14 +68,14 @@ margin-bottom:0px;
 </div>
 <div class="row well">
 <div class="col-md-5" style="padding:0px">
-<h5 ><b>@pharmacy.name</b></h5>
+<h5><b>@pharmacy.name</b></h5>
         @if(pharmacy.address != null){  
-        <h5>@pharmacy.address.addressLine1</h5>     
-        <h5>@pharmacy.address.area</h5>
-        <h5>@pharmacy.address.city</h5>
-        <h5>@pharmacy.address.state</h5>
+        <h5>@pharmacy.address.addressLine1<br>     
+        @pharmacy.address.area<br>
+        @pharmacy.address.city<br>
+        @pharmacy.address.state.capitalize()</h5>
         }
-        <h5>Phones nos:@pharmacy.contactNumber</h5>
+        <h5><i class="fa fa-phone-square"></i>@pharmacy.contactNumber</h5>
 </div>
 
 <br>

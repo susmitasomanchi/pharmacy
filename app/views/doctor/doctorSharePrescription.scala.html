@@ -88,13 +88,17 @@
 <h4>Prescription shared with:</h4>
 <ul>
 @for(ppinfo <- prescription.getPharmacyInfoList()){
-	<li><a href="@routes.PublicController.getPharmacyWithSlug(ppinfo.pharmacy.slugUrl)">@ppinfo.pharmacy.name</a> on @ppinfo.receivedDate.format("dd-MMM-yyyy HH:mm")</li>
+	@if(ppinfo.sharedBy.id == LoginController.getLoggedInUser().id){
+		<li><a href="@routes.PublicController.getPharmacyWithSlug(ppinfo.pharmacy.slugUrl)">@ppinfo.pharmacy.name</a> on @ppinfo.sharedDate.format("dd-MMM-yyyy HH:mm")</li>
+	}
 }
 </ul>
 
 <ul>
 @for(dpinfo <- prescription.getDiagnoticInfoList()){
-	<li><a href="@routes.PublicController.getDiagnosticCentreWithSlug(dpinfo.diagnosticCentre.slugUrl)">@dpinfo.diagnosticCentre.name</a> on @dpinfo.sharedDate.format("dd-MMM-yyyy HH:mm")</li>
+	@if(dpinfo.sharedBy.id == LoginController.getLoggedInUser().id){
+		<li><a href="@routes.PublicController.getDiagnosticCentreWithSlug(dpinfo.diagnosticCentre.slugUrl)">@dpinfo.diagnosticCentre.name</a> on @dpinfo.sharedDate.format("dd-MMM-yyyy HH:mm")</li>
+	}
 }
 </ul>
 

@@ -160,17 +160,17 @@ $('body').on('click', function (e) {
 <div class="col-md-5">
 
 
+@pharmacy.contactPerson<br>
 @if(pharmacy.address != null){
-<h5>@pharmacy.contactPerson</h5>
-<h5>@pharmacy.address.addressLine1</h5>
-<h5>@pharmacy.address.area</h5>
-<h5>@pharmacy.address.city</h5>
+@pharmacy.address.addressLine1<br>
+@pharmacy.address.area<br>
+@pharmacy.address.city<br>
+@pharmacy.address.pinCode<br>
 @if(pharmacy.address.state != null){
-<h5>@models.State.options().get(pharmacy.address.state.toString())</h5>	
+@pharmacy.address.state.capitalize()<br>	
 }
-<h5>@pharmacy.address.pinCode</h5>
-<h5>Phones: @pharmacy.contactNumber </h5>
 }
+<i class="fa fa-phone-square"></i> @pharmacy.contactNumber
 
 </div>
 

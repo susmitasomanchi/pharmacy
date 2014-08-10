@@ -1,22 +1,15 @@
 package controllers;
 
 
-import java.security.MessageDigest;
-import java.security.SecureRandom;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
-import java.util.Random;
 
-import org.apache.commons.codec.binary.Base64;
-
-import models.Alert;
 import models.AppUser;
 import models.MasterDiagnosticTest;
 import models.MasterProduct;
 import models.Role;
-import models.Sex;
 import models.diagnostic.DiagnosticCentrePrescriptionInfo;
-import models.doctor.Appointment;
 import models.doctor.DiagnosticTestLineItem;
 import models.doctor.Doctor;
 import models.doctor.Prescription;
@@ -27,6 +20,7 @@ import models.patient.PatientDoctorInfo;
 import play.Logger;
 import play.mvc.Controller;
 import play.mvc.Result;
+import utils.EmailService;
 
 public class SampleDataController extends Controller {
 
@@ -218,33 +212,8 @@ public class SampleDataController extends Controller {
 		final AppUser appUser = new AppUser();
 		appUser.name = "anand";
 		appUser.email = "anand@gmail.com";
-		String password = "123";
+		appUser.password = "123";
 		appUser.role = Role.ADMIN_MR;
-		if(AppUser.find.where().eq("email", appUser.email).findRowCount()>0){
-			flash().put("alert", new Alert("alert-danger", "Sorry! User with email id "+appUser.email.trim()+" already exists!").toString());
-			if(appUser.role == Role.ADMIN_MR){
-				return ok("User already exist");
-			}
-		}
-		try {
-
-			final Random random = new SecureRandom();
-			final byte[] saltArray = new byte[32];
-			random.nextBytes(saltArray);
-			final String randomSalt = Base64.encodeBase64String(saltArray);
-
-			final String passwordWithSalt = password+randomSalt;
-			final MessageDigest sha256 = MessageDigest.getInstance("SHA-256");
-			final byte[] passBytes = passwordWithSalt.getBytes();
-			final String hashedPasswordWithSalt = Base64.encodeBase64String(sha256.digest(passBytes));
-
-			appUser.salt = randomSalt;
-			appUser.password = hashedPasswordWithSalt;
-
-		} catch (final Exception e) {
-			Logger.error("ERROR WHILE CREATING SHA2 HASH");
-			e.printStackTrace();
-		}
 		appUser.save();
 		final MedicalRepresentative mr = new MedicalRepresentative();
 		mr.appUser = appUser;
@@ -253,9 +222,7 @@ public class SampleDataController extends Controller {
 		company.save();
 		mr.pharmaceuticalCompany = company;
 		mr.save();
-		company.adminMR = mr;
-		company.update();
-		return ok("mr Sample data saved");
+		return ok();
 
 	}
 
@@ -304,16 +271,9 @@ public class SampleDataController extends Controller {
 
 	public static Result prescripetionTest(){
 		final Prescription prescription = new Prescription();
-		Patient patient = Patient.find.byId(1L);
-		prescription.patient = patient;
-		 Doctor doctor= Doctor.find.byId(1L);		 	 
-		prescription.doctor= doctor;
-		Appointment appointment = new Appointment();
-		appointment.appointmentTime = new Date();
-		prescription.appointment= appointment;
-		prescription.prescriptionDate = new Date();
-		prescription.save();
-		/*final DiagnosticTestLineItem medicineLineItem1 = new DiagnosticTestLineItem();
+		final DiagnosticCentrePrescriptionInfo diagnosticCentrePrescriptionInfo = new DiagnosticCentrePrescriptionInfo();
+		diagnosticCentrePrescriptionInfo.diagnosticCentre = LoginController.getLoggedInUser().getDiagnosticRepresentative().diagnosticCentre;
+		final DiagnosticTestLineItem medicineLineItem1 = new DiagnosticTestLineItem();
 		medicineLineItem1.fullNameOfDiagnosticTest = "X-ray";
 		prescription.diagnosticTestLineItemList.add(medicineLineItem1);
 		final DiagnosticTestLineItem medicineLineItem2 = new DiagnosticTestLineItem();
@@ -322,7 +282,7 @@ public class SampleDataController extends Controller {
 		prescription.save();
 		diagnosticCentrePrescriptionInfo.prescription = prescription;
 		diagnosticCentrePrescriptionInfo.sharedDate = new Date();
-		diagnosticCentrePrescriptionInfo.save();*/
+		diagnosticCentrePrescriptionInfo.save();
 		return ok();
 
 	}
@@ -370,6 +330,8 @@ public class SampleDataController extends Controller {
 		return ok("Right Now!");
 	}
 	 */
+
+
 
 }
 

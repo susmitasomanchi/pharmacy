@@ -10,11 +10,16 @@
 
 <label for="searchInput">Search For</label>
 <input id="searchInput"  value="@searchedKey"/>
+
+<a onclick="window.location.href='/doctor/search/'+$('#searchInput').val().trim();" class="btn btn-xs btn-primary">Search</a>
+
 <script>
-$("#key").click(function(){
+$("#searchInput").keyup(function (e) {
+    if (e.keyCode == 13) {
+    	window.location.href='/doctor/search/'+$('#searchInput').val().trim();
+    }
 });
 </script>
-<a id="key" onclick="window.location.href='/doctor/search/'+$('#searchInput').val().trim();" class="btn btn-xs btn-primary">Search</a>
 
 </div>
 </div>
@@ -61,22 +66,22 @@ margin-bottom:0px;
 				<img src="/assets/images/doctor.png" class="thumbnail" width="100" height="100"  />
 					}
 				</div>
-				<div style="cursor:pointer" onclick="window.location.href='@routes.PublicController.getDoctorWithSlug(doctor.slugUrl)';" class="col-md-5">
+				<div style="cursor:pointer;width:47%" onclick="window.location.href='@routes.PublicController.getDoctorWithSlug(doctor.slugUrl)';" class="col-md-5">
 				<p style="font-size:18px"><b>@doctor.appUser.name</b></p>
 				<p style="font-size:14px"><b>@doctor.specialization</b></p>
 				<h6>@doctor.degree</h6>
 				<h6>@doctor.experience</h6>
 				<br>
 				</div>
-				<div class="col-md-3" style="width:30%;padding-left:3px;padding-top:60px">
-				<a class="btn btn-primary btn-xs" href="#">Ask Query</a>
-				<a id="@doctor.id" class="btn btn-success btn-xs" href="@routes.PublicController.addToFavDoctor(doctor.id)" class="pull-right">Fav&nbsp<i class="fa fa-plus"></i></a>
+				<div class="col-md-3 pull-right" style="width:30%;padding-left:15px;padding-top:60px">
+				@*<a class="btn btn-primary btn-xs" href="#">Ask Query</a>*@
+				<a id="@doctor.id" class="btn btn-success btn-xs pull-right" href="@routes.PublicController.addToFavDoctor(doctor.id)" class="pull-right">Fav&nbsp<i class="fa fa-plus"></i></a>
 				@*<a class="btn btn-danger btn-sm" href="@routes.PatientController.deleteMyFavDoctors(patDoc.id)">Remove</a>*@
 				</div>
 				</div>
 				
 				
-				<div class="well" style="padding-left:20px;padding-right:0px;padding-top:0px;padding-bottom:20px">
+				<div class="well" style="padding-left:3px;padding-right:0px;padding-top:0px;padding-bottom:20px">
 				<h4 style="color:#006687;font-weight:bold">Clinics</h4>
 				@if(doctor.doctorClinicInfoList.size()==0){
 					No clinic created yet
@@ -97,12 +102,12 @@ margin-bottom:0px;
 							<div class="tab-pane active" id="@{docclinic.id}_clinic">
 								<div class="row">
 									<div class="col-md-8">
-									<h5 style="color:#006687">
-									<b><a href="#" >@docclinic.clinic.name</a></b>
-										<span style="font-size:12px;color:black">@docclinic.clinic.address.addressLine1
-										@docclinic.clinic.address.area
-										@docclinic.clinic.address.city
-										@docclinic.clinic.address.state</h5>
+									<h5><b><a href="#" style="color:#006687"
+									>@docclinic.clinic.name</a></b></h5>
+										@docclinic.clinic.address.addressLine1<br>
+										@docclinic.clinic.address.area<br>
+										@docclinic.clinic.address.city<br>
+										@docclinic.clinic.address.state<br>
 									<i class="fa fa-phone-square"></i> @docclinic.clinic.contactNo<br><br>
 									</div>
 									<div class="col-md-4">
@@ -112,18 +117,18 @@ margin-bottom:0px;
 								<div class="row" style="padding-left:10px">
 									@for((key,value)<-docclinic.getScheduleMap()){
 										@if(docclinic.getScheduleMap().get(key)!=null){
-											<span class="col-md-2" style="font-size:16px;width:14%">@key</span>
+											<span class="col-md-2" style="font-size:12px;width:14%">@key</span>
 										}else{
-										<span class="badge col-md-2" style="font-size:16px;width:14%">@key</span>
+										<span class="badge col-md-2" style="font-size:12px;width:14%">@key</span>
 										}
 									}
 								</div>	
 									<div class="row" style="padding-left:10px">
 										@for((key,value)<-docclinic.getScheduleMap()){
 											@if(docclinic.getScheduleMap().get(key)!=null){
-												<span class="col-md-2" style="font-size:16px;width:14%">@docclinic.getScheduleMap().get(key)</span>
+												<span class="col-md-2" style="font-size:12px;width:14%">@docclinic.getScheduleMap().get(key)</span>
 											}else{
-											<span class="badge col-md-2" style="font-size:16px;width:14%"></span>
+											<span class="badge col-md-2" style="font-size:12px;width:14%"></span>
 											}
 										}
 									</div>
@@ -133,11 +138,11 @@ margin-bottom:0px;
 									<div class="col-md-8">
 									<h5 style="color:#006687">
 									<b><a href="@{docclinic.id}_clinic" >@docclinic.clinic.name</a></b>
-										<span style="font-size:12px;color:black">@docclinic.clinic.address.addressLine1
-										@docclinic.clinic.address.area
-										@docclinic.clinic.address.city
-										@docclinic.clinic.address.state</h5>
-									<i class="fa fa-phone-square"></i> @docclinic.clinic.contactNo<br><br>
+										<span style="font-size:12px;color:black">@docclinic.clinic.address.addressLine1<br>
+										@docclinic.clinic.address.area<br>
+										@docclinic.clinic.address.city<br>
+										@docclinic.clinic.address.state<br>
+									<i class="fa fa-phone-square"></i> @docclinic.clinic.contactNo<br><br></span>
 									</div>
 									<div class="col-md-4">
 										<a class="btn btn-success btn-xs" style="float:right" href="/static/new/appointment">Book Appointment</a>
@@ -146,18 +151,18 @@ margin-bottom:0px;
 								<div class="row" style="padding-left:10px">
 									@for((key,value)<-docclinic.getScheduleMap()){
 										@if(docclinic.getScheduleMap().get(key)!=null){
-											<span class="col-md-2" style="font-size:16px;width:14%">@key</span>
+											<span class="col-md-2" style="font-size:12px;width:14%">@key</span>
 										}else{
-										<span class="badge col-md-2" style="font-size:16px;width:14%">@key</span>
+										<span class="badge col-md-2" style="font-size:12px;width:14%">@key</span>
 										}
 									}
 								</div>	
 									<div class="row" style="padding-left:10px">
 										@for((key,value)<-docclinic.getScheduleMap()){
 											@if(docclinic.getScheduleMap().get(key)!=null){
-												<span class="col-md-2" style="font-size:16px;width:14%">@docclinic.getScheduleMap().get(key)</span>
+												<span class="col-md-2" style="font-size:12px;width:14%">@docclinic.getScheduleMap().get(key)</span>
 											}else{
-											<span class="badge col-md-2" style="font-size:16px;width:14%"></span>
+											<span class="badge col-md-2" style="font-size:12px;width:14%"></span>
 											}
 										}
 									</div>
@@ -201,9 +206,9 @@ margin-bottom:0px;
 				<h6>@doctor.experience</h6>
 				<br>
 				</div>
-				<div class="col-md-3" style="width:30%;padding-left:3px;padding-top:60px">
-				<a class="btn btn-primary btn-xs" href="#">Ask Query</a>
-				<a id="@doctor.id" class="btn btn-success btn-xs" href="@routes.PublicController.addToFavDoctor(doctor.id)" class="pull-right">Fav&nbsp<i class="fa fa-plus"></i></a>
+				<div class="col-md-4 pull-right" style="width:30%;padding-left:15px;padding-top:60px">
+				@*<a class="btn btn-primary btn-xs" href="#">Ask Query</a>*@
+				<a id="@doctor.id" class="btn btn-success btn-xs pull-right" href="@routes.PublicController.addToFavDoctor(doctor.id)">Fav&nbsp<i class="fa fa-plus"></i></a>
 				@*<a class="btn btn-danger btn-sm" href="@routes.PatientController.deleteMyFavDoctors(patDoc.id)">Remove</a>*@
 				</div>
 				</div>
@@ -231,11 +236,11 @@ margin-bottom:0px;
 								<div class="row">
 									<div class="col-md-8">
 									<h5 style="color:#006687">
-									<b><a href="#" >@docclinic.clinic.name</a></b>
-										<span style="font-size:12px;color:black">@docclinic.clinic.address.addressLine1
-										@docclinic.clinic.address.area
-										@docclinic.clinic.address.city
-										@docclinic.clinic.address.state</h5>
+									<b><a href="#" >@docclinic.clinic.name</a></b></h5>
+										@docclinic.clinic.address.addressLine1<br>
+										@docclinic.clinic.address.area<br>
+										@docclinic.clinic.address.city<br>
+										@docclinic.clinic.address.state<br>
 									<i class="fa fa-phone-square"></i> @docclinic.clinic.contactNo<br><br>
 									</div>
 									<div class="col-md-4">
@@ -245,18 +250,18 @@ margin-bottom:0px;
 								<div class="row" style="padding-left:10px">
 									@for((key,value)<-docclinic.getScheduleMap()){
 										@if(docclinic.getScheduleMap().get(key)!=null){
-											<span class="col-md-2" style="font-size:16px;width:14%">@key</span>
+											<span class="col-md-2" style="font-size:12px;width:14%">@key</span>
 										}else{
-										<span class="badge col-md-2" style="font-size:16px;width:14%">@key</span>
+										<span class="badge col-md-2" style="font-size:12px;width:14%">@key</span>
 										}
 									}
 								</div>	
 									<div class="row" style="padding-left:10px">
 										@for((key,value)<-docclinic.getScheduleMap()){
 											@if(docclinic.getScheduleMap().get(key)!=null){
-												<span class="col-md-2" style="font-size:16px;width:14%">@docclinic.getScheduleMap().get(key)</span>
+												<span class="col-md-2" style="font-size:12px;width:14%">@docclinic.getScheduleMap().get(key)</span>
 											}else{
-											<span class="badge col-md-2" style="font-size:16px;width:14%"></span>
+											<span class="badge col-md-2" style="font-size:12px;width:14%"></span>
 											}
 										}
 									</div>
@@ -279,18 +284,18 @@ margin-bottom:0px;
 								<div class="row" style="padding-left:10px">
 									@for((key,value)<-docclinic.getScheduleMap()){
 										@if(docclinic.getScheduleMap().get(key)!=null){
-											<span class="col-md-2" style="font-size:16px;width:14%">@key</span>
+											<span class="col-md-2" style="font-size:12px;width:14%">@key</span>
 										}else{
-										<span class="badge col-md-2" style="font-size:16px;width:14%">@key</span>
+										<span class="badge col-md-2" style="font-size:12px;width:14%">@key</span>
 										}
 									}
 								</div>	
 									<div class="row" style="padding-left:10px">
 										@for((key,value)<-docclinic.getScheduleMap()){
 											@if(docclinic.getScheduleMap().get(key)!=null){
-												<span class="col-md-2" style="font-size:16px;width:14%">@docclinic.getScheduleMap().get(key)</span>
+												<span class="col-md-2" style="font-size:12px;width:14%">@docclinic.getScheduleMap().get(key)</span>
 											}else{
-											<span class="badge col-md-2" style="font-size:16px;width:14%"></span>
+											<span class="badge col-md-2" style="font-size:12px;width:14%"></span>
 											}
 										}
 									</div>
