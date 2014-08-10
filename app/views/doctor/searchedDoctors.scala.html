@@ -9,16 +9,19 @@
 <div class="row">
 
 <label for="searchInput">Search For</label>
-<input id="searchInput" value="@searchedKey"/>
-
-<a onclick="window.location.href='/doctor/search/'+$('#searchInput').val().trim();" class="btn btn-xs btn-primary">Search</a>
+<input id="searchInput"  value="@searchedKey"/>
+<script>
+$("#key").click(function(){
+});
+</script>
+<a id="key" onclick="window.location.href='/doctor/search/'+$('#searchInput').val().trim();" class="btn btn-xs btn-primary">Search</a>
 
 </div>
 </div>
 @if(searched){
 
 	@if(doctorList.size()==0){
-		No List is created yet
+		No Doctor is present with name <b>@searchedKey</b>
 	}else{
 <style>
 .badge{
@@ -41,17 +44,18 @@ margin-bottom:0px;
 			<tr class="row">
 				<td class="col-md-6">
 				<div class="row" style="padding-left:20px;padding-right:20px">
-				<div style="cursor:pointer" onclick="window.location.href='@routes.PublicController.getDoctorWithSlug(doctor.slugUrl)';"><img src="/assets/images/sunrise.png" width="530" height="170" />
+				<div style="cursor:pointer" onclick="window.location.href='@routes.PublicController.getDoctorWithSlug(doctor.slugUrl)';">
 				@if(doctor.backgroundImage != null){
-				<img id="coverborder" src="@routes.PublicController.getImage(doctor.id,"backgroundImage")"  width="530" style="position:relative;top:-65px"/>
+				<img src="@routes.PublicController.getImage(doctor.id,"backgroundImage")"  width="530" width="530" height="170"/>
 				}else{
-				<img id="coverborder" src="/assets/images/bordercover.png" width="530" style="position:relative;top:-65px"/>
+				<img src="/assets/images/sunrise.png" width="530" height="170" />
 				}
+				<img id="coverborder" src="/assets/images/bordercover.png" width="530" style="position:relative;top:-65px"/>
 				</div>
 				<div class="row" style="margin-top:-120px;padding-left:15px">
 				<div style="cursor:pointer;width:23%" onclick="window.location.href='@routes.PublicController.getDoctorWithSlug(doctor.slugUrl)';" class="col-md-3">
 				<br>
-				@if(doctor.backgroundImage != null){
+				@if(doctor.profileImage != null){
 				<img src="@routes.PublicController.getImage(doctor.id,"profileImage")" class="thumbnail" width="100" height="100"  />
 					}else{
 				<img src="/assets/images/doctor.png" class="thumbnail" width="100" height="100"  />
@@ -171,19 +175,20 @@ margin-bottom:0px;
 					}
 				
 			}else{
-							<td class="col-md-6">
+	<td class="col-md-6">
 				<div class="row" style="padding-left:20px;padding-right:20px">
-				<div style="cursor:pointer" onclick="window.location.href='@routes.PublicController.getDoctorWithSlug(doctor.slugUrl)';"><img src="/assets/images/sunrise.png" width="530" height="170" />
+				<div style="cursor:pointer" onclick="window.location.href='@routes.PublicController.getDoctorWithSlug(doctor.slugUrl)';">
 				@if(doctor.backgroundImage != null){
-				<img id="coverborder" src="@routes.PublicController.getImage(doctor.id,"backgroundImage")"  width="530" style="position:relative;top:-65px"/>
+				<img src="@routes.PublicController.getImage(doctor.id,"backgroundImage")"  width="530" width="530" height="170"/>
 				}else{
-				<img id="coverborder" src="/assets/images/bordercover.png" width="530" style="position:relative;top:-65px"/>
+				<img src="/assets/images/sunrise.png" width="530" height="170" />
 				}
+				<img id="coverborder" src="/assets/images/bordercover.png" width="530" style="position:relative;top:-65px"/>
 				</div>
 				<div class="row" style="margin-top:-120px;padding-left:15px">
 				<div style="cursor:pointer;width:23%" onclick="window.location.href='@routes.PublicController.getDoctorWithSlug(doctor.slugUrl)';" class="col-md-3">
 				<br>
-				@if(doctor.backgroundImage != null){
+				@if(doctor.profileImage != null){
 				<img src="@routes.PublicController.getImage(doctor.id,"profileImage")" class="thumbnail" width="100" height="100"  />
 					}else{
 				<img src="/assets/images/doctor.png" class="thumbnail" width="100" height="100"  />
@@ -290,13 +295,13 @@ margin-bottom:0px;
 										}
 									</div>
 							</div>				
-							}
-						} 
-					</div>
+						}
+					} 
 				</div>
 			</div>
-		<br>
-	</td>
+		</div>
+	<br>
+</td>
 
 	</tr>
 		

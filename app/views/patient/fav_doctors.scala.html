@@ -28,12 +28,14 @@ margin-bottom:0px;
 				<tr class="row">
 				<td class="col-md-6">
 				<div class="row" style="padding-left:20px;padding-right:20px">
-				<div style="cursor:pointer" onclick="window.location.href='@routes.PublicController.getDoctorWithSlug(patDoc.doctor.slugUrl)';"><img src="/assets/images/sunrise.png" width="530" height="170" />
+				<div style="cursor:pointer" onclick="window.location.href='@routes.PublicController.getDoctorWithSlug(patDoc.doctor.slugUrl)';">
 				@if(patDoc.doctor.backgroundImage != null){
-				<img id="coverborder" src="@routes.PublicController.getImage(patDoc.doctor.id,"backgroundImage")"  width="530" style="position:relative;top:-65px"/>
+				<img src="@routes.PublicController.getImage(patDoc.doctor.id,"backgroundImage")"  width="530" width="530" height="170"/>
 				}else{
-				<img id="coverborder" src="/assets/images/bordercover.png" width="530" style="position:relative;top:-65px"/>
+				<img src="/assets/images/sunrise.png" width="530" height="170" />
 				}
+				<img id="coverborder" src="/assets/images/bordercover.png" width="530" style="position:relative;top:-65px"/>
+				
 				</div>
 				<div class="row" style="margin-top:-120px;padding-left:15px">
 				<div style="cursor:pointer;width:23%" onclick="window.location.href='@routes.PublicController.getDoctorWithSlug(patDoc.doctor.slugUrl)';" class="col-md-3">
@@ -159,14 +161,16 @@ margin-bottom:0px;
 					}
 				
 			}else{
-			<td class="col-md-6">
+		<td class="col-md-6">
 				<div class="row" style="padding-left:20px;padding-right:20px">
-				<div style="cursor:pointer" onclick="window.location.href='@routes.PublicController.getDoctorWithSlug(patDoc.doctor.slugUrl)';"><img src="/assets/images/sunrise.png" width="530" height="170" />
+				<div style="cursor:pointer" onclick="window.location.href='@routes.PublicController.getDoctorWithSlug(patDoc.doctor.slugUrl)';">
 				@if(patDoc.doctor.backgroundImage != null){
-				<img id="coverborder" src="@routes.PublicController.getImage(patDoc.doctor.id,"backgroundImage")"  width="530" style="position:relative;top:-65px"/>
+				<img src="@routes.PublicController.getImage(patDoc.doctor.id,"backgroundImage")"  width="530" width="530" height="170"/>
 				}else{
-				<img id="coverborder" src="/assets/images/bordercover.png" width="530" style="position:relative;top:-65px"/>
+				<img src="/assets/images/sunrise.png" width="530" height="170" />
 				}
+				<img id="coverborder" src="/assets/images/bordercover.png" width="530" style="position:relative;top:-65px"/>
+				
 				</div>
 				<div class="row" style="margin-top:-120px;padding-left:15px">
 				<div style="cursor:pointer;width:23%" onclick="window.location.href='@routes.PublicController.getDoctorWithSlug(patDoc.doctor.slugUrl)';" class="col-md-3">
@@ -285,7 +289,7 @@ margin-bottom:0px;
 			</div>
 		</div>
 	<br>
-</td>	
+</td>
 	</tr>
 		
 			}

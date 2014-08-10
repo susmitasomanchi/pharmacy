@@ -126,4 +126,9 @@ public enum State {
 		return vals;
 	}
 
+	public String capitalize(){
+		return WordUtils.capitalizeFully(this.toString().replaceAll("_", " "));
+	}
 }
+
+

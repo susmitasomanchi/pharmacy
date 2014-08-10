@@ -609,7 +609,7 @@ public class DoctorController extends Controller {
 	 * @author Mitesh Action to render a page with form for adding new clinic of
 	 *         the loggedInDoctor GET /doctor/new-clinic
 	 */
-//	@ConfirmAppUser
+	//	@ConfirmAppUser
 	public static Result newClinic() {
 		return ok(views.html.doctor.newClinic.render(clinicForm));
 	}
@@ -701,8 +701,7 @@ public class DoctorController extends Controller {
 									Logger.info("  " + calendar.getTime());
 									final Appointment appointment = new Appointment();
 									appointment.appointmentStatus = AppointmentStatus.AVAILABLE;
-									appointment.appointmentTime = calendar
-											.getTime();
+									appointment.appointmentTime = calendar.getTime();
 									appointment.doctorClinicInfo = docClinicInfo;
 									appointment.save();
 									calendar.add(Calendar.MINUTE,
@@ -1571,7 +1570,7 @@ public class DoctorController extends Controller {
 		return ok(views.html.diagnostic.favorite_diagnosticCentre_list.render(doctor.diagnosticCentreList));
 	}
 
-	
+
 
 	@ConfirmAppUser
 	public static Result requestAppointment() {
@@ -1590,5 +1589,4 @@ public class DoctorController extends Controller {
 			return ok("-1");
 		}
 	}
-
 }
