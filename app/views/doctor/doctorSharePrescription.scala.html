@@ -88,7 +88,7 @@
 <h4>Prescription shared with:</h4>
 <ul>
 @for(ppinfo <- prescription.getPharmacyInfoList()){
-	<li><a href="@routes.PublicController.getPharmacyWithSlug(ppinfo.pharmacy.slugUrl)">@ppinfo.pharmacy.name</a> on @ppinfo.receivedDate.format("dd-MMM-yyyy HH:mm")</li>
+	<li><a href="@routes.PublicController.getPharmacyWithSlug(ppinfo.pharmacy.slugUrl)">@ppinfo.pharmacy.name</a> on @ppinfo.sharedDate.format("dd-MMM-yyyy HH:mm")</li>
 }
 </ul>
 

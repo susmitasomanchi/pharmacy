@@ -1,4 +1,4 @@
-@(prescription:models.doctor.Prescription)
+@(ppInfo:models.pharmacist.PharmacyPrescriptionInfo)
 @import play.i18n._
 @import helper.twitterBootstrap._
 @import helper._
@@ -7,14 +7,16 @@
 
 <div class="row" style="padding-left:20px; padding-right:100px;">
 
-<h3><a href="@routes.PublicController.getDoctorWithSlug(prescription.doctor.slugUrl)">Dr. @prescription.doctor.appUser.name</a></h3>
-<h4>@prescription.doctor.degree</h4>
-<h4>@prescription.doctor.specialization</h4>
+<h3><a href="@routes.PublicController.getDoctorWithSlug(ppInfo.prescription.doctor.slugUrl)">Dr. @ppInfo.prescription.doctor.appUser.name</a>
+<span class="pull-right">Order Status: <span class="badge" style="font-size:24px;"><b>@ppInfo.pharmacyPrescriptionStatus</b></span></span>
+</h3>
+<h4>@ppInfo.prescription.doctor.degree</h4>
+<h4>@ppInfo.prescription.doctor.specialization</h4>
 
 <hr>
 
-<h4 style="margin:0px; padding:0px;">@prescription.patient.appUser.name</h4>
-<p style="margin:0px; padding:0px;">@prescription.patient.appUser.mobileNumber</p>
+<h4 style="margin:0px; padding:0px;">@ppInfo.prescription.patient.appUser.name</h4>
+<p style="margin:0px; padding:0px;">@ppInfo.prescription.patient.appUser.mobileNumber</p>
 
 <br>
 
@@ -30,7 +32,7 @@
 	</tr>
 </thead>
 <tbody>
-	@for((medicine, index) <- prescription.medicineLineItemList.zipWithIndex){
+	@for((medicine, index) <- ppInfo.prescription.medicineLineItemList.zipWithIndex){
 	<tr>
 		<td>@(index+1)</td>
 		<td>@medicine.medicineFullName</td>

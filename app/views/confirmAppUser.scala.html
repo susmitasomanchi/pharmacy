@@ -5,11 +5,19 @@
 
 		<div class="row well">
 			@if(appUser.role.equals(models.Role.DOCTOR)){
-				<p>Please confirm your contact details to use services like Clinic Scheduling, Practice Management etc.</p>
+				<p>Please confirm your contact details to use services like <b>Clinic Scheduling, Practice Management, Prescription Management etc.</b></p>
+			}
+			
+			@if(appUser.role.equals(models.Role.PATIENT)){
+				<p>Please confirm your contact details to use services like <b>Booking Appointments, Managing Prescriptions etc.</b></p>
 			}
 			
 			@if(appUser.role.equals(models.Role.ADMIN_PHARMACIST)){
-				<p>Please confirm your contact details to use services like Prescription Management etc.</p>
+				<p>Please confirm your contact details to use services like <b>Prescription Sharing etc.</b></p>
+			}
+			
+			@if(appUser.role.equals(models.Role.ADMIN_DIAGREP)){
+				<p>Please confirm your contact details to use services like <b>Prescription Sharing, Reports Management etc.</b></p>
 			}
 		
 			@if(!appUser.emailConfirmed){

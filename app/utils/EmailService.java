@@ -78,7 +78,7 @@ public class EmailService {
 			email.setAuthenticator(new DefaultAuthenticator("mitesh.greensoftware@gmail.com", "mitesh@greensoftware.in"));
 			email.setSSLOnConnect(true);
 			email.setFrom("assistant@greensoftware.in");
-			email.setSubject("Conformation Email");
+			email.setSubject("Please Confirmation Email at MedNetwork");
 			email.setHtmlMsg(builder.toString());
 			email.addTo(appUser.email);
 			email.send();

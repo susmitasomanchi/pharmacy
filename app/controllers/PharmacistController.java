@@ -7,8 +7,6 @@ import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
-import javax.activation.MimetypesFileTypeMap;
-
 import models.Address;
 import models.Alert;
 import models.Country;
@@ -286,7 +284,7 @@ public class PharmacistController extends Controller {
 		if(pharmacyPrescriptionInfo.pharmacy.id.longValue() != LoginController.getLoggedInUser().getPharmacist().pharmacy.id.longValue()){
 			return redirect(routes.LoginController.processLogout());
 		}
-		return ok(views.html.pharmacist.viewPrescriptionDetails.render(pharmacyPrescriptionInfo.prescription));
+		return ok(views.html.pharmacist.viewPrescriptionDetails.render(pharmacyPrescriptionInfo));
 	}
 
 
@@ -351,8 +349,8 @@ public class PharmacistController extends Controller {
 		final List<PharmacyPrescriptionInfo> pharmacyPrescriptionInfos =
 				PharmacyPrescriptionInfo.find.where()
 				.eq("pharmacy", pharmacy)
-				.ge("receivedDate", calendarFrom.getTime())
-				.le("receivedDate", calendarTo.getTime())
+				.ge("sharedDate", calendarFrom.getTime())
+				.le("sharedDate", calendarTo.getTime())
 				.findList();
 		return ok(views.html.pharmacist.viewPharmacyPrescriptionList.render(pharmacyPrescriptionInfos, ""));
 	}
@@ -379,8 +377,8 @@ public class PharmacistController extends Controller {
 		final List<PharmacyPrescriptionInfo> pharmacyPrescriptionInfos =
 				PharmacyPrescriptionInfo.find.where()
 				.eq("pharmacy", pharmacy)
-				.ge("receivedDate", dateFrom)
-				.le("receivedDate",dateTo)
+				.ge("sharedDate", dateFrom)
+				.le("sharedDate",dateTo)
 				.findList();
 		return ok(views.html.pharmacist.viewPharmacyPrescriptionList.render(pharmacyPrescriptionInfos,""));
 	}

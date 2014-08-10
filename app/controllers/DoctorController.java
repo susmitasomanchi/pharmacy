@@ -1214,7 +1214,8 @@ public class DoctorController extends Controller {
 				final PharmacyPrescriptionInfo phprInfo = new PharmacyPrescriptionInfo();
 				phprInfo.pharmacy = pharmacy;
 				phprInfo.prescription = prescription;
-				phprInfo.receivedDate = new Date();
+				phprInfo.sharedBy = doctor.appUser;
+				phprInfo.sharedDate = new Date();
 				phprInfo.pharmacyPrescriptionStatus = PharmacyPrescriptionStatus.RECEIVED;
 				phprInfo.save();
 				sharedWith.append(phprInfo.pharmacy.name);
@@ -1230,6 +1231,7 @@ public class DoctorController extends Controller {
 				final DiagnosticCentrePrescriptionInfo diagPrescriptionInfo = new DiagnosticCentrePrescriptionInfo();
 				diagPrescriptionInfo.diagnosticCentre = diagnosticCentre;
 				diagPrescriptionInfo.prescription = prescription;
+				diagPrescriptionInfo.sharedBy = doctor.appUser;
 				diagPrescriptionInfo.sharedDate = new Date();
 				diagPrescriptionInfo.diagnosticCentrePrescritionStatus = DiagnosticCentrePrescritionStatus.RECEIVED;
 				diagPrescriptionInfo.save();
@@ -1245,8 +1247,8 @@ public class DoctorController extends Controller {
 	}
 
 	/**
-	 * Action to show todays prescription created by loggedIn doctor GET
-	 * /doctor/todays-prescriptions
+	 * Action to show todays prescription created by loggedIn doctor
+	 * GET	/doctor/todays-prescriptions
 	 */
 	@ConfirmAppUser
 	public static Result viewTodaysPrescription() {

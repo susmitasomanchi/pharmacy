@@ -74,6 +74,7 @@ public class PublicController extends Controller{
 			return ok("404");
 		}
 	}
+
 	/**
 	 * @author Mitesh
 	 * Action to add doctor to Users's page
@@ -83,7 +84,8 @@ public class PublicController extends Controller{
 		if(!LoginController.isLoggedIn()){
 			flash().put("alert", new Alert("alert-info","Please Login To Add Your Favorite Doctor").toString());
 			return redirect(routes.LoginController.loginForm());
-		}else{
+		}
+		else{
 			final String loggedInRole=LoginController.getLoggedInUserRole();
 			if(loggedInRole.equalsIgnoreCase(Role.PATIENT.toString())){
 				final Patient patient=LoginController.getLoggedInUser().getPatient();
@@ -99,7 +101,6 @@ public class PublicController extends Controller{
 					flash().put("alert", new Alert("alert-success","Already added to Your Favorite Doctor").toString());
 				}
 				return redirect(routes.UserActions.dashboard());
-
 			}
 			else if(loggedInRole.equalsIgnoreCase(Role.ADMIN_PHARMACIST.toString())){
 

@@ -12,6 +12,7 @@ import javax.persistence.Id;
 import javax.persistence.ManyToMany;
 import javax.persistence.OneToOne;
 
+import models.AppUser;
 import models.BaseEntity;
 import models.FileEntity;
 import models.doctor.Prescription;
@@ -21,20 +22,23 @@ import play.db.ebean.Model;
 public class DiagnosticCentrePrescriptionInfo extends BaseEntity{
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO)
-	public  Long id;	
-	
+	public  Long id;
+
 	@OneToOne
 	public DiagnosticCentre diagnosticCentre;
-	
+
 	@OneToOne
 	public Prescription prescription;
-	
+
 	public DiagnosticCentrePrescritionStatus diagnosticCentrePrescritionStatus = DiagnosticCentrePrescritionStatus.RECEIVED;
-	
+
+	@OneToOne
+	public AppUser sharedBy;
+
 	public Date sharedDate;
-	
+
 	@ManyToMany(cascade=CascadeType.ALL)
 	public List<FileEntity> fileEntities = new ArrayList<FileEntity>();
-	
+
 	public static Model.Finder<Long, DiagnosticCentrePrescriptionInfo> find = new Finder<Long, DiagnosticCentrePrescriptionInfo>(Long.class, DiagnosticCentrePrescriptionInfo.class);
 }

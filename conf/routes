@@ -122,6 +122,7 @@ GET		/user/favorite-diagnostic-centres				controllers.PatientController.patientF
 GET		/user/my-pharmacies						controllers.PatientController.patientFavoritePharmacies()
 #GET		/user/appointments								controllers.PatientController.viewPatientAppointments()
 GET		/user/appointments									controllers.PatientController.viewMyAppointments()
+GET		/user/share-prescription							controllers.PatientController.sharePrescription(prId: Long, pharmacyId: String, diagnosticId: String)
 
 
 
@@ -362,13 +363,6 @@ GET		/mr/new-product									controllers.ProductController.pharmaceuticalProduct
 POST	/mr/new-product									controllers.ProductController.savePharmceuticalProduct()
 GET    /view-products                              controllers.ProductController.displayProduct()
 #GET    /edit-product/:id                           controllers.ProductController.editProduct(id: Long)
-
-
-# delete later
-GET    /userform/patient/                 controllers.PatientController.form()
-GET    /userform/patient/h/               controllers.PatientController.enterForm()
-GET    /register/                         controllers.PatientController.register()
-POST   /register/                         controllers.PatientController.registerProccess()
 
 
 #sample data

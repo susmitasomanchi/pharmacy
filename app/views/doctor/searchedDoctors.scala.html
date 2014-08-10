@@ -13,12 +13,19 @@
 
 <a onclick="window.location.href='/doctor/search/'+$('#searchInput').val().trim();" class="btn btn-xs btn-primary">Search</a>
 
+<script>
+$("#searchInput").keyup(function (e) {
+    if (e.keyCode == 13) {
+    	window.location.href='/doctor/search/'+$('#searchInput').val().trim();
+    }
+});
+</script>
+
 </div>
 </div>
 @if(searched){
-
 	@if(doctorList.size()==0){
-		No List is created yet
+		No doctor could be found with the query. 
 	}else{
 <style>
 .badge{

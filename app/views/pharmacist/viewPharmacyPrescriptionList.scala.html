@@ -2,19 +2,11 @@
 
 @main("Pharmacy Prescription and Order"){
 
-<div class=" row col-md-6 btn-group">
    
-<select class="chzn" id="status-select" style="width:50%;" data-placeholder="Select Order Status">
-<option></option>
-<option value="any" @if(status.trim.toLowerCase().compareTo("any")==0){selected}>Any</option>
-<option value="received" @if(status.trim.toLowerCase().compareTo("received")==0){selected}>Received</option>
-<option value="served" @if(status.trim.toLowerCase().compareTo("served")==0){selected}>Served</option>
-</select>
    
-</div>
 
 
-
+<div class="row">
    <div class="col-md-10">
    <form action="@routes.PharmacistController.getFromAndToDatePrescriptions()" method="POST">
    	<div class="col-md-4 form-group">
@@ -34,6 +26,18 @@
     </div>
     </form>
     </div>
+</div>
+
+<div class="row">
+<div class="col-md-5 col-md-offset-3">
+<select class="chzn" id="status-select" style="width:50%;" data-placeholder="Select Order Status">
+<option></option>
+<option value="any" @if(status.trim.toLowerCase().compareTo("any")==0){selected}>Any</option>
+<option value="received" @if(status.trim.toLowerCase().compareTo("received")==0){selected}>Received</option>
+<option value="served" @if(status.trim.toLowerCase().compareTo("served")==0){selected}>Served</option>
+</select>
+</div>
+</div>
 
 <script>
 $('#status-select').on('change', function(){
@@ -48,13 +52,14 @@ $('#status-select').on('change', function(){
 
 <br><br>
 <div class="row">
-<div class="col-md-8">
+<div class="col-md-11">
 <table class="table table-striped table-bordered">
 <tr>
 <th>S.No</th>
 <th>Doctor</th>
 <th>Patient</th>
-<th>Date</th>
+<th>Shared By</th>
+<th>Shared Date</th>
 <th>Order Status</th>
 <th>Action</th>
 </tr>
@@ -75,14 +80,25 @@ $('#status-select').on('change', function(){
 @pharmacyPrescriptionInfo.prescription.patient.appUser.mobileNumber
 </td>
 
-<td>@pharmacyPrescriptionInfo.receivedDate.format("dd-MMM-yyyy HH:mm") </td>
 <td>
-<span style="padding-right:20px">@pharmacyPrescriptionInfo.pharmacyPrescriptionStatus</span>
-@*if(pharmacyPrescriptionInfo.pharmacyPrescriptionStatus.equals(models.pharmacist.PharmacyPrescriptionStatus.RECEIVED)&& !pharmacyPrescriptionInfo.pharmacyPrescriptionStatus.equals(models.pharmacist.PharmacyPrescriptionStatus.SERVED)){
-<a href="@routes.PharmacistController.confirmPrescription(pharmacyPrescriptionInfo.id)" class="btn btn-primary btn-xs" >Confirm</a>
-}*@
+	@if(pharmacyPrescriptionInfo.sharedBy.role.equals(Role.DOCTOR)){
+		Dr. @pharmacyPrescriptionInfo.sharedBy.name
+	}else{
+		@pharmacyPrescriptionInfo.sharedBy.name
+	}
+</td>
+
+<td style="text-align:center;">
+@pharmacyPrescriptionInfo.sharedDate.format("dd-MMM-yyyy")
+<br>
+@pharmacyPrescriptionInfo.sharedDate.format("HH:mm")
+</td>
+
+<td>
+<span class="badge" style=""><b>@pharmacyPrescriptionInfo.pharmacyPrescriptionStatus</b></span>
 @if(!pharmacyPrescriptionInfo.pharmacyPrescriptionStatus.equals(models.pharmacist.PharmacyPrescriptionStatus.SERVED)){
-<a href="@routes.PharmacistController.servedPrescription(pharmacyPrescriptionInfo.id)" class="btn btn-primary btn-xs" >Served</a>
+	<br><br>
+Mark as <a href="@routes.PharmacistController.servedPrescription(pharmacyPrescriptionInfo.id)" class="" ><b>Served</b></a>
 }
 </td>
 
