@@ -70,7 +70,7 @@ public class DiagnosticController extends Controller {
 			if (request().body().asMultipartFormData().getFile("backgroundImage") != null) {
 				final FilePart image = request().body().asMultipartFormData().getFile("backgroundImage");
 				if(image.getContentType().equalsIgnoreCase("image/bmp")||image.getContentType().equalsIgnoreCase("image/png")||image.getContentType().equalsIgnoreCase("image/jpeg")||image.getContentType().equalsIgnoreCase("image/gif")){
-				diagnosticCentre.backgroudImage = Files.toByteArray(image.getFile());
+					diagnosticCentre.backgroudImage = Files.toByteArray(image.getFile());
 				}else{
 					flash().put("alert", new Alert("alert-info", "Sorry. Images Should Be In The Following Formats .JPEG,.jpg,.png,.gif,.bmp").toString());
 				}
