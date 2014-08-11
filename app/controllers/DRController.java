@@ -21,24 +21,20 @@ public class DRController extends Controller {
 	public static Form<DiagnosticRepresentative> diagnosticRepresentative = Form
 			.form(DiagnosticRepresentative.class);
 
-	/*
+	/**
 	 * @author : lakshmi
-	 * 
-	 * @url:/diagnosticrep
-	 * 
-	 * description: rendering to DiagnosticRepresentative form
+	 * /diagnosticrep
+	 * rendering to DiagnosticRepresentative form
 	 */
 	public static Result addDiagRep() {
 		return ok(views.html.diagnostic.diagnosticRep
 				.render(diagnosticRepresentative));
 	}
 
-	/*
+	/**
 	 * @author : lakshmi
-	 * 
-	 * @url: /diagnosticrep/save
-	 * 
-	 * description:persisiting the diagnosticRepresentative in diagnosticCentre
+	 * POST/diagnosticrep/save
+	 * persisiting the diagnosticRepresentative in diagnosticCentre
 	 */
 	public static Result addDiagRepProcess() {
 		final Form<AppUser> filledForm = registrationForm.bindFromRequest();
@@ -58,12 +54,10 @@ public class DRController extends Controller {
 
 	}
 
-	/*
+	/**
 	 * @author : lakshmi
-	 * 
-	 * @url:  /diagnosticrep/list
-	 * 
-	 * description:displaying all diagnostic Representators belongs to the logged in diagnostic centre
+	 * GET/diagnosticrep/list
+	 * displaying all diagnostic Representators belongs to the logged in diagnostic centre
 	 */
 	public static Result diagnosticRepresentativeList() {
 		Logger.info("size of list........"
@@ -72,12 +66,10 @@ public class DRController extends Controller {
 				.render(dc.diagnosticRepresentativelist));
 
 	}
-	/*
+	/**
 	 * @author : lakshmi
-	 * 
-	 * @url: /diagnosticrep/add-doctor/:id
-	 * 
-	 * description: adding a doctor to the DiagnosticCentre
+	 * GET /diagnosticrep/add-doctor/:id
+	 * adding a doctor to the DiagnosticCentre
 	 */
 	public static Result addDoctor(final Long id) {
 		Logger.info("test1");
@@ -99,12 +91,10 @@ public class DRController extends Controller {
 		return ok();
 	}
 
-	/*
+	/**
 	 * @author : lakshmi
-	 * 
-	 * @url: /diagnosticrep/remove-doctor/:id
-	 * 
-	 * description: removing a doctor from the DiagnosticCentre
+	 * GET/diagnosticrep/remove-doctor/:id
+	 * removing a doctor from the DiagnosticCentre
 	 */
 	public static Result removeDoctor(final Long id) {
 		System.out.println("id........." + id);
@@ -116,22 +106,18 @@ public class DRController extends Controller {
 	}
 
 
-	/*
+	/**
 	 * @author : lakshmi
-	 * 
-	 * @url: /diagnosticrep/doctor-search
-	 * 
-	 * description: rendering page to search a doctor
+	 * GET /diagnosticrep/doctor-search
+	 * rendering page to search a doctor
 	 */
 	public static Result search() {
 		return ok(views.html.diagnostic.searchDoctor.render());
 	}
-	/*
+	/**
 	 * @author : lakshmi
-	 * 
-	 * @url: /diagnosticrep/doctorsearch
-	 * 
-	 * description: searchProcess for a Doctor
+	 * POST /diagnosticrep/doctorsearch
+	 * searchProcess for a Doctor
 	 */
 	public static Result searchProcess() {
 
@@ -155,12 +141,10 @@ public class DRController extends Controller {
 
 	}
 
-	/*
+	/**
 	 * @author : lakshmi
-	 * 
-	 * @url: /diagnostic-centre/all-doctors
-	 * 
-	 * description: diaplying all doctors belongs to the loggedin diagnostic centre
+	 * GET /diagnostic-centre/all-doctors
+	 * displying all doctors belongs to the loggedin ADMIN_DIAGREP
 	 */
 	public static Result displayDiagnosticCentreDoctors() {
 		final DiagnosticCentre diagCentre = LoginController.getLoggedInUser().getDiagnosticRepresentative().diagnosticCentre;

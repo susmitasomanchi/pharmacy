@@ -224,8 +224,9 @@ public class PatientController extends Controller {
 
 
 	/**
-	 * @author lakshmi Action to list out favorite Diagnostic Centre of Patient
-	 *         of loggedin DOCTOR GET/patient/favorite-diagnostic-centres
+	 * @author lakshmi 
+	 * Action to list out favorite Diagnostic Centre of loggedIn Patient
+	 * GET/patient/favorite-diagnostic-centres
 	 */
 	@ConfirmAppUser
 	public static Result patientFavoriteDiagnosticCentres() {
@@ -266,7 +267,7 @@ public class PatientController extends Controller {
 	}
 
 	/**@author lakshmi
-	 * Action to show all prescription created by loggedInPatient
+	 * Action to show all prescription Of loggedInPatient
 	 *GET /user/prescriptions
 	 */
 	@ConfirmAppUser
@@ -278,7 +279,7 @@ public class PatientController extends Controller {
 	}
 	/**
 	 * @author lakshmi
-	 * Action to show the prescription to the loggedInPatient
+	 * Action to show the prescription content to the loggedInPatient
 	 * GET/user/show-prescription/:prescriptionId
 	 */
 	@ConfirmAppUser

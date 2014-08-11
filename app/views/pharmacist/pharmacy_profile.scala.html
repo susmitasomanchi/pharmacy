@@ -102,7 +102,7 @@ function validateSlugUrl(){
 
 
 @if(pharmacy.backgroundImage != null){
-	<div id="au" style="background-image:url('@routes.PublicController.getPharmacyImages(pharmacy.id,0)');background-size:940px 400px; background-repeat:no-repeat; height:400px;"></div>
+	<div style="background-image:url('@routes.PublicController.getPharmacyImages(pharmacy.id,0)');background-size:940px 400px; background-repeat:no-repeat; height:400px;"></div>
 }else{
 	<div style="background-image:url('/assets/images/pharmacy-default-bg-image.jpg');background-size:940px 400px; background-repeat:no-repeat; height:400px;"></div>
 }
