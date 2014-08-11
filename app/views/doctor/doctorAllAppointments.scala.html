@@ -2,20 +2,22 @@
 @(appointments:List[models.doctor.Appointment],docClincs:List[models.doctor.DoctorClinicInfo])
 @import play.i18n._
 
-@main("All Appointments"){
+@main("Today's Appointments"){
 	
 	
 		<ul class="nav nav-tabs" role="tablist" id="my-tab">
   			<li  class="active"><a href="#all"  data-toggle="tab">All Clinics</a></li>
   			@for( docClinic <-  docClincs){
-  				
- 			 <li><a href="#@docClinic.clinic.id" data-toggle="tab">@docClinic.clinic.name</a></li>
+  				@if(docClinic.active){
+  				 			 <li><a href="#@docClinic.clinic.id" data-toggle="tab">@docClinic.clinic.name</a></li>
+  					
+  				}
   			}
   			
   			
 		</ul>
 	<div id="myTabContent" class="tab-content">
-		
+		 
 		<div class="tab-pane fade in active" id="all">
 			<table class="table table-condensed table-hover">
 			<thead>
@@ -37,6 +39,7 @@
 			</tr>
 			</thead>
 			@for(appointment <- appointments){
+			@if(appointment.doctorClinicInfo.active){
 			<tr>
 			<div class="row clearfix">
 				<div class="col-md-3 column">
@@ -67,9 +70,13 @@
 			</div>
 			</tr>
 			}
+			
+			}
 		</table>
 		</div>
 		@for(  docClinic <-  docClincs){
+			@for( docClinic <-  docClincs){
+			
 			<div class="tab-pane fade" id="@docClinic.clinic.id">
 				<table class="table table-condensed table-hover">
 			<thead>
@@ -116,6 +123,7 @@
 				</div>
 			</div>
 			</tr>
+			}
 			}
 			
 			}
