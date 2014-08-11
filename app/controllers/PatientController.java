@@ -43,7 +43,7 @@ public class PatientController extends Controller {
 	 * Action to display currently logged in Patient' Doctor List
 	 *  GET  /user/my-doctors
 	 */
-	@ConfirmAppUser
+	//@ConfirmAppUser
 	public static Result myFavouriteDoctors() {
 		final Patient patient=LoginController.getLoggedInUser().getPatient();
 		return ok(views.html.patient.fav_doctors.render(patient.patientDoctorInfoList));
