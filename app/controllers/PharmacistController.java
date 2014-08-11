@@ -37,6 +37,7 @@ import beans.AddProductToInventoryBean;
 import beans.PharmacyBean;
 
 import com.avaje.ebean.Expr;
+import com.avaje.ebean.ExpressionList;
 import com.google.common.io.Files;
 
 @BasicAuth
@@ -352,7 +353,7 @@ public class PharmacistController extends Controller {
 				.ge("sharedDate", calendarFrom.getTime())
 				.le("sharedDate", calendarTo.getTime())
 				.findList();
-		return ok(views.html.pharmacist.viewPharmacyPrescriptionList.render(pharmacyPrescriptionInfos, ""));
+		return ok(views.html.pharmacist.pharmacyTodaysPrescriptions.render(pharmacyPrescriptionInfos, ""));
 	}
 	/**
 	 * @author lakshmi
@@ -374,13 +375,29 @@ public class PharmacistController extends Controller {
 			flash().put("alert", new Alert("alert-info", "Please provide both dates.").toString());
 		}
 		final Pharmacy pharmacy = LoginController.getLoggedInUser().getPharmacist().pharmacy;
+
+		/*
 		final List<PharmacyPrescriptionInfo> pharmacyPrescriptionInfos =
 				PharmacyPrescriptionInfo.find.where()
 				.eq("pharmacy", pharmacy)
 				.ge("sharedDate", dateFrom)
 				.le("sharedDate",dateTo)
 				.findList();
-		return ok(views.html.pharmacist.viewPharmacyPrescriptionList.render(pharmacyPrescriptionInfos,""));
+		 */
+
+		final ExpressionList<PharmacyPrescriptionInfo> ppInfoExpList = PharmacyPrescriptionInfo.find.where()
+				.eq("pharmacy", pharmacy)
+				.ge("sharedDate", dateFrom)
+				.le("sharedDate",dateTo);
+
+		if(requestMap.get("status") != null && (requestMap.get("status")[0].trim().compareToIgnoreCase("")!=0)){
+			if(requestMap.get("status")[0].trim().compareToIgnoreCase("any") != 0){
+				final PharmacyPrescriptionStatus ppstatus = PharmacyPrescriptionStatus.valueOf(requestMap.get("status")[0].trim());
+				ppInfoExpList.eq("pharmacyPrescriptionStatus", ppstatus);
+			}
+		}
+
+		return ok(views.html.pharmacist.viewPharmacyPrescriptionList.render(ppInfoExpList.findList(),""));
 	}
 
 

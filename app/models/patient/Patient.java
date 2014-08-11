@@ -28,7 +28,7 @@ public class Patient extends BaseEntity {
 
 	@OneToOne
 	public AppUser appUser;
-	
+
 	public String age;
 
 	@OneToMany(cascade = CascadeType.ALL)
@@ -41,13 +41,17 @@ public class Patient extends BaseEntity {
 	public List<DiagnosticCentre> diagnosticCenterList = new ArrayList<DiagnosticCentre>();
 
 	public static Model.Finder<Long, Patient> find = new Finder<Long, Patient>(Long.class, Patient.class);
-	
+
 	public List<Appointment> getAppointments(){
 		final List<Appointment> appointments = Appointment.find.where()
 				.eq("requestedBy", this.appUser).orderBy().desc("appointmentTime")
 				.findList();
 		return appointments;
 		//return ok(views.html.patient.patientAllAppointments.render(appointments,docclinicInfo));
+	}
+
+	public String getSexAndAge(){
+		return this.appUser.sex.toString().substring(0,1)+"/"+this.appUser.getAge();
 	}
 
 }

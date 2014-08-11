@@ -126,8 +126,8 @@
           Prescriptions
           <b class="caret"></b></a>
           <ul class="dropdown-menu">
-            <li><a href="@routes.PharmacistController.pharmacyPrescriptionList()">All Prescriptions</a></li>
 	       	<li><a href="@routes.PharmacistController.viewTodaysPrescriptions()">Today's Prescriptions</a></li>
+	       	<li><a href="@routes.PharmacistController.pharmacyPrescriptionList()">All Prescriptions</a></li>
             </ul>
         </li>
         @*<li class="dropdown">
@@ -358,9 +358,8 @@
           Prescriptions
           <b class="caret"></b></a>
           <ul class="dropdown-menu">
+          <li><a href="@routes.DiagnosticController.TodaysDiagnosticPrescriptions()">Today's Prescriptions</a></li>
           <li><a href="@routes.DiagnosticController.getDiagnosticCentrePrescriptions()">All Prescriptions</a></li>
-          <li><a href="@routes.DiagnosticController.TodaysDiagnosticPrescriptions()">View Today's Prescriptions</a></li> 
-            
           </ul>
         </li> 
         }

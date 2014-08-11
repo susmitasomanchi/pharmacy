@@ -24,6 +24,8 @@ import models.diagnostic.DiagnosticReportStatus;
 import models.diagnostic.DiagnosticTest;
 import models.diagnostic.ShowCasedService;
 import models.patient.Patient;
+import models.pharmacist.PharmacyPrescriptionInfo;
+import models.pharmacist.PharmacyPrescriptionStatus;
 
 import org.apache.commons.io.FileUtils;
 import org.joda.time.DateTime;
@@ -40,6 +42,7 @@ import actions.BasicAuth;
 import actions.ConfirmAppUser;
 import beans.DiagnosticBean;
 
+import com.avaje.ebean.ExpressionList;
 import com.google.common.io.Files;
 
 @BasicAuth
@@ -255,8 +258,8 @@ public class DiagnosticController extends Controller {
 	 * GET/diagnostic/order-confirmed/:diagInfoId
 	 */
 	@ConfirmAppUser
-		public static Result orderServed(Long DiagnosticInfoId) {
-			DiagnosticCentrePrescriptionInfo diagnosticCentrePrescriptionInfo= DiagnosticCentrePrescriptionInfo.find.byId(DiagnosticInfoId);
+	public static Result orderServed(final Long DiagnosticInfoId) {
+		final DiagnosticCentrePrescriptionInfo diagnosticCentrePrescriptionInfo= DiagnosticCentrePrescriptionInfo.find.byId(DiagnosticInfoId);
 		diagnosticCentrePrescriptionInfo.diagnosticCentrePrescritionStatus = DiagnosticCentrePrescritionStatus.SERVED;
 		diagnosticCentrePrescriptionInfo.update();
 		return redirect(routes.DiagnosticController.getDiagnosticCentrePrescriptions("any"));
@@ -283,8 +286,8 @@ public class DiagnosticController extends Controller {
 	 * Action to display all DiagnosticTest for the current order
 	 */
 	@ConfirmAppUser
-		public static Result viewOrderedTest(Long DiagnosticInfoId) {
-			DiagnosticCentrePrescriptionInfo diagnosticCentrePrescriptionInfo= DiagnosticCentrePrescriptionInfo.find.byId(DiagnosticInfoId);			
+	public static Result viewOrderedTest(final Long DiagnosticInfoId) {
+		final DiagnosticCentrePrescriptionInfo diagnosticCentrePrescriptionInfo= DiagnosticCentrePrescriptionInfo.find.byId(DiagnosticInfoId);
 		return ok(views.html.diagnostic.receivedTests.render(diagnosticCentrePrescriptionInfo));
 	}
 	/**
@@ -293,7 +296,7 @@ public class DiagnosticController extends Controller {
 	 * Action to render to the uploadPatientReort.scala to get upload form
 	 */
 	@ConfirmAppUser
-		public static Result uploadDiagnosticReport(Long DiagnosticInfoId) {
+	public static Result uploadDiagnosticReport(final Long DiagnosticInfoId) {
 		return ok(views.html.diagnostic.uploadDiagnosticReport.render(DiagnosticInfoId));
 	}
 	/**
@@ -302,17 +305,17 @@ public class DiagnosticController extends Controller {
 	 * Action to upload DiagnosticReport
 	 */
 	@ConfirmAppUser
-		public static Result uploadDiagnosticReportProcess(Long DiagnosticInfoId) {
-			DiagnosticCentrePrescriptionInfo diagnosticCentrePrescriptionInfo= DiagnosticCentrePrescriptionInfo.find.byId(DiagnosticInfoId);
+	public static Result uploadDiagnosticReportProcess(final Long DiagnosticInfoId) {
+		final DiagnosticCentrePrescriptionInfo diagnosticCentrePrescriptionInfo= DiagnosticCentrePrescriptionInfo.find.byId(DiagnosticInfoId);
 		if (request().body().asMultipartFormData().getFile("file") != null) {
 			final FilePart report = request().body().asMultipartFormData().getFile("file");
-				FileEntity fileEntity = new FileEntity();
+			final FileEntity fileEntity = new FileEntity();
 			try {
 				fileEntity.mimeType = report.getContentType();
 				fileEntity.fileName = report.getFilename();
 				fileEntity.byteContent = Files.toByteArray(report.getFile());
 				diagnosticCentrePrescriptionInfo.fileEntities.add(fileEntity);
-				} catch (IOException e) {
+			} catch (final IOException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
@@ -330,7 +333,7 @@ public class DiagnosticController extends Controller {
 	 */
 	@ConfirmAppUser
 	public static Result TodaysDiagnosticPrescriptions() {
-			Date now = new Date();
+		final Date now = new Date();
 		final Calendar calendarFrom = Calendar.getInstance();
 		calendarFrom.setTime(now);
 		calendarFrom.set(Calendar.HOUR_OF_DAY, 0);
@@ -345,7 +348,7 @@ public class DiagnosticController extends Controller {
 		calendarTo.set(Calendar.SECOND,59);
 		calendarTo.set(Calendar.MILLISECOND,999);
 
-			DiagnosticCentre diagnosticCentre = LoginController.getLoggedInUser().getDiagnosticRepresentative().diagnosticCentre;
+		final DiagnosticCentre diagnosticCentre = LoginController.getLoggedInUser().getDiagnosticRepresentative().diagnosticCentre;
 		final List<DiagnosticCentrePrescriptionInfo> diagnosticCentrePrescriptionInfos =
 				DiagnosticCentrePrescriptionInfo.find.where()
 				.eq("diagnosticCentre", diagnosticCentre)
@@ -367,15 +370,33 @@ public class DiagnosticController extends Controller {
 		}
 		if(requestMap.get("to") != null && (requestMap.get("to")[0]).trim().compareToIgnoreCase("")!=0){
 			dateTo = new DateTime(requestMap.get("to")[0]).toDate();
-				}DiagnosticCentre diagnosticCentre = LoginController.getLoggedInUser().getDiagnosticRepresentative().diagnosticCentre;
+		}
+		final DiagnosticCentre diagnosticCentre = LoginController.getLoggedInUser().getDiagnosticRepresentative().diagnosticCentre;
 
-		final List<DiagnosticCentrePrescriptionInfo> diagnosticCentrePrescriptionInfos =
+
+		/*
+				final List<DiagnosticCentrePrescriptionInfo> diagnosticCentrePrescriptionInfos =
 				DiagnosticCentrePrescriptionInfo.find.where()
 				.eq("diagnosticCentre", diagnosticCentre)
 				.ge("sharedDate", dateFrom)
 				.le("sharedDate",dateTo)
 				.findList();
-		return ok(views.html.diagnostic.diagnosticPrescriptionList.render(diagnosticCentrePrescriptionInfos,"",true));
+		 */
+
+
+		final ExpressionList<DiagnosticCentrePrescriptionInfo> dpInfoExpList = DiagnosticCentrePrescriptionInfo.find.where()
+				.eq("diagnosticCentre", diagnosticCentre)
+				.ge("sharedDate", dateFrom)
+				.le("sharedDate",dateTo);
+
+		if(requestMap.get("status") != null && (requestMap.get("status")[0].trim().compareToIgnoreCase("")!=0)){
+			if(requestMap.get("status")[0].trim().compareToIgnoreCase("any") != 0){
+				final DiagnosticCentrePrescritionStatus dpstatus = DiagnosticCentrePrescritionStatus.valueOf(requestMap.get("status")[0].trim());
+				dpInfoExpList.eq("diagnosticCentrePrescritionStatus", dpstatus);
+			}
+		}
+
+		return ok(views.html.diagnostic.diagnosticPrescriptionList.render(dpInfoExpList.findList(),"",true));
 	}
 
 
