@@ -49,8 +49,8 @@ $('#status-select').on('change', function(){
 <table class="table table-striped table-bordered" style="vertical-align:center">
 <tr>
 <th style="text-align:center;width:50px">S.No</th>
-<th style="text-align:center;width:150px"> Doctor Name</th>
-<th style="text-align:center;width:150px"> Patient Name</th>
+<th style="text-align:center;width:150px"> Doctor</th>
+<th style="text-align:center;width:150px"> Patient</th>
 <th style="text-align:center;width:150px"> Tests</th>
 <th style="text-align:center;width:350px"> Status</th>
 <th style="text-align:center;width:300px"> Action</th>
@@ -61,20 +61,16 @@ $('#status-select').on('change', function(){
 @{index+1}
 </td>
 <td>
-@*if(diagnosticCentrePrescriptionInfo.prescription.doctor!= null){
 Dr.@diagnosticCentrePrescriptionInfo.prescription.doctor.appUser.name
-}*@
 </td>
 <td>
-@*if(diagnosticCentrePrescriptionInfo.prescription.patient!= null){
 @diagnosticCentrePrescriptionInfo.prescription.patient.appUser.name
-}*@
 </td>
 <td>
-@diagnosticCentrePrescriptionInfo.prescription
-@*for((diagnosticTestLineItem,index) <- diagnosticCentrePrescriptionInfo.prescription.diagnosticTestLineItemList.zipWithIndex) {
+
+@for((diagnosticTestLineItem,index) <- diagnosticCentrePrescriptionInfo.prescription.diagnosticTestLineItemList.zipWithIndex) {
 @{index+1}.@diagnosticTestLineItem.fullNameOfDiagnosticTest<br>
-}*@
+}
 </td>
 <td>
 <span style="padding-right:20px">@diagnosticCentrePrescriptionInfo.diagnosticCentrePrescritionStatus</span>
@@ -86,8 +82,11 @@ Dr.@diagnosticCentrePrescriptionInfo.prescription.doctor.appUser.name
 }*@
 </td>
 <td>
-<a href="@routes.DiagnosticController.viewOrderedTest(diagnosticCentrePrescriptionInfo.id)" class="btn btn-xs btn-default">All Tests</a>
-
+@if(!diagnosticCentrePrescriptionInfo.diagnosticCentrePrescritionStatus.equals(models.diagnostic.DiagnosticCentrePrescritionStatus.SERVED)){
+<a href="@routes.DiagnosticController.uploadDiagnosticReport(diagnosticCentrePrescriptionInfo.id)" class="btn btn-xs btn-primary">Send Report</a>
+}else{
+  <a  class="btn btn-disabled btn-sm" disabled>Report Sended</a>
+}
 </td>
 }
 </tr>

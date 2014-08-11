@@ -26,7 +26,7 @@ $("#searchInput").keyup(function (e) {
 @if(searched){
 
 	@if(doctorList.size()==0){
-		No Doctor is present with name <b>@searchedKey</b>
+		No Doctor Is Available With The Name <b>@searchedKey</b>
 	}else{
 <style>
 .badge{
@@ -220,29 +220,6 @@ margin-bottom:0px;
 
 </table>	
 }
-		<div class="modal fade" id="myModal11" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
-  		<div class="modal-dialog" style="padding-top:200px">
-    	<div class="modal-content" style="padding-left:20px">
-      	<h4>Are you to confirm to remove1</h4>
-      	<div class="modal-footer">
-        <button type="button" class="btn btn-default btn-xs" data-dismiss="modal">Close</button>
-        <button type="button" class="btn btn-primary btn-xs">Confirm</button>
-      	</div>
-    	</div>
-  		</div>
-	</div>
-	<div class="modal fade" id="myModal1" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
-  		<div class="modal-dialog" style="padding-top:200px">
-    	<div class="modal-content" style="padding-left:20px">
-      	<h4>Are you to confirm to remove1</h4>
-      	<div class="modal-footer">
-        <button type="button" class="btn btn-default btn-xs" data-dismiss="modal">Close</button>
-        <button type="button" class="btn btn-primary btn-xs" onclick="window.location.href = '/patient/delete-fav-doc/'+docid;">Confirm</button>
-      	</div>
-    	</div>
-  		</div>
-	</div>
-	
 	
 <script>
 var docid;

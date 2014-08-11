@@ -51,7 +51,7 @@ public class DiagnosticController extends Controller {
 
 	/**
 	 * @author lakshmi
-	 * Action for uploading DiagnosticCentre backgroundImage and profile
+	 * Action for ing DiagnosticCentre backgroundImage and profile
 	 * Images of of DiagnosticCentre of the loggedIn ADMIN_DIAGREP
 	 * POST	/diagnostic/upload-diagnostic-images
 	 */

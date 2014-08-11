@@ -4,7 +4,13 @@
 @main(pharmacy.name) {
 
 <script src="http://maps.googleapis.com/maps/api/js?sensor=false"></script>
-
+<script>
+var u = $("#au").uploader({
+    id: 'Uploader1',
+    restrictions: {fileMask: '*.jpg;*.jpeg;*.png;*.gif;*.bmp'},
+    messages: {fileNameNotAllowed: 'You can add only images.'}
+});
+</script>
 <script>
 	var i = 0;
 	function addfiles() {
@@ -96,7 +102,7 @@ function validateSlugUrl(){
 
 
 @if(pharmacy.backgroundImage != null){
-	<div style="background-image:url('@routes.PublicController.getPharmacyImages(pharmacy.id,0)');background-size:940px 400px; background-repeat:no-repeat; height:400px;"></div>
+	<div id="au" style="background-image:url('@routes.PublicController.getPharmacyImages(pharmacy.id,0)');background-size:940px 400px; background-repeat:no-repeat; height:400px;"></div>
 }else{
 	<div style="background-image:url('/assets/images/pharmacy-default-bg-image.jpg');background-size:940px 400px; background-repeat:no-repeat; height:400px;"></div>
 }

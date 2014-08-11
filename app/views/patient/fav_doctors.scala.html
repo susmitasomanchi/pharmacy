@@ -20,7 +20,7 @@ margin-bottom:0px;
 
 </style>
 @if(favDocs.size()==0){
-		No List is created yet
+		No List Created Yet
 	}else{	
 		<table class="table table-bordered">
 		@for((patDoc,index) <- favDocs.zipWithIndex){
@@ -32,7 +32,7 @@ margin-bottom:0px;
 				<div class="row" style="padding-left:20px;padding-right:20px">
 				<div style="cursor:pointer" onclick="window.location.href='@routes.PublicController.getDoctorWithSlug(patDoc.doctor.slugUrl)';">
 				@if(patDoc.doctor.backgroundImage != null){
-				<img src="@routes.PublicController.getImage(patDoc.doctor.id,"backgroundImage")"  width="530" width="530" height="170"/>
+				<img src="@routes.PublicController.getImage(patDoc.doctor.id,"backgroundImage")"  width="530" height="170"/>
 				}else{
 				<img src="/assets/images/sunrise.png" width="530" height="170" />
 				}
