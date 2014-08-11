@@ -35,7 +35,9 @@ Test
 <a href="@routes.DiagnosticController.uploadDiagnosticReport(diagnosticOrder.id,diagnosticReport.id)" class="btn btn-xs btn-default">Upload Report</a>
 }*@
 <th>
-<a href="@routes.DiagnosticController.uploadDiagnosticReport(diagnosticCentrePrescriptionInfo.id)" class="btn btn-xs btn-default">Upload Report</a>
+@if(!diagnosticCentrePrescriptionInfo.diagnosticCentrePrescritionStatus.equals(models.diagnostic.DiagnosticCentrePrescritionStatus.SERVED)){
+<a href="@routes.DiagnosticController.uploadDiagnosticReport(diagnosticCentrePrescriptionInfo.id)" class="btn btn-xs btn-primary">Upload Report</a>
+}
 </th>
 }
 </tr>
