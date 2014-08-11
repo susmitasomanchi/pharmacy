@@ -43,7 +43,7 @@ public class PatientController extends Controller {
 	 * Action to display currently logged in Patient' Doctor List
 	 *  GET  /user/my-doctors
 	 */
-	@ConfirmAppUser
+	//@ConfirmAppUser
 	public static Result myFavouriteDoctors() {
 		final Patient patient=LoginController.getLoggedInUser().getPatient();
 		return ok(views.html.patient.fav_doctors.render(patient.patientDoctorInfoList));
@@ -190,7 +190,7 @@ public class PatientController extends Controller {
 	 * Action to add favorite pharmacy of the Doctor to the list of Patient of loggedin PATIENT
 	 * GET/patient/add-favorite-pharmacy/:pharmacyId/:str
 	 */
-	@ConfirmAppUser
+	//@ConfirmAppUser
 	public static Result addFavoritePharmacy(final Long pharmacyId,final String searchStr) {
 		final Patient patient = LoginController.getLoggedInUser().getPatient();
 		final Pharmacy pharmacy = Pharmacy.find.byId(pharmacyId);
@@ -216,7 +216,7 @@ public class PatientController extends Controller {
 	 * Action to list out favorite pharmacies of Patient of loggedin PATIENT
 	 * GET/patient/my-favorite-pharmacies
 	 */
-	@ConfirmAppUser
+	//@ConfirmAppUser
 	public static Result patientFavoritePharmacies() {
 		final Patient patient = LoginController.getLoggedInUser().getPatient();
 		return ok(views.html.pharmacist.favorite_pharmacy_list.render(patient.pharmacyList));
@@ -227,7 +227,7 @@ public class PatientController extends Controller {
 	 * @author lakshmi Action to list out favorite Diagnostic Centre of Patient
 	 *         of loggedin DOCTOR GET/patient/favorite-diagnostic-centres
 	 */
-	@ConfirmAppUser
+	//@ConfirmAppUser
 	public static Result patientFavoriteDiagnosticCentres() {
 		final Patient patient = LoginController.getLoggedInUser().getPatient();
 		return ok(views.html.diagnostic.favorite_diagnosticCentre_list.render(patient.diagnosticCenterList));
@@ -240,7 +240,7 @@ public class PatientController extends Controller {
 	 * Action to show a forms which have currently logged in patient requested appointments
 	 *  GET		/patient/my-appointments
 	 */
-	@ConfirmAppUser
+	//@ConfirmAppUser
 	public static Result viewMyAppointments(){
 		final AppUser patient=LoginController.getLoggedInUser();
 		final List<Appointment> patientApppointments=Appointment.find.where().eq("requestedBy", patient).findList();
@@ -252,7 +252,7 @@ public class PatientController extends Controller {
 	 * Action to process requested appointments
 	 * POST		/patient/process-appointment
 	 */
-	@ConfirmAppUser
+	//@ConfirmAppUser
 	public static Result processAppointment(final Long apptId) {
 		final String remark=request().body().asFormUrlEncoded().get("remark")[0];
 		Logger.warn(remark);
@@ -269,7 +269,7 @@ public class PatientController extends Controller {
 	 * Action to show all prescription created by loggedInPatient
 	 *GET /user/prescriptions
 	 */
-	@ConfirmAppUser
+	//@ConfirmAppUser
 	public static Result viewAllPatientPrescriptions() {
 		final Patient patient = LoginController.getLoggedInUser().getPatient();
 		final List<Prescription> prescriptionList = Prescription.find.where()

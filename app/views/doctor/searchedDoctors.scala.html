@@ -44,276 +44,181 @@ margin-bottom:0px;
 </style>	
 		<table class="table table-bordered">
 		@for((doctor,index) <- doctorList.zipWithIndex){
-			@if(index % 2 == 0){
+			@if(index%2==0){
+ <tr class="row"> 
+}
 				
-			<tr class="row">
 				<td class="col-md-6">
 				<div class="row" style="padding-left:20px;padding-right:20px">
 				<div style="cursor:pointer" onclick="window.location.href='@routes.PublicController.getDoctorWithSlug(doctor.slugUrl)';">
 				@if(doctor.backgroundImage != null){
-				<img src="@routes.PublicController.getImage(doctor.id,"backgroundImage")"  width="530" width="530" height="170"/>
+				<img id="coverborder" src="@routes.PublicController.getImage(doctor.id,"backgroundImage")"  width="530" height="170"  style="position:relative"/>
 				}else{
-				<img src="/assets/images/sunrise.png" width="530" height="170" />
+				<img id="coverborder" src="/assets/images/sunrise.png" width="530" height="170" style="position:relative"/>
 				}
-				<img id="coverborder" src="/assets/images/bordercover.png" width="530" style="position:relative;top:-65px"/>
 				</div>
-				<div class="row" style="margin-top:-120px;padding-left:15px">
+				<div class="row" style="margin-top:-55px;padding-left:15px">
 				<div style="cursor:pointer;width:23%" onclick="window.location.href='@routes.PublicController.getDoctorWithSlug(doctor.slugUrl)';" class="col-md-3">
-				<br>
 				@if(doctor.profileImage != null){
 				<img src="@routes.PublicController.getImage(doctor.id,"profileImage")" class="thumbnail" width="100" height="100"  />
-					}else{
+				}else{
 				<img src="/assets/images/doctor.png" class="thumbnail" width="100" height="100"  />
-					}
+				}
 				</div>
-				<div style="cursor:pointer;width:47%" onclick="window.location.href='@routes.PublicController.getDoctorWithSlug(doctor.slugUrl)';" class="col-md-5">
+				<div style="cursor:pointer" onclick="window.location.href='@routes.PublicController.getDoctorWithSlug(doctor.slugUrl)';" class="col-md-4">
 				<p style="font-size:18px"><b>@doctor.appUser.name</b></p>
 				<p style="font-size:14px"><b>@doctor.specialization</b></p>
 				<h6>@doctor.degree</h6>
 				<h6>@doctor.experience</h6>
 				<br>
 				</div>
-				<div class="col-md-3 pull-right" style="width:30%;padding-left:15px;padding-top:60px">
-				@*<a class="btn btn-primary btn-xs" href="#">Ask Query</a>*@
+				<div class="col-md-4 pull-right" style="width:30%;padding-left:3px;padding-top:60px">
 				<a id="@doctor.id" class="btn btn-success btn-xs pull-right" href="@routes.PublicController.addToFavDoctor(doctor.id)" class="pull-right">Fav&nbsp<i class="fa fa-plus"></i></a>
-				@*<a class="btn btn-danger btn-sm" href="@routes.PatientController.deleteMyFavDoctors(patDoc.id)">Remove</a>*@
-				</div>
-				</div>
-				
-				
-				<div class="well" style="padding-left:3px;padding-right:0px;padding-top:0px;padding-bottom:20px">
-				<h4 style="color:#006687;font-weight:bold">Clinics</h4>
-				@if(doctor.doctorClinicInfoList.size()==0){
-					No clinic created yet
-				}
-				<ul class="nav nav-tabs">
-				@for(docclinic <- doctor.doctorClinicInfoList){
-					@if( doctor.doctorClinicInfoList.indexOf(docclinic)==0){
-					  <li  class="active"><a href="@{docclinic.id}_clinic" data-toggle="tab">@docclinic.clinic.name</a></li>
-					}else{
-					 <li><a href="#clinic12" data-toggle="tab">@docclinic.clinic.name</a></li>
-					}
-				} 
-				</ul>
-				
-				<div class="tab-content">
-					@for(docclinic <- doctor.doctorClinicInfoList){
-						@if( doctor.doctorClinicInfoList.indexOf(docclinic)==0){
-							<div class="tab-pane active" id="@{docclinic.id}_clinic">
-								<div class="row">
-									<div class="col-md-8">
-									<h5><b><a href="#" style="color:#006687"
-									>@docclinic.clinic.name</a></b></h5>
-										@docclinic.clinic.address.addressLine1<br>
-										@docclinic.clinic.address.area<br>
-										@docclinic.clinic.address.city<br>
-										@docclinic.clinic.address.state<br>
-									<i class="fa fa-phone-square"></i> @docclinic.clinic.contactNo<br><br>
-									</div>
-									<div class="col-md-4">
-										<a class="btn btn-success btn-xs" style="float:right" href="/static/new/appointment">Book Appointment</a>
-									</div>
-								</div>
-								<div class="row" style="padding-left:10px">
-									@for((key,value)<-docclinic.getScheduleMap()){
-										@if(docclinic.getScheduleMap().get(key)!=null){
-											<span class="col-md-2" style="font-size:12px;width:14%">@key</span>
-										}else{
-										<span class="badge col-md-2" style="font-size:12px;width:14%">@key</span>
-										}
-									}
-								</div>	
-									<div class="row" style="padding-left:10px">
-										@for((key,value)<-docclinic.getScheduleMap()){
-											@if(docclinic.getScheduleMap().get(key)!=null){
-												<span class="col-md-2" style="font-size:12px;width:14%">@docclinic.getScheduleMap().get(key)</span>
-											}else{
-											<span class="badge col-md-2" style="font-size:12px;width:14%"></span>
-											}
-										}
-									</div>
-							</div>
-						}else{<div class="tab-pane" id="clinic1">
-								<div class="row">
-									<div class="col-md-8">
-									<h5 style="color:#006687">
-									<b><a href="@{docclinic.id}_clinic" >@docclinic.clinic.name</a></b>
-										<span style="font-size:12px;color:black">@docclinic.clinic.address.addressLine1<br>
-										@docclinic.clinic.address.area<br>
-										@docclinic.clinic.address.city<br>
-										@docclinic.clinic.address.state<br>
-									<i class="fa fa-phone-square"></i> @docclinic.clinic.contactNo<br><br></span>
-									</div>
-									<div class="col-md-4">
-										<a class="btn btn-success btn-xs" style="float:right" href="/static/new/appointment">Book Appointment</a>
-									</div>
-								</div>
-								<div class="row" style="padding-left:10px">
-									@for((key,value)<-docclinic.getScheduleMap()){
-										@if(docclinic.getScheduleMap().get(key)!=null){
-											<span class="col-md-2" style="font-size:12px;width:14%">@key</span>
-										}else{
-										<span class="badge col-md-2" style="font-size:12px;width:14%">@key</span>
-										}
-									}
-								</div>	
-									<div class="row" style="padding-left:10px">
-										@for((key,value)<-docclinic.getScheduleMap()){
-											@if(docclinic.getScheduleMap().get(key)!=null){
-												<span class="col-md-2" style="font-size:12px;width:14%">@docclinic.getScheduleMap().get(key)</span>
-											}else{
-											<span class="badge col-md-2" style="font-size:12px;width:14%"></span>
-											}
-										}
-									</div>
-							</div>				
-						}
-					} 
-				</div>
-			</div>
-		</div>
-	<br>
-</td>
-				
-				@if(index == doctorList.size()-1){
-						</tr>
-					}
-				
-			}else{
-	<td class="col-md-6">
-				<div class="row" style="padding-left:20px;padding-right:20px">
-				<div style="cursor:pointer" onclick="window.location.href='@routes.PublicController.getDoctorWithSlug(doctor.slugUrl)';">
-				@if(doctor.backgroundImage != null){
-				<img src="@routes.PublicController.getImage(doctor.id,"backgroundImage")"  width="530" width="530" height="170"/>
-				}else{
-				<img src="/assets/images/sunrise.png" width="530" height="170" />
-				}
-				<img id="coverborder" src="/assets/images/bordercover.png" width="530" style="position:relative;top:-65px"/>
-				</div>
-				<div class="row" style="margin-top:-120px;padding-left:15px">
-				<div style="cursor:pointer;width:23%" onclick="window.location.href='@routes.PublicController.getDoctorWithSlug(doctor.slugUrl)';" class="col-md-3">
-				<br>
-				@if(doctor.profileImage != null){
-				<img src="@routes.PublicController.getImage(doctor.id,"profileImage")" class="thumbnail" width="100" height="100"  />
-					}else{
-				<img src="/assets/images/doctor.png" class="thumbnail" width="100" height="100"  />
-					}
-				</div>
-				<div style="cursor:pointer" onclick="window.location.href='@routes.PublicController.getDoctorWithSlug(doctor.slugUrl)';" class="col-md-5">
-				<p style="font-size:18px"><b>@doctor.appUser.name</b></p>
-				<p style="font-size:14px"><b>@doctor.specialization</b></p>
-				<h6>@doctor.degree</h6>
-				<h6>@doctor.experience</h6>
-				<br>
-				</div>
-				<div class="col-md-4 pull-right" style="width:30%;padding-left:15px;padding-top:60px">
-				@*<a class="btn btn-primary btn-xs" href="#">Ask Query</a>*@
-				<a id="@doctor.id" class="btn btn-success btn-xs pull-right" href="@routes.PublicController.addToFavDoctor(doctor.id)">Fav&nbsp<i class="fa fa-plus"></i></a>
-				@*<a class="btn btn-danger btn-sm" href="@routes.PatientController.deleteMyFavDoctors(patDoc.id)">Remove</a>*@
-				</div>
+       			</div>
 				</div>
 				
 				
 				<div class="well" style="padding-left:20px;padding-right:0px;padding-top:0px;padding-bottom:20px">
 				<h4 style="color:#006687;font-weight:bold">Clinics</h4>
-				@if(doctor.doctorClinicInfoList.size()==0){
-					No clinic created yet
+				<ul class="nav nav-tabs">			
+				@if(doctor.doctorActiveClinicInfoList().size()==0){
+					Clinic information hasn't been provided yet.
 				}
-				<ul class="nav nav-tabs">
-				@for(docclinic <- doctor.doctorClinicInfoList){
-					@if( doctor.doctorClinicInfoList.indexOf(docclinic)==0){
-					  <li  class="active"><a href="@{docclinic.id}_clinic" data-toggle="tab">@docclinic.clinic.name</a></li>
+				<ul class="nav nav-tabs">				
+				@for((docclinic,index) <- doctor.doctorActiveClinicInfoList().zipWithIndex){
+					@if( index==0){
+					  <li  class="active"><a href="#clinic@docclinic.id" data-toggle="tab">@docclinic.clinic.name</a></li>
 					}else{
-					 <li><a href="#clinic12" data-toggle="tab">@docclinic.clinic.name</a></li>
+					 <li><a href="##clinic@docclinic.id" data-toggle="tab">@docclinic.clinic.name</a></li>
 					}
-				} 
+				}
 				</ul>
 				
-				<div class="tab-content">
-					@for(docclinic <- doctor.doctorClinicInfoList){
-						@if( doctor.doctorClinicInfoList.indexOf(docclinic)==0){
-							<div class="tab-pane active" id="@{docclinic.id}_clinic">
+				<div class="tab-content" style="padding:10px">
+					@for((docclinic,index) <- doctor.doctorActiveClinicInfoList().zipWithIndex){
+						@if(index == 0){
+						<div class="tab-pane active" id="clinic@docclinic.id">
+						}else{
+						<div class="tab-pane" id="clinic@docclinic.id">
+						}
 								<div class="row">
 									<div class="col-md-8">
 									<h5 style="color:#006687">
-									<b><a href="#" >@docclinic.clinic.name</a></b></h5>
-										@docclinic.clinic.address.addressLine1<br>
+									<b><a href="#" >@docclinic.clinic.name</a></b><br>
+										<span style="font-size:12px;color:black">@docclinic.clinic.address.addressLine1
 										@docclinic.clinic.address.area<br>
 										@docclinic.clinic.address.city<br>
 										@docclinic.clinic.address.state<br>
 									<i class="fa fa-phone-square"></i> @docclinic.clinic.contactNo<br><br>
 									</div>
 									<div class="col-md-4">
-										<a class="btn btn-success btn-xs" style="float:right" href="/static/new/appointment">Book Appointment</a>
+										<a class="btn btn-success btn-xs" style="float:right" href="@routes.PublicController.scheduleAppointment(docclinic.id)">Book Appointment</a>
 									</div>
 								</div>
-								<div class="row" style="padding-left:10px">
-									@for((key,value)<-docclinic.getScheduleMap()){
-										@if(docclinic.getScheduleMap().get(key)!=null){
-											<span class="col-md-2" style="font-size:12px;width:14%">@key</span>
-										}else{
-										<span class="badge col-md-2" style="font-size:12px;width:14%">@key</span>
-										}
-									}
-								</div>	
-									<div class="row" style="padding-left:10px">
-										@for((key,value)<-docclinic.getScheduleMap()){
-											@if(docclinic.getScheduleMap().get(key)!=null){
-												<span class="col-md-2" style="font-size:12px;width:14%">@docclinic.getScheduleMap().get(key)</span>
-											}else{
-											<span class="badge col-md-2" style="font-size:12px;width:14%"></span>
-											}
-										}
-									</div>
+								
+								<div class="row" style="padding-left:15px">
+
+@if(docclinic.getScheduleMap().get("MONDAY") != null){
+	<span class="badge col-md-2" style="font-size:12px;width:14%">Mon</span>
+}else{
+	<span class="col-md-2" style="font-size:12px;width:14%">Mon</span>
+}
+
+@if(docclinic.getScheduleMap().get("TUESDAY") != null){
+	<span class="badge col-md-2" style="font-size:12px;width:14%">Tue</span>
+}else{
+	<span class="col-md-2" style="font-size:12px;width:14%">Tue</span>
+}
+
+@if(docclinic.getScheduleMap().get("WEDNESDAY") != null){
+	<span class="badge col-md-2" style="font-size:12px;width:14%">Wed</span>
+}else{
+	<span class="col-md-2" style="font-size:12px;width:14%">Wed</span>
+}
+
+@if(docclinic.getScheduleMap().get("THURSDAY") != null){
+	<span class="badge col-md-2" style="font-size:12px;width:14%">Thu</span>
+}else{
+	<span class="col-md-2" style="font-size:12px;width:14%">Thu</span>
+}
+
+@if(docclinic.getScheduleMap().get("FRIDAY") != null){
+	<span class="badge col-md-2" style="font-size:12px;width:14%">Fri</span>
+}else{
+	<span class="col-md-2" style="font-size:12px;width:14%">Fri</span>
+}
+@if(docclinic.getScheduleMap().get("SATURDAY") != null){
+	<span class="badge col-md-2" style="font-size:12px;width:14%">Sat</span>
+}else{
+	<span class="col-md-2" style="font-size:12px;width:14%">Sat</span>
+}
+
+@if(docclinic.getScheduleMap().get("SUNDAY") != null){
+	<span class="badge col-md-2" style="font-size:12px;width:14%">Sun</span>
+}else{
+	<span class="col-md-2" style="font-size:12px;width:14%">Sun</span>
+}
+
+</div>
+<div class="row" style="padding-left:15px;font-size:10px">
+
+
+@if(docclinic.getScheduleMap().get("MONDAY") != null){
+	<span class="col-md-2" style="padding-right:0px;padding-left:8px;margin:0px;width:14%">@docclinic.getScheduleMap().get("MONDAY")</span>
+}else{
+	<span class="col-md-2" style="padding-right:0px;padding-left:8px; margin:0px;width:14%"></span>
+}
+
+@if(docclinic.getScheduleMap().get("TUESDAY") != null){
+	<span class="col-md-2" style="padding-right:0px;padding-left:8px; margin:0px;width:14%">@docclinic.getScheduleMap().get("TUESDAY")</span>
+}else{
+	<span class="col-md-2" style="padding-right:0px;padding-left:8px; margin:0px;width:14%"></span>
+}
+
+@if(docclinic.getScheduleMap().get("WEDNESDAY") != null){
+	<span class="col-md-2" style="padding-right:0px; margin:0px; padding-left:8px;width:14%">@docclinic.getScheduleMap().get("WEDNESDAY")</span>
+}else{
+	<span class="col-md-2" style="padding-right:0px; margin:0px; padding-left:8px;width:14%"></span>
+}
+
+@if(docclinic.getScheduleMap().get("THURSDAY") != null){
+	<span class="col-md-2" style="padding-right:0px; margin:0px;padding-left:8px;width:14%">@docclinic.getScheduleMap().get("THURSDAY")</span>
+}else{
+	<span class="col-md-2" style="padding-right:0px; margin:0px; padding-left:8px;width:14%"></span>
+}
+
+@if(docclinic.getScheduleMap().get("FRIDAY") != null){ 
+	<span class="col-md-2" style="padding-right:0px; margin:0px;padding-left:8px;width:14%">@docclinic.getScheduleMap().get("FRIDAY")</span>
+}else{
+	<span class="col-md-2" style="padding-right:0px; margin:0px;width:14%;padding-left:8px"></span>
+}
+@if(docclinic.getScheduleMap().get("SATURDAY") != null){ 
+	<span class="col-md-2" style="padding-right:0px; margin:0px;width:14%;padding-left:8px">@docclinic.getScheduleMap().get("SATURDAY")</span>
+}else{
+	<span class="col-md-2" style="padding-right:0px; margin:0px;width:14%;padding-left:8px"></span>
+}
+@if(docclinic.getScheduleMap().get("SUNDAY") != null){ 
+	<span class="col-md-2" style="padding-right:0px; margin:0px;padding-left:8px;width:14%">@docclinic.getScheduleMap().get("SUNDAY")</span>
+}else{
+	<span class="col-md-2" style="padding-right:0px;padding-left:8px; margin:0px;width:14%"></span>
+}
+</div>
+								
 							</div>
-						}else{<div class="tab-pane" id="clinic1">
-								<div class="row">
-									<div class="col-md-8">
-									<h5 style="color:#006687">
-									<b><a href="@{docclinic.id}_clinic" >@docclinic.clinic.name</a></b>
-										<span style="font-size:12px;color:black">@docclinic.clinic.address.addressLine1
-										@docclinic.clinic.address.area
-										@docclinic.clinic.address.city
-										@docclinic.clinic.address.state</h5>
-									<i class="fa fa-phone-square"></i> @docclinic.clinic.contactNo<br><br>
-									</div>
-									<div class="col-md-4">
-										<a class="btn btn-success btn-xs" style="float:right" href="/static/new/appointment">Book Appointment</a>
-									</div>
-								</div>
-								<div class="row" style="padding-left:10px">
-									@for((key,value)<-docclinic.getScheduleMap()){
-										@if(docclinic.getScheduleMap().get(key)!=null){
-											<span class="col-md-2" style="font-size:12px;width:14%">@key</span>
-										}else{
-										<span class="badge col-md-2" style="font-size:12px;width:14%">@key</span>
-										}
-									}
-								</div>	
-									<div class="row" style="padding-left:10px">
-										@for((key,value)<-docclinic.getScheduleMap()){
-											@if(docclinic.getScheduleMap().get(key)!=null){
-												<span class="col-md-2" style="font-size:12px;width:14%">@docclinic.getScheduleMap().get(key)</span>
-											}else{
-											<span class="badge col-md-2" style="font-size:12px;width:14%"></span>
-											}
-										}
-									</div>
-							</div>				
-						}
+						
 					} 
 				</div>
 			</div>
 		</div>
 	<br>
 </td>
+				@if(index == doctorList.size()-1){
+            </tr>
+          }
+          }
 
-	</tr>
-		
-			}
-		}
-}
 </table>	
+}
 		<div class="modal fade" id="myModal11" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
   		<div class="modal-dialog" style="padding-top:200px">
     	<div class="modal-content" style="padding-left:20px">
