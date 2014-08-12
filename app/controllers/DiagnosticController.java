@@ -220,9 +220,7 @@ public class DiagnosticController extends Controller {
 		final DiagnosticCentre diagnosticCentre = DiagnosticCentre.find.byId(diagnosticId);
 		Logger.info("before list size="+diagnosticCentre.profileImageList.size());
 		final FileEntity image = FileEntity.find.byId(imageId);
-
 		diagnosticCentre.profileImageList.remove(image);
-
 		diagnosticCentre.update();
 		//image.delete();
 		Logger.info("after list size="+diagnosticCentre.profileImageList.size());
@@ -338,17 +336,8 @@ public class DiagnosticController extends Controller {
 	public static Result downloadDiagnosticReport(Long reportId,Long diagnosticInfoId){
 		DiagnosticCentrePrescriptionInfo diagnosticCentrePrescriptionInfo = DiagnosticCentrePrescriptionInfo.find.byId(diagnosticInfoId);
 		FileEntity fileEntity = FileEntity.find.byId(reportId);
-		
 		response().setContentType("application/x-download");
 		response().setHeader("Content-disposition","attachment; filename="+fileEntity.fileName);
-		/*final File file = new File(fileEntity.fileName);
-		Logger.info(""+fileEntity.fileName);
-		try {
-			FileUtils.writeByteArrayToFile(file, fileEntity.byteContent);
-		} catch (final IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}*/
 		return ok(fileEntity.byteContent).as("application/pdf");
 	}
 	/**
@@ -361,6 +350,8 @@ public class DiagnosticController extends Controller {
 		FileEntity fileEntity = FileEntity.find.byId(reportId);
 		diagnosticCentrePrescriptionInfo.fileEntities.remove(fileEntity);
 		diagnosticCentrePrescriptionInfo.update();
+		fileEntity.delete();
+		
 		return redirect(routes.DiagnosticController.getDiagnosticCentrePrescriptions("any"));
 	}
 	/**
