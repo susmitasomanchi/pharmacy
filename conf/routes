@@ -157,6 +157,7 @@ GET /pharmacy/:slugUrl										controllers.PublicController.getPharmacyWithSlug
 POST   /diagnostic/upload-diagnostic-images             				controllers.DiagnosticController.uploadDiagnosticImageProcess()
 GET   	/diagnostic/search/:searchString                  				controllers.PublicController.processSearchDiagnosticCentres(searchString: String)
 GET    /diagnostic/search												controllers.PublicController.searchDiagnosticPage()
+GET    /diagnostic/remove-report/:reportId/:diagnosticInfoId						  		controllers.DiagnosticController.removeDiagnosticReport(reportId: Long,diagnosticInfoId: Long)											
 GET		/diagnostic/add-to-user/:diagnosticId							controllers.PublicController.addDiagnosticCentreToLoggedInUser(diagnosticId: Long)
 GET 	/diagnostic/prescriptions										controllers.DiagnosticController.getDiagnosticCentrePrescriptions(status: String ?= "any")
 GET		/diagnostic/order-confirmed/:diagInfoId							controllers.DiagnosticController.orderServed(diagInfoId: Long)
@@ -167,7 +168,7 @@ POST    /diagnostic/upload-diagnostic-Report/:diagInfoId		  			controllers.Diagn
 GET     /diagnostic/todays-appointments									controllers.DiagnosticController.TodaysDiagnosticPrescriptions()
 POST    /diagnostic/from-to-prescription									controllers.DiagnosticController.getFromToDatePrescriptions()
 GET    /diagnostic/download-report/:reportId/:diagnosticInfoId						  		controllers.DiagnosticController.downloadDiagnosticReport(reportId: Long,diagnosticInfoId: Long)
-GET    /diagnostic/remove-report/:reportId/:diagnosticInfoId						  		controllers.DiagnosticController.removeDiagnosticReport(reportId: Long,diagnosticInfoId: Long)
+
 #slug url (must be the last route in /diagnostic/)
 GET 	/diagnostic/:slugUrl								controllers.PublicController.getDiagnosticCentreWithSlug(slugUrl: String)
 

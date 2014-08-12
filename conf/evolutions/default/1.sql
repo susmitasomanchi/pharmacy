@@ -200,6 +200,7 @@ create table diagnostic_centre (
 
 create table diagnostic_centre_prescription_info (
   id                        bigint not null,
+  s                         varchar(255),
   diagnostic_centre_id      bigint,
   prescription_id           bigint,
   diagnostic_centre_prescrition_status varchar(9),

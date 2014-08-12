@@ -125,7 +125,7 @@ Mark as <a href="@routes.DiagnosticController.orderServed(diagnosticCentrePrescr
       <a href="@routes.DiagnosticController.downloadDiagnosticReport(file.id,diagnosticCentrePrescriptionInfo.id)">@{index+1}. @file.fileName</a>
 
 
-      &nbsp;<a style="color:red;" href="downloadDiagnosticReport(file.id,diagnosticCentrePrescriptionInfo.id)"><i class="fa fa-times"></i></a>
+      &nbsp;<a style="color:red;" href="@routes.DiagnosticController.removeDiagnosticReport(file.id,diagnosticCentrePrescriptionInfo.id)"><i class="fa fa-times"></i></a>
 
   </li>
 }

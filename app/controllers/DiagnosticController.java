@@ -309,10 +309,10 @@ public class DiagnosticController extends Controller {
 	 */
 	@ConfirmAppUser
 		public static Result uploadDiagnosticReportProcess(Long DiagnosticInfoId) {
-			DiagnosticCentrePrescriptionInfo diagnosticCentrePrescriptionInfo= DiagnosticCentrePrescriptionInfo.find.byId(DiagnosticInfoId);
+			DiagnosticCentrePrescriptionInfo diagnosticCentrePrescriptionInfo = DiagnosticCentrePrescriptionInfo.find.byId(DiagnosticInfoId);
 		if (request().body().asMultipartFormData().getFile("file") != null) {
 			final FilePart report = request().body().asMultipartFormData().getFile("file");
-				FileEntity fileEntity = new FileEntity();
+			final FileEntity fileEntity = new FileEntity();
 			try {
 				fileEntity.mimeType = report.getContentType();
 				fileEntity.fileName = report.getFilename();
@@ -323,7 +323,7 @@ public class DiagnosticController extends Controller {
 				e.printStackTrace();
 			}
 			diagnosticCentrePrescriptionInfo.update();
-//			flash().put("alert", new Alert("alert-success", "Report("+fileEntity.fileName+") Has Been Uploaded for the "+diagnosticCentrePrescriptionInfo.prescription.patient.appUser.name).toString());			
+			//flash().put("alert", new Alert("alert-success", "Uploaded report("+fileEntity.fileName+") for patient, "+diagnosticCentrePrescriptionInfo.prescription.patient.appUser.name).toString());			
 		}
 
 		return redirect(routes.DiagnosticController.getDiagnosticCentrePrescriptions("any"));
@@ -341,15 +341,15 @@ public class DiagnosticController extends Controller {
 		
 		response().setContentType("application/x-download");
 		response().setHeader("Content-disposition","attachment; filename="+fileEntity.fileName);
-		final File file = new File(fileEntity.fileName);
+		/*final File file = new File(fileEntity.fileName);
 		Logger.info(""+fileEntity.fileName);
 		try {
 			FileUtils.writeByteArrayToFile(file, fileEntity.byteContent);
 		} catch (final IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
-		}
-		return redirect(routes.DiagnosticController.getDiagnosticCentrePrescriptions("any"));
+		}*/
+		return ok(fileEntity.byteContent).as("application/pdf");
 	}
 	/**
 	 * @author : lakshmi
