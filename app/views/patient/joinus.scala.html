@@ -147,6 +147,13 @@
 <script>
 
 function validateAndSubmit(e){
+
+	if($('#inputPassword').val().trim().length < 6){
+		e.preventDefault();
+		alert('Password should be atleast 6 characters long.');
+		return;
+	}
+	
 	if(
 		($('#inputConfirmPassword').val() == $('#inputPassword').val())
 		){
@@ -154,6 +161,7 @@ function validateAndSubmit(e){
 	else{
 		e.preventDefault();
 		alert('Passwords Do Not Match!');
+		return;
 	}
 }
 

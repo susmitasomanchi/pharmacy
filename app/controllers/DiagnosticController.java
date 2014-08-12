@@ -9,8 +9,6 @@ import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
-import javax.activation.MimetypesFileTypeMap;
-
 import models.Address;
 import models.Alert;
 import models.FileEntity;
@@ -24,8 +22,6 @@ import models.diagnostic.DiagnosticReportStatus;
 import models.diagnostic.DiagnosticTest;
 import models.diagnostic.ShowCasedService;
 import models.patient.Patient;
-import models.pharmacist.PharmacyPrescriptionInfo;
-import models.pharmacist.PharmacyPrescriptionStatus;
 
 import org.apache.commons.io.FileUtils;
 import org.joda.time.DateTime;
@@ -357,6 +353,7 @@ public class DiagnosticController extends Controller {
 				.findList();
 		return ok(views.html.diagnostic.diagnosticPrescriptionList.render(diagnosticCentrePrescriptionInfos,"",false));
 	}
+
 	/**
 	 * @author lakshmi
 	 * Action to Display Todays Prescriptions requested to logged-in ADMIN_DIAGREP
@@ -400,6 +397,22 @@ public class DiagnosticController extends Controller {
 	}
 
 
+	/**
+	 * Action to Display A Prescription to the logged in Diag_Admin
+	 * GET 	/diagnostic/prescription/:dpInfoId
+	 */
+	@ConfirmAppUser
+	public static Result showDiagnosticPrescription(final Long dpInfoId){
+		final DiagnosticCentrePrescriptionInfo dpInfo = DiagnosticCentrePrescriptionInfo.find.byId(dpInfoId);
+		// Server side validation
+		if((dpInfo.diagnosticCentre.id.longValue() != LoginController.getLoggedInUser().getDiagnosticRepresentative().diagnosticCentre.id.longValue()) || (!LoginController.getLoggedInUser().role.equals(Role.ADMIN_DIAGREP))){
+			session().clear();
+			return redirect(routes.LoginController.processLogout());
+		}
+
+		return ok(views.html.diagnostic.diagnosticCentrePrescription.render(dpInfo));
+
+	}
 
 
 

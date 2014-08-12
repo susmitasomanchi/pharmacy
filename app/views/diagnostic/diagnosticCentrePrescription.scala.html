@@ -1,0 +1,86 @@
+@(dpInfo:models.diagnostic.DiagnosticCentrePrescriptionInfo)
+@import play.i18n._
+@import helper.twitterBootstrap._
+@import helper._
+
+@main("Prescription"){
+
+<div class="row" style="padding-left:20px; padding-right:100px;">
+
+<h3>Dr. @dpInfo.prescription.doctor.appUser.name <span class="pull-right" style="font-size:18px;">@dpInfo.prescription.prescriptionDate.format("dd-MMM-yyyy HH:mm")</span></h3>
+<h4>@dpInfo.prescription.doctor.degree</h4>
+<h4>@dpInfo.prescription.doctor.specialization</h4>
+
+<hr>
+
+<h4 style="margin:0px; padding:0px;">@dpInfo.prescription.patient.appUser.name</h4>
+<p style="margin:0px; padding:0px;">Age: @dpInfo.prescription.patient.appUser.getAge()</p>
+<p>Sex: @org.apache.commons.lang3.text.WordUtils.capitalizeFully(dpInfo.prescription.patient.appUser.sex.toString())</p>
+
+<br>
+
+<h4><u>Problem Statement:</u></h4>
+<p>@dpInfo.prescription.problemStatement</p>
+<br>
+
+<h4><u>Prognosis:</u></h4>
+<p>@dpInfo.prescription.prognosis</p>
+<br>
+
+<div class="row">
+<div class="col-md-6">
+<h4><u>Medicines:</u></h4>
+<table class="table table-bordered table-condensed">
+<thead>
+	<tr>
+		<th>S No</th>
+		<th>Medicine</th>
+		<th>Dosage</th>
+		<th>Remarks</th>
+	</tr>
+</thead>
+<tbody>
+	@for((medicine, index) <- dpInfo.prescription.medicineLineItemList.zipWithIndex){
+	<tr>
+		<td>@(index+1)</td>
+		<td>@medicine.medicineFullName</td>
+		<td>@medicine.dosage</td>
+		<td>@medicine.remarks</td>
+	</tr>
+	}
+</tbody>
+</table>
+</div>
+
+<div class="col-md-6">
+<h4><u>Diagnostic Tests:</u></h4>
+<table class="table table-bordered table-condensed">
+<thead>
+	<tr>
+		<th>S No</th>
+		<th>Test</th>
+		<th>Remarks</th>
+	</tr>
+</thead>
+<tbody>
+	@for((test, index) <- dpInfo.prescription.diagnosticTestLineItemList.zipWithIndex){
+	<tr>
+		<td>@(index+1)</td>
+		<td>@test.fullNameOfDiagnosticTest</td>
+		<td>@test.remarks</td>
+	</tr>
+	}
+</tbody>
+</table>
+</div>
+</div>
+
+<h4><u>Remarks:</u></h4>
+<p>@dpInfo.prescription.remarks</p>
+</div>
+
+<hr>
+
+
+
+}
