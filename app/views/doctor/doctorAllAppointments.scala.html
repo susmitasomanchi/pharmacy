@@ -48,7 +48,7 @@
 				<td>@appointment.appointmentTime.format("dd-MMM-yy HH:mm")</td>
 				</div>
 				<div class="col-md-3 column">
-				<td>@{appointment.requestedBy.name}&nbsp;(@appointment.requestedBy.sex.toString().substring(0,1)/@appointment.requestedBy.getAge())</td>
+				<td>@{appointment.requestedBy.name}&nbsp;(@appointment.requestedBy.getPatient().getSexAndAge())</td>
 				</div>
 				<div class="col-md-3 column">
 				<td>
@@ -101,7 +101,7 @@
 				<td>@appointment.appointmentTime.format("dd-MMM-yy HH:mm")</td>
 				</div>
 				<div class="col-md-3 column">
-				<td>@{appointment.requestedBy.name}&nbsp;(@appointment.requestedBy.sex.toString().substring(0,1)/@appointment.requestedBy.getAge())</td>
+				<td>@{appointment.requestedBy.name}&nbsp;(@appointment.requestedBy.getPatient().getSexAndAge())</td>
 				</div>
 				<div class="col-md-3 column">
 				<td>

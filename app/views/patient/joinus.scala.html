@@ -121,19 +121,23 @@
     
     <div class="form-group">
       <label for="inputDOB" class="col-lg-2 control-label">Birth Date*</label>
-      <div class="col-lg-10">
-		<div class="input-append date" id="dp3" data-date="01-01-1990" data-date-format="dd-mm-yyyy">
+      <div class="col-lg-4">
+		 <input type="date" name="dob" class="form-control" id="from">
+		 <span class="add-on"><i class="icon-th"></i></span>
+    </div>
+    @*
 			<input class="span2 dob-datepicker" size="16" type="text" name="dob" value="01-01-1990">
 			<span class="add-on"><i class="icon-th"></i></span>
 		</div>
       </div>
+      *@
     </div>
     
     <input type="hidden" name="role" value="PATIENT">
     
     <div class="form-group">
       <div class="col-lg-10 col-lg-offset-2">
-        <input type="submit" onclick="validateAndSubmit();" class="btn btn-primary" value="Submit" >
+        <input type="submit" onclick="return validateAndSubmit();" class="btn btn-primary" value="Submit" >
       </div>
     </div>
     
@@ -146,23 +150,15 @@
     
 <script>
 
-function validateAndSubmit(e){
-
-	if($('#inputPassword').val().trim().length < 6){
-		e.preventDefault();
-		alert('Password should be atleast 6 characters long.');
-		return;
-	}
-	
-	if(
-		($('#inputConfirmPassword').val() == $('#inputPassword').val())
-		){
-	}
-	else{
-		e.preventDefault();
-		alert('Passwords Do Not Match!');
-		return;
-	}
+function validateAndSubmit(){	
+  if($("#inputPassword").val().trim().length < 6){
+    alert("Password Should Be Atleast Six Characters Long.");
+     return false;
+      }
+  if($("#inputPassword").val().trim() != $("#inputConfirmPassword").val().trim()){
+    alert("Passwords Do Not Match!");
+     return false;
+      }
 }
 
 </script>    

@@ -20,6 +20,8 @@ import play.db.ebean.Model;
 @SuppressWarnings("serial")
 @Entity
 public class DiagnosticCentrePrescriptionInfo extends BaseEntity{
+	String s;
+	
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO)
 	public  Long id;

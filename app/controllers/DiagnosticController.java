@@ -9,6 +9,8 @@ import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
+import javax.activation.MimetypesFileTypeMap;
+
 import models.Address;
 import models.Alert;
 import models.FileEntity;
@@ -80,16 +82,16 @@ public class DiagnosticController extends Controller {
 				final FileEntity fileEntity = new FileEntity();
 				final FilePart image = request().body().asMultipartFormData().getFile("profileImage");
 				if(image.getContentType().equalsIgnoreCase("image/bmp")||image.getContentType().equalsIgnoreCase("image/png")||image.getContentType().equalsIgnoreCase("image/jpeg")||image.getContentType().equalsIgnoreCase("image/gif")){
-				fileEntity.fileName = image.getFilename();
-				fileEntity.mimeType = image.getContentType();
-				fileEntity.byteContent = Files.toByteArray(image.getFile());
-				fileEntity.save();
-				final Long imageId=fileEntity.id;
-				diagnosticCentre.profileImageList.add(FileEntity.find.byId(imageId));
-				diagnosticCentre.update();
-			}else{
-				flash().put("alert", new Alert("alert-info", "Sorry. Images Should Be In The Following Formats .JPEG,.jpg,.png,.gif,.bmp").toString());
-			}
+					fileEntity.fileName = image.getFilename();
+					fileEntity.mimeType = image.getContentType();
+					fileEntity.byteContent = Files.toByteArray(image.getFile());
+					fileEntity.save();
+					final Long imageId=fileEntity.id;
+					diagnosticCentre.profileImageList.add(FileEntity.find.byId(imageId));
+					diagnosticCentre.update();
+				}else{
+					flash().put("alert", new Alert("alert-info", "Sorry. Images Should Be In The Following Formats .JPEG,.jpg,.png,.gif,.bmp").toString());
+				}
 			} else {
 				Logger.info("BG IMAGE NULL");
 			}
@@ -219,9 +221,7 @@ public class DiagnosticController extends Controller {
 		final DiagnosticCentre diagnosticCentre = DiagnosticCentre.find.byId(diagnosticId);
 		Logger.info("before list size="+diagnosticCentre.profileImageList.size());
 		final FileEntity image = FileEntity.find.byId(imageId);
-
 		diagnosticCentre.profileImageList.remove(image);
-
 		diagnosticCentre.update();
 		//image.delete();
 		Logger.info("after list size="+diagnosticCentre.profileImageList.size());
@@ -261,7 +261,7 @@ public class DiagnosticController extends Controller {
 	 */
 	@ConfirmAppUser
 	public static Result orderServed(final Long DiagnosticInfoId) {
-		final DiagnosticCentrePrescriptionInfo diagnosticCentrePrescriptionInfo= DiagnosticCentrePrescriptionInfo.find.byId(DiagnosticInfoId);
+		final DiagnosticCentrePrescriptionInfo diagnosticCentrePrescriptionInfo = DiagnosticCentrePrescriptionInfo.find.byId(DiagnosticInfoId);
 		diagnosticCentrePrescriptionInfo.diagnosticCentrePrescritionStatus = DiagnosticCentrePrescritionStatus.SERVED;
 		diagnosticCentrePrescriptionInfo.update();
 		return redirect(routes.DiagnosticController.getDiagnosticCentrePrescriptions("any"));
@@ -308,7 +308,10 @@ public class DiagnosticController extends Controller {
 	 */
 	@ConfirmAppUser
 	public static Result uploadDiagnosticReportProcess(final Long DiagnosticInfoId) {
-		final DiagnosticCentrePrescriptionInfo diagnosticCentrePrescriptionInfo= DiagnosticCentrePrescriptionInfo.find.byId(DiagnosticInfoId);
+		final DiagnosticCentrePrescriptionInfo diagnosticCentrePrescriptionInfo = DiagnosticCentrePrescriptionInfo.find.byId(DiagnosticInfoId);
+
+		//@TODO: server side check for status of dpInfo
+
 		if (request().body().asMultipartFormData().getFile("file") != null) {
 			final FilePart report = request().body().asMultipartFormData().getFile("file");
 			final FileEntity fileEntity = new FileEntity();
@@ -322,10 +325,44 @@ public class DiagnosticController extends Controller {
 				e.printStackTrace();
 			}
 			diagnosticCentrePrescriptionInfo.update();
+			flash().put("alert", new Alert("alert-success", "Uploaded report("+fileEntity.fileName+") for patient, "+diagnosticCentrePrescriptionInfo.prescription.patient.appUser.name+"("+diagnosticCentrePrescriptionInfo.prescription.patient.getSexAndAge()+")").toString());
 		}
+		return redirect(routes.DiagnosticController.getDiagnosticCentrePrescriptions("any"));
+	}
 
-		return ok(views.html.diagnostic.receivedTests.render(diagnosticCentrePrescriptionInfo));
 
+	/**
+	 * @author : lakshmi
+	 * GET/diagnostic/download
+	 * downloading the Diagnostic report
+	 */
+	public static Result downloadDiagnosticReport(final Long reportId,final Long diagnosticInfoId){
+		final DiagnosticCentrePrescriptionInfo diagnosticCentrePrescriptionInfo = DiagnosticCentrePrescriptionInfo.find.byId(diagnosticInfoId);
+
+		//@TODO: server side check for logged in user
+
+		final FileEntity fileEntity = FileEntity.find.byId(reportId);
+		response().setContentType("application/x-download");
+		response().setHeader("Content-disposition","attachment; filename="+fileEntity.fileName);
+		return ok(fileEntity.byteContent).as("application/pdf");
+	}
+
+
+	/**
+	 * @author : lakshmi
+	 * GET/diagnostic/remove-report
+	 * removing the report from the list
+	 */
+	public static Result removeDiagnosticReport(final Long reportId,final Long diagnosticInfoId){
+
+		//@TODO: server side check for status of dpInfo
+
+		final DiagnosticCentrePrescriptionInfo diagnosticCentrePrescriptionInfo = DiagnosticCentrePrescriptionInfo.find.byId(diagnosticInfoId);
+		final FileEntity fileEntity = FileEntity.find.byId(reportId);
+		diagnosticCentrePrescriptionInfo.fileEntities.remove(fileEntity);
+		diagnosticCentrePrescriptionInfo.update();
+		fileEntity.delete();
+		return redirect(routes.DiagnosticController.getDiagnosticCentrePrescriptions("any"));
 	}
 
 
