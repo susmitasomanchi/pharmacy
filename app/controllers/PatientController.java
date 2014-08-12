@@ -43,7 +43,7 @@ public class PatientController extends Controller {
 	 * Action to display currently logged in Patient' Doctor List
 	 *  GET  /user/my-doctors
 	 */
-	@ConfirmAppUser
+	//@ConfirmAppUser
 	public static Result myFavouriteDoctors() {
 		final Patient patient=LoginController.getLoggedInUser().getPatient();
 		return ok(views.html.patient.fav_doctors.render(patient.patientDoctorInfoList));
@@ -119,7 +119,7 @@ public class PatientController extends Controller {
 
 	}
 
-	/*
+	/**
 	 * displaying diagnostic centers which are there in patient favorite list
 	 */
 	@ConfirmAppUser
@@ -133,7 +133,7 @@ public class PatientController extends Controller {
 
 	}
 
-	/*
+	/**
 	 * removing diagnostic center from patient favorite diagnostic center list
 	 */
 	@ConfirmAppUser
@@ -224,8 +224,9 @@ public class PatientController extends Controller {
 
 
 	/**
-	 * @author lakshmi Action to list out favorite Diagnostic Centre of Patient
-	 *         of loggedin DOCTOR GET/patient/favorite-diagnostic-centres
+	 * @author lakshmi 
+	 * Action to list out favorite Diagnostic Centre of loggedIn Patient
+	 * GET/patient/favorite-diagnostic-centres
 	 */
 	@ConfirmAppUser
 	public static Result patientFavoriteDiagnosticCentres() {
@@ -266,7 +267,7 @@ public class PatientController extends Controller {
 	}
 
 	/**@author lakshmi
-	 * Action to show all prescription created by loggedInPatient
+	 * Action to show all prescription Of loggedInPatient
 	 *GET /user/prescriptions
 	 */
 	@ConfirmAppUser
@@ -278,7 +279,7 @@ public class PatientController extends Controller {
 	}
 	/**
 	 * @author lakshmi
-	 * Action to show the prescription to the loggedInPatient
+	 * Action to show the prescription content to the loggedInPatient
 	 * GET/user/show-prescription/:prescriptionId
 	 */
 	@ConfirmAppUser

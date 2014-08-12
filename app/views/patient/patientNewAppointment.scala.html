@@ -285,7 +285,8 @@ console.log('localhost:9000/patient/display-appointment/@doctorClinic.id/'+date.
 $("#myModal").on('shown.bs.modal',function(evt){
 $("#model-content").html(
 '<form action="/patient/process-appointment/'+$(evt.relatedTarget).attr("id")+'" method="post" id="datetimeform">'
-+'<p> Are you sure you wish to book an appointment on Sunday, 10-Aug-2014 at '
++'<p> Are you sure you wish to book an appointment on'
++$(evt.relatedTarget).attr("detail")
 +$(evt.relatedTarget).attr("date")
 +' at '
 +$(evt.relatedTarget).attr("clinic")

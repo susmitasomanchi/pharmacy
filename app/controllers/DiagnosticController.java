@@ -50,7 +50,7 @@ public class DiagnosticController extends Controller {
 
 	/**
 	 * @author lakshmi
-	 * Action for uploading DiagnosticCentre backgroundImage and profile
+	 * Action for ing DiagnosticCentre backgroundImage and profile
 	 * Images of of DiagnosticCentre of the loggedIn ADMIN_DIAGREP
 	 * POST	/diagnostic/upload-diagnostic-images
 	 */
@@ -65,16 +65,21 @@ public class DiagnosticController extends Controller {
 				Logger.warn("logged in DiagnosticRep: "+LoginController.getLoggedInUser().getDiagnosticRepresentative().id);
 				return redirect(routes.LoginController.processLogout());
 			}
-
+			//final String pattern="([^\\s]+(\\.(?i)(JPEG|jpg|png|gif|bmp))$)";
 			if (request().body().asMultipartFormData().getFile("backgroundImage") != null) {
-				final File image = request().body().asMultipartFormData().getFile("backgroundImage").getFile();
-				diagnosticCentre.backgroudImage = Files.toByteArray(image);
+				final FilePart image = request().body().asMultipartFormData().getFile("backgroundImage");
+				if(image.getContentType().equalsIgnoreCase("image/bmp")||image.getContentType().equalsIgnoreCase("image/png")||image.getContentType().equalsIgnoreCase("image/jpeg")||image.getContentType().equalsIgnoreCase("image/gif")){
+					diagnosticCentre.backgroudImage = Files.toByteArray(image.getFile());
+				}else{
+					flash().put("alert", new Alert("alert-info", "Sorry. Images Should Be In The Following Formats .JPEG,.jpg,.png,.gif,.bmp").toString());
+				}
 				diagnosticCentre.update();
 			}
 
 			if (request().body().asMultipartFormData().getFile("profileImage") != null) {
 				final FileEntity fileEntity = new FileEntity();
 				final FilePart image = request().body().asMultipartFormData().getFile("profileImage");
+				if(image.getContentType().equalsIgnoreCase("image/bmp")||image.getContentType().equalsIgnoreCase("image/png")||image.getContentType().equalsIgnoreCase("image/jpeg")||image.getContentType().equalsIgnoreCase("image/gif")){
 				fileEntity.fileName = image.getFilename();
 				fileEntity.mimeType = image.getContentType();
 				fileEntity.byteContent = Files.toByteArray(image.getFile());
@@ -82,6 +87,9 @@ public class DiagnosticController extends Controller {
 				final Long imageId=fileEntity.id;
 				diagnosticCentre.profileImageList.add(FileEntity.find.byId(imageId));
 				diagnosticCentre.update();
+			}else{
+				flash().put("alert", new Alert("alert-info", "Sorry. Images Should Be In The Following Formats .JPEG,.jpg,.png,.gif,.bmp").toString());
+			}
 			} else {
 				Logger.info("BG IMAGE NULL");
 			}
@@ -90,9 +98,7 @@ public class DiagnosticController extends Controller {
 			Logger.error("");
 			flash().put("alert", new Alert("alert-danger", "Sorry. Something went wrong. Please try again.").toString());
 		}
-
 		//return ok(views.html.pharmacist.pharmacy_profile.render(pharmacy.inventoryList, pharmacy));
-
 		return redirect(routes.UserActions.dashboard());
 
 	}

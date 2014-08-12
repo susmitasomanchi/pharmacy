@@ -699,8 +699,7 @@ public class DoctorController extends Controller {
 									Logger.info("  " + calendar.getTime());
 									final Appointment appointment = new Appointment();
 									appointment.appointmentStatus = AppointmentStatus.AVAILABLE;
-									appointment.appointmentTime = calendar
-											.getTime();
+									appointment.appointmentTime = calendar.getTime();
 									appointment.doctorClinicInfo = docClinicInfo;
 									appointment.save();
 									calendar.add(Calendar.MINUTE,
@@ -1352,6 +1351,7 @@ public class DoctorController extends Controller {
 		SMSService.sendConfirmationSMS(appUser);
 		flash().put("alert",new Alert("alert-info","A confirmation code has been SMSed to your Mobile Number ("+appUser.mobileNumber+")").toString());
 		return redirect(routes.UserController.confirmAppUserPage());
+
 	}
 
 	/**
@@ -1407,7 +1407,6 @@ public class DoctorController extends Controller {
 		}
 	}
 
-
 	/**
 	 * @author Mitesh
 	 *  Action to send a verification email
@@ -1418,6 +1417,7 @@ public class DoctorController extends Controller {
 
 		final boolean result;
 		final AppUser loggedInUser = LoginController.getLoggedInUser();
+
 
 		Promise.promise(new Function0<Integer>() {
 
@@ -1599,5 +1599,4 @@ public class DoctorController extends Controller {
 			return ok("-1");
 		}
 	}
-
 }

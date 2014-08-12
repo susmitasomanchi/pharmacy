@@ -4,7 +4,13 @@
 @main(pharmacy.name) {
 
 <script src="http://maps.googleapis.com/maps/api/js?sensor=false"></script>
-
+<script>
+var u = $("#au").uploader({
+    id: 'Uploader1',
+    restrictions: {fileMask: '*.jpg;*.jpeg;*.png;*.gif;*.bmp'},
+    messages: {fileNameNotAllowed: 'You can add only images.'}
+});
+</script>
 <script>
 	var i = 0;
 	function addfiles() {
