@@ -175,7 +175,7 @@
     <input type="hidden" name="role" value="ADMIN_PHARMACIST">
     <div class="form-group">
       <div class="col-lg-10 col-lg-offset-2">
-        <input type="submit" onclick="validateAndSubmit();" class="btn btn-primary" value="Submit" >
+        <input type="submit" onclick="return validateAndSubmit();" class="btn btn-primary" value="Submit" >
       </div>
     </div>
   </fieldset>
@@ -186,16 +186,15 @@
     
 <script>
 
-function validateAndSubmit(e){
-	if(
-		($('#inputConfirmPassword').val() == $('#inputPassword').val())
-		){
-		//$('#doctorForm').submit();			
-	}
-	else{
-		e.preventDefault();
-		alert('Passwords Do Not Match!');
-	}
+function validateAndSubmit(){
+	  if($('#inputPassword').val().trim().length < 6){
+    alert("Password Should Be Atleast Six Characters Long.");
+    return false;
+      }
+  if($('#inputPassword').val().trim() != $('#inputConfirmPassword').val().trim()){
+    alert("Passwords Do Not Match!");
+     return false;
+      }     
 }
 
 </script>    

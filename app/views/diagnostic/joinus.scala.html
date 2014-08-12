@@ -96,7 +96,7 @@
     <div class="form-group">
       <label for="inputPassword" class="col-lg-2 control-label">Password*</label>
       <div class="col-lg-10">
-        <input type="password" class="form-control" name="password" id="inputPassword" placeholder="Password" required>
+        <input type="password" class="form-control" name="password" id="inputPassword" minlength='6' placeholder="Password" required>
       </div>
     </div>
     
@@ -174,29 +174,27 @@
     
     <input type="hidden" name="role" value="ADMIN_DIAGREP">
     <div class="form-group">
-      <div class="col-lg-10 col-lg-offset-2">
-        <input type="submit" onclick="validateAndSubmit();" class="btn btn-primary" value="Submit" >
+      <div class="col-lg-10 col-lg-offset-3">
+        <input type="submit" onclick="return validateAndSubmit();" class="btn btn-primary" value="Submit" >
       </div>
     </div>
   </fieldset>
 </form>
 	 </div>
     </div>
-    
-    
+      
 <script>
 
-function validateAndSubmit(e){
-	if(
-		($('#inputConfirmPassword').val() == $('#inputPassword').val())
-		){
-		//$('#doctorForm').submit();			
-	}
-	else{
-		e.preventDefault();
-		alert('Passwords Do Not Match!');
-	}
-}
+function validateAndSubmit(){
+  if($("#inputPassword").val().trim().length < 6){
+    alert("Password Should Be Atleast Six Characters Long.");
+    return false;
+      }
+  if($("#inputPassword").val().trim() != $("#inputConfirmPassword").val().trim()){
+    alert("Passwords Do Not Match!");
+    return false;
+      }
+ }
 
 </script>    
 	    

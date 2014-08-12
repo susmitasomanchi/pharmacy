@@ -323,13 +323,46 @@ public class DiagnosticController extends Controller {
 				e.printStackTrace();
 			}
 			diagnosticCentrePrescriptionInfo.update();
+//			flash().put("alert", new Alert("alert-success", "Report("+fileEntity.fileName+") Has Been Uploaded for the "+diagnosticCentrePrescriptionInfo.prescription.patient.appUser.name).toString());			
 		}
 
-		return ok(views.html.diagnostic.receivedTests.render(diagnosticCentrePrescriptionInfo));
+		return redirect(routes.DiagnosticController.getDiagnosticCentrePrescriptions("any"));
 
 	}
-
-
+	
+	/**
+	 * @author : lakshmi
+	 * GET/diagnostic/download
+	 * downloading the Diagnostic report
+	 */
+	public static Result downloadDiagnosticReport(Long reportId,Long diagnosticInfoId){
+		DiagnosticCentrePrescriptionInfo diagnosticCentrePrescriptionInfo = DiagnosticCentrePrescriptionInfo.find.byId(diagnosticInfoId);
+		FileEntity fileEntity = FileEntity.find.byId(reportId);
+		
+		response().setContentType("application/x-download");
+		response().setHeader("Content-disposition","attachment; filename="+fileEntity.fileName);
+		final File file = new File(fileEntity.fileName);
+		Logger.info(""+fileEntity.fileName);
+		try {
+			FileUtils.writeByteArrayToFile(file, fileEntity.byteContent);
+		} catch (final IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		return redirect(routes.DiagnosticController.getDiagnosticCentrePrescriptions("any"));
+	}
+	/**
+	 * @author : lakshmi
+	 * GET/diagnostic/remove-report
+	 * removing the report from the list
+	 */
+	public static Result removeDiagnosticReport(Long reportId,Long diagnosticInfoId){
+		DiagnosticCentrePrescriptionInfo diagnosticCentrePrescriptionInfo = DiagnosticCentrePrescriptionInfo.find.byId(diagnosticInfoId);
+		FileEntity fileEntity = FileEntity.find.byId(reportId);
+		diagnosticCentrePrescriptionInfo.fileEntities.remove(fileEntity);
+		diagnosticCentrePrescriptionInfo.update();
+		return redirect(routes.DiagnosticController.getDiagnosticCentrePrescriptions("any"));
+	}
 	/**
 	 * @author lakshmi
 	 * Action to Display Todays Prescriptions requested to logged-in ADMIN_PHARMACIST
@@ -907,27 +940,7 @@ public class DiagnosticController extends Controller {
 		return ok(views.html.diagnostic.diagnosticCentreTestProfile.render(dc));
 	}
 
-	/**
-	 * @author : lakshmi
-	 * 
-	 * @url:/download
-	 * 
-	 *description: downloading the Diagnostic report
-	 */
-	public static Result downloadFile() {
-		final Long id=(long) 1;
-		final DiagnosticReport diagReport = DiagnosticReport.find.byId(id);
-		response().setContentType("application/x-download");
-		response().setHeader("Content-disposition","attachment; filename="+diagReport.fileName);
-		final File file = new File(diagReport.fileName);
-		try {
-			FileUtils.writeByteArrayToFile(file, diagReport.fileContent);
-		} catch (final IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-		return ok(file);
-	}
+	
 
 	/**
 	 * @author lakshmi
