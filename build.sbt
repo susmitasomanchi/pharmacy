@@ -15,7 +15,8 @@ libraryDependencies ++= Seq(
   "org.apache.commons" % "commons-email" % "1.3.2",
   "commons-codec" % "commons-codec" % "1.7",
   "joda-time" % "joda-time" % "2.3",
-  "org.json" % "json" % "20140107"
+  "org.json" % "json" % "20140107",
+  "org.quartz-scheduler" % "quartz" % "2.2.1"
 )     
  
 play.Project.playJavaSettings
