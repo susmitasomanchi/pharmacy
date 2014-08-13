@@ -35,6 +35,12 @@ GET		/sitemap.xml								controllers.Application.sitemap()
 GET    /                                 			controllers.Application.index()
 POST   /login                             			controllers.LoginController.processLogin()
 GET    /logout                            			controllers.LoginController.processLogout()
+
+GET    /forgot-password                            	controllers.LoginController.forgotPassword()
+POST   /forgot-password                            	controllers.LoginController.processForgotPassword()
+GET	/forgot-reset-password/:userId/:forgotPasswordKey	controllers.LoginController.editForgotPassword(userId: Long, forgotPasswordKey:String)
+POST	/forgot-reset-password						controllers.LoginController.updateForgotPassword()
+
 GET    /edit-password                            	controllers.LoginController.editPassword()
 POST   /update-password                            	controllers.LoginController.updatePassword()
 
@@ -50,6 +56,7 @@ POST 	/user/verify-mobile-number					controllers.DoctorController.verifyMobileNu
 
 
 # Public Pages
+
 GET		/doctor/search									controllers.PublicController.searchDoctorsPage()
 GET		/doctor/search/:key								controllers.PublicController.processSearchDoctors(key: String)
 GET		/pharmacy/search/:searchString                  controllers.PublicController.processSearchPharmacies(searchString: String)
@@ -123,7 +130,7 @@ GET		/user/my-pharmacies						controllers.PatientController.patientFavoritePharm
 #GET		/user/appointments								controllers.PatientController.viewPatientAppointments()
 GET		/user/appointments									controllers.PatientController.viewMyAppointments()
 GET		/user/share-prescription							controllers.PatientController.sharePrescription(prId: Long, pharmacyId: String, diagnosticId: String)
-
+GET    /user/diagnostic-reports							 	controllers.PatientController.viewDiagnosticReports()
 
 
 POST	/pharmacy/upload-pharmacy-images					controllers.PharmacistController.uploadPharmacyImageProcess()
@@ -153,7 +160,6 @@ GET /pharmacy/:slugUrl										controllers.PublicController.getPharmacyWithSlug
 
 
 # Doagnostic Centre Module
-
 POST   /diagnostic/upload-diagnostic-images             				controllers.DiagnosticController.uploadDiagnosticImageProcess()
 GET   	/diagnostic/search/:searchString                  				controllers.PublicController.processSearchDiagnosticCentres(searchString: String)
 GET    /diagnostic/search												controllers.PublicController.searchDiagnosticPage()

@@ -34,6 +34,8 @@ public class PharmacyPrescriptionInfo extends BaseEntity{
 
 	public Date sharedDate;
 
+	public Date servedDate;
+
 	public Boolean patientsConsent = Boolean.FALSE;
 
 	public static Model.Finder<Long, PharmacyPrescriptionInfo> find = new Finder<Long, PharmacyPrescriptionInfo>(Long.class, PharmacyPrescriptionInfo.class);

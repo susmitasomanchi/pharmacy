@@ -263,7 +263,18 @@ public class DiagnosticController extends Controller {
 	public static Result orderServed(final Long DiagnosticInfoId) {
 		final DiagnosticCentrePrescriptionInfo diagnosticCentrePrescriptionInfo = DiagnosticCentrePrescriptionInfo.find.byId(DiagnosticInfoId);
 		diagnosticCentrePrescriptionInfo.diagnosticCentrePrescritionStatus = DiagnosticCentrePrescritionStatus.SERVED;
+		diagnosticCentrePrescriptionInfo.servedDate = new Date();
+		final Patient patient = diagnosticCentrePrescriptionInfo.prescription.patient;
+		for (final FileEntity report : diagnosticCentrePrescriptionInfo.fileEntities) {
+			if(!patient.diagnosticReportList.contains(report)){
+				patient.diagnosticReportList.add(report);
+				patient.update();
+			}
+		}
+		Logger.info("====="+diagnosticCentrePrescriptionInfo.prescription.patient.diagnosticReportList.size());
 		diagnosticCentrePrescriptionInfo.update();
+
+		Logger.info("=="+diagnosticCentrePrescriptionInfo.prescription.patient.diagnosticReportList.size());
 		return redirect(routes.DiagnosticController.getDiagnosticCentrePrescriptions("any"));
 	}
 
@@ -338,9 +349,25 @@ public class DiagnosticController extends Controller {
 	 */
 	public static Result downloadDiagnosticReport(final Long reportId,final Long diagnosticInfoId){
 		final DiagnosticCentrePrescriptionInfo diagnosticCentrePrescriptionInfo = DiagnosticCentrePrescriptionInfo.find.byId(diagnosticInfoId);
-
-		//@TODO: server side check for logged in user
-
+		// Server side validation
+		if(!(LoginController.getLoggedInUser().role.equals(Role.ADMIN_DIAGREP)
+				||
+				LoginController.getLoggedInUser().role.equals(Role.PATIENT))){
+			session().clear();
+			return redirect(routes.LoginController.processLogout());
+		}
+		if(LoginController.getLoggedInUser().role.equals(Role.ADMIN_DIAGREP)){
+			if((diagnosticCentrePrescriptionInfo.diagnosticCentre.id.longValue() != LoginController.getLoggedInUser().getDiagnosticRepresentative().diagnosticCentre.id.longValue())){
+				session().clear();
+				return redirect(routes.LoginController.processLogout());
+			}
+		}
+		if(LoginController.getLoggedInUser().role.equals(Role.PATIENT)){
+			if((diagnosticCentrePrescriptionInfo.prescription.patient.id.longValue() != LoginController.getLoggedInUser().getPatient().id.longValue()) ){
+				session().clear();
+				return redirect(routes.LoginController.processLogout());
+			}
+		}
 		final FileEntity fileEntity = FileEntity.find.byId(reportId);
 		response().setContentType("application/x-download");
 		response().setHeader("Content-disposition","attachment; filename="+fileEntity.fileName);
@@ -354,10 +381,12 @@ public class DiagnosticController extends Controller {
 	 * removing the report from the list
 	 */
 	public static Result removeDiagnosticReport(final Long reportId,final Long diagnosticInfoId){
-
-		//@TODO: server side check for status of dpInfo
-
 		final DiagnosticCentrePrescriptionInfo diagnosticCentrePrescriptionInfo = DiagnosticCentrePrescriptionInfo.find.byId(diagnosticInfoId);
+		// Server side validation
+		if((diagnosticCentrePrescriptionInfo.diagnosticCentre.id.longValue() != LoginController.getLoggedInUser().getDiagnosticRepresentative().diagnosticCentre.id.longValue()) || (!LoginController.getLoggedInUser().role.equals(Role.ADMIN_DIAGREP))){
+			session().clear();
+			return redirect(routes.LoginController.processLogout());
+		}
 		final FileEntity fileEntity = FileEntity.find.byId(reportId);
 		diagnosticCentrePrescriptionInfo.fileEntities.remove(fileEntity);
 		diagnosticCentrePrescriptionInfo.update();

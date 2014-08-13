@@ -39,6 +39,7 @@ create table app_user (
   mobile_number_confirmed   boolean,
   email_confirmation_key    TEXT,
   mobile_number_confirmation_key TEXT,
+  forgot_password_confirmation_key TEXT,
   last_update               timestamp not null,
   constraint ck_app_user_sex check (sex in ('FEMALE','OTHER','MALE')),
   constraint ck_app_user_role check (role in ('PATIENT','ADMIN_DIAGREP','DOCTOR','ADMIN','PHARMACIST','ADMIN_PHARMACIST','BLOG_ADMIN','ADMIN_MR','MR','DIAGREP','DOCTOR_SECRETARY')),
@@ -206,6 +207,7 @@ create table diagnostic_centre_prescription_info (
   diagnostic_centre_prescrition_status varchar(9),
   shared_by_id              bigint,
   shared_date               timestamp,
+  served_date               timestamp,
   patients_consent          boolean,
   last_update               timestamp not null,
   constraint ck_diagnostic_centre_prescription_info_diagnostic_centre_prescrition_status check (diagnostic_centre_prescrition_status in ('CANCELLED','RECEIVED','CONFIRMED','SERVED')),
@@ -593,6 +595,7 @@ create table pharmacy_prescription_info (
   pharmacy_prescription_status varchar(9),
   shared_by_id              bigint,
   shared_date               timestamp,
+  served_date               timestamp,
   patients_consent          boolean,
   last_update               timestamp not null,
   constraint ck_pharmacy_prescription_info_pharmacy_prescription_status check (pharmacy_prescription_status in ('RECEIVED','CONFIRMED','SERVED')),
@@ -791,6 +794,12 @@ create table patient_diagnostic_centre (
   patient_id                     bigint not null,
   diagnostic_centre_id           bigint not null,
   constraint pk_patient_diagnostic_centre primary key (patient_id, diagnostic_centre_id))
+;
+
+create table patient_file_entity (
+  patient_id                     bigint not null,
+  file_entity_id                 bigint not null,
+  constraint pk_patient_file_entity primary key (patient_id, file_entity_id))
 ;
 
 create table pharmacy_file_entity (
@@ -1155,6 +1164,10 @@ alter table patient_diagnostic_centre add constraint fk_patient_diagnostic_centr
 
 alter table patient_diagnostic_centre add constraint fk_patient_diagnostic_centre__02 foreign key (diagnostic_centre_id) references diagnostic_centre (id);
 
+alter table patient_file_entity add constraint fk_patient_file_entity_patien_01 foreign key (patient_id) references patient (id);
+
+alter table patient_file_entity add constraint fk_patient_file_entity_file_e_02 foreign key (file_entity_id) references file_entity (id);
+
 alter table pharmacy_file_entity add constraint fk_pharmacy_file_entity_pharm_01 foreign key (pharmacy_id) references pharmacy (id);
 
 alter table pharmacy_file_entity add constraint fk_pharmacy_file_entity_file__02 foreign key (file_entity_id) references file_entity (id);
@@ -1280,6 +1293,8 @@ drop table if exists patient cascade;
 drop table if exists patient_pharmacy cascade;
 
 drop table if exists patient_diagnostic_centre cascade;
+
+drop table if exists patient_file_entity cascade;
 
 drop table if exists patient_doctor_info cascade;
 

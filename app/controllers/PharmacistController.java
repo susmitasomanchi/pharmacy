@@ -73,7 +73,7 @@ public class PharmacistController extends Controller {
 			if (request().body().asMultipartFormData().getFile("backgroundImage") != null) {
 				final FilePart image = request().body().asMultipartFormData().getFile("backgroundImage");
 				if(image.getContentType().equalsIgnoreCase("image/bmp")||image.getContentType().equalsIgnoreCase("image/png")||image.getContentType().equalsIgnoreCase("image/jpeg")||image.getContentType().equalsIgnoreCase("image/gif")){
-				pharmacy.backgroundImage = Files.toByteArray(image.getFile());
+					pharmacy.backgroundImage = Files.toByteArray(image.getFile());
 				}else{
 					flash().put("alert", new Alert("alert-info", "Sorry. Images Should Be In The Following Formats .JPEG,.jpg,.png,.gif,.bmp").toString());
 				}
@@ -81,10 +81,10 @@ public class PharmacistController extends Controller {
 			if (request().body().asMultipartFormData().getFile("profileImage") != null) {
 				final FilePart image = request().body().asMultipartFormData().getFile("profileImage");
 				if(image.getContentType().equalsIgnoreCase("image/bmp")||image.getContentType().equalsIgnoreCase("image/png")||image.getContentType().equalsIgnoreCase("image/jpeg")||image.getContentType().equalsIgnoreCase("image/gif")){
-				fileEntity.fileName = image.getFilename();
-				fileEntity.mimeType = image.getContentType();
-				fileEntity.byteContent = Files.toByteArray(image.getFile());
-				pharmacy.profileImageList.add(fileEntity);
+					fileEntity.fileName = image.getFilename();
+					fileEntity.mimeType = image.getContentType();
+					fileEntity.byteContent = Files.toByteArray(image.getFile());
+					pharmacy.profileImageList.add(fileEntity);
 				}else{
 					flash().put("alert", new Alert("alert-info", "Sorry. Images Should Be In The Following Formats .JPEG,.jpg,.png,.gif,.bmp").toString());
 				}
@@ -327,6 +327,7 @@ public class PharmacistController extends Controller {
 			return redirect(routes.LoginController.processLogout());
 		}
 		pharmacyPrescriptionInfo.pharmacyPrescriptionStatus = PharmacyPrescriptionStatus.SERVED;
+		pharmacyPrescriptionInfo.servedDate = new Date();
 		pharmacyPrescriptionInfo.update();
 		return redirect(routes.PharmacistController.pharmacyPrescriptionList("any"));
 	}

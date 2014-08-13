@@ -49,7 +49,6 @@ public class AppUser extends BaseEntity {
 	@Email
 	public String email;
 
-	@Min(6)
 	@Column(columnDefinition="TEXT")
 	public String password;
 
@@ -74,6 +73,9 @@ public class AppUser extends BaseEntity {
 
 	@Column(columnDefinition="TEXT")
 	public String mobileNumberConfirmationKey;
+
+	@Column(columnDefinition="TEXT")
+	public String forgotPasswordConfirmationKey;
 
 	public static Model.Finder<Long, AppUser> find = new Finder<Long, AppUser>(Long.class, AppUser.class);
 

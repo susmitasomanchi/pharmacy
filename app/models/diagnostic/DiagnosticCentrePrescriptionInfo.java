@@ -38,6 +38,8 @@ public class DiagnosticCentrePrescriptionInfo extends BaseEntity{
 	public AppUser sharedBy;
 
 	public Date sharedDate;
+	
+	public Date servedDate;
 
 	public Boolean patientsConsent = Boolean.FALSE;
 

@@ -1,0 +1,71 @@
+@(diagnosticInfoList:List[models.diagnostic.DiagnosticCentrePrescriptionInfo])
+@import play.i18n._
+@import helper.twitterBootstrap._
+@import helper._
+
+@main("Diagnosic Reports"){
+
+<table class="table table-striped table-bordered">
+<tr>
+<th style="text-align:center">S No</th>
+<th style="text-align:center">Test Prescribed By</th>
+<th style="text-align:center">Prescription</th>
+<th style="text-align:center">Diagnostic Centre</th>
+<th style="text-align:center">Served<br>Date</th>
+<th style="text-align:center">Diagnostic Reports</th>
+
+</tr>
+@for((diagnosticInfo,index) <- diagnosticInfoList.zipWithIndex){
+<tr>
+<td style="vertical-align:middle;text-align:center;font-size:16px">@{index+1}</td>
+<td>
+<div class="row" style="cursor:pointer" onclick="location.href='/dashboard';">
+<div class="col-md-4">
+@if(diagnosticInfo.prescription.doctor.profileImage != null){
+		<img src="@routes.PublicController.getImage(diagnosticInfo.prescription.doctor.id,"profileImage")" class="thumbnail" width="100" height="100"  />
+	}else{
+		<img src="/assets/images/doctor.png" class="thumbnail" width="100" height="100"  />
+	}</div>
+<div class="col-md-8" style="padding-left:35px">
+<h4>@diagnosticInfo.prescription.doctor.appUser.name</h4>
+<h6>@diagnosticInfo.prescription.doctor.specialization</h6>
+<h6>@diagnosticInfo.prescription.doctor.degree</h6>
+</div>
+</div>
+</td>
+<td style="vertical-align:middle;text-align:center;font-size:12px">
+@if(diagnosticInfo.prescription != null){
+<a href="@routes.PatientController.viewPrescription(diagnosticInfo.prescription.id)" class="btn btn-success btn-sm" >View Prescription</a>
+}else{
+<button class="btn btn-disabled btn-sm" disabled>No Prescription Yet</button>
+}
+</td>
+@*<td>
+<div class="row" style="cursor:pointer" onclick="location.href='/dashboard';">
+<div class="col-md-4">
+@if(diagnosticInfo.diagnosticCentre.backgroudImage != null){
+		<img src="@routes.PublicController.getDiagnosticImages(diagnosticInfo.diagnosticCentre.id,diagnosticInfo.diagnosticCentre.backgroudImage.id){" class="thumbnail" width="100" height="100"  />
+	}else{
+		<img src="/assets/images/pharmacy-default-bg-image.jpg" class="thumbnail" width="100" height="100"  />
+	}
+	</div>
+<div class="col-md-8" style="padding-left:35px">
+<h4>@diagnosticInfo.diagnosticCentre.name</h4>
+</div>
+</div>
+</td>
+*@
+<td style="vertical-align:middle;text-align:center;font-size:12px">@diagnosticInfo.diagnosticCentre.name </td> 
+<td style="vertical-align:middle;text-align:center;font-size:12px">@diagnosticInfo.servedDate.format("dd-MMM-yyyy")<br>@diagnosticInfo.servedDate.format("EE")<br>@diagnosticInfo.servedDate.format("hh:mm")</td>
+<td style="vertical-align:middle;font-size:12px">
+	@for((report,index) <- diagnosticInfo.prescription.patient.diagnosticReportList.zipWithIndex){
+	@{index+1}.<a href="@routes.DiagnosticController.downloadDiagnosticReport(report.id,diagnosticInfo.id)">@report.fileName</a><br>
+}
+
+</td>
+
+</tr>
+}
+</table>
+
+}

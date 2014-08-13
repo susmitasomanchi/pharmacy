@@ -6,6 +6,7 @@ import java.util.List;
 
 import models.Alert;
 import models.AppUser;
+import models.FileEntity;
 import models.diagnostic.DiagnosticCentre;
 import models.diagnostic.DiagnosticCentrePrescriptionInfo;
 import models.diagnostic.DiagnosticCentrePrescritionStatus;
@@ -368,6 +369,20 @@ public class PatientController extends Controller {
 		flash().put("alert",new Alert("alert-success", "Prescription shared with "+sharedWith.toString()).toString());
 		return redirect(routes.PatientController.viewAllPatientPrescriptions());
 	}
+/**
+ * @author lakshmi
+ * Action to display diagnostic reports
+ */
+public static Result viewDiagnosticReports(){
+	Patient patient = LoginController.getLoggedInUser().getPatient();
+	/*DiagnosticCentrePrescriptionInfo info = DiagnosticCentrePrescriptionInfo.find.byId(diagnosticInfoId);*/
+	List<DiagnosticCentrePrescriptionInfo> diagnosticCentrePrescriptionInfos = DiagnosticCentrePrescriptionInfo.find.where().eq("prescription.patient", patient).findList();
+	return ok(views.html.patient.patientDiagnosticReports.render(diagnosticCentrePrescriptionInfos));
+	
+}
+
+
+
 
 
 }
