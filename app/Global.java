@@ -17,7 +17,7 @@ public class Global extends GlobalSettings {
 
 		Akka.system().scheduler().schedule(
 				Duration.create(0, TimeUnit.MILLISECONDS), //Initial delay 0 milliseconds
-				Duration.create(1, TimeUnit.HOURS),     //Frequency 30 minutes
+				Duration.create(1, TimeUnit.SECONDS),     //Frequency 30 minutes
 				myActor,
 				"tick",
 				Akka.system().dispatcher(),
