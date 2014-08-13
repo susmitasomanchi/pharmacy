@@ -986,6 +986,8 @@ public class DiagnosticController extends Controller {
 	 *description: downloading the Diagnostic report
 	 */
 	public static Result downloadFile() {
+
+		/*
 		final Long id=(long) 1;
 		final DiagnosticReport diagReport = DiagnosticReport.find.byId(id);
 		response().setContentType("application/x-download");
@@ -998,6 +1000,8 @@ public class DiagnosticController extends Controller {
 			e.printStackTrace();
 		}
 		return ok(file);
+		 */
+		return ok();
 	}
 
 	/**

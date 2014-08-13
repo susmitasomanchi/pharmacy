@@ -1180,8 +1180,7 @@ public class DoctorController extends Controller {
 	@ConfirmAppUser
 	public static Result showPrescription(final Long prescriptionId) {
 		final Doctor doctor = LoginController.getLoggedInUser().getDoctor();
-		final Prescription prescription = Prescription.find
-				.byId(prescriptionId);
+		final Prescription prescription = Prescription.find.byId(prescriptionId);
 		// server-side check
 		if (prescription.doctor.id.longValue() != doctor.id.longValue()) {
 			return redirect(routes.LoginController.processLogout());
@@ -1195,13 +1194,19 @@ public class DoctorController extends Controller {
 	 * pharmacy / diagnostic centre GET /doctor/share-prescription
 	 */
 	@ConfirmAppUser
-	public static Result sharePrescription(final Long prId,final String pharmacyId, final String diagnosticId) {
+	public static Result sharePrescription(final Long prId,final String pharmacyId, final String diagnosticId, final Boolean consent) {
 		final Doctor doctor = LoginController.getLoggedInUser().getDoctor();
 		final Prescription prescription = Prescription.find.byId(prId);
 		// server-side check
 		if (prescription.doctor.id.longValue() != doctor.id.longValue()) {
 			return redirect(routes.LoginController.processLogout());
 		}
+
+		if(!consent){
+			flash().put("alert",new Alert("alert-info", "Patient's Consent is Mandatory!").toString());
+			return redirect(routes.DoctorController.showPrescription(prId));
+		}
+
 		final StringBuilder sharedWith = new StringBuilder();
 
 		if(pharmacyId != null && !pharmacyId.trim().isEmpty()){
@@ -1216,6 +1221,7 @@ public class DoctorController extends Controller {
 				phprInfo.sharedBy = doctor.appUser;
 				phprInfo.sharedDate = new Date();
 				phprInfo.pharmacyPrescriptionStatus = PharmacyPrescriptionStatus.RECEIVED;
+				phprInfo.patientsConsent = consent;
 				phprInfo.save();
 				sharedWith.append(phprInfo.pharmacy.name);
 			}
@@ -1240,7 +1246,6 @@ public class DoctorController extends Controller {
 				sharedWith.append(diagnosticCentre.name);
 			}
 		}
-
 		flash().put("alert",new Alert("alert-success", "Prescription shared with "+sharedWith.toString()).toString());
 		return redirect(routes.DoctorController.viewTodaysAppointments());
 	}
@@ -1548,6 +1553,7 @@ public class DoctorController extends Controller {
 	 *         of Doctor of loggedin DOCTOR
 	 *         GET/doctor/add-favorite-pharmacy/:pharmacyId/:str
 	 */
+	@ConfirmAppUser
 	public static Result addFavoriteDiagnosticCentre(final Long diagnosticId,
 			final String searchStr) {
 		final Doctor doctor = LoginController.getLoggedInUser().getDoctor();
@@ -1574,7 +1580,7 @@ public class DoctorController extends Controller {
 	 * @author lakshmi Action to list out favorite Diagnostic Centre of Doctor
 	 *         of loggedin DOCTOR GET/doctor/favorite-diagnostic-centres
 	 */
-
+	@ConfirmAppUser
 	public static Result myFavoriteDiagnosticCentres() {
 		final Doctor doctor = LoginController.getLoggedInUser().getDoctor();
 		return ok(views.html.diagnostic.favorite_diagnosticCentre_list.render(doctor.diagnosticCentreList));

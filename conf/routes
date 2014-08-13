@@ -106,7 +106,7 @@ GET		/doctor/todays-appointments							controllers.DoctorController.viewTodaysAp
 GET		/doctor/prescription/:appointmentId					controllers.DoctorController.showPrescriptionForm(appointmentId: Long)
 POST	/doctor/save-prescription							controllers.DoctorController.savePrescription()
 GET		/doctor/show-prescription/:prescriptionId			controllers.DoctorController.showPrescription(prescriptionId: Long)
-GET		/doctor/share-prescription							controllers.DoctorController.sharePrescription(prId: Long, pharmacyId: String, diagnosticId: String)
+GET		/doctor/share-prescription							controllers.DoctorController.sharePrescription(prId: Long, pharmacyId: String, diagnosticId: String, consent: Boolean)
 GET		/doctor/all-prescriptions					controllers.DoctorController.viewAllPrescription()
 GET		/doctor/todays-prescriptions						controllers.DoctorController.viewTodaysPrescription()
 GET		/doctor/products/get-json							controllers.DoctorController.getAllProductsJson()

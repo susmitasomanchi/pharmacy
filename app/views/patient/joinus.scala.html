@@ -119,19 +119,28 @@
     </div>
     
     
+     @*
+	<div class="form-group">
+		<label for="inputDOB" class="col-lg-2 control-label">Birth Date*</label>
+		<div class="col-lg-4">
+			<input type="date" name="dob" class="form-control" id="from">
+			<span class="add-on"><i class="icon-th"></i></span>
+		</div>
+	</div>
+	*@
+	
+	    
     <div class="form-group">
-      <label for="inputDOB" class="col-lg-2 control-label">Birth Date*</label>
-      <div class="col-lg-4">
-		 <input type="date" name="dob" class="form-control" id="from">
-		 <span class="add-on"><i class="icon-th"></i></span>
-    </div>
-    @*
-			<input class="span2 dob-datepicker" size="16" type="text" name="dob" value="01-01-1990">
+      <label for="inputDOB" class="col-lg-2 control-label">Birth Date*<br><span style="font-size:10px;"><b>(DD-MM-YYYY)</b></span></label>
+      <div class="col-lg-10">
+		<div class="input-append date" data-date="01-01-1990" data-date-format="dd-mm-yyyy">
+			<input id="dob-datepicker" class="span2" size="16" type="text" name="dob" value="01-01-1990">
 			<span class="add-on"><i class="icon-th"></i></span>
 		</div>
       </div>
-      *@
     </div>
+    
+    
     
     <input type="hidden" name="role" value="PATIENT">
     
@@ -192,7 +201,7 @@ function validateAndSubmit(){
 
 var nowTemp = new Date();
 var now = new Date(nowTemp.getFullYear(), nowTemp.getMonth(), nowTemp.getDate(), 0, 0, 0, 0);
-$('.dob-datepicker').datepicker({
+$('#dob-datepicker').datepicker({
 	  format: 'dd-mm-yyyy',
 	  onRender: function(date) {
 		    return date.valueOf() > now.valueOf() ? 'disabled' : '';

@@ -206,6 +206,7 @@ create table diagnostic_centre_prescription_info (
   diagnostic_centre_prescrition_status varchar(9),
   shared_by_id              bigint,
   shared_date               timestamp,
+  patients_consent          boolean,
   last_update               timestamp not null,
   constraint ck_diagnostic_centre_prescription_info_diagnostic_centre_prescrition_status check (diagnostic_centre_prescrition_status in ('CANCELLED','RECEIVED','CONFIRMED','SERVED')),
   constraint pk_diagnostic_centre_prescriptio primary key (id))
@@ -592,6 +593,7 @@ create table pharmacy_prescription_info (
   pharmacy_prescription_status varchar(9),
   shared_by_id              bigint,
   shared_date               timestamp,
+  patients_consent          boolean,
   last_update               timestamp not null,
   constraint ck_pharmacy_prescription_info_pharmacy_prescription_status check (pharmacy_prescription_status in ('RECEIVED','CONFIRMED','SERVED')),
   constraint pk_pharmacy_prescription_info primary key (id))
