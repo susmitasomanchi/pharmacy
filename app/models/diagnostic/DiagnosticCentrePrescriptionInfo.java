@@ -38,6 +38,8 @@ public class DiagnosticCentrePrescriptionInfo extends BaseEntity{
 	public AppUser sharedBy;
 
 	public Date sharedDate;
+	
+	public Date servedDate;
 
 	@ManyToMany(cascade=CascadeType.ALL)
 	public List<FileEntity> fileEntities = new ArrayList<FileEntity>();

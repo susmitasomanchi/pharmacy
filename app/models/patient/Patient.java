@@ -14,6 +14,7 @@ import javax.persistence.OneToOne;
 
 import models.AppUser;
 import models.BaseEntity;
+import models.FileEntity;
 import models.diagnostic.DiagnosticCentre;
 import models.doctor.Appointment;
 import models.pharmacist.Pharmacy;
@@ -39,6 +40,9 @@ public class Patient extends BaseEntity {
 
 	@ManyToMany(cascade = CascadeType.ALL)
 	public List<DiagnosticCentre> diagnosticCenterList = new ArrayList<DiagnosticCentre>();
+	
+	@ManyToMany(cascade = CascadeType.ALL)
+	public List<FileEntity> diagnosticReportList = new ArrayList<FileEntity>();
 
 	public static Model.Finder<Long, Patient> find = new Finder<Long, Patient>(Long.class, Patient.class);
 

@@ -18,7 +18,8 @@ public class Application extends Controller {
 	public static Form<MedicalRepresentative> mrForm=Form.form(MedicalRepresentative.class);
 
 	public static Result index() {
-		return ok(views.html.comingsoon.render(loginForm));
+		//return ok(views.html.comingsoon.render(loginForm));
+		return ok(views.html.home.render(loginForm));
 	}
 
 	public static Result indexX(final String str) {
@@ -94,7 +95,7 @@ public class Application extends Controller {
 	//home Page
 
 	public static Result homePage(){
-		return ok(views.html.home.render());
+		return ok(views.html.home.render(loginForm));
 	}
 
 
