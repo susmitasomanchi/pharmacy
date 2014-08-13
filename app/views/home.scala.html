@@ -1,551 +1,166 @@
-@* home Template File *@
-@*
-<head>
-        <link href="/assets/css/bootstrap.min.css" rel="stylesheet" type="text/css" />
-        <link href="/assets/css/font-awesome.min.css" rel="stylesheet" type="text/css" />
-        <link href="/assets/css/ionicons.min.css" rel="stylesheet" type="text/css" />
-        <link href="/assets/css/morris/morris.css" rel="stylesheet" type="text/css" />
-        <link href="/assets/css/jvectormap/jquery-jvectormap-1.2.2.css" rel="stylesheet" type="text/css" />
-        <link href="/assets/css/fullcalendar/fullcalendar.css" rel="stylesheet" type="text/css" />
-        <link href="/assets/css/daterangepicker/daterangepicker-bs3.css" rel="stylesheet" type="text/css" />
-        <link href="/assets/css/bootstrap-wysihtml5/bootstrap3-wysihtml5.min.css" rel="stylesheet" type="text/css" />
-        <link href="/assets/css/AdminLTE.css" rel="stylesheet" type="text/css" />
-</head>*@
-<div>
-        
+@(loginForm:play.data.Form[beans.LoginBean])
 
+@no_navbar("MedNetwork"){
 
-<header class="header">
-            <a href="/home/" class="logo">
-                <!-- Add the class icon to your logo image or logo icon to add the margining -->
-                AdminLTE
-            </a>
-            <!-- Header Navbar: style can be found in header.less -->
-            <nav class="navbar navbar-static-top" role="navigation">
-                <!-- Sidebar toggle button-->
-                <a href="#" class="navbar-btn sidebar-toggle" data-toggle="offcanvas" role="button">
-                    <span class="sr-only">Toggle navigation</span>
-                    <span class="icon-bar"></span>
-                    <span class="icon-bar"></span>
-                    <span class="icon-bar"></span>
-                </a>
-                <div class="navbar-right">
-                    <ul class="nav navbar-nav">
-                        <!-- Messages: style can be found in dropdown.less-->
-                        <li class="dropdown messages-menu">
-                            <a href="#" class="dropdown-toggle" data-toggle="dropdown">
-                                <i class="fa fa-envelope"></i>
-                                <span class="label label-success">4</span>
-                            </a>
-                            <ul class="dropdown-menu">
-                                <li class="header">You have 4 messages</li>
-                                <li>
-                                    <!-- inner menu: contains the actual data -->
-                                    <ul class="menu">
-                                        <li><!-- start message -->
-                                            <a href="#">
-                                                <div class="pull-left">
-                                                    <img src="img/avatar3.png" class="img-circle" alt="User Image"/>
-                                                </div>
-                                                <h4>
-                                                    Support Team
-                                                    <small><i class="fa fa-clock-o"></i> 5 mins</small>
-                                                </h4>
-                                                <p>Why not buy a new awesome theme?</p>
-                                            </a>
-                                        </li><!-- end message -->
-                                        <li>
-                                            <a href="#">
-                                                <div class="pull-left">
-                                                    <img src="/assets/img/avatar2.png" class="img-circle" alt="user image"/>
-                                                </div>
-                                                <h4>
-                                                    AdminLTE Design Team
-                                                    <small><i class="fa fa-clock-o"></i> 2 hours</small>
-                                                </h4>
-                                                <p>Why not buy a new awesome theme?</p>
-                                            </a>
-                                        </li>
-                                        <li>
-                                            <a href="#">
-                                                <div class="pull-left">
-                                                    <img src="/assets/img/avatar.png" class="img-circle" alt="user image"/>
-                                                </div>
-                                                <h4>
-                                                    Developers
-                                                    <small><i class="fa fa-clock-o"></i> Today</small>
-                                                </h4>
-                                                <p>Why not buy a new awesome theme?</p>
-                                            </a>
-                                        </li>
-                                        <li>
-                                            <a href="#">
-                                                <div class="pull-left">
-                                                    <img src="/assets/img/avatar2.png" class="img-circle" alt="user image"/>
-                                                </div>
-                                                <h4>
-                                                    Sales Department
-                                                    <small><i class="fa fa-clock-o"></i> Yesterday</small>
-                                                </h4>
-                                                <p>Why not buy a new awesome theme?</p>
-                                            </a>
-                                        </li>
-                                        <li>
-                                            <a href="#">
-                                                <div class="pull-left">
-                                                    <img src="/assets/img/avatar.png" class="img-circle" alt="user image"/>
-                                                </div>
-                                                <h4>
-                                                    Reviewers
-                                                    <small><i class="fa fa-clock-o"></i> 2 days</small>
-                                                </h4>
-                                                <p>Why not buy a new awesome theme?</p>
-                                            </a>
-                                        </li>
-                                    </ul>
-                                </li>
-                                <li class="footer"><a href="#">See All Messages</a></li>
-                            </ul>
-                        </li>
-                        <!-- Notifications: style can be found in dropdown.less -->
-                        <li class="dropdown notifications-menu">
-                            <a href="#" class="dropdown-toggle" data-toggle="dropdown">
-                                <i class="fa fa-warning"></i>
-                                <span class="label label-warning">10</span>
-                            </a>
-                            <ul class="dropdown-menu">
-                                <li class="header">You have 10 notifications</li>
-                                <li>
-                                    <!-- inner menu: contains the actual data -->
-                                    <ul class="menu">
-                                        <li>
-                                            <a href="#">
-                                                <i class="ion ion-ios7-people info"></i> 5 new members joined today
-                                            </a>
-                                        </li>
-                                        <li>
-                                            <a href="#">
-                                                <i class="fa fa-warning danger"></i> Very long description here that may not fit into the page and may cause design problems
-                                            </a>
-                                        </li>
-                                        <li>
-                                            <a href="#">
-                                                <i class="fa fa-users warning"></i> 5 new members joined
-                                            </a>
-                                        </li>
+<body style="zoom: 1;">
+    			
 
-                                        <li>
-                                            <a href="#">
-                                                <i class="ion ion-ios7-cart success"></i> 25 sales made
-                                            </a>
-                                        </li>
-                                        <li>
-                                            <a href="#">
-                                                <i class="ion ion-ios7-person danger"></i> You changed your username
-                                            </a>
-                                        </li>
-                                    </ul>
-                                </li>
-                                <li class="footer"><a href="#">View all</a></li>
-                            </ul>
-                        </li>
-                        <!-- Tasks: style can be found in dropdown.less -->
-                        <li class="dropdown tasks-menu">
-                            <a href="#" class="dropdown-toggle" data-toggle="dropdown">
-                                <i class="fa fa-tasks"></i>
-                                <span class="label label-danger">9</span>
-                            </a>
-                            <ul class="dropdown-menu">
-                                <li class="header">You have 9 tasks</li>
-                                <li>
-                                    <!-- inner menu: contains the actual data -->
-                                    <ul class="menu">
-                                        <li><!-- Task item -->
-                                            <a href="#">
-                                                <h3>
-                                                    Design some buttons
-                                                    <small class="pull-right">20%</small>
-                                                </h3>
-                                                <div class="progress xs">
-                                                    <div class="progress-bar progress-bar-aqua" style="width: 20%" role="progressbar" aria-valuenow="20" aria-valuemin="0" aria-valuemax="100">
-                                                        <span class="sr-only">20% Complete</span>
-                                                    </div>
-                                                </div>
-                                            </a>
-                                        </li><!-- end task item -->
-                                        <li><!-- Task item -->
-                                            <a href="#">
-                                                <h3>
-                                                    Create a nice theme
-                                                    <small class="pull-right">40%</small>
-                                                </h3>
-                                                <div class="progress xs">
-                                                    <div class="progress-bar progress-bar-green" style="width: 40%" role="progressbar" aria-valuenow="20" aria-valuemin="0" aria-valuemax="100">
-                                                        <span class="sr-only">40% Complete</span>
-                                                    </div>
-                                                </div>
-                                            </a>
-                                        </li><!-- end task item -->
-                                        <li><!-- Task item -->
-                                            <a href="#">
-                                                <h3>
-                                                    Some task I need to do
-                                                    <small class="pull-right">60%</small>
-                                                </h3>
-                                                <div class="progress xs">
-                                                    <div class="progress-bar progress-bar-red" style="width: 60%" role="progressbar" aria-valuenow="20" aria-valuemin="0" aria-valuemax="100">
-                                                        <span class="sr-only">60% Complete</span>
-                                                    </div>
-                                                </div>
-                                            </a>
-                                        </li><!-- end task item -->
-                                        <li><!-- Task item -->
-                                            <a href="#">
-                                                <h3>
-                                                    Make beautiful transitions
-                                                    <small class="pull-right">80%</small>
-                                                </h3>
-                                                <div class="progress xs">
-                                                    <div class="progress-bar progress-bar-yellow" style="width: 80%" role="progressbar" aria-valuenow="20" aria-valuemin="0" aria-valuemax="100">
-                                                        <span class="sr-only">80% Complete</span>
-                                                    </div>
-                                                </div>
-                                            </a>
-                                        </li><!-- end task item -->
-                                    </ul>
-                                </li>
-                                <li class="footer">
-                                    <a href="#">View all tasks</a>
-                                </li>
-                            </ul>
-                        </li>
-                        <!-- User Account: style can be found in dropdown.less -->
-                        <li class="dropdown user user-menu">
-                            <a href="#" class="dropdown-toggle" data-toggle="dropdown">
-                                <i class="glyphicon glyphicon-user"></i>
-                                <span>Jane Doe <i class="caret"></i></span>
-                            </a>
-                            <ul class="dropdown-menu">
-                                <!-- User image -->
-                                <li class="user-header bg-light-blue">
-                                    <img src="/assets/img/avatar3.png" class="img-circle" alt="User Image" />
-                                    <p>
-                                        Jane Doe - Web Developer
-                                        <small>Member since Nov. 2012</small>
-                                    </p>
-                                </li>
-                                <!-- Menu Body -->
-                                <li class="user-body">
-                                    <div class="col-xs-4 text-center">
-                                        <a href="#">Followers</a>
-                                    </div>
-                                    <div class="col-xs-4 text-center">
-                                        <a href="#">Sales</a>
-                                    </div>
-                                    <div class="col-xs-4 text-center">
-                                        <a href="#">Friends</a>
-                                    </div>
-                                </li>
-                                <!-- Menu Footer-->
-                                <li class="user-footer">
-                                    <div class="pull-left">
-                                        <a href="#" class="btn btn-default btn-flat">Profile</a>
-                                    </div>
-                                    <div class="pull-right">
-                                        <a href="#" class="btn btn-default btn-flat">Sign out</a>
-                                    </div>
-                                </li>
-                            </ul>
-                        </li>
-                    </ul>
-                </div>
-            </nav>
-        </header>
-   </div>
-        <div class="wrapper row-offcanvas row-offcanvas-left">
-            <!-- Left side column. contains the logo and sidebar -->
-            <aside class="left-side sidebar-offcanvas">
-                <!-- sidebar: style can be found in sidebar.less -->
-                <section class="sidebar">
-                    <!-- Sidebar user panel -->
-                    <div class="user-panel">
-                        <div class="pull-left image">
-                            <img src="/assets/img/avatar3.png" class="img-circle" alt="User Image" />
-                        </div>
-                        <div class="pull-left info">
-                            <p>Hello, Jane</p>
-
-                            <a href="#"><i class="fa fa-circle text-success"></i> Online</a>
-                        </div>
-                    </div>
-                    <!-- search form -->
-                    <form action="#" method="get" class="sidebar-form">
-                        <div class="input-group">
-                            <input type="text" name="q" class="form-control" placeholder="Search..."/>
-                            <span class="input-group-btn">
-                                <button type='submit' name='seach' id='search-btn' class="btn btn-flat"><i class="fa fa-search"></i></button>
-                            </span>
-                        </div>
-                    </form>
-        
-        
-        
-        <ul class="sidebar-menu">
-                        <li class="active">
-                            <a href="/home/">
-                                <i class="fa fa-dashboard"></i> <span>Dashboard</span>
-                            </a>
-                        </li>
-                        <li>
-                            <a href="/assets/pages/widgets.html">
-                                <i class="fa fa-th"></i> <span>Widgets</span> <small class="badge pull-right bg-green">new</small>
-                            </a>
-                        </li>
-                        <li class="treeview">
-                            <a href="#">
-                                <i class="fa fa-bar-chart-o"></i>
-                                <span>Charts</span>
-                                <i class="fa fa-angle-left pull-right"></i>
-                            </a>
-                            <ul class="treeview-menu">
-                                <li><a href="/assets/pages/charts/morris.html"><i class="fa fa-angle-double-right"></i> Morris</a></li>
-                                <li><a href="/assets/pages/charts/flot.html"><i class="fa fa-angle-double-right"></i> Flot</a></li>
-                                <li><a href="/assets/pages/charts/inline.html"><i class="fa fa-angle-double-right"></i> Inline charts</a></li>
-                            </ul>
-                        </li>
-                        <li class="treeview">
-                            <a href="#">
-                                <i class="fa fa-laptop"></i>
-                                <span>UI Elements</span>
-                                <i class="fa fa-angle-left pull-right"></i>
-                            </a>
-                            <ul class="treeview-menu">
-                                <li><a href="/assets/pages/UI/general.html"><i class="fa fa-angle-double-right"></i> General</a></li>
-                                <li><a href="/assets/pages/UI/icons.html"><i class="fa fa-angle-double-right"></i> Icons</a></li>
-                                <li><a href="/assets/pages/UI/buttons.html"><i class="fa fa-angle-double-right"></i> Buttons</a></li>
-                                <li><a href="/assets/pages/UI/sliders.html"><i class="fa fa-angle-double-right"></i> Sliders</a></li>
-                                <li><a href="/assets/pages/UI/timeline.html"><i class="fa fa-angle-double-right"></i> Timeline</a></li>
-                            </ul>
-                        </li>
-                        <li class="treeview">
-                            <a href="#">
-                                <i class="fa fa-edit"></i> <span>Forms</span>
-                                <i class="fa fa-angle-left pull-right"></i>
-                            </a>
-                            <ul class="treeview-menu">
-                                <li><a href="/assets/pages/forms/general.html"><i class="fa fa-angle-double-right"></i> General Elements</a></li>
-                                <li><a href="/assets/pages/forms/advanced.html"><i class="fa fa-angle-double-right"></i> Advanced Elements</a></li>
-                                <li><a href="/assets/pages/forms/editors.html"><i class="fa fa-angle-double-right"></i> Editors</a></li>
-                            </ul>
-                        </li>
-                        <li class="treeview">
-                            <a href="#">
-                                <i class="fa fa-table"></i> <span>Tables</span>
-                                <i class="fa fa-angle-left pull-right"></i>
-                            </a>
-                            <ul class="treeview-menu">
-                                <li><a href="/assets/pages/tables/simple.html"><i class="fa fa-angle-double-right"></i> Simple tables</a></li>
-                                <li><a href="/assets/pages/tables/data.html"><i class="fa fa-angle-double-right"></i> Data tables</a></li>
-                            </ul>
-                        </li>
-                        <li>
-                            <a href="/assets/pages/calendar.html">
-                                <i class="fa fa-calendar"></i> <span>Calendar</span>
-                                <small class="badge pull-right bg-red">3</small>
-                            </a>
-                        </li>
-                        <li>
-                            <a href="/assets/pages/mailbox.html">
-                                <i class="fa fa-envelope"></i> <span>Mailbox</span>
-                                <small class="badge pull-right bg-yellow">12</small>
-                            </a>
-                        </li>
-                        <li class="treeview">
-                            <a href="#">
-                                <i class="fa fa-folder"></i> <span>Examples</span>
-                                <i class="fa fa-angle-left pull-right"></i>
-                            </a>
-                            <ul class="treeview-menu">
-                                <li><a href="/assets/pages/examples/invoice.html"><i class="fa fa-angle-double-right"></i> Invoice</a></li>
-                                <li><a href="/assets/pages/examples/login.html"><i class="fa fa-angle-double-right"></i> Login</a></li>
-                                <li><a href="/assets/pages/examples/register.html"><i class="fa fa-angle-double-right"></i> Register</a></li>
-                                <li><a href="/assets/pages/examples/lockscreen.html"><i class="fa fa-angle-double-right"></i> Lockscreen</a></li>
-                                <li><a href="/assets/pages/examples/404.html"><i class="fa fa-angle-double-right"></i> 404 Error</a></li>
-                                <li><a href="/assets/pages/examples/500.html"><i class="fa fa-angle-double-right"></i> 500 Error</a></li>
-                                <li><a href="/assets/pages/examples/blank.html"><i class="fa fa-angle-double-right"></i> Blank Page</a></li>
-                            </ul>
-                        </li>
-                    </ul>
-                </section>
-</aside>
-
-
-
-<aside class="right-side">
-                <!-- Content Header (Page header) -->
-                <section class="content-header">
-                    <h1>
-                        Dashboard
-                        <small>Control panel</small>
-                    </h1>
-                    <ol class="breadcrumb">
-                        <li><a href="#"><i class="fa fa-dashboard"></i> Home</a></li>
-                        <li class="active">Dashboard</li>
-                    </ol>
-                </section>
-            
-                <section class="content">
-                
-                 <div class="row">
-                        <div class="col-lg-3 col-xs-6">
-                            <!-- small box -->
-                            <div class="small-box bg-aqua">
-                                <div class="inner">
-                                    <h3>
-                                        150
-                                    </h3>
-                                    <p>
-                                        New Orders
-                                    </p>
-                                </div>
-                                <div class="icon">
-                                    <i class="ion ion-bag"></i>
-                                </div>
-                                <a href="#" class="small-box-footer">
-                                    More info <i class="fa fa-arrow-circle-right"></i>
-                                </a>
-                            </div>
-                        </div><!-- ./col -->
-                        
-                        
-                        <div class="col-lg-3 col-xs-6">
-                            <!-- small box -->
-                            <div class="small-box bg-green">
-                                <div class="inner">
-                                    <h3>
-                                        53<sup style="font-size: 20px">%</sup>
-                                    </h3>
-                                    <p>
-                                        Bounce Rate
-                                    </p>
-                                </div>
-                                <div class="icon">
-                                    <i class="ion ion-stats-bars"></i>
-                                </div>
-                                <a href="#" class="small-box-footer">
-                                    More info <i class="fa fa-arrow-circle-right"></i>
-                                </a>
-                            </div>
-                        </div><!-- ./col -->
-                        
-                         <div class="col-lg-3 col-xs-6">
-                            <!-- small box -->
-                            <div class="small-box bg-yellow">
-                                <div class="inner">
-                                    <h3>
-                                        44
-                                    </h3>
-                                    <p>
-                                        User Registrations
-                                    </p>
-                                </div>
-                                <div class="icon">
-                                    <i class="ion ion-person-add"></i>
-                                </div>
-                                <a href="#" class="small-box-footer">
-                                    More info <i class="fa fa-arrow-circle-right"></i>
-                                </a>
-                            </div>
-                        </div><!-- ./col -->
-                        <div class="col-lg-3 col-xs-6">
-                            <!-- small box -->
-                            <div class="small-box bg-red">
-                                <div class="inner">
-                                    <h3>
-                                        65
-                                    </h3>
-                                    <p>
-                                        Unique Visitors
-                                    </p>
-                                </div>
-                                <div class="icon">
-                                    <i class="ion ion-pie-graph"></i>
-                                </div>
-                                <a href="#" class="small-box-footer">
-                                    More info <i class="fa fa-arrow-circle-right"></i>
-                                </a>
-                            </div>
-                        </div><!-- ./col -->
-                        
-                     </div><!-- /.row -->
-                      <!-- top row -->
-                    <div class="row">
-                        <div class="col-xs-12 connectedSortable">
-                            
-                        </div><!-- /.col -->
-                    </div>
-                    <!-- /.row -->
-                 
-                  <!-- Main row -->
-                    <div class="row">
-                        <!-- Left col -->
-                        <section class="col-lg-6 connectedSortable"> 
-                            <!-- Box (with bar chart) -->
-                            <div class="box box-danger" id="loading-example">
-                                <div class="box-header">
-                                    <!-- tools box -->
-                                    <div class="pull-right box-tools">
-                                        <button class="btn btn-danger btn-sm refresh-btn" data-toggle="tooltip" title="Reload"><i class="fa fa-refresh"></i></button>
-                                        <button class="btn btn-danger btn-sm" data-widget='collapse' data-toggle="tooltip" title="Collapse"><i class="fa fa-minus"></i></button>
-                                        <button class="btn btn-danger btn-sm" data-widget='remove' data-toggle="tooltip" title="Remove"><i class="fa fa-times"></i></button>
-                                    </div><!-- /. tools -->
-                                    <i class="fa fa-cloud"></i>
-
-                                    <h3 class="box-title">Server Load</h3>
-                                </div><!-- /.box-header -->
-                                
-                                
-                                
-                                
-                                
-                                
-                                <div class="box-footer">
-                                    <div class="row">
-                                        <div class="col-xs-4 text-center" style="border-right: 1px solid #f4f4f4">
-                                            <input type="text" class="knob" data-readonly="true" value="80" data-width="60" data-height="60" data-fgColor="#f56954"/>
-                                            <div class="knob-label">CPU</div>
-                                        </div><!-- ./col -->
-                                        <div class="col-xs-4 text-center" style="border-right: 1px solid #f4f4f4">
-                                            <input type="text" class="knob" data-readonly="true" value="50" data-width="60" data-height="60" data-fgColor="#00a65a"/>
-                                            <div class="knob-label">Disk</div>
-                                        </div><!-- ./col -->
-                                        <div class="col-xs-4 text-center">
-                                            <input type="text" class="knob" data-readonly="true" value="30" data-width="60" data-height="60" data-fgColor="#3c8dbc"/>
-                                            <div class="knob-label">RAM</div>
-                                        </div><!-- ./col -->
-                                    </div><!-- /.row -->
-                                </div><!-- /.box-footer -->
-                            </div><!-- /.box -->
-                            
-                            <!-- Custom tabs (Charts with tabs)-->
-                            <div class="nav-tabs-custom">
-                                <!-- Tabs within a box -->
-                                <ul class="nav nav-tabs pull-right">
-                                    <li class="active"><a href="#revenue-chart" data-toggle="tab">Area</a></li>
-                                    <li><a href="#sales-chart" data-toggle="tab">Donut</a></li>
-                                    <li class="pull-left header"><i class="fa fa-inbox"></i> Sales</li>
-                                </ul>
-                                <div class="tab-content no-padding">
-                                    <!-- Morris chart - Sales -->
-                                    <div class="chart tab-pane active" id="revenue-chart" style="position: relative; height: 300px;"></div>
-                                    <div class="chart tab-pane" id="sales-chart" style="position: relative; height: 300px;"></div>
-                                </div>
-                            </div><!-- /.nav-tabs-custom -->
-                            
-                  </section></div>
-                       
-                </section>
-
-</aside>
+<div class="row">
+<div class="col-md-10 col-md-offset-1">
+	
+	<div class="row">
+      <div class="col-md-2" style="margin-top:-1%; margin-bottom:-2%;">
+        <img style="" src="/assets/blog/images/mednlogo.png" alt="MedNetwork">
+      </div>
+	</div>
+   
+    <hr>
+   <div class="row">
+ <div class="col-md-2" style="width:8%;padding-right:0px">
+ <p style="padding-top:7px">Search For</p>
+</div>
+<div class="col-md-2" style="width:22%" >
+  <select class="form-control" name="role" id="role">
+<option value="DOCTOR">Doctor</option>
+<option value="ADMIN_PHARMACIST">Pharmacy</option>
+<option value="ADMIN_DIAGREP">Diagnostic Centre</option>
+</select>
 
 </div>
+  <div class="col-md-6" style="width:50%">
+      <input type="search" style="width:100%"  name="searchKey" id="searchKey" placeholder="SEARCH">
+    </div>
+   
+<div class="col-md-2" style="width:20%">
+  <button style="width:100%" class="btn btn-sm btn-success pull-right" onclick="searchKey();"><i class="icon-search icon-large"></i> Search</button>
+  </div>
+  </div>
+   <script>
+function searchKey(){
+    var searchString = $('#searchKey').val();
+    var setValue = $('#role').val();
+    if(setValue == "DOCTOR"){
+  window.location.href='@routes.PublicController.processSearchDoctors("")'+searchString; 
+  } 
+  if(setValue == "ADMIN_PHARMACIST"){
+  window.location.href='@routes.PublicController.processSearchPharmacies("")'+searchString; 
+  } 
+  if(setValue == "ADMIN_DIAGREP"){
+  window.location.href='@routes.PublicController.processSearchDiagnosticCentres("")'+searchString; 
+  } 
+}
+
+</script>
+
+<br>
+  <hr>
+  <div class="row">    
+    
+	<div class="col-md-8">
+      <p class="well">
+        <strong>MedNetwork is an online platform for all medical professionals</strong>
+        
+      <p></p>
+      <p style="text-align:justify;" >
+      We strongly believe that <strong>the whole is greater than the sum of its parts</strong>, that is why we believe that healthcare can be greatly enhanced if
+      everyone working in healthcare industry can easily interact with each other and share data. MedNetwork will be this platform. Here such day to day
+      interaction and data exchanges will be simple and instant.  
+      We also hope that mednetwork will be a place for a lot of new and exciting possibilities.
+      </p>
+
+
+      <p style="text-align:justify;" >
+      We strongly believe that <strong>the whole is greater than the sum of its parts</strong>, that is why we believe that healthcare can be greatly enhanced if
+      everyone working in healthcare industry can easily interact with each other and share data. MedNetwork will be this platform. Here such day to day
+      interaction and data exchanges will be simple and instant.  
+      We also hope that mednetwork will be a place for a lot of new and exciting possibilities.
+      </p>
+      
+      <p>
+      We will be launching first public beta this independence day. 
+      </p>
+      
+       </div>
+       <br>
+       <div class="col-md-4">
+    @helper.form(action=routes.LoginController.processLogin()) {
+  <div style="margin-top:-1.3em;">
+  <div class="panel panel-primary" >
+  <div class="panel-heading">
+  <h3 class="panel-title"><i class="fa fa-sign-in"></i> Sign-in</h3>
+  </div>
+  <div class="panel-body">
+  <br>
+  <div class="col-md-12">
+  <input type="text" name="email" placeholder="Email" style="width:100%">
+  </div>
+  <div class="col-md-12">
+  <input type="text" name="password" placeholder="Password" style="width:100%">
+     @* @helper.inputText(loginForm("email"),'_label->"Username")
+      @helper.inputPassword(loginForm("password"),'_label->"Password")*@
+      </div>
+      <a href="#" style="padding-left:15px;font-size:12px">Forgot your password ?</a>
+     <div class="col-md-12">
+     <br>
+          <input type="submit" class="btn btn-sm btn-primary pull-right" value="Sign in" style="width:100%">
+      </div>
+      
+  </div>
+  </div>
+  </div>
+  }
+ 
+<div class="panel panel-primary">   
+<div class="panel-heading">
+  <h3 class="panel-title">SignUp</h3>
+  </div>
+  <div class="panel-body">
+      <ul style="list-style-type: none;padding:0px">
+
+        <li><h4><a href="@routes.UserController.joinUsPatient()" style="cursor:pointer;text-decoration:none;"><i class="fa fa-users" style="padding-right:3px"></i> User </a></h4></li>
+        <li><h4><a href="@routes.UserController.joinUsDoctor()" style="cursor:pointer;text-decoration:none;"><i class="fa fa-user-md" style="padding-right:3px"></i> &nbsp;Doctor </a></h4></li>
+        <li><h4><a href="@routes.UserController.joinUsPharmacy()" style="cursor:pointer;text-decoration:none;"><i class="fa fa-medkit"style="padding-right:3px"></i> Pharmacy </a></h4></li>
+        @*
+        <li><h4><a style="cursor:pointer;text-decoration:none;"><i class="fa fa-ambulance" style="padding-right:3px"></i> Pharma Companies</a></h4></li>
+        *@
+        <li><h4><a href="@routes.UserController.joinUsDiagnostic()" style="cursor:pointer;text-decoration:none;"><i class="fa fa-bar-chart-o" style="padding-right:3px"></i> Diagnostic Center </a></h4></li>
+        
+        
+      </ul>
+      </div>
+      </div>
+    </div>
+</div>
+    <div>
+     
+    </div>
+ 
+    
+    
+	<div class="row">
+    <div class="col-md-12">
+    <div class="well">
+    <span>
+        @*
+        Ride the revolution by <a href="/join" class="btn-link"><b>joining us today!</b></a> Its free and worth much more than the 30 seconds you'll take to do so.
+        <br>
+        *@ 
+        Meanwhile you can follow us on <a href="https://twitter.com/mednetworkindia" target="_blank"><b>twitter</b></a>, like our page on <a href="https://www.facebook.com/mednetwork.in" target="_blank"><b>facebook</b></a> and <strong>read our <a href="/blog" target="_blank"><b>blog</b></a></strong> which has some interesting ideas to stay healthy and can also share your <a href="/feedback"><b> feedback </b></a>
+    </span>
+    	
+	</div>
+	
+	<span style="width:100%; margin-left:400px; font-size:10px;"> Copyright 2014 <a href="http://www.greensoftware.in/">Green Software</a> . All rights reserved.</span>
+	</div>
+	
+	
+    </div>
+  
+  
+  </div>
+ 
+
+  </div> 
+
+  
+}

@@ -20,6 +20,8 @@ import play.db.ebean.Model;
 @SuppressWarnings("serial")
 @Entity
 public class DiagnosticCentrePrescriptionInfo extends BaseEntity{
+	String s;
+	
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO)
 	public  Long id;
@@ -36,6 +38,8 @@ public class DiagnosticCentrePrescriptionInfo extends BaseEntity{
 	public AppUser sharedBy;
 
 	public Date sharedDate;
+	
+	public Date servedDate;
 
 	@ManyToMany(cascade=CascadeType.ALL)
 	public List<FileEntity> fileEntities = new ArrayList<FileEntity>();

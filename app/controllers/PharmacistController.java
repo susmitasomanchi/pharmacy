@@ -37,6 +37,7 @@ import beans.AddProductToInventoryBean;
 import beans.PharmacyBean;
 
 import com.avaje.ebean.Expr;
+import com.avaje.ebean.ExpressionList;
 import com.google.common.io.Files;
 
 @BasicAuth
@@ -70,15 +71,23 @@ public class PharmacistController extends Controller {
 			}
 			final FileEntity fileEntity = new FileEntity();
 			if (request().body().asMultipartFormData().getFile("backgroundImage") != null) {
-				final File image = request().body().asMultipartFormData().getFile("backgroundImage").getFile();
-				pharmacy.backgroundImage = Files.toByteArray(image);
+				final FilePart image = request().body().asMultipartFormData().getFile("backgroundImage");
+				if(image.getContentType().equalsIgnoreCase("image/bmp")||image.getContentType().equalsIgnoreCase("image/png")||image.getContentType().equalsIgnoreCase("image/jpeg")||image.getContentType().equalsIgnoreCase("image/gif")){
+				pharmacy.backgroundImage = Files.toByteArray(image.getFile());
+				}else{
+					flash().put("alert", new Alert("alert-info", "Sorry. Images Should Be In The Following Formats .JPEG,.jpg,.png,.gif,.bmp").toString());
+				}
 			}
 			if (request().body().asMultipartFormData().getFile("profileImage") != null) {
 				final FilePart image = request().body().asMultipartFormData().getFile("profileImage");
+				if(image.getContentType().equalsIgnoreCase("image/bmp")||image.getContentType().equalsIgnoreCase("image/png")||image.getContentType().equalsIgnoreCase("image/jpeg")||image.getContentType().equalsIgnoreCase("image/gif")){
 				fileEntity.fileName = image.getFilename();
 				fileEntity.mimeType = image.getContentType();
 				fileEntity.byteContent = Files.toByteArray(image.getFile());
 				pharmacy.profileImageList.add(fileEntity);
+				}else{
+					flash().put("alert", new Alert("alert-info", "Sorry. Images Should Be In The Following Formats .JPEG,.jpg,.png,.gif,.bmp").toString());
+				}
 
 			} else {
 				Logger.info("BG IMAGE NULL");
@@ -352,7 +361,7 @@ public class PharmacistController extends Controller {
 				.ge("sharedDate", calendarFrom.getTime())
 				.le("sharedDate", calendarTo.getTime())
 				.findList();
-		return ok(views.html.pharmacist.viewPharmacyPrescriptionList.render(pharmacyPrescriptionInfos, ""));
+		return ok(views.html.pharmacist.pharmacyTodaysPrescriptions.render(pharmacyPrescriptionInfos, ""));
 	}
 	/**
 	 * @author lakshmi
@@ -374,13 +383,29 @@ public class PharmacistController extends Controller {
 			flash().put("alert", new Alert("alert-info", "Please provide both dates.").toString());
 		}
 		final Pharmacy pharmacy = LoginController.getLoggedInUser().getPharmacist().pharmacy;
+
+		/*
 		final List<PharmacyPrescriptionInfo> pharmacyPrescriptionInfos =
 				PharmacyPrescriptionInfo.find.where()
 				.eq("pharmacy", pharmacy)
 				.ge("sharedDate", dateFrom)
 				.le("sharedDate",dateTo)
 				.findList();
-		return ok(views.html.pharmacist.viewPharmacyPrescriptionList.render(pharmacyPrescriptionInfos,""));
+		 */
+
+		final ExpressionList<PharmacyPrescriptionInfo> ppInfoExpList = PharmacyPrescriptionInfo.find.where()
+				.eq("pharmacy", pharmacy)
+				.ge("sharedDate", dateFrom)
+				.le("sharedDate",dateTo);
+
+		if(requestMap.get("status") != null && (requestMap.get("status")[0].trim().compareToIgnoreCase("")!=0)){
+			if(requestMap.get("status")[0].trim().compareToIgnoreCase("any") != 0){
+				final PharmacyPrescriptionStatus ppstatus = PharmacyPrescriptionStatus.valueOf(requestMap.get("status")[0].trim());
+				ppInfoExpList.eq("pharmacyPrescriptionStatus", ppstatus);
+			}
+		}
+
+		return ok(views.html.pharmacist.viewPharmacyPrescriptionList.render(ppInfoExpList.findList(),""));
 	}
 
 

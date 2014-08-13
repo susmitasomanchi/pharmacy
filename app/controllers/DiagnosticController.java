@@ -40,6 +40,7 @@ import actions.BasicAuth;
 import actions.ConfirmAppUser;
 import beans.DiagnosticBean;
 
+import com.avaje.ebean.ExpressionList;
 import com.google.common.io.Files;
 
 @BasicAuth
@@ -66,23 +67,31 @@ public class DiagnosticController extends Controller {
 				Logger.warn("logged in DiagnosticRep: "+LoginController.getLoggedInUser().getDiagnosticRepresentative().id);
 				return redirect(routes.LoginController.processLogout());
 			}
-
+			//final String pattern="([^\\s]+(\\.(?i)(JPEG|jpg|png|gif|bmp))$)";
 			if (request().body().asMultipartFormData().getFile("backgroundImage") != null) {
-				final File image = request().body().asMultipartFormData().getFile("backgroundImage").getFile();
-				diagnosticCentre.backgroudImage = Files.toByteArray(image);
+				final FilePart image = request().body().asMultipartFormData().getFile("backgroundImage");
+				if(image.getContentType().equalsIgnoreCase("image/bmp")||image.getContentType().equalsIgnoreCase("image/png")||image.getContentType().equalsIgnoreCase("image/jpeg")||image.getContentType().equalsIgnoreCase("image/gif")){
+					diagnosticCentre.backgroudImage = Files.toByteArray(image.getFile());
+				}else{
+					flash().put("alert", new Alert("alert-info", "Sorry. Images Should Be In The Following Formats .JPEG,.jpg,.png,.gif,.bmp").toString());
+				}
 				diagnosticCentre.update();
 			}
 
 			if (request().body().asMultipartFormData().getFile("profileImage") != null) {
 				final FileEntity fileEntity = new FileEntity();
 				final FilePart image = request().body().asMultipartFormData().getFile("profileImage");
-				fileEntity.fileName = image.getFilename();
-				fileEntity.mimeType = image.getContentType();
-				fileEntity.byteContent = Files.toByteArray(image.getFile());
-				fileEntity.save();
-				final Long imageId=fileEntity.id;
-				diagnosticCentre.profileImageList.add(FileEntity.find.byId(imageId));
-				diagnosticCentre.update();
+				if(image.getContentType().equalsIgnoreCase("image/bmp")||image.getContentType().equalsIgnoreCase("image/png")||image.getContentType().equalsIgnoreCase("image/jpeg")||image.getContentType().equalsIgnoreCase("image/gif")){
+					fileEntity.fileName = image.getFilename();
+					fileEntity.mimeType = image.getContentType();
+					fileEntity.byteContent = Files.toByteArray(image.getFile());
+					fileEntity.save();
+					final Long imageId=fileEntity.id;
+					diagnosticCentre.profileImageList.add(FileEntity.find.byId(imageId));
+					diagnosticCentre.update();
+				}else{
+					flash().put("alert", new Alert("alert-info", "Sorry. Images Should Be In The Following Formats .JPEG,.jpg,.png,.gif,.bmp").toString());
+				}
 			} else {
 				Logger.info("BG IMAGE NULL");
 			}
@@ -91,9 +100,7 @@ public class DiagnosticController extends Controller {
 			Logger.error("");
 			flash().put("alert", new Alert("alert-danger", "Sorry. Something went wrong. Please try again.").toString());
 		}
-
 		//return ok(views.html.pharmacist.pharmacy_profile.render(pharmacy.inventoryList, pharmacy));
-
 		return redirect(routes.UserActions.dashboard());
 
 	}
@@ -214,9 +221,7 @@ public class DiagnosticController extends Controller {
 		final DiagnosticCentre diagnosticCentre = DiagnosticCentre.find.byId(diagnosticId);
 		Logger.info("before list size="+diagnosticCentre.profileImageList.size());
 		final FileEntity image = FileEntity.find.byId(imageId);
-
 		diagnosticCentre.profileImageList.remove(image);
-
 		diagnosticCentre.update();
 		//image.delete();
 		Logger.info("after list size="+diagnosticCentre.profileImageList.size());
@@ -255,10 +260,21 @@ public class DiagnosticController extends Controller {
 	 * GET/diagnostic/order-confirmed/:diagInfoId
 	 */
 	@ConfirmAppUser
-		public static Result orderServed(Long DiagnosticInfoId) {
-			DiagnosticCentrePrescriptionInfo diagnosticCentrePrescriptionInfo= DiagnosticCentrePrescriptionInfo.find.byId(DiagnosticInfoId);
+	public static Result orderServed(final Long DiagnosticInfoId) {
+		final DiagnosticCentrePrescriptionInfo diagnosticCentrePrescriptionInfo = DiagnosticCentrePrescriptionInfo.find.byId(DiagnosticInfoId);
 		diagnosticCentrePrescriptionInfo.diagnosticCentrePrescritionStatus = DiagnosticCentrePrescritionStatus.SERVED;
+		diagnosticCentrePrescriptionInfo.servedDate = new Date();
+		final Patient patient = diagnosticCentrePrescriptionInfo.prescription.patient;
+		for (final FileEntity report : diagnosticCentrePrescriptionInfo.fileEntities) {
+			if(!patient.diagnosticReportList.contains(report)){
+				patient.diagnosticReportList.add(report);
+				patient.update();
+			}
+		}
+		Logger.info("====="+diagnosticCentrePrescriptionInfo.prescription.patient.diagnosticReportList.size());
 		diagnosticCentrePrescriptionInfo.update();
+
+		Logger.info("=="+diagnosticCentrePrescriptionInfo.prescription.patient.diagnosticReportList.size());
 		return redirect(routes.DiagnosticController.getDiagnosticCentrePrescriptions("any"));
 	}
 
@@ -283,8 +299,8 @@ public class DiagnosticController extends Controller {
 	 * Action to display all DiagnosticTest for the current order
 	 */
 	@ConfirmAppUser
-		public static Result viewOrderedTest(Long DiagnosticInfoId) {
-			DiagnosticCentrePrescriptionInfo diagnosticCentrePrescriptionInfo= DiagnosticCentrePrescriptionInfo.find.byId(DiagnosticInfoId);			
+	public static Result viewOrderedTest(final Long DiagnosticInfoId) {
+		final DiagnosticCentrePrescriptionInfo diagnosticCentrePrescriptionInfo= DiagnosticCentrePrescriptionInfo.find.byId(DiagnosticInfoId);
 		return ok(views.html.diagnostic.receivedTests.render(diagnosticCentrePrescriptionInfo));
 	}
 	/**
@@ -293,7 +309,7 @@ public class DiagnosticController extends Controller {
 	 * Action to render to the uploadPatientReort.scala to get upload form
 	 */
 	@ConfirmAppUser
-		public static Result uploadDiagnosticReport(Long DiagnosticInfoId) {
+	public static Result uploadDiagnosticReport(final Long DiagnosticInfoId) {
 		return ok(views.html.diagnostic.uploadDiagnosticReport.render(DiagnosticInfoId));
 	}
 	/**
@@ -302,25 +318,80 @@ public class DiagnosticController extends Controller {
 	 * Action to upload DiagnosticReport
 	 */
 	@ConfirmAppUser
-		public static Result uploadDiagnosticReportProcess(Long DiagnosticInfoId) {
-			DiagnosticCentrePrescriptionInfo diagnosticCentrePrescriptionInfo= DiagnosticCentrePrescriptionInfo.find.byId(DiagnosticInfoId);
+	public static Result uploadDiagnosticReportProcess(final Long DiagnosticInfoId) {
+		final DiagnosticCentrePrescriptionInfo diagnosticCentrePrescriptionInfo = DiagnosticCentrePrescriptionInfo.find.byId(DiagnosticInfoId);
+
+		//@TODO: server side check for status of dpInfo
+
 		if (request().body().asMultipartFormData().getFile("file") != null) {
 			final FilePart report = request().body().asMultipartFormData().getFile("file");
-				FileEntity fileEntity = new FileEntity();
+			final FileEntity fileEntity = new FileEntity();
 			try {
 				fileEntity.mimeType = report.getContentType();
 				fileEntity.fileName = report.getFilename();
 				fileEntity.byteContent = Files.toByteArray(report.getFile());
 				diagnosticCentrePrescriptionInfo.fileEntities.add(fileEntity);
-				} catch (IOException e) {
+			} catch (final IOException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
 			diagnosticCentrePrescriptionInfo.update();
+			flash().put("alert", new Alert("alert-success", "Uploaded report("+fileEntity.fileName+") for patient, "+diagnosticCentrePrescriptionInfo.prescription.patient.appUser.name+"("+diagnosticCentrePrescriptionInfo.prescription.patient.getSexAndAge()+")").toString());
 		}
+		return redirect(routes.DiagnosticController.getDiagnosticCentrePrescriptions("any"));
+	}
 
-		return ok(views.html.diagnostic.receivedTests.render(diagnosticCentrePrescriptionInfo));
 
+	/**
+	 * @author : lakshmi
+	 * GET/diagnostic/download
+	 * downloading the Diagnostic report
+	 */
+	public static Result downloadDiagnosticReport(final Long reportId,final Long diagnosticInfoId){
+		final DiagnosticCentrePrescriptionInfo diagnosticCentrePrescriptionInfo = DiagnosticCentrePrescriptionInfo.find.byId(diagnosticInfoId);
+		// Server side validation
+		if(!(LoginController.getLoggedInUser().role.equals(Role.ADMIN_DIAGREP)
+				||
+				LoginController.getLoggedInUser().role.equals(Role.PATIENT))){
+			session().clear();
+			return redirect(routes.LoginController.processLogout());
+		}
+		if(LoginController.getLoggedInUser().role.equals(Role.ADMIN_DIAGREP)){
+			if((diagnosticCentrePrescriptionInfo.diagnosticCentre.id.longValue() != LoginController.getLoggedInUser().getDiagnosticRepresentative().diagnosticCentre.id.longValue())){
+				session().clear();
+				return redirect(routes.LoginController.processLogout());
+			}
+		}
+		if(LoginController.getLoggedInUser().role.equals(Role.PATIENT)){
+			if((diagnosticCentrePrescriptionInfo.prescription.patient.id.longValue() != LoginController.getLoggedInUser().getPatient().id.longValue()) ){
+				session().clear();
+				return redirect(routes.LoginController.processLogout());
+			}
+		}
+		final FileEntity fileEntity = FileEntity.find.byId(reportId);
+		response().setContentType("application/x-download");
+		response().setHeader("Content-disposition","attachment; filename="+fileEntity.fileName);
+		return ok(fileEntity.byteContent).as("application/pdf");
+	}
+
+
+	/**
+	 * @author : lakshmi
+	 * GET/diagnostic/remove-report
+	 * removing the report from the list
+	 */
+	public static Result removeDiagnosticReport(final Long reportId,final Long diagnosticInfoId){
+		final DiagnosticCentrePrescriptionInfo diagnosticCentrePrescriptionInfo = DiagnosticCentrePrescriptionInfo.find.byId(diagnosticInfoId);
+		// Server side validation
+		if((diagnosticCentrePrescriptionInfo.diagnosticCentre.id.longValue() != LoginController.getLoggedInUser().getDiagnosticRepresentative().diagnosticCentre.id.longValue()) || (!LoginController.getLoggedInUser().role.equals(Role.ADMIN_DIAGREP))){
+			session().clear();
+			return redirect(routes.LoginController.processLogout());
+		}
+		final FileEntity fileEntity = FileEntity.find.byId(reportId);
+		diagnosticCentrePrescriptionInfo.fileEntities.remove(fileEntity);
+		diagnosticCentrePrescriptionInfo.update();
+		fileEntity.delete();
+		return redirect(routes.DiagnosticController.getDiagnosticCentrePrescriptions("any"));
 	}
 
 
@@ -330,7 +401,7 @@ public class DiagnosticController extends Controller {
 	 */
 	@ConfirmAppUser
 	public static Result TodaysDiagnosticPrescriptions() {
-			Date now = new Date();
+		final Date now = new Date();
 		final Calendar calendarFrom = Calendar.getInstance();
 		calendarFrom.setTime(now);
 		calendarFrom.set(Calendar.HOUR_OF_DAY, 0);
@@ -345,7 +416,7 @@ public class DiagnosticController extends Controller {
 		calendarTo.set(Calendar.SECOND,59);
 		calendarTo.set(Calendar.MILLISECOND,999);
 
-			DiagnosticCentre diagnosticCentre = LoginController.getLoggedInUser().getDiagnosticRepresentative().diagnosticCentre;
+		final DiagnosticCentre diagnosticCentre = LoginController.getLoggedInUser().getDiagnosticRepresentative().diagnosticCentre;
 		final List<DiagnosticCentrePrescriptionInfo> diagnosticCentrePrescriptionInfos =
 				DiagnosticCentrePrescriptionInfo.find.where()
 				.eq("diagnosticCentre", diagnosticCentre)
@@ -354,6 +425,7 @@ public class DiagnosticController extends Controller {
 				.findList();
 		return ok(views.html.diagnostic.diagnosticPrescriptionList.render(diagnosticCentrePrescriptionInfos,"",false));
 	}
+
 	/**
 	 * @author lakshmi
 	 * Action to Display Todays Prescriptions requested to logged-in ADMIN_DIAGREP
@@ -367,18 +439,52 @@ public class DiagnosticController extends Controller {
 		}
 		if(requestMap.get("to") != null && (requestMap.get("to")[0]).trim().compareToIgnoreCase("")!=0){
 			dateTo = new DateTime(requestMap.get("to")[0]).toDate();
-				}DiagnosticCentre diagnosticCentre = LoginController.getLoggedInUser().getDiagnosticRepresentative().diagnosticCentre;
+		}
+		final DiagnosticCentre diagnosticCentre = LoginController.getLoggedInUser().getDiagnosticRepresentative().diagnosticCentre;
 
-		final List<DiagnosticCentrePrescriptionInfo> diagnosticCentrePrescriptionInfos =
+
+		/*
+				final List<DiagnosticCentrePrescriptionInfo> diagnosticCentrePrescriptionInfos =
 				DiagnosticCentrePrescriptionInfo.find.where()
 				.eq("diagnosticCentre", diagnosticCentre)
 				.ge("sharedDate", dateFrom)
 				.le("sharedDate",dateTo)
 				.findList();
-		return ok(views.html.diagnostic.diagnosticPrescriptionList.render(diagnosticCentrePrescriptionInfos,"",true));
+		 */
+
+
+		final ExpressionList<DiagnosticCentrePrescriptionInfo> dpInfoExpList = DiagnosticCentrePrescriptionInfo.find.where()
+				.eq("diagnosticCentre", diagnosticCentre)
+				.ge("sharedDate", dateFrom)
+				.le("sharedDate",dateTo);
+
+		if(requestMap.get("status") != null && (requestMap.get("status")[0].trim().compareToIgnoreCase("")!=0)){
+			if(requestMap.get("status")[0].trim().compareToIgnoreCase("any") != 0){
+				final DiagnosticCentrePrescritionStatus dpstatus = DiagnosticCentrePrescritionStatus.valueOf(requestMap.get("status")[0].trim());
+				dpInfoExpList.eq("diagnosticCentrePrescritionStatus", dpstatus);
+			}
+		}
+
+		return ok(views.html.diagnostic.diagnosticPrescriptionList.render(dpInfoExpList.findList(),"",true));
 	}
 
 
+	/**
+	 * Action to Display A Prescription to the logged in Diag_Admin
+	 * GET 	/diagnostic/prescription/:dpInfoId
+	 */
+	@ConfirmAppUser
+	public static Result showDiagnosticPrescription(final Long dpInfoId){
+		final DiagnosticCentrePrescriptionInfo dpInfo = DiagnosticCentrePrescriptionInfo.find.byId(dpInfoId);
+		// Server side validation
+		if((dpInfo.diagnosticCentre.id.longValue() != LoginController.getLoggedInUser().getDiagnosticRepresentative().diagnosticCentre.id.longValue()) || (!LoginController.getLoggedInUser().role.equals(Role.ADMIN_DIAGREP))){
+			session().clear();
+			return redirect(routes.LoginController.processLogout());
+		}
+
+		return ok(views.html.diagnostic.diagnosticCentrePrescription.render(dpInfo));
+
+	}
 
 
 

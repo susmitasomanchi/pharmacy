@@ -28,7 +28,6 @@ import beans.DiagnosticBean;
 @SuppressWarnings("serial")
 @Entity
 public class DiagnosticCentre extends BaseEntity {
-
 	@GeneratedValue(strategy = GenerationType.AUTO)
 	@Id
 	public Long id;
@@ -165,7 +164,6 @@ public class DiagnosticCentre extends BaseEntity {
 		}
 		stringBuilder.append(this.slugUrl.toLowerCase());
 		this.searchIndex = stringBuilder.toString();
-		Logger.info("The heirarichy..."+this.toString());
 		super.update();
 
 	}

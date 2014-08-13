@@ -11,6 +11,7 @@ import java.util.List;
 import java.util.Map;
 
 import actions.ConfirmAppUser;
+import beans.LoginBean;
 
 import com.google.common.io.Files;
 
@@ -29,12 +30,13 @@ import models.patient.Patient;
 import models.patient.PatientDoctorInfo;
 import models.pharmacist.Pharmacy;
 import play.Logger;
+import play.data.Form;
 import play.mvc.Controller;
 import play.mvc.Result;
 import play.mvc.Http.MultipartFormData.FilePart;
 
 public class PublicController extends Controller{
-
+	public static final Form<LoginBean> loginForm = Form.form(LoginBean.class);
 	/**
 	 * Action to render search doctor page
 	 * GET /doctor/search
@@ -568,4 +570,16 @@ public class PublicController extends Controller{
 			return redirect(routes.UserActions.dashboard());
 		}
 	}
+
+
+
+	public static Result homePages(){
+		return ok(views.html.home.render(loginForm));
+	}
+
+
+
+
+
+
 }

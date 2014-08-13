@@ -2,13 +2,16 @@
 @main("Diagnostic Order List") {
 
 <div class="row col-md-12">
+
+
+@*
 <div class="col-md-2">
   <select class="chzn" id="status-select" style="width:50%;">
 <option></option>
 <option value="any" @if(status.trim.toLowerCase().compareTo("any")==0){selected}>Any</option>
 <option value="received" @if(status.trim.toLowerCase().compareTo("received")==0){selected}>Received</option>
 @*<option value="confirmed" @if(status.trim.toLowerCase().compareTo("confirmed")==0){selected}>Confirmed</option>
-<option value="cancelled" @if(status.trim.toLowerCase().compareTo("cancelled")==0){selected}>Cancelled</option>*@
+<option value="cancelled" @if(status.trim.toLowerCase().compareTo("cancelled")==0){selected}>Cancelled</option> * @
 <option value="served" @if(status.trim.toLowerCase().compareTo("served")==0){selected}>Served</option>
 </select>
 <script>
@@ -18,42 +21,60 @@ $('#status-select').on('change', function(){
 });
 
 </script>
+</div>
+*@
+
 @if(check==true){
-   </div>
-   <div class="col-md-9">
+   <div class="col-md-12">
    <form action="@routes.DiagnosticController.getFromToDatePrescriptions()" method="POST">
-   	<div class="col-md-4 form-group">
+    <div class="col-md-3 form-group">
     <label for="from" class="col-md-3 control-label" style="padding-top:10px">From</label>
     <div class="col-lg-9">
       <input type="date" name="from" class="form-control" id="from" placeholder="From Date">
       </div>
     </div>
-    <div class="col-md-4 form-group">
+    <div class="col-md-3 form-group">
     <label for="to" class="col-md-3 control-label" style="padding-top:10px" >To</label>
     <div class="col-lg-9">
       <input type="date" name="to" class="form-control" id="to" placeholder="To Date">
       </div>
     </div>
-    <div class="col-md-4">
-      <input type="submit" class="btn btn-success btn-sm" value="Find Prescriptions">
+    
+    <div class="col-md-3 form-group">
+    <label for="to" class="col-md-3 control-label" style="padding-top:0px" >Order Status</label>
+    <div class="col-lg-9">
+    <select class="chzn" name="status" style="width:100%;" data-placeholder="Select Status">
+<option></option>
+<option value="any" @if(status.trim.toLowerCase().compareTo("any")==0){selected}>Any</option>
+<option value="RECEIVED" @if(status.trim.toLowerCase().compareTo("received")==0){selected}>Received</option>
+<option value="SERVED" @if(status.trim.toLowerCase().compareTo("served")==0){selected}>Served</option>
+</select>
+</div>
+    </div>
+    
+    <div class="col-md-3">
+      <input type="submit" class="btn btn-primary btn-sm" value="Search Prescriptions">
     </div>
     </form>
     </div>
     }
 </div>
 
-<br><br><br>
+<br><br><br>  
 <div class="row">
 <div class="col-md-1"></div>
 <div class="col-md-10">
 <table class="table table-striped table-bordered" style="vertical-align:center">
 <tr>
-<th style="text-align:center;width:50px">S.No</th>
-<th style="text-align:center;width:150px"> Doctor</th>
-<th style="text-align:center;width:150px"> Patient</th>
-<th style="text-align:center;width:150px"> Tests</th>
-<th style="text-align:center;width:350px"> Status</th>
-<th style="text-align:center;width:300px"> Action</th>
+<th style="text-align:center;"> SNo</th>
+<th style="text-align:center;"> Doctor</th>
+<th style="text-align:center;"> Patient</th>
+<th style="text-align:center;"> Shared <br> By</th>
+<th style="text-align:center;"> Shared <br> Date</th>
+<th style="text-align:center;"> Tests</th>
+<th style="text-align:center;"> Status</th>
+<th style="text-align:center;"> Reports <br> Uploaded</th>
+<th style="text-align:center;"> Prescription</th>
 </tr>
 @for((diagnosticCentrePrescriptionInfo,index) <- diagnosticCentrePrescriptionInfos.zipWithIndex) {
 <tr>
@@ -61,32 +82,80 @@ $('#status-select').on('change', function(){
 @{index+1}
 </td>
 <td>
-Dr.@diagnosticCentrePrescriptionInfo.prescription.doctor.appUser.name
+<a href="@routes.PublicController.getDoctorWithSlug(diagnosticCentrePrescriptionInfo.prescription.doctor.slugUrl)">Dr. @diagnosticCentrePrescriptionInfo.prescription.doctor.appUser.name</a>
 </td>
 <td>
-@diagnosticCentrePrescriptionInfo.prescription.patient.appUser.name
+@diagnosticCentrePrescriptionInfo.prescription.patient.appUser.name<br>
+(@diagnosticCentrePrescriptionInfo.prescription.patient.getSexAndAge())<br>
+@diagnosticCentrePrescriptionInfo.prescription.patient.appUser.mobileNumber
 </td>
-<td>
 
-@for((diagnosticTestLineItem,index) <- diagnosticCentrePrescriptionInfo.prescription.diagnosticTestLineItemList.zipWithIndex) {
-@{index+1}.@diagnosticTestLineItem.fullNameOfDiagnosticTest<br>
-}
-</td>
 <td>
-<span style="padding-right:20px">@diagnosticCentrePrescriptionInfo.diagnosticCentrePrescritionStatus</span>
-@if(diagnosticCentrePrescriptionInfo.diagnosticCentrePrescritionStatus.equals(models.diagnostic.DiagnosticCentrePrescritionStatus.RECEIVED)){
-<a  href="@routes.DiagnosticController.orderServed(diagnosticCentrePrescriptionInfo.id)" class="btn btn-xs btn-success">Served</a>
-}
-@*if(!diagnosticCentrePrescriptionInfo.diagnosticCentrePrescritionStatus.equals(models.diagnostic.DiagnosticCentrePrescritionStatus.CANCELLED)&& !diagnosticCentrePrescriptionInfo.diagnosticCentrePrescritionStatus.equals(models.diagnostic.DiagnosticCentrePrescritionStatus.SERVED)){
-<a  href="@routes.DiagnosticController.orderCancelled(diagnosticCentrePrescriptionInfo.id)" class="btn btn-xs btn-danger">Cancel</a>
-}*@
-</td>
-<td>
-@if(!diagnosticCentrePrescriptionInfo.diagnosticCentrePrescritionStatus.equals(models.diagnostic.DiagnosticCentrePrescritionStatus.SERVED)){
-<a href="@routes.DiagnosticController.uploadDiagnosticReport(diagnosticCentrePrescriptionInfo.id)" class="btn btn-xs btn-primary">Send Report</a>
+@if(diagnosticCentrePrescriptionInfo.sharedBy.role.equals(Role.DOCTOR)){
+Dr. @diagnosticCentrePrescriptionInfo.sharedBy.name
 }else{
-  <a  class="btn btn-disabled btn-sm" disabled>Report Sended</a>
+@diagnosticCentrePrescriptionInfo.sharedBy.name
 }
+</td>
+
+<td style="text-align:center;">
+@diagnosticCentrePrescriptionInfo.sharedDate.format("dd-MMM-yyyy")
+<br>
+@diagnosticCentrePrescriptionInfo.sharedDate.format("HH:mm")
+</td>
+
+<td>
+@for((diagnosticTestLineItem,index) <- diagnosticCentrePrescriptionInfo.prescription.diagnosticTestLineItemList.zipWithIndex) {
+<b>@{index+1}. @diagnosticTestLineItem.fullNameOfDiagnosticTest</b><br>
+}
+</td>
+<td>
+<span class="badge" style=""><b>@diagnosticCentrePrescriptionInfo.diagnosticCentrePrescritionStatus</b></span>
+@if(diagnosticCentrePrescriptionInfo.diagnosticCentrePrescritionStatus.equals(models.diagnostic.DiagnosticCentrePrescritionStatus.RECEIVED)){
+<br><br>
+Mark as <a  class="btn btn-xs"  data-toggle="modal" data-target="#myModal1@diagnosticCentrePrescriptionInfo.id"><b>Served</b></a>
+<div class="modal fade" id="myModal1@diagnosticCentrePrescriptionInfo.id" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+  <div class="modal-dialog" style="padding-top:200px">
+    <div class="modal-content" style="padding-left:20px">
+      <h5>Are you sure to serve the report ?</h5>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-default btn-xs" data-dismiss="modal">Close</button>
+        <a href="@routes.DiagnosticController.orderServed(diagnosticCentrePrescriptionInfo.id)" class="btn btn-primary btn-xs">Serve</a>
+           
+      </div>
+    </div>
+  </div>
+</div>
+}
+</td>
+
+<td>
+<ul style="list-style-type: none; padding-left:0px;">
+
+@for((file, index) <- diagnosticCentrePrescriptionInfo.fileEntities.zipWithIndex){
+  <li>
+      <a href="@routes.DiagnosticController.downloadDiagnosticReport(file.id,diagnosticCentrePrescriptionInfo.id)">@{index+1}. @file.fileName</a>
+		@if(diagnosticCentrePrescriptionInfo.diagnosticCentrePrescritionStatus.equals(models.diagnostic.DiagnosticCentrePrescritionStatus.RECEIVED)){
+      	&nbsp;<a style="color:red;" href="@routes.DiagnosticController.removeDiagnosticReport(file.id,diagnosticCentrePrescriptionInfo.id)"><i class="fa fa-times"></i></a>
+		}
+  </li>
+}
+
+@if(diagnosticCentrePrescriptionInfo.diagnosticCentrePrescritionStatus.equals(models.diagnostic.DiagnosticCentrePrescritionStatus.RECEIVED)){
+@helper.form(action=routes.DiagnosticController.uploadDiagnosticReportProcess(diagnosticCentrePrescriptionInfo.id),'enctype -> "multipart/form-data",'method -> "post"){
+<br>    
+<label for="file">Add Report:</label>
+<input type="file" name="file" id="file"><br>
+<input type="submit" class="btn btn-xs" name="submit" value="Upload">
+}
+}
+</ul>
+</td>
+ 
+<td>
+<a href="@routes.DiagnosticController.showDiagnosticPrescription(diagnosticCentrePrescriptionInfo.id)" class="btn btn-xs btn-success">View Prescription</a>
+<br>
+@*<a href="@routes.DiagnosticController.viewOrderedTest(diagnosticCentrePrescriptionInfo.id)" class="btn btn-xs btn-default">Report Files</a>*@
 </td>
 }
 </tr>

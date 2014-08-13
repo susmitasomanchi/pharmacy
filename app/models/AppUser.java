@@ -14,6 +14,7 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Lob;
 import javax.persistence.OneToOne;
+import javax.validation.constraints.Min;
 
 import models.diagnostic.DiagnosticRepresentative;
 import models.doctor.Doctor;
@@ -48,6 +49,7 @@ public class AppUser extends BaseEntity {
 	@Email
 	public String email;
 
+	@Min(6)
 	@Column(columnDefinition="TEXT")
 	public String password;
 

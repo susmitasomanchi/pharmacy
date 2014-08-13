@@ -6,6 +6,7 @@ import java.util.List;
 
 import models.Alert;
 import models.AppUser;
+import models.FileEntity;
 import models.diagnostic.DiagnosticCentre;
 import models.diagnostic.DiagnosticCentrePrescriptionInfo;
 import models.diagnostic.DiagnosticCentrePrescritionStatus;
@@ -224,8 +225,9 @@ public class PatientController extends Controller {
 
 
 	/**
-	 * @author lakshmi Action to list out favorite Diagnostic Centre of Patient
-	 *         of loggedin DOCTOR GET/patient/favorite-diagnostic-centres
+	 * @author lakshmi 
+	 * Action to list out favorite Diagnostic Centre of loggedIn Patient
+	 * GET/patient/favorite-diagnostic-centres
 	 */
 	@ConfirmAppUser
 	public static Result patientFavoriteDiagnosticCentres() {
@@ -266,7 +268,7 @@ public class PatientController extends Controller {
 	}
 
 	/**@author lakshmi
-	 * Action to show all prescription created by loggedInPatient
+	 * Action to show all prescription Of loggedInPatient
 	 *GET /user/prescriptions
 	 */
 	@ConfirmAppUser
@@ -278,7 +280,7 @@ public class PatientController extends Controller {
 	}
 	/**
 	 * @author lakshmi
-	 * Action to show the prescription to the loggedInPatient
+	 * Action to show the prescription content to the loggedInPatient
 	 * GET/user/show-prescription/:prescriptionId
 	 */
 	@ConfirmAppUser
@@ -367,6 +369,20 @@ public class PatientController extends Controller {
 		flash().put("alert",new Alert("alert-success", "Prescription shared with "+sharedWith.toString()).toString());
 		return redirect(routes.PatientController.viewAllPatientPrescriptions());
 	}
+/**
+ * @author lakshmi
+ * Action to display diagnostic reports
+ */
+public static Result viewDiagnosticReports(){
+	Patient patient = LoginController.getLoggedInUser().getPatient();
+	/*DiagnosticCentrePrescriptionInfo info = DiagnosticCentrePrescriptionInfo.find.byId(diagnosticInfoId);*/
+	List<DiagnosticCentrePrescriptionInfo> diagnosticCentrePrescriptionInfos = DiagnosticCentrePrescriptionInfo.find.where().eq("prescription.patient", patient).findList();
+	return ok(views.html.patient.patientDiagnosticReports.render(diagnosticCentrePrescriptionInfos));
+	
+}
+
+
+
 
 
 }

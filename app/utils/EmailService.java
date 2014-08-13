@@ -36,9 +36,9 @@ public class EmailService {
 			final Email email = new SimpleEmail();
 			email.setHostName("smtp.gmail.com");
 			email.setSmtpPort(587);
-			email.setAuthenticator(new DefaultAuthenticator("assistant@greensoftware.in", "test.assistant"));
+			email.setAuthenticator(new DefaultAuthenticator("noreply@mednetwork.in", "we#will#win"));
 			email.setSSLOnConnect(true);
-			email.setFrom("assistant@greensoftware.in");
+			email.setFrom("noreply@mednetwork.in","MedNetwork");
 			email.setSubject(subject);
 			email.setMsg(message);
 			email.addTo(receiverEmailId);
@@ -75,9 +75,9 @@ public class EmailService {
 			final HtmlEmail email = new HtmlEmail();
 			email.setHostName("smtp.gmail.com");
 			email.setSmtpPort(587);
-			email.setAuthenticator(new DefaultAuthenticator("mitesh.greensoftware@gmail.com", "mitesh@greensoftware.in"));
+			email.setAuthenticator(new DefaultAuthenticator("noreply@mednetwork.in", "we#will#win"));
 			email.setSSLOnConnect(true);
-			email.setFrom("assistant@greensoftware.in");
+			email.setFrom("noreply@mednetwork.in","MedNetwork");
 			email.setSubject("Please Confirmation Email at MedNetwork");
 			email.setHtmlMsg(builder.toString());
 			email.addTo(appUser.email);
@@ -105,9 +105,9 @@ public class EmailService {
 		try {
 			email.setHostName("smtp.gmail.com");
 			email.setSmtpPort(587);
-			email.setAuthenticator(new DefaultAuthenticator("mitesh.greensoftware@gmail.com", "mitesh@greensoftware.in"));
+			email.setAuthenticator(new DefaultAuthenticator("noreply@mednetwork.in", "we#will#win"));
 			email.setSSLOnConnect(true);
-			email.setFrom("me@apache.org", "Me");
+			email.setFrom("noreply@mednetwork.in","MedNetwork");
 			email.setSubject("The picture");
 			email.setMsg("Here is the picture you wanted");
 			email.addTo(receiverEmailId);

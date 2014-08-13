@@ -40,7 +40,7 @@
 				<td>@if(prescription.appointment != null){@prescription.appointment.appointmentTime.format("dd-MMM-yyyy HH:mm")}</td>
 				</div>
 				<div class="col-md-3 column">
-				<td>@{prescription.patient.appUser.name}&nbsp;(@prescription.patient.appUser.sex.toString().substring(0,1)/@prescription.patient.appUser.getAge())</td>
+				<td>@{prescription.patient.appUser.name}&nbsp;(@prescription.patient.getSexAndAge())</td>
 				</div>
 				<td>
 				
@@ -84,7 +84,7 @@
 				<td>@if(prescription.appointment != null){@prescription.appointment.appointmentTime.format("dd-MMM-yyyy HH:mm")}</td>
 				</div>
 				<div class="col-md-3 column">
-				<td>@{prescription.patient.appUser.name}&nbsp;(@prescription.patient.appUser.sex.toString().substring(0,1)/@prescription.patient.appUser.getAge())</td>
+				<td>@{prescription.patient.appUser.name}&nbsp;(@prescription.patient.getSexAndAge())</td>
 				</div>
 				<td>
 				
