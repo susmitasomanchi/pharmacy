@@ -21,7 +21,6 @@ import play.mvc.Result;
 
 import com.avaje.ebean.Ebean;
 
-@SuppressWarnings("deprecation")
 public class CronController extends Controller {
 
 
@@ -170,28 +169,17 @@ public class CronController extends Controller {
 												}
 											}
 										}
-
 									}
-
 								}
-
 								Logger.info("***end of shedules");
 								calendar.add(Calendar.DATE, 1);
 								dayss--;
 							}
-
 						}
-
-
-
-
 					}
 				}
 			}
-
-
 			Logger.info("Created");
-
 
 		} catch (final Exception e) {
 			e.printStackTrace();

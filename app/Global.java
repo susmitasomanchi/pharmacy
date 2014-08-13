@@ -1,5 +1,8 @@
 import java.util.concurrent.TimeUnit;
 
+import org.joda.time.DateTime;
+import org.joda.time.Seconds;
+
 import play.Application;
 import play.GlobalSettings;
 import play.libs.Akka;
@@ -11,6 +14,12 @@ import akka.actor.Props;
 
 public class Global extends GlobalSettings {
 
+
+	/**
+	 * @author: Mitesh
+	 *	 For testing
+	 */
+	/*
 	@Override
 	public void onStart(final Application app) {
 		final ActorRef myActor = Akka.system().actorOf(new Props(MyActor.class));
@@ -24,8 +33,10 @@ public class Global extends GlobalSettings {
 				null
 				);
 	}
+	 */
 
-	/*@Override
+
+	@Override
 	public void onStart(final Application app) {
 		final ActorRef myActor = Akka.system().actorOf(new Props(MyActor.class));
 
@@ -38,6 +49,7 @@ public class Global extends GlobalSettings {
 				null
 				);
 	}
+
 	public static int nextExecutionInSeconds(final int hour, final int minute){
 		return Seconds.secondsBetween(
 				new DateTime(),
@@ -55,6 +67,6 @@ public class Global extends GlobalSettings {
 		return (next.isBeforeNow())
 				? next.plusHours(24)
 						: next;
-	}*/
+	}
 
 }
