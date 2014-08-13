@@ -379,6 +379,9 @@ GET    /view-products                              controllers.ProductController
 GET		/patient_data					controllers.SampleDataController.patientTest()
 GET		/prescription_data					controllers.SampleDataController.prescripetionTest()
 GET	/mr/sample-data					controllers.SampleDataController.mrSampleData()
+
+#Cron
+GET		/cron/start						controllers.CronController.startCron()
 # Map static resources from the /public folder to the /assets URL path
 GET    /assets/*file                                    controllers.Assets.at(path="/public", file)
 

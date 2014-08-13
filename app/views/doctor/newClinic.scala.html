@@ -186,8 +186,18 @@
 	</div>
 </div>
 <input type="hidden" name="id" value="@clinicForm("id").value">
-<button id="submit"type="submit" class="btn btn-primary btn-sm"  data-toggle="popover" title="Data Incorrect" data-content="Check From and To values">Submit</button>
-
+<button id="submit"type="submit" class="btn btn-primary btn-sm"   data-toggle="modal" data-target=".bs-example-modal-sm"  data-toggle="popover" title="Data Incorrect" data-content="Check From and To values">Submit</button>
+<div class="modal fade bs-example-modal-sm" tabindex="-1" role="dialog" aria-labelledby="mySmallModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-sm">
+    <div class="modal-content">
+        <div class="modal-header alert-info">
+        <h4 class="modal-title" id="myModalLabel"> Wait while creating  the clinic</h4>
+      </div><div class="modal-body">
+      	<div style="text-align: center;"><span   style="font-size:50px;"><i class="fa fa-spinner fa-spin"></i></span></div>
+      </div>
+    </div>
+  </div>
+</div>
 </form>
 
 <script>
@@ -338,6 +348,10 @@
 
 
 <script type="text/javascript"> 
+$('.modal').on('hidden.bs.modal', function () {
+	$('#submit').html('Please Wait <i class="fa fa-refresh fa-spin">');
+	$('#submit').prop('disabled', true);
+	});
 $( document ).ready(function() {
 });
 
