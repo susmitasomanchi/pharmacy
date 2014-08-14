@@ -26,6 +26,7 @@ public class Application extends Controller {
 		return redirect(routes.Application.index());
 	}
 
+
 	/*public static Result medicalRepresentative(){
 		return ok(views.html.mr.medicalRepresentative.render(mrForm));
 

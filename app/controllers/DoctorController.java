@@ -30,7 +30,7 @@ import models.doctor.DoctorEducation;
 import models.doctor.DoctorExperience;
 import models.doctor.DoctorProduct;
 import models.doctor.DoctorSocialWork;
-import models.doctor.DoctorSpecialization;
+import models.doctor.MasterSpecialization;
 import models.doctor.MedicineLineItem;
 import models.doctor.Prescription;
 import models.doctor.QuestionAndAnswer;
@@ -63,14 +63,10 @@ import com.google.common.io.Files;
 @BasicAuth
 public class DoctorController extends Controller {
 
-	public static Form<DoctorClinicInfoBean> clinicForm = Form
-			.form(DoctorClinicInfoBean.class);
-	public static Form<QuestionAndAnswerBean> questionAndAnswerForm = Form
-			.form(QuestionAndAnswerBean.class);
-	public static Form<DoctorClinicInfo> doctorClinicForm = Form
-			.form(DoctorClinicInfo.class);
-	public static Form<PrescriptionBean> prescriptionForm = Form
-			.form(PrescriptionBean.class);
+	public static Form<DoctorClinicInfoBean> clinicForm = Form.form(DoctorClinicInfoBean.class);
+	public static Form<QuestionAndAnswerBean> questionAndAnswerForm = Form.form(QuestionAndAnswerBean.class);
+	public static Form<DoctorClinicInfo> doctorClinicForm = Form.form(DoctorClinicInfo.class);
+	public static Form<PrescriptionBean> prescriptionForm = Form.form(PrescriptionBean.class);
 
 	/**
 	 * Action to update basic field of doctor like name, specialization, degree
@@ -100,18 +96,12 @@ public class DoctorController extends Controller {
 				doctor.appUser.name = requestMap.get("fullname")[0].trim();
 			}
 
-			if (requestMap.get("specialization") != null) { // &&
-				// !(requestMap.get("specialization").length
-				// > 0)
-				final List<DoctorSpecialization> oldSpezList = new ArrayList<DoctorSpecialization>();
+			if (requestMap.get("specialization") != null ) {	//&& !(requestMap.get("specialization").length > 0)
+				final List<MasterSpecialization> oldSpezList = new ArrayList<MasterSpecialization>();
 				oldSpezList.addAll(doctor.specializationList);
-				doctor.specializationList.removeAll(oldSpezList);// .clear()
-				// wasnt
-				// working
-				for (final String specializationId : requestMap
-						.get("specialization")) {
-					final DoctorSpecialization spez = DoctorSpecialization.find
-							.byId(Long.parseLong(specializationId));
+				doctor.specializationList.removeAll(oldSpezList);// .clear() wasnt working
+				for (final String specializationId : requestMap.get("specialization")) {
+					final MasterSpecialization spez = MasterSpecialization.find.byId(Long.parseLong(specializationId));
 					doctor.specializationList.add(spez);
 				}
 			}
@@ -132,39 +122,23 @@ public class DoctorController extends Controller {
 				doctor.description = requestMap.get("description")[0].trim();
 			}
 
-			if (requestMap.get("email") != null
-					&& !(requestMap.get("email")[0].trim().isEmpty())) {
+			if (requestMap.get("email") != null && !(requestMap.get("email")[0].trim().isEmpty())) {
 				final String oldEmail = doctor.appUser.email;
-				if (oldEmail.trim().compareToIgnoreCase(
-						requestMap.get("email")[0].trim()) != 0) {
-					if (AppUser.find.where()
-							.ieq("email", requestMap.get("email")[0].trim())
-							.findRowCount() > 0) {
-						flash().put(
-								"alert",
-								new Alert("alert-danger",
-										"Sorry! Another User with email id "
-												+ requestMap.get("email")[0]
-														.trim()
-														+ " already exists!")
-								.toString());
+				if (oldEmail.trim().compareToIgnoreCase(requestMap.get("email")[0].trim()) != 0) {
+					if(AppUser.find.where().ieq("email", requestMap.get("email")[0].trim()).findRowCount()>0){
+						flash().put("alert", new Alert("alert-danger", "Sorry! Another User with email id "+requestMap.get("email")[0].trim()+" already exists!").toString());
 						return redirect(routes.UserActions.dashboard());
 					}
-					doctor.appUser.email = requestMap.get("email")[0].trim()
-							.toLowerCase();
+					doctor.appUser.email = requestMap.get("email")[0].trim().toLowerCase();
 					doctor.appUser.emailConfirmed = false;
 				}
 			}
 
-			if (requestMap.get("mobileNumber") != null
-					&& !(requestMap.get("mobileNumber")[0].trim().isEmpty())) {
+			if (requestMap.get("mobileNumber") != null && !(requestMap.get("mobileNumber")[0].trim().isEmpty())) {
 				final Long oldNumber = doctor.appUser.mobileNumber;
-				final Long newNumber = Long.parseLong(requestMap
-						.get("mobileNumber")[0].trim());
-				if (oldNumber == null
-						|| (oldNumber.longValue() != newNumber.longValue())) {
-					doctor.appUser.mobileNumber = Long.parseLong(requestMap
-							.get("mobileNumber")[0].trim());
+				final Long newNumber = Long.parseLong(requestMap.get("mobileNumber")[0].trim());
+				if (oldNumber == null || (oldNumber.longValue() != newNumber.longValue())) {
+					doctor.appUser.mobileNumber = Long.parseLong(requestMap.get("mobileNumber")[0].trim());
 					doctor.appUser.mobileNumberConfirmed = false;
 				}
 			}
@@ -724,7 +698,6 @@ public class DoctorController extends Controller {
 										.eq("appointmentTime",
 												calendar.getTime())
 												.findUnique() == null) {
-									Logger.info("  " + calendar.getTime());
 									final Appointment appointment = new Appointment();
 									appointment.appointmentStatus = AppointmentStatus.AVAILABLE;
 									appointment.appointmentTime = calendar

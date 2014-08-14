@@ -11,7 +11,7 @@ import play.db.ebean.Model;
 
 @SuppressWarnings("serial")
 @Entity
-public class DoctorSpecialization extends BaseEntity{
+public class MasterSpecialization extends BaseEntity{
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO)
@@ -23,6 +23,6 @@ public class DoctorSpecialization extends BaseEntity{
 	@Column(columnDefinition="TEXT")
 	public String remarks;
 
-	public static Model.Finder<Long,DoctorSpecialization> find = new Finder<Long, DoctorSpecialization>(Long.class, DoctorSpecialization.class);
+	public static Model.Finder<Long,MasterSpecialization> find = new Finder<Long, MasterSpecialization>(Long.class, MasterSpecialization.class);
 
 }

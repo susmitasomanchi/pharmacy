@@ -198,7 +198,7 @@ You profile is available at
 
 <select id=&quot;new-specialization&quot; style=&quot;color:#292929; font-weight:bold; width:200px;&quot; data-placeholder=&quot;Select Specializations&quot; multiple>
 <option></option>
-@for(spez <- models.doctor.DoctorSpecialization.find.all()){
+@for(spez <- models.doctor.MasterSpecialization.find.all()){
 	@if(doctor.specializationList.contains(spez)){
 		<option style=&quot;color:#292929; font-weight:bold;&quot; value=&quot;@spez.id&quot; selected>@spez.name</option>
 	}else{

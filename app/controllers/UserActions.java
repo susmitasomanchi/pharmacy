@@ -32,9 +32,13 @@ public class UserActions extends Controller {
 
 			return ok(views.html.patient.fav_doctors.render(patient.patientDoctorInfoList));
 		}
+		if(appUser.role.equals(Role.MEDNETWORK_ADMIN)){
+			return ok(views.html.mednetAdmin.adminProfile.render());
+		}
 
 		//@TODO: none should render the dashboard of patient
 		return ok("Not implemented yet");
+
 	}
 
 }

@@ -62,6 +62,10 @@ GET		/doctor/search/:key								controllers.PublicController.processSearchDoctor
 GET		/pharmacy/search/:searchString                  controllers.PublicController.processSearchPharmacies(searchString: String)
 #GET   	/pharmacy/add-favourite-pharmacy/:pharmacyId/:str   controllers.PublicController.myFavoritePharmacy(pharmacyId : Long,str: String)
 GET		/pharmacy/search									controllers.PublicController.searchPharmaciesPage()
+GET    /feedback											controllers.PublicController.feedBack()
+POST    /feedback											controllers.PublicController.saveFeedBack()
+
+
 GET		/doctor/add-to-favorite/:docId					controllers.PublicController.addToFavDoctor(docId: Long)
 GET		/diagnostic/get-image/:diagnosticId/:imageId	controllers.PublicController.getDiagnosticImages(diagnosticId: Long,imageId: Long)
 GET		/diagnostic/remove-diagnostic/:diagnosticId					controllers.PublicController.removeFavoriteDiagnosticCentre(diagnosticId: Long)
@@ -192,6 +196,13 @@ GET 	/diagnostic/:slugUrl								controllers.PublicController.getDiagnosticCentr
 GET		/static/fav/pharmacies							controllers.PharmacistController.staticFavPharmacies()
 GET		/create/master									controllers.SampleDataController.createMasterMedicinesAndTests()
 GET		/create/spez									controllers.SampleDataController.createDocSpez()
+
+GET		/admin/specialization-list						controllers.MednetworkAdminController.getSpecializationList()
+POST	/admin/add-specialization						controllers.MednetworkAdminController.addSpecialization()
+POST	/admin/update-specialization					controllers.MednetworkAdminController.updateSpecialization()
+GET		/admin/feedback-list							controllers.MednetworkAdminController.getFeedbackList()
+GET		/admin/delete-feedback/:id						controllers.MednetworkAdminController.deleteFeedback(id: Long)
+
 #############################	PRODUCTION	#################################################################################
 
 
@@ -381,6 +392,9 @@ GET    /view-products                              controllers.ProductController
 GET		/patient_data					controllers.SampleDataController.patientTest()
 GET		/prescription_data					controllers.SampleDataController.prescripetionTest()
 GET	/mr/sample-data					controllers.SampleDataController.mrSampleData()
+
+#Mednetwork-Admin
+GET		/admin						controllers.SampleDataController.mednetAdmin()
 
 #Cron
 GET		/cron/start						controllers.CronController.startCron()

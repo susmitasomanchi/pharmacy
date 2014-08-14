@@ -12,6 +12,7 @@ PLEASE DO NOT MODIFY IT BY HAND
 package controllers;
 import static play.libs.F.Promise.promise;
 
+
 import java.security.MessageDigest;
 import java.security.SecureRandom;
 import java.text.ParseException;
@@ -208,6 +209,7 @@ public class UserController extends Controller {
 		// Async Execution
 		promise(new Function0<Integer>() {
 			//@Override
+			@Override
 			public Integer apply() {
 				if(EmailService.sendConfirmationEmail(appUser)){
 					flash().put("alert", new Alert("alert-success","A confirmation mail has been sent to your email id.").toString());

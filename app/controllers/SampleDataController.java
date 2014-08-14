@@ -12,16 +12,22 @@ import models.Role;
 import models.diagnostic.DiagnosticCentrePrescriptionInfo;
 import models.doctor.DiagnosticTestLineItem;
 import models.doctor.Doctor;
-import models.doctor.DoctorSpecialization;
+import models.doctor.MasterSpecialization;
 import models.doctor.Prescription;
 import models.mr.MedicalRepresentative;
 import models.mr.PharmaceuticalCompany;
 import models.patient.Patient;
 import models.patient.PatientDoctorInfo;
 import play.Logger;
+import play.libs.WS;
 import play.mvc.Controller;
 import play.mvc.Result;
 import utils.EmailService;
+import utils.SMSService;
+import play.libs.WS;
+import play.mvc.Result;
+import static play.libs.F.Function;
+import static play.libs.F.Promise;
 
 public class SampleDataController extends Controller {
 
@@ -303,28 +309,37 @@ public class SampleDataController extends Controller {
 
 
 	public static Result createDocSpez(){
-		DoctorSpecialization spez;
-		spez = new DoctorSpecialization();
+		MasterSpecialization spez;
+		spez = new MasterSpecialization();
 		spez.name = "Cardiology";
 		spez.save();
-		spez = new DoctorSpecialization();
+		spez = new MasterSpecialization();
 		spez.name = "Opthalmology";
 		spez.save();
-		spez = new DoctorSpecialization();
+		spez = new MasterSpecialization();
 		spez.name = "Orthopaedic";
 		spez.save();
-		spez = new DoctorSpecialization();
+		spez = new MasterSpecialization();
 		spez.name = "Neurologist";
 		spez.save();
-		spez = new DoctorSpecialization();
+		spez = new MasterSpecialization();
 		spez.name = "Paediatrics";
 		spez.save();
-		spez = new DoctorSpecialization();
+		spez = new MasterSpecialization();
 		spez.name = "Gynecologist";
 		spez.save();
-		spez = new DoctorSpecialization();
+		spez = new MasterSpecialization();
 		spez.name = "Obstetician";
 		spez.save();
+		return ok();
+	}
+
+	public static Result mednetAdmin(){
+		final AppUser appUser = new AppUser();
+		appUser.name = "laxmi";
+		appUser.email = "vlaxmi.b3@gmail.com";
+		appUser.role = Role.MEDNETWORK_ADMIN;
+		appUser.save();
 		return ok();
 	}
 
@@ -360,6 +375,15 @@ public class SampleDataController extends Controller {
 	 */
 
 
+	public static Result testurl(){
+		SMSService.sendSMS("9999999999", "test!");
+		return ok("This Page");
+	}
 
+
+	public static Result test222(){
+		Logger.info("Test 2222222");
+		return ok();
+	}
 }
 
