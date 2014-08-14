@@ -110,6 +110,7 @@ POST   /doctor/update-clinic                            controllers.DoctorContro
 POST   /doctor/update-clinic-schedule                   controllers.DoctorController.processUpdateClinicSchedule()
 GET    /doctor/delete-clinic/:id                        controllers.DoctorController.deleteClinic(id:Long)
 
+
 GET		/doctor/sig-codes									controllers.DoctorController.showSigCodes()
 POST	/doctor/add-sig-code								controllers.DoctorController.addSigCode()
 GET		/doctor/all-appointments							controllers.DoctorController.viewAllAppointments()

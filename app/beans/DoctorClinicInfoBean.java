@@ -13,7 +13,6 @@ import models.doctor.DaySchedule;
 import models.doctor.Doctor;
 import models.doctor.DoctorClinicInfo;
 import play.Logger;
-import play.data.validation.Constraints.Required;
 
 @SuppressWarnings("serial")
 public class DoctorClinicInfoBean implements Serializable {
@@ -24,7 +23,6 @@ public class DoctorClinicInfoBean implements Serializable {
 
 	public Long clinicId;
 
-	@Required
 	public String name;
 
 	public String contactPersonName;
@@ -37,7 +35,6 @@ public class DoctorClinicInfoBean implements Serializable {
 
 	public String area;
 
-	@Required
 	public String city;
 
 	public String state;
