@@ -202,8 +202,6 @@ POST	/admin/update-specialization					controllers.MednetworkAdminController.upda
 GET		/admin/feedback-list							controllers.MednetworkAdminController.getFeedbackList()
 GET		/admin/delete-feedback/:id						controllers.MednetworkAdminController.deleteFeedback(id: Long)
 
-GET		/testurl									controllers.SampleDataController.testurl()
-GET		/test222									controllers.SampleDataController.test222()
 #############################	PRODUCTION	#################################################################################
 
 
