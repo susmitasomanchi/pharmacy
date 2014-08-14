@@ -664,7 +664,6 @@ public class DoctorController extends Controller {
 			final Calendar calendar1 = Calendar.getInstance();
 			final Calendar calendar2 = Calendar.getInstance();
 			final SimpleDateFormat dateFormat = new SimpleDateFormat("kk:mm");
-			final Doctor doctor = LoginController.getLoggedInUser().getDoctor();
 			final Calendar calendar = Calendar.getInstance();
 			calendar.setTime(new Date());
 			for (int date = 0; date < 90; date++) {
@@ -685,8 +684,6 @@ public class DoctorController extends Controller {
 						final int minutsToClinic = calendar1
 								.get(Calendar.MINUTE)
 								- calendar2.get(Calendar.MINUTE);
-						Logger.info("total minutes***"
-								+ calendar1.get(Calendar.MINUTE));
 						calendar.set(Calendar.HOUR_OF_DAY,
 								calendar2.get(Calendar.HOUR_OF_DAY));
 						calendar.set(Calendar.MINUTE,
@@ -741,7 +738,6 @@ public class DoctorController extends Controller {
 					}
 
 				}
-				Logger.info("***end of shedules");
 				calendar.add(Calendar.DATE, 1);
 			}
 			flash().put(
