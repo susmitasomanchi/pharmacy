@@ -1,43 +1,67 @@
-@()
+@(appUser: models.AppUser)
 
-@main("Feedback Form"){
+@no_navbar("Feedback Form"){
 
+<br><br><br>
+
+    	<div class="container">
+    		<div class="row">
+    		<div class="col-md-12">
+    		<div class="panel panel-primary">
+  			<div class="panel-heading">
+    			<h3 class="panel-title">Feedback Form</h3>
+  			</div>
+  			<div class="panel-body">
 <div class="row">
 <div class="col-md-2">
 </div>
 <div class="col-md-8 well">
-<form>
+<form action="@routes.PublicController.saveFeedBack()" method="POST">
 <div class="form-group">
 <label for="firstName" class="col-md-4" style="font-size:16px"> Name <span style="color:red">*</span></label>
-<div class="col-lg-8"><input type="text" class="form-control" name="firstName" placeholder="Name"></div>
+<div class="col-lg-8"><input type="text" class="form-control" name="firstName" placeholder="Name" @if(appUser!=null){value="@appUser.name"}></div>
 </div>
 <br><br>
 <div class="form-group">
 <label for="role" class="col-md-4" style="font-size:16px"> Role </label>
 <div class="col-md-8">
-<select class="form-control">
-<option value="1">Doctor</option>
-<option value="2">Pharmacist</option>
-<option value="3">Admin Diag Rep</option>
-<option value="4">User</option>
+<select class="form-control" name="role">
+<option @if(appUser!=null){value="@appUser.role"}>@if(appUser!=null){@appUser.role}</option>
+<option value="DOCTOR">Doctor</option>
+<option value="ADMIN_PHARMACIST">Pharmacist</option>
+<option value="ADMIN_DIAGREP">Admin Diag Rep</option>
+<option value="PATIENT">User</option>
 </select>
 </div>
 </div>
 <br><br>
 <div class="form-group">
+<label for="firstName" class="col-md-4" style="font-size:16px"> Email </label>
+<div class="col-lg-8"><input type="text" class="form-control" name="email" @if(appUser!=null){value="@appUser.email"} placeholder="Email"></div>
+</div>
+<br><br>
+<div class="form-group">
 <label for="feedback" class="col-md-4" style="font-size:16px"> Feedback </label>
 <div class="col-lg-8">
-<textarea rows="5" cols="49"></textarea>
+<textarea rows="5" cols="49" name="remarks"></textarea>
 </div>
 </div>
 <div class="pull-right" style="padding-right:15px">
 <br>
-	<a href="#" class="btn btn-primary btn-sm" >Submit</a>
-	<a href="#" class="btn btn-default btn-sm" >Reset</a>
+<input type="submit" class="btn btn-primary btn-sm" value="Submit">
+	@*<a href="@routes.PublicController.saveFeedBack()" class="btn btn-primary btn-sm" >Submit</a>
+	<a href="#" class="btn btn-default btn-sm" >Reset</a>*@
 	</div>
 </form>
 </div>
 <div class="col-md-2">
 </div>
 </div>
+
+  				
+  			</div>
+			</div>
+    		</div>
+    		</div>
+    	</div>
 }

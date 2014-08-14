@@ -62,6 +62,10 @@ GET		/doctor/search/:key								controllers.PublicController.processSearchDoctor
 GET		/pharmacy/search/:searchString                  controllers.PublicController.processSearchPharmacies(searchString: String)
 #GET   	/pharmacy/add-favourite-pharmacy/:pharmacyId/:str   controllers.PublicController.myFavoritePharmacy(pharmacyId : Long,str: String)
 GET		/pharmacy/search									controllers.PublicController.searchPharmaciesPage()
+GET    /feedback											controllers.PublicController.feedBack()
+POST    /feedback											controllers.PublicController.saveFeedBack()
+
+
 GET		/doctor/add-to-favorite/:docId					controllers.PublicController.addToFavDoctor(docId: Long)
 GET		/diagnostic/get-image/:diagnosticId/:imageId	controllers.PublicController.getDiagnosticImages(diagnosticId: Long,imageId: Long)
 GET		/diagnostic/remove-diagnostic/:diagnosticId					controllers.PublicController.removeFavoriteDiagnosticCentre(diagnosticId: Long)
@@ -73,6 +77,7 @@ GET    /pharmacy/join                              			controllers.UserController
 GET    /diagnostic/join                              		controllers.UserController.joinUsDiagnostic()
 GET    /user/join											controllers.UserController.joinUsPatient()
 POST   /join		                              			controllers.UserController.processJoinUs()
+
 
 # Dashboard of LoggedInUser
 GET		/dashboard                                  controllers.UserActions.dashboard()
@@ -381,7 +386,7 @@ GET		/patient_data					controllers.SampleDataController.patientTest()
 GET		/prescription_data					controllers.SampleDataController.prescripetionTest()
 GET	/mr/sample-data					controllers.SampleDataController.mrSampleData()
 
-GET    /feedback					controllers.Application.feedBack()
+
 
 #Cron
 GET		/cron/start						controllers.CronController.startCron()

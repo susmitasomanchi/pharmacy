@@ -1,6 +1,5 @@
 package controllers;
 
-import java.io.IOException;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -10,17 +9,12 @@ import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
-import actions.ConfirmAppUser;
-import beans.LoginBean;
-
-import com.google.common.io.Files;
-
 import models.Alert;
 import models.AppUser;
+import models.Feedback;
 import models.FileEntity;
 import models.Role;
 import models.diagnostic.DiagnosticCentre;
-import models.diagnostic.DiagnosticCentrePrescriptionInfo;
 import models.doctor.Appointment;
 import models.doctor.Day;
 import models.doctor.DaySchedule;
@@ -33,7 +27,8 @@ import play.Logger;
 import play.data.Form;
 import play.mvc.Controller;
 import play.mvc.Result;
-import play.mvc.Http.MultipartFormData.FilePart;
+import actions.ConfirmAppUser;
+import beans.LoginBean;
 
 public class PublicController extends Controller{
 	public static final Form<LoginBean> loginForm = Form.form(LoginBean.class);
@@ -570,12 +565,53 @@ public class PublicController extends Controller{
 			return redirect(routes.UserActions.dashboard());
 		}
 	}
+	/**
+	 * @author lakshmi
+	 * Action to render the feedback page
+	 * @return
+	 */
+	public static Result feedBack(){
 
-
-
-	public static Result homePages(){
-		return ok(views.html.home.render(loginForm));
+		AppUser appUser = null;
+		if((LoginController.getLoggedInUserRole().equals(Role.DOCTOR)) ||
+				LoginController.getLoggedInUserRole().equals(Role.PATIENT) ||
+				LoginController.getLoggedInUserRole().equals(Role.ADMIN_PHARMACIST) ||
+				LoginController.getLoggedInUserRole().equals(Role.ADMIN_DIAGREP)){
+			appUser = LoginController.getLoggedInUser();
+		}
+		return ok(views.html.feedback.render(appUser));
 	}
+
+	/**
+	 * @author lakshmi
+	 * Action to render the feedback page
+	 * @return
+	 */
+	public static Result saveFeedBack(){
+		Logger.info("test1");
+		final Map<String,String[]> requestData = request().body().asFormUrlEncoded();
+		final Feedback feedback = new Feedback();
+		if(requestData.get("firstName")[0] != null && requestData.get("firstName")[0].trim() != ""){
+			Logger.info("test1");
+			feedback.name = requestData.get("firstName")[0];
+		}
+		if(requestData.get("role")[0] != null && requestData.get("role")[0].trim() != ""){
+			Logger.info("test1");
+			feedback.role = requestData.get("role")[0];
+		}
+		if(requestData.get("email")[0] != null && requestData.get("email")[0].trim() != ""){
+			Logger.info("test1");
+			feedback.email = requestData.get("email")[0];
+		}
+		if(requestData.get("remarks")[0] != null && requestData.get("remarks")[0].trim() != ""){
+			Logger.info("test1");
+			feedback.remarks = requestData.get("remarks")[0];
+		}
+		feedback.save();
+		flash().put("alert", new Alert("alert-info", "Thanx For Your Valuable Feedback.").toString());
+		return redirect(routes.UserActions.dashboard());
+	}
+
 
 
 
