@@ -6,8 +6,10 @@ import java.util.Map;
 import com.avaje.ebean.annotation.EnumValue;
 
 public enum Role {
-	@EnumValue("ADMIN")
-	ADMIN,
+
+	@EnumValue("MEDNETWORK_ADMIN")
+	MEDNETWORK_ADMIN,
+
 	@EnumValue("DOCTOR")
 	DOCTOR,
 	@EnumValue("DOCTOR_SECRETARY")

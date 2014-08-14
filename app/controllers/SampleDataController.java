@@ -12,6 +12,7 @@ import models.Role;
 import models.diagnostic.DiagnosticCentrePrescriptionInfo;
 import models.doctor.DiagnosticTestLineItem;
 import models.doctor.Doctor;
+import models.doctor.DoctorSpecialization;
 import models.doctor.Prescription;
 import models.mr.MedicalRepresentative;
 import models.mr.PharmaceuticalCompany;
@@ -297,6 +298,33 @@ public class SampleDataController extends Controller {
 			test.name = "Test-"+i;
 			test.save();
 		}
+		return ok();
+	}
+
+
+	public static Result createDocSpez(){
+		DoctorSpecialization spez;
+		spez = new DoctorSpecialization();
+		spez.name = "Cardiology";
+		spez.save();
+		spez = new DoctorSpecialization();
+		spez.name = "Opthalmology";
+		spez.save();
+		spez = new DoctorSpecialization();
+		spez.name = "Orthopaedic";
+		spez.save();
+		spez = new DoctorSpecialization();
+		spez.name = "Neurologist";
+		spez.save();
+		spez = new DoctorSpecialization();
+		spez.name = "Paediatrics";
+		spez.save();
+		spez = new DoctorSpecialization();
+		spez.name = "Gynecologist";
+		spez.save();
+		spez = new DoctorSpecialization();
+		spez.name = "Obstetician";
+		spez.save();
 		return ok();
 	}
 

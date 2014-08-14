@@ -35,6 +35,12 @@ GET		/sitemap.xml								controllers.Application.sitemap()
 GET    /                                 			controllers.Application.index()
 POST   /login                             			controllers.LoginController.processLogin()
 GET    /logout                            			controllers.LoginController.processLogout()
+
+GET    /forgot-password                            	controllers.LoginController.forgotPassword()
+POST   /forgot-password                            	controllers.LoginController.processForgotPassword()
+GET	/forgot-reset-password/:userId/:forgotPasswordKey	controllers.LoginController.editForgotPassword(userId: Long, forgotPasswordKey:String)
+POST	/forgot-reset-password						controllers.LoginController.updateForgotPassword()
+
 GET    /edit-password                            	controllers.LoginController.editPassword()
 POST   /update-password                            	controllers.LoginController.updatePassword()
 
@@ -107,7 +113,7 @@ GET		/doctor/todays-appointments							controllers.DoctorController.viewTodaysAp
 GET		/doctor/prescription/:appointmentId					controllers.DoctorController.showPrescriptionForm(appointmentId: Long)
 POST	/doctor/save-prescription							controllers.DoctorController.savePrescription()
 GET		/doctor/show-prescription/:prescriptionId			controllers.DoctorController.showPrescription(prescriptionId: Long)
-GET		/doctor/share-prescription							controllers.DoctorController.sharePrescription(prId: Long, pharmacyId: String, diagnosticId: String)
+GET		/doctor/share-prescription							controllers.DoctorController.sharePrescription(prId: Long, pharmacyId: String, diagnosticId: String, consent: Boolean)
 GET		/doctor/all-prescriptions					controllers.DoctorController.viewAllPrescription()
 GET		/doctor/todays-prescriptions						controllers.DoctorController.viewTodaysPrescription()
 GET		/doctor/products/get-json							controllers.DoctorController.getAllProductsJson()
@@ -184,6 +190,7 @@ GET 	/diagnostic/:slugUrl								controllers.PublicController.getDiagnosticCentr
 
 GET		/static/fav/pharmacies							controllers.PharmacistController.staticFavPharmacies()
 GET		/create/master									controllers.SampleDataController.createMasterMedicinesAndTests()
+GET		/create/spez									controllers.SampleDataController.createDocSpez()
 #############################	PRODUCTION	#################################################################################
 
 
@@ -375,6 +382,9 @@ GET		/prescription_data					controllers.SampleDataController.prescripetionTest()
 GET	/mr/sample-data					controllers.SampleDataController.mrSampleData()
 
 GET    /feedback					controllers.Application.feedBack()
+
+#Cron
+GET		/cron/start						controllers.CronController.startCron()
 # Map static resources from the /public folder to the /assets URL path
 GET    /assets/*file                                    controllers.Assets.at(path="/public", file)
 

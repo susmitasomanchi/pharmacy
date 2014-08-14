@@ -78,7 +78,7 @@ public class EmailService {
 			email.setAuthenticator(new DefaultAuthenticator("noreply@mednetwork.in", "we#will#win"));
 			email.setSSLOnConnect(true);
 			email.setFrom("noreply@mednetwork.in","MedNetwork");
-			email.setSubject("Please Confirmation Email at MedNetwork");
+			email.setSubject("Confirm your account at MedNetwork");
 			email.setHtmlMsg(builder.toString());
 			email.addTo(appUser.email);
 			email.send();
@@ -132,6 +132,48 @@ public class EmailService {
 
 		// send the email
 
+	}
+
+
+
+	/**
+	 * Action to send mail to appUser's email id to change password(forgot password)
+	 * NO URL
+	 */
+	public static void sendForgotPasswordEmail(final AppUser appUser){
+		final Random random = new SecureRandom();
+		final String randomString = new BigInteger(130,random).toString(32);
+		boolean result = true;
+		try{
+			final StringBuilder builder=new StringBuilder();
+			builder.append("<html><body>");
+			builder.append("<p>Dear "+appUser.name+",<br><br>To reset your password, please ");
+			builder.append("<a href=\"http://mednetwork.in/forgot-reset-password/");
+			builder.append(appUser.id);
+			builder.append("/"+randomString +"\">");
+			builder.append("<b>click here.</b>");
+			builder.append("</a><br><br>In case you haven't raised any request for resetting your password, kindly ignore this mail. You can continue using your existing password.<br><br>Best regards,<br>MedNetwork.in</p>");
+			builder.append("</body></html>");
+			final HtmlEmail email = new HtmlEmail();
+			email.setHostName("smtp.gmail.com");
+			email.setSmtpPort(587);
+			email.setAuthenticator(new DefaultAuthenticator("noreply@mednetwork.in", "we#will#win"));
+			email.setSSLOnConnect(true);
+			email.setFrom("noreply@mednetwork.in","MedNetwork");
+			email.setSubject("Reset password at MedNetwork");
+			email.setHtmlMsg(builder.toString());
+			email.addTo(appUser.email);
+			email.send();
+			System.out.println("Mail Sent Successfully!");
+			appUser.forgotPasswordConfirmationKey = randomString;
+			appUser.update();
+			Logger.info(builder.toString());
+		}
+		catch (final Exception e){
+			System.out.println("ERROR While Sending Email");
+			e.printStackTrace();
+			result=false;
+		}
 	}
 
 }

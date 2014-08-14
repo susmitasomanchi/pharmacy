@@ -37,6 +37,12 @@
   </div>
   </div>
    <script>
+   
+   
+$('#role').on('change', function(){
+	$('#searchKey').attr('placeholder',$(this).find("option:selected").text()+'\'s Name');
+});
+   
 function searchKey(){
     var searchString = $('#searchKey').val();
     var setValue = $('#role').val();
@@ -50,6 +56,13 @@ function searchKey(){
   window.location.href='@routes.PublicController.processSearchDiagnosticCentres("")'+searchString; 
   } 
 }
+
+
+$("#searchKey").keyup(function (e) {
+    if (e.keyCode == 13) {
+    	searchKey();
+    }
+});
 
 </script>
 
@@ -87,7 +100,7 @@ function searchKey(){
   <div style="margin-top:-1.3em;">
   <div class="panel panel-primary" >
   <div class="panel-heading">
-  <h3 class="panel-title"><i class="fa fa-sign-in"></i> Sign-in</h3>
+  <h3 class="panel-title"><i class="fa fa-sign-in"></i> Sign In</h3>
   </div>
   <div class="panel-body" style="padding-top:0px">
   <br>
@@ -96,8 +109,6 @@ function searchKey(){
   </div>
   <div class="col-md-12">
   <input type="password" name="password" placeholder="Password" style="width:100%">
-     @* @helper.inputText(loginForm("email"),'_label->"Username")
-      @helper.inputPassword(loginForm("password"),'_label->"Password")*@
       </div>
       <a href="#" style="padding-left:15px;font-size:12px">Forgot your password ?</a>
      <div class="col-md-12">
@@ -112,7 +123,7 @@ function searchKey(){
  
 <div class="panel panel-primary">   
 <div class="panel-heading">
-  <h3 class="panel-title">SignUp</h3>
+  <h3 class="panel-title"><i class="fa fa-check"></i> Sign Up</h3>
   </div>
   <div class="panel-body">
       <ul style="list-style-type: none;padding:0px">
@@ -145,7 +156,7 @@ function searchKey(){
         Ride the revolution by <a href="/join" class="btn-link"><b>joining us today!</b></a> Its free and worth much more than the 30 seconds you'll take to do so.
         <br>
         *@ 
-        Meanwhile you can follow us on <a href="https://twitter.com/mednetworkindia" target="_blank"><b>twitter</b></a>, like our page on <a href="https://www.facebook.com/mednetwork.in" target="_blank"><b>facebook</b></a> and <strong>read our <a href="/blog" target="_blank"><b>blog</b></a></strong> which has some interesting ideas to stay healthy. 
+        Follow us on <a href="https://twitter.com/mednetworkindia" target="_blank"><b>twitter</b></a>, like our page on <a href="https://www.facebook.com/mednetwork.in" target="_blank"><b>facebook</b></a> and <strong>read our <a href="/blog" target="_blank"><b>blog</b></a></strong> which has some interesting ideas to stay healthy. 
     </span>
     	
 	</div>
