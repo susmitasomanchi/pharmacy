@@ -45,6 +45,9 @@ $('#role').on('change', function(){
    
 function searchKey(){
     var searchString = $('#searchKey').val();
+    if(searchString.trim() == ''){
+    	return false;
+    }
     var setValue = $('#role').val();
     if(setValue == "DOCTOR"){
   window.location.href='@routes.PublicController.processSearchDoctors("")'+searchString; 

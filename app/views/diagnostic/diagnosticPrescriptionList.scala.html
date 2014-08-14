@@ -67,7 +67,7 @@ $('#status-select').on('change', function(){
 <table class="table table-striped table-bordered" style="vertical-align:center">
 <tr>
 <th style="text-align:center;"> SNo</th>
-<th style="text-align:center;"> Doctor</th>
+<th style="text-align:center;"> Prescribed<br>By<br>Doctor</th>
 <th style="text-align:center;"> Patient</th>
 <th style="text-align:center;"> Shared <br> By</th>
 <th style="text-align:center;"> Shared <br> Date</th>
@@ -117,7 +117,11 @@ Mark as <a  class="btn btn-xs"  data-toggle="modal" data-target="#myModal1@diagn
 <div class="modal fade" id="myModal1@diagnosticCentrePrescriptionInfo.id" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
   <div class="modal-dialog" style="padding-top:200px">
     <div class="modal-content" style="padding-left:20px">
-      <h5>Are you sure to serve the report ?</h5>
+	    <div class="modal-header">
+        <h3 class="modal-title">Are you sure?</h3>
+      </div>
+      <h4>Reports will be served to the patient.</h4>
+      <h4>Once served, reports cannot be edited or deleted.</h4>
       <div class="modal-footer">
         <button type="button" class="btn btn-default btn-xs" data-dismiss="modal">Close</button>
         <a href="@routes.DiagnosticController.orderServed(diagnosticCentrePrescriptionInfo.id)" class="btn btn-primary btn-xs">Serve</a>
