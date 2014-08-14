@@ -12,7 +12,7 @@ import models.Role;
 import models.diagnostic.DiagnosticCentrePrescriptionInfo;
 import models.doctor.DiagnosticTestLineItem;
 import models.doctor.Doctor;
-import models.doctor.DoctorSpecialization;
+import models.doctor.MasterSpecialization;
 import models.doctor.Prescription;
 import models.mr.MedicalRepresentative;
 import models.mr.PharmaceuticalCompany;
@@ -303,26 +303,26 @@ public class SampleDataController extends Controller {
 
 
 	public static Result createDocSpez(){
-		DoctorSpecialization spez;
-		spez = new DoctorSpecialization();
+		MasterSpecialization spez;
+		spez = new MasterSpecialization();
 		spez.name = "Cardiology";
 		spez.save();
-		spez = new DoctorSpecialization();
+		spez = new MasterSpecialization();
 		spez.name = "Opthalmology";
 		spez.save();
-		spez = new DoctorSpecialization();
+		spez = new MasterSpecialization();
 		spez.name = "Orthopaedic";
 		spez.save();
-		spez = new DoctorSpecialization();
+		spez = new MasterSpecialization();
 		spez.name = "Neurologist";
 		spez.save();
-		spez = new DoctorSpecialization();
+		spez = new MasterSpecialization();
 		spez.name = "Paediatrics";
 		spez.save();
-		spez = new DoctorSpecialization();
+		spez = new MasterSpecialization();
 		spez.name = "Gynecologist";
 		spez.save();
-		spez = new DoctorSpecialization();
+		spez = new MasterSpecialization();
 		spez.name = "Obstetician";
 		spez.save();
 		return ok();

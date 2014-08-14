@@ -31,7 +31,6 @@ public class Address extends BaseEntity {
 	@Required
 	public String city;
 
-	@Required
 	public State state;
 
 	public String pinCode;

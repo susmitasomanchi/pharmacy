@@ -391,14 +391,6 @@ create table doctor_social_work (
   constraint pk_doctor_social_work primary key (id))
 ;
 
-create table doctor_specialization (
-  id                        bigint not null,
-  name                      TEXT,
-  remarks                   TEXT,
-  last_update               timestamp not null,
-  constraint pk_doctor_specialization primary key (id))
-;
-
 create table file_entity (
   id                        bigint not null,
   file_name                 varchar(255),
@@ -453,6 +445,14 @@ create table master_sig_code (
   code                      varchar(255),
   description               TEXT,
   last_update               timestamp not null)
+;
+
+create table master_specialization (
+  id                        bigint not null,
+  name                      TEXT,
+  remarks                   TEXT,
+  last_update               timestamp not null,
+  constraint pk_master_specialization primary key (id))
 ;
 
 create table medical_representative (
@@ -746,10 +746,10 @@ create table diagnostic_centre_prescription_i (
   constraint pk_diagnostic_centre_prescription_i primary key (diagnostic_centre_prescription_info_id, file_entity_id))
 ;
 
-create table doctor_doctor_specialization (
+create table doctor_master_specialization (
   doctor_id                      bigint not null,
-  doctor_specialization_id       bigint not null,
-  constraint pk_doctor_doctor_specialization primary key (doctor_id, doctor_specialization_id))
+  master_specialization_id       bigint not null,
+  constraint pk_doctor_master_specialization primary key (doctor_id, master_specialization_id))
 ;
 
 create table doctor_pharmacy (
@@ -875,8 +875,6 @@ create sequence doctor_publication_seq;
 
 create sequence doctor_social_work_seq;
 
-create sequence doctor_specialization_seq;
-
 create sequence file_entity_seq;
 
 create sequence head_quarter_seq;
@@ -886,6 +884,8 @@ create sequence inventory_seq;
 create sequence master_diagnostic_test_seq;
 
 create sequence master_product_seq;
+
+create sequence master_specialization_seq;
 
 create sequence medical_representative_seq;
 
@@ -1124,9 +1124,9 @@ alter table diagnostic_centre_prescription_i add constraint fk_diagnostic_centre
 
 alter table diagnostic_centre_prescription_i add constraint fk_diagnostic_centre_prescrip_02 foreign key (file_entity_id) references file_entity (id);
 
-alter table doctor_doctor_specialization add constraint fk_doctor_doctor_specializati_01 foreign key (doctor_id) references doctor (id);
+alter table doctor_master_specialization add constraint fk_doctor_master_specializati_01 foreign key (doctor_id) references doctor (id);
 
-alter table doctor_doctor_specialization add constraint fk_doctor_doctor_specializati_02 foreign key (doctor_specialization_id) references doctor_specialization (id);
+alter table doctor_master_specialization add constraint fk_doctor_master_specializati_02 foreign key (master_specialization_id) references master_specialization (id);
 
 alter table doctor_pharmacy add constraint fk_doctor_pharmacy_doctor_01 foreign key (doctor_id) references doctor (id);
 
@@ -1226,7 +1226,7 @@ drop table if exists diagnostic_test_line_item cascade;
 
 drop table if exists doctor cascade;
 
-drop table if exists doctor_doctor_specialization cascade;
+drop table if exists doctor_master_specialization cascade;
 
 drop table if exists doctor_pharmacy cascade;
 
@@ -1250,8 +1250,6 @@ drop table if exists doctor_publication cascade;
 
 drop table if exists doctor_social_work cascade;
 
-drop table if exists doctor_specialization cascade;
-
 drop table if exists file_entity cascade;
 
 drop table if exists head_quarter cascade;
@@ -1263,6 +1261,8 @@ drop table if exists master_diagnostic_test cascade;
 drop table if exists master_product cascade;
 
 drop table if exists master_sig_code cascade;
+
+drop table if exists master_specialization cascade;
 
 drop table if exists medical_representative cascade;
 
@@ -1384,8 +1384,6 @@ drop sequence if exists doctor_publication_seq;
 
 drop sequence if exists doctor_social_work_seq;
 
-drop sequence if exists doctor_specialization_seq;
-
 drop sequence if exists file_entity_seq;
 
 drop sequence if exists head_quarter_seq;
@@ -1395,6 +1393,8 @@ drop sequence if exists inventory_seq;
 drop sequence if exists master_diagnostic_test_seq;
 
 drop sequence if exists master_product_seq;
+
+drop sequence if exists master_specialization_seq;
 
 drop sequence if exists medical_representative_seq;
 

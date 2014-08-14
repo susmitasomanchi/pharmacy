@@ -35,6 +35,7 @@ public class UserActions extends Controller {
 
 		//@TODO: none should render the dashboard of patient
 		return ok("Not implemented yet");
+
 	}
 
 }

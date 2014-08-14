@@ -30,7 +30,7 @@ import models.doctor.DoctorEducation;
 import models.doctor.DoctorExperience;
 import models.doctor.DoctorProduct;
 import models.doctor.DoctorSocialWork;
-import models.doctor.DoctorSpecialization;
+import models.doctor.MasterSpecialization;
 import models.doctor.MedicineLineItem;
 import models.doctor.Prescription;
 import models.doctor.QuestionAndAnswer;
@@ -97,11 +97,11 @@ public class DoctorController extends Controller {
 			}
 
 			if (requestMap.get("specialization") != null ) {	//&& !(requestMap.get("specialization").length > 0)
-				final List<DoctorSpecialization> oldSpezList = new ArrayList<DoctorSpecialization>();
+				final List<MasterSpecialization> oldSpezList = new ArrayList<MasterSpecialization>();
 				oldSpezList.addAll(doctor.specializationList);
 				doctor.specializationList.removeAll(oldSpezList);// .clear() wasnt working
 				for (final String specializationId : requestMap.get("specialization")) {
-					final DoctorSpecialization spez = DoctorSpecialization.find.byId(Long.parseLong(specializationId));
+					final MasterSpecialization spez = MasterSpecialization.find.byId(Long.parseLong(specializationId));
 					doctor.specializationList.add(spez);
 				}
 			}
