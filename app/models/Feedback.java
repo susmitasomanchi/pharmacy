@@ -1,5 +1,7 @@
 package models;
 
+import java.util.Date;
+
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -19,9 +21,13 @@ public class Feedback extends BaseEntity{
 
 	public String name;
 
-	public String role;
+	public Role role;
 
 	public String email;
+
+	public Date date;
+
+	public String ipAddress;
 
 	@Column(columnDefinition="TEXT")
 	public String remarks;

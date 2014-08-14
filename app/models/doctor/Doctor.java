@@ -41,7 +41,7 @@ public class Doctor extends BaseEntity{
 	public String registrationNumber;
 
 	@ManyToMany(cascade = CascadeType.ALL)
-	public List<DoctorSpecialization> specializationList = new ArrayList<DoctorSpecialization>();
+	public List<MasterSpecialization> specializationList = new ArrayList<MasterSpecialization>();
 
 	@Required
 	public String position;
@@ -134,7 +134,7 @@ public class Doctor extends BaseEntity{
 		if(this.appUser.name != null){
 			stringBuilder.append(this.appUser.name.toLowerCase());
 		}
-		for(final DoctorSpecialization spez : this.specializationList){
+		for(final MasterSpecialization spez : this.specializationList){
 			stringBuilder.append(spez.name.toLowerCase());
 		}
 		if(this.degree != null){
@@ -159,7 +159,7 @@ public class Doctor extends BaseEntity{
 		if(this.appUser.name != null){
 			stringBuilder.append(this.appUser.name.toLowerCase());
 		}
-		for(final DoctorSpecialization spez : this.specializationList){
+		for(final MasterSpecialization spez : this.specializationList){
 			stringBuilder.append(spez.name.toLowerCase());
 		}
 		if(this.degree != null){
@@ -196,7 +196,7 @@ public class Doctor extends BaseEntity{
 	public String getSpecializations(){
 		final StringBuilder sb = new StringBuilder("");
 		if(this.specializationList.size()>0){
-			for (final DoctorSpecialization spez : this.specializationList) {
+			for (final MasterSpecialization spez : this.specializationList) {
 				sb.append(spez.name+", ");
 			}
 			final int l = sb.length();

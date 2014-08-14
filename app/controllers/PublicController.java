@@ -14,6 +14,7 @@ import models.AppUser;
 import models.Feedback;
 import models.FileEntity;
 import models.Role;
+import models.State;
 import models.diagnostic.DiagnosticCentre;
 import models.doctor.Appointment;
 import models.doctor.Day;
@@ -568,48 +569,49 @@ public class PublicController extends Controller{
 	/**
 	 * @author lakshmi
 	 * Action to render the feedback page
-	 * @return
+	 * GET/feedback
 	 */
 	public static Result feedBack(){
 
-		AppUser appUser = null;
-		if((LoginController.getLoggedInUserRole().equals(Role.DOCTOR)) ||
-				LoginController.getLoggedInUserRole().equals(Role.PATIENT) ||
-				LoginController.getLoggedInUserRole().equals(Role.ADMIN_PHARMACIST) ||
-				LoginController.getLoggedInUserRole().equals(Role.ADMIN_DIAGREP)){
-			appUser = LoginController.getLoggedInUser();
-		}
-		return ok(views.html.feedback.render(appUser));
+		//final AppUser appUser = LoginController.getLoggedInUser();
+		return ok(views.html.feedback.render());
 	}
 
 	/**
 	 * @author lakshmi
-	 * Action to render the feedback page
-	 * @return
+	 * Action to save the feedback from the user
+	 * POST/feedback
 	 */
 	public static Result saveFeedBack(){
-		Logger.info("test1");
 		final Map<String,String[]> requestData = request().body().asFormUrlEncoded();
 		final Feedback feedback = new Feedback();
-		if(requestData.get("firstName")[0] != null && requestData.get("firstName")[0].trim() != ""){
-			Logger.info("test1");
-			feedback.name = requestData.get("firstName")[0];
+
+		if(LoginController.isLoggedIn()){
+			feedback.appUser = LoginController.getLoggedInUser();
 		}
-		if(requestData.get("role")[0] != null && requestData.get("role")[0].trim() != ""){
-			Logger.info("test1");
-			feedback.role = requestData.get("role")[0];
+		else{
+			if(requestData.get("firstName") != null && requestData.get("firstName")[0].trim() != ""){
+				feedback.name = requestData.get("firstName")[0];
+			}
+			if(requestData.get("role") != null && requestData.get("role")[0].trim() != ""){
+				feedback.role = Enum.valueOf(Role.class,requestData.get("role")[0]);
+			}
+			if(requestData.get("email") != null && requestData.get("email")[0].trim() != ""){
+				feedback.email = requestData.get("email")[0];
+			}
 		}
-		if(requestData.get("email")[0] != null && requestData.get("email")[0].trim() != ""){
-			Logger.info("test1");
-			feedback.email = requestData.get("email")[0];
-		}
-		if(requestData.get("remarks")[0] != null && requestData.get("remarks")[0].trim() != ""){
-			Logger.info("test1");
+
+		if(requestData.get("remarks") != null && requestData.get("remarks")[0].trim() != ""){
 			feedback.remarks = requestData.get("remarks")[0];
 		}
+		feedback.date = new Date();
+		feedback.ipAddress = request().remoteAddress();
 		feedback.save();
-		flash().put("alert", new Alert("alert-info", "Thanx For Your Valuable Feedback.").toString());
-		return redirect(routes.UserActions.dashboard());
+		flash().put("alert", new Alert("alert-success", "Thank you for your feedback.").toString());
+		if(LoginController.isLoggedIn()){
+			return redirect(routes.UserActions.dashboard());
+		}
+		return redirect(routes.Application.index());
 	}
 
 

@@ -1,4 +1,4 @@
-@(appUser: models.AppUser)
+@()
 
 @no_navbar("Feedback Form"){
 
@@ -17,33 +17,45 @@
 </div>
 <div class="col-md-8 well">
 <form action="@routes.PublicController.saveFeedBack()" method="POST">
+
+
 <div class="form-group">
-<label for="firstName" class="col-md-4" style="font-size:16px"> Name <span style="color:red">*</span></label>
-<div class="col-lg-8"><input type="text" class="form-control" name="firstName" placeholder="Name" @if(appUser!=null){value="@appUser.name"}></div>
+	<label for="firstName" class="col-md-4" style="font-size:16px"> Name <span style="color:red">*</span></label>
+	<div class="col-lg-8">
+		<input type="text" class="form-control" name="firstName" required placeholder="Name" @if(LoginController.isLoggedIn()){value="@LoginController.getLoggedInUser().name" readonly}>
+	</div>
 </div>
+
 <br><br>
+
+
+@if(!LoginController.isLoggedIn()){
 <div class="form-group">
 <label for="role" class="col-md-4" style="font-size:16px"> Role </label>
 <div class="col-md-8">
 <select class="form-control" name="role">
-<option @if(appUser!=null){value="@appUser.role"}>@if(appUser!=null){@appUser.role}</option>
+<option value="PATIENT">User</option>
 <option value="DOCTOR">Doctor</option>
 <option value="ADMIN_PHARMACIST">Pharmacist</option>
-<option value="ADMIN_DIAGREP">Admin Diag Rep</option>
-<option value="PATIENT">User</option>
+<option value="ADMIN_DIAGREP">Diagnostic Representative</option>
 </select>
 </div>
 </div>
 <br><br>
+}
+
+@if(!LoginController.isLoggedIn()){
 <div class="form-group">
 <label for="firstName" class="col-md-4" style="font-size:16px"> Email </label>
-<div class="col-lg-8"><input type="text" class="form-control" name="email" @if(appUser!=null){value="@appUser.email"} placeholder="Email"></div>
+<div class="col-lg-8"><input type="text" class="form-control" name="email" placeholder="Email"></div>
 </div>
 <br><br>
+}
+
 <div class="form-group">
-<label for="feedback" class="col-md-4" style="font-size:16px"> Feedback </label>
+<label for="feedback" class="col-md-4" style="font-size:16px"> Feedback <span style="color:red">*</span> </label>
 <div class="col-lg-8">
-<textarea rows="5" cols="49" name="remarks"></textarea>
+<textarea rows="5" cols="49" placeholder="suggestions, queries etc." name="remarks" required></textarea>
 </div>
 </div>
 <div class="pull-right" style="padding-right:15px">

@@ -21,7 +21,7 @@
  <p style="padding-top:7px">Search For</p>
 </div>
 <div class="col-md-2" style="width:12%" >
-  <select class="form-control" name="role" id="role" style="width:100%;box-shadow: 1px 1px 1px 1px #aaaaaa;>
+  <select class="form-control" name="role" id="role" style="width:100%;box-shadow: 1px 1px 1px 1px #aaaaaa;">
 <option value="DOCTOR">Doctor</option>
 <option value="ADMIN_PHARMACIST">Pharmacy</option>
 <option value="ADMIN_DIAGREP">Diagnostic Centre</option>
@@ -33,7 +33,7 @@
     </div>
    
 <div class="col-md-2" style="width:20%">
-  <button style="width:100%" class="btn btn-sm btn-success pull-right" onclick="searchKey();"><i class="icon-search icon-large"></i> Search</button>
+  <button style="width:100%;border-top-left-radius:2.5em;border-bottom-left-radius:2.5em;border-top-right-radius:2.5em;border-bottom-right-radius:2.5em;box-shadow: 1px 1px 3px 3px #aaaaaa;" class="btn btn-sm btn-success pull-right" onclick="searchKey();"><i class="icon-search icon-large"></i> Search</button>
   </div>
   </div>
    <script>
@@ -110,7 +110,7 @@ $("#searchKey").keyup(function (e) {
   <div class="col-md-12">
   <input type="password" name="password" placeholder="Password" style="width:100%">
       </div>
-      <a href="#" style="padding-left:15px;font-size:12px">Forgot your password ?</a>
+      <a href="@routes.LoginController.forgotPassword()" style="padding-left:15px;font-size:12px">Forgot your password ?</a>
      <div class="col-md-12">
      <br>
           <input type="submit" class="btn btn-sm btn-primary pull-right" value="Sign in" style="width:100%">
@@ -161,7 +161,6 @@ $("#searchKey").keyup(function (e) {
     	
 	</div>
 	
-	<span style="width:100%; margin-left:400px; font-size:12px;"> Copyright 2014 <a href="http://www.greensoftware.in/">Green Software</a> . All rights reserved | Share your <a href="/feedback"><b> feedback </b></a></span>
 	</div>
 	
 	

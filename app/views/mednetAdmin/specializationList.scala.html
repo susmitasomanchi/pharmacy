@@ -1,0 +1,55 @@
+@(specializations: List[models.doctor.MasterSpecialization])
+
+
+@main("Doctor's Specialization List") {
+
+<div  style="padding-left:1%">
+	
+
+<div class="row well">
+
+<div class="col-md-5">
+<form action="@routes.MednetworkAdminController.addSpecialization()" method="POST">
+	<input type="text" name="specialization" placeholder="Add Specialization">
+	<input type="submit" class="btn btn-primary btn-xs"value="Add">
+
+<script>
+</script>
+</form>
+
+</div>
+
+
+<div class="col-md-5">
+<form action="@routes.MednetworkAdminController.updateSpecialization()" method="POST">
+	<select name="spezId" class="chzn">
+		<option></option>
+		@for(spez <- specializations){
+			<option value="@spez.id">@spez.name</option>
+		}
+	</select>
+	<input type="text" name="spezName" placeholder="Edit Specialization">
+	<input type="submit" class="btn btn-primary btn-xs"value="Update">
+
+<script>
+</script>
+</form>
+</div>
+
+</div>
+
+<br>
+<table class="table">
+<tr>
+<th>S.No</th>
+<th>Specialization</th>
+</tr>
+@for((specialization,index)<- specializations.zipWithIndex){
+<tr>
+<td>@{index+1}</td><td>@specialization.name</td>
+</tr>
+}
+</table>
+
+</div>
+}

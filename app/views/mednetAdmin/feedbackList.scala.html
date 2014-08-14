@@ -1,0 +1,38 @@
+@(feedbacks: List[models.Feedback])
+
+
+@main("Feedbacks") {
+
+
+@for((feedback,index)<- feedbacks.zipWithIndex){
+<div class="row" style="padding-left:20px;">
+
+<div class="row">
+	<div class="col-md-5">
+		<h4><b>@if(feedback.appUser != null){@feedback.appUser.name}else{@feedback.name}</b></h4>
+		@if(feedback.appUser != null){@feedback.appUser.role.capitalize()}else{@feedback.role.capitalize()}<br>
+		@if(feedback.appUser != null){@feedback.appUser.email}else{@feedback.email}<br>
+		@if(feedback.appUser != null){AppUser (id = @feedback.appUser.id)}else{(Public User)}<br>
+		@if(feedback.ipAddress != null){@feedback.ipAddress}
+	</div>
+	
+	<div class="col-md-5">
+		@feedback.date.format("dd-MMM-yyyy hh:mm")<br>
+		<a href="@routes.MednetworkAdminController.deleteFeedback(feedback.id)" class="btn btn-danger btn-sm">Delete</a>
+	</div>
+</div>
+
+<div class="row" style="padding-left:20px;">
+<i>@feedback.remarks</i>
+</div>
+
+</div>
+<hr>
+}
+
+
+
+
+
+
+}

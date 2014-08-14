@@ -1,6 +1,5 @@
 # Routes
 # This file defines all application routes (Higher priority routes first)
-# ~~~~
 
 
 #Blog
@@ -196,6 +195,13 @@ GET 	/diagnostic/:slugUrl								controllers.PublicController.getDiagnosticCentr
 GET		/static/fav/pharmacies							controllers.PharmacistController.staticFavPharmacies()
 GET		/create/master									controllers.SampleDataController.createMasterMedicinesAndTests()
 GET		/create/spez									controllers.SampleDataController.createDocSpez()
+GET		/admin/specialization-list						controllers.MednetworkAdminController.getSpecializationList()
+POST	/admin/add-specialization						controllers.MednetworkAdminController.addSpecialization()
+POST	/admin/update-specialization					controllers.MednetworkAdminController.updateSpecialization()
+GET		/admin/feedback-list							controllers.MednetworkAdminController.getFeedbackList()
+GET		/admin/delete-feedback/:id						controllers.MednetworkAdminController.deleteFeedback(id: Long)
+
+
 #############################	PRODUCTION	#################################################################################
 
 
@@ -390,8 +396,14 @@ GET	/mr/sample-data					controllers.SampleDataController.mrSampleData()
 
 #Cron
 GET		/cron/start						controllers.CronController.startCron()
+#Mednetwork-Admin
+GET		/admin						controllers.SampleDataController.mednetAdmin()
+
+
 # Map static resources from the /public folder to the /assets URL path
 GET    /assets/*file                                    controllers.Assets.at(path="/public", file)
+
+
 
 
 
