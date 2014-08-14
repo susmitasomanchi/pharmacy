@@ -29,7 +29,7 @@ public class Doctor extends BaseEntity{
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO)
-	public  Long id;
+	public Long id;
 
 	@OneToOne
 	public AppUser appUser;
@@ -40,8 +40,10 @@ public class Doctor extends BaseEntity{
 	@Required
 	public String registrationNumber;
 
-	@Required
 	public String specialization;
+
+	@ManyToMany(cascade=CascadeType.ALL)
+	public List<DoctorSpecialization> specializationList = new ArrayList<DoctorSpecialization>();
 
 	@Required
 	public String position;
@@ -74,16 +76,9 @@ public class Doctor extends BaseEntity{
 	@OneToMany(cascade=CascadeType.ALL)
 	public List<DoctorAward> doctorAwardList = new ArrayList<DoctorAward>();
 
-	//language
-	@ManyToMany(cascade=CascadeType.ALL)
-	public List<DoctorLanguage> doctorLanguageList = new ArrayList<DoctorLanguage>();
-
 	//socialwork
 	@OneToMany(cascade=CascadeType.ALL)
 	public List<DoctorSocialWork> doctorSocialWorkList = new ArrayList<DoctorSocialWork>();
-
-	@OneToMany(cascade=CascadeType.ALL)
-	public List<DoctorEducation> doctorEducation = new ArrayList<DoctorEducation>();
 
 	@OneToMany(cascade=CascadeType.ALL)
 	public List<DoctorProduct> myProductList = new ArrayList<DoctorProduct>();
