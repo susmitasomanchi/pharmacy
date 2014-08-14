@@ -77,7 +77,11 @@ text-decoration:none;
 <form style="display:none" id="basicinfoform" action="@routes.DoctorController.basicUpdate()" method="POST">
 <input type="hidden" name="doctorId" value="@doctor.id">
 <input id="fullname" type="hidden" name="fullname" value="">
-<input id="specialization" type="hidden" name="specialization" value="">
+
+<div id="spez-list">
+	
+</div>
+
 <input id="degree" type="hidden" name="degree" value="">
 
 <input id="email" type="hidden" name="email" value="">
@@ -121,17 +125,20 @@ function submitbasicform(name){
 		}
 	}
 
-	$("[data-toggle=popover]").popover('hide');
-	$('#spinner-'+name).addClass( "fa-spin" );
-	$('#'+name).val($('#new-'+name).val());
 
-	//$.post("@routes.DoctorController.basicUpdate()",$('#basicinfoform').serialize()
-		//,function(data){
-		//if(data == 0){
-		//	window.location.href='';
-		//}
-		//}
-	//);
+	if(name.localeCompare('specialization') == 0){
+		$("[data-toggle=popover]").popover('hide');
+		$('#spinner-'+name).addClass( "fa-spin" );
+		$("#new-specialization > option:selected").each(function() {
+    		//alert(this.text + ' ' + this.value);
+    		$('#spez-list').append('<input id="specialization" type="hidden" name="specialization" value="'+this.value+'">');
+		});
+	}
+	else{
+		$("[data-toggle=popover]").popover('hide');
+		$('#spinner-'+name).addClass( "fa-spin" );
+		$('#'+name).val($('#new-'+name).val());
+	}
 
 	$('#basicinfoform').submit();
 }
@@ -185,7 +192,36 @@ You profile is available at
 
 <h2><span style="text-shadow:1px 1px 20px white, 3px 3px 20px white;"><b> Dr. @doctor.appUser.name </b></span><span data-toggle="popover" title="Edit Name" data-html="true" data-content="<input id=&quot;new-fullname&quot; style=&quot;color:#292929; font-weight:bold;&quot; type=&quot;text&quot; value=&quot;@doctor.appUser.name&quot;><br><a class=&quot;pull-right btn btn-xs btn-primary&quot; onclick=&quot;submitbasicform('fullname');&quot; >save</a> " style="cursor:pointer; position:relative; font-size:15px; top:-15px; text-shadow:1px 1px 20px white, 3px 3px 20px white;"><i id="spinner-fullname" class="fa fa-cog"></i></span></h2>
 
-<h3><span style="text-shadow:1px 1px 20px white, 3px 3px 20px white;">@doctor.specialization</span><span data-toggle="popover" title="Edit Specialization" data-html="true" data-content="<input id=&quot;new-specialization&quot; style=&quot;color:#292929; font-weight:bold;&quot; type=&quot;text&quot; value=&quot;@doctor.specialization&quot;><br><a class=&quot;pull-right btn btn-xs btn-primary&quot; onclick=&quot;submitbasicform('specialization');&quot; >save</a> " style="cursor:pointer; position:relative; font-size:15px; top:-10px; text-shadow:1px 1px 20px white, 3px 3px 20px white;"><i id="spinner-specialization" class="fa fa-cog"></i></span></h3>
+
+
+<h3><span style="text-shadow:1px 1px 20px white, 3px 3px 20px white;">@doctor.getSpecializations()</span><span id="spez-popover" data-toggle="popover" title="Edit Specializations" data-html="true" data-content="
+
+<select id=&quot;new-specialization&quot; style=&quot;color:#292929; font-weight:bold; width:200px;&quot; data-placeholder=&quot;Select Specializations&quot; multiple>
+<option></option>
+@for(spez <- models.doctor.DoctorSpecialization.find.all()){
+	@if(doctor.specializationList.contains(spez)){
+		<option style=&quot;color:#292929; font-weight:bold;&quot; value=&quot;@spez.id&quot; selected>@spez.name</option>
+	}else{
+		<option style=&quot;color:#292929; font-weight:bold;&quot; value=&quot;@spez.id&quot;>@spez.name</option>
+	}
+}
+</select>
+
+<br><a class=&quot;pull-right btn btn-xs btn-primary&quot; onclick=&quot;submitbasicform('specialization');&quot; >save</a> " style="cursor:pointer; position:relative; font-size:15px; top:-10px; text-shadow:1px 1px 20px white, 3px 3px 20px white;"><i id="spinner-specialization" class="fa fa-cog"></i></span></h3>
+
+<style>
+	.chosen-search{
+		color:#292929;
+		font-weight:bold;
+	}
+</style>
+
+<script>
+	$('#spez-popover').on('shown.bs.popover', function () {
+  		$("#new-specialization").chosen();
+	})
+</script>
+
 
 <h4><span style="text-shadow:1px 1px 20px white, 3px 3px 20px white;">@doctor.degree</span><span data-toggle="popover" title="Edit Degree" data-html="true" data-content="<input id=&quot;new-degree&quot; style=&quot;color:#292929; font-weight:bold;&quot; type=&quot;text&quot; value=&quot;@doctor.degree&quot;><br><a class=&quot;pull-right btn btn-xs btn-primary&quot; onclick=&quot;submitbasicform('degree');&quot; >save</a> " style="cursor:pointer; position:relative; font-size:15px; top:-10px; text-shadow:1px 1px 20px white, 3px 3px 20px white;"><i id="spinner-degree" class="fa fa-cog"></i></span></h4>
 

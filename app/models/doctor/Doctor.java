@@ -40,9 +40,7 @@ public class Doctor extends BaseEntity{
 	@Required
 	public String registrationNumber;
 
-	public String specialization;
-
-	@ManyToMany(cascade=CascadeType.ALL)
+	@ManyToMany(cascade = CascadeType.ALL)
 	public List<DoctorSpecialization> specializationList = new ArrayList<DoctorSpecialization>();
 
 	@Required
@@ -136,8 +134,8 @@ public class Doctor extends BaseEntity{
 		if(this.appUser.name != null){
 			stringBuilder.append(this.appUser.name.toLowerCase());
 		}
-		if(this.specialization != null){
-			stringBuilder.append(this.specialization.toLowerCase());
+		for(final DoctorSpecialization spez : this.specializationList){
+			stringBuilder.append(spez.name.toLowerCase());
 		}
 		if(this.degree != null){
 			stringBuilder.append(this.degree.toLowerCase());
@@ -161,8 +159,8 @@ public class Doctor extends BaseEntity{
 		if(this.appUser.name != null){
 			stringBuilder.append(this.appUser.name.toLowerCase());
 		}
-		if(this.specialization != null){
-			stringBuilder.append(this.specialization.toLowerCase());
+		for(final DoctorSpecialization spez : this.specializationList){
+			stringBuilder.append(spez.name.toLowerCase());
 		}
 		if(this.degree != null){
 			stringBuilder.append(this.degree.toLowerCase());
@@ -193,6 +191,21 @@ public class Doctor extends BaseEntity{
 
 	public List<DoctorClinicInfo> doctorActiveClinicInfoList(){
 		return DoctorClinicInfo.find.where().eq("doctor", this).eq("active", true).findList();
+	}
+
+	public String getSpecializations(){
+		final StringBuilder sb = new StringBuilder("");
+		if(this.specializationList.size()>0){
+			for (final DoctorSpecialization spez : this.specializationList) {
+				sb.append(spez.name+", ");
+			}
+			final int l = sb.length();
+			sb.replace(l-2, l, "");
+			return sb.toString();
+		}
+		else{
+			return "Specialization";
+		}
 	}
 
 }

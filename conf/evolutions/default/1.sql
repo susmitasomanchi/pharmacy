@@ -276,7 +276,6 @@ create table doctor (
   id                        bigint not null,
   app_user_id               bigint,
   registration_number       varchar(255),
-  specialization            varchar(255),
   position                  varchar(255),
   degree                    varchar(255),
   description               TEXT,

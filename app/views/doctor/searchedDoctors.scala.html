@@ -68,7 +68,7 @@ margin-bottom:0px;
 				</div>
 				<div style="cursor:pointer" onclick="window.location.href='@routes.PublicController.getDoctorWithSlug(doctor.slugUrl)';" class="col-md-4">
 				<p style="font-size:18px"><b>@doctor.appUser.name</b></p>
-				<p style="font-size:14px"><b>@doctor.specialization</b></p>
+				<p style="font-size:14px"><b>@doctor.getSpecializations()</b></p>
 				<h6>@doctor.degree</h6>
 				<h6>@doctor.experience</h6>
 				<br>
