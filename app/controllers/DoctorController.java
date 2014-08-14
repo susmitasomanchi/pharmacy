@@ -63,10 +63,14 @@ import com.google.common.io.Files;
 @BasicAuth
 public class DoctorController extends Controller {
 
-	public static Form<DoctorClinicInfoBean> clinicForm = Form.form(DoctorClinicInfoBean.class);
-	public static Form<QuestionAndAnswerBean> questionAndAnswerForm = Form.form(QuestionAndAnswerBean.class);
-	public static Form<DoctorClinicInfo> doctorClinicForm = Form.form(DoctorClinicInfo.class);
-	public static Form<PrescriptionBean> prescriptionForm = Form.form(PrescriptionBean.class);
+	public static Form<DoctorClinicInfoBean> clinicForm = Form
+			.form(DoctorClinicInfoBean.class);
+	public static Form<QuestionAndAnswerBean> questionAndAnswerForm = Form
+			.form(QuestionAndAnswerBean.class);
+	public static Form<DoctorClinicInfo> doctorClinicForm = Form
+			.form(DoctorClinicInfo.class);
+	public static Form<PrescriptionBean> prescriptionForm = Form
+			.form(PrescriptionBean.class);
 
 	/**
 	 * Action to update basic field of doctor like name, specialization, degree
@@ -96,12 +100,18 @@ public class DoctorController extends Controller {
 				doctor.appUser.name = requestMap.get("fullname")[0].trim();
 			}
 
-			if (requestMap.get("specialization") != null ) {	//&& !(requestMap.get("specialization").length > 0)
+			if (requestMap.get("specialization") != null) { // &&
+				// !(requestMap.get("specialization").length
+				// > 0)
 				final List<DoctorSpecialization> oldSpezList = new ArrayList<DoctorSpecialization>();
 				oldSpezList.addAll(doctor.specializationList);
-				doctor.specializationList.removeAll(oldSpezList);// .clear() wasnt working
-				for (final String specializationId : requestMap.get("specialization")) {
-					final DoctorSpecialization spez = DoctorSpecialization.find.byId(Long.parseLong(specializationId));
+				doctor.specializationList.removeAll(oldSpezList);// .clear()
+				// wasnt
+				// working
+				for (final String specializationId : requestMap
+						.get("specialization")) {
+					final DoctorSpecialization spez = DoctorSpecialization.find
+							.byId(Long.parseLong(specializationId));
 					doctor.specializationList.add(spez);
 				}
 			}
@@ -122,23 +132,39 @@ public class DoctorController extends Controller {
 				doctor.description = requestMap.get("description")[0].trim();
 			}
 
-			if (requestMap.get("email") != null && !(requestMap.get("email")[0].trim().isEmpty())) {
+			if (requestMap.get("email") != null
+					&& !(requestMap.get("email")[0].trim().isEmpty())) {
 				final String oldEmail = doctor.appUser.email;
-				if (oldEmail.trim().compareToIgnoreCase(requestMap.get("email")[0].trim()) != 0) {
-					if(AppUser.find.where().ieq("email", requestMap.get("email")[0].trim()).findRowCount()>0){
-						flash().put("alert", new Alert("alert-danger", "Sorry! Another User with email id "+requestMap.get("email")[0].trim()+" already exists!").toString());
+				if (oldEmail.trim().compareToIgnoreCase(
+						requestMap.get("email")[0].trim()) != 0) {
+					if (AppUser.find.where()
+							.ieq("email", requestMap.get("email")[0].trim())
+							.findRowCount() > 0) {
+						flash().put(
+								"alert",
+								new Alert("alert-danger",
+										"Sorry! Another User with email id "
+												+ requestMap.get("email")[0]
+														.trim()
+														+ " already exists!")
+								.toString());
 						return redirect(routes.UserActions.dashboard());
 					}
-					doctor.appUser.email = requestMap.get("email")[0].trim().toLowerCase();
+					doctor.appUser.email = requestMap.get("email")[0].trim()
+							.toLowerCase();
 					doctor.appUser.emailConfirmed = false;
 				}
 			}
 
-			if (requestMap.get("mobileNumber") != null && !(requestMap.get("mobileNumber")[0].trim().isEmpty())) {
+			if (requestMap.get("mobileNumber") != null
+					&& !(requestMap.get("mobileNumber")[0].trim().isEmpty())) {
 				final Long oldNumber = doctor.appUser.mobileNumber;
-				final Long newNumber = Long.parseLong(requestMap.get("mobileNumber")[0].trim());
-				if (oldNumber == null || (oldNumber.longValue() != newNumber.longValue())) {
-					doctor.appUser.mobileNumber = Long.parseLong(requestMap.get("mobileNumber")[0].trim());
+				final Long newNumber = Long.parseLong(requestMap
+						.get("mobileNumber")[0].trim());
+				if (oldNumber == null
+						|| (oldNumber.longValue() != newNumber.longValue())) {
+					doctor.appUser.mobileNumber = Long.parseLong(requestMap
+							.get("mobileNumber")[0].trim());
 					doctor.appUser.mobileNumberConfirmed = false;
 				}
 			}
@@ -701,7 +727,8 @@ public class DoctorController extends Controller {
 									Logger.info("  " + calendar.getTime());
 									final Appointment appointment = new Appointment();
 									appointment.appointmentStatus = AppointmentStatus.AVAILABLE;
-									appointment.appointmentTime = calendar.getTime();
+									appointment.appointmentTime = calendar
+											.getTime();
 									appointment.doctorClinicInfo = docClinicInfo;
 									appointment.save();
 									calendar.add(Calendar.MINUTE,
@@ -753,7 +780,7 @@ public class DoctorController extends Controller {
 					new Alert("alert-danger",
 							"Sorry. Something went wrong. Please try again.")
 					.toString());
-			return redirect(routes.DoctorController.newClinic());
+			return redirect(routes.DoctorController.myClinics());
 		}
 	}
 
@@ -812,8 +839,8 @@ public class DoctorController extends Controller {
 		final Form<DoctorClinicInfoBean> filledForm = clinicForm
 				.bindFromRequest();
 		if (filledForm.hasErrors()) {
-			return ok(views.html.doctor.editClinic.render(clinicForm,
-					new ArrayList<String>(), new ArrayList<String>()));
+			return ok(views.html.doctor.editClinicInfo.render(filledForm));
+
 		} else {
 			final DoctorClinicInfo clinicInfo = filledForm.get()
 					.toDoctorClinicInfo();
@@ -857,11 +884,11 @@ public class DoctorController extends Controller {
 	 */
 	@ConfirmAppUser
 	public static Result processUpdateClinicSchedule() {
+
 		final Form<DoctorClinicInfoBean> filledForm = clinicForm
 				.bindFromRequest();
 		if (filledForm.hasErrors()) {
-			return ok(views.html.doctor.editClinic.render(clinicForm,
-					new ArrayList<String>(), new ArrayList<String>()));
+			return redirect(routes.DoctorController.myClinics());
 		} else {
 			final DoctorClinicInfo clinicInfo = filledForm.get()
 					.toDoctorClinicInfo();
@@ -905,6 +932,7 @@ public class DoctorController extends Controller {
 	 */
 	@ConfirmAppUser
 	private static Result reCreateAppointment(final DoctorClinicInfo clinicInfo) {
+		Logger.debug("entered");
 		final List<Appointment> appointments = Appointment.find.where()
 				.eq("doctorClinicInfo", clinicInfo)
 				.eq("appointmentStatus", AppointmentStatus.AVAILABLE)
@@ -921,11 +949,15 @@ public class DoctorController extends Controller {
 	public static Result deleteClinic(final Long id) {
 		final DoctorClinicInfo clinicInfo = DoctorClinicInfo.find.byId(id);
 		// Server side validation
-		if (clinicInfo.doctor.id.longValue() != LoginController.getLoggedInUser().getDoctor().id.longValue()) {
+		if (clinicInfo.doctor.id.longValue() != LoginController
+				.getLoggedInUser().getDoctor().id.longValue()) {
 			Logger.warn("COULD NOT VALIDATE LOGGED IN USER TO PERFORM THIS TASK");
-			Logger.warn("update attempted for doctor id: "+ clinicInfo.doctor.id);
-			Logger.warn("logged in AppUser: "+ LoginController.getLoggedInUser().id);
-			Logger.warn("logged in Doctor: "+ LoginController.getLoggedInUser().getDoctor().id);
+			Logger.warn("update attempted for doctor id: "
+					+ clinicInfo.doctor.id);
+			Logger.warn("logged in AppUser: "
+					+ LoginController.getLoggedInUser().id);
+			Logger.warn("logged in Doctor: "
+					+ LoginController.getLoggedInUser().getDoctor().id);
 			return redirect(routes.LoginController.processLogout());
 		}
 		final Calendar calendar = Calendar.getInstance();
@@ -938,8 +970,7 @@ public class DoctorController extends Controller {
 		final List<Appointment> futureApptList = Appointment.find.where()
 				.eq("doctorClinicInfo", clinicInfo)
 				.ge("appointmentTime", calendar.getTime())
-				.ne("appointmentStatus", AppointmentStatus.SERVED)
-				.findList();
+				.ne("appointmentStatus", AppointmentStatus.SERVED).findList();
 
 		Ebean.delete(futureApptList);
 
@@ -1124,7 +1155,8 @@ public class DoctorController extends Controller {
 	 */
 	@ConfirmAppUser
 	public static Result savePrescription() {
-		final Form<PrescriptionBean> filledForm = prescriptionForm.bindFromRequest();
+		final Form<PrescriptionBean> filledForm = prescriptionForm
+				.bindFromRequest();
 		final PrescriptionBean bean = filledForm.get();
 		final Doctor doctor = LoginController.getLoggedInUser().getDoctor();
 		// server-side check
@@ -1143,14 +1175,16 @@ public class DoctorController extends Controller {
 		final List<MedicineLineItem> medLineItemList = prescription.medicineLineItemList;
 		final List<DoctorProduct> doctorProductList = new ArrayList<DoctorProduct>();
 		for (final MedicineLineItem medLineItem : medLineItemList) {
-			if(DoctorProduct.find.where().ieq("fullName", medLineItem.medicineFullName.trim()).findRowCount() == 0){
+			if (DoctorProduct.find.where()
+					.ieq("fullName", medLineItem.medicineFullName.trim())
+					.findRowCount() == 0) {
 				final DoctorProduct doctorProduct = new DoctorProduct();
 				doctorProduct.fullName = medLineItem.medicineFullName.trim();
 				doctorProductList.add(doctorProduct);
 			}
 		}
 
-		if(doctorProductList.size()>0){
+		if (doctorProductList.size() > 0) {
 			doctor.myProductList.addAll(doctorProductList);
 			doctor.update();
 		}
@@ -1158,20 +1192,25 @@ public class DoctorController extends Controller {
 		final List<DiagnosticTestLineItem> diagnosticTestLineItemList = prescription.diagnosticTestLineItemList;
 		final List<DoctorDiagnosticTest> doctorDiagnosticTestList = new ArrayList<DoctorDiagnosticTest>();
 		for (final DiagnosticTestLineItem diagLineItem : diagnosticTestLineItemList) {
-			if(DoctorDiagnosticTest.find.where().ieq("name", diagLineItem.fullNameOfDiagnosticTest.trim()).findRowCount() == 0){
+			if (DoctorDiagnosticTest.find.where()
+					.ieq("name", diagLineItem.fullNameOfDiagnosticTest.trim())
+					.findRowCount() == 0) {
 				final DoctorDiagnosticTest doctorDiagnosticTest = new DoctorDiagnosticTest();
-				doctorDiagnosticTest.name = diagLineItem.fullNameOfDiagnosticTest.trim();
+				doctorDiagnosticTest.name = diagLineItem.fullNameOfDiagnosticTest
+						.trim();
 				doctorDiagnosticTestList.add(doctorDiagnosticTest);
 			}
 		}
 
-		if(doctorDiagnosticTestList.size()>0){
+		if (doctorDiagnosticTestList.size() > 0) {
 			doctor.myDiagnosticTestList.addAll(doctorDiagnosticTestList);
 			doctor.update();
 		}
 
-		flash().put("alert",new Alert("alert-success", "Prescription saved!").toString());
-		return redirect(routes.DoctorController.showPrescription(prescription.id));
+		flash().put("alert",
+				new Alert("alert-success", "Prescription saved!").toString());
+		return redirect(routes.DoctorController
+				.showPrescription(prescription.id));
 	}
 
 	/**
@@ -1181,7 +1220,8 @@ public class DoctorController extends Controller {
 	@ConfirmAppUser
 	public static Result showPrescription(final Long prescriptionId) {
 		final Doctor doctor = LoginController.getLoggedInUser().getDoctor();
-		final Prescription prescription = Prescription.find.byId(prescriptionId);
+		final Prescription prescription = Prescription.find
+				.byId(prescriptionId);
 		// server-side check
 		if (prescription.doctor.id.longValue() != doctor.id.longValue()) {
 			return redirect(routes.LoginController.processLogout());
@@ -1195,7 +1235,9 @@ public class DoctorController extends Controller {
 	 * pharmacy / diagnostic centre GET /doctor/share-prescription
 	 */
 	@ConfirmAppUser
-	public static Result sharePrescription(final Long prId,final String pharmacyId, final String diagnosticId, final Boolean consent) {
+	public static Result sharePrescription(final Long prId,
+			final String pharmacyId, final String diagnosticId,
+			final Boolean consent) {
 		final Doctor doctor = LoginController.getLoggedInUser().getDoctor();
 		final Prescription prescription = Prescription.find.byId(prId);
 		// server-side check
@@ -1203,15 +1245,19 @@ public class DoctorController extends Controller {
 			return redirect(routes.LoginController.processLogout());
 		}
 
-		if(!consent){
-			flash().put("alert",new Alert("alert-info", "Patient's Consent is Mandatory!").toString());
+		if (!consent) {
+			flash().put(
+					"alert",
+					new Alert("alert-info", "Patient's Consent is Mandatory!")
+					.toString());
 			return redirect(routes.DoctorController.showPrescription(prId));
 		}
 
 		final StringBuilder sharedWith = new StringBuilder();
 
-		if(pharmacyId != null && !pharmacyId.trim().isEmpty()){
-			final Pharmacy pharmacy = Pharmacy.find.byId(Long.parseLong(pharmacyId));
+		if (pharmacyId != null && !pharmacyId.trim().isEmpty()) {
+			final Pharmacy pharmacy = Pharmacy.find.byId(Long
+					.parseLong(pharmacyId));
 			final PharmacyPrescriptionInfo ppInfo = PharmacyPrescriptionInfo.find
 					.where().eq("pharmacy", pharmacy)
 					.eq("prescription", prescription).findUnique();
@@ -1228,8 +1274,9 @@ public class DoctorController extends Controller {
 			}
 		}
 
-		if(diagnosticId != null && !diagnosticId.trim().isEmpty()){
-			final DiagnosticCentre diagnosticCentre = DiagnosticCentre.find.byId(Long.parseLong(diagnosticId));
+		if (diagnosticId != null && !diagnosticId.trim().isEmpty()) {
+			final DiagnosticCentre diagnosticCentre = DiagnosticCentre.find
+					.byId(Long.parseLong(diagnosticId));
 			final DiagnosticCentrePrescriptionInfo dcpInfo = DiagnosticCentrePrescriptionInfo.find
 					.where().eq("diagnosticCentre", diagnosticCentre)
 					.eq("prescription", prescription).findUnique();
@@ -1241,19 +1288,22 @@ public class DoctorController extends Controller {
 				diagPrescriptionInfo.sharedDate = new Date();
 				diagPrescriptionInfo.diagnosticCentrePrescritionStatus = DiagnosticCentrePrescritionStatus.RECEIVED;
 				diagPrescriptionInfo.save();
-				if(sharedWith.length() > 0){
+				if (sharedWith.length() > 0) {
 					sharedWith.append(" and ");
 				}
 				sharedWith.append(diagnosticCentre.name);
 			}
 		}
-		flash().put("alert",new Alert("alert-success", "Prescription shared with "+sharedWith.toString()).toString());
+		flash().put(
+				"alert",
+				new Alert("alert-success", "Prescription shared with "
+						+ sharedWith.toString()).toString());
 		return redirect(routes.DoctorController.viewTodaysAppointments());
 	}
 
 	/**
-	 * Action to show todays prescription created by loggedIn doctor
-	 * GET	/doctor/todays-prescriptions
+	 * Action to show todays prescription created by loggedIn doctor GET
+	 * /doctor/todays-prescriptions
 	 */
 	@ConfirmAppUser
 	public static Result viewTodaysPrescription() {
@@ -1349,34 +1399,33 @@ public class DoctorController extends Controller {
 
 	/**
 	 * @author Mitesh Action to send mobileNumberConfirmationKey to currently
-	 *         logged in user's mobile
-	 *         GET /user/send-verificaion-code
+	 *         logged in user's mobile GET /user/send-verificaion-code
 	 */
 	public static Result sendMobVerificationCode() {
 		final AppUser appUser = LoginController.getLoggedInUser();
 		SMSService.sendConfirmationSMS(appUser);
-		flash().put("alert",new Alert("alert-info","A confirmation code has been SMSed to your Mobile Number ("+appUser.mobileNumber+")").toString());
+		flash().put(
+				"alert",
+				new Alert("alert-info",
+						"A confirmation code has been SMSed to your Mobile Number ("
+								+ appUser.mobileNumber + ")").toString());
 		return redirect(routes.UserController.confirmAppUserPage());
 
 	}
 
 	/**
 	 * @author Mitesh Action to Display form to verify the mobile number of
-	 *         currently logged in user
-	 *         GET /user/verify-mobile-number
+	 *         currently logged in user GET /user/verify-mobile-number
 	 */
 	public static Result displayMobVerificationForm() {
 		return ok(views.html.common.verifyMobileNumber.render());
 	}
 
 	/**
-	 * @author Mitesh
-	 *  Action to verify the mobileNumberConfirmationKey send to
-	 *	 currently logged in user'mobile
-	 *	POST /user/verify-mobile-number
+	 * @author Mitesh Action to verify the mobileNumberConfirmationKey send to
+	 *         currently logged in user'mobile POST /user/verify-mobile-number
 	 */
 	public static Result verifyMobileNumberConfirmationKey() {
-
 
 		final String key = request().body().asFormUrlEncoded()
 				.get("mobileNumber")[0].trim();
@@ -1385,11 +1434,11 @@ public class DoctorController extends Controller {
 
 		final AppUser appUser = LoginController.getLoggedInUser();
 		Logger.info(appUser.mobileNumberConfirmationKey);
-		if(appUser.mobileNumberConfirmationKey == null){
+		if (appUser.mobileNumberConfirmationKey == null) {
 			flash().put(
 					"alert",
-					new Alert("alert-danger",
-							"You hav'nt genrated acode yet").toString());
+					new Alert("alert-danger", "You hav'nt genrated acode yet")
+					.toString());
 			return redirect(routes.UserController.confirmAppUserPage());
 
 		}
@@ -1414,30 +1463,32 @@ public class DoctorController extends Controller {
 	}
 
 	/**
-	 * @author Mitesh
-	 *  Action to send a verification email
-	 *	 currently logged in user'mobile
-	 *GET 	/user/verify-email-number
+	 * @author Mitesh Action to send a verification email currently logged in
+	 *         user'mobile GET /user/verify-email-number
 	 */
 	public static Result sendConformationEmail() {
 
 		final boolean result;
 		final AppUser loggedInUser = LoginController.getLoggedInUser();
 
-
 		Promise.promise(new Function0<Integer>() {
 
 			// @Override
 			@Override
 			public Integer apply() {
-				final boolean result1 = EmailService.sendConfirmationEmail(loggedInUser);
+				final boolean result1 = EmailService
+						.sendConfirmationEmail(loggedInUser);
 				return 0;
 			}
 		});
 		// End of async
-		flash().put("alert",new Alert("alert-success","A confirmation email has been sent to you at "+loggedInUser.email+". Kindly verify the same.").toString());
+		flash().put(
+				"alert",
+				new Alert("alert-success",
+						"A confirmation email has been sent to you at "
+								+ loggedInUser.email
+								+ ". Kindly verify the same.").toString());
 		return redirect(routes.UserController.confirmAppUserPage());
-
 
 	}
 
@@ -1545,9 +1596,9 @@ public class DoctorController extends Controller {
 	@ConfirmAppUser
 	public static Result myFavoritePharmacies() {
 		final Doctor doctor = LoginController.getLoggedInUser().getDoctor();
-		return ok(views.html.pharmacist.favorite_pharmacy_list.render(doctor.pharmacyList));
+		return ok(views.html.pharmacist.favorite_pharmacy_list
+				.render(doctor.pharmacyList));
 	}
-
 
 	/**
 	 * @author lakshmi Action to add favorite pharmacy of the Doctor to the list
@@ -1584,10 +1635,9 @@ public class DoctorController extends Controller {
 	@ConfirmAppUser
 	public static Result myFavoriteDiagnosticCentres() {
 		final Doctor doctor = LoginController.getLoggedInUser().getDoctor();
-		return ok(views.html.diagnostic.favorite_diagnosticCentre_list.render(doctor.diagnosticCentreList));
+		return ok(views.html.diagnostic.favorite_diagnosticCentre_list
+				.render(doctor.diagnosticCentreList));
 	}
-
-
 
 	@ConfirmAppUser
 	public static Result requestAppointment() {
