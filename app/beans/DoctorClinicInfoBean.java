@@ -13,6 +13,7 @@ import models.doctor.DaySchedule;
 import models.doctor.Doctor;
 import models.doctor.DoctorClinicInfo;
 import play.Logger;
+import play.data.validation.Constraints.Required;
 
 @SuppressWarnings("serial")
 public class DoctorClinicInfoBean implements Serializable {
@@ -23,6 +24,7 @@ public class DoctorClinicInfoBean implements Serializable {
 
 	public Long clinicId;
 
+	@Required
 	public String name;
 
 	public String contactPersonName;
@@ -35,11 +37,14 @@ public class DoctorClinicInfoBean implements Serializable {
 
 	public String area;
 
+	@Required
 	public String city;
 
 	public String state;
 
 	public String fetchpin;
+
+	public String pinCode;
 
 	public List<String> fromHrs = new ArrayList<String>();
 
@@ -141,7 +146,7 @@ public class DoctorClinicInfoBean implements Serializable {
 		if (this.city != null) {
 			address.city = this.city;
 		}
-		if (this.state != null) {
+		if (this.state != null && !this.state.trim().isEmpty()) {
 			address.state = State.valueOf(this.state);
 		}
 
@@ -155,6 +160,10 @@ public class DoctorClinicInfoBean implements Serializable {
 		if(this.fetchpin != null){
 			address.fetchedPinCode = this.fetchpin;
 		}
+		if(this.pinCode != null){
+			address.pinCode = this.pinCode;
+		}
+
 
 		doctorClinicInfo.clinic.address = address;
 		if(doctorClinicInfo.clinic.address.id == null){
