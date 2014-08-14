@@ -334,6 +334,15 @@ public class SampleDataController extends Controller {
 		return ok();
 	}
 
+	public static Result mednetAdmin(){
+		final AppUser appUser = new AppUser();
+		appUser.name = "laxmi";
+		appUser.email = "vlaxmi.b3@gmail.com";
+		appUser.role = Role.MEDNETWORK_ADMIN;
+		appUser.save();
+		return ok();
+	}
+
 	/*	public static Result testXXX() {
 		promise(new Function0<Integer>() {
 			@Override

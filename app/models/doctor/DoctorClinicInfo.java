@@ -138,7 +138,9 @@ public class DoctorClinicInfo extends BaseEntity {
 		if(this.clinic.address.city!=null){
 			bean.city=this.clinic.address.city;
 		}
-
+		if(this.clinic.address.pinCode!=null){
+			bean.pinCode=this.clinic.address.pinCode;
+		}
 		bean.lat = this.clinic.address.latitude;
 
 		bean.lng = this.clinic.address.longitude;

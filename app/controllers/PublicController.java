@@ -1,6 +1,5 @@
 package controllers;
 
-import java.io.IOException;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -10,17 +9,13 @@ import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
-import actions.ConfirmAppUser;
-import beans.LoginBean;
-
-import com.google.common.io.Files;
-
 import models.Alert;
 import models.AppUser;
+import models.Feedback;
 import models.FileEntity;
 import models.Role;
+import models.State;
 import models.diagnostic.DiagnosticCentre;
-import models.diagnostic.DiagnosticCentrePrescriptionInfo;
 import models.doctor.Appointment;
 import models.doctor.Day;
 import models.doctor.DaySchedule;
@@ -33,7 +28,8 @@ import play.Logger;
 import play.data.Form;
 import play.mvc.Controller;
 import play.mvc.Result;
-import play.mvc.Http.MultipartFormData.FilePart;
+import actions.ConfirmAppUser;
+import beans.LoginBean;
 
 public class PublicController extends Controller{
 	public static final Form<LoginBean> loginForm = Form.form(LoginBean.class);
@@ -570,12 +566,54 @@ public class PublicController extends Controller{
 			return redirect(routes.UserActions.dashboard());
 		}
 	}
+	/**
+	 * @author lakshmi
+	 * Action to render the feedback page
+	 * GET/feedback
+	 */
+	public static Result feedBack(){
 
-
-
-	public static Result homePages(){
-		return ok(views.html.home.render(loginForm));
+		//final AppUser appUser = LoginController.getLoggedInUser();
+		return ok(views.html.feedback.render());
 	}
+
+	/**
+	 * @author lakshmi
+	 * Action to save the feedback from the user
+	 * POST/feedback
+	 */
+	public static Result saveFeedBack(){
+		final Map<String,String[]> requestData = request().body().asFormUrlEncoded();
+		final Feedback feedback = new Feedback();
+
+		if(LoginController.isLoggedIn()){
+			feedback.appUser = LoginController.getLoggedInUser();
+		}
+		else{
+			if(requestData.get("firstName") != null && requestData.get("firstName")[0].trim() != ""){
+				feedback.name = requestData.get("firstName")[0];
+			}
+			if(requestData.get("role") != null && requestData.get("role")[0].trim() != ""){
+				feedback.role = Enum.valueOf(Role.class,requestData.get("role")[0]);
+			}
+			if(requestData.get("email") != null && requestData.get("email")[0].trim() != ""){
+				feedback.email = requestData.get("email")[0];
+			}
+		}
+
+		if(requestData.get("remarks") != null && requestData.get("remarks")[0].trim() != ""){
+			feedback.remarks = requestData.get("remarks")[0];
+		}
+		feedback.date = new Date();
+		feedback.ipAddress = request().remoteAddress();
+		feedback.save();
+		flash().put("alert", new Alert("alert-success", "Thank you for your feedback.").toString());
+		if(LoginController.isLoggedIn()){
+			return redirect(routes.UserActions.dashboard());
+		}
+		return redirect(routes.Application.index());
+	}
+
 
 
 

@@ -43,7 +43,7 @@
         src="https://maps.googleapis.com/maps/api/js?v=3.exp&sensor=false&libraries=places">
 	</script>
    
-   <form role="form" action="@routes.DoctorController.processNewClinic()" method="post" onsubmit="return validate()">
+   <form id="myForm" role="form" action="@routes.DoctorController.processNewClinic()" method="post">
 	<div class="row">
 		<div class="col-md-6">
 		
@@ -52,8 +52,8 @@
 			<div ><input type="hidden" name="fetchpin" id="fetchPin"></div>
 			
 			 <div class="form-group">
-    			<label for="clinicName">Clinic Name</label>
-   			    <input type="text" class="form-control" id="clinicName" name="name" value="@clinicForm("name").value" placeholder="Enter Clinic Name">
+    			<label for="clinicName">Clinic Name*</label>
+   			    <input type="text" class="form-control" id="clinicName" name="name" value="@clinicForm("name").value" placeholder="Enter Clinic Name" required>
    			 </div>
    			 
  			 <div class="form-group">
@@ -62,8 +62,8 @@
  			 </div>
  			 
   			<div class="form-group">
-    			<label for="phone">Phone Number</label>
-    			<input type="text" id="phone" class="form-control" value="@clinicForm("contactNo").value"  name="contactNo"  placeholder="Enter phone number">
+    			<label for="phone">Phone Number*</label>
+    			<input type="text" id="phone" class="form-control" value="@clinicForm("contactNo").value"  name="contactNo"  placeholder="Enter phone number" required>
   			</div>
 		
 			<div class="form-group">
@@ -72,15 +72,21 @@
   			</div>
   			
  			 <div class="form-group">
-    			<label for="area">Area</label>
-   				 <input type="text" class="form-control" id="area" name="area" value="@clinicForm("area").value" placeholder="Enter area">
+    			<label for="area">Area*</label>
+   				 <input type="text" class="form-control" id="area" name="area" value="@clinicForm("area").value" placeholder="Enter area" required>
   			</div>
   			
+  			
   			<div class="form-group">
-    			<label for="city">City</label>
-   				 <input type="text" id="city" class="form-control" name="city" value="@clinicForm("city").value" placeholder="Enter city name">
+    			<label for="city">City*</label>
+   				 <input type="text" id="city" class="form-control" name="city" value="@clinicForm("city").value" placeholder="Enter city name" required>
  		     </div>
 		
+			<div class="form-group">
+    			<label for="pinCode">Pin code</label>
+   				 <input type="text" id=pinCode class="form-control" name="pinCode" value="@clinicForm("pinCode").value" placeholder="Enter pin code">
+ 		     </div>
+ 		     
 			<div class="form-group">
    				 <label for="state">State</label>
     			 <select data-placeholder="Select State" name="state" class="form-control chosen-select">
@@ -90,6 +96,7 @@
 					}
 				</select>
 			</div>
+			
 			</div>
 			<div class="col-md-6">
 				<div id="map_canvas" style="width:520px;height:400px">
@@ -186,12 +193,12 @@
 	</div>
 </div>
 <input type="hidden" name="id" value="@clinicForm("id").value">
-<button id="submit"type="submit" class="btn btn-primary btn-sm"   data-toggle="modal" data-target=".bs-example-modal-sm"  data-toggle="popover" title="Data Incorrect" data-content="Check From and To values">Submit</button>
+<button id="submit"type="submit" class="btn btn-primary btn-sm"    data-toggle="popover" title="Data Incorrect" data-content="Check From and To values">Submit</button>
 <div class="modal fade bs-example-modal-sm" tabindex="-1" role="dialog" aria-labelledby="mySmallModalLabel" aria-hidden="true">
   <div class="modal-dialog modal-sm">
     <div class="modal-content">
         <div class="modal-header alert-info">
-        <h4 class="modal-title" id="myModalLabel"> Wait while creating  the clinic</h4>
+        <h4 class="modal-title" id="myModalLabel"> Please wait while your schedule is created</h4>
       </div><div class="modal-body">
       	<div style="text-align: center;"><span   style="font-size:50px;"><i class="fa fa-spinner fa-spin"></i></span></div>
       </div>
@@ -225,7 +232,24 @@
 		$('#textbox1').val($(this).is(':checked'));
 	});
 
+
+	$('#myForm').submit(function(event){
+	    // cancels the form submission
+	   // event.preventDefault();
+	   var $myForm = $('#myForm');
+	    if (!$myForm[0].checkValidity()) {
+	    	  // If the form is invalid, submit it. The form won't actually submit;
+	    	  // this will just cause the browser to display the native HTML5 error messages.
+	    	  $myForm.submit();
+	    	}else{
+	    		$('.modal').modal('show');
+	    		 $myForm.submit();	
+	    	}
+	    // do whatever you want here
+	});
+		
 	function validate() {
+		
 		/*
 		var values = $('input:checkbox:checked').map(
 				function() {
@@ -242,7 +266,7 @@
 			return false;
 		}
 		*/
-		return true;
+		//return true;
 	}
 </script>			
 			

@@ -3,6 +3,8 @@ package models;
 import java.util.LinkedHashMap;
 import java.util.Map;
 
+import org.apache.commons.lang3.text.WordUtils;
+
 import com.avaje.ebean.annotation.EnumValue;
 
 public enum Role {
@@ -39,4 +41,9 @@ public enum Role {
 		}
 		return vals;
 	}
+
+	public String capitalize(){
+		return WordUtils.capitalizeFully(this.toString().replaceAll("_", " "));
+	}
+
 }

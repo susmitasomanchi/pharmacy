@@ -7,11 +7,12 @@
 
 <div class="row">
 <div class="col-md-10 col-md-offset-1">
-	
+	<br>
 	<div class="row">
       <div class="col-md-2" style="margin-top:-1%; margin-bottom:-2%;">
-        <img style="" src="/assets/blog/images/mednlogo.png" alt="MedNetwork">
+        <img style="" src="/assets/blog/images/mednlogoc.png" alt="MedNetwork">
       </div>
+      <br>
 	</div>
    
     <hr>
@@ -19,20 +20,20 @@
  <div class="col-md-2" style="width:8%;padding-right:0px">
  <p style="padding-top:7px">Search For</p>
 </div>
-<div class="col-md-2" style="width:22%" >
-  <select class="form-control" name="role" id="role">
+<div class="col-md-2" style="width:12%" >
+  <select class="form-control" name="role" id="role" style="width:100%;box-shadow: 1px 1px 1px 1px #aaaaaa;">
 <option value="DOCTOR">Doctor</option>
 <option value="ADMIN_PHARMACIST">Pharmacy</option>
 <option value="ADMIN_DIAGREP">Diagnostic Centre</option>
 </select>
 
 </div>
-  <div class="col-md-6" style="width:50%">
-      <input type="search" style="width:100%"  name="searchKey" id="searchKey" placeholder="Doctor's Name">
+  <div class="col-md-6" style="width:60%">
+      <input type="search" style="width:100%;border-top-left-radius:2.5em;border-bottom-left-radius:2.5em;border-top-right-radius:2.5em;border-bottom-right-radius:2.5em;box-shadow: 1px 1px 3px 3px #aaaaaa;"  name="searchKey" id="searchKey" placeholder="Doctor's Name">
     </div>
    
 <div class="col-md-2" style="width:20%">
-  <button style="width:100%" class="btn btn-sm btn-success pull-right" onclick="searchKey();"><i class="icon-search icon-large"></i> Search</button>
+  <button style="width:100%;border-top-left-radius:2.5em;border-bottom-left-radius:2.5em;border-top-right-radius:2.5em;border-bottom-right-radius:2.5em;box-shadow: 1px 1px 3px 3px #aaaaaa;" class="btn btn-sm btn-primary pull-right" onclick="searchKey();"><i class="icon-search icon-large"></i> Search</button>
   </div>
   </div>
    <script>
@@ -65,7 +66,6 @@ $("#searchKey").keyup(function (e) {
 
 </script>
 
-<br>
   <hr>
   <div class="row">    
     
@@ -102,15 +102,15 @@ $("#searchKey").keyup(function (e) {
   <div class="panel-heading">
   <h3 class="panel-title"><i class="fa fa-sign-in"></i> Sign In</h3>
   </div>
-  <div class="panel-body">
+  <div class="panel-body" style="padding-top:0px">
   <br>
   <div class="col-md-12">
   <input type="text" name="email" placeholder="Email" style="width:100%">
   </div>
   <div class="col-md-12">
   <input type="password" name="password" placeholder="Password" style="width:100%">
-	</div>
-      <a href="@routes.LoginController.forgotPassword()" style="padding-left:15px;font-size:12px">Forgot password ?</a>
+      </div>
+      <a href="@routes.LoginController.forgotPassword()" style="padding-left:15px;font-size:12px">Forgot your password ?</a>
      <div class="col-md-12">
      <br>
           <input type="submit" class="btn btn-sm btn-primary pull-right" value="Sign in" style="width:100%">
@@ -156,12 +156,11 @@ $("#searchKey").keyup(function (e) {
         Ride the revolution by <a href="/join" class="btn-link"><b>joining us today!</b></a> Its free and worth much more than the 30 seconds you'll take to do so.
         <br>
         *@ 
-        Follow us on <a href="https://twitter.com/mednetworkindia" target="_blank"><b>twitter</b></a>, like our page on <a href="https://www.facebook.com/mednetwork.in" target="_blank"><b>facebook</b></a> and <strong>read our <a href="/blog" target="_blank"><b>blog</b></a></strong> which has some interesting ideas to stay healthy and can also share your <a href="/feedback"><b> feedback </b></a>
+        Follow us on <a href="https://twitter.com/mednetworkindia" target="_blank"><b>twitter</b></a>, like our page on <a href="https://www.facebook.com/mednetwork.in" target="_blank"><b>facebook</b></a> and <strong>read our <a href="/blog" target="_blank"><b>blog</b></a></strong> which has some interesting ideas to stay healthy. 
     </span>
     	
 	</div>
 	
-	<span style="width:100%; margin-left:400px; font-size:10px;"> Copyright 2014 <a href="http://www.greensoftware.in/">Green Software</a> . All rights reserved.</span>
 	</div>
 	
 	
