@@ -191,6 +191,9 @@ GET 	/diagnostic/:slugUrl								controllers.PublicController.getDiagnosticCentr
 GET		/static/fav/pharmacies							controllers.PharmacistController.staticFavPharmacies()
 GET		/create/master									controllers.SampleDataController.createMasterMedicinesAndTests()
 GET		/create/spez									controllers.SampleDataController.createDocSpez()
+
+GET		/testurl									controllers.SampleDataController.testurl()
+GET		/test222									controllers.SampleDataController.test222()
 #############################	PRODUCTION	#################################################################################
 
 
