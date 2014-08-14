@@ -76,6 +76,7 @@
    				 <input type="text" class="form-control" id="area" name="area" value="@clinicForm("area").value" placeholder="Enter area" required>
   			</div>
   			
+  			
   			<div class="form-group">
     			<label for="city">City*</label>
    				 <input type="text" id="city" class="form-control" name="city" value="@clinicForm("city").value" placeholder="Enter city name" required>
@@ -87,8 +88,8 @@
  		     </div>
  		     
 			<div class="form-group">
-   				 <label for="state">State*</label>
-    			 <select data-placeholder="Select State" name="state" class="form-control chosen-select" required>
+   				 <label for="state">State</label>
+    			 <select data-placeholder="Select State" name="state" class="form-control chosen-select">
   				 	<option></option>
   				 	@for((k,v) <-State.options()){
   				 	<option value="@k">@v</option>

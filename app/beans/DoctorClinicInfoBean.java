@@ -146,7 +146,7 @@ public class DoctorClinicInfoBean implements Serializable {
 		if (this.city != null) {
 			address.city = this.city;
 		}
-		if (this.state != null) {
+		if (this.state != null && !this.state.trim().isEmpty()) {
 			address.state = State.valueOf(this.state);
 		}
 

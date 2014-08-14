@@ -25,7 +25,7 @@
         src="https://maps.googleapis.com/maps/api/js?v=3.exp&sensor=false&libraries=places">
 	</script>
    
-   <form role="form" action="@routes.DoctorController.processUpdateClinicInfo()" method="post" >
+   <form id="myForm" role="form" action="@routes.DoctorController.processUpdateClinicInfo()" method="post" >
 	<div class="row">
 		<div class="col-md-6">
 		
@@ -33,8 +33,8 @@
 			<div ><input type="hidden" name="lng" id="lng1"></div>
 			
 			 <div class="form-group">
-    			<label for="clinicName">Clinic Name</label>
-   			    <input type="text" class="form-control" id="clinicName" name="name" value="@clinicForm("name").value" placeholder="Enter Clinic Name">
+    			<label for="clinicName">Clinic Name*</label>
+   			    <input type="text" class="form-control" id="clinicName" name="name" value="@clinicForm("name").value" placeholder="Enter Clinic Name" required>
    			 </div>
    			 
  			 <div class="form-group">
@@ -43,8 +43,8 @@
  			 </div>
  			 
   			<div class="form-group">
-    			<label for="phone">Phone Number</label>
-    			<input type="text" id="phone" class="form-control" value="@clinicForm("contactNo").value"  name="contactNo"  placeholder="Enter phone number">
+    			<label for="phone">Phone Number*</label>
+    			<input type="text" id="phone" class="form-control" value="@clinicForm("contactNo").value"  name="contactNo"  placeholder="Enter phone number" required>
   			</div>
 		
 			<div class="form-group">
@@ -53,13 +53,13 @@
   			</div>
   			
  			 <div class="form-group">
-    			<label for="area">Area</label>
-   				 <input type="text" class="form-control" id="area" name="area" value="@clinicForm("area").value" placeholder="Enter area">
+    			<label for="area">Area*</label>
+   				 <input type="text" class="form-control" id="area" name="area" value="@clinicForm("area").value" placeholder="Enter area" required>
   			</div>
   			
   			<div class="form-group">
-    			<label for="city">City</label>
-   				 <input type="text" id="city" class="form-control" name="city" value="@clinicForm("city").value" placeholder="Enter city name">
+    			<label for="city">City*</label>
+   				 <input type="text" id="city" class="form-control" name="city" value="@clinicForm("city").value" placeholder="Enter city name" required>
  		     </div>
 		
 			<div class="form-group">
@@ -180,6 +180,21 @@
     </script>
   
   <script>
+   $('#myForm').submit(function(event){
+	   
+	   var $myForm = $('#myForm');
+	    if (!$myForm[0].checkValidity()) {
+	    	  // If the form is invalid, submit it. The form won't actually submit;
+	    	  // this will just cause the browser to display the native HTML5 error messages.
+	    	  $myForm.submit();
+	    	}else{
+	    		$('.modal').modal('show');
+	    		 $myForm.submit();	
+	    	}
+	    // do whatever you want here
+	});
+   
+   
    $( document ).ready(function() {
 
 
