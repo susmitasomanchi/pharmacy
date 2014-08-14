@@ -158,7 +158,6 @@ public class UserController extends Controller {
 
 		if(appUser.role.equals(Role.DOCTOR)){
 			final Doctor doctor = new Doctor();
-			doctor.specialization = "Specialization";
 			doctor.degree = "Degree";
 			final Calendar cal = Calendar.getInstance();
 			cal.setTime(new Date());
@@ -335,7 +334,6 @@ public class UserController extends Controller {
 		appUser.save();
 
 		final Doctor doctor = new Doctor();
-		doctor.specialization = "Specialization";
 		doctor.degree = "Degree";
 		doctor.appUser = appUser;
 		doctor.save();

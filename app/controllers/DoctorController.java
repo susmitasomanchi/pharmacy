@@ -30,6 +30,7 @@ import models.doctor.DoctorEducation;
 import models.doctor.DoctorExperience;
 import models.doctor.DoctorProduct;
 import models.doctor.DoctorSocialWork;
+import models.doctor.DoctorSpecialization;
 import models.doctor.MedicineLineItem;
 import models.doctor.Prescription;
 import models.doctor.QuestionAndAnswer;
@@ -95,10 +96,16 @@ public class DoctorController extends Controller {
 				doctor.appUser.name = requestMap.get("fullname")[0].trim();
 			}
 
-			if (requestMap.get("specialization") != null
-					&& !(requestMap.get("specialization")[0].trim().isEmpty())) {
-				doctor.specialization = requestMap.get("specialization")[0]
-						.trim();
+			if (requestMap.get("specialization") != null ) {	//&& !(requestMap.get("specialization").length > 0)
+				Logger.info("here!!!!");
+				List<DoctorSpecialization> oldSpezList = new ArrayList<DoctorSpecialization>();
+				oldSpezList.addAll(doctor.specializationList);
+				doctor.specializationList.removeAll(oldSpezList);// .clear() wasnt working
+				for (String specializationId : requestMap.get("specialization")) {
+					Logger.info("now!!!!");
+					DoctorSpecialization spez = DoctorSpecialization.find.byId(Long.parseLong(specializationId));
+					doctor.specializationList.add(spez);
+				}
 			}
 
 			if (requestMap.get("degree") != null
