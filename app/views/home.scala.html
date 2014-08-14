@@ -12,6 +12,36 @@
       <div class="col-md-2" style="margin-top:-1%; margin-bottom:-2%;">
         <img style="" src="/assets/blog/images/mednlogoc.png" alt="MedNetwork">
       </div>
+      
+      <div class="col-md-2" style="font-size:20px; color:#369C51; margin-top:5.6%; margin-left:12%;">
+      	&#946;eta
+      </div>
+      
+      <div class="col-md-3 pull-right" style="margin-top:-1%; margin-bottom:-2%;">
+    @helper.form(action=routes.LoginController.processLogin()) {
+  	<div style="margin-top:0em;">
+  	<div class="panel panel-primary" >
+  	<div class="panel-heading">
+  	<h3 class="panel-title"><i class="fa fa-sign-in"></i> Sign In</h3>
+  	</div>
+  	<div class="panel-body" style="padding:0px">
+  	<br>
+  	<div class="col-md-12" style="padding:0px; margin-top:-8%;">
+  	<input type="email" name="email" placeholder="Email" style="width:100%" required>
+  	</div>
+  	<div class="col-md-12" style="padding:0px;">
+  	<input type="password" name="password" placeholder="Password" style="width:100%" required>
+      </div>
+     <div class="col-md-12" style="padding:0px;">
+          <input type="submit" class="btn btn-sm btn-primary pull-right" value="Sign in" style="width:100%">
+      </div>
+      	<a class="pull-right" href="@routes.LoginController.forgotPassword()" style="padding-right:5px; font-size:12px">Forgot password ?</a>
+  	</div>
+  </div>
+  </div>
+  }
+      </div>
+      
       <br>
 	</div>
    
@@ -72,33 +102,99 @@ $("#searchKey").keyup(function (e) {
   <hr>
   <div class="row">    
     
-	<div class="col-md-8">
+	<div class="col-md-12">
       <p class="well">
-        <strong>MedNetwork is an online platform for all medical professionals</strong>
+        <strong>MedNetwork is an online platform for all stakeholders in healthcare to synergise their efforts in making healthcare smart, integrated and networked.</strong>
         
-      <p></p>
+
+<div class="row">
+
+<div class="col-md-3">
+<div class="panel panel-primary" style="cursor:pointer;" onclick="window.location.href='@routes.UserController.joinUsPatient()';">
+  	<div class="panel-heading">
+  		<h3 class="panel-title"><i class="fa fa-users"></i> Users<span class="pull-right">Join</span></h3>
+  	</div>
+  	<div class="panel-body" style="padding:0px">
+  		<ul style="list-style-type:circle; padding-left:25px; padding-top:5px;">
+  			<li><b>Search</b> Doctors, Pharmacies & Diagnostic Centres</li>
+  			<li>Schedule <b>Appointments</b> with Doctors</li>
+  			<li>Manage <b>Prescriptions</b> online</li>
+  			<li><b>Share</b> Prescriptions with favourite Pharmacies and Diagnostic Centres</li>
+  		</ul>
+	</div>
+</div>
+</div>
+
+<div class="col-md-3">
+<div class="panel panel-primary" style="cursor:pointer;" onclick="window.location.href='@routes.UserController.joinUsDoctor()';">
+  	<div class="panel-heading">
+  	<h3 class="panel-title"><i class="fa fa-user-md"></i> Doctors<span class="pull-right">Join</span></h3>
+  	</div>
+  	<div class="panel-body" style="padding:0px">
+  		<ul style="list-style-type:circle; padding-left:25px; padding-top:5px;">
+  			<li>Manage <b>Clinics & Appointment</b> Schedules</li>
+  			<li>Simple DIY <b>Profile Builder</b> gives you perfect online visibility</li>
+  			<li>Easy to use online <b>Practice Management</b> Tool</li>
+  			<li>Manage <b>Prescriptions</b> online</li>
+  		</ul>
+	</div>
+</div>
+</div>
+
+<div class="col-md-3">
+<div class="panel panel-primary" style="cursor:pointer;" onclick="window.location.href='@routes.UserController.joinUsPharmacy()';">
+  	<div class="panel-heading">
+  	<h3 class="panel-title"><i class="fa fa-medkit"></i> Pharmacy<span class="pull-right">Join</span></h3>
+  	</div>
+  	<div class="panel-body" style="padding:0px">
+  		<ul style="list-style-type:circle; padding-left:25px; padding-top:5px;">
+  			<li>Simple DIY <b>Profile Builder</b> gives you the online visibility you need without having to build a website</li>
+  			<li>Get <b>Prescriptions</b> directly from Doctors and/or Patients</li>
+  			<li>Get found by countless <b>Customers</b> online</li>
+  		</ul>
+	</div>
+</div>
+</div>
+
+<div class="col-md-3">
+<div class="panel panel-primary" style="cursor:pointer;" onclick="window.location.href='@routes.UserController.joinUsDiagnostic()';">
+  	<div class="panel-heading">
+  	<h3 class="panel-title"><i class="fa fa-bar-chart-o"></i> Diagnostic Centre<span class="pull-right">Join</span></h3>
+  	</div>
+  	<div class="panel-body" style="padding:0px">
+  		<ul style="list-style-type:circle; padding-left:25px; padding-top:5px;">
+  			<li>Simple DIY <b>Profile Builder</b> gives you the online visibility you need without having to build a website</li>
+  			<li>Get <b>Prescriptions</b> directly from Doctors and/or Patients</li>
+  			<li>Manage <b>Reports</b> online and <b>Share</b> them with patients</li>
+  		</ul>
+	</div>
+</div>
+</div>
+  
+  
+  
+  
+  
+</div>
+
+
+
+
+
+
+
       <p style="text-align:justify;" >
       We strongly believe that <strong>the whole is greater than the sum of its parts</strong>, that is why we believe that healthcare can be greatly enhanced if
       everyone working in healthcare industry can easily interact with each other and share data. MedNetwork will be this platform. Here such day to day
       interaction and data exchanges will be simple and instant.  
       We also hope that mednetwork will be a place for a lot of new and exciting possibilities.
-      </p>
-
-
-      <p style="text-align:justify;" >
-      We strongly believe that <strong>the whole is greater than the sum of its parts</strong>, that is why we believe that healthcare can be greatly enhanced if
-      everyone working in healthcare industry can easily interact with each other and share data. MedNetwork will be this platform. Here such day to day
-      interaction and data exchanges will be simple and instant.  
-      We also hope that mednetwork will be a place for a lot of new and exciting possibilities.
-      </p>
-      
-      <p>
-      We will be launching first public beta this independence day. 
       </p>
       
        </div>
        <br>
-       <div class="col-md-4">
+  
+  @*
+  <div class="col-md-4">
     @helper.form(action=routes.LoginController.processLogin()) {
   <div style="margin-top:-1.3em;">
   <div class="panel panel-primary" >
@@ -134,9 +230,9 @@ $("#searchKey").keyup(function (e) {
         <li><h4><a href="@routes.UserController.joinUsPatient()" style="cursor:pointer;text-decoration:none;"><i class="fa fa-users" style="padding-right:3px"></i> User </a></h4></li>
         <li><h4><a href="@routes.UserController.joinUsDoctor()" style="cursor:pointer;text-decoration:none;"><i class="fa fa-user-md" style="padding-right:3px"></i> &nbsp;Doctor </a></h4></li>
         <li><h4><a href="@routes.UserController.joinUsPharmacy()" style="cursor:pointer;text-decoration:none;"><i class="fa fa-medkit"style="padding-right:3px"></i> Pharmacy </a></h4></li>
-        @*
+        @ *
         <li><h4><a style="cursor:pointer;text-decoration:none;"><i class="fa fa-ambulance" style="padding-right:3px"></i> Pharma Companies</a></h4></li>
-        *@
+        * @
         <li><h4><a href="@routes.UserController.joinUsDiagnostic()" style="cursor:pointer;text-decoration:none;"><i class="fa fa-bar-chart-o" style="padding-right:3px"></i> Diagnostic Center </a></h4></li>
         
         
@@ -144,6 +240,15 @@ $("#searchKey").keyup(function (e) {
       </div>
       </div>
     </div>
+    *@
+    
+    
+    
+    
+    
+    
+    
+    
 </div>
     <div>
      
