@@ -87,8 +87,8 @@
  		     </div>
  		     
 			<div class="form-group">
-   				 <label for="state">State</label>
-    			 <select data-placeholder="Select State" name="state" class="form-control chosen-select">
+   				 <label for="state">State*</label>
+    			 <select data-placeholder="Select State" name="state" class="form-control chosen-select" required>
   				 	<option></option>
   				 	@for((k,v) <-State.options()){
   				 	<option value="@k">@v</option>
