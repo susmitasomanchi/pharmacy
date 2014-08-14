@@ -1,0 +1,43 @@
+@()
+
+@main("Feedback Form"){
+
+<div class="row">
+<div class="col-md-2">
+</div>
+<div class="col-md-8 well">
+<form>
+<div class="form-group">
+<label for="firstName" class="col-md-4" style="font-size:16px"> Name <span style="color:red">*</span></label>
+<div class="col-lg-8"><input type="text" class="form-control" name="firstName" placeholder="Name"></div>
+</div>
+<br><br>
+<div class="form-group">
+<label for="role" class="col-md-4" style="font-size:16px"> Role </label>
+<div class="col-md-8">
+<select class="form-control">
+<option value="1">Doctor</option>
+<option value="2">Pharmacist</option>
+<option value="3">Admin Diag Rep</option>
+<option value="4">User</option>
+</select>
+</div>
+</div>
+<br><br>
+<div class="form-group">
+<label for="feedback" class="col-md-4" style="font-size:16px"> Feedback </label>
+<div class="col-lg-8">
+<textarea rows="5" cols="49"></textarea>
+</div>
+</div>
+<div class="pull-right" style="padding-right:15px">
+<br>
+	<a href="#" class="btn btn-primary btn-sm" >Submit</a>
+	<a href="#" class="btn btn-default btn-sm" >Reset</a>
+	</div>
+</form>
+</div>
+<div class="col-md-2">
+</div>
+</div>
+}
