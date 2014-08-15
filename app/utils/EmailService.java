@@ -1,11 +1,10 @@
 package utils;
 
-import java.io.BufferedInputStream;
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
-import java.io.InputStream;
 import java.math.BigInteger;
 import java.security.SecureRandom;
+import java.text.SimpleDateFormat;
 import java.util.List;
 import java.util.Random;
 
@@ -13,6 +12,7 @@ import javax.activation.DataSource;
 
 import models.AppUser;
 import models.FileEntity;
+import models.doctor.Appointment;
 
 import org.apache.commons.mail.ByteArrayDataSource;
 import org.apache.commons.mail.DefaultAuthenticator;
@@ -176,5 +176,178 @@ public class EmailService {
 		}
 	}
 
+	public static boolean sendVerificationConformMessage(final AppUser appUser) {
+		boolean result = true;
+		try{
+			final StringBuilder builder=new StringBuilder();
+			builder.append("<html><body>");
+			builder.append("<p>Dear "+appUser.name+",<br><br>Thank you for verifying your email id.");
+			builder.append("<br><br>Best regards,<br>MedNetwork.in</p>");
+			builder.append("</body></html>");
+			final HtmlEmail email = new HtmlEmail();
+			email.setHostName("smtp.gmail.com");
+			email.setSmtpPort(587);
+			email.setAuthenticator(new DefaultAuthenticator("noreply@mednetwork.in", "we#will#win"));
+			email.setSSLOnConnect(true);
+			email.setFrom("noreply@mednetwork.in","MedNetwork");
+			email.setSubject("MedNetwork Account Verified");
+			email.setHtmlMsg(builder.toString());
+			email.addTo(appUser.email);
+			email.send();
+			Logger.info("Mail Sent Successfully!");
+			Logger.info(builder.toString());
+		}
+		catch (final Exception e){
+			System.out.println("ERROR While Sending Email");
+			e.printStackTrace();
+			result=false;
+		}
+		return result;
+	}
+
+	public static boolean sendAppointmentConformMail(final AppUser requestBy ,final AppUser requestTo,final Appointment appointment) {
+
+		boolean result = true;
+		try{
+			final StringBuilder builder=new StringBuilder();
+			builder.append("<html><body>");
+			builder.append("<p>Dear "+requestBy.name+",<br><br>Your appointment has been booked, details are as follows");
+			builder.append("<br><br><b>Appointment Date:</b>"+ new SimpleDateFormat("dd-MMM-yyyy").format(appointment.appointmentTime));
+			builder.append("<br><br><b>Appointment Time:</b>"+ new SimpleDateFormat("hh:mm").format(appointment.appointmentTime));
+			builder.append("<br><br><b>Clinic          :</b>"+ appointment.doctorClinicInfo.clinic.name);
+			builder.append("<br><br><b>Doctor          :</b>"+ appointment.doctorClinicInfo.doctor.appUser.name);
+
+			builder.append("<br><br>Best regards,<br>MedNetwork.in</p>");
+			builder.append("</body></html>");
+			final HtmlEmail email = new HtmlEmail();
+			email.setHostName("smtp.gmail.com");
+			email.setSmtpPort(587);
+			email.setAuthenticator(new DefaultAuthenticator("noreply@mednetwork.in", "we#will#win"));
+			email.setSSLOnConnect(true);
+			email.setFrom("noreply@mednetwork.in","MedNetwork");
+			email.setSubject("An appointment has been booked at "+appointment.doctorClinicInfo.clinic.name+".");
+			email.setHtmlMsg(builder.toString());
+			email.addTo(requestBy.email);
+			email.send();
+			Logger.info("Mail Sent Successfully!");
+			Logger.info(builder.toString());
+		}
+		catch (final Exception e){
+			System.out.println("ERROR While Sending Email");
+			e.printStackTrace();
+			result=false;
+		}
+		try{
+			final StringBuilder builder=new StringBuilder();
+			builder.append("<html><body>");
+			builder.append("<p>Dear Dr. "+requestTo.name+",<br><br>An appointment has been booked,details are as follows");
+			builder.append("<br><br><b>Appointment Date			:</b>"+ new SimpleDateFormat("dd-MMM-yyyy").format(appointment.appointmentTime));
+			builder.append("<br><br><b>Appointment Time			:</b>"+ new SimpleDateFormat("hh:mm").format(appointment.appointmentTime));
+			builder.append("<br><br><b>Clinic          			:</b>"+ appointment.doctorClinicInfo.clinic.name);
+			builder.append("<br><br><b>Patient                  :</b>"+ requestBy.name+"("+requestBy.getPatient().getSexAndAge()+")");
+
+			builder.append("<br><br>Best regards,<br>MedNetwork.in</p>");
+			builder.append("</body></html>");
+			final HtmlEmail email = new HtmlEmail();
+			email.setHostName("smtp.gmail.com");
+			email.setSmtpPort(587);
+			email.setAuthenticator(new DefaultAuthenticator("noreply@mednetwork.in", "we#will#win"));
+			email.setSSLOnConnect(true);
+			email.setFrom("noreply@mednetwork.in","MedNetwork");
+			email.setSubject("An appointment has been booked at "+appointment.doctorClinicInfo.clinic.name+".");
+			email.setHtmlMsg(builder.toString());
+			email.addTo(requestTo.email);
+			email.send();
+			Logger.info("Mail Sent Successfully!");
+			Logger.info(builder.toString());
+		}
+		catch (final Exception e){
+			System.out.println("ERROR While Sending Email");
+			e.printStackTrace();
+			result=false;
+		}
+		return result;
+	}
+
+	public static boolean sendPrescriptionSaveMessage(final AppUser requestBy ,final AppUser requestTo) {
+
+		boolean result = true;
+		try{
+			final StringBuilder builder=new StringBuilder();
+			builder.append("<html><body>");
+			builder.append("<p>Dear "+requestBy.name+",<br><br>Your prescription by Dr. "+requestTo.name+" has been saved.");
+
+			builder.append("<br><br>Best regards,<br>MedNetwork.in</p>");
+			builder.append("</body></html>");
+			final HtmlEmail email = new HtmlEmail();
+			email.setHostName("smtp.gmail.com");
+			email.setSmtpPort(587);
+			email.setAuthenticator(new DefaultAuthenticator("noreply@mednetwork.in", "we#will#win"));
+			email.setSSLOnConnect(true);
+			email.setFrom("noreply@mednetwork.in","MedNetwork");
+			email.setSubject("Your Prescription has been saved at MedNetwork");
+			email.setHtmlMsg(builder.toString());
+			email.addTo(requestBy.email);
+			email.send();
+			Logger.info("Mail Sent Successfully!");
+			Logger.info(builder.toString());
+		}
+		catch (final Exception e){
+			System.out.println("ERROR While Sending Email");
+			e.printStackTrace();
+			result=false;
+		}
+		try{
+			final StringBuilder builder=new StringBuilder();
+			builder.append("<html><body>");
+			builder.append("<p>Dear Dr."+requestTo.name+",<br><br>Your prescription for "+requestBy.name+"("+requestBy.getPatient().getSexAndAge()+")"+" has been saved.");
+
+			builder.append("<br><br>Best regards,<br>MedNetwork.in</p>");
+			builder.append("</body></html>");
+			final HtmlEmail email = new HtmlEmail();
+			email.setHostName("smtp.gmail.com");
+			email.setSmtpPort(587);
+			email.setAuthenticator(new DefaultAuthenticator("noreply@mednetwork.in", "we#will#win"));
+			email.setSSLOnConnect(true);
+			email.setFrom("noreply@mednetwork.in","MedNetwork");
+			email.setSubject("Prescription saved at MedNetwork");
+			email.setHtmlMsg(builder.toString());
+			email.addTo(requestTo.email);
+			email.send();
+			Logger.info("Mail Sent Successfully!");
+			Logger.info(builder.toString());
+		}
+		catch (final Exception e){
+			System.out.println("ERROR While Sending Email");
+			e.printStackTrace();
+			result=false;
+		}
+		return result;
+	}
+
+	public static boolean sendSimpleHtmlEMail(final String receiverEmailId, final String subject, final String message) {
+		boolean result = true;
+		try{
+			final HtmlEmail email = new HtmlEmail();
+			email.setHostName("smtp.gmail.com");
+			email.setSmtpPort(587);
+			email.setAuthenticator(new DefaultAuthenticator("noreply@mednetwork.in", "we#will#win"));
+			email.setSSLOnConnect(true);
+			email.setFrom("noreply@mednetwork.in","MedNetwork");
+			email.setSubject(subject);
+			email.setHtmlMsg(message);
+			email.addTo(receiverEmailId);
+			email.send();
+			Logger.info("Mail Sent Successfully!");
+			Logger.info(message);
+		}
+		catch (final Exception e){
+			System.out.println("ERROR While Sending Email");
+			e.printStackTrace();
+			result=false;
+		}
+		return result;
+
+	}
 }
 

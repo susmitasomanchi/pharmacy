@@ -9,8 +9,6 @@ import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
-import javax.activation.MimetypesFileTypeMap;
-
 import models.Address;
 import models.Alert;
 import models.FileEntity;
@@ -25,17 +23,19 @@ import models.diagnostic.DiagnosticTest;
 import models.diagnostic.ShowCasedService;
 import models.patient.Patient;
 
-import org.apache.commons.io.FileUtils;
 import org.joda.time.DateTime;
 
 import play.Logger;
 import play.data.DynamicForm;
 import play.data.Form;
+import play.libs.F.Function0;
+import play.libs.F.Promise;
 import play.mvc.Controller;
 import play.mvc.Http.MultipartFormData;
 import play.mvc.Http.MultipartFormData.FilePart;
 import play.mvc.Result;
 import utils.EmailService;
+import utils.SMSService;
 import actions.BasicAuth;
 import actions.ConfirmAppUser;
 import beans.DiagnosticBean;
@@ -275,6 +275,56 @@ public class DiagnosticController extends Controller {
 		diagnosticCentrePrescriptionInfo.update();
 
 		Logger.info("=="+diagnosticCentrePrescriptionInfo.prescription.patient.diagnosticReportList.size());
+
+
+		//send mail to patient and diagnostic
+		final StringBuilder messagetodiagnostic = new StringBuilder();
+		messagetodiagnostic.append("<html><body>");
+		messagetodiagnostic.append("<p>Dear "+diagnosticCentrePrescriptionInfo.diagnosticCentre.diagnosticRepAdmin.appUser.name+",<br><br>Diagnostic Reports of "+diagnosticCentrePrescriptionInfo.prescription.patient.appUser.name+" have been served.");
+		messagetodiagnostic.append("<br><br>Best regards,<br>MedNetwork.in</p>");
+		messagetodiagnostic.append("</body></html>");
+		// Async Execution
+		Promise.promise(new Function0<Integer>() {
+			//@Override
+			public Integer apply() {
+				int result = 0;
+				if(!EmailService.sendSimpleHtmlEMail(diagnosticCentrePrescriptionInfo.diagnosticCentre.diagnosticRepAdmin.appUser.email, "Diagnostic Reports served", messagetodiagnostic.toString())){
+					result=1;
+				}
+
+				return result;
+			}
+		});
+		// End of async
+
+		final StringBuilder messagetopatient = new StringBuilder();
+		messagetopatient.append("<html><body>");
+		messagetopatient.append("<p>Dear "+diagnosticCentrePrescriptionInfo.prescription.patient.appUser.name+",<br><br>Your Diagnosics Reports from "+diagnosticCentrePrescriptionInfo.diagnosticCentre.name+" have been served.");
+		messagetopatient.append("<br><br>Best regards,<br>MedNetwork.in</p>");
+		messagetopatient.append("</body></html>");
+		// Async Execution
+		Promise.promise(new Function0<Integer>() {
+			//@Override
+			public Integer apply() {
+				int result = 0;
+				if(!EmailService.sendSimpleHtmlEMail(diagnosticCentrePrescriptionInfo.prescription.patient.appUser.email, "Diagnostic Reports served", messagetopatient.toString())){
+					result=1;
+				}
+
+				return result;
+			}
+		});
+		// End of async
+
+		//sms to patient and diagnostic
+		final StringBuilder smsTodiagnostic  = new StringBuilder();
+		smsTodiagnostic.append("Diagnostics Reports of "+diagnosticCentrePrescriptionInfo.prescription.patient.appUser.name+" have been served.");
+		SMSService.sendSMS(diagnosticCentrePrescriptionInfo.diagnosticCentre.diagnosticRepAdmin.appUser.mobileNumber.toString(), smsTodiagnostic.toString());
+
+		final StringBuilder smsToPacient = new StringBuilder();
+		smsToPacient.append("Your Diagnosics reports from "+diagnosticCentrePrescriptionInfo.diagnosticCentre.name+" have been served.");
+		SMSService.sendSMS(diagnosticCentrePrescriptionInfo.prescription.patient.appUser.mobileNumber.toString(), smsToPacient.toString());
+
 		return redirect(routes.DiagnosticController.getDiagnosticCentrePrescriptions("any"));
 	}
 
