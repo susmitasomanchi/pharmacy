@@ -48,11 +48,11 @@ GET	   /edit-my-profile								controllers.UserController.editAppUserProfile()
 POST   /edit-my-profile								controllers.UserController.updateAppUserProfile()
 
 GET		/not-confirmed-yet							controllers.UserController.confirmAppUserPage()
-GET		/user/verify-email							controllers.DoctorController.sendConformationEmail()
+GET		/user/verify-email							controllers.UserController.sendConformationEmail()
 GET 	/user/confirmation/:userId/:randomString	controllers.PublicController.emailConfirmation(userId: Long, randomString:String)
-GET		/user/send-verificaion-code					controllers.DoctorController.sendMobVerificationCode()
-GET 	/user/verify-mobile-number					controllers.DoctorController.displayMobVerificationForm()
-POST 	/user/verify-mobile-number					controllers.DoctorController.verifyMobileNumberConfirmationKey()
+GET		/user/send-verificaion-code					controllers.UserController.sendMobVerificationCode()
+GET 	/user/verify-mobile-number					controllers.UserController.displayMobVerificationForm()
+POST 	/user/verify-mobile-number					controllers.UserController.verifyMobileNumberConfirmationKey()
 
 
 # Public Pages

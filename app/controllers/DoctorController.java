@@ -1180,6 +1180,22 @@ public class DoctorController extends Controller {
 			doctor.update();
 		}
 
+		final AppUser patient = prescription.patient.appUser;
+		// Async Execution
+		Promise.promise(new Function0<Integer>() {
+			//@Override
+			public Integer apply() {
+				int result = 0;
+				if(!EmailService.sendPrescriptionSaveMessage(patient, doctor.appUser)){
+					result=1;
+				}
+
+				return result;
+			}
+		});
+		// End of async
+		SMSService.sendSMS(prescription.patient.appUser.mobileNumber.toString(), "Your priscription by Dr"
+				+doctor.appUser.name+"has been saved.");
 		flash().put("alert",
 				new Alert("alert-success", "Prescription saved!").toString());
 		return redirect(routes.DoctorController
@@ -1243,6 +1259,31 @@ public class DoctorController extends Controller {
 				phprInfo.pharmacyPrescriptionStatus = PharmacyPrescriptionStatus.RECEIVED;
 				phprInfo.patientsConsent = consent;
 				phprInfo.save();
+				// send sms and email to pharmacy
+				final StringBuilder message = new StringBuilder();
+				message.append("<html><body>");
+				message.append("<p>Dear "+pharmacy.adminPharmacist.appUser.name+",<br><br>Prescription of Dr."+doctor.appUser.name+" for patient "+prescription.patient.appUser.name+" has been shared with you.");
+				message.append("<br><br>Best regards,<br>MedNetwork.in</p>");
+				message.append("</body></html>");
+				// Async Execution
+				Promise.promise(new Function0<Integer>() {
+					//@Override
+					public Integer apply() {
+						int result = 0;
+						if(!EmailService.sendSimpleHtmlEMail(pharmacy.adminPharmacist.appUser.email, "Prescription Shared", message.toString())){
+							result=1;
+						}
+
+						return result;
+					}
+				});
+				// End of async
+
+				final StringBuilder smsToPharmacy = new StringBuilder();
+				smsToPharmacy.append("Prescription of Dr."+doctor.appUser.name+" for patient has been shared with you.");
+				SMSService.sendSMS(pharmacy.adminPharmacist.appUser.mobileNumber.toString(), smsToPharmacy.toString());
+
+
 				sharedWith.append(phprInfo.pharmacy.name);
 			}
 		}
@@ -1261,16 +1302,88 @@ public class DoctorController extends Controller {
 				diagPrescriptionInfo.sharedDate = new Date();
 				diagPrescriptionInfo.diagnosticCentrePrescritionStatus = DiagnosticCentrePrescritionStatus.RECEIVED;
 				diagPrescriptionInfo.save();
+				// send sms and email to dc
+				final StringBuilder message = new StringBuilder();
+				message.append("<html><body>");
+				message.append("<p>Dear "+diagnosticCentre.diagnosticRepAdmin.appUser.name+",<br><br>Prescription of Dr."+doctor.appUser.name+" for patient "+prescription.patient.appUser.name+" has been shared with you.");
+				message.append("<br><br>Best regards,<br>MedNetwork.in</p>");
+				message.append("</body></html>");
+				// Async Execution
+				Promise.promise(new Function0<Integer>() {
+					//@Override
+					public Integer apply() {
+						int result = 0;
+						if(!EmailService.sendSimpleHtmlEMail(diagnosticCentre.diagnosticRepAdmin.appUser.email, "Prescription Shared", message.toString())){
+							result=1;
+						}
+
+						return result;
+					}
+				});
+				// End of async
+
+
+				final StringBuilder smsTodiagnosticCentre = new StringBuilder();
+				smsTodiagnosticCentre.append(" Prescription of Dr."+doctor.appUser.name+" for patient has been shared with you.");
+				SMSService.sendSMS(diagnosticCentre.diagnosticRepAdmin.appUser.mobileNumber.toString(), smsTodiagnosticCentre.toString());
+
 				if (sharedWith.length() > 0) {
 					sharedWith.append(" and ");
 				}
 				sharedWith.append(diagnosticCentre.name);
 			}
 		}
-		flash().put(
-				"alert",
-				new Alert("alert-success", "Prescription shared with "
-						+ sharedWith.toString()).toString());
+
+		if(!(
+				(pharmacyId == null || pharmacyId.trim().isEmpty())
+				&&
+				(diagnosticId == null || diagnosticId.trim().isEmpty())
+				)){
+
+			//send mail to patient and doctor
+			//send sms to patient
+			final StringBuilder message = new StringBuilder();
+			message.append("<html><body>");
+			message.append("<p>Dear "+prescription.patient.appUser.name+",<br><br>Your prescription of Dr."+doctor.appUser.name+" has been shared with "+sharedWith.toString()+".");
+			message.append("<br><br>Best regards,<br>MedNetwork.in</p>");
+			message.append("</body></html>");
+			// Async Execution
+			Promise.promise(new Function0<Integer>() {
+				//@Override
+				public Integer apply() {
+					int result = 0;
+					if(!EmailService.sendSimpleHtmlEMail(prescription.patient.appUser.email, "Prescription Shared", message.toString())){
+						result=1;
+					}
+
+					return result;
+				}
+			});
+			// End of async
+			final StringBuilder messageToDoctor = new StringBuilder();
+			messageToDoctor.append("<html><body>");
+			messageToDoctor.append("<p>Dear Dr."+doctor.appUser.name+",<br><br>You have shared prescription for patient "+prescription.patient.appUser.name+" with "+sharedWith.toString()+".");
+			messageToDoctor.append("<br><br>Best regards,<br>MedNetwork.in</p>");
+			messageToDoctor.append("</body></html>");
+			// Async Execution
+			Promise.promise(new Function0<Integer>() {
+				//@Override
+				public Integer apply() {
+					int result = 0;
+					if(!EmailService.sendSimpleHtmlEMail(doctor.appUser.email, "Prescription Shared", messageToDoctor.toString())){
+						result=1;
+					}
+
+					return result;
+				}
+			});
+			// End of async
+			final StringBuilder smsToPatient = new StringBuilder();
+			smsToPatient.append("Your prescription of Dr."+doctor.appUser.name+" has been shared with "+sharedWith.toString()+".");
+			SMSService.sendSMS(prescription.patient.appUser.mobileNumber.toString(), smsToPatient.toString());
+			flash().put("alert",new Alert("alert-success", "Prescription shared with "+ sharedWith.toString()).toString());
+		}
+
 		return redirect(routes.DoctorController.viewTodaysAppointments());
 	}
 
@@ -1370,100 +1483,7 @@ public class DoctorController extends Controller {
 		return ok(jsonArray.toString());
 	}
 
-	/**
-	 * @author Mitesh Action to send mobileNumberConfirmationKey to currently
-	 *         logged in user's mobile GET /user/send-verificaion-code
-	 */
-	public static Result sendMobVerificationCode() {
-		final AppUser appUser = LoginController.getLoggedInUser();
-		SMSService.sendConfirmationSMS(appUser);
-		flash().put(
-				"alert",
-				new Alert("alert-info",
-						"A confirmation code has been SMSed to your Mobile Number ("
-								+ appUser.mobileNumber + ")").toString());
-		return redirect(routes.UserController.confirmAppUserPage());
 
-	}
-
-	/**
-	 * @author Mitesh Action to Display form to verify the mobile number of
-	 *         currently logged in user GET /user/verify-mobile-number
-	 */
-	public static Result displayMobVerificationForm() {
-		return ok(views.html.common.verifyMobileNumber.render());
-	}
-
-	/**
-	 * @author Mitesh Action to verify the mobileNumberConfirmationKey send to
-	 *         currently logged in user'mobile POST /user/verify-mobile-number
-	 */
-	public static Result verifyMobileNumberConfirmationKey() {
-
-		final String key = request().body().asFormUrlEncoded()
-				.get("mobileNumber")[0].trim();
-
-		Logger.debug(key);
-
-		final AppUser appUser = LoginController.getLoggedInUser();
-		Logger.info(appUser.mobileNumberConfirmationKey);
-		if (appUser.mobileNumberConfirmationKey == null) {
-			flash().put(
-					"alert",
-					new Alert("alert-danger", "You hav'nt genrated acode yet")
-					.toString());
-			return redirect(routes.UserController.confirmAppUserPage());
-
-		}
-		if (key.compareToIgnoreCase(appUser.mobileNumberConfirmationKey) == 0) {
-			flash().put(
-					"alert",
-					new Alert("alert-success", "Mobile number is verified")
-					.toString());
-			appUser.mobileNumberConfirmed = true;
-			appUser.update();
-			return redirect(routes.UserActions.dashboard());
-		} else {
-			Logger.debug("enterd");
-
-			Logger.info("fail");
-			flash().put(
-					"alert",
-					new Alert("alert-danger",
-							"Wrong code Please enter correct code").toString());
-			return redirect(routes.UserController.confirmAppUserPage());
-		}
-	}
-
-	/**
-	 * @author Mitesh Action to send a verification email currently logged in
-	 *         user'mobile GET /user/verify-email-number
-	 */
-	public static Result sendConformationEmail() {
-
-		final boolean result;
-		final AppUser loggedInUser = LoginController.getLoggedInUser();
-
-		Promise.promise(new Function0<Integer>() {
-
-			// @Override
-			@Override
-			public Integer apply() {
-				final boolean result1 = EmailService
-						.sendConfirmationEmail(loggedInUser);
-				return 0;
-			}
-		});
-		// End of async
-		flash().put(
-				"alert",
-				new Alert("alert-success",
-						"A confirmation email has been sent to you at "
-								+ loggedInUser.email
-								+ ". Kindly verify the same.").toString());
-		return redirect(routes.UserController.confirmAppUserPage());
-
-	}
 
 	public static Result displayAnswer() {
 		final AppUser user = LoginController.getLoggedInUser();
@@ -1629,4 +1649,6 @@ public class DoctorController extends Controller {
 			return ok("-1");
 		}
 	}
+
+
 }

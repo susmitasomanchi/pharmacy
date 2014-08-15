@@ -27,10 +27,14 @@ import org.joda.time.DateTime;
 
 import play.Logger;
 import play.data.Form;
+import play.libs.F.Function0;
+import play.libs.F.Promise;
 import play.mvc.Controller;
 import play.mvc.Http.MultipartFormData;
 import play.mvc.Http.MultipartFormData.FilePart;
 import play.mvc.Result;
+import utils.EmailService;
+import utils.SMSService;
 import actions.BasicAuth;
 import actions.ConfirmAppUser;
 import beans.AddProductToInventoryBean;
@@ -329,6 +333,54 @@ public class PharmacistController extends Controller {
 		pharmacyPrescriptionInfo.pharmacyPrescriptionStatus = PharmacyPrescriptionStatus.SERVED;
 		pharmacyPrescriptionInfo.servedDate = new Date();
 		pharmacyPrescriptionInfo.update();
+
+		//send mail to patient and pharmaciest
+		final StringBuilder messagetopharmaciest = new StringBuilder();
+		messagetopharmaciest.append("<html><body>");
+		messagetopharmaciest.append("<p>Dear "+pharmacyPrescriptionInfo.pharmacy.adminPharmacist.appUser.name+",<br><br>An order from prescription of Dr."+pharmacyPrescriptionInfo.prescription.doctor.appUser.name+" has been served to patient "+pharmacyPrescriptionInfo.prescription.patient.appUser.name);
+		messagetopharmaciest.append("<br><br>Best regards,<br>MedNetwork.in</p>");
+		messagetopharmaciest.append("</body></html>");
+		// Async Execution
+		Promise.promise(new Function0<Integer>() {
+			//@Override
+			public Integer apply() {
+				int result = 0;
+				if(!EmailService.sendSimpleHtmlEMail(pharmacyPrescriptionInfo.pharmacy.adminPharmacist.appUser.email, "Prescription Served", messagetopharmaciest.toString())){
+					result=1;
+				}
+
+				return result;
+			}
+		});
+		// End of async
+
+		final StringBuilder messagetopatient = new StringBuilder();
+		messagetopatient.append("<html><body>");
+		messagetopatient.append("<p>Dear "+pharmacyPrescriptionInfo.prescription.patient.appUser.name+",<br><br>An order from prescription of Dr."+pharmacyPrescriptionInfo.prescription.doctor.appUser.name+" has been served from pharmacy "+pharmacyPrescriptionInfo.pharmacy.name+" to you");
+		messagetopatient.append("<br><br>Best regards,<br>MedNetwork.in</p>");
+		messagetopatient.append("</body></html>");
+		// Async Execution
+		Promise.promise(new Function0<Integer>() {
+			//@Override
+			public Integer apply() {
+				int result = 0;
+				if(!EmailService.sendSimpleHtmlEMail(pharmacyPrescriptionInfo.prescription.patient.appUser.email, "Prescription Served", messagetopatient.toString())){
+					result=1;
+				}
+
+				return result;
+			}
+		});
+		// End of async
+		//sms to patient and pharmaciest
+		final StringBuilder smsToPharmacist = new StringBuilder();
+		smsToPharmacist.append("A prescription of Dr."+pharmacyPrescriptionInfo.prescription.doctor.appUser.name+" has been served for patient"+pharmacyPrescriptionInfo.prescription.patient.appUser.name);
+		SMSService.sendSMS(pharmacyPrescriptionInfo.pharmacy.adminPharmacist.appUser.mobileNumber.toString(), smsToPharmacist.toString());
+
+		final StringBuilder smsToPacient = new StringBuilder();
+		smsToPacient.append("A prescription of Dr."+pharmacyPrescriptionInfo.prescription.doctor.appUser.name+" has been served from pharmacy"+pharmacyPrescriptionInfo.pharmacy.name+" to you");
+		SMSService.sendSMS(pharmacyPrescriptionInfo.pharmacy.adminPharmacist.appUser.mobileNumber.toString(), smsToPacient.toString());
+
 		return redirect(routes.PharmacistController.pharmacyPrescriptionList("any"));
 	}
 
