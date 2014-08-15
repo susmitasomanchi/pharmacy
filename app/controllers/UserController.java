@@ -207,6 +207,7 @@ public class UserController extends Controller {
 		// Async Execution
 		Promise.promise(new Function0<Integer>() {
 			//@Override
+			@Override
 			public Integer apply() {
 				if(EmailService.sendConfirmationEmail(appUser)){
 					flash().put("alert", new Alert("alert-success","A confirmation mail has been sent to your email id.").toString());
@@ -314,9 +315,7 @@ public class UserController extends Controller {
 		SMSService.sendConfirmationSMS(appUser);
 		flash().put(
 				"alert",
-				new Alert("alert-info",
-						"A confirmation code has been SMSed to your Mobile Number ("
-								+ appUser.mobileNumber + ")").toString());
+				new Alert("alert-info","A confirmation code has been SMSed to your Mobile Number ("+ appUser.mobileNumber + ")").toString());
 		return redirect(routes.UserController.confirmAppUserPage());
 
 	}
@@ -391,6 +390,7 @@ public class UserController extends Controller {
 
 			// @Override
 			//@Override
+			@Override
 			public Integer apply() {
 				final boolean result1 = EmailService
 						.sendConfirmationEmail(loggedInUser);

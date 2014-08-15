@@ -376,7 +376,7 @@ public class SampleDataController extends Controller {
 
 
 	public static Result testurl(){
-		SMSService.sendSMS("9999999999", "test!");
+		SMSService.sendSMS("9949254085", "From Paris With Love!");
 		return ok("This Page");
 	}
 

@@ -274,6 +274,7 @@ public class PatientController extends Controller {
 		// Async Execution
 		Promise.promise(new Function0<Integer>() {
 			//@Override
+			@Override
 			public Integer apply() {
 				int result = 0;
 				if(!EmailService.sendAppointmentConformMail(appointment.requestedBy, appointment.doctorClinicInfo.doctor.appUser, appointment)){
@@ -285,7 +286,7 @@ public class PatientController extends Controller {
 		});
 		// End of async
 
-		StringBuilder smsMessage = new StringBuilder();
+		final StringBuilder smsMessage = new StringBuilder();
 
 		smsMessage.append("You have booked an Appointment on");
 		smsMessage.append( new SimpleDateFormat("dd-MMM-yyyy").format(appointment.appointmentTime));
@@ -293,7 +294,7 @@ public class PatientController extends Controller {
 		smsMessage.append("at "+appointment.doctorClinicInfo.clinic.name+","+appointment.doctorClinicInfo.clinic.address.area);
 
 		SMSService.sendSMS(appointment.requestedBy.mobileNumber.toString(), smsMessage.toString());
-		StringBuilder smsMessage2 = new StringBuilder();
+		final StringBuilder smsMessage2 = new StringBuilder();
 
 		smsMessage2.append("An Appointment has been booked on");
 		smsMessage2.append( new SimpleDateFormat("dd-MMM-yyyy").format(appointment.appointmentTime));
@@ -390,6 +391,7 @@ public class PatientController extends Controller {
 				// Async Execution
 				Promise.promise(new Function0<Integer>() {
 					//@Override
+					@Override
 					public Integer apply() {
 						int result = 0;
 						if(!EmailService.sendSimpleHtmlEMail(pharmacy.adminPharmacist.appUser.email, "Prescription Shared", message.toString())){
@@ -426,6 +428,7 @@ public class PatientController extends Controller {
 				// Async Execution
 				Promise.promise(new Function0<Integer>() {
 					//@Override
+					@Override
 					public Integer apply() {
 						int result = 0;
 						if(!EmailService.sendSimpleHtmlEMail(diagnosticCentre.diagnosticRepAdmin.appUser.email, "Prescription Shared", message.toString())){
@@ -460,6 +463,7 @@ public class PatientController extends Controller {
 			// Async Execution
 			Promise.promise(new Function0<Integer>() {
 				//@Override
+				@Override
 				public Integer apply() {
 					int result = 0;
 					if(!EmailService.sendSimpleHtmlEMail(prescription.patient.appUser.email, "Prescription Shared", message.toString())){
@@ -486,10 +490,11 @@ public class PatientController extends Controller {
 	 * @author lakshmi
 	 * Action to display diagnostic reports
 	 */
+	@ConfirmAppUser
 	public static Result viewDiagnosticReports(){
-		Patient patient = LoginController.getLoggedInUser().getPatient();
+		final Patient patient = LoginController.getLoggedInUser().getPatient();
 		/*DiagnosticCentrePrescriptionInfo info = DiagnosticCentrePrescriptionInfo.find.byId(diagnosticInfoId);*/
-		List<DiagnosticCentrePrescriptionInfo> diagnosticCentrePrescriptionInfos = DiagnosticCentrePrescriptionInfo.find.where().eq("prescription.patient", patient).findList();
+		final List<DiagnosticCentrePrescriptionInfo> diagnosticCentrePrescriptionInfos = DiagnosticCentrePrescriptionInfo.find.where().eq("prescription.patient", patient).findList();
 		return ok(views.html.patient.patientDiagnosticReports.render(diagnosticCentrePrescriptionInfos));
 
 	}

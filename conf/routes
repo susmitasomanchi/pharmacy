@@ -196,6 +196,7 @@ GET 	/diagnostic/:slugUrl								controllers.PublicController.getDiagnosticCentr
 GET		/static/fav/pharmacies							controllers.PharmacistController.staticFavPharmacies()
 GET		/create/master									controllers.SampleDataController.createMasterMedicinesAndTests()
 GET		/create/spez									controllers.SampleDataController.createDocSpez()
+GET		/sms											controllers.SampleDataController.testurl()
 
 GET		/admin/specialization-list						controllers.MednetworkAdminController.getSpecializationList()
 POST	/admin/add-specialization						controllers.MednetworkAdminController.addSpecialization()
