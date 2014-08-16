@@ -18,6 +18,9 @@
 <script>
 $("#searchInput").keyup(function (e) {
     if (e.keyCode == 13) {
+    	if($('#searchInput').val().trim() == ''){
+        	return false;
+        }
     	window.location.href='/pharmacy/search/'+$('#searchInput').val().trim();
     }
 });
