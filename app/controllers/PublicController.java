@@ -623,6 +623,38 @@ public class PublicController extends Controller{
 		feedback.date = new Date();
 		feedback.ipAddress = request().remoteAddress();
 		feedback.save();
+		final StringBuilder message = new StringBuilder();
+		message.append("<html><body>");
+		message.append("<p>Dear "+"Admin"+",<br><br>A feedback with following detail has been saved.");
+		if(feedback.appUser !=null){
+			message.append("<br><p>****** USER*******</p>");
+			message.append("<br><p>Name:"+feedback.appUser.name+"</p>");
+			message.append("<br><p>Email:"+feedback.appUser.email+"</p>");
+			message.append("<br><p>Role:"+feedback.appUser.role+"</p>");
+
+		}else{
+			message.append("<br><p>******NOT USER*******</p>");
+			message.append("<br><p>Name:"+feedback.name+"</p>");
+			message.append("<br><p>Email:"+feedback.email+"</p>");
+			message.append("<br><p>Role:"+feedback.role+"</p>");
+		}
+		message.append("<br><p>IP address:"+feedback.ipAddress+"</p>");
+		message.append("<br><p>Remark:"+feedback.remarks+"</p>");
+		message.append("<br><br>Best regards,<br>MedNetwork.in</p>");
+		message.append("</body></html>");
+		// Async Execution
+		Promise.promise(new Function0<Integer>() {
+			//@Override
+			public Integer apply() {
+				int result = 0;
+				if(!EmailService.sendSimpleHtmlEMail("admin@mednetwork.in", "A feedback saved", message.toString())){
+					result=1;
+				}
+
+				return result;
+			}
+		});
+		// End of async
 		flash().put("alert", new Alert("alert-success", "Thank you for your feedback.").toString());
 		if(LoginController.isLoggedIn()){
 			return redirect(routes.UserActions.dashboard());
