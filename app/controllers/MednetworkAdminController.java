@@ -49,7 +49,6 @@ public class MednetworkAdminController extends Controller {
 	 * @return
 	 */
 	public static Result updateSpecialization(){
-
 		if(request().body().asFormUrlEncoded().get("spezId")!= null
 				&& request().body().asFormUrlEncoded().get("spezName")!= null
 				&& !request().body().asFormUrlEncoded().get("spezName")[0].trim().isEmpty()
