@@ -1,7 +1,26 @@
-@(title: String, dessc : String="",keys:String="")(content: Html)
+@(title: String, desc : String="",keys:String="")(content: Html)
 <!DOCTYPE html>
 <html>
 	<head>
+	@if(title != null && title != ""){
+		<title>@title</title>
+		<meta property="og:title" content="@title" />
+  	}else{
+		<title>MedNetwork Blogs</title>
+	}
+	@if(desc != null && desc != ""){
+		<meta name="description" content="@desc">
+		<meta property="og:description" content="@desc" />
+	}else{
+		<meta name="description" content="MedNetwork is a platform which integrates the efforts of all stakeholders invloved in the healthcare sector viz. Doctors, Patients, Pharmacies, Pharmaceutical Companies, Diagnostic Centres, Blood Banks etc.">
+	}
+	@if(keys != null && keys != ""){
+		<meta name="keywords" content="@keys">
+	}else{
+		<meta name="keywords" content="mednetwork, med, network, doctor, patient, mr, medical representative, pharma, pharmaceutical, medical, pharmacy, diagnostic, blood bank">
+	}
+	<meta charset="UTF-8">
+   
         <title>@title</title>
         <link rel="stylesheet" media="screen" href="@routes.Assets.at("stylesheets/chosen.min.css")">
         <link rel="stylesheet" media="screen" href="@routes.Assets.at("stylesheets/main.css")">
