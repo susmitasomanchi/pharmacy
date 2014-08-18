@@ -614,6 +614,19 @@ public class PublicController extends Controller{
 		return redirect(routes.Application.index());
 	}
 
+	/**
+	 * @author lakshmi
+	 * Action to perge the doctor details
+	 * POST/feedback
+	 */
+	public static Result pergeDoctor(){
+		//Doctor doctor = Doctor.find.byId(1L);
+		final AppUser appUser = AppUser.find.byId(2L);
+		appUser.delete();
+
+		return ok("hello deleted");
+	}
+
 
 
 
