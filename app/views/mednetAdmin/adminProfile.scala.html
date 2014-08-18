@@ -1,16 +1,84 @@
-@()
+@(todayMap:Map[String, Integer], weekMap:Map[String, Integer])
 
 
-@main("Mednetwork") {
+@main("Mednetwork Admin Console") {
 
-<div class="row" style="text-align:centre;">
+<div class="row" style="text-align:center;">
+
+<div class="col-md-4">
+<p style="color:#292929; font-size:20px;"><em>The Big Picture</em></p>
+<p>Total AppUsers: @models.AppUser.find.findRowCount()</p>
+<p>Total Patients: @models.patient.Patient.find.findRowCount()</p>
+<p>Total Doctors: @models.doctor.Doctor.find.findRowCount()</p>
+<p>Total Pharmacies: @models.pharmacist.Pharmacy.find.findRowCount()</p>
+<p>Total Diagnostic Centres: @models.diagnostic.DiagnosticCentre.find.findRowCount()</p> 
+</div>
+
+<div class="col-md-4">
+<p style="color:#292929; font-size:20px; text-align:center;"><em>Today</em></p>
+<p>AppUsers: @todayMap.get("appUsers")</p>
+<p>Patients: @todayMap.get("patients")</p>
+<p>Doctors: @todayMap.get("doctors")</p>
+<p>Pharmacies: @todayMap.get("pharmacies")</p>
+<p>Diagnostic Centres: @todayMap.get("dc")</p> 
+</div>
+
+<div class="col-md-4">
+<p style="color:#292929; font-size:20px; text-align:center;"><em>Last Week</em></p>
+<p>AppUsers: @weekMap.get("appUsers")</p>
+<p>Patients: @weekMap.get("patients")</p>
+<p>Doctors: @weekMap.get("doctors")</p>
+<p>Pharmacies: @weekMap.get("pharmacies")</p>
+<p>Diagnostic Centres: @weekMap.get("dc")</p> 
+</div>
+
+</div>
+
+<hr>
+
+<div class="well">
+<div class="row">
+
 <div class="col-md-2">
-<a href="@routes.MednetworkAdminController.getSpecializationList()" class="btn btn-primary">Specialization</a>
-</div>
-<div class="col-md-2">
-<a href="@routes.MednetworkAdminController.getFeedbackList()" class="btn btn-primary">View Feedback</a>
-</div>
+	<input id="from" placeholder="From (dd-MM-yyyy)">
 </div>
 
+<div class="col-md-2">
+	<input id="to" placeholder="To (dd-MM-yyyy)">
+</div>
+
+<div class="col-md-3">
+	<a onclick="getData();" class="btn btn-primary btn-sm">Go</a>
+</div>
+
+</div>
+
+
+<div class="row">
+
+<div class="col-md-6" id="result">
+
+</div>
+
+</div>
+
+
+<script>
+
+function getData(){
+	var from = $('#from').val();
+	var to = $('#to').val();
+	$.get('/admin/get-user-date-between-dates/'+from+'/'+to, function(data){
+		var obj = jQuery.parseJSON(data);
+		if(obj.error == 0){
+			$('#result').html('<br><p style="color:#292929; font-size:20px;">Registrations between '+from+' and '+to+': </p><p>AppUsers: '+obj.appUsers+'</p><p>Patients: '+obj.patients+'</p><p>Doctors: '+obj.doctors+'</p><p>Pharmacies: '+obj.pharmacies+'</p><p>Diagnostic Centres: '+obj.dc+'</p>');
+		}
+		else{
+			$('#result').html('<br>Something went wrong. Please try again');
+		}
+	});
+}
+
+</script>
 
 }

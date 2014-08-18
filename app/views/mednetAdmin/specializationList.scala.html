@@ -20,9 +20,9 @@
 </div>
 
 
-<div class="col-md-5">
+<div class="col-md-7">
 <form action="@routes.MednetworkAdminController.updateSpecialization()" method="POST">
-	<select name="spezId" class="chzn">
+	<select name="spezId" class="chzn" style="width:40%;" data-placeholder="Select specialization">
 		<option></option>
 		@for(spez <- specializations){
 			<option value="@spez.id">@spez.name</option>

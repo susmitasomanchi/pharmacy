@@ -287,4 +287,12 @@ public class LoginController extends Controller {
 		return false;
 	}
 
+	public static boolean isLoggedInMedNetworkAdmin() {
+		final String role = session(Constants.LOGGED_IN_USER_ROLE);
+		if(role.equalsIgnoreCase(Role.MEDNETWORK_ADMIN.toString())){
+			return true;
+		}
+		return false;
+	}
+
 }

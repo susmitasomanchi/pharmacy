@@ -18,6 +18,31 @@
       <ul class="nav navbar-nav">
     
 		
+		
+		@if(LoginController.getLoggedInUserRole().equals(Role.MEDNETWORK_ADMIN.toString())){
+		<li class="dropdown">
+          <a href="#" class="dropdown-toggle" data-toggle="dropdown">
+        	Doctors
+          <b class="caret"></b></a>
+          <ul class="dropdown-menu">
+            <li><a href="@routes.MednetworkAdminController.getSpecializationList()">Specializations</a></li>
+          </ul>
+        </li>
+        
+       <li class="dropdown">
+          <a href="#" class="dropdown-toggle" data-toggle="dropdown">
+          Feedback
+          <b class="caret"></b></a>
+          <ul class="dropdown-menu">
+          <li><a href="@routes.MednetworkAdminController.getFeedbackList()">All Feedbacks</a></li>
+          </ul>
+        </li>
+        
+		}
+		
+		
+		
+		
 		@if(LoginController.getLoggedInUserRole().equals(Role.PATIENT.toString())){
 		
 		<li class="dropdown">
