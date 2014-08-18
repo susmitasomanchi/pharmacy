@@ -662,7 +662,16 @@ public class PublicController extends Controller{
 		return redirect(routes.Application.index());
 	}
 
+	/**
+	 * @author Prathyusha
+	 * Action to render the help document page
+	 * GET/feedback
+	 */
+	public static Result helpDocument(){
 
+		//final AppUser appUser = LoginController.getLoggedInUser();
+		return ok(views.html.helpdocument.render());
+	}
 
 
 
