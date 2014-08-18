@@ -297,6 +297,16 @@ public class UserController extends Controller {
 				SMSService.sendConfirmationSMS(loggedInUser);
 			}
 		}
+		if(requestMap.get("dob")[0]!=null ){
+			try {
+				loggedInUser.dob =new SimpleDateFormat("dd-mm-yyyy").parse(requestMap.get("dob")[0].trim());
+				Logger.debug(new SimpleDateFormat("dd-mm-yyyy").parse(requestMap.get("dob")[0].trim()).toString());
+				Logger.debug(""+loggedInUser.dob);
+			} catch (Exception e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		}
 		loggedInUser.update();
 		return redirect(routes.UserActions.dashboard());
 	}

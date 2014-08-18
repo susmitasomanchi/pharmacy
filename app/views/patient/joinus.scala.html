@@ -169,7 +169,7 @@
     
     <div class="form-group">
       <div class="col-lg-10 col-lg-offset-2">
-        <input type="submit" onclick="return validateAndSubmit();" class="btn btn-primary" value="Submit" >
+        <input id="sub" type="submit" onclick="return validateAndSubmit();" class="btn btn-primary" value="Submit" >
       </div>
     </div>
     
@@ -224,13 +224,17 @@ function validateAndSubmit(){
 
 var nowTemp = new Date();
 var now = new Date(nowTemp.getFullYear(), nowTemp.getMonth(), nowTemp.getDate(), 0, 0, 0, 0);
-$('#dob-datepicker').datepicker({
+var checkin =$('#dob-datepicker').datepicker({
 	  format: 'dd-mm-yyyy',
 	  onRender: function(date) {
 		    return date.valueOf() > now.valueOf() ? 'disabled' : '';
 	  }
 }).on('changeDate', function(ev) {
-	$(this).datepicker('hide');
+	alert(ev);
+	checkin.datepicker('hide');
+	
+	//$("#dob-datepicker").datepicker('place');
+	
 });
 
 </script>

@@ -13,27 +13,24 @@
         <img style="" src="/assets/images/mednetwork.png" alt="MedNetwork">
       </div>
       
-      <div class="col-md-3 pull-right" style="margin-top:-1%; margin-bottom:-2%;">
+      <div class="col-md-6 pull-right" style="margin-top:-1%; margin-bottom:-2%;">
     @helper.form(action=routes.LoginController.processLogin()) {
   	<div style="margin-top:0em;">
-  	<div class="panel panel-primary" >
-  	<div class="panel-heading">
-  	<h3 class="panel-title"><i class="fa fa-sign-in"></i> Sign In</h3>
-  	</div>
-  	<div class="panel-body" style="padding:0px">
   	<br>
-  	<div class="col-md-12" style="padding:0px; margin-top:-8%;">
+  	<div class="col-md-5">
+  	<label><b>Email</b></label>
   	<input type="email" name="email" placeholder="Email" style="width:100%" required>
   	</div>
-  	<div class="col-md-12" style="padding:0px;">
+  	<div class="col-md-5">
+  	<label><b>Password</b> <a href="@routes.LoginController.forgotPassword()" style="padding-right:5px; font-size:12px">( Forgot password ? )</a></label>
   	<input type="password" name="password" placeholder="Password" style="width:100%" required>
       </div>
-     <div class="col-md-12" style="padding:0px;">
-          <input type="submit" class="btn btn-sm btn-primary pull-right" value="Sign in" style="width:100%">
+     <div class="col-md-2" style="padding-right:0px">
+     <br>
+          <input type="submit" class="btn btn-sm btn-success pull-right" value="Sign in" style="width:100%">
       </div>
-      	<a class="pull-right" href="@routes.LoginController.forgotPassword()" style="padding-right:5px; font-size:12px">Forgot password ?</a>
-  	</div>
-  </div>
+      	
+  	
   </div>
   }
       </div>
@@ -55,11 +52,11 @@
 
 </div>
   <div class="col-md-6" style="width:60%">
-      <input type="search" style="width:100%;border-top-left-radius:2.5em;border-bottom-left-radius:2.5em;border-top-right-radius:2.5em;border-bottom-right-radius:2.5em;box-shadow: 1px 1px 3px 3px #aaaaaa;"  name="searchKey" id="searchKey" placeholder="Doctor's Name">
+      <input type="search" style="width:100%;box-shadow: 1px 1px 3px 3px #aaaaaa;"  name="searchKey" id="searchKey" placeholder="Doctor's Name">
     </div>
    
 <div class="col-md-2" style="width:20%">
-  <button style="width:100%;border-top-left-radius:2.5em;border-bottom-left-radius:2.5em;border-top-right-radius:2.5em;border-bottom-right-radius:2.5em;box-shadow: 1px 1px 3px 3px #aaaaaa;" class="btn btn-sm btn-primary pull-right" onclick="searchKey();"><i class="icon-search icon-large"></i> Search</button>
+  <button style="width:100%;box-shadow: 1px 1px 3px 3px #aaaaaa;" class="btn btn-sm btn-primary pull-right" onclick="searchKey();"><i class="icon-search icon-large"></i> Search</button>
   </div>
   </div>
    <script>
@@ -114,7 +111,8 @@ $("#searchKey").keyup(function (e) {
   	<div class="panel-heading">
   		<h3 class="panel-title"><i class="fa fa-users"></i> Users<span class="pull-right">Join</span></h3>
   	</div>
-  	<div class="panel-body" style="padding:0px">
+  	<div class="panel-body" style="padding:0px;height:200px;font-size:14px">
+  	<br>
   		<ul style="list-style-type:circle; padding-left:25px; padding-top:5px;">
   			<li><b>Search</b> Doctors, Pharmacies & Diagnostic Centres</li>
   			<li>Schedule <b>Appointments</b> with Doctors</li>
@@ -130,7 +128,8 @@ $("#searchKey").keyup(function (e) {
   	<div class="panel-heading">
   	<h3 class="panel-title"><i class="fa fa-user-md"></i> Doctors<span class="pull-right">Join</span></h3>
   	</div>
-  	<div class="panel-body" style="padding:0px">
+  	<div class="panel-body" style="padding:0px;height:200px;font-size:14px">
+  	<br>
   		<ul style="list-style-type:circle; padding-left:25px; padding-top:5px;">
   			<li>Manage <b>Clinics & Appointments</b></li>
 			<li>Simple <b>Website Builder</b> gives you a free website</li>
@@ -146,7 +145,8 @@ $("#searchKey").keyup(function (e) {
   	<div class="panel-heading">
   	<h3 class="panel-title"><i class="fa fa-medkit"></i> Pharmacy<span class="pull-right">Join</span></h3>
   	</div>
-  	<div class="panel-body" style="padding:0px">
+  	<div class="panel-body" style="padding:0px;height:200px;font-size:14px">
+  	<br>
   		<ul style="list-style-type:circle; padding-left:25px; padding-top:5px;">
   			<li>Get <b>Prescriptions</b> directly from Doctors and Patients</li>
 			<li>Simple <b>Website Builder</b> gives you the online visibility you need without having to build a website</li>
@@ -161,7 +161,8 @@ $("#searchKey").keyup(function (e) {
   	<div class="panel-heading">
   	<h3 class="panel-title"><i class="fa fa-bar-chart-o"></i> Diagnostic Centre<span class="pull-right">Join</span></h3>
   	</div>
-  	<div class="panel-body" style="padding:0px">
+  	<div class="panel-body" style="padding:0px;height:200px;font-size:14px">
+  	<br>
   		<ul style="list-style-type:circle; padding-left:25px; padding-top:5px;">
   			<li>Get <b>Prescriptions</b> directly from Doctors and Patients</li>
   			<li>Simple <b>Website Builder</b> gives you the online visibility you need without having to build a website</li>
