@@ -10,9 +10,6 @@ THIS IS AN AUTO GENERATED CODE
 PLEASE DO NOT MODIFY IT BY HAND
  *****/
 package controllers;
-import static play.libs.F.Promise.promise;
-
-
 import java.security.MessageDigest;
 import java.security.SecureRandom;
 import java.text.ParseException;
@@ -39,6 +36,7 @@ import org.apache.commons.codec.binary.Base64;
 import play.Logger;
 import play.data.Form;
 import play.libs.F.Function0;
+import play.libs.F.Promise;
 import play.mvc.Controller;
 import play.mvc.Result;
 import utils.Constants;
@@ -207,7 +205,7 @@ public class UserController extends Controller {
 		session(Constants.LOGGED_IN_USER_ID, appUser.id + "");
 		session(Constants.LOGGED_IN_USER_ROLE, appUser.role+ "");
 		// Async Execution
-		promise(new Function0<Integer>() {
+		Promise.promise(new Function0<Integer>() {
 			//@Override
 			@Override
 			public Integer apply() {
@@ -308,10 +306,107 @@ public class UserController extends Controller {
 
 
 
+	/**
+	 * @author Mitesh Action to send mobileNumberConfirmationKey to currently
+	 *         logged in user's mobile GET /user/send-verificaion-code
+	 */
+	public static Result sendMobVerificationCode() {
+		final AppUser appUser = LoginController.getLoggedInUser();
+		SMSService.sendConfirmationSMS(appUser);
+		flash().put(
+				"alert",
+				new Alert("alert-info","A confirmation code has been SMSed to your Mobile Number ("+ appUser.mobileNumber + ")").toString());
+		return redirect(routes.UserController.confirmAppUserPage());
+
+	}
+
+	/**
+	 * @author Mitesh Action to Display form to verify the mobile number of
+	 *         currently logged in user GET /user/verify-mobile-number
+	 */
+	public static Result displayMobVerificationForm() {
+		return ok(views.html.common.verifyMobileNumber.render());
+	}
 
 
 
+	/**
+	 * @author Mitesh Action to verify the mobileNumberConfirmationKey send to
+	 *         currently logged in user'mobile POST /user/verify-mobile-number
+	 */
+	public static Result verifyMobileNumberConfirmationKey() {
 
+		final String key = request().body().asFormUrlEncoded()
+				.get("mobileNumber")[0].trim();
+
+		Logger.debug(key);
+
+		final AppUser appUser = LoginController.getLoggedInUser();
+		Logger.info(appUser.mobileNumberConfirmationKey);
+		if (appUser.mobileNumberConfirmationKey == null) {
+			flash().put(
+					"alert",
+					new Alert("alert-danger", "You hav'nt genrated a code yet")
+					.toString());
+			return redirect(routes.UserController.confirmAppUserPage());
+
+		}
+		if (key.compareToIgnoreCase(appUser.mobileNumberConfirmationKey) == 0) {
+			flash().put(
+					"alert",
+					new Alert("alert-success", "Mobile number is verified")
+					.toString());
+			appUser.mobileNumberConfirmed = true;
+			appUser.update();
+
+			/**
+			 * message to mobile after mobile verification
+			 */
+
+			SMSService.sendSMS(appUser.mobileNumber.toString(), "Thank you for mobile verification");
+			return redirect(routes.UserActions.dashboard());
+		} else {
+
+			flash().put(
+					"alert",
+					new Alert("alert-danger",
+							"Wrong code Please enter correct code").toString());
+			return redirect(routes.UserController.confirmAppUserPage());
+		}
+	}
+
+
+
+	/**
+	 * @author Mitesh Action to send a verification email currently logged in
+	 *         user'mobile GET /user/verify-email-number
+	 */
+	public static Result sendConformationEmail() {
+
+		final boolean result;
+		final AppUser loggedInUser = LoginController.getLoggedInUser();
+
+		Promise.promise(new Function0<Integer>() {
+
+			// @Override
+			//@Override
+			@Override
+			public Integer apply() {
+				final boolean result1 = EmailService
+						.sendConfirmationEmail(loggedInUser);
+				return 0;
+			}
+		});
+		// End of async
+		flash().put(
+				"alert",
+				new Alert("alert-success",
+						"A confirmation email has been sent to you at "
+								+ loggedInUser.email
+								+ ". Kindly verify the same.").toString());
+		return redirect(routes.UserController.confirmAppUserPage());
+
+	}
 
 
 

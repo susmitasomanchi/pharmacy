@@ -24,7 +24,7 @@
 				<p>
 				Your email address <strong>@appUser.email</strong> has not been confirmed yet.
 				Please click on the link provided in the confirmation mail to proceed.<br>
-				<a href="@routes.DoctorController.sendConformationEmail()">Click here</a> to receive the confirmation mail again.
+				<a href="@routes.UserController.sendConformationEmail()">Click here</a> to receive the confirmation mail again.
 				</p>
 			}
 			
@@ -33,13 +33,20 @@
 				Your Mobile Number <strong>@appUser.mobileNumber</strong> has not been confirmed yet.
 				<br>
 				Please enter the confirmation code sent to your mobile number.<br>
-				<form action="@routes.DoctorController.verifyMobileNumberConfirmationKey()" method="POST">
+				<form action="@routes.UserController.verifyMobileNumberConfirmationKey()" method="POST">
 				<input name="mobileNumber">&nbsp;<input type="submit" value="Confirm" class="btn btn-primary btn-sm"/>
 				</form>
 				<br>
-				<a href="@routes.DoctorController.sendMobVerificationCode()">Click here</a> to receive the code again.
+				<a href="@routes.UserController.sendMobVerificationCode()">Click here</a> to receive the code again.
 				</p>
+				
+				<small>
+					<p>At times, it may take a few minutes for the confirmation code to be sent to your mobile number. In case it takes longer than 10 minutes, kindly 
+						reach us on (+91)9949254085
+					</p>
+				<small>
 			}
 		</div>
+		
 	
 }

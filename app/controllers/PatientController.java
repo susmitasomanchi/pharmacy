@@ -1,12 +1,12 @@
 package controllers;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
 import models.Alert;
 import models.AppUser;
-import models.FileEntity;
 import models.diagnostic.DiagnosticCentre;
 import models.diagnostic.DiagnosticCentrePrescriptionInfo;
 import models.diagnostic.DiagnosticCentrePrescritionStatus;
@@ -22,8 +22,12 @@ import models.pharmacist.PharmacyPrescriptionInfo;
 import models.pharmacist.PharmacyPrescriptionStatus;
 import play.Logger;
 import play.data.Form;
+import play.libs.F.Function0;
+import play.libs.F.Promise;
 import play.mvc.Controller;
 import play.mvc.Result;
+import utils.EmailService;
+import utils.SMSService;
 import actions.BasicAuth;
 import actions.ConfirmAppUser;
 import beans.QuestionAndAnswerBean;
@@ -225,7 +229,7 @@ public class PatientController extends Controller {
 
 
 	/**
-	 * @author lakshmi 
+	 * @author lakshmi
 	 * Action to list out favorite Diagnostic Centre of loggedIn Patient
 	 * GET/patient/favorite-diagnostic-centres
 	 */
@@ -264,6 +268,42 @@ public class PatientController extends Controller {
 		appointment.requestedBy=LoginController.getLoggedInUser();
 		appointment.bookedOn = new Date();
 		appointment.update();
+
+
+
+		// Async Execution
+		Promise.promise(new Function0<Integer>() {
+			//@Override
+			@Override
+			public Integer apply() {
+				int result = 0;
+				if(!EmailService.sendAppointmentConformMail(appointment.requestedBy, appointment.doctorClinicInfo.doctor.appUser, appointment)){
+					result=1;
+				}
+
+				return result;
+			}
+		});
+		// End of async
+
+		final StringBuilder smsMessage = new StringBuilder();
+
+		smsMessage.append("You have booked an Appointment on");
+		smsMessage.append( new SimpleDateFormat("dd-MMM-yyyy").format(appointment.appointmentTime));
+		smsMessage.append(","+ new SimpleDateFormat("HH:mm").format(appointment.appointmentTime));
+		smsMessage.append("at "+appointment.doctorClinicInfo.clinic.name+","+appointment.doctorClinicInfo.clinic.address.area);
+
+		SMSService.sendSMS(appointment.requestedBy.mobileNumber.toString(), smsMessage.toString());
+		final StringBuilder smsMessage2 = new StringBuilder();
+
+		smsMessage2.append("An Appointment has been booked on");
+		smsMessage2.append( new SimpleDateFormat("dd-MMM-yyyy").format(appointment.appointmentTime));
+		smsMessage2.append(","+ new SimpleDateFormat("HH:mm").format(appointment.appointmentTime));
+		smsMessage2.append("at "+appointment.doctorClinicInfo.clinic.name+","+appointment.doctorClinicInfo.clinic.address.area);
+		smsMessage2.append("by patient "+appointment.requestedBy.name+".");
+
+		SMSService.sendSMS(appointment.doctorClinicInfo.doctor.appUser.mobileNumber.toString(), smsMessage.toString());
+
 		return redirect(routes.PatientController. viewMyAppointments());
 	}
 
@@ -342,6 +382,26 @@ public class PatientController extends Controller {
 				phprInfo.sharedDate = new Date();
 				phprInfo.pharmacyPrescriptionStatus = PharmacyPrescriptionStatus.RECEIVED;
 				phprInfo.save();
+				// send sms and email to pharmacy
+				final StringBuilder message = new StringBuilder();
+				message.append("<html><body>");
+				message.append("<p>Dear "+pharmacy.adminPharmacist.appUser.name+",<br><br>Prescription of Dr."+prescription.doctor.appUser.name+"for patient"+prescription.patient.appUser.name+" has been shared with you.");
+				message.append("<br><br>Best regards,<br>MedNetwork.in</p>");
+				message.append("</body></html>");
+				// Async Execution
+				Promise.promise(new Function0<Integer>() {
+					//@Override
+					@Override
+					public Integer apply() {
+						int result = 0;
+						if(!EmailService.sendSimpleHtmlEMail(pharmacy.adminPharmacist.appUser.email, "Prescription Shared", message.toString())){
+							result=1;
+						}
+
+						return result;
+					}
+				});
+				// End of async
 				sharedWith.append(phprInfo.pharmacy.name);
 			}
 		}
@@ -359,6 +419,26 @@ public class PatientController extends Controller {
 				diagPrescriptionInfo.sharedDate = new Date();
 				diagPrescriptionInfo.diagnosticCentrePrescritionStatus = DiagnosticCentrePrescritionStatus.RECEIVED;
 				diagPrescriptionInfo.save();
+				// send sms and email to dc
+				final StringBuilder message = new StringBuilder();
+				message.append("<html><body>");
+				message.append("<p>Dear "+diagnosticCentre.diagnosticRepAdmin.appUser.name+",<br><br>Prescription of Dr."+prescription.doctor.appUser.name+"for patient"+prescription.patient.appUser.name+" has been shared with you.");
+				message.append("<br><br>Best regards,<br>MedNetwork.in</p>");
+				message.append("</body></html>");
+				// Async Execution
+				Promise.promise(new Function0<Integer>() {
+					//@Override
+					@Override
+					public Integer apply() {
+						int result = 0;
+						if(!EmailService.sendSimpleHtmlEMail(diagnosticCentre.diagnosticRepAdmin.appUser.email, "Prescription Shared", message.toString())){
+							result=1;
+						}
+
+						return result;
+					}
+				});
+				// End of async
 				if(sharedWith.length() > 0){
 					sharedWith.append(" and ");
 				}
@@ -366,20 +446,58 @@ public class PatientController extends Controller {
 			}
 		}
 
+
+		if(!(
+				(pharmacyId == null || pharmacyId.trim().isEmpty())
+				&&
+				(diagnosticId == null || diagnosticId.trim().isEmpty())
+				)){
+
+			//send mail to patient and doctor
+			//send sms to patient
+			final StringBuilder message = new StringBuilder();
+			message.append("<html><body>");
+			message.append("<p>Dear "+prescription.patient.appUser.email+",<br><br>Your prescription of Dr."+prescription.doctor.appUser.name+" has been shared with"+sharedWith.toString()+".");
+			message.append("<br><br>Best regards,<br>MedNetwork.in</p>");
+			message.append("</body></html>");
+			// Async Execution
+			Promise.promise(new Function0<Integer>() {
+				//@Override
+				@Override
+				public Integer apply() {
+					int result = 0;
+					if(!EmailService.sendSimpleHtmlEMail(prescription.patient.appUser.email, "Prescription Shared", message.toString())){
+						result=1;
+					}
+
+					return result;
+				}
+			});
+			// End of async
+
+			final StringBuilder smsToPatient = new StringBuilder();
+			smsToPatient.append("Your prescription of Dr."+prescription.doctor.appUser.name+" has been shared with"+sharedWith.toString()+".");
+			SMSService.sendSMS(prescription.patient.appUser.mobileNumber.toString(), smsToPatient.toString());
+
+			flash().put("alert",new Alert("alert-success", "Prescription shared with "+sharedWith.toString()).toString());
+		}
+
 		flash().put("alert",new Alert("alert-success", "Prescription shared with "+sharedWith.toString()).toString());
+
 		return redirect(routes.PatientController.viewAllPatientPrescriptions());
 	}
-/**
- * @author lakshmi
- * Action to display diagnostic reports
- */
-public static Result viewDiagnosticReports(){
-	Patient patient = LoginController.getLoggedInUser().getPatient();
-	/*DiagnosticCentrePrescriptionInfo info = DiagnosticCentrePrescriptionInfo.find.byId(diagnosticInfoId);*/
-	List<DiagnosticCentrePrescriptionInfo> diagnosticCentrePrescriptionInfos = DiagnosticCentrePrescriptionInfo.find.where().eq("prescription.patient", patient).findList();
-	return ok(views.html.patient.patientDiagnosticReports.render(diagnosticCentrePrescriptionInfos));
-	
-}
+	/**
+	 * @author lakshmi
+	 * Action to display diagnostic reports
+	 */
+	@ConfirmAppUser
+	public static Result viewDiagnosticReports(){
+		final Patient patient = LoginController.getLoggedInUser().getPatient();
+		/*DiagnosticCentrePrescriptionInfo info = DiagnosticCentrePrescriptionInfo.find.byId(diagnosticInfoId);*/
+		final List<DiagnosticCentrePrescriptionInfo> diagnosticCentrePrescriptionInfos = DiagnosticCentrePrescriptionInfo.find.where().eq("prescription.patient", patient).findList();
+		return ok(views.html.patient.patientDiagnosticReports.render(diagnosticCentrePrescriptionInfos));
+
+	}
 
 
 

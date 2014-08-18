@@ -1,5 +1,6 @@
 # Routes
 # This file defines all application routes (Higher priority routes first)
+# ~~~~
 
 
 #Blog
@@ -47,11 +48,11 @@ GET	   /edit-my-profile								controllers.UserController.editAppUserProfile()
 POST   /edit-my-profile								controllers.UserController.updateAppUserProfile()
 
 GET		/not-confirmed-yet							controllers.UserController.confirmAppUserPage()
-GET		/user/verify-email							controllers.DoctorController.sendConformationEmail()
+GET		/user/verify-email							controllers.UserController.sendConformationEmail()
 GET 	/user/confirmation/:userId/:randomString	controllers.PublicController.emailConfirmation(userId: Long, randomString:String)
-GET		/user/send-verificaion-code					controllers.DoctorController.sendMobVerificationCode()
-GET 	/user/verify-mobile-number					controllers.DoctorController.displayMobVerificationForm()
-POST 	/user/verify-mobile-number					controllers.DoctorController.verifyMobileNumberConfirmationKey()
+GET		/user/send-verificaion-code					controllers.UserController.sendMobVerificationCode()
+GET 	/user/verify-mobile-number					controllers.UserController.displayMobVerificationForm()
+POST 	/user/verify-mobile-number					controllers.UserController.verifyMobileNumberConfirmationKey()
 
 
 # Public Pages
@@ -78,7 +79,6 @@ GET    /pharmacy/join                              			controllers.UserController
 GET    /diagnostic/join                              		controllers.UserController.joinUsDiagnostic()
 GET    /user/join											controllers.UserController.joinUsPatient()
 POST   /join		                              			controllers.UserController.processJoinUs()
-
 
 # Dashboard of LoggedInUser
 GET		/dashboard                                  controllers.UserActions.dashboard()
@@ -111,6 +111,7 @@ GET    /doctor/edit-clinic-schedule/:id                 controllers.DoctorContro
 POST   /doctor/update-clinic                            controllers.DoctorController.processUpdateClinicInfo()
 POST   /doctor/update-clinic-schedule                   controllers.DoctorController.processUpdateClinicSchedule()
 GET    /doctor/delete-clinic/:id                        controllers.DoctorController.deleteClinic(id:Long)
+
 
 GET		/doctor/sig-codes									controllers.DoctorController.showSigCodes()
 POST	/doctor/add-sig-code								controllers.DoctorController.addSigCode()
@@ -197,12 +198,13 @@ GET 	/diagnostic/:slugUrl								controllers.PublicController.getDiagnosticCentr
 GET		/static/fav/pharmacies							controllers.PharmacistController.staticFavPharmacies()
 GET		/create/master									controllers.SampleDataController.createMasterMedicinesAndTests()
 GET		/create/spez									controllers.SampleDataController.createDocSpez()
+GET		/sms											controllers.SampleDataController.testurl()
+
 GET		/admin/specialization-list						controllers.MednetworkAdminController.getSpecializationList()
 POST	/admin/add-specialization						controllers.MednetworkAdminController.addSpecialization()
 POST	/admin/update-specialization					controllers.MednetworkAdminController.updateSpecialization()
 GET		/admin/feedback-list							controllers.MednetworkAdminController.getFeedbackList()
 GET		/admin/delete-feedback/:id						controllers.MednetworkAdminController.deleteFeedback(id: Long)
-
 
 #############################	PRODUCTION	#################################################################################
 
@@ -394,18 +396,13 @@ GET		/patient_data					controllers.SampleDataController.patientTest()
 GET		/prescription_data					controllers.SampleDataController.prescripetionTest()
 GET	/mr/sample-data					controllers.SampleDataController.mrSampleData()
 
-
-
-#Cron
-GET		/cron/start						controllers.CronController.startCron()
 #Mednetwork-Admin
 GET		/admin						controllers.SampleDataController.mednetAdmin()
 
-
+#Cron
+GET		/cron/start						controllers.CronController.startCron()
 # Map static resources from the /public folder to the /assets URL path
 GET    /assets/*file                                    controllers.Assets.at(path="/public", file)
-
-
 
 
 

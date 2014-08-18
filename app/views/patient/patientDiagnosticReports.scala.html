@@ -56,7 +56,11 @@
 </td>
 *@
 <td style="vertical-align:middle;text-align:center;font-size:12px">@diagnosticInfo.diagnosticCentre.name </td> 
-<td style="vertical-align:middle;text-align:center;font-size:12px">@diagnosticInfo.servedDate.format("dd-MMM-yyyy")<br>@diagnosticInfo.servedDate.format("EE")<br>@diagnosticInfo.servedDate.format("hh:mm")</td>
+<td style="vertical-align:middle;text-align:center;font-size:12px">
+@if(diagnosticInfo.servedDate != null){
+	@diagnosticInfo.servedDate.format("dd-MMM-yyyy")<br>@diagnosticInfo.servedDate.format("EE")<br>@diagnosticInfo.servedDate.format("hh:mm")
+}
+</td>
 <td style="vertical-align:middle;font-size:12px">
 	@for((report,index) <- diagnosticInfo.prescription.patient.diagnosticReportList.zipWithIndex){
 	@{index+1}.<a href="@routes.DiagnosticController.downloadDiagnosticReport(report.id,diagnosticInfo.id)">@report.fileName</a><br>

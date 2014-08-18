@@ -19,9 +19,15 @@ import models.mr.PharmaceuticalCompany;
 import models.patient.Patient;
 import models.patient.PatientDoctorInfo;
 import play.Logger;
+import play.libs.WS;
 import play.mvc.Controller;
 import play.mvc.Result;
 import utils.EmailService;
+import utils.SMSService;
+import play.libs.WS;
+import play.mvc.Result;
+import static play.libs.F.Function;
+import static play.libs.F.Promise;
 
 public class SampleDataController extends Controller {
 
@@ -369,6 +375,15 @@ public class SampleDataController extends Controller {
 	 */
 
 
+	public static Result testurl(){
+		SMSService.sendSMS("9949254085", "From Paris With Love!");
+		return ok("This Page");
+	}
 
+
+	public static Result test222(){
+		Logger.info("Test 2222222");
+		return ok();
+	}
 }
 

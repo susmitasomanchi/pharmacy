@@ -43,7 +43,23 @@
 				<td>@{prescription.patient.appUser.name}&nbsp;(@prescription.patient.getSexAndAge())</td>
 				</div>
 				<td>
-				
+					
+					<ul style="list-style-type: none; padding-left:0px;">
+						@for(ppinfo <- prescription.getPharmacyInfoList()){
+							@if(ppinfo.sharedBy.id == LoginController.getLoggedInUser().id){
+								<li><a href="@routes.PublicController.getPharmacyWithSlug(ppinfo.pharmacy.slugUrl)">@ppinfo.pharmacy.name</a> on @ppinfo.sharedDate.format("dd-MMM-yyyy HH:mm")</li>
+							}
+						}
+					</ul>
+
+					<ul style="list-style-type: none; padding-left:0px;">
+						@for(dpinfo <- prescription.getDiagnoticInfoList()){
+							@if(dpinfo.sharedBy.id == LoginController.getLoggedInUser().id){
+								<li><a href="@routes.PublicController.getDiagnosticCentreWithSlug(dpinfo.diagnosticCentre.slugUrl)">@dpinfo.diagnosticCentre.name</a> on @dpinfo.sharedDate.format("dd-MMM-yyyy HH:mm")</li>
+							}
+						}
+					</ul>
+					
 				</td>
 				<div class="col-md-3 column">
 				<td>
@@ -87,6 +103,22 @@
 				<td>@{prescription.patient.appUser.name}&nbsp;(@prescription.patient.getSexAndAge())</td>
 				</div>
 				<td>
+				
+				<ul style="list-style-type: none; padding-left:0px;">
+						@for(ppinfo <- prescription.getPharmacyInfoList()){
+							@if(ppinfo.sharedBy.id == LoginController.getLoggedInUser().id){
+								<li><a href="@routes.PublicController.getPharmacyWithSlug(ppinfo.pharmacy.slugUrl)">@ppinfo.pharmacy.name</a> on @ppinfo.sharedDate.format("dd-MMM-yyyy HH:mm")</li>
+							}
+						}
+					</ul>
+
+					<ul style="list-style-type: none; padding-left:0px;">
+						@for(dpinfo <- prescription.getDiagnoticInfoList()){
+							@if(dpinfo.sharedBy.id == LoginController.getLoggedInUser().id){
+								<li><a href="@routes.PublicController.getDiagnosticCentreWithSlug(dpinfo.diagnosticCentre.slugUrl)">@dpinfo.diagnosticCentre.name</a> on @dpinfo.sharedDate.format("dd-MMM-yyyy HH:mm")</li>
+							}
+						}
+					</ul>
 				
 				</td>
 				<div class="col-md-3 column">

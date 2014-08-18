@@ -13,26 +13,49 @@
 <div class="col-md-10 col-md-offset-1">
 	
 	<div class="row">
-      <div class="col-md-2" style="margin-top:-1%; margin-bottom:-2%;">
+      <div class="col-md-2" style="margin-top:-1%; margin-bottom:-2%; cursor:pointer;" onclick="window.location.href='@routes.Application.index()';">
           <img style="" src="@routes.Assets.at("images/mednlogo.png")" alt="MedNetwork" width="150px">
       </div>
+      <div class="col-md-2" style="color:#369C51; margin-top:1.5%; margin-left:-5.5%;">
+      	&#946;eta
+      </div>
+      @*
       <div class="col-md-4 col-md-offset-6" align="right">
       	<h5><span style="cursor:pointer; margin-top:150px;" onClick="window.location.href=&#39;/&#39;;">Coming this Independence Day..</span></h5>   	
       </div>
+      *@
 	</div>
     
     <hr>
   
   <div class="row">
-   <div class="col-md-6">
-  <button type="button" class="btn btn-success btn-lg btn-block">Diagnostic Center</button>
-  		<div class="well" style="text-align:justify;">
-  We're here to listen, diagnose, consult, strategize, build, launch, market, deliver patients, contain costs, create efficiencies, and continually grow your medical website assets.For all medical web projects, large or small, desktop, mobile, or tablet, think of us as your own personal dedicated expert medical website and medical web marketing department.<br>
   
-  Quality professional medical web design plays a critical role in modern medical communications. It has become the first, last, and absolute impression of the modern medical practice. Doctors continue to find that getting found on the Internet by prospective patients is critical to new patient referrals and remaining competitive. Doctors (medical practices) also know that controlling what their patients and referring physicians see on the Internet can make a significant difference when it comes to getting new patients, lowering costs, and building a valued/professional/recognized medical brand.
-</div>
+   <div class="col-md-6">
+  <button type="button" class="btn btn-info btn-lg btn-block">Diagnostic Centre</button>
+  		<div class="well" style="text-align:justify;">
+  		<p>We completely understand that apart from ensuring that your patients get best treatment possible, you have to play sales, marketing, administrator, accountant, business development and numerous other roles</p>
+  		<p>We want to assist you by taking some of your load using technology and innovation, so that you can focus on what you do best, treating your patients :)</p>
+  		<p>With mednetwork you can</p>
+  		<ul class="list-group">
+ 			<li class="list-group-item">maintain a beautiful <b>website</b> through which you can communicate to the world, all by yourself, just like your facebook account</li>
+ 			<li class="list-group-item">tremendous <b>online visibility</b> leads to more customers getting to know your diagnostic centre</li>
+ 			<li class="list-group-item"><b>patients</b> will find you and share their <b>prescription</b> online</li>
+ 			<li class="list-group-item">even <b>doctors</b> can share their <b>prescription</b> online thus improving your orders</li>
+ 			<li class="list-group-item">manage all <b>Diagnostic Reports</b> online.</li>
+ 			<li class="list-group-item">Once ready, you can directly <b>serve</b> diagnostic reports to patients <b>online</b></li>
+ 			<li class="list-group-item">Get <b>notified</b> about all your transactions in real time both via email and sms.</li>
+ 		</ul>
+ 		<p>And this is <b>completely free</b></p>
+ </div>
 
-<div class="panel panel-success" style="padding:0;">
+
+    </div>
+	
+	 <div class="col-md-6">
+	 <button type="button" class="btn btn-default btn-lg btn-block">Registration Form</button>
+	 <br>
+	 
+	 	 	 <div class="panel panel-success">
   <div class="panel-heading">
     <h3 class="panel-title" style="color:#000000;">Process of registration</h3>
   </div>
@@ -41,7 +64,7 @@
     <tbody>
       <tr class="info">
       <td>1</td>
-      <td>Fill the registraion form on right side of this page.</td>
+      <td>Fill in the registration form below</td>
       
     </tr>
     <tr class="success">
@@ -51,27 +74,19 @@
     
 	 <tr class="info">
       <td>3</td>
-      <td>Create your own website in DIY section</td>
-      
+      <td>Verify your email id and mobile number</td>
     </tr>
+
 	 <tr class="success">
       <td>4</td>
-      <td>Column content</td>
+      <td>You are all set now to get shared prescriptions and manage reports etc.</td>
     </tr>
   </tbody>
 </table> 
   </div>
 </div>
-
-<button type="button" class="btn btn-primary">Why Us </button> &nbsp;&nbsp;<button type="button" class="btn btn-primary">Terms & Conditions</button>&nbsp;&nbsp;
-<button type="button" class="btn btn-primary">Serives Available</button>
-
-
-    </div>
-	
-	 <div class="col-md-6">
-	 <button type="button" class="btn btn-default btn-lg btn-block">Registration Form</button>
 	 
+	 <div class="well">
 	 <form id="doctorForm" class="form-horizontal" action="@routes.UserController.processJoinUs()" method="POST">
   <fieldset>
     <p class="text-success" style="text-align:center;">Please Fill the following entries to get yourself registered on MED Network. </p>
@@ -116,70 +131,15 @@
     </div>
     
     
-    @*
-    
-    <div class="form-group">
-      <label for="textArea" class="col-lg-2 control-label">Message </label>
-      <div class="col-lg-10">
-        <textarea class="form-control" rows="3" id="textArea"></textarea>
-        <span class="help-block">Any Other Information you may want to add up.</span>
-      </div>
-    </div>
-    
-    
-    <div class="form-group">
-      <label class="col-lg-2 control-label">Choose one of these options</label>
-      <div class="col-lg-10">
-        <div class="radio">
-          <label>
-            <input type="radio" name="optionsRadios" id="optionsRadios1" value="option1" checked="">
-            Own Clinic
-          </label>
-        </div>
-        <div class="radio">
-          <label>
-            <input type="radio" name="optionsRadios" id="optionsRadios2" value="option2">
-            Practicing as attached pratictioner on call in other clinics/hospital
-          </label>
-        </div>
-      </div>
-    </div>
-    
-    
-    
-    <div class="form-group">
-      <label for="select" class="col-lg-2 control-label">Area of specialization</label>
-      <div class="col-lg-10">
-        <select class="form-control" id="select">
-          <option>1</option>
-          <option>2</option>
-          <option>3</option>
-          <option>4</option>
-          <option>5</option>
-        </select>
-        <br>
-        <select multiple="" class="form-control">
-          <option>1</option>
-          <option>2</option>
-          <option>3</option>
-          <option>4</option>
-          <option>5</option>
-        </select>
-      </div>
-    </div>
-    
-    
-    *@
-    
-    
     <input type="hidden" name="role" value="ADMIN_DIAGREP">
     <div class="form-group">
       <div class="col-lg-10 col-lg-offset-3">
-        <input type="submit" onclick="return validateAndSubmit();" class="btn btn-primary" value="Submit" >
+        <input type="submit" onclick="return validateAndSubmit();" class="btn btn-info" value="Submit" >
       </div>
     </div>
   </fieldset>
 </form>
+</div>
 	 </div>
     </div>
       
