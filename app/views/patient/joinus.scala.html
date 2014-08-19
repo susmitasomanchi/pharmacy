@@ -230,7 +230,6 @@ var checkin =$('#dob-datepicker').datepicker({
 		    return date.valueOf() > now.valueOf() ? 'disabled' : '';
 	  }
 }).on('changeDate', function(ev) {
-	alert(ev);
 	checkin.datepicker('hide');
 	
 	//$("#dob-datepicker").datepicker('place');

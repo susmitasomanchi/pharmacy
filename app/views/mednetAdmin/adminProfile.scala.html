@@ -40,11 +40,15 @@
 <div class="row">
 
 <div class="col-md-2">
-	<input id="from" placeholder="From (dd-MM-yyyy)">
+	<div class="input-append date">
+		<input id="from" class="admin-datepicker" size="18" type="text" placeholder="From">
+	</div>
 </div>
 
 <div class="col-md-2">
-	<input id="to" placeholder="To (dd-MM-yyyy)">
+	<div class="input-append date">
+		<input id="to" class="admin-datepicker" size="18" type="text" placeholder="To">
+	</div>
 </div>
 
 <div class="col-md-3">
@@ -64,6 +68,10 @@
 
 
 <script>
+
+
+$('.admin-datepicker').datepicker({format: 'dd-mm-yyyy'});
+
 
 function getData(){
 	var from = $('#from').val();

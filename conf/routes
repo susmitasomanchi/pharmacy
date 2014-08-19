@@ -401,8 +401,7 @@ GET		/admin						controllers.SampleDataController.mednetAdmin()
 
 #Cron
 GET		/cron/start						controllers.CronController.startCron()
+
 # Map static resources from the /public folder to the /assets URL path
 GET    /assets/*file                                    controllers.Assets.at(path="/public", file)
-
-
 

@@ -19,11 +19,11 @@
   	<br>
   	<div class="col-md-5">
   	<label><b>Email</b></label>
-  	<input type="email" name="email" placeholder="Email" style="width:100%" required>
+  	<input id="uname" type="email" name="email" placeholder="Email" style="width:100%" required>
   	</div>
   	<div class="col-md-5">
-  	<label><b>Password</b> <a href="@routes.LoginController.forgotPassword()" style="padding-right:5px; font-size:12px">( Forgot password ? )</a></label>
-  	<input type="password" name="password" placeholder="Password" style="width:100%" required>
+  	<label><b>Password</b> <a href="@routes.LoginController.forgotPassword()" style="padding-right:5px; font-size:12px">(Forgot password ?)</a></label>
+  	<input type="password" id="pwd" name="password" placeholder="Password" style="width:100%" required>
       </div>
      <div class="col-md-2" style="padding-right:0px">
      <br>
@@ -33,6 +33,12 @@
   	
   </div>
   }
+  <script>
+	$('#uname').on('blur', function(){
+		$('#pwd').focus();
+	});
+  </script>
+  
       </div>
       
       <br>
