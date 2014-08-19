@@ -65,7 +65,7 @@ GET		/pharmacy/search									controllers.PublicController.searchPharmaciesPage(
 GET    /feedback											controllers.PublicController.feedBack()
 POST    /feedback											controllers.PublicController.saveFeedBack()
 GET    /perge-doctor											controllers.PublicController.pergeDoctor()
-
+GET    /help												controllers.PublicController.helpDocument()
 
 
 GET		/doctor/add-to-favorite/:docId					controllers.PublicController.addToFavDoctor(docId: Long)

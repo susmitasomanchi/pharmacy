@@ -372,8 +372,7 @@ public class PublicController extends Controller{
 				// Async Execution
 				Promise.promise(new Function0<Integer>() {
 					//@Override
-					@Override
-					public Integer apply() {
+				public Integer apply() {
 						int result = 0;
 						if(!EmailService.sendVerificationConformMessage(appUser)){
 							result=1;
@@ -663,6 +662,18 @@ public class PublicController extends Controller{
 		}
 		return redirect(routes.Application.index());
 	}
+
+/**
+	 * @author Prathyusha
+	 * Action to render the help document page
+	 * GET/feedback
+	 */
+	public static Result helpDocument(){
+
+		//final AppUser appUser = LoginController.getLoggedInUser();
+		return ok(views.html.helpdocument.render());
+	}
+
 
 	/**
 	 * @author lakshmi
