@@ -372,6 +372,7 @@ public class PublicController extends Controller{
 				// Async Execution
 				Promise.promise(new Function0<Integer>() {
 					//@Override
+					@Override
 					public Integer apply() {
 						int result = 0;
 						if(!EmailService.sendVerificationConformMessage(appUser)){
@@ -645,6 +646,7 @@ public class PublicController extends Controller{
 		// Async Execution
 		Promise.promise(new Function0<Integer>() {
 			//@Override
+			@Override
 			public Integer apply() {
 				int result = 0;
 				if(!EmailService.sendSimpleHtmlEMail("admin@mednetwork.in", "A feedback saved", message.toString())){
@@ -668,8 +670,13 @@ public class PublicController extends Controller{
 	 * POST/feedback
 	 */
 	public static Result pergeDoctor(){
-		//Doctor doctor = Doctor.find.byId(1L);
+		/*final Doctor doctor = Doctor.find.byId(2L);
+		Logger.info(""+doctor.appUser.name);
+
+		doctor.delete();*/
 		final AppUser appUser = AppUser.find.byId(2L);
+		final Doctor doctor2 = Doctor.find.where().eq("appUser", appUser).findUnique();
+		doctor2.delete();
 		appUser.delete();
 
 		return ok("hello deleted");

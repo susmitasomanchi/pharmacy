@@ -101,7 +101,7 @@ public class Doctor extends BaseEntity{
 
 	@Column(columnDefinition="TEXT")
 	public String slugUrl;
-
+	String s;
 	public static Model.Finder<Long,Doctor> find = new Finder<Long, Doctor>(Long.class, Doctor.class);
 
 	public List<DoctorExperience> getExperienceListInOrder(){

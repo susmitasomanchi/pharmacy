@@ -103,6 +103,7 @@ GET		/doctor/add-favorite-diagnosticCentre/:diagnosticId/:str					controllers.Do
 
 
 # Doctor's Clinics
+GET    /new-clinic								controllers.SampleDataController.addClinic()
 GET    /doctor/new-clinic                 		controllers.DoctorController.newClinic()
 POST   /doctor/new-clinic                 		controllers.DoctorController.processNewClinic()
 GET    /doctor/clinics                    		controllers.DoctorController.myClinics()

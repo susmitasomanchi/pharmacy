@@ -1,17 +1,22 @@
 package controllers;
 
 
-import java.util.ArrayList;
+import java.awt.geom.Area;
 import java.util.Date;
 import java.util.List;
 
+import models.Address;
 import models.AppUser;
 import models.MasterDiagnosticTest;
 import models.MasterProduct;
 import models.Role;
 import models.diagnostic.DiagnosticCentrePrescriptionInfo;
+import models.doctor.Clinic;
+import models.doctor.Day;
+import models.doctor.DaySchedule;
 import models.doctor.DiagnosticTestLineItem;
 import models.doctor.Doctor;
+import models.doctor.DoctorClinicInfo;
 import models.doctor.MasterSpecialization;
 import models.doctor.Prescription;
 import models.mr.MedicalRepresentative;
@@ -19,15 +24,9 @@ import models.mr.PharmaceuticalCompany;
 import models.patient.Patient;
 import models.patient.PatientDoctorInfo;
 import play.Logger;
-import play.libs.WS;
 import play.mvc.Controller;
 import play.mvc.Result;
-import utils.EmailService;
 import utils.SMSService;
-import play.libs.WS;
-import play.mvc.Result;
-import static play.libs.F.Function;
-import static play.libs.F.Promise;
 
 public class SampleDataController extends Controller {
 
@@ -304,6 +303,40 @@ public class SampleDataController extends Controller {
 			test.name = "Test-"+i;
 			test.save();
 		}
+		return ok();
+	}
+	public static Result addClinic(){
+		final Doctor doctor = LoginController.getLoggedInUser().getDoctor();
+		final DoctorClinicInfo doctorClinicInfo = new DoctorClinicInfo();
+		doctorClinicInfo.doctor = doctor;
+
+		doctorClinicInfo.save();
+		Logger.info(""+doctorClinicInfo.doctor.appUser.name);
+		final Clinic clinic = new Clinic();
+		final Address address = new Address();
+		address.area = "kukatpally";
+		address.city = "hyderabad";
+		address.save();
+		clinic.name = "apollo clinic";
+		clinic.address = address;
+		clinic.save();
+		doctorClinicInfo.clinic = clinic;
+		doctorClinicInfo.update();
+		final DaySchedule schedule = new DaySchedule();
+		schedule.day = Day.MONDAY;
+		schedule.fromTime ="12:00";
+		schedule.toTime = "16:00";
+		//schedule.save();
+		doctorClinicInfo.scheduleDays.add(schedule);
+		//doctorClinicInfo.update();
+		final DaySchedule schedule1 = new DaySchedule();
+		schedule1.day = Day.TUESDAY;
+		schedule1.fromTime ="10:00";
+		schedule1.toTime = "20:00";
+		//schedule1.save();
+		doctorClinicInfo.scheduleDays.add(schedule1);
+
+		doctorClinicInfo.update();
 		return ok();
 	}
 

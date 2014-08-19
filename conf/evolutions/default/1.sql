@@ -284,6 +284,7 @@ create table doctor (
   experience                integer,
   search_index              TEXT,
   slug_url                  TEXT,
+  s                         varchar(255),
   last_update               timestamp not null,
   constraint pk_doctor primary key (id))
 ;
