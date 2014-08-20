@@ -317,7 +317,7 @@ public class SampleDataController extends Controller {
 		address.area = "kukatpally";
 		address.city = "hyderabad";
 		address.save();
-		clinic.name = "apollo clinic";
+		clinic.name = "laxmi clinics";
 		clinic.address = address;
 		clinic.save();
 		doctorClinicInfo.clinic = clinic;

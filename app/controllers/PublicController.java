@@ -676,28 +676,6 @@ public class PublicController extends Controller{
 	}
 
 
-	/**
-	 * @author lakshmi
-	 * Action to perge the doctor details
-	 * POST/feedback
-	 */
-	public static Result purgeDoctor(){
-		/*final Doctor doctor = Doctor.find.byId(2L);
-		Logger.info(""+doctor.appUser.name);
-
-		doctor.delete();*/
-		final AppUser appUser = AppUser.find.byId(2L);
-		final Doctor doctor2 = Doctor.find.where().eq("appUser", appUser).findUnique();
-		final List<DoctorClinicInfo> doctorClinicInfos = DoctorClinicInfo.find.where().eq("doctor", doctor2).findList();
-		for (final DoctorClinicInfo doctorClinicInfo : doctorClinicInfos) {
-			DoctorClinicInfo.find.byId(doctorClinicInfo.id).delete();
-		}
-		doctor2.delete();
-		appUser.delete();
-
-		return ok("hello deleted");
-	}
-
 
 
 

@@ -64,7 +64,6 @@ GET		/pharmacy/search/:searchString                  controllers.PublicControlle
 GET		/pharmacy/search									controllers.PublicController.searchPharmaciesPage()
 GET    /feedback											controllers.PublicController.feedBack()
 POST    /feedback											controllers.PublicController.saveFeedBack()
-GET    /purge-doctor											controllers.PublicController.purgeDoctor()
 GET    /help												controllers.PublicController.helpDocument()
 
 
@@ -99,6 +98,7 @@ GET		/doctor/add-favorite-pharmacy/:pharmacyId/:str							controllers.DoctorCont
 GET		/doctor/my-favorite-pharmacies											controllers.DoctorController.myFavoritePharmacies()
 GET		/doctor/favorite-diagnostic-centres											controllers.DoctorController.myFavoriteDiagnosticCentres()
 GET		/doctor/add-favorite-diagnosticCentre/:diagnosticId/:str					controllers.DoctorController.addFavoriteDiagnosticCentre(diagnosticId: Long,str: String)
+GET    /purge-doctor																controllers.DoctorController.purgeDoctor()
 
 
 

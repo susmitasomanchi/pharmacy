@@ -19,6 +19,7 @@ import models.diagnostic.DiagnosticCentrePrescriptionInfo;
 import models.diagnostic.DiagnosticCentrePrescritionStatus;
 import models.doctor.Appointment;
 import models.doctor.AppointmentStatus;
+import models.doctor.Clinic;
 import models.doctor.Day;
 import models.doctor.DaySchedule;
 import models.doctor.DiagnosticTestLineItem;
@@ -959,7 +960,7 @@ public class DoctorController extends Controller {
 	 * @author Mitesh Action to show form to edit one of loggedIn doctor's
 	 *         clinic information GET /doctor/edit-clinic-info/:id
 	 */
-	//@ConfirmAppUser
+	@ConfirmAppUser
 	public static Result editClinicInfo(final Long docClinicId) {
 
 		final DoctorClinicInfo doctorClinicInfo = DoctorClinicInfo.find
@@ -979,7 +980,7 @@ public class DoctorController extends Controller {
 	 * @author Mitesh Action to show form to edit one of loggedIn doctor's
 	 *         clinic schedule GET /doctor/edit-clinic-schedule/:id
 	 */
-	//	@ConfirmAppUser
+	@ConfirmAppUser
 	public static Result editClinicSchedule(final Long docClinicId) {
 		final DoctorClinicInfo doctorClinicInfo = DoctorClinicInfo.find
 				.byId(docClinicId);
@@ -1000,7 +1001,7 @@ public class DoctorController extends Controller {
 	 * @author Mitesh Action to Display appointment requested to logged-in
 	 *         DOCTOR GET /doctor/all-appointments
 	 */
-	//@ConfirmAppUser
+	@ConfirmAppUser
 	public static Result viewAllAppointments() {
 
 		/*
@@ -1034,7 +1035,7 @@ public class DoctorController extends Controller {
 	 * @author Mitesh Action to Display appointment requested to logged-in
 	 *         DOCTOR GET /doctor/todays-appointments
 	 */
-	//@ConfirmAppUser
+	@ConfirmAppUser
 	public static Result viewTodaysAppointments() {
 		final Date now = new Date();
 		final Calendar calendarFrom = Calendar.getInstance();
@@ -1110,7 +1111,7 @@ public class DoctorController extends Controller {
 	 * Action to render the prescription form to the loggedInDoctor GET
 	 * /doctor/prescription/:appointmentId
 	 */
-	//@ConfirmAppUser
+	@ConfirmAppUser
 	public static Result showPrescriptionForm(final Long appointmentId) {
 		final Appointment appointment = Appointment.find.byId(appointmentId);
 		// server-side check
@@ -1126,7 +1127,7 @@ public class DoctorController extends Controller {
 	 * Action to save prescription of the loggedInDoctor POST
 	 * /doctor/save-prescription
 	 */
-	//@ConfirmAppUser
+	@ConfirmAppUser
 	public static Result savePrescription() {
 		final Form<PrescriptionBean> filledForm = prescriptionForm
 				.bindFromRequest();
@@ -1207,7 +1208,7 @@ public class DoctorController extends Controller {
 	 * Action to show logged In doctor a page to assign a prescription to a
 	 * pharmacy / diagnostic centre GET /doctor/show-prescription
 	 */
-	//@ConfirmAppUser
+	@ConfirmAppUser
 	public static Result showPrescription(final Long prescriptionId) {
 		final Doctor doctor = LoginController.getLoggedInUser().getDoctor();
 		final Prescription prescription = Prescription.find
@@ -1224,7 +1225,7 @@ public class DoctorController extends Controller {
 	 * Action to show logged In doctor a page to assign a prescription to a
 	 * pharmacy / diagnostic centre GET /doctor/share-prescription
 	 */
-	//@ConfirmAppUser
+	@ConfirmAppUser
 	public static Result sharePrescription(final Long prId,
 			final String pharmacyId, final String diagnosticId,
 			final Boolean consent) {
@@ -1396,7 +1397,7 @@ public class DoctorController extends Controller {
 	 * Action to show todays prescription created by loggedIn doctor GET
 	 * /doctor/todays-prescriptions
 	 */
-	//@ConfirmAppUser
+	@ConfirmAppUser
 	public static Result viewTodaysPrescription() {
 		final Date now = new Date();
 		final Calendar calendarFrom = Calendar.getInstance();
@@ -1428,7 +1429,7 @@ public class DoctorController extends Controller {
 	 * Action to show all prescription created by loggedIn doctor GET
 	 * /doctor/all-prescriptions
 	 */
-	//@ConfirmAppUser
+	@ConfirmAppUser
 	public static Result viewAllPrescription() {
 		final Doctor doctor = LoginController.getLoggedInUser().getDoctor();
 		final List<Prescription> prescriptionList = Prescription.find.where()
@@ -1559,7 +1560,7 @@ public class DoctorController extends Controller {
 	 *         of Doctor of loggedin DOCTOR
 	 *         GET/doctor/add-favorite-pharmacy/:pharmacyId/:str
 	 */
-	//@ConfirmAppUser
+	@ConfirmAppUser
 	public static Result addFavoritePharmacy(final Long pharmacyId,
 			final String searchStr) {
 		final Doctor doctor = LoginController.getLoggedInUser().getDoctor();
@@ -1591,7 +1592,7 @@ public class DoctorController extends Controller {
 	 * @author lakshmi Action to list out favorite Pharmacies of Doctor of
 	 *         loggedin DOCTOR GET/doctor/my-favorite-pharmacies
 	 */
-	//@ConfirmAppUser
+	@ConfirmAppUser
 	public static Result myFavoritePharmacies() {
 		final Doctor doctor = LoginController.getLoggedInUser().getDoctor();
 		return ok(views.html.pharmacist.favorite_pharmacy_list
@@ -1603,7 +1604,7 @@ public class DoctorController extends Controller {
 	 *         of Doctor of loggedin DOCTOR
 	 *         GET/doctor/add-favorite-pharmacy/:pharmacyId/:str
 	 */
-	//@ConfirmAppUser
+	@ConfirmAppUser
 	public static Result addFavoriteDiagnosticCentre(final Long diagnosticId,
 			final String searchStr) {
 		final Doctor doctor = LoginController.getLoggedInUser().getDoctor();
@@ -1630,14 +1631,14 @@ public class DoctorController extends Controller {
 	 * @author lakshmi Action to list out favorite Diagnostic Centre of Doctor
 	 *         of loggedin DOCTOR GET/doctor/favorite-diagnostic-centres
 	 */
-	//@ConfirmAppUser
+	@ConfirmAppUser
 	public static Result myFavoriteDiagnosticCentres() {
 		final Doctor doctor = LoginController.getLoggedInUser().getDoctor();
 		return ok(views.html.diagnostic.favorite_diagnosticCentre_list
 				.render(doctor.diagnosticCentreList));
 	}
 
-	//@ConfirmAppUser
+	@ConfirmAppUser
 	public static Result requestAppointment() {
 		final String param[] = request().body().asFormUrlEncoded()
 				.get("datetime");
@@ -1653,6 +1654,27 @@ public class DoctorController extends Controller {
 			e.printStackTrace();
 			return ok("-1");
 		}
+	}
+
+	/**
+	 * @author lakshmi
+	 * Action to purge the doctor details
+	 * 
+	 */
+	public static Result purgeDoctor(){
+		final AppUser appUser = AppUser.find.byId(61L);
+		final Doctor doctor2 = Doctor.find.where().eq("appUser", appUser).findUnique();
+		final List<DoctorClinicInfo> doctorClinicInfos = DoctorClinicInfo.find.where().eq("doctor", doctor2).findList();
+		List<Appointment> appointments;
+		for (final DoctorClinicInfo doctorClinicInfo : doctorClinicInfos) {
+			appointments = Appointment.find.where().eq("doctorClinicInfo", doctorClinicInfo).findList();
+			Clinic.find.where().eq("id", doctorClinicInfo.clinic.id).findUnique().delete();
+			DoctorClinicInfo.find.byId(doctorClinicInfo.id).delete();
+		}
+		doctor2.delete();
+		appUser.delete();
+
+		return ok("hello deleted");
 	}
 
 
