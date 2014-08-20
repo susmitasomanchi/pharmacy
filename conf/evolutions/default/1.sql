@@ -5,6 +5,7 @@
 
 create table address (
   id                        bigint not null,
+  created_on                timestamp not null,
   address_line1             varchar(255),
   address_line2             varchar(255),
   address_line3             varchar(255),
@@ -24,6 +25,7 @@ create table address (
 
 create table app_user (
   id                        bigint not null,
+  created_on                timestamp not null,
   image                     bytea,
   name                      varchar(255),
   username                  varchar(255),
@@ -40,7 +42,6 @@ create table app_user (
   email_confirmation_key    TEXT,
   mobile_number_confirmation_key TEXT,
   forgot_password_confirmation_key TEXT,
-  test                      varchar(255),
   last_update               timestamp not null,
   constraint ck_app_user_sex check (sex in ('FEMALE','OTHER','MALE')),
   constraint ck_app_user_role check (role in ('PATIENT','ADMIN_DIAGREP','DOCTOR','PHARMACIST','MEDNETWORK_ADMIN','ADMIN_PHARMACIST','BLOG_ADMIN','ADMIN_MR','MR','DIAGREP','DOCTOR_SECRETARY')),
@@ -49,6 +50,7 @@ create table app_user (
 
 create table appointment (
   id                        bigint not null,
+  created_on                timestamp not null,
   appointment_time          timestamp,
   appointment_status        varchar(9),
   requested_by_id           bigint,
@@ -63,6 +65,7 @@ create table appointment (
 
 create table article (
   id                        bigint not null,
+  created_on                timestamp not null,
   name                      TEXT,
   position                  integer,
   short_description         TEXT,
@@ -81,6 +84,7 @@ create table article (
 
 create table article_category (
   id                        bigint not null,
+  created_on                timestamp not null,
   name                      TEXT,
   position                  integer,
   short_description         TEXT,
@@ -96,6 +100,7 @@ create table article_category (
 create table batch (
   id                        bigint not null,
   inventory_id              bigint not null,
+  created_on                timestamp not null,
   product_id                bigint,
   batch_no                  varchar(255),
   mrp                       float,
@@ -110,6 +115,7 @@ create table batch (
 create table blog_comment (
   id                        bigint not null,
   article_id                bigint not null,
+  created_on                timestamp not null,
   message                   TEXT,
   date                      timestamp,
   by_id                     bigint,
@@ -123,6 +129,7 @@ create table blog_comment (
 create table blog_comment_reply (
   id                        bigint not null,
   blog_comment_id           bigint not null,
+  created_on                timestamp not null,
   message                   TEXT,
   date                      timestamp,
   by_id                     bigint,
@@ -135,16 +142,19 @@ create table blog_comment_reply (
 
 create table clinic (
   id                        bigint not null,
+  created_on                timestamp not null,
   name                      varchar(255),
   contact_person_name       varchar(255),
   contact_no                varchar(255),
   address_id                bigint,
+  last_update               timestamp not null,
   constraint pk_clinic primary key (id))
 ;
 
 create table dcrline_item (
   id                        bigint not null,
   daily_call_report_id      bigint not null,
+  created_on                timestamp not null,
   doctor_id                 bigint,
   in_time                   timestamp,
   out_time                  timestamp,
@@ -157,6 +167,7 @@ create table dcrline_item (
 
 create table daily_call_report (
   id                        bigint not null,
+  created_on                timestamp not null,
   for_date                  timestamp,
   submitter_id              bigint,
   approver_id               bigint,
@@ -173,6 +184,7 @@ create table daily_call_report (
 create table day_schedule (
   id                        bigint not null,
   doctor_clinic_info_id     bigint not null,
+  created_on                timestamp not null,
   day                       varchar(9),
   from_time                 varchar(255),
   to_time                   varchar(255),
@@ -185,6 +197,7 @@ create table day_schedule (
 
 create table diagnostic_centre (
   id                        bigint not null,
+  created_on                timestamp not null,
   name                      varchar(255),
   contact_person            varchar(255),
   address_id                bigint,
@@ -202,6 +215,7 @@ create table diagnostic_centre (
 
 create table diagnostic_centre_prescription_info (
   id                        bigint not null,
+  created_on                timestamp not null,
   s                         varchar(255),
   diagnostic_centre_id      bigint,
   prescription_id           bigint,
@@ -218,6 +232,7 @@ create table diagnostic_centre_prescription_info (
 create table diagnostic_order (
   id                        bigint not null,
   diagnostic_centre_id      bigint not null,
+  created_on                timestamp not null,
   prescription_id           bigint,
   diagnostic_order_status   varchar(15),
   received_date             timestamp,
@@ -231,6 +246,7 @@ create table diagnostic_order (
 create table diagnostic_report (
   id                        bigint not null,
   diagnostic_order_id       bigint not null,
+  created_on                timestamp not null,
   file_name                 varchar(255),
   file_content              bytea,
   master_diagnostic_test_id bigint,
@@ -245,6 +261,7 @@ create table diagnostic_report (
 
 create table diagnostic_representative (
   id                        bigint not null,
+  created_on                timestamp not null,
   app_user_id               bigint,
   patient_id                bigint,
   diagnostic_type           varchar(255),
@@ -257,6 +274,7 @@ create table diagnostic_representative (
 create table diagnostic_test (
   id                        bigint not null,
   diagnostic_centre_id      bigint not null,
+  created_on                timestamp not null,
   name                      varchar(255),
   description               TEXT,
   last_update               timestamp not null,
@@ -266,6 +284,7 @@ create table diagnostic_test (
 create table diagnostic_test_line_item (
   id                        bigint not null,
   prescription_id           bigint not null,
+  created_on                timestamp not null,
   master_diagnostic_test_id bigint,
   full_name_of_diagnostic_test varchar(255),
   remarks                   TEXT,
@@ -275,6 +294,7 @@ create table diagnostic_test_line_item (
 
 create table doctor (
   id                        bigint not null,
+  created_on                timestamp not null,
   app_user_id               bigint,
   registration_number       varchar(255),
   position                  varchar(255),
@@ -291,6 +311,7 @@ create table doctor (
 
 create table doctor_assistant (
   id                        bigint not null,
+  created_on                timestamp not null,
   app_user_id               bigint,
   degree                    varchar(255),
   experience                varchar(255),
@@ -301,6 +322,7 @@ create table doctor_assistant (
 create table doctor_award (
   id                        bigint not null,
   doctor_id                 bigint not null,
+  created_on                timestamp not null,
   award_name                varchar(255),
   awarded_by                varchar(255),
   year                      varchar(255),
@@ -312,6 +334,7 @@ create table doctor_award (
 
 create table doctor_clinic_info (
   id                        bigint not null,
+  created_on                timestamp not null,
   clinic_id                 bigint,
   doctor_id                 bigint,
   slot                      integer,
@@ -324,6 +347,7 @@ create table doctor_clinic_info (
 create table doctor_diagnostic_test (
   id                        bigint not null,
   doctor_id                 bigint not null,
+  created_on                timestamp not null,
   name                      varchar(255),
   description               TEXT,
   last_update               timestamp not null,
@@ -333,6 +357,7 @@ create table doctor_diagnostic_test (
 create table doctor_education (
   id                        bigint not null,
   doctor_id                 bigint not null,
+  created_on                timestamp not null,
   institution_name          varchar(255),
   degree                    varchar(255),
   from_year                 integer,
@@ -345,6 +370,7 @@ create table doctor_education (
 create table doctor_experience (
   id                        bigint not null,
   doctor_id                 bigint not null,
+  created_on                timestamp not null,
   institution_name          varchar(255),
   position                  varchar(255),
   description               TEXT,
@@ -357,6 +383,7 @@ create table doctor_experience (
 create table doctor_product (
   id                        bigint not null,
   doctor_id                 bigint not null,
+  created_on                timestamp not null,
   medicine_name             varchar(255),
   brand_name                varchar(255),
   salt                      varchar(255),
@@ -371,6 +398,7 @@ create table doctor_product (
 create table doctor_publication (
   id                        bigint not null,
   doctor_id                 bigint not null,
+  created_on                timestamp not null,
   name                      varchar(255),
   article_for               varchar(255),
   year                      varchar(255),
@@ -386,6 +414,7 @@ create table doctor_publication (
 create table doctor_social_work (
   id                        bigint not null,
   doctor_id                 bigint not null,
+  created_on                timestamp not null,
   title                     varchar(255),
   description               TEXT,
   last_update               timestamp not null,
@@ -394,6 +423,7 @@ create table doctor_social_work (
 
 create table feedback (
   id                        bigint not null,
+  created_on                timestamp not null,
   app_user_id               bigint,
   name                      varchar(255),
   role                      varchar(16),
@@ -408,6 +438,7 @@ create table feedback (
 
 create table file_entity (
   id                        bigint not null,
+  created_on                timestamp not null,
   file_name                 varchar(255),
   mime_type                 varchar(255),
   byte_content              bytea,
@@ -417,6 +448,7 @@ create table file_entity (
 
 create table head_quarter (
   id                        bigint not null,
+  created_on                timestamp not null,
   state                     varchar(35),
   name                      varchar(255),
   last_update               timestamp not null,
@@ -427,6 +459,7 @@ create table head_quarter (
 create table inventory (
   id                        bigint not null,
   pharmacy_id               bigint not null,
+  created_on                timestamp not null,
   product_id                bigint,
   shelf_no                  varchar(255),
   product_quantity          integer,
@@ -437,6 +470,7 @@ create table inventory (
 
 create table master_diagnostic_test (
   id                        bigint not null,
+  created_on                timestamp not null,
   name                      varchar(255),
   description               TEXT,
   last_update               timestamp not null,
@@ -445,6 +479,7 @@ create table master_diagnostic_test (
 
 create table master_product (
   id                        bigint not null,
+  created_on                timestamp not null,
   medicine_name             varchar(255),
   brand_name                varchar(255),
   salt                      varchar(255),
@@ -457,6 +492,7 @@ create table master_product (
 ;
 
 create table master_sig_code (
+  created_on                timestamp not null,
   code                      varchar(255),
   description               TEXT,
   last_update               timestamp not null)
@@ -464,6 +500,7 @@ create table master_sig_code (
 
 create table master_specialization (
   id                        bigint not null,
+  created_on                timestamp not null,
   name                      TEXT,
   remarks                   TEXT,
   last_update               timestamp not null,
@@ -472,6 +509,7 @@ create table master_specialization (
 
 create table medical_representative (
   id                        bigint not null,
+  created_on                timestamp not null,
   app_user_id               bigint,
   region_alloted            varchar(255),
   company_name              varchar(255),
@@ -492,6 +530,7 @@ create table medical_representative (
 create table medicine_line_item (
   id                        bigint not null,
   prescription_id           bigint not null,
+  created_on                timestamp not null,
   medicine_id               bigint,
   full_name_of_medicine     varchar(255),
   medicine_full_name        varchar(255),
@@ -504,6 +543,7 @@ create table medicine_line_item (
 
 create table order_line_item (
   id                        bigint not null,
+  created_on                timestamp not null,
   product_id                bigint,
   quantity                  float,
   batch_no                  varchar(255),
@@ -516,6 +556,7 @@ create table order_line_item (
 
 create table patient (
   id                        bigint not null,
+  created_on                timestamp not null,
   app_user_id               bigint,
   age                       varchar(255),
   last_update               timestamp not null,
@@ -524,6 +565,7 @@ create table patient (
 
 create table patient_doctor_info (
   id                        bigint not null,
+  created_on                timestamp not null,
   doctor_id                 bigint,
   patient_id                bigint,
   last_update               timestamp not null,
@@ -532,6 +574,7 @@ create table patient_doctor_info (
 
 create table pharmaceutical_company (
   id                        bigint not null,
+  created_on                timestamp not null,
   name                      varchar(255),
   admin_mr_id               bigint,
   last_update               timestamp not null,
@@ -540,6 +583,7 @@ create table pharmaceutical_company (
 
 create table pharmaceutical_product (
   id                        bigint not null,
+  created_on                timestamp not null,
   medicine_name             varchar(255),
   brand_name                varchar(255),
   salt                      varchar(255),
@@ -555,6 +599,7 @@ create table pharmaceutical_product (
 
 create table pharmacist (
   id                        bigint not null,
+  created_on                timestamp not null,
   app_user_id               bigint,
   pharmacy_id               bigint,
   category                  varchar(255),
@@ -564,6 +609,7 @@ create table pharmacist (
 
 create table pharmacy (
   id                        bigint not null,
+  created_on                timestamp not null,
   name                      varchar(255),
   address_id                bigint,
   contact_person            varchar(255),
@@ -585,6 +631,7 @@ create table pharmacy_info (
 
 create table pharmacy_order (
   id                        bigint not null,
+  created_on                timestamp not null,
   prescription_id           bigint,
   pharmacy_prescription_status varchar(9),
   ordered_date              timestamp,
@@ -597,6 +644,7 @@ create table pharmacy_order (
 
 create table pharmacy_prescription_info (
   id                        bigint not null,
+  created_on                timestamp not null,
   pharmacy_id               bigint,
   prescription_id           bigint,
   pharmacy_prescription_status varchar(9),
@@ -611,6 +659,7 @@ create table pharmacy_prescription_info (
 
 create table pharmacy_product (
   id                        bigint not null,
+  created_on                timestamp not null,
   medicine_name             varchar(255),
   brand_name                varchar(255),
   salt                      varchar(255),
@@ -626,6 +675,7 @@ create table pharmacy_product (
 
 create table prescription (
   id                        bigint not null,
+  created_on                timestamp not null,
   doctor_id                 bigint,
   clinic_id                 bigint,
   patient_id                bigint,
@@ -640,6 +690,7 @@ create table prescription (
 
 create table question_and_answer (
   id                        bigint not null,
+  created_on                timestamp not null,
   question                  TEXT,
   answer                    TEXT,
   question_date             timestamp,
@@ -653,6 +704,7 @@ create table question_and_answer (
 create table sample (
   id                        bigint not null,
   tpline_item_id            bigint not null,
+  created_on                timestamp not null,
   dcr_line_item_id          bigint,
   pharmaceutical_product_id bigint,
   quantity                  integer,
@@ -663,6 +715,7 @@ create table sample (
 create table show_cased_product (
   id                        bigint not null,
   pharmacy_id               bigint not null,
+  created_on                timestamp not null,
   name                      varchar(255),
   description               TEXT,
   mrp                       float,
@@ -673,6 +726,7 @@ create table show_cased_product (
 create table show_cased_service (
   id                        bigint not null,
   diagnostic_centre_id      bigint not null,
+  created_on                timestamp not null,
   name                      varchar(255),
   description               TEXT,
   cost                      float,
@@ -682,6 +736,7 @@ create table show_cased_service (
 
 create table sig_code (
   doctor_id                 bigint not null,
+  created_on                timestamp not null,
   code                      varchar(255),
   description               TEXT,
   last_update               timestamp not null)
@@ -689,6 +744,7 @@ create table sig_code (
 
 create table social_user (
   id                        bigint not null,
+  created_on                timestamp not null,
   image                     bytea,
   name                      varchar(255),
   username                  varchar(255),
@@ -705,6 +761,7 @@ create table social_user (
 create table tpline_item (
   id                        bigint not null,
   tour_plan_id              bigint not null,
+  created_on                timestamp not null,
   date                      timestamp,
   day_status                varchar(11),
   pob                       integer,
@@ -718,6 +775,7 @@ create table tpline_item (
 create table tour_plan (
   id                        bigint not null,
   medical_representative_id bigint not null,
+  created_on                timestamp not null,
   for_month                 timestamp,
   submit_date               timestamp,
   last_update               timestamp not null,

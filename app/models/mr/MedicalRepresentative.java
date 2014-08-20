@@ -87,10 +87,6 @@ public class MedicalRepresentative extends BaseEntity {
 			bean.email = this.appUser.email;
 		}
 
-		if (this.appUser != null) {
-			bean.password = this.appUser.password;
-		}
-
 		if (this.regionAlloted != null) {
 			bean.regionAlloted = this.regionAlloted;
 		}

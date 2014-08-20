@@ -7,6 +7,8 @@ import javax.persistence.MappedSuperclass;
 import javax.persistence.Version;
 import javax.validation.constraints.NotNull;
 
+import com.avaje.ebean.annotation.CreatedTimestamp;
+
 import play.db.ebean.Model;
 
 @SuppressWarnings("serial")
@@ -15,6 +17,7 @@ public abstract class BaseEntity extends Model {
 
 
 	@NotNull
+	@CreatedTimestamp
 	Timestamp createdOn;
 
 	@Version
