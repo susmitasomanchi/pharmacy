@@ -372,7 +372,8 @@ public class PublicController extends Controller{
 				// Async Execution
 				Promise.promise(new Function0<Integer>() {
 					//@Override
-				public Integer apply() {
+					@Override
+					public Integer apply() {
 						int result = 0;
 						if(!EmailService.sendVerificationConformMessage(appUser)){
 							result=1;
@@ -663,7 +664,7 @@ public class PublicController extends Controller{
 		return redirect(routes.Application.index());
 	}
 
-/**
+	/**
 	 * @author Prathyusha
 	 * Action to render the help document page
 	 * GET/feedback
@@ -680,13 +681,17 @@ public class PublicController extends Controller{
 	 * Action to perge the doctor details
 	 * POST/feedback
 	 */
-	public static Result pergeDoctor(){
+	public static Result purgeDoctor(){
 		/*final Doctor doctor = Doctor.find.byId(2L);
 		Logger.info(""+doctor.appUser.name);
 
 		doctor.delete();*/
 		final AppUser appUser = AppUser.find.byId(2L);
 		final Doctor doctor2 = Doctor.find.where().eq("appUser", appUser).findUnique();
+		final List<DoctorClinicInfo> doctorClinicInfos = DoctorClinicInfo.find.where().eq("doctor", doctor2).findList();
+		for (final DoctorClinicInfo doctorClinicInfo : doctorClinicInfos) {
+			DoctorClinicInfo.find.byId(doctorClinicInfo.id).delete();
+		}
 		doctor2.delete();
 		appUser.delete();
 
