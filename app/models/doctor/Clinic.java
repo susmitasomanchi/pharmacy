@@ -7,11 +7,12 @@ import javax.persistence.Id;
 import javax.persistence.OneToOne;
 
 import models.Address;
+import models.BaseEntity;
 import play.db.ebean.Model;
 
 @SuppressWarnings("serial")
 @Entity
-public class Clinic extends Model{
+public class Clinic extends BaseEntity{
 
 	@GeneratedValue(strategy=GenerationType.AUTO)
 	@Id

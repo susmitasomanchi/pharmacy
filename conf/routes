@@ -201,11 +201,12 @@ GET		/create/master									controllers.SampleDataController.createMasterMedicin
 GET		/create/spez									controllers.SampleDataController.createDocSpez()
 GET		/sms											controllers.SampleDataController.testurl()
 
-GET		/admin/specialization-list						controllers.MednetworkAdminController.getSpecializationList()
+GET		/admin/specializations							controllers.MednetworkAdminController.getSpecializationList()
 POST	/admin/add-specialization						controllers.MednetworkAdminController.addSpecialization()
 POST	/admin/update-specialization					controllers.MednetworkAdminController.updateSpecialization()
 GET		/admin/feedback-list							controllers.MednetworkAdminController.getFeedbackList()
 GET		/admin/delete-feedback/:id						controllers.MednetworkAdminController.deleteFeedback(id: Long)
+GET		/admin/get-user-date-between-dates/:from/:to 	controllers.MednetworkAdminController.getUserDateBetweenDates(from: String, to: String)
 
 #############################	PRODUCTION	#################################################################################
 
@@ -402,8 +403,7 @@ GET		/admin						controllers.SampleDataController.mednetAdmin()
 
 #Cron
 GET		/cron/start						controllers.CronController.startCron()
+
 # Map static resources from the /public folder to the /assets URL path
 GET    /assets/*file                                    controllers.Assets.at(path="/public", file)
-
-
 

@@ -16,6 +16,9 @@
 <script>
 $("#searchInput").keyup(function (e) {
     if (e.keyCode == 13) {
+    	if($('#searchInput').val().trim() == ''){
+        	return false;
+        }
     	window.location.href='/doctor/search/'+$('#searchInput').val().trim();
     }
 });
@@ -70,7 +73,7 @@ margin-bottom:0px;
 				<p style="font-size:18px"><b>@doctor.appUser.name</b></p>
 				<p style="font-size:14px"><b>@doctor.getSpecializations()</b></p>
 				<h6>@doctor.degree</h6>
-				<h6>@doctor.experience</h6>
+				<h6>Ex: @doctor.getYearsOfExperience() years</h6>
 				<br>
 				</div>
 				<div class="col-md-4 pull-right" style="width:30%;padding-left:3px;padding-top:60px">

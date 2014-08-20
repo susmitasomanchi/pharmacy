@@ -17,9 +17,9 @@ import javax.persistence.OneToOne;
 import models.Address;
 import models.BaseEntity;
 import models.FileEntity;
-import models.diagnostic.DiagnosticOrder;
-import models.doctor.Prescription;
 import beans.PharmacyBean;
+
+import play.db.ebean.Model.Finder;
 
 @SuppressWarnings("serial")
 @Entity
@@ -27,7 +27,7 @@ public class Pharmacy extends BaseEntity {
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO)
 	public  Long id;
-	
+
 	public String name;
 
 	@OneToOne
@@ -42,7 +42,7 @@ public class Pharmacy extends BaseEntity {
 
 	@OneToOne
 	public Pharmacist adminPharmacist;
-	
+
 	@Lob
 	public byte[] backgroundImage;
 
@@ -69,11 +69,11 @@ public class Pharmacy extends BaseEntity {
 
 	/*@OneToMany(cascade=CascadeType.ALL)
 	public List<PharmacyOrder> pharmacyOrderList = new ArrayList<PharmacyOrder>();
-*/
+	 */
 	@OneToMany(cascade=CascadeType.ALL)
 	public List<Inventory> inventoryList = new ArrayList<Inventory>();
-	
-	
+
+
 
 	public static Finder<Long, Pharmacy> find = new Finder<Long, Pharmacy>(Long.class, Pharmacy.class);
 

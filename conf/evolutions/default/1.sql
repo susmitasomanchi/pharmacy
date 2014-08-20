@@ -40,6 +40,7 @@ create table app_user (
   email_confirmation_key    TEXT,
   mobile_number_confirmation_key TEXT,
   forgot_password_confirmation_key TEXT,
+  test                      varchar(255),
   last_update               timestamp not null,
   constraint ck_app_user_sex check (sex in ('FEMALE','OTHER','MALE')),
   constraint ck_app_user_role check (role in ('PATIENT','ADMIN_DIAGREP','DOCTOR','PHARMACIST','MEDNETWORK_ADMIN','ADMIN_PHARMACIST','BLOG_ADMIN','ADMIN_MR','MR','DIAGREP','DOCTOR_SECRETARY')),

@@ -1,13 +1,27 @@
 package controllers;
 
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
+import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
-import actions.BasicAuth;
+import org.json.JSONArray;
+import org.json.JSONObject;
+
 import models.Alert;
+import models.AppUser;
 import models.Feedback;
+import models.diagnostic.DiagnosticCentre;
+import models.doctor.Doctor;
 import models.doctor.MasterSpecialization;
+import models.patient.Patient;
+import models.pharmacist.Pharmacy;
+import play.Logger;
 import play.mvc.Controller;
 import play.mvc.Result;
+import actions.BasicAuth;
 
 @BasicAuth
 public class MednetworkAdminController extends Controller {
@@ -17,7 +31,7 @@ public class MednetworkAdminController extends Controller {
 	 * @return
 	 */
 	public static Result getSpecializationList(){
-		final List<MasterSpecialization> masterSpecializations = MasterSpecialization.find.all();
+		final List<MasterSpecialization> masterSpecializations = MasterSpecialization.find.orderBy("name").findList();
 		return ok(views.html.mednetAdmin.specializationList.render(masterSpecializations));
 	}
 
@@ -87,6 +101,38 @@ public class MednetworkAdminController extends Controller {
 		Feedback.find.byId(id).delete();
 		flash().put("alert", new Alert("alert-info"," Feedback deleted.").toString());
 		return redirect(routes.MednetworkAdminController.getFeedbackList());
+	}
+
+
+	/**
+	 * GET	/admin/get-user-date-between-dates/:from/:to
+	 * Get count of Appusers and other roles created between :from and :to
+	 */
+	public static Result getUserDateBetweenDates(final String fromDate, final String toDate){
+		final Map<String, Integer> map = new HashMap<String, Integer>();
+		try{
+			final SimpleDateFormat sdf = new SimpleDateFormat("dd-MM-yyyy");
+			final Date from = sdf.parse(fromDate.trim());
+			final Calendar cal = Calendar.getInstance();
+			cal.setTime(sdf.parse(toDate.trim()));
+			cal.set(Calendar.HOUR_OF_DAY, 23);
+			cal.set(Calendar.MINUTE, 59);
+			cal.set(Calendar.SECOND, 59);
+			cal.set(Calendar.MILLISECOND, 999);
+			final Date to = cal.getTime();
+			map.put("error", 0);
+			map.put("appUsers", AppUser.find.where().ge("createdOn", from).le("createdOn", to).findRowCount());
+			map.put("patients", Patient.find.where().ge("createdOn", from).le("createdOn", to).findRowCount());
+			map.put("doctors", Doctor.find.where().ge("createdOn", from).le("createdOn", to).findRowCount());
+			map.put("pharmacies", Pharmacy.find.where().ge("createdOn", from).le("createdOn", to).findRowCount());
+			map.put("dc", DiagnosticCentre.find.where().ge("createdOn", from).le("createdOn", to).findRowCount());
+			return ok(new JSONObject(map).toString());
+		}
+		catch (final Exception e){
+			e.printStackTrace();
+			map.put("error", -1);
+			return ok(new JSONObject(map).toString());
+		}
 	}
 
 }

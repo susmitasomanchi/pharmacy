@@ -18,7 +18,6 @@ public class Application extends Controller {
 	public static Form<MedicalRepresentative> mrForm=Form.form(MedicalRepresentative.class);
 
 	public static Result index() {
-		//return ok(views.html.comingsoon.render(loginForm));
 		return ok(views.html.home.render(loginForm));
 	}
 
@@ -27,45 +26,11 @@ public class Application extends Controller {
 	}
 
 
-	/*public static Result medicalRepresentative(){
-		return ok(views.html.mr.medicalRepresentative.render(mrForm));
-
-	}*/
-
-	/*public static Result medicalRepresentativeProccess(){
-		final Form<MedicalRepresentative> filledForm=mrForm.bindFromRequest();
-
-		if(filledForm.hasErrors()) {
-			Logger.info("*** user bad request");
-			return badRequest(views.html.mr.medicalRepresentative.render(filledForm));
-		}
-		else {
-			//final SalesRep salesRepForm = filledForm.get();
-			final MedicalRepresentative appUser = filledForm.get();
-			Logger.info("*** user object ");
-
-			if(appUser.id == null) {
-				//final AppUser appUser = salesRepForm.toEntity();
-				appUser.save();
-				final String message = flash("success");
-
-			}
-			else {
-				appUser.update();
-			}
-		}
-
-
-		return ok("salesrepresentr information added");
-	}*/
-	//diagnostic representator proccessing
-
-
 	public static Result diagnosticRep(){
-
 		return ok(views.html.diagnostic.diagnosticRep.render(diagnosticRepForm));
-
 	}
+
+
 
 	public static Result  diagnosticRepProccess(){
 		final Form<DiagnosticRepresentative> filledForm=diagnosticRepForm.bindFromRequest();
@@ -105,8 +70,7 @@ public class Application extends Controller {
 	 * url: /sitemap.xml
 	 * */
 	public static Result sitemap(){
-		return ok(views.xml.sitemap.render("http://"));
+		return ok(views.xml.sitemap.render("https://"));
 	}
-
 
 }
