@@ -1,0 +1,12 @@
+@(dataForm: play.data.Form[beans.DesignationBean])
+@import helper._
+@import helper.twitterBootstrap._
+@main("Designation form") {
+	
+ @helper.form(action=routes.MRController.addDesignationProccess()) {
+	
+	@helper.inputText(dataForm("name"),'_label->"Name")
+	@helper.inputText(dataForm("description"),'_label->"Description")
+	<input type="submit" value="Add"/>
+	}
+}

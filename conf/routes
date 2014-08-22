@@ -378,6 +378,10 @@ POST    /mr/add                                    controllers.MRController.medi
 #POST    /mr/editmr                                 controllers.MRController.medicalRepresentativeProccessUpdate()
 GET     /mr/del	                                   controllers.MRController.removeMR(id: Long)
 GET     /mr/edit/:id	                           controllers.MRController.editMR(id: Long)
+GET		/mr/add-designation							controllers.MRController.addDesignation()
+POST	/mr/add-designation							controllers.MRController.addDesignationProccess()
+
+
 GET    /mr/add-value                               controllers.SampleDataController.values()
 
 

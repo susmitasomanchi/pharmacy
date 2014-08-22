@@ -21,6 +21,7 @@ import models.mr.DCRLineItem;
 import models.mr.DCRStatus;
 import models.mr.DailyCallReport;
 import models.mr.DayStatus;
+import models.mr.Designation;
 import models.mr.HeadQuarter;
 import models.mr.MedicalRepresentative;
 import models.mr.PharmaceuticalCompany;
@@ -43,6 +44,7 @@ import play.mvc.Result;
 import utils.EmailService;
 import utils.GenerateRandomString;
 import actions.BasicAuth;
+import beans.DesignationBean;
 import beans.MedicalRepresentativeBean;
 
 @BasicAuth
@@ -60,6 +62,7 @@ public class MRController extends Controller {
 			.form(DailyCallReport.class);
 	public static Form<MedicalRepresentativeBean> mrForm = Form
 			.form(MedicalRepresentativeBean.class);
+	public static Form<DesignationBean> designationBeanForm = Form.form(DesignationBean.class);
 
 	/**
 	 * 
@@ -71,10 +74,10 @@ public class MRController extends Controller {
 	 */
 
 	public static Result addMR() {
-		final MedicalRepresentative mr = new MedicalRepresentative();
+		final MedicalRepresentative adminMr = LoginController.getLoggedInUser().getMedicalRepresentative();
 		final List<MedicalRepresentative> mrList = MedicalRepresentative.find
 				.where().eq("appUser.role", "MR").findList();
-		return ok(views.html.mr.medicalRepresentative.render(mrForm, mrList));
+		return ok(views.html.mr.medicalRepresentative.render(mrForm,adminMr,mrList));
 	}
 
 	/**
@@ -89,7 +92,7 @@ public class MRController extends Controller {
 	 */
 
 	public static Result medicalRepresentativeProccess() {
-
+		final MedicalRepresentative adminMr = LoginController.getLoggedInUser().getMedicalRepresentative();
 		final Form<MedicalRepresentativeBean> filledForm = mrForm
 				.bindFromRequest();
 		if (filledForm.hasErrors()) {
@@ -97,7 +100,7 @@ public class MRController extends Controller {
 			final List<MedicalRepresentative> mrList = MedicalRepresentative.find
 					.where().eq("appUser.role", "MR").findList();
 			return ok(views.html.mr.medicalRepresentative
-					.render(mrForm, mrList));
+					.render(mrForm,adminMr,mrList));
 		}
 
 		else {
@@ -112,8 +115,7 @@ public class MRController extends Controller {
 			final PharmaceuticalCompany company = LoginController
 					.getLoggedInUser().getMedicalRepresentative().pharmaceuticalCompany;
 
-			final MedicalRepresentative adminMr = LoginController
-					.getLoggedInUser().getMedicalRepresentative();
+			
 			String generatedPassword = "";
 			if (mr.id == null) {
 				
@@ -270,6 +272,7 @@ public class MRController extends Controller {
 	 */
 
 	public static Result editMR(final Long id) {
+		final MedicalRepresentative adminMr = LoginController.getLoggedInUser().getMedicalRepresentative();
 
 		final MedicalRepresentative filledMr = MedicalRepresentative.find
 				.byId(id);
@@ -282,7 +285,7 @@ public class MRController extends Controller {
 		// =AppUser.find.where().eq("role","MR").findList();
 		final List<MedicalRepresentative> mrList = MedicalRepresentative.find
 				.where().eq("appUser.role", "MR").findList();
-		return ok(views.html.mr.medicalRepresentative.render(editForm, mrList));
+		return ok(views.html.mr.medicalRepresentative.render(editForm,adminMr,mrList));
 	}
 
 	/**
@@ -1137,4 +1140,39 @@ public class MRController extends Controller {
 		myMr.update();
 		return ok("visibility modified successfully");
 	}
+		/**
+		 * @author anand
+		 * 
+		 * @description :	this method is rendering the adddesignation page to add designation for company
+		 * 
+		 * url : GET		/mr/add-designation		
+		 * 
+		 * */
+	
+		public static Result addDesignation(){
+			return ok(views.html.mr.addDesignation.render(designationBeanForm));
+		}
+			
+		/**
+		 * @author anand
+		 * 
+		 * @description :	AdminMr is adding the all designation for their company
+		 * 
+		 * url : POST		/mr/add-designation
+		 * 
+		 * */
+	
+			public static Result addDesignationProccess(){
+				
+				MedicalRepresentative loggedInMr = LoginController.getLoggedInUser().getMedicalRepresentative();
+				final Form<DesignationBean> filledform = designationBeanForm.bindFromRequest(); 
+				Designation designation = filledform.get().toDesignation();
+				Logger.info("name : "+designation.name);
+				loggedInMr.pharmaceuticalCompany.designationList.add(designation);
+				loggedInMr.update();
+				
+				
+				return ok("Designation added.");
+			}
+		
 }
