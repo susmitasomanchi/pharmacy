@@ -7,7 +7,10 @@ import javax.persistence.MappedSuperclass;
 import javax.persistence.Version;
 import javax.validation.constraints.NotNull;
 
+import play.Logger;
 import play.db.ebean.Model;
+
+import com.avaje.ebean.annotation.CreatedTimestamp;
 
 @SuppressWarnings("serial")
 @MappedSuperclass
@@ -15,14 +18,17 @@ public abstract class BaseEntity extends Model {
 
 
 	@NotNull
-	Timestamp createdOn;
+	@CreatedTimestamp
+	public Timestamp createdOn;
 
 	@Version
-	Timestamp lastUpdate;
+	public Timestamp lastUpdate;
 
-	@Override
+	/*@Override
 	public void save() {
-		this.createdOn = new Timestamp(new Date().getTime());
+		final Date now = new Date();
+		this.createdOn = new Timestamp(now.getTime());
+		Logger.info("createdOn: "+this.createdOn);
 		super.save();
-	}
+	}*/
 }

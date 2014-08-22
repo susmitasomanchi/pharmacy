@@ -1,7 +1,6 @@
 package controllers;
 
 
-import java.awt.geom.Area;
 import java.util.Date;
 import java.util.List;
 
@@ -11,6 +10,8 @@ import models.MasterDiagnosticTest;
 import models.MasterProduct;
 import models.Role;
 import models.diagnostic.DiagnosticCentrePrescriptionInfo;
+import models.doctor.Appointment;
+import models.doctor.AppointmentStatus;
 import models.doctor.Clinic;
 import models.doctor.Day;
 import models.doctor.DaySchedule;
@@ -340,6 +341,22 @@ public class SampleDataController extends Controller {
 		return ok();
 	}
 
+	public static Result createAppointment(){
+		final Appointment appointment = new Appointment();
+		appointment.appointmentStatus = AppointmentStatus.APPROVED;
+		appointment.appointmentTime = new Date();
+		appointment.apporovedBy = AppUser.find.byId(82L);
+		appointment.requestedBy = AppUser.find.byId(21L);
+		appointment.bookedOn = new Date();
+		appointment.problemStatement = "not feeling well";
+		final DoctorClinicInfo doctorClinicInfo = new DoctorClinicInfo();
+		doctorClinicInfo.doctor = Doctor.find.byId(61L);
+		doctorClinicInfo.clinic = Clinic.find.byId(1L);
+		doctorClinicInfo.save();
+		appointment.doctorClinicInfo = doctorClinicInfo;
+		appointment.save();
+		return ok();
+	}
 
 	public static Result createDocSpez(){
 		MasterSpecialization spez;

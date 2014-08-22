@@ -16,6 +16,7 @@ create table address (
   pin_code                  varchar(255),
   fetched_pin_code          varchar(255),
   country                   varchar(27),
+  created_on                timestamp not null,
   last_update               timestamp not null,
   constraint ck_address_state check (state in ('DADRA_AND_NAGAR_HAVELI','KERALA','WEST_BENGAL','JAMMU_AND_KASHMIR','HIMACHAL_PRADESH','MANIPUR','MIZORAM','MAHARASHTRA','CHANDIGARH','JHARKHAND','ASSAM','UTTARAKHAND','SIKKIM','KARNATAKA','CHHATTISGARH','ANDHRA_PRADESH','NATIONAL_CAPITAL_TERRITORY_OF_DELHI','UTTAR_PRADESH','PUDUCHERRY','ANDAMAN_AND_NICOBAR_ISLANDS','TRIPURA','GOA','DAMAN_AND_DIU','NAGALAND','ODISHA','TAMIL_NADU','BIHAR','RAJASTHAN','LAKSHADWEEP','HARYANA','MEGHALAYA','PUNJAB','ARUNACHAL_PRADESH','GUJARAT','TELANGANA','MADHYA_PRADESH')),
   constraint ck_address_country check (country in ('ARMENIA','ANGUILLA','AUSTRALIA','ARUBA','CHAD','BOSNIA_AND_HERZEGOVINA','ANTIGUA_AND_BARBUDA','CHINA','ASHMORE_AND_CARTIER_ISLANDS','AMERICAN_SAMOA','COMOROS','INDIA','BOLIVIA','CAMEROON','PAKISTAN','DENMARK','BURUNDI','CAPE_VERDE','BULGARIA','ARGENTINA','DJIBOUTI','BELGIUM','ALBANIA','BAHRAIN','ALGERIA','ECUADOR','BELARUS','BARBADOS','BURMA','CHILE','BRUNEI','BELIZE','AZERBAIJAN','BHUTAN','CANADA','AFGHANISTAN','ANDORRA','CAMBODIA','AKROTIRI','AUSTRIA','BOUVET_ISLAND','BERMUDA','DOMINICA','ANGOLA','EGYPT','BENIN','UNITED_STATES','DHEKELIA','BOTSWANA','CUBA','ANTARCTICA','BRAZIL','CYPRUS','BURKINA_FASO','BANGLADESH','COLOMBIA')),
@@ -40,7 +41,7 @@ create table app_user (
   email_confirmation_key    TEXT,
   mobile_number_confirmation_key TEXT,
   forgot_password_confirmation_key TEXT,
-  test                      varchar(255),
+  created_on                timestamp not null,
   last_update               timestamp not null,
   constraint ck_app_user_sex check (sex in ('FEMALE','OTHER','MALE')),
   constraint ck_app_user_role check (role in ('PATIENT','ADMIN_DIAGREP','DOCTOR','PHARMACIST','MEDNETWORK_ADMIN','ADMIN_PHARMACIST','BLOG_ADMIN','ADMIN_MR','MR','DIAGREP','DOCTOR_SECRETARY')),
@@ -56,6 +57,7 @@ create table appointment (
   problem_statement         TEXT,
   doctor_clinic_info_id     bigint,
   booked_on                 timestamp,
+  created_on                timestamp not null,
   last_update               timestamp not null,
   constraint ck_appointment_appointment_status check (appointment_status in ('CANCELLED','REQUESTED','APPROVED','AVAILABLE','SERVED')),
   constraint pk_appointment primary key (id))
@@ -75,6 +77,7 @@ create table article (
   html_meta_description     TEXT,
   html_keywords             TEXT,
   category_id               bigint,
+  created_on                timestamp not null,
   last_update               timestamp not null,
   constraint pk_article primary key (id))
 ;
@@ -89,6 +92,7 @@ create table article_category (
   slug_url                  TEXT,
   thumbnail                 bytea,
   image                     bytea,
+  created_on                timestamp not null,
   last_update               timestamp not null,
   constraint pk_article_category primary key (id))
 ;
@@ -102,6 +106,7 @@ create table batch (
   quantity                  integer,
   tax                       float,
   discount                  float,
+  created_on                timestamp not null,
   last_update               timestamp not null,
   expiry_date               timestamp not null,
   constraint pk_batch primary key (id))
@@ -115,6 +120,7 @@ create table blog_comment (
   by_id                     bigint,
   social_by_id              bigint,
   blog_commentator_type     varchar(8),
+  created_on                timestamp not null,
   last_update               timestamp not null,
   constraint ck_blog_comment_blog_commentator_type check (blog_commentator_type in ('GOOGLE','FACEBOOK','APP_USER')),
   constraint pk_blog_comment primary key (id))
@@ -128,6 +134,7 @@ create table blog_comment_reply (
   by_id                     bigint,
   social_by_id              bigint,
   blog_commentator_type     varchar(8),
+  created_on                timestamp not null,
   last_update               timestamp not null,
   constraint ck_blog_comment_reply_blog_commentator_type check (blog_commentator_type in ('GOOGLE','FACEBOOK','APP_USER')),
   constraint pk_blog_comment_reply primary key (id))
@@ -139,6 +146,8 @@ create table clinic (
   contact_person_name       varchar(255),
   contact_no                varchar(255),
   address_id                bigint,
+  created_on                timestamp not null,
+  last_update               timestamp not null,
   constraint pk_clinic primary key (id))
 ;
 
@@ -151,6 +160,7 @@ create table dcrline_item (
   pob                       integer,
   head_quater_id            bigint,
   remarks                   varchar(255),
+  created_on                timestamp not null,
   last_update               timestamp not null,
   constraint pk_dcrline_item primary key (id))
 ;
@@ -165,6 +175,7 @@ create table daily_call_report (
   response_on               timestamp,
   re_opened_date            timestamp,
   head_quarter_id           bigint,
+  created_on                timestamp not null,
   last_update               timestamp not null,
   constraint ck_daily_call_report_dcr_status check (dcr_status in ('REJECTED','DRAFT','APPROVED','REOPENED','SUBMITTED')),
   constraint pk_daily_call_report primary key (id))
@@ -177,6 +188,7 @@ create table day_schedule (
   from_time                 varchar(255),
   to_time                   varchar(255),
   requester                 varchar(16),
+  created_on                timestamp not null,
   last_update               timestamp not null,
   constraint ck_day_schedule_day check (day in ('MONDAY','SUNDAY','WEDNESDAY','THURSDAY','SATURDAY','TUESDAY','FRIDAY')),
   constraint ck_day_schedule_requester check (requester in ('PATIENT','ADMIN_DIAGREP','DOCTOR','PHARMACIST','MEDNETWORK_ADMIN','ADMIN_PHARMACIST','BLOG_ADMIN','ADMIN_MR','MR','DIAGREP','DOCTOR_SECRETARY')),
@@ -196,6 +208,7 @@ create table diagnostic_centre (
   diagnostic_rep_admin_id   bigint,
   search_index              TEXT,
   slug_url                  TEXT,
+  created_on                timestamp not null,
   last_update               timestamp not null,
   constraint pk_diagnostic_centre primary key (id))
 ;
@@ -210,6 +223,7 @@ create table diagnostic_centre_prescription_info (
   shared_date               timestamp,
   served_date               timestamp,
   patients_consent          boolean,
+  created_on                timestamp not null,
   last_update               timestamp not null,
   constraint ck_diagnostic_centre_prescription_info_diagnostic_centre_prescrition_status check (diagnostic_centre_prescrition_status in ('CANCELLED','RECEIVED','CONFIRMED','SERVED')),
   constraint pk_diagnostic_centre_prescriptio primary key (id))
@@ -223,6 +237,7 @@ create table diagnostic_order (
   received_date             timestamp,
   confirmed_date            timestamp,
   cancelled_date            timestamp,
+  created_on                timestamp not null,
   last_update               timestamp not null,
   constraint ck_diagnostic_order_diagnostic_order_status check (diagnostic_order_status in ('ORDER_CANCELLED','ORDER_RECEIVED','ORDER_CONFIRMED','ORDER_SERVED')),
   constraint pk_diagnostic_order primary key (id))
@@ -238,6 +253,7 @@ create table diagnostic_report (
   sample_collected_date     timestamp,
   report_generated_date     timestamp,
   remarks                   TEXT,
+  created_on                timestamp not null,
   last_update               timestamp not null,
   constraint ck_diagnostic_report_report_status check (report_status in ('SAMPLE_NOT_COLLECTED','REPORT_READY','SAMPLE_COLLECTED')),
   constraint pk_diagnostic_report primary key (id))
@@ -250,6 +266,7 @@ create table diagnostic_representative (
   diagnostic_type           varchar(255),
   file                      bytea,
   diagnostic_centre_id      bigint,
+  created_on                timestamp not null,
   last_update               timestamp not null,
   constraint pk_diagnostic_representative primary key (id))
 ;
@@ -259,6 +276,7 @@ create table diagnostic_test (
   diagnostic_centre_id      bigint not null,
   name                      varchar(255),
   description               TEXT,
+  created_on                timestamp not null,
   last_update               timestamp not null,
   constraint pk_diagnostic_test primary key (id))
 ;
@@ -269,6 +287,7 @@ create table diagnostic_test_line_item (
   master_diagnostic_test_id bigint,
   full_name_of_diagnostic_test varchar(255),
   remarks                   TEXT,
+  created_on                timestamp not null,
   last_update               timestamp not null,
   constraint pk_diagnostic_test_line_item primary key (id))
 ;
@@ -286,6 +305,7 @@ create table doctor (
   search_index              TEXT,
   slug_url                  TEXT,
   s                         varchar(255),
+  created_on                timestamp not null,
   last_update               timestamp not null,
   constraint pk_doctor primary key (id))
 ;
@@ -295,6 +315,7 @@ create table doctor_assistant (
   app_user_id               bigint,
   degree                    varchar(255),
   experience                varchar(255),
+  created_on                timestamp not null,
   last_update               timestamp not null,
   constraint pk_doctor_assistant primary key (id))
 ;
@@ -307,6 +328,7 @@ create table doctor_award (
   year                      varchar(255),
   description               TEXT,
   position                  integer,
+  created_on                timestamp not null,
   last_update               timestamp not null,
   constraint pk_doctor_award primary key (id))
 ;
@@ -318,6 +340,7 @@ create table doctor_clinic_info (
   slot                      integer,
   slot_mr                   integer,
   active                    boolean,
+  created_on                timestamp not null,
   last_update               timestamp not null,
   constraint pk_doctor_clinic_info primary key (id))
 ;
@@ -327,6 +350,7 @@ create table doctor_diagnostic_test (
   doctor_id                 bigint not null,
   name                      varchar(255),
   description               TEXT,
+  created_on                timestamp not null,
   last_update               timestamp not null,
   constraint pk_doctor_diagnostic_test primary key (id))
 ;
@@ -339,6 +363,7 @@ create table doctor_education (
   from_year                 integer,
   to_year                   integer,
   description               TEXT,
+  created_on                timestamp not null,
   last_update               timestamp not null,
   constraint pk_doctor_education primary key (id))
 ;
@@ -351,6 +376,7 @@ create table doctor_experience (
   description               TEXT,
   worked_from               integer,
   worked_to                 integer,
+  created_on                timestamp not null,
   last_update               timestamp not null,
   constraint pk_doctor_experience primary key (id))
 ;
@@ -365,6 +391,7 @@ create table doctor_product (
   description               varchar(255),
   units_per_pack            bigint,
   full_name                 varchar(255),
+  created_on                timestamp not null,
   last_update               timestamp not null,
   constraint pk_doctor_product primary key (id))
 ;
@@ -380,6 +407,7 @@ create table doctor_publication (
   content                   TEXT,
   image                     bytea,
   file                      bytea,
+  created_on                timestamp not null,
   last_update               timestamp not null,
   constraint pk_doctor_publication primary key (id))
 ;
@@ -389,6 +417,7 @@ create table doctor_social_work (
   doctor_id                 bigint not null,
   title                     varchar(255),
   description               TEXT,
+  created_on                timestamp not null,
   last_update               timestamp not null,
   constraint pk_doctor_social_work primary key (id))
 ;
@@ -402,6 +431,7 @@ create table feedback (
   date                      timestamp,
   ip_address                varchar(255),
   remarks                   TEXT,
+  created_on                timestamp not null,
   last_update               timestamp not null,
   constraint ck_feedback_role check (role in ('PATIENT','ADMIN_DIAGREP','DOCTOR','PHARMACIST','MEDNETWORK_ADMIN','ADMIN_PHARMACIST','BLOG_ADMIN','ADMIN_MR','MR','DIAGREP','DOCTOR_SECRETARY')),
   constraint pk_feedback primary key (id))
@@ -412,6 +442,7 @@ create table file_entity (
   file_name                 varchar(255),
   mime_type                 varchar(255),
   byte_content              bytea,
+  created_on                timestamp not null,
   last_update               timestamp not null,
   constraint pk_file_entity primary key (id))
 ;
@@ -420,6 +451,7 @@ create table head_quarter (
   id                        bigint not null,
   state                     varchar(35),
   name                      varchar(255),
+  created_on                timestamp not null,
   last_update               timestamp not null,
   constraint ck_head_quarter_state check (state in ('DADRA_AND_NAGAR_HAVELI','KERALA','WEST_BENGAL','JAMMU_AND_KASHMIR','HIMACHAL_PRADESH','MANIPUR','MIZORAM','MAHARASHTRA','CHANDIGARH','JHARKHAND','ASSAM','UTTARAKHAND','SIKKIM','KARNATAKA','CHHATTISGARH','ANDHRA_PRADESH','NATIONAL_CAPITAL_TERRITORY_OF_DELHI','UTTAR_PRADESH','PUDUCHERRY','ANDAMAN_AND_NICOBAR_ISLANDS','TRIPURA','GOA','DAMAN_AND_DIU','NAGALAND','ODISHA','TAMIL_NADU','BIHAR','RAJASTHAN','LAKSHADWEEP','HARYANA','MEGHALAYA','PUNJAB','ARUNACHAL_PRADESH','GUJARAT','TELANGANA','MADHYA_PRADESH')),
   constraint pk_head_quarter primary key (id))
@@ -432,6 +464,7 @@ create table inventory (
   shelf_no                  varchar(255),
   product_quantity          integer,
   remarks                   varchar(255),
+  created_on                timestamp not null,
   last_update               timestamp not null,
   constraint pk_inventory primary key (id))
 ;
@@ -440,6 +473,7 @@ create table master_diagnostic_test (
   id                        bigint not null,
   name                      varchar(255),
   description               TEXT,
+  created_on                timestamp not null,
   last_update               timestamp not null,
   constraint pk_master_diagnostic_test primary key (id))
 ;
@@ -453,6 +487,7 @@ create table master_product (
   description               TEXT,
   units_per_pack            bigint,
   full_name                 varchar(255),
+  created_on                timestamp not null,
   last_update               timestamp not null,
   constraint pk_master_product primary key (id))
 ;
@@ -460,6 +495,7 @@ create table master_product (
 create table master_sig_code (
   code                      varchar(255),
   description               TEXT,
+  created_on                timestamp not null,
   last_update               timestamp not null)
 ;
 
@@ -467,6 +503,7 @@ create table master_specialization (
   id                        bigint not null,
   name                      TEXT,
   remarks                   TEXT,
+  created_on                timestamp not null,
   last_update               timestamp not null,
   constraint pk_master_specialization primary key (id))
 ;
@@ -486,6 +523,7 @@ create table medical_representative (
   is_promotion_visible      boolean,
   is_pob_visible            boolean,
   is_remarks_visible        boolean,
+  created_on                timestamp not null,
   last_update               timestamp not null,
   constraint pk_medical_representative primary key (id))
 ;
@@ -499,6 +537,7 @@ create table medicine_line_item (
   dosage                    TEXT,
   frequency                 TEXT,
   remarks                   TEXT,
+  created_on                timestamp not null,
   last_update               timestamp not null,
   constraint pk_medicine_line_item primary key (id))
 ;
@@ -511,6 +550,7 @@ create table order_line_item (
   expiry_date               timestamp,
   price                     float,
   sub_total                 float,
+  created_on                timestamp not null,
   last_update               timestamp not null,
   constraint pk_order_line_item primary key (id))
 ;
@@ -519,6 +559,7 @@ create table patient (
   id                        bigint not null,
   app_user_id               bigint,
   age                       varchar(255),
+  created_on                timestamp not null,
   last_update               timestamp not null,
   constraint pk_patient primary key (id))
 ;
@@ -527,6 +568,7 @@ create table patient_doctor_info (
   id                        bigint not null,
   doctor_id                 bigint,
   patient_id                bigint,
+  created_on                timestamp not null,
   last_update               timestamp not null,
   constraint pk_patient_doctor_info primary key (id))
 ;
@@ -535,6 +577,7 @@ create table pharmaceutical_company (
   id                        bigint not null,
   name                      varchar(255),
   admin_mr_id               bigint,
+  created_on                timestamp not null,
   last_update               timestamp not null,
   constraint pk_pharmaceutical_company primary key (id))
 ;
@@ -550,6 +593,7 @@ create table pharmaceutical_product (
   units_per_pack            bigint,
   full_name                 varchar(255),
   pharmaceutical_company_id bigint,
+  created_on                timestamp not null,
   last_update               timestamp not null,
   constraint pk_pharmaceutical_product primary key (id))
 ;
@@ -559,6 +603,7 @@ create table pharmacist (
   app_user_id               bigint,
   pharmacy_id               bigint,
   category                  varchar(255),
+  created_on                timestamp not null,
   last_update               timestamp not null,
   constraint pk_pharmacist primary key (id))
 ;
@@ -574,6 +619,7 @@ create table pharmacy (
   background_image          bytea,
   search_index              TEXT,
   slug_url                  TEXT,
+  created_on                timestamp not null,
   last_update               timestamp not null,
   constraint pk_pharmacy primary key (id))
 ;
@@ -591,6 +637,7 @@ create table pharmacy_order (
   ordered_date              timestamp,
   served_date               timestamp,
   total_amount              float,
+  created_on                timestamp not null,
   last_update               timestamp not null,
   constraint ck_pharmacy_order_pharmacy_prescription_status check (pharmacy_prescription_status in ('RECEIVED','CONFIRMED','SERVED')),
   constraint pk_pharmacy_order primary key (id))
@@ -605,6 +652,7 @@ create table pharmacy_prescription_info (
   shared_date               timestamp,
   served_date               timestamp,
   patients_consent          boolean,
+  created_on                timestamp not null,
   last_update               timestamp not null,
   constraint ck_pharmacy_prescription_info_pharmacy_prescription_status check (pharmacy_prescription_status in ('RECEIVED','CONFIRMED','SERVED')),
   constraint pk_pharmacy_prescription_info primary key (id))
@@ -621,6 +669,7 @@ create table pharmacy_product (
   units_per_pack            bigint,
   full_name                 varchar(255),
   pharmacy_id               bigint,
+  created_on                timestamp not null,
   last_update               timestamp not null,
   constraint pk_pharmacy_product primary key (id))
 ;
@@ -635,6 +684,7 @@ create table prescription (
   problem_statement         TEXT,
   prognosis                 TEXT,
   remarks                   TEXT,
+  created_on                timestamp not null,
   last_update               timestamp not null,
   constraint pk_prescription primary key (id))
 ;
@@ -647,6 +697,7 @@ create table question_and_answer (
   answer_date               timestamp,
   question_by_id            bigint,
   answer_by_id              bigint,
+  created_on                timestamp not null,
   last_update               timestamp not null,
   constraint pk_question_and_answer primary key (id))
 ;
@@ -657,6 +708,7 @@ create table sample (
   dcr_line_item_id          bigint,
   pharmaceutical_product_id bigint,
   quantity                  integer,
+  created_on                timestamp not null,
   last_update               timestamp not null,
   constraint pk_sample primary key (id))
 ;
@@ -667,6 +719,7 @@ create table show_cased_product (
   name                      varchar(255),
   description               TEXT,
   mrp                       float,
+  created_on                timestamp not null,
   last_update               timestamp not null,
   constraint pk_show_cased_product primary key (id))
 ;
@@ -677,6 +730,7 @@ create table show_cased_service (
   name                      varchar(255),
   description               TEXT,
   cost                      float,
+  created_on                timestamp not null,
   last_update               timestamp not null,
   constraint pk_show_cased_service primary key (id))
 ;
@@ -685,6 +739,7 @@ create table sig_code (
   doctor_id                 bigint not null,
   code                      varchar(255),
   description               TEXT,
+  created_on                timestamp not null,
   last_update               timestamp not null)
 ;
 
@@ -697,6 +752,7 @@ create table social_user (
   sex                       varchar(6),
   dob                       timestamp,
   first_log_in_via          varchar(8),
+  created_on                timestamp not null,
   last_update               timestamp not null,
   constraint ck_social_user_sex check (sex in ('FEMALE','OTHER','MALE')),
   constraint ck_social_user_first_log_in_via check (first_log_in_via in ('GOOGLE','FACEBOOK','APP_USER')),
@@ -711,6 +767,7 @@ create table tpline_item (
   pob                       integer,
   remarks                   varchar(255),
   is_addedto_tourplan       boolean,
+  created_on                timestamp not null,
   last_update               timestamp not null,
   constraint ck_tpline_item_day_status check (day_status in ('HOLIDAY','WORKING_DAY')),
   constraint pk_tpline_item primary key (id))
@@ -721,6 +778,7 @@ create table tour_plan (
   medical_representative_id bigint not null,
   for_month                 timestamp,
   submit_date               timestamp,
+  created_on                timestamp not null,
   last_update               timestamp not null,
   constraint pk_tour_plan primary key (id))
 ;

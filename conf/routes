@@ -98,7 +98,15 @@ GET		/doctor/add-favorite-pharmacy/:pharmacyId/:str							controllers.DoctorCont
 GET		/doctor/my-favorite-pharmacies											controllers.DoctorController.myFavoritePharmacies()
 GET		/doctor/favorite-diagnostic-centres											controllers.DoctorController.myFavoriteDiagnosticCentres()
 GET		/doctor/add-favorite-diagnosticCentre/:diagnosticId/:str					controllers.DoctorController.addFavoriteDiagnosticCentre(diagnosticId: Long,str: String)
-GET    /purge-doctor																controllers.DoctorController.purgeDoctor()
+GET    /admin/purge-doctor-find																controllers.MednetworkAdminController.purgeDoctor()
+POST    /admin/purge-doctor-details/:role																controllers.MednetworkAdminController.getAppUserDetails(role: String)
+GET     /admin/purge-doctor/:id																controllers.MednetworkAdminController.processPurgeDoctor(id: Long)
+GET     /admin/purge-pharmacy-find																controllers.MednetworkAdminController.purgePharmacy()
+#POST    /admin/purge-Pharmacy-details																controllers.MednetworkAdminController.getPharmacyDetails()
+GET     /admin/purge-pharmacy/:id																controllers.MednetworkAdminController.processPurgePharmacy(id: Long)
+GET     /admin/purge-diagnostic-find																controllers.MednetworkAdminController.purgeDiagnosticCentre()
+#POST    /admin/purge-diagnostic-details																controllers.MednetworkAdminController.getDiagnosticCentreDetails()
+GET     /admin/purge-diagnostic/:id																controllers.MednetworkAdminController.processPurgeDiagnosticCentre(id: Long)
 
 
 
@@ -400,6 +408,7 @@ GET	/mr/sample-data					controllers.SampleDataController.mrSampleData()
 
 #Mednetwork-Admin
 GET		/admin						controllers.SampleDataController.mednetAdmin()
+GET    /appointment					controllers.SampleDataController.createAppointment()
 
 #Cron
 GET		/cron/start						controllers.CronController.startCron()

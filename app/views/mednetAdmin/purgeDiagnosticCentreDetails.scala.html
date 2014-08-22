@@ -1,0 +1,61 @@
+@(appUser: models.AppUser,check: Boolean)
+
+
+@main("Diagnostic Centre Details") {
+	
+
+<div class="row">
+<div class="col-md-1">
+</div>
+<div class="col-md-10 well">
+<div class="col-md-12">
+<form action="@routes.MednetworkAdminController.getAppUserDetails("diagnostic")" method="POST">
+	<input type="text" name="appUserId" placeholder="AppUser Id">
+	<input type="submit" class="btn btn-primary btn-xs"value="Find">
+
+</form>
+
+</div>
+<br><br><br>
+
+<div>
+@if(check){
+<div class="col-md-6">
+		<h4><b> @appUser.name</b></h4>
+		AppUser ID: @appUser.id<br>
+		Diagnostic Centre Name: @appUser.getDiagnosticRepresentative().diagnosticCentre.name<br>
+		<p>Role: @appUser.role.capitalize()<br>
+		Email-id: @appUser.email<br>		
+		</p>
+		</div>
+		<div class="col-md-6">
+	<h4><a target="_blank" href="@routes.PublicController.getDiagnosticCentreWithSlug(appUser.getDiagnosticRepresentative().diagnosticCentre.slugUrl)">Click to view profile</a></h4>
+	@*<b>Registered On</b> @appUser.createdOn.format("dd-MMM-yyyy hh:mm")<br>*@
+	Mobile Number: @appUser.mobileNumber<br>
+	</div>
+		
+	
+			<button class="btn btn-danger btn-sm pull-right" data-toggle="modal" data-target="#myModal">Purge</button>
+	<div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+   <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+      </div>
+      <div class="modal-body">
+        <p> Are you sure to purge <b>@appUser.getDiagnosticRepresentative().diagnosticCentre.name</b> </p>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-default btn-sm" data-dismiss="modal">Close</button>
+        <a href="@routes.MednetworkAdminController.processPurgeDiagnosticCentre(appUser.id)" type="button" class="btn btn-danger btn-sm">Purge</a>
+      </div>
+    </div>
+  </div>
+</div> 
+}
+</div>
+<div class="col-md-1">
+</div>
+</div>
+
+}

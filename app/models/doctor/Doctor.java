@@ -19,6 +19,7 @@ import javax.persistence.OneToOne;
 import models.AppUser;
 import models.BaseEntity;
 import models.diagnostic.DiagnosticCentre;
+import models.patient.PatientDoctorInfo;
 import models.pharmacist.Pharmacy;
 import play.data.validation.Constraints.Required;
 import play.db.ebean.Model;
@@ -101,7 +102,7 @@ public class Doctor extends BaseEntity{
 
 	@Column(columnDefinition="TEXT")
 	public String slugUrl;
-	String s;
+
 	public static Model.Finder<Long,Doctor> find = new Finder<Long, Doctor>(Long.class, Doctor.class);
 
 	public List<DoctorExperience> getExperienceListInOrder(){
@@ -118,6 +119,16 @@ public class Doctor extends BaseEntity{
 
 	public List<DoctorClinicInfo> getActiveClinic(){
 		return DoctorClinicInfo.find.where().eq("doctor", this).eq("active", true).findList();
+	}
+
+	public int getPrescriptionRowCount(){
+		return Prescription.find.where().eq("doctor", this).findRowCount();
+	}
+	public int getAppointmentRowCount(){
+		return Appointment.find.where().eq("doctorClinicInfo.doctor", this).findRowCount();
+	}
+	public List<PatientDoctorInfo> getPatientDoctorInfo(){
+		return PatientDoctorInfo.find.where().eq("doctor", this).findList();
 	}
 
 	@OneToMany(cascade = CascadeType.ALL)

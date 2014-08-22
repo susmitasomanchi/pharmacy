@@ -613,7 +613,7 @@ public class DoctorController extends Controller {
 	 * @author Mitesh Action to render a page with form for adding new clinic of
 	 *         the loggedInDoctor GET /doctor/new-clinic
 	 */
-	//@ConfirmAppUser
+	@ConfirmAppUser
 	public static Result newClinic() {
 		return ok(views.html.doctor.newClinic.render(clinicForm));
 	}
@@ -624,7 +624,7 @@ public class DoctorController extends Controller {
 	 *         DoctorController.createAppointment(clinicInfo) method to create
 	 *         requisite appointments POST /doctor/new-clinic
 	 */
-	//@ConfirmAppUser
+	@ConfirmAppUser
 	public static Result processNewClinic() {
 		final Form<DoctorClinicInfoBean> filledForm = clinicForm
 				.bindFromRequest();
@@ -762,7 +762,7 @@ public class DoctorController extends Controller {
 	 * @author Mitesh Action to show all active clinics of the loggedIn Doctor
 	 *         GET /doctor/clinics
 	 */
-	//@ConfirmAppUser
+	@ConfirmAppUser
 	public static Result myClinics() {
 		final Doctor loggedInDoctor = LoginController.getLoggedInUser()
 				.getDoctor();
@@ -808,7 +808,7 @@ public class DoctorController extends Controller {
 	 *         (non-schedule) information like name, address etc. POST
 	 *         /doctor/update-clinic
 	 */
-	//@ConfirmAppUser
+	@ConfirmAppUser
 	public static Result processUpdateClinicInfo() {
 		final Form<DoctorClinicInfoBean> filledForm = clinicForm
 				.bindFromRequest();
@@ -1660,22 +1660,26 @@ public class DoctorController extends Controller {
 	 * @author lakshmi
 	 * Action to purge the doctor details
 	 * 
-	 */
+	 *//*
 	public static Result purgeDoctor(){
-		final AppUser appUser = AppUser.find.byId(61L);
-		final Doctor doctor2 = Doctor.find.where().eq("appUser", appUser).findUnique();
-		final List<DoctorClinicInfo> doctorClinicInfos = DoctorClinicInfo.find.where().eq("doctor", doctor2).findList();
-		List<Appointment> appointments;
+		final AppUser appUser = AppUser.find.byId(143L);
+		final Doctor doctor = Doctor.find.where().eq("appUser", appUser).findUnique();
+		final List<DoctorClinicInfo> doctorClinicInfos = DoctorClinicInfo.find.where().eq("doctor", doctor).findList();
+		final List<Appointment> appointments= Appointment.find.where().eq("doctorClinicInfo.doctor", doctor).findList();;
+		final List<Prescription> prescriptions = Prescription.find.where().eq("doctor", doctor).findList();
+		final List<Clinic> clinics = new ArrayList<Clinic>();
 		for (final DoctorClinicInfo doctorClinicInfo : doctorClinicInfos) {
-			appointments = Appointment.find.where().eq("doctorClinicInfo", doctorClinicInfo).findList();
-			Clinic.find.where().eq("id", doctorClinicInfo.clinic.id).findUnique().delete();
-			DoctorClinicInfo.find.byId(doctorClinicInfo.id).delete();
+			clinics.add(Clinic.find.where().eq("id", doctorClinicInfo.clinic.id).findUnique());
 		}
-		doctor2.delete();
+		Ebean.delete(appointments);
+		Ebean.delete(clinics);
+		Ebean.delete(prescriptions);
+		Ebean.delete(doctorClinicInfos);
+		doctor.delete();
 		appUser.delete();
 
 		return ok("hello deleted");
 	}
-
+	  */
 
 }
