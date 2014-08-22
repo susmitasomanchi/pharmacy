@@ -37,7 +37,7 @@ public class DailyCallReport extends BaseEntity{
 	//public Date approvedDate;
 
 	//public Date rejectedDate;
-
+	
 	public Date responseOn;
 
 	public Date reOpenedDate;

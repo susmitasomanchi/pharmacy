@@ -102,16 +102,13 @@ GET    /admin/purge-doctor-find																controllers.MednetworkAdminContro
 POST    /admin/purge-doctor-details/:role																controllers.MednetworkAdminController.getAppUserDetails(role: String)
 GET     /admin/purge-doctor/:id																controllers.MednetworkAdminController.processPurgeDoctor(id: Long)
 GET     /admin/purge-pharmacy-find																controllers.MednetworkAdminController.purgePharmacy()
-#POST    /admin/purge-Pharmacy-details																controllers.MednetworkAdminController.getPharmacyDetails()
 GET     /admin/purge-pharmacy/:id																controllers.MednetworkAdminController.processPurgePharmacy(id: Long)
 GET     /admin/purge-diagnostic-find																controllers.MednetworkAdminController.purgeDiagnosticCentre()
-#POST    /admin/purge-diagnostic-details																controllers.MednetworkAdminController.getDiagnosticCentreDetails()
 GET     /admin/purge-diagnostic/:id																controllers.MednetworkAdminController.processPurgeDiagnosticCentre(id: Long)
 
 
 
 # Doctor's Clinics
-GET    /new-clinic								controllers.SampleDataController.addClinic()
 GET    /doctor/new-clinic                 		controllers.DoctorController.newClinic()
 POST   /doctor/new-clinic                 		controllers.DoctorController.processNewClinic()
 GET    /doctor/clinics                    		controllers.DoctorController.myClinics()
@@ -408,7 +405,7 @@ GET	/mr/sample-data					controllers.SampleDataController.mrSampleData()
 
 #Mednetwork-Admin
 GET		/admin						controllers.SampleDataController.mednetAdmin()
-GET    /appointment					controllers.SampleDataController.createAppointment()
+#GET    /appointment					controllers.SampleDataController.createAppointment()
 
 #Cron
 GET		/cron/start						controllers.CronController.startCron()

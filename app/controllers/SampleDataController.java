@@ -1,23 +1,23 @@
 package controllers;
 
 
+import java.security.MessageDigest;
+import java.security.SecureRandom;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.Random;
 
-import models.Address;
+import org.apache.commons.codec.binary.Base64;
+
+import models.Alert;
 import models.AppUser;
 import models.MasterDiagnosticTest;
 import models.MasterProduct;
 import models.Role;
 import models.diagnostic.DiagnosticCentrePrescriptionInfo;
-import models.doctor.Appointment;
-import models.doctor.AppointmentStatus;
-import models.doctor.Clinic;
-import models.doctor.Day;
-import models.doctor.DaySchedule;
 import models.doctor.DiagnosticTestLineItem;
 import models.doctor.Doctor;
-import models.doctor.DoctorClinicInfo;
 import models.doctor.MasterSpecialization;
 import models.doctor.Prescription;
 import models.mr.MedicalRepresentative;
@@ -25,9 +25,15 @@ import models.mr.PharmaceuticalCompany;
 import models.patient.Patient;
 import models.patient.PatientDoctorInfo;
 import play.Logger;
+import play.libs.WS;
 import play.mvc.Controller;
 import play.mvc.Result;
+import utils.EmailService;
 import utils.SMSService;
+import play.libs.WS;
+import play.mvc.Result;
+import static play.libs.F.Function;
+import static play.libs.F.Promise;
 
 public class SampleDataController extends Controller {
 
@@ -215,7 +221,7 @@ public class SampleDataController extends Controller {
 
 
 
-	public static Result mrSampleData(){
+	/*public static Result mrSampleData(){
 		final AppUser appUser = new AppUser();
 		appUser.name = "anand";
 		appUser.email = "anand@gmail.com";
@@ -230,6 +236,50 @@ public class SampleDataController extends Controller {
 		mr.pharmaceuticalCompany = company;
 		mr.save();
 		return ok();
+
+	}*/
+	public static Result mrSampleData(){
+		final AppUser appUser = new AppUser();
+		appUser.name = "anand";
+		appUser.email = "anand@gmail.com";
+		String password = "123";
+		appUser.role = Role.ADMIN_MR;
+		if(AppUser.find.where().eq("email", appUser.email).findRowCount()>0){
+			flash().put("alert", new Alert("alert-danger", "Sorry! User with email id "+appUser.email.trim()+" already exists!").toString());
+			if(appUser.role == Role.ADMIN_MR){
+				return ok("User already exist");
+			}
+		}
+		try {
+
+			final Random random = new SecureRandom();
+			final byte[] saltArray = new byte[32];
+			random.nextBytes(saltArray);
+			final String randomSalt = Base64.encodeBase64String(saltArray);
+
+			final String passwordWithSalt = password+randomSalt;
+			final MessageDigest sha256 = MessageDigest.getInstance("SHA-256");
+			final byte[] passBytes = passwordWithSalt.getBytes();
+			final String hashedPasswordWithSalt = Base64.encodeBase64String(sha256.digest(passBytes));
+
+			appUser.salt = randomSalt;
+			appUser.password = hashedPasswordWithSalt;
+
+		} catch (final Exception e) {
+			Logger.error("ERROR WHILE CREATING SHA2 HASH");
+			e.printStackTrace();
+		}
+		appUser.save();
+		final MedicalRepresentative mr = new MedicalRepresentative();
+		mr.appUser = appUser;
+		final PharmaceuticalCompany company = new PharmaceuticalCompany();
+		company.name="green pharma";
+		company.save();
+		mr.pharmaceuticalCompany = company;
+		mr.save();
+		company.adminMR = mr;
+		company.update();
+		return ok("mr Sample data saved");
 
 	}
 
@@ -306,57 +356,7 @@ public class SampleDataController extends Controller {
 		}
 		return ok();
 	}
-	public static Result addClinic(){
-		final Doctor doctor = LoginController.getLoggedInUser().getDoctor();
-		final DoctorClinicInfo doctorClinicInfo = new DoctorClinicInfo();
-		doctorClinicInfo.doctor = doctor;
 
-		doctorClinicInfo.save();
-		Logger.info(""+doctorClinicInfo.doctor.appUser.name);
-		final Clinic clinic = new Clinic();
-		final Address address = new Address();
-		address.area = "kukatpally";
-		address.city = "hyderabad";
-		address.save();
-		clinic.name = "laxmi clinics";
-		clinic.address = address;
-		clinic.save();
-		doctorClinicInfo.clinic = clinic;
-		doctorClinicInfo.update();
-		final DaySchedule schedule = new DaySchedule();
-		schedule.day = Day.MONDAY;
-		schedule.fromTime ="12:00";
-		schedule.toTime = "16:00";
-		//schedule.save();
-		doctorClinicInfo.scheduleDays.add(schedule);
-		//doctorClinicInfo.update();
-		final DaySchedule schedule1 = new DaySchedule();
-		schedule1.day = Day.TUESDAY;
-		schedule1.fromTime ="10:00";
-		schedule1.toTime = "20:00";
-		//schedule1.save();
-		doctorClinicInfo.scheduleDays.add(schedule1);
-
-		doctorClinicInfo.update();
-		return ok();
-	}
-
-	public static Result createAppointment(){
-		final Appointment appointment = new Appointment();
-		appointment.appointmentStatus = AppointmentStatus.APPROVED;
-		appointment.appointmentTime = new Date();
-		appointment.apporovedBy = AppUser.find.byId(82L);
-		appointment.requestedBy = AppUser.find.byId(21L);
-		appointment.bookedOn = new Date();
-		appointment.problemStatement = "not feeling well";
-		final DoctorClinicInfo doctorClinicInfo = new DoctorClinicInfo();
-		doctorClinicInfo.doctor = Doctor.find.byId(61L);
-		doctorClinicInfo.clinic = Clinic.find.byId(1L);
-		doctorClinicInfo.save();
-		appointment.doctorClinicInfo = doctorClinicInfo;
-		appointment.save();
-		return ok();
-	}
 
 	public static Result createDocSpez(){
 		MasterSpecialization spez;
