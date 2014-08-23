@@ -5,6 +5,7 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.OneToOne;
 
 import models.BaseEntity;
 
@@ -20,6 +21,9 @@ public class Designation extends BaseEntity{
 	
 	@Column(columnDefinition="TEXT")
 	public String description;
+	
+	@OneToOne
+	public MedicalRepresentative mr;
 	
 	public static Finder<Long, Designation> find = new Finder<Long, Designation>(
 			Long.class, Designation.class);

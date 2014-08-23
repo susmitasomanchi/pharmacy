@@ -20,6 +20,7 @@ import models.doctor.DiagnosticTestLineItem;
 import models.doctor.Doctor;
 import models.doctor.MasterSpecialization;
 import models.doctor.Prescription;
+import models.mr.Designation;
 import models.mr.MedicalRepresentative;
 import models.mr.PharmaceuticalCompany;
 import models.patient.Patient;
@@ -270,12 +271,18 @@ public class SampleDataController extends Controller {
 			e.printStackTrace();
 		}
 		appUser.save();
+		
 		final MedicalRepresentative mr = new MedicalRepresentative();
 		mr.appUser = appUser;
 		final PharmaceuticalCompany company = new PharmaceuticalCompany();
+		Designation designation = new Designation();
+		designation.name = "manager";
+		//designation.save();
+		company.designationList.add(designation);
 		company.name="green pharma";
-		company.save();
+		company.update();
 		mr.pharmaceuticalCompany = company;
+		mr.designation = company.designationList.get(0);
 		mr.save();
 		company.adminMR = mr;
 		company.update();
