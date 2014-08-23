@@ -103,7 +103,7 @@ public class Doctor extends BaseEntity{
 	@Column(columnDefinition="TEXT")
 	public String slugUrl;
 
-	public static Model.Finder<Long,Doctor> find = new Finder<Long, Doctor>(Long.class, Doctor.class);
+	public static Model.Finder<Long,Doctor> find = new Model.Finder<Long, Doctor>(Long.class, Doctor.class);
 
 	public List<DoctorExperience> getExperienceListInOrder(){
 		return DoctorExperience.find.where().eq("doctor_id", this.id).orderBy("workedFrom DESC").findList();

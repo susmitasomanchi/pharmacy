@@ -30,7 +30,6 @@
 	
 	<div class="col-md-6">
 	<h4><a target="_blank" href="@routes.PublicController.getDoctorWithSlug(appUser.getDoctor().slugUrl)">Click to view profile</a></h4>
-	@*<b>Registered On</b> @appUser.createdOn.format("dd-MMM-yyyy hh:mm")<br>*@
 	Mobile Number: @appUser.mobileNumber<br>
 	Registerd On: @appUser.createdOn.format("dd-MMM-yyyy hh:mm")<br>
 	Register Number: @appUser.getDoctor().registrationNumber<br>

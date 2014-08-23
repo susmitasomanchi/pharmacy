@@ -20,6 +20,7 @@
 
 <div>
 @if(check){
+<div class="row">
 <div class="col-md-6">
 		<h4><b> @appUser.name</b></h4>
 		AppUser ID: @appUser.id<br>
@@ -33,7 +34,25 @@
 	@*<b>Registered On</b> @appUser.createdOn.format("dd-MMM-yyyy hh:mm")<br>*@
 	Mobile Number: @appUser.mobileNumber<br>
 	</div>
-		
+	</div>
+	<div class="row">
+		<div class="col-md-6">
+	<br><br>
+	<b>Added As Favorite To The Doctor</b><br>
+	@for((doctor,index) <- appUser.getDiagnosticRepresentative().diagnosticCentre.getDoctorsAddedAsFavoriteDiagnostics().zipWithIndex){
+		@{index+1}.&nbsp @doctor.appUser.name<br>
+	}
+
+	</div>
+	
+	<div class="col-md-6">
+	<br><br>
+	<b>Added As Favorite To The User</b><br>
+	@for((patient,index) <- appUser.getDiagnosticRepresentative().diagnosticCentre.getPatientsAddedAsFavoriteDiagnostics().zipWithIndex){
+	@{index+1}&nbsp@patient.appUser.name<br>
+	}
+	</div>
+	</div>	
 	
 			<button class="btn btn-danger btn-sm pull-right" data-toggle="modal" data-target="#myModal">Purge</button>
 	<div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">

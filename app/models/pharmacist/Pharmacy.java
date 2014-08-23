@@ -17,9 +17,10 @@ import javax.persistence.OneToOne;
 import models.Address;
 import models.BaseEntity;
 import models.FileEntity;
+import models.doctor.Doctor;
+import models.patient.Patient;
+import play.db.ebean.Model;
 import beans.PharmacyBean;
-
-import play.db.ebean.Model.Finder;
 
 @SuppressWarnings("serial")
 @Entity
@@ -75,7 +76,7 @@ public class Pharmacy extends BaseEntity {
 
 
 
-	public static Finder<Long, Pharmacy> find = new Finder<Long, Pharmacy>(Long.class, Pharmacy.class);
+	public static Model.Finder<Long, Pharmacy> find = new Model.Finder<Long, Pharmacy>(Long.class, Pharmacy.class);
 
 	public PharmacyBean toBean(){
 
@@ -160,6 +161,26 @@ public class Pharmacy extends BaseEntity {
 		stringBuilder.append(this.slugUrl.toLowerCase());
 		this.searchIndex = stringBuilder.toString();
 		super.update();
+
+	}
+
+	public List<Doctor> getDoctorsAddedAsFavoritePharmacies(){
+		final List<Doctor> doctorList = new ArrayList<Doctor>();
+		for (final Doctor doctor : Doctor.find.all()) {
+			if(doctor.pharmacyList.contains(this)){
+				doctorList.add(doctor);
+			}
+		}
+		return doctorList;
+	}
+	public List<Patient> getPatientsAddedAsFavoritePharmacies(){
+		final List<Patient> patientList = new ArrayList<Patient>();
+		for (final Patient patient : Patient.find.all()) {
+			if(patient.pharmacyList.contains(this)){
+				patientList.add(patient);
+			}
+		}
+		return patientList;
 	}
 
 }
