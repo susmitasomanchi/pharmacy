@@ -16,7 +16,7 @@ public class BasicAuthAction extends Action<Result> {
 	@Override
 	public F.Promise<SimpleResult> call(final Http.Context ctx) throws Throwable {
 
-		if(ctx.request().uri().startsWith("/blog/admin")){
+		if(ctx.request().uri().startsWith("/blog-admin")){
 			if(!LoginController.isLoggedIn()){
 				return F.Promise.pure((SimpleResult) BlogController.blogHome());
 			}

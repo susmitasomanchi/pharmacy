@@ -19,6 +19,7 @@ import models.FileEntity;
 import models.MasterDiagnosticTest;
 import models.doctor.Doctor;
 import models.doctor.Prescription;
+import models.patient.Patient;
 import play.Logger;
 import play.data.validation.Constraints.Email;
 import play.data.validation.Constraints.Required;
@@ -166,6 +167,24 @@ public class DiagnosticCentre extends BaseEntity {
 		this.searchIndex = stringBuilder.toString();
 		super.update();
 
+	}
+	public List<Doctor> getDoctorsAddedAsFavoriteDiagnostics(){
+		final List<Doctor> doctorList = new ArrayList<Doctor>();
+		for (final Doctor doctor : Doctor.find.all()) {
+			if(doctor.diagnosticCentreList.contains(this)){
+				doctorList.add(doctor);
+			}
+		}
+		return doctorList;
+	}
+	public List<Patient> getPatientsAddedAsFavoriteDiagnostics(){
+		final List<Patient> patientList = new ArrayList<Patient>();
+		for (final Patient patient : Patient.find.all()) {
+			if(patient.diagnosticCenterList.contains(this)){
+				patientList.add(patient);
+			}
+		}
+		return patientList;
 	}
 
 }

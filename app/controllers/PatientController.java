@@ -292,17 +292,17 @@ public class PatientController extends Controller {
 		smsMessage.append( new SimpleDateFormat("dd-MMM-yyyy").format(appointment.appointmentTime));
 		smsMessage.append(" at "+ new SimpleDateFormat("HH:mm").format(appointment.appointmentTime));
 		smsMessage.append(" at "+appointment.doctorClinicInfo.clinic.name+", "+appointment.doctorClinicInfo.clinic.address.area);
-
 		SMSService.sendSMS(appointment.requestedBy.mobileNumber.toString(), smsMessage.toString());
-		final StringBuilder smsMessage2 = new StringBuilder();
 
+		/*
+		final StringBuilder smsMessage2 = new StringBuilder();
 		smsMessage2.append("An Appointment has been booked on");
 		smsMessage2.append( new SimpleDateFormat("dd-MMM-yyyy").format(appointment.appointmentTime));
 		smsMessage2.append(","+ new SimpleDateFormat("HH:mm").format(appointment.appointmentTime));
 		smsMessage2.append("at "+appointment.doctorClinicInfo.clinic.name+","+appointment.doctorClinicInfo.clinic.address.area);
 		smsMessage2.append("by patient "+appointment.requestedBy.name+".");
-
-		SMSService.sendSMS(appointment.doctorClinicInfo.doctor.appUser.mobileNumber.toString(), smsMessage.toString());
+		SMSService.sendSMS(appointment.doctorClinicInfo.doctor.appUser.mobileNumber.toString(), smsMessage2.toString());
+		 */
 
 		return redirect(routes.PatientController. viewMyAppointments());
 	}

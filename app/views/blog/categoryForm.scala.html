@@ -11,9 +11,18 @@
 @blogmain("", "", ""){
 
 @helper.form(action=routes.BlogController.processCategoryForm()) {
+@*
 @helper.inputText(dataForm("name"),'_label->"Name",'class->"col-sm-9")
 @helper.inputText(dataForm("position"),'_label->"Position",'class->"col-sm-9")
+*@
 
+<br><br>
+<label>Name</label>
+<input name="name" class="col-sm-9">
+<br>
+<label>Position</label>
+<input name="position" class="col-sm-9">
+<br>
 <input type="hidden" name="id" value='@dataForm("id").value' >
 <input class="btn btn-primary" type="submit" value="Save">
 }

@@ -4,7 +4,6 @@ import java.sql.Timestamp;
 
 import javax.persistence.MappedSuperclass;
 import javax.persistence.Version;
-import javax.validation.constraints.NotNull;
 
 import play.db.ebean.Model;
 
@@ -15,11 +14,10 @@ import com.avaje.ebean.annotation.CreatedTimestamp;
 public abstract class BaseEntity extends Model {
 
 
-	@NotNull
 	@CreatedTimestamp
-	Timestamp createdOn;
+	public Timestamp createdOn;
 
 	@Version
-	Timestamp lastUpdate;
+	public Timestamp lastUpdate;
 
 }

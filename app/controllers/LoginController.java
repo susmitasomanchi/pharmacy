@@ -38,16 +38,16 @@ public class LoginController extends Controller {
 
 	public static Result loginForm() {
 
-		/*
+
 		if (LoginController.isLoggedIn()) {
 			return redirect(routes.UserActions.dashboard());
 		} else {
 			//return ok(views.html.loginForm.render(loginForm));
 			return ok(views.html.adminlogin.render(loginForm));
 		}
-		 */
 
-		return ok(views.html.home.render(loginForm));
+
+		//return ok(views.html.home.render(loginForm));
 	}
 
 

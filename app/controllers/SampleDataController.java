@@ -1,10 +1,16 @@
 package controllers;
 
 
+import java.security.MessageDigest;
+import java.security.SecureRandom;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.Random;
 
+import org.apache.commons.codec.binary.Base64;
+
+import models.Alert;
 import models.AppUser;
 import models.MasterDiagnosticTest;
 import models.MasterProduct;
@@ -215,7 +221,7 @@ public class SampleDataController extends Controller {
 
 
 
-	public static Result mrSampleData(){
+	/*public static Result mrSampleData(){
 		final AppUser appUser = new AppUser();
 		appUser.name = "anand";
 		appUser.email = "anand@gmail.com";
@@ -230,6 +236,50 @@ public class SampleDataController extends Controller {
 		mr.pharmaceuticalCompany = company;
 		mr.save();
 		return ok();
+
+	}*/
+	public static Result mrSampleData(){
+		final AppUser appUser = new AppUser();
+		appUser.name = "anand";
+		appUser.email = "anand@gmail.com";
+		String password = "123";
+		appUser.role = Role.ADMIN_MR;
+		if(AppUser.find.where().eq("email", appUser.email).findRowCount()>0){
+			flash().put("alert", new Alert("alert-danger", "Sorry! User with email id "+appUser.email.trim()+" already exists!").toString());
+			if(appUser.role == Role.ADMIN_MR){
+				return ok("User already exist");
+			}
+		}
+		try {
+
+			final Random random = new SecureRandom();
+			final byte[] saltArray = new byte[32];
+			random.nextBytes(saltArray);
+			final String randomSalt = Base64.encodeBase64String(saltArray);
+
+			final String passwordWithSalt = password+randomSalt;
+			final MessageDigest sha256 = MessageDigest.getInstance("SHA-256");
+			final byte[] passBytes = passwordWithSalt.getBytes();
+			final String hashedPasswordWithSalt = Base64.encodeBase64String(sha256.digest(passBytes));
+
+			appUser.salt = randomSalt;
+			appUser.password = hashedPasswordWithSalt;
+
+		} catch (final Exception e) {
+			Logger.error("ERROR WHILE CREATING SHA2 HASH");
+			e.printStackTrace();
+		}
+		appUser.save();
+		final MedicalRepresentative mr = new MedicalRepresentative();
+		mr.appUser = appUser;
+		final PharmaceuticalCompany company = new PharmaceuticalCompany();
+		company.name="green pharma";
+		company.save();
+		mr.pharmaceuticalCompany = company;
+		mr.save();
+		company.adminMR = mr;
+		company.update();
+		return ok("mr Sample data saved");
 
 	}
 

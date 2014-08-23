@@ -15,14 +15,19 @@ import models.Feedback;
 import models.FileEntity;
 import models.Role;
 import models.diagnostic.DiagnosticCentre;
+import models.diagnostic.DiagnosticCentrePrescriptionInfo;
 import models.doctor.Appointment;
+import models.doctor.Clinic;
 import models.doctor.Day;
 import models.doctor.DaySchedule;
 import models.doctor.Doctor;
 import models.doctor.DoctorClinicInfo;
+import models.doctor.Prescription;
 import models.patient.Patient;
 import models.patient.PatientDoctorInfo;
+import models.pharmacist.Pharmacist;
 import models.pharmacist.Pharmacy;
+import models.pharmacist.PharmacyPrescriptionInfo;
 import play.Logger;
 import play.data.Form;
 import play.libs.F.Function0;
@@ -32,6 +37,8 @@ import play.mvc.Result;
 import utils.EmailService;
 import actions.ConfirmAppUser;
 import beans.LoginBean;
+
+import com.avaje.ebean.Ebean;
 
 public class PublicController extends Controller{
 	public static final Form<LoginBean> loginForm = Form.form(LoginBean.class);
@@ -372,6 +379,7 @@ public class PublicController extends Controller{
 				// Async Execution
 				Promise.promise(new Function0<Integer>() {
 					//@Override
+					@Override
 					public Integer apply() {
 						int result = 0;
 						if(!EmailService.sendVerificationConformMessage(appUser)){
@@ -645,6 +653,7 @@ public class PublicController extends Controller{
 		// Async Execution
 		Promise.promise(new Function0<Integer>() {
 			//@Override
+			@Override
 			public Integer apply() {
 				int result = 0;
 				if(!EmailService.sendSimpleHtmlEMail("admin@mednetwork.in", "A feedback saved", message.toString())){
@@ -672,7 +681,6 @@ public class PublicController extends Controller{
 		//final AppUser appUser = LoginController.getLoggedInUser();
 		return ok(views.html.helpdocument.render());
 	}
-
 
 
 

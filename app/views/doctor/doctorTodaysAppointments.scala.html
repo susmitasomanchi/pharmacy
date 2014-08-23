@@ -19,8 +19,8 @@
 	<div id="myTabContent" class="tab-content">
 		 
 		<div class="tab-pane fade in active" id="all">
-			<table class="table table-condensed table-hover">
-			<thead>
+			<table class="table table-bordered table-hover">
+			<thead style="padding:0px;">
 			<tr>
 			<div class="row clearfix">
 				<th><div class="col-md-4 column">
@@ -49,7 +49,7 @@
 				<td>@appointment.appointmentTime.format("dd-MMM-yy HH:mm")</td>
 				</div>
 				<div class="col-md-3 column">
-				<td>@{appointment.requestedBy.name}&nbsp;(@appointment.requestedBy.sex.toString().substring(0,1)/@appointment.requestedBy.getAge())</td>
+				<td>@{appointment.requestedBy.name}&nbsp;(@appointment.requestedBy.getPatient().getSexAndAge())</td>
 				</div>
 				<div class="col-md-3 column">
 				<td>
@@ -74,21 +74,19 @@
 			}
 		</table>
 		</div>
-		@for(  docClinic <-  docClincs){
-			@for( docClinic <-  docClincs){
-			
-			<div class="tab-pane fade" id="@docClinic.clinic.id">
-				<table class="table table-condensed table-hover">
-			<thead>
+			@for(docClinic <-  docClincs){
+			<div class="tab-pane fade " id="@docClinic.clinic.id">
+				<table class="table table-bordered table-hover">
+			<thead style="padding:0px;">
 			<tr>
 			<div class="row clearfix">
-				<th><div class="col-md-4 column">
+				<th style="text-align:center;"><div class="col-md-4 column">
 				Date &amp; Time
 				</div></th>
-				<th><div class="col-md-3 column">
+				<th style="text-align:center;"><div class="col-md-3 column">
 				Patient&nbsp;(Sex/Age)
 				</div></th>
-				<th><div class="col-md-3 column">
+				<th style="text-align:center;"><div class="col-md-3 column">
 				Appointment
 				</div></th>
 			</div>
@@ -102,7 +100,7 @@
 				<td>@appointment.appointmentTime.format("dd-MMM-yy HH:mm")</td>
 				</div>
 				<div class="col-md-3 column">
-				<td>@{appointment.requestedBy.name}&nbsp;(@appointment.requestedBy.sex.toString().substring(0,1)/@appointment.requestedBy.getAge())</td>
+				<td>&nbsp;&nbsp; @{appointment.requestedBy.name}&nbsp;(@appointment.requestedBy.getPatient().getSexAndAge())</td>
 				</div>
 				<div class="col-md-3 column">
 				<td>
@@ -126,13 +124,12 @@
 			}
 			}
 			
-			}
 		</table>
-			
 			</div>
 			}
 		
 	</div>
+	
 	
 	
 	<script>
@@ -142,20 +139,6 @@
 		})
 	</script>
 	
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 }
 
 

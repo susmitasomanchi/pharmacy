@@ -22,7 +22,6 @@ public class MedicalRepresentativeBean implements Serializable {
 	public String designation;
 	public String username;
 	public String email;
-	public String password;
 	public int age;
 	// public String role;
 	public String sex;
@@ -38,7 +37,6 @@ public class MedicalRepresentativeBean implements Serializable {
 			//appUser.id=this.appid;
 			appUser.name = this.name;
 			appUser.email = this.email;
-			appUser.password = this.password;
 			appUser.role = Role.MR;
 			// appUser.sex = Sex.valueOf(this.sex);
 			appUser.username = this.username;
@@ -48,7 +46,6 @@ public class MedicalRepresentativeBean implements Serializable {
 			final AppUser appUser=AppUser.find.byId(this.appid);
 			appUser.name = this.name;
 			appUser.email = this.email;
-			appUser.password = this.password;
 			appUser.role = Role.MR;
 			// appUser.sex = Sex.valueOf(this.sex);
 			appUser.username = this.username;

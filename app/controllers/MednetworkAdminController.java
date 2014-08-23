@@ -1,6 +1,7 @@
 package controllers;
 
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.HashMap;
@@ -10,14 +11,26 @@ import java.util.Map;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
+import com.avaje.ebean.Ebean;
+
 import models.Alert;
 import models.AppUser;
 import models.Feedback;
+import models.Role;
 import models.diagnostic.DiagnosticCentre;
+import models.diagnostic.DiagnosticCentrePrescriptionInfo;
+import models.diagnostic.DiagnosticRepresentative;
+import models.doctor.Appointment;
+import models.doctor.Clinic;
 import models.doctor.Doctor;
+import models.doctor.DoctorClinicInfo;
 import models.doctor.MasterSpecialization;
+import models.doctor.Prescription;
 import models.patient.Patient;
+import models.patient.PatientDoctorInfo;
+import models.pharmacist.Pharmacist;
 import models.pharmacist.Pharmacy;
+import models.pharmacist.PharmacyPrescriptionInfo;
 import play.Logger;
 import play.mvc.Controller;
 import play.mvc.Result;
@@ -133,6 +146,190 @@ public class MednetworkAdminController extends Controller {
 			map.put("error", -1);
 			return ok(new JSONObject(map).toString());
 		}
+	}
+	/**
+	 * @author lakshmi
+	 * Action to render purgeDoctorDetails scala template
+	 * GET    /admin/purge-doctor-find
+	 */
+	public static Result purgeDoctor(){
+		return ok(views.html.mednetAdmin.purgeDoctorDetails.render(null,false));
+	}
+	/**
+	 * @author lakshmi
+	 * Action to get the Doctor Information
+	 * POST    /admin/purge-doctor-details
+	 */
+	public static Result getAppUserDetails(final String role){
+		if(request().body().asFormUrlEncoded().get("appUserId")[0] != null && !(request().body().asFormUrlEncoded().get("appUserId")[0].trim().isEmpty())){
+			if(AppUser.find.byId(Long.parseLong(request().body().asFormUrlEncoded().get("appUserId")[0])) != null){
+				final AppUser appUser = AppUser.find.byId(Long.parseLong(request().body().asFormUrlEncoded().get("appUserId")[0]));
+				if(role.equalsIgnoreCase("doctor")) {
+					return ok(views.html.mednetAdmin.purgeDoctorDetails.render(appUser,true));
+				}
+				if(role.equalsIgnoreCase("Pharmacy")) {
+					return ok(views.html.mednetAdmin.purgePharmacyDetails.render(appUser,true));
+				}
+				if(role.equalsIgnoreCase("Diagnostic")) {
+					return ok(views.html.mednetAdmin.purgeDiagnosticCentreDetails.render(appUser,true));
+				}
+			}
+			else{
+				flash().put("alert", new Alert("alert-info","With The Id "+request().body().asFormUrlEncoded().get("appUserId")[0]+" No AppUser Is Available.").toString());
+			}
+		}
+		return redirect(routes.MednetworkAdminController.purgeDoctor());
+
+	}
+
+	/**
+	 * @author lakshmi
+	 * Action to purge the Doctor Information
+	 * GET     /admin/purge-doctor/:id
+	 */
+	public static Result processPurgeDoctor(final Long id){
+		if(!(LoginController.getLoggedInUser().role.equals(Role.MEDNETWORK_ADMIN))){
+			flash().put("alert", new Alert("alert-info","Not Authorised.").toString());
+			return redirect(routes.Application.index());
+		}
+
+		final AppUser appUser = AppUser.find.byId(id);
+		final Doctor doctor = Doctor.find.where().eq("appUser", appUser).findUnique();
+		Logger.info(""+doctor.id);
+		final List<DoctorClinicInfo> doctorClinicInfos = DoctorClinicInfo.find.where().eq("doctor", doctor).findList();
+		final List<Appointment> appointments= Appointment.find.where().eq("doctorClinicInfo.doctor", doctor).findList();;
+		final List<Prescription> prescriptions = Prescription.find.where().eq("doctor", doctor).findList();
+		final List<Clinic> clinics = new ArrayList<Clinic>();
+		final List<PharmacyPrescriptionInfo> pharmacyPrescriptionInfos = PharmacyPrescriptionInfo.find.where().eq("prescription.doctor", doctor).findList();
+		final List<DiagnosticCentrePrescriptionInfo> diagnosticCentrePrescriptionInfos = DiagnosticCentrePrescriptionInfo.find.where().eq("prescription.doctor", doctor).findList();
+		final List<PatientDoctorInfo> patientDoctorInfos = PatientDoctorInfo.find.where().eq("doctor", doctor).findList();
+		for (final DoctorClinicInfo doctorClinicInfo : doctorClinicInfos) {
+			clinics.add(Clinic.find.where().eq("id", doctorClinicInfo.clinic.id).findUnique());
+		}
+		Ebean.delete(pharmacyPrescriptionInfos);
+		Ebean.delete(diagnosticCentrePrescriptionInfos);
+		Ebean.delete(prescriptions);
+		Ebean.delete(appointments);
+		Ebean.delete(doctorClinicInfos);
+		Ebean.delete(clinics);
+		Ebean.delete(patientDoctorInfos);
+		doctor.delete();
+		appUser.delete();
+		flash().put("alert", new Alert("alert-info",""
+				+ "Doctor Puged Successfully.").toString());
+		return redirect(routes.UserActions.dashboard());
+	}
+	/**
+	 * @author lakshmi
+	 * Action to render purgePharmacyDetails scala template
+	 * GET    /admin/purge-pharmacy-find
+	 */
+	public static Result purgePharmacy(){
+		return ok(views.html.mednetAdmin.purgePharmacyDetails.render(null,false));
+	}
+
+	/**
+	 * @author lakshmi
+	 * Action to purge the Pharmacy details
+	 * 
+	 */
+	public static Result processPurgePharmacy(final Long id){
+		if(!(LoginController.getLoggedInUser().role.equals(Role.MEDNETWORK_ADMIN))){
+			flash().put("alert", new Alert("alert-info","Not Authorised.").toString());
+			return redirect(routes.Application.index());
+		}
+
+		final AppUser appUser = AppUser.find.byId(id);
+		final Pharmacist pharmacist = Pharmacist.find.where().eq("appUser", appUser).findUnique();
+		final Pharmacy pharmacy = Pharmacy.find.where().eq("adminPharmacist.appUser", appUser).findUnique();
+		final List<PharmacyPrescriptionInfo> pharmacyPrescriptionInfos = PharmacyPrescriptionInfo.find.where().eq("pharmacy", pharmacy).findList();
+		Ebean.delete(pharmacyPrescriptionInfos);
+		pharmacist.pharmacy = null;
+		pharmacist.update();
+		pharmacy.adminPharmacist = null;
+		pharmacy.update();
+		//pharmacy.adminPharmacist.delete();
+		pharmacist.delete();
+		final List<Patient> patients = Patient.find.all();
+		for (final Patient patient : patients) {
+			if(patient.pharmacyList.contains(pharmacy)){
+				patient.pharmacyList.remove(pharmacy);
+				patient.update();
+			}
+		}
+		final List<Doctor> doctors = Doctor.find.all();
+		for (final Doctor doctor : doctors) {
+			if(doctor.pharmacyList.contains(pharmacy)){
+				doctor.pharmacyList.remove(pharmacy);
+				doctor.update();
+			}
+		}
+		pharmacy.delete();
+		appUser.delete();
+		flash().put("alert", new Alert("alert-info","Pharmacy Puged Successfully.").toString());
+		return redirect(routes.MednetworkAdminController.purgePharmacy());
+	}
+	/**
+	 * @author lakshmi
+	 * Action to render purgeDoctorDetails scala template
+	 * GET    /admin/purge-diagnostic-find
+	 */
+	public static Result purgeDiagnosticCentre(){
+		return ok(views.html.mednetAdmin.purgeDiagnosticCentreDetails.render(null,false));
+	}
+	/*public static Result getDiagnosticCentreDetails(){
+		if(request().body().asFormUrlEncoded().get("appUserId")[0] != null && !(request().body().asFormUrlEncoded().get("appUserId")[0].isEmpty())){
+			if(AppUser.find.byId(Long.parseLong(request().body().asFormUrlEncoded().get("appUserId")[0])) != null){
+				final AppUser appUser = AppUser.find.byId(Long.parseLong(request().body().asFormUrlEncoded().get("appUserId")[0]));
+				return ok(views.html.mednetAdmin.purgeDiagnosticCentreDetails.render(appUser,true));
+			}
+			else{
+				flash().put("alert", new Alert("alert-info","With this Id No Pharmacy Is Available.").toString());
+			}
+		}
+		return redirect(routes.MednetworkAdminController.purgeDiagnosticCentre());
+
+	}*/
+	/**
+	 * @author lakshmi
+	 * Action to purge the Pharmacy details
+	 * 
+	 */
+	public static Result processPurgeDiagnosticCentre(final Long id){
+		if(!(LoginController.getLoggedInUser().role.equals(Role.MEDNETWORK_ADMIN))){
+			flash().put("alert", new Alert("alert-info","Not Authorised.").toString());
+			return redirect(routes.Application.index());
+		}
+
+		final AppUser appUser = AppUser.find.byId(id);
+		final DiagnosticRepresentative diagnosticRepresentative = DiagnosticRepresentative.find.where().eq("appUser", appUser).findUnique();
+		final DiagnosticCentre diagnosticCentre = DiagnosticCentre.find.where().eq("diagnosticRepAdmin.appUser", appUser).findUnique();
+		final List<DiagnosticCentrePrescriptionInfo> diagnosticCentrePrescriptionInfos = DiagnosticCentrePrescriptionInfo.find.where().eq("diagnosticCentre", diagnosticCentre).findList();
+		Ebean.delete(diagnosticCentrePrescriptionInfos);
+		diagnosticRepresentative.diagnosticCentre = null;
+		diagnosticRepresentative.update();
+		diagnosticCentre.diagnosticRepAdmin = null;
+		diagnosticCentre.update();
+		//pharmacy.adminPharmacist.delete();
+		diagnosticRepresentative.delete();
+		final List<Patient> patients = Patient.find.all();
+		for (final Patient patient : patients) {
+			if(patient.diagnosticCenterList.contains(diagnosticCentre)){
+				patient.diagnosticCenterList.remove(diagnosticCentre);
+				patient.update();
+			}
+		}
+		final List<Doctor> doctors = Doctor.find.all();
+		for (final Doctor doctor : doctors) {
+			if(doctor.diagnosticCentreList.contains(diagnosticCentre)){
+				doctor.diagnosticCentreList.remove(diagnosticCentre);
+				doctor.update();
+			}
+		}
+		diagnosticCentre.delete();
+		appUser.delete();
+		flash().put("alert", new Alert("alert-info","Diagnostic Centre Puged Successfully.").toString());
+		return redirect(routes.MednetworkAdminController.purgeDiagnosticCentre());
 	}
 
 }

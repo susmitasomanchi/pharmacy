@@ -115,7 +115,19 @@ $('#status-select').on('change', function(){
 <span class="badge" style=""><b>@pharmacyPrescriptionInfo.pharmacyPrescriptionStatus</b></span>
 @if(!pharmacyPrescriptionInfo.pharmacyPrescriptionStatus.equals(models.pharmacist.PharmacyPrescriptionStatus.SERVED)){
 	<br><br>
-Mark as <a href="@routes.PharmacistController.servedPrescription(pharmacyPrescriptionInfo.id)" class="" ><b>Served</b></a>
+Mark as <button class="btn btn-primary btn-xs" data-toggle="modal" data-target="#myModal1@pharmacyPrescriptionInfo.id">Served</button>
+<div class="modal fade" id="myModal1@pharmacyPrescriptionInfo.id" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+  <div class="modal-dialog" style="padding-top:200px">
+    <div class="modal-content" style="padding-left:20px">
+      <h4>Are you sure to serve the Prescription ?</h4>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-default btn-xs" data-dismiss="modal">Close</button>
+        <a href="@routes.PharmacistController.servedPrescription(pharmacyPrescriptionInfo.id)" class="btn btn-primary btn-xs">Served</a>
+            
+      </div>
+    </div>
+  </div>
+</div>
 }
 </td>
 

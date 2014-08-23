@@ -40,6 +40,8 @@ import play.data.DynamicForm;
 import play.data.Form;
 import play.mvc.Controller;
 import play.mvc.Result;
+import utils.EmailService;
+import utils.GenerateRandomString;
 import actions.BasicAuth;
 import beans.MedicalRepresentativeBean;
 
@@ -112,10 +114,12 @@ public class MRController extends Controller {
 
 			final MedicalRepresentative adminMr = LoginController
 					.getLoggedInUser().getMedicalRepresentative();
+			String generatedPassword = "";
 			if (mr.id == null) {
-				/*if(AppUser.find.where().eq("email", appUser.email).findRowCount()>0){
+				
+				if(AppUser.find.where().eq("email", appUser.email).findRowCount()>0){
 					flash().put("alert", new Alert("alert-danger", "Sorry! User with email id "+appUser.email.trim()+" already exists!").toString());
-					if(appUser.role == Role.ADMIN_MR){
+					if(appUser.role == Role.MR){
 						return ok("User already exist");
 					}
 				}
@@ -125,8 +129,8 @@ public class MRController extends Controller {
 					final byte[] saltArray = new byte[32];
 					random.nextBytes(saltArray);
 					final String randomSalt = Base64.encodeBase64String(saltArray);
-
-					final String passwordWithSalt = medicalRepresentativeBean.password+randomSalt;
+					generatedPassword = GenerateRandomString.generatePassword();
+					final String passwordWithSalt = generatedPassword+randomSalt;
 					final MessageDigest sha256 = MessageDigest.getInstance("SHA-256");
 					final byte[] passBytes = passwordWithSalt.getBytes();
 					final String hashedPasswordWithSalt = Base64.encodeBase64String(sha256.digest(passBytes));
@@ -137,15 +141,20 @@ public class MRController extends Controller {
 				} catch (final Exception e) {
 					Logger.error("ERROR WHILE CREATING SHA2 HASH");
 					e.printStackTrace();
-				}*/
+				}
+				
 				appUser.save();
+				StringBuilder message = new StringBuilder();
+				message.append(" Dear "+appUser.name+",<br> Your account has been created at <a href='https://mednetwork.in'>MedNetwork.in</a> Please use the following credentials to login:<br><br> UserName :"+appUser.email+"<br> Password :"+generatedPassword+"<br><br> Thank you <br> MedNetwork");
+					
+				EmailService.sendSimpleHtmlEMail(appUser.email, "\n Account created on MedNetwork",message.toString());
+				Logger.info("email : "+appUser.email+" & Generated password is : "+generatedPassword);
 				mr.pharmaceuticalCompany = company;
 				mr.appUser = appUser;
 				if (medicalRepresentativeBean.manager != null) {
 					mr.manager = MedicalRepresentative.find
 							.byId(medicalRepresentativeBean.manager);
 				}
-
 				mr.save();
 				adminMr.pharmaceuticalCompany.mrList.add(mr);
 				adminMr.pharmaceuticalCompany.update();

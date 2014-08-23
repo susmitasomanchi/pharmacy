@@ -8,14 +8,14 @@ GET    /blog/create-blog-admin                     	controllers.SampleDataContro
 GET    /login	                              	   	controllers.LoginController.loginForm()
 
 GET		/blog										controllers.BlogController.blogHome()
-GET		/blog/admin/new-category					controllers.BlogController.categoryForm()
-POST	/blog/admin/new-category					controllers.BlogController.processCategoryForm()
-GET		/blog/admin/categories						controllers.BlogController.categories()
-GET		/blog/admin/edit-category/:id				controllers.BlogController.editCategoryForm(id: Long)
-GET		/blog/admin/new-article						controllers.BlogController.articleForm()
-POST	/blog/admin/new-article						controllers.BlogController.processArticleForm()
-GET		/blog/admin/articles/:categoryId			controllers.BlogController.articles(categoryId: Long)
-GET		/blog/admin/edit-article/:id				controllers.BlogController.editArticleForm(id: Long)
+GET		/blog-admin/new-category					controllers.BlogController.categoryForm()
+POST	/blog-admin/new-category					controllers.BlogController.processCategoryForm()
+GET		/blog-admin/categories						controllers.BlogController.categories()
+GET		/blog-admin/edit-category/:id				controllers.BlogController.editCategoryForm(id: Long)
+GET		/blog-admin/new-article						controllers.BlogController.articleForm()
+POST	/blog-admin/new-article						controllers.BlogController.processArticleForm()
+GET		/blog-admin/articles/:categoryId			controllers.BlogController.articles(categoryId: Long)
+GET		/blog-admin/edit-article/:id				controllers.BlogController.editArticleForm(id: Long)
 GET		/blog/get-thumbnail/:id						controllers.BlogController.getThumbnail(id: Long)
 GET		/blog/get-main-image/:id					controllers.BlogController.getMainImage(id: Long)
 
@@ -98,6 +98,13 @@ GET		/doctor/add-favorite-pharmacy/:pharmacyId/:str							controllers.DoctorCont
 GET		/doctor/my-favorite-pharmacies											controllers.DoctorController.myFavoritePharmacies()
 GET		/doctor/favorite-diagnostic-centres											controllers.DoctorController.myFavoriteDiagnosticCentres()
 GET		/doctor/add-favorite-diagnosticCentre/:diagnosticId/:str					controllers.DoctorController.addFavoriteDiagnosticCentre(diagnosticId: Long,str: String)
+GET    /admin/purge-doctor-find																controllers.MednetworkAdminController.purgeDoctor()
+POST    /admin/purge-doctor-details/:role																controllers.MednetworkAdminController.getAppUserDetails(role: String)
+GET     /admin/purge-doctor/:id																controllers.MednetworkAdminController.processPurgeDoctor(id: Long)
+GET     /admin/purge-pharmacy-find																controllers.MednetworkAdminController.purgePharmacy()
+GET     /admin/purge-pharmacy/:id																controllers.MednetworkAdminController.processPurgePharmacy(id: Long)
+GET     /admin/purge-diagnostic-find																controllers.MednetworkAdminController.purgeDiagnosticCentre()
+GET     /admin/purge-diagnostic/:id																controllers.MednetworkAdminController.processPurgeDiagnosticCentre(id: Long)
 
 
 
@@ -398,6 +405,7 @@ GET	/mr/sample-data					controllers.SampleDataController.mrSampleData()
 
 #Mednetwork-Admin
 GET		/admin						controllers.SampleDataController.mednetAdmin()
+#GET    /appointment					controllers.SampleDataController.createAppointment()
 
 #Cron
 GET		/cron/start						controllers.CronController.startCron()

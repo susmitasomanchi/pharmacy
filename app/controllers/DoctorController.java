@@ -19,6 +19,7 @@ import models.diagnostic.DiagnosticCentrePrescriptionInfo;
 import models.diagnostic.DiagnosticCentrePrescritionStatus;
 import models.doctor.Appointment;
 import models.doctor.AppointmentStatus;
+import models.doctor.Clinic;
 import models.doctor.Day;
 import models.doctor.DaySchedule;
 import models.doctor.DiagnosticTestLineItem;
@@ -1655,5 +1656,30 @@ public class DoctorController extends Controller {
 		}
 	}
 
+	/**
+	 * @author lakshmi
+	 * Action to purge the doctor details
+	 * 
+	 *//*
+	public static Result purgeDoctor(){
+		final AppUser appUser = AppUser.find.byId(143L);
+		final Doctor doctor = Doctor.find.where().eq("appUser", appUser).findUnique();
+		final List<DoctorClinicInfo> doctorClinicInfos = DoctorClinicInfo.find.where().eq("doctor", doctor).findList();
+		final List<Appointment> appointments= Appointment.find.where().eq("doctorClinicInfo.doctor", doctor).findList();;
+		final List<Prescription> prescriptions = Prescription.find.where().eq("doctor", doctor).findList();
+		final List<Clinic> clinics = new ArrayList<Clinic>();
+		for (final DoctorClinicInfo doctorClinicInfo : doctorClinicInfos) {
+			clinics.add(Clinic.find.where().eq("id", doctorClinicInfo.clinic.id).findUnique());
+		}
+		Ebean.delete(appointments);
+		Ebean.delete(clinics);
+		Ebean.delete(prescriptions);
+		Ebean.delete(doctorClinicInfos);
+		doctor.delete();
+		appUser.delete();
+
+		return ok("hello deleted");
+	}
+	  */
 
 }
