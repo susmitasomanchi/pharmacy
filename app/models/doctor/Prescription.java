@@ -1,7 +1,6 @@
 package models.doctor;
 
 import java.util.ArrayList;
-
 import java.util.Date;
 import java.util.List;
 
@@ -15,7 +14,6 @@ import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 
 import models.BaseEntity;
-import models.diagnostic.DiagnosticCentre;
 import models.diagnostic.DiagnosticCentrePrescriptionInfo;
 import models.patient.Patient;
 import models.pharmacist.PharmacyPrescriptionInfo;
@@ -43,7 +41,7 @@ public class Prescription extends BaseEntity{
 	public Appointment appointment;
 
 	public Date prescriptionDate;
-	
+
 	@Column(columnDefinition="TEXT")
 	public String problemStatement;
 
@@ -61,18 +59,14 @@ public class Prescription extends BaseEntity{
 
 	public static Model.Finder<Long, Prescription> find = new Finder<Long, Prescription>(Long.class, Prescription.class);
 
-	public List<DiagnosticCentre> getDiagnosticCentres(){
-		return null;
-	}
-	
 	public List<PharmacyPrescriptionInfo> getPharmacyInfoList(){
 		return PharmacyPrescriptionInfo.find.where().eq("prescription", this).findList();
 	}
-	
+
 	public List<DiagnosticCentrePrescriptionInfo> getDiagnoticInfoList(){
 		return DiagnosticCentrePrescriptionInfo.find.where().eq("prescription", this).findList();
 	}
-	
+
 	/**
 	 * Not required in this format. Gotta come up with a better way to
 	 * edit existing prescriptions (if that is desired in the first place)
@@ -117,5 +111,5 @@ public class Prescription extends BaseEntity{
 
 		return bean;
 	}
-*/
+	 */
 }

@@ -1184,6 +1184,7 @@ public class DoctorController extends Controller {
 		// Async Execution
 		Promise.promise(new Function0<Integer>() {
 			//@Override
+			@Override
 			public Integer apply() {
 				int result = 0;
 				if(!EmailService.sendPrescriptionSaveMessage(patient, doctor.appUser)){
@@ -1194,8 +1195,8 @@ public class DoctorController extends Controller {
 			}
 		});
 		// End of async
-		SMSService.sendSMS(prescription.patient.appUser.mobileNumber.toString(), "Your priscription by Dr"
-				+doctor.appUser.name+"has been saved.");
+		SMSService.sendSMS(prescription.patient.appUser.mobileNumber.toString(), "Your priscription by Dr. "
+				+doctor.appUser.name+" has been saved.");
 		flash().put("alert",
 				new Alert("alert-success", "Prescription saved!").toString());
 		return redirect(routes.DoctorController
@@ -1268,6 +1269,7 @@ public class DoctorController extends Controller {
 				// Async Execution
 				Promise.promise(new Function0<Integer>() {
 					//@Override
+					@Override
 					public Integer apply() {
 						int result = 0;
 						if(!EmailService.sendSimpleHtmlEMail(pharmacy.adminPharmacist.appUser.email, "Prescription Shared", message.toString())){
@@ -1311,6 +1313,7 @@ public class DoctorController extends Controller {
 				// Async Execution
 				Promise.promise(new Function0<Integer>() {
 					//@Override
+					@Override
 					public Integer apply() {
 						int result = 0;
 						if(!EmailService.sendSimpleHtmlEMail(diagnosticCentre.diagnosticRepAdmin.appUser.email, "Prescription Shared", message.toString())){
@@ -1350,6 +1353,7 @@ public class DoctorController extends Controller {
 			// Async Execution
 			Promise.promise(new Function0<Integer>() {
 				//@Override
+				@Override
 				public Integer apply() {
 					int result = 0;
 					if(!EmailService.sendSimpleHtmlEMail(prescription.patient.appUser.email, "Prescription Shared", message.toString())){
@@ -1368,6 +1372,7 @@ public class DoctorController extends Controller {
 			// Async Execution
 			Promise.promise(new Function0<Integer>() {
 				//@Override
+				@Override
 				public Integer apply() {
 					int result = 0;
 					if(!EmailService.sendSimpleHtmlEMail(doctor.appUser.email, "Prescription Shared", messageToDoctor.toString())){

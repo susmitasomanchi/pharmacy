@@ -288,10 +288,10 @@ public class PatientController extends Controller {
 
 		final StringBuilder smsMessage = new StringBuilder();
 
-		smsMessage.append("You have booked an Appointment on");
+		smsMessage.append("You have booked an appointment with Dr. "+appointment.doctorClinicInfo.doctor.appUser.name+" on ");
 		smsMessage.append( new SimpleDateFormat("dd-MMM-yyyy").format(appointment.appointmentTime));
-		smsMessage.append(","+ new SimpleDateFormat("HH:mm").format(appointment.appointmentTime));
-		smsMessage.append("at "+appointment.doctorClinicInfo.clinic.name+","+appointment.doctorClinicInfo.clinic.address.area);
+		smsMessage.append(" at "+ new SimpleDateFormat("HH:mm").format(appointment.appointmentTime));
+		smsMessage.append(" at "+appointment.doctorClinicInfo.clinic.name+", "+appointment.doctorClinicInfo.clinic.address.area);
 
 		SMSService.sendSMS(appointment.requestedBy.mobileNumber.toString(), smsMessage.toString());
 		final StringBuilder smsMessage2 = new StringBuilder();

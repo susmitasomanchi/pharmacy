@@ -64,7 +64,7 @@ public class LoginController extends Controller {
 		else {
 			final LoginBean loginBean = filledForm.get();
 			final List<AppUser> appUsers = AppUser.find.where().eq("email", loginBean.email.trim().toLowerCase()).findList();
-			Logger.info("found users " + appUsers.toString());
+			Logger.info("found appUsers: " + appUsers.size());
 			if(appUsers.size() < 1) {
 				// return invalid login/password
 				Logger.error("Invalid username/password");
@@ -84,7 +84,19 @@ public class LoginController extends Controller {
 				}
 				session(Constants.LOGGED_IN_USER_ID, appUsers.get(0).id + "");
 				session(Constants.LOGGED_IN_USER_ROLE, appUsers.get(0).role+ "");
-				return redirect(routes.UserActions.dashboard());
+
+				Logger.info("Session URL: "+session(Constants.URL_AFTER_LOGIN));
+
+				if(session(Constants.URL_AFTER_LOGIN) != null && !session(Constants.URL_AFTER_LOGIN).trim().isEmpty()){
+					final String url = session(Constants.URL_AFTER_LOGIN);
+					Logger.info("url: "+url);
+					session(Constants.URL_AFTER_LOGIN, "");
+					return redirect(session(url));
+				}
+				else{
+					Logger.info("url null");
+					return redirect(routes.UserActions.dashboard());
+				}
 			}
 			if(appUsers.size() > 1) {
 				session(Constants.LOGGED_IN_USER_ID, appUsers.get(0).id + "");
