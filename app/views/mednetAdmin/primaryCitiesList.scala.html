@@ -1,0 +1,49 @@
+@()
+
+@main("Primacy City List") {
+
+<div  style="padding-left:1%">
+	
+
+<div class="row well">
+
+<div class="col-md-8">
+<form action="@routes.MednetworkAdminController.addPrimaryCity()" method="POST">
+	<select name="state" class="chzn" data-placeholder="Select State">
+	<option></option>
+	@for((k,v) <- models.State.options()){
+		<option value="@k">@v</option>
+	}
+	</select>
+	<input type="text" name="city" placeholder="City's Name">
+	<input type="submit" class="btn btn-primary btn-xs"value="Add">
+
+<script>
+</script>
+</form>
+
+</div>
+
+
+</div>
+
+
+
+<br>
+<table class="table table-condensed">
+<tr>
+<th>S.No</th>
+<th>City</th>
+<th>State</th>
+</tr>
+@for((city,index)<- models.PrimaryCity.getCitiesStateWise().zipWithIndex){
+<tr>
+<td>@{index+1}</td>
+<td>@city.name</td>
+<td>@city.state.capitalize()</td>
+</tr>
+}
+</table>
+
+</div>
+}

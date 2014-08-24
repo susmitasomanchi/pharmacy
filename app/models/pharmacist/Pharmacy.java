@@ -17,6 +17,7 @@ import javax.persistence.OneToOne;
 import models.Address;
 import models.BaseEntity;
 import models.FileEntity;
+import models.PrimaryCity;
 import models.doctor.Doctor;
 import models.patient.Patient;
 import play.db.ebean.Model;
@@ -74,7 +75,8 @@ public class Pharmacy extends BaseEntity {
 	@OneToMany(cascade=CascadeType.ALL)
 	public List<Inventory> inventoryList = new ArrayList<Inventory>();
 
-
+	@OneToOne
+	PrimaryCity primaryCity;
 
 	public static Model.Finder<Long, Pharmacy> find = new Model.Finder<Long, Pharmacy>(Long.class, Pharmacy.class);
 

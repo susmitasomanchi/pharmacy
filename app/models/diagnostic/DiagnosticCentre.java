@@ -17,6 +17,7 @@ import models.Address;
 import models.BaseEntity;
 import models.FileEntity;
 import models.MasterDiagnosticTest;
+import models.PrimaryCity;
 import models.doctor.Doctor;
 import models.doctor.Prescription;
 import models.patient.Patient;
@@ -86,6 +87,9 @@ public class DiagnosticCentre extends BaseEntity {
 
 	@Column(columnDefinition="TEXT")
 	public String slugUrl;
+
+	@OneToOne
+	PrimaryCity primaryCity;
 
 	public static Model.Finder<Long, DiagnosticCentre> find = new Finder<Long, DiagnosticCentre>(Long.class, DiagnosticCentre.class);
 

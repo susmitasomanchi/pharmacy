@@ -16,7 +16,9 @@ import com.avaje.ebean.Ebean;
 import models.Alert;
 import models.AppUser;
 import models.Feedback;
+import models.PrimaryCity;
 import models.Role;
+import models.State;
 import models.diagnostic.DiagnosticCentre;
 import models.diagnostic.DiagnosticCentrePrescriptionInfo;
 import models.diagnostic.DiagnosticRepresentative;
@@ -38,14 +40,14 @@ import actions.BasicAuth;
 
 @BasicAuth
 public class MednetworkAdminController extends Controller {
+
 	/**
 	 * @author Lakshmi
 	 * GET		/admin/specialization-list
 	 * @return
 	 */
 	public static Result getSpecializationList(){
-		final List<MasterSpecialization> masterSpecializations = MasterSpecialization.find.orderBy("name").findList();
-		return ok(views.html.mednetAdmin.specializationList.render(masterSpecializations));
+		return ok(views.html.mednetAdmin.specializationList.render(MasterSpecialization.getAll()));
 	}
 
 	/**
@@ -330,6 +332,39 @@ public class MednetworkAdminController extends Controller {
 		appUser.delete();
 		flash().put("alert", new Alert("alert-info","Diagnostic Centre Puged Successfully.").toString());
 		return redirect(routes.MednetworkAdminController.purgeDiagnosticCentre());
+	}
+
+
+	/**
+	 * Action to render list of Primary Cities and a form to add one
+	 * GET	/admin/primary-cities
+	 */
+	public static Result getPrimaryCitiesList(){
+		return ok(views.html.mednetAdmin.primaryCitiesList.render());
+	}
+
+	/**
+	 * Action create a Primary City
+	 * POST	/admin/add-primary-city
+	 */
+	public static Result addPrimaryCity(){
+		if(
+				request().body().asFormUrlEncoded().get("state")!= null &&
+				request().body().asFormUrlEncoded().get("city")!= null &&
+				!request().body().asFormUrlEncoded().get("state")[0].trim().isEmpty() &&
+				!request().body().asFormUrlEncoded().get("city")[0].trim().isEmpty()
+
+				){
+
+			final State state = State.valueOf(request().body().asFormUrlEncoded().get("state")[0].trim());
+			final String city = request().body().asFormUrlEncoded().get("city")[0].trim();
+			final PrimaryCity primaryCity = new PrimaryCity();
+			primaryCity.name = city;
+			primaryCity.state = state;
+			primaryCity.save();
+			flash().put("alert", new Alert("alert-info","Primary City Added").toString());
+		}
+		return redirect(routes.MednetworkAdminController.getPrimaryCitiesList());
 	}
 
 }

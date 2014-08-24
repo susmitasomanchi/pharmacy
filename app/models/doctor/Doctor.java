@@ -18,6 +18,7 @@ import javax.persistence.OneToOne;
 
 import models.AppUser;
 import models.BaseEntity;
+import models.PrimaryCity;
 import models.diagnostic.DiagnosticCentre;
 import models.patient.PatientDoctorInfo;
 import models.pharmacist.Pharmacy;
@@ -91,8 +92,10 @@ public class Doctor extends BaseEntity{
 	@ManyToMany(cascade=CascadeType.ALL)
 	public List<DiagnosticCentre> diagnosticCentreList=new ArrayList<DiagnosticCentre>();
 
-	/** Using it to capture starting year of experience.
+	/**
+	 * 	Using it to capture starting year of experience.
 	 * 	So, Doctor's experience = currentYear - this.experience
+	 * 	Check out doctor.getYearsOfExperience()
 	 */
 	public Integer experience;
 
@@ -102,6 +105,11 @@ public class Doctor extends BaseEntity{
 
 	@Column(columnDefinition="TEXT")
 	public String slugUrl;
+
+	@OneToOne
+	PrimaryCity primaryCity;
+
+
 
 	public static Model.Finder<Long,Doctor> find = new Model.Finder<Long, Doctor>(Long.class, Doctor.class);
 

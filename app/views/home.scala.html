@@ -44,32 +44,74 @@
       <br>
 	</div>
    
-    <hr>
-   <div class="row">
- <div class="col-md-2" style="width:8%;padding-right:0px">
+<hr>
+
+
+<style>
+.chosen-container .chosen-single{
+	height:37px;
+}
+
+.chosen-container .chosen-single span{
+	padding-top:5px;
+}
+
+.chosen-container .chosen-single b{
+	margin-top:7px;
+}
+
+</style>
+
+<div class="row">
+
+<div class="col-md-2" style="width:8%;padding-right:0px">
  <p style="padding-top:7px">Search For</p>
 </div>
-<div class="col-md-2" style="width:12%" >
-  <select class="form-control" name="role" id="role" style="width:100%;box-shadow: 1px 1px 1px 1px #aaaaaa;">
-<option value="DOCTOR">Doctor</option>
-<option value="ADMIN_PHARMACIST">Pharmacy</option>
-<option value="ADMIN_DIAGREP">Diagnostic Centre</option>
-</select>
 
+<div class="col-md-2" style="width:12%" >
+	<select class="form-control" name="role" id="role" style="width:100%;box-shadow: 1px 1px 1px 1px #aaaaaa;">
+		<option value="DOCTOR">Doctor</option>
+		<option value="ADMIN_PHARMACIST">Pharmacy</option>
+		<option value="ADMIN_DIAGREP">Diagnostic Centre</option>
+	</select>
 </div>
-  <div class="col-md-6" style="width:60%">
-      <input type="search" style="width:100%;box-shadow: 1px 1px 3px 3px #aaaaaa;"  name="searchKey" id="searchKey" placeholder="Doctor's Name">
-    </div>
+
+<div id="spezDiv" class="col-md-2" style="width:20%">
+	<select class="form-control chzn-no-deselect" data-placeholder="Specialization" name="spez" id="spez" style="width:100%;box-shadow: 1px 1px 1px 1px #aaaaaa; height:120%;">
+		<option></option>
+		@for(spez <- models.doctor.MasterSpecialization.getAll()){
+			<option value="@spez.name">@spez.name</option>
+		}
+	</select>
+</div>
+
+<div id="searchDiv" class="col-md-4" style="width:40%">
+	<input type="search" style="width:100%;box-shadow: 1px 1px 3px 3px #aaaaaa;"  name="searchKey" id="searchKey" placeholder="Doctor's Name">
+</div>
    
 <div class="col-md-2" style="width:20%">
-  <button style="width:100%;box-shadow: 1px 1px 3px 3px #aaaaaa;" class="btn btn-sm btn-primary pull-right" onclick="searchKey();"><i class="icon-search icon-large"></i> Search</button>
-  </div>
-  </div>
-   <script>
-   
+	<button style="width:100%;box-shadow: 1px 1px 3px 3px #aaaaaa;" class="btn btn-sm btn-primary pull-right" onclick="searchKey();"><i class="icon-search icon-large"></i> Search</button>
+</div>
+
+</div>
+
+
+
+<script>
    
 $('#role').on('change', function(){
-	$('#searchKey').attr('placeholder',$(this).find("option:selected").text()+'\'s Name');
+	var selectedText = $(this).find("option:selected").text();
+	$('#searchKey').attr('placeholder',selectedText+'\'s Name');
+	if(selectedText.localeCompare('Doctor') != 0){
+		$('#spezDiv').hide();
+		$('#searchDiv').attr('class','col-md-6');
+		$('#searchDiv').attr('style','width:60%;');
+	}
+	else{
+		$('#searchDiv').attr('class','col-md-4');
+		$('#searchDiv').attr('style','width:40%;');
+		$('#spezDiv').show();
+	}
 });
    
 function searchKey(){
@@ -79,7 +121,8 @@ function searchKey(){
     }
     var setValue = $('#role').val();
     if(setValue == "DOCTOR"){
-  window.location.href='@routes.PublicController.processSearchDoctors("")'+searchString; 
+  	var spez = $('#spez').find("option:selected").text();
+  	window.location.href='/doctor/search/'+spez.toLowerCase()+'/'+searchString; 
   } 
   if(setValue == "ADMIN_PHARMACIST"){
   window.location.href='@routes.PublicController.processSearchPharmacies("")'+searchString; 
@@ -267,10 +310,6 @@ $("#searchKey").keyup(function (e) {
     <div class="col-md-12">
     <div class="well">
     <span>
-        @*
-        Ride the revolution by <a href="/join" class="btn-link"><b>joining us today!</b></a> Its free and worth much more than the 30 seconds you'll take to do so.
-        <br>
-        *@ 
         Follow us on <a href="https://twitter.com/mednetworkindia" target="_blank"><b>twitter</b></a>, like our page on <a href="https://www.facebook.com/mednetwork.in" target="_blank"><b>facebook</b></a> and <strong>read our <a href="/blog" target="_blank"><b>blog</b></a></strong> which has some interesting ideas to stay healthy. 
     </span>
     	

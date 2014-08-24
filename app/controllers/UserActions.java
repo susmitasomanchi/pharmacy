@@ -66,7 +66,7 @@ public class UserActions extends Controller {
 			weekMap.put("pharmacies", Pharmacy.find.where().ge("createdOn", cal.getTime()).findRowCount());
 			weekMap.put("dc", DiagnosticCentre.find.where().ge("createdOn", cal.getTime()).findRowCount());
 
-			return ok(views.html.mednetAdmin.adminProfile.render(todayMap, weekMap));
+			return ok(views.html.mednetAdmin.adminDashboard.render(todayMap, weekMap));
 		}
 
 		//@TODO: none should render the dashboard of patient

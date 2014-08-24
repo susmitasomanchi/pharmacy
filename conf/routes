@@ -4,7 +4,6 @@
 
 
 #Blog
-GET    /blog/create-blog-admin                     	controllers.SampleDataController.createBlogAdmin()
 GET    /login	                              	   	controllers.LoginController.loginForm()
 
 GET		/blog										controllers.BlogController.blogHome()
@@ -202,9 +201,6 @@ GET 	/diagnostic/:slugUrl								controllers.PublicController.getDiagnosticCentr
 
 
 GET		/static/fav/pharmacies							controllers.PharmacistController.staticFavPharmacies()
-GET		/create/master									controllers.SampleDataController.createMasterMedicinesAndTests()
-GET		/create/spez									controllers.SampleDataController.createDocSpez()
-GET		/sms											controllers.SampleDataController.testurl()
 
 GET		/admin/specializations							controllers.MednetworkAdminController.getSpecializationList()
 POST	/admin/add-specialization						controllers.MednetworkAdminController.addSpecialization()
@@ -212,6 +208,8 @@ POST	/admin/update-specialization					controllers.MednetworkAdminController.upda
 GET		/admin/feedback-list							controllers.MednetworkAdminController.getFeedbackList()
 GET		/admin/delete-feedback/:id						controllers.MednetworkAdminController.deleteFeedback(id: Long)
 GET		/admin/get-user-date-between-dates/:from/:to 	controllers.MednetworkAdminController.getUserDateBetweenDates(from: String, to: String)
+GET		/admin/primary-cities							controllers.MednetworkAdminController.getPrimaryCitiesList()
+POST	/admin/add-primary-city							controllers.MednetworkAdminController.addPrimaryCity()
 
 #############################	PRODUCTION	#################################################################################
 

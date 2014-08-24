@@ -242,7 +242,7 @@ public class SampleDataController extends Controller {
 		final AppUser appUser = new AppUser();
 		appUser.name = "anand";
 		appUser.email = "anand@gmail.com";
-		String password = "123";
+		final String password = "123";
 		appUser.role = Role.ADMIN_MR;
 		if(AppUser.find.where().eq("email", appUser.email).findRowCount()>0){
 			flash().put("alert", new Alert("alert-danger", "Sorry! User with email id "+appUser.email.trim()+" already exists!").toString());
@@ -431,9 +431,5 @@ public class SampleDataController extends Controller {
 	}
 
 
-	public static Result test222(){
-		Logger.info("Test 2222222");
-		return ok();
-	}
 }
 

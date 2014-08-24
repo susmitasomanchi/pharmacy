@@ -1,5 +1,7 @@
 package models.doctor;
 
+import java.util.List;
+
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -24,5 +26,9 @@ public class MasterSpecialization extends BaseEntity{
 	public String remarks;
 
 	public static Model.Finder<Long,MasterSpecialization> find = new Finder<Long, MasterSpecialization>(Long.class, MasterSpecialization.class);
+
+	public static List<MasterSpecialization> getAll(){
+		return find.orderBy("name").findList();
+	}
 
 }
