@@ -1,15 +1,5 @@
-
-/*****
-
-THIS IS AN AUTO GENERATED CODE
-PLEASE DO NOT MODIFY IT BY HAND
- *****/
-/*****
-
-THIS IS AN AUTO GENERATED CODE
-PLEASE DO NOT MODIFY IT BY HAND
- *****/
 package controllers;
+
 import java.security.MessageDigest;
 import java.security.SecureRandom;
 import java.text.ParseException;
@@ -21,6 +11,7 @@ import java.util.Random;
 
 import models.Alert;
 import models.AppUser;
+import models.PrimaryCity;
 import models.Role;
 import models.Sex;
 import models.diagnostic.DiagnosticCentre;
@@ -155,6 +146,8 @@ public class UserController extends Controller {
 		appUser.mobileNumber = 9999999999L;
 		appUser.save();
 
+		final PrimaryCity city = PrimaryCity.find.byId(Long.parseLong(requestMap.get("city")[0].trim()));
+
 		if(appUser.role.equals(Role.DOCTOR)){
 			final Doctor doctor = new Doctor();
 			doctor.degree = "Degree";
@@ -164,6 +157,7 @@ public class UserController extends Controller {
 			doctor.registrationNumber = "00000";
 			doctor.slugUrl = Util.simpleSlugify(appUser.name)+appUser.id;
 			doctor.appUser = appUser;
+			doctor.primaryCity = city;
 			doctor.save();
 		}
 
@@ -176,6 +170,7 @@ public class UserController extends Controller {
 			pharmacy.name = request().body().asFormUrlEncoded().get("pharmacyName")[0];
 			pharmacy.adminPharmacist = pharmacist;
 			pharmacy.slugUrl = Util.simpleSlugify(pharmacy.name)+pharmacist.id;
+			pharmacy.primaryCity = city;
 			pharmacy.save();
 			pharmacist.pharmacy = pharmacy;
 			pharmacist.update();
@@ -190,6 +185,7 @@ public class UserController extends Controller {
 			diagnosticCentre.name = request().body().asFormUrlEncoded().get("diagnosticCentreName")[0];
 			diagnosticCentre.diagnosticRepAdmin = diagnosticRepresentative;
 			diagnosticCentre.slugUrl = Util.simpleSlugify(diagnosticCentre.name)+diagnosticRepresentative.id;
+			diagnosticCentre.primaryCity = city;
 			diagnosticCentre.save();
 			diagnosticRepresentative.diagnosticCentre = diagnosticCentre;
 			diagnosticRepresentative.update();
@@ -201,7 +197,7 @@ public class UserController extends Controller {
 			patient.save();
 		}
 
-		session().clear();
+		//session().clear();
 		session(Constants.LOGGED_IN_USER_ID, appUser.id + "");
 		session(Constants.LOGGED_IN_USER_ROLE, appUser.role+ "");
 		// Async Execution
@@ -220,7 +216,6 @@ public class UserController extends Controller {
 			}
 		});
 		// End of async
-
 
 		return redirect(routes.UserActions.dashboard());
 	}
@@ -266,7 +261,10 @@ public class UserController extends Controller {
 		final AppUser loggedInUser = LoginController.getLoggedInUser();
 		// server-side check
 		if(appUserId.longValue() != loggedInUser.id.longValue()){
-			session().clear();
+			//session().clear();
+			session().remove(Constants.LOGGED_IN_USER_ID);
+			session().remove(Constants.LOGGED_IN_USER_ROLE);
+
 			return redirect(routes.LoginController.processLogout());
 		}
 
@@ -445,7 +443,10 @@ public class UserController extends Controller {
 		doctor.appUser = appUser;
 		doctor.save();
 
-		session().clear();
+		//session().clear();
+		session().remove(Constants.LOGGED_IN_USER_ID);
+		session().remove(Constants.LOGGED_IN_USER_ROLE);
+
 		session(Constants.LOGGED_IN_USER_ID, appUser.id + "");
 		session(Constants.LOGGED_IN_USER_ROLE, appUser.role+ "");
 

@@ -2,6 +2,15 @@
 
 @no_navbar("MedNetwork"){
 
+<script>
+@if(session().get(utils.Constants.CITY_ID) != null){
+	var inCity = '@models.PrimaryCity.find.byId(Long.parseLong(session().get(utils.Constants.CITY_ID))).name';
+}else{
+	var inCity = '';
+}
+</script>
+
+
 <body style="zoom: 1;">
     			
 
@@ -13,7 +22,10 @@
         <img style="" src="/assets/images/mednetwork.png" alt="MedNetwork">
       </div>
       
-      <div class="col-md-6 pull-right" style="margin-top:-1%; margin-bottom:-2%;">
+      
+    @* 
+      
+	<div class="col-md-6 pull-right" style="margin-top:-1%; margin-bottom:-2%;">
     @helper.form(action=routes.LoginController.processLogin()) {
   	<div style="margin-top:0em;">
   	<br>
@@ -33,13 +45,16 @@
   	
   </div>
   }
-  <script>
-	$('#uname').on('blur', function(){
-		$('#pwd').focus();
-	});
-  </script>
+  	<script>
+		$('#uname').on('blur', function(){
+			$('#pwd').focus();
+		});
+  	</script>
   
-      </div>
+	</div>
+	
+	*@
+	
       
       <br>
 	</div>
@@ -86,7 +101,14 @@
 </div>
 
 <div id="searchDiv" class="col-md-4" style="width:40%">
-	<input type="search" style="width:100%;box-shadow: 1px 1px 3px 3px #aaaaaa;"  name="searchKey" id="searchKey" placeholder="Doctor's Name">
+	<input type="search" style="width:100%;box-shadow: 1px 1px 3px 3px #aaaaaa;"  name="searchKey" id="searchKey" 
+	@if(session().get(utils.Constants.CITY_ID) != null){
+		placeholder="Doctor's Name or Locality in @models.PrimaryCity.find.byId(Long.parseLong(session().get(utils.Constants.CITY_ID))).name"
+	}else{
+		placeholder="Doctor's Name or Locality"
+	}
+	>
+	
 </div>
    
 <div class="col-md-2" style="width:20%">
@@ -101,7 +123,7 @@
    
 $('#role').on('change', function(){
 	var selectedText = $(this).find("option:selected").text();
-	$('#searchKey').attr('placeholder',selectedText+'\'s Name');
+	$('#searchKey').attr('placeholder',selectedText+'\'s Name or Locality '+inCity);
 	if(selectedText.localeCompare('Doctor') != 0){
 		$('#spezDiv').hide();
 		$('#searchDiv').attr('class','col-md-6');

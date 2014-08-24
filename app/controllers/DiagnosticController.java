@@ -34,6 +34,7 @@ import play.mvc.Controller;
 import play.mvc.Http.MultipartFormData;
 import play.mvc.Http.MultipartFormData.FilePart;
 import play.mvc.Result;
+import utils.Constants;
 import utils.EmailService;
 import utils.SMSService;
 import actions.BasicAuth;
@@ -286,6 +287,7 @@ public class DiagnosticController extends Controller {
 		// Async Execution
 		Promise.promise(new Function0<Integer>() {
 			//@Override
+			@Override
 			public Integer apply() {
 				int result = 0;
 				if(!EmailService.sendSimpleHtmlEMail(diagnosticCentrePrescriptionInfo.diagnosticCentre.diagnosticRepAdmin.appUser.email, "Diagnostic Reports served", messagetodiagnostic.toString())){
@@ -305,6 +307,7 @@ public class DiagnosticController extends Controller {
 		// Async Execution
 		Promise.promise(new Function0<Integer>() {
 			//@Override
+			@Override
 			public Integer apply() {
 				int result = 0;
 				if(!EmailService.sendSimpleHtmlEMail(diagnosticCentrePrescriptionInfo.prescription.patient.appUser.email, "Diagnostic Reports served", messagetopatient.toString())){
@@ -403,18 +406,27 @@ public class DiagnosticController extends Controller {
 		if(!(LoginController.getLoggedInUser().role.equals(Role.ADMIN_DIAGREP)
 				||
 				LoginController.getLoggedInUser().role.equals(Role.PATIENT))){
-			session().clear();
+			//session().clear();
+			session().remove(Constants.LOGGED_IN_USER_ID);
+			session().remove(Constants.LOGGED_IN_USER_ROLE);
+
 			return redirect(routes.LoginController.processLogout());
 		}
 		if(LoginController.getLoggedInUser().role.equals(Role.ADMIN_DIAGREP)){
 			if((diagnosticCentrePrescriptionInfo.diagnosticCentre.id.longValue() != LoginController.getLoggedInUser().getDiagnosticRepresentative().diagnosticCentre.id.longValue())){
-				session().clear();
+				//session().clear();
+				session().remove(Constants.LOGGED_IN_USER_ID);
+				session().remove(Constants.LOGGED_IN_USER_ROLE);
+
 				return redirect(routes.LoginController.processLogout());
 			}
 		}
 		if(LoginController.getLoggedInUser().role.equals(Role.PATIENT)){
 			if((diagnosticCentrePrescriptionInfo.prescription.patient.id.longValue() != LoginController.getLoggedInUser().getPatient().id.longValue()) ){
-				session().clear();
+				//session().clear();
+				session().remove(Constants.LOGGED_IN_USER_ID);
+				session().remove(Constants.LOGGED_IN_USER_ROLE);
+
 				return redirect(routes.LoginController.processLogout());
 			}
 		}
@@ -434,7 +446,10 @@ public class DiagnosticController extends Controller {
 		final DiagnosticCentrePrescriptionInfo diagnosticCentrePrescriptionInfo = DiagnosticCentrePrescriptionInfo.find.byId(diagnosticInfoId);
 		// Server side validation
 		if((diagnosticCentrePrescriptionInfo.diagnosticCentre.id.longValue() != LoginController.getLoggedInUser().getDiagnosticRepresentative().diagnosticCentre.id.longValue()) || (!LoginController.getLoggedInUser().role.equals(Role.ADMIN_DIAGREP))){
-			session().clear();
+			//session().clear();
+			session().remove(Constants.LOGGED_IN_USER_ID);
+			session().remove(Constants.LOGGED_IN_USER_ROLE);
+
 			return redirect(routes.LoginController.processLogout());
 		}
 		final FileEntity fileEntity = FileEntity.find.byId(reportId);
@@ -528,7 +543,10 @@ public class DiagnosticController extends Controller {
 		final DiagnosticCentrePrescriptionInfo dpInfo = DiagnosticCentrePrescriptionInfo.find.byId(dpInfoId);
 		// Server side validation
 		if((dpInfo.diagnosticCentre.id.longValue() != LoginController.getLoggedInUser().getDiagnosticRepresentative().diagnosticCentre.id.longValue()) || (!LoginController.getLoggedInUser().role.equals(Role.ADMIN_DIAGREP))){
-			session().clear();
+			//session().clear();
+			session().remove(Constants.LOGGED_IN_USER_ID);
+			session().remove(Constants.LOGGED_IN_USER_ROLE);
+
 			return redirect(routes.LoginController.processLogout());
 		}
 

@@ -57,7 +57,7 @@ POST 	/user/verify-mobile-number					controllers.UserController.verifyMobileNumb
 # Public Pages
 
 GET		/doctor/search									controllers.PublicController.searchDoctorsPage()
-GET		/doctor/search/:key								controllers.PublicController.processSearchDoctors(key: String)
+GET		/doctor/search/:spez/:key								controllers.PublicController.processSearchDoctors(spez: String, key: String)
 GET		/pharmacy/search/:searchString                  controllers.PublicController.processSearchPharmacies(searchString: String)
 #GET   	/pharmacy/add-favourite-pharmacy/:pharmacyId/:str   controllers.PublicController.myFavoritePharmacy(pharmacyId : Long,str: String)
 GET		/pharmacy/search									controllers.PublicController.searchPharmaciesPage()
@@ -210,6 +210,8 @@ GET		/admin/delete-feedback/:id						controllers.MednetworkAdminController.delet
 GET		/admin/get-user-date-between-dates/:from/:to 	controllers.MednetworkAdminController.getUserDateBetweenDates(from: String, to: String)
 GET		/admin/primary-cities							controllers.MednetworkAdminController.getPrimaryCitiesList()
 POST	/admin/add-primary-city							controllers.MednetworkAdminController.addPrimaryCity()
+GET		/add-primary-city-to-session/:cityId			controllers.PublicController.addPrimaryCityToSession(cityId: Long)
+
 
 #############################	PRODUCTION	#################################################################################
 

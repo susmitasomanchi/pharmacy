@@ -8,8 +8,15 @@
 <div class="well">
 <div class="row">
 
-<label for="searchInput">Search For</label>
-<input id="searchInput" value="@searchKey"/>
+<input id="searchInput" value="@searchKey" style="width:40%;"
+	
+	@if(session().get(utils.Constants.CITY_ID) != null){
+		placeholder="Pharmacy's Name or Locality in @models.PrimaryCity.find.byId(Long.parseLong(session().get(utils.Constants.CITY_ID))).name"
+	}else{
+		placeholder="Pharmacy's Name or Locality"
+	}
+	
+/>
 
 <a onclick="window.location.href='/pharmacy/search/'+$('#searchInput').val().trim();" class="btn btn-xs btn-primary">Search</a>
 

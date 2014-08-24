@@ -89,7 +89,7 @@ public class DiagnosticCentre extends BaseEntity {
 	public String slugUrl;
 
 	@OneToOne
-	PrimaryCity primaryCity;
+	public PrimaryCity primaryCity;
 
 	public static Model.Finder<Long, DiagnosticCentre> find = new Finder<Long, DiagnosticCentre>(Long.class, DiagnosticCentre.class);
 

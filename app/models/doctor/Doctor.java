@@ -107,7 +107,7 @@ public class Doctor extends BaseEntity{
 	public String slugUrl;
 
 	@OneToOne
-	PrimaryCity primaryCity;
+	public PrimaryCity primaryCity;
 
 
 
@@ -171,8 +171,11 @@ public class Doctor extends BaseEntity{
 	public void update() {
 		final StringBuilder stringBuilder = new StringBuilder();
 		for (final DoctorClinicInfo clinicInfo : this.doctorClinicInfoList) {
-			if(clinicInfo.clinic != null){
+			if(clinicInfo.clinic != null && clinicInfo.active){
 				stringBuilder.append(clinicInfo.clinic.name.toLowerCase());
+				if(clinicInfo.clinic.address != null){
+					stringBuilder.append(clinicInfo.clinic.address.area.toLowerCase());
+				}
 			}
 		}
 		if(this.appUser.name != null){

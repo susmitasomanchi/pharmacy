@@ -28,4 +28,8 @@ public class PrimaryCity extends BaseEntity{
 		return find.where().orderBy("state").findList();
 	}
 
+	public static List<PrimaryCity> getAllInOrder(){
+		return find.where().orderBy("name").findList();
+	}
+
 }

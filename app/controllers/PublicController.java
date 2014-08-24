@@ -13,32 +13,28 @@ import models.Alert;
 import models.AppUser;
 import models.Feedback;
 import models.FileEntity;
+import models.PrimaryCity;
 import models.Role;
 import models.diagnostic.DiagnosticCentre;
-import models.diagnostic.DiagnosticCentrePrescriptionInfo;
 import models.doctor.Appointment;
-import models.doctor.Clinic;
 import models.doctor.Day;
 import models.doctor.DaySchedule;
 import models.doctor.Doctor;
 import models.doctor.DoctorClinicInfo;
-import models.doctor.Prescription;
+import models.doctor.MasterSpecialization;
 import models.patient.Patient;
 import models.patient.PatientDoctorInfo;
-import models.pharmacist.Pharmacist;
 import models.pharmacist.Pharmacy;
-import models.pharmacist.PharmacyPrescriptionInfo;
 import play.Logger;
 import play.data.Form;
 import play.libs.F.Function0;
 import play.libs.F.Promise;
 import play.mvc.Controller;
 import play.mvc.Result;
+import utils.Constants;
 import utils.EmailService;
 import actions.ConfirmAppUser;
 import beans.LoginBean;
-
-import com.avaje.ebean.Ebean;
 
 public class PublicController extends Controller{
 	public static final Form<LoginBean> loginForm = Form.form(LoginBean.class);
@@ -55,14 +51,19 @@ public class PublicController extends Controller{
 	 * Action to search Doctor and display it
 	 * GET /doctor/search/:key
 	 */
-	public static Result processSearchDoctors(final String key) {
+	public static Result processSearchDoctors(final String spez, final String key) {
 		final String cleanKey = key.trim().toLowerCase();
 		if(cleanKey.length() < 4){
 			flash().put("alert", new Alert("alert-info", "Searched word should be atleast 4 characters long.").toString());
 			return ok(views.html.doctor.searchedDoctors.render(false,key, new ArrayList<Doctor>()));
 		}
 		else{
-			final List<Doctor> doctors = Doctor.find.where().like("searchIndex","%"+cleanKey+"%").findList();
+			final PrimaryCity city = PrimaryCity.find.byId(Long.parseLong(session(Constants.CITY_ID)));
+			final MasterSpecialization specialization = MasterSpecialization.find.where().ieq("name", spez).findUnique();
+			final List<Doctor> doctors = Doctor.find.where()
+					.eq("primaryCity", city)
+					.in("specializationList", specialization)
+					.like("searchIndex","%"+cleanKey+"%").findList();
 			return ok(views.html.doctor.searchedDoctors.render(true, key, doctors));
 		}
 	}
@@ -182,16 +183,18 @@ public class PublicController extends Controller{
 	 */
 	public static Result processSearchPharmacies(final String searchKey) {
 		final String searchStr = searchKey.toLowerCase().trim();
-		final List<Pharmacy> pharmacyList = new ArrayList<Pharmacy>();
-		if(searchStr.length()>=4){
-			Logger.info("key: "+searchStr);
-			pharmacyList.addAll(Pharmacy.find.where().like("searchIndex","%"+searchStr+"%").findList());
-			Logger.info("size: "+pharmacyList.size());
+		if(searchStr.length() < 4){
+			flash().put("alert", new Alert("alert-danger", "The searck key should contain atleast four charecters").toString());
+			return ok(views.html.pharmacist.searched_pharmacies.render(false,searchKey,new ArrayList<Pharmacy>()));
 		}
 		else{
-			flash().put("alert", new Alert("alert-danger", "The searck key should contain atleast four charecters").toString());
+			final PrimaryCity city = PrimaryCity.find.byId(Long.parseLong(session(Constants.CITY_ID)));
+			final List<Pharmacy>pharmacyList = Pharmacy.find.where()
+					.eq("primaryCity", city)
+					.like("searchIndex","%"+searchStr+"%")
+					.findList();
+			return ok(views.html.pharmacist.searched_pharmacies.render(true,searchKey,pharmacyList));
 		}
-		return ok(views.html.pharmacist.searched_pharmacies.render(true,searchKey,pharmacyList));
 	}
 
 	/**
@@ -467,15 +470,18 @@ public class PublicController extends Controller{
 	 */
 	public static Result processSearchDiagnosticCentres(final String searchKey) {
 		final String searchStr = searchKey.toLowerCase().trim();
-		final List<DiagnosticCentre> diagnosticCentreList = new ArrayList<DiagnosticCentre>();
-		if(searchStr.length()>=4){
-			Logger.info("key: "+searchStr);
-			diagnosticCentreList.addAll(DiagnosticCentre.find.where().like("searchIndex","%"+searchStr+"%").findList());
+		if(searchStr.length() < 4){
+			flash().put("alert", new Alert("alert-danger", "The searck key should contain atleast four charecters").toString());
+			return ok(views.html.diagnostic.searched_diagnostic_Centres.render(false,searchKey,new ArrayList<DiagnosticCentre>()));
 		}
 		else{
-			flash().put("alert", new Alert("alert-danger", "The searck key should contain atleast four charecters").toString());
+			final PrimaryCity city = PrimaryCity.find.byId(Long.parseLong(session(Constants.CITY_ID)));
+			final List<DiagnosticCentre> diagnosticCentreList =  DiagnosticCentre.find.where()
+					.eq("primaryCity", city)
+					.like("searchIndex","%"+searchStr+"%")
+					.findList();
+			return ok(views.html.diagnostic.searched_diagnostic_Centres.render(true,searchKey,diagnosticCentreList));
 		}
-		return ok(views.html.diagnostic.searched_diagnostic_Centres.render(true,searchKey,diagnosticCentreList));
 	}
 
 
@@ -680,6 +686,16 @@ public class PublicController extends Controller{
 
 		//final AppUser appUser = LoginController.getLoggedInUser();
 		return ok(views.html.helpdocument.render());
+	}
+
+
+	/**
+	 * Action to add Primary City to Session
+	 * GET	/add-primary-city-to-session/:cityId
+	 */
+	public static Result addPrimaryCityToSession(final Long cityId){
+		session(Constants.CITY_ID, cityId+"");
+		return ok(PrimaryCity.find.byId(cityId).name);
 	}
 
 

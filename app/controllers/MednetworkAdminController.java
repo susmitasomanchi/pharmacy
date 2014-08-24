@@ -8,11 +8,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import org.json.JSONArray;
-import org.json.JSONObject;
-
-import com.avaje.ebean.Ebean;
-
 import models.Alert;
 import models.AppUser;
 import models.Feedback;
@@ -33,12 +28,19 @@ import models.patient.PatientDoctorInfo;
 import models.pharmacist.Pharmacist;
 import models.pharmacist.Pharmacy;
 import models.pharmacist.PharmacyPrescriptionInfo;
+
+import org.json.JSONObject;
+
 import play.Logger;
 import play.mvc.Controller;
 import play.mvc.Result;
 import actions.BasicAuth;
+import actions.MedNetworkAdmin;
+
+import com.avaje.ebean.Ebean;
 
 @BasicAuth
+@MedNetworkAdmin
 public class MednetworkAdminController extends Controller {
 
 	/**

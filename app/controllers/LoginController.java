@@ -56,7 +56,11 @@ public class LoginController extends Controller {
 	 *	POST   /login
 	 */
 	public static Result processLogin() {
-		session().clear();
+
+		//session().clear(); Cannot clear session() as its used to store Primary City Id
+		session().remove(Constants.LOGGED_IN_USER_ID);
+		session().remove(Constants.LOGGED_IN_USER_ROLE);
+
 		final Form<LoginBean> filledForm = loginForm.bindFromRequest();
 		if (filledForm.hasErrors()) {
 			return badRequest(views.html.adminlogin.render(filledForm));
@@ -110,7 +114,9 @@ public class LoginController extends Controller {
 
 	//@BasicAuth
 	public static Result processLogout() {
-		session().clear();
+		//session().clear();
+		session().remove(Constants.LOGGED_IN_USER_ID);
+		session().remove(Constants.LOGGED_IN_USER_ROLE);
 		return redirect(routes.Application.index());
 	}
 
@@ -130,7 +136,9 @@ public class LoginController extends Controller {
 		final AppUser loggedInUser = LoginController.getLoggedInUser();
 
 		if(appUserId.longValue() != loggedInUser.id.longValue()){
-			session().clear();
+			//session().clear();
+			session().remove(Constants.LOGGED_IN_USER_ID);
+			session().remove(Constants.LOGGED_IN_USER_ROLE);
 			return redirect(routes.LoginController.processLogout());
 		}
 
@@ -167,7 +175,9 @@ public class LoginController extends Controller {
 			loggedInUser.update();
 			Logger.info("Password Changed Successfully By AppUser: "+loggedInUser.id);
 			flash().put("alert", new Alert("alert-info", "Password has been changed. Please login with the new password.").toString());
-			session().clear();
+			//session().clear();
+			session().remove(Constants.LOGGED_IN_USER_ID);
+			session().remove(Constants.LOGGED_IN_USER_ROLE);
 			return redirect(routes.Application.index());
 		}
 
@@ -265,7 +275,9 @@ public class LoginController extends Controller {
 			appUser.update();
 			Logger.info("Forgotten Password Changed Successfully By AppUser: "+appUser.id);
 			flash().put("alert", new Alert("alert-info", "Password has been changed. Please login with the new password.").toString());
-			session().clear();
+			//session().clear();
+			session().remove(Constants.LOGGED_IN_USER_ID);
+			session().remove(Constants.LOGGED_IN_USER_ROLE);
 			return redirect(routes.Application.index());
 		}
 

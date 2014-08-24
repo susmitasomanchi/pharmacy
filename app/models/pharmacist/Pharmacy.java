@@ -76,7 +76,7 @@ public class Pharmacy extends BaseEntity {
 	public List<Inventory> inventoryList = new ArrayList<Inventory>();
 
 	@OneToOne
-	PrimaryCity primaryCity;
+	public PrimaryCity primaryCity;
 
 	public static Model.Finder<Long, Pharmacy> find = new Model.Finder<Long, Pharmacy>(Long.class, Pharmacy.class);
 
