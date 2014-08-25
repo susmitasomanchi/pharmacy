@@ -48,7 +48,7 @@ public class UserController extends Controller {
 
 	/**
 	 * Action to render the joinUs page for Doctor
-	 * GET    /doctor/join
+	 * GET    /secure-doctor/join
 	 */
 	public static Result joinUsDoctor(){
 		return ok(views.html.doctor.joinus.render());
@@ -57,7 +57,7 @@ public class UserController extends Controller {
 
 	/**
 	 * Action to render the joinUs page for Pharmacy
-	 * GET    /pharmacy/join
+	 * GET    /secure-pharmacy/join
 	 */
 	public static Result joinUsPharmacy(){
 		return ok(views.html.pharmacist.joinus.render());
@@ -65,7 +65,7 @@ public class UserController extends Controller {
 
 	/**
 	 * Action to render the joinUs page for Diagnostic Centre
-	 * GET    /diagnostic/join
+	 * GET    /secure-diagnostic/join
 	 */
 	public static Result joinUsDiagnostic(){
 		return ok(views.html.diagnostic.joinus.render());
@@ -73,7 +73,7 @@ public class UserController extends Controller {
 
 	/**
 	 * Action to render the joinUs page for Patients("User")
-	 * GET    /user/join
+	 * GET    /secure-user/join
 	 */
 	public static Result joinUsPatient(){
 		return ok(views.html.patient.joinus.render());
@@ -330,7 +330,7 @@ public class UserController extends Controller {
 
 	/**
 	 * @author Mitesh Action to Display form to verify the mobile number of
-	 *         currently logged in user GET /user/verify-mobile-number
+	 *         currently logged in user GET /secure-user/verify-mobile-number
 	 */
 	public static Result displayMobVerificationForm() {
 		return ok(views.html.common.verifyMobileNumber.render());
@@ -340,7 +340,7 @@ public class UserController extends Controller {
 
 	/**
 	 * @author Mitesh Action to verify the mobileNumberConfirmationKey send to
-	 *         currently logged in user'mobile POST /user/verify-mobile-number
+	 *         currently logged in user'mobile POST /secure-user/verify-mobile-number
 	 */
 	public static Result verifyMobileNumberConfirmationKey() {
 

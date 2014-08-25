@@ -46,7 +46,7 @@ public class PatientController extends Controller {
 	/**
 	 * @author Mitesh
 	 * Action to display currently logged in Patient' Doctor List
-	 *  GET  /user/my-doctors
+	 *  GET  /secure-user/my-doctors
 	 */
 	//@ConfirmAppUser
 	public static Result myFavouriteDoctors() {
@@ -309,7 +309,7 @@ public class PatientController extends Controller {
 
 	/**@author lakshmi
 	 * Action to show all prescription Of loggedInPatient
-	 *GET /user/prescriptions
+	 *GET /secure-user/prescriptions
 	 */
 	@ConfirmAppUser
 	public static Result viewAllPatientPrescriptions() {
@@ -321,7 +321,7 @@ public class PatientController extends Controller {
 	/**
 	 * @author lakshmi
 	 * Action to show the prescription content to the loggedInPatient
-	 * GET/user/show-prescription/:prescriptionId
+	 * GET/secure-user/show-prescription/:prescriptionId
 	 */
 	@ConfirmAppUser
 	public static Result viewPrescription(final Long prescriptionId) {
@@ -336,7 +336,7 @@ public class PatientController extends Controller {
 
 	/**
 	 * @author Mitesh Action to Display appointment requested to logged-in
-	 *         DOCTOR GET /doctor/all-appointments
+	 *         DOCTOR GET /secure-doctor/all-appointments
 	 */
 	@ConfirmAppUser
 	public static Result viewPatientAppointments() {
@@ -357,7 +357,7 @@ public class PatientController extends Controller {
 
 	/**
 	 * Action to show logged In patient a page to assign a prescription to a pharmacy / diagnostic centre
-	 * GET /user/share-prescription
+	 * GET /secure-user/share-prescription
 	 */
 	@ConfirmAppUser
 	public static Result sharePrescription(final Long prId,final String pharmacyId, final String diagnosticId) {

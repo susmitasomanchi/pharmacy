@@ -55,7 +55,7 @@ public class DiagnosticController extends Controller {
 	 * @author lakshmi
 	 * Action for ing DiagnosticCentre backgroundImage and profile
 	 * Images of of DiagnosticCentre of the loggedIn ADMIN_DIAGREP
-	 * POST	/diagnostic/upload-diagnostic-images
+	 * POST	/secure-diagnostic/upload-diagnostic-images
 	 */
 	public static Result uploadDiagnosticImageProcess() {
 		try{
@@ -109,7 +109,7 @@ public class DiagnosticController extends Controller {
 
 	/**
 	 * @author : lakshmi
-	 * POST	/diagnostic/basic-update
+	 * POST	/secure-diagnostic/basic-update
 	 * Action to update the basic details(like name & brief description etc) of DiagnosticCentre
 	 * of the loggedIn ADMIN_DIAGREP
 	 */
@@ -159,7 +159,7 @@ public class DiagnosticController extends Controller {
 
 	/**
 	 * @author : lakshmi
-	 * POST	/diagnostic/address-update
+	 * POST	/secure-diagnostic/address-update
 	 * Action to update the address details of DiagnosticCentre
 	 * of the loggedIn ADMIN_DIAGREP
 	 */
@@ -216,7 +216,7 @@ public class DiagnosticController extends Controller {
 	/**
 	 * @author lakshmi
 	 * Action to remove profileImage of DiagnosticCentre of the loggedIn ADMIN_DIAGREP	 *
-	 * GET/diagnostic/remove-image/:diagnosticId/:fileId
+	 * GET/secure-diagnostic/remove-image/:diagnosticId/:fileId
 	 */
 	public static Result removeDiagnosticImage(final Long diagnosticId,final Long imageId){
 		final DiagnosticCentre diagnosticCentre = DiagnosticCentre.find.byId(diagnosticId);
@@ -233,7 +233,7 @@ public class DiagnosticController extends Controller {
 	/**
 	 * @author lakshmi
 	 * Action to Display Todays Prescriptions requested by logged-in ADMIN_PHARMACIST
-	 * Get /diagnostic/prescriptions
+	 * Get /secure-diagnostic/prescriptions
 	 */
 	@ConfirmAppUser
 	public static Result getDiagnosticCentrePrescriptions(final String status){
@@ -258,7 +258,7 @@ public class DiagnosticController extends Controller {
 	/**
 	 * @author : lakshmi
 	 * Action to change the status of loggedInDiagnostics's prescription to SERVED
-	 * GET/diagnostic/order-confirmed/:diagInfoId
+	 * GET/secure-diagnostic/order-confirmed/:diagInfoId
 	 */
 	@ConfirmAppUser
 	public static Result orderServed(final Long DiagnosticInfoId) {
@@ -272,12 +272,7 @@ public class DiagnosticController extends Controller {
 				patient.update();
 			}
 		}
-		Logger.info("====="+diagnosticCentrePrescriptionInfo.prescription.patient.diagnosticReportList.size());
 		diagnosticCentrePrescriptionInfo.update();
-
-		Logger.info("=="+diagnosticCentrePrescriptionInfo.prescription.patient.diagnosticReportList.size());
-
-
 		//send mail to patient and diagnostic
 		final StringBuilder messagetodiagnostic = new StringBuilder();
 		messagetodiagnostic.append("<html><body>");
@@ -348,7 +343,7 @@ public class DiagnosticController extends Controller {
 
 	/**
 	 * @author : lakshmi
-	 * GET/diagnostic/ordered-tests/:diagnosticId/:orderId
+	 * GET/secure-diagnostic/ordered-tests/:diagnosticId/:orderId
 	 * Action to display all DiagnosticTest for the current order
 	 */
 	@ConfirmAppUser
@@ -358,7 +353,7 @@ public class DiagnosticController extends Controller {
 	}
 	/**
 	 * @author : lakshmi
-	 * GET/diagnostic/upload-diagnostic-Report/:orderId/:reportId
+	 * GET/secure-diagnostic/upload-diagnostic-Report/:orderId/:reportId
 	 * Action to render to the uploadPatientReort.scala to get upload form
 	 */
 	@ConfirmAppUser
@@ -367,7 +362,7 @@ public class DiagnosticController extends Controller {
 	}
 	/**
 	 * @author : lakshmi
-	 * POST/diagnostic/upload-diagnostic-Report/:orderId/:reportId
+	 * POST/secure-diagnostic/upload-diagnostic-Report/:orderId/:reportId
 	 * Action to upload DiagnosticReport
 	 */
 	@ConfirmAppUser
@@ -397,7 +392,7 @@ public class DiagnosticController extends Controller {
 
 	/**
 	 * @author : lakshmi
-	 * GET/diagnostic/download
+	 * GET/secure-diagnostic/download
 	 * downloading the Diagnostic report
 	 */
 	public static Result downloadDiagnosticReport(final Long reportId,final Long diagnosticInfoId){
@@ -439,7 +434,7 @@ public class DiagnosticController extends Controller {
 
 	/**
 	 * @author : lakshmi
-	 * GET/diagnostic/remove-report
+	 * GET/secure-diagnostic/remove-report
 	 * removing the report from the list
 	 */
 	public static Result removeDiagnosticReport(final Long reportId,final Long diagnosticInfoId){
@@ -536,7 +531,7 @@ public class DiagnosticController extends Controller {
 
 	/**
 	 * Action to Display A Prescription to the logged in Diag_Admin
-	 * GET 	/diagnostic/prescription/:dpInfoId
+	 * GET 	/secure-diagnostic/prescription/:dpInfoId
 	 */
 	@ConfirmAppUser
 	public static Result showDiagnosticPrescription(final Long dpInfoId){

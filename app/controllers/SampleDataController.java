@@ -14,7 +14,9 @@ import models.Alert;
 import models.AppUser;
 import models.MasterDiagnosticTest;
 import models.MasterProduct;
+import models.PrimaryCity;
 import models.Role;
+import models.State;
 import models.diagnostic.DiagnosticCentrePrescriptionInfo;
 import models.doctor.DiagnosticTestLineItem;
 import models.doctor.Doctor;
@@ -428,6 +430,18 @@ public class SampleDataController extends Controller {
 	public static Result testurl(){
 		SMSService.sendSMS("9949254085", "From Paris With Love!");
 		return ok("This Page");
+	}
+	public static Result addPrimaryCity(){
+		final PrimaryCity primaryCity = new PrimaryCity();
+		primaryCity.name = "Macherla";
+		primaryCity.state = State.ANDHRA_PRADESH;
+		primaryCity.save();
+		final PrimaryCity primaryCity2 = new PrimaryCity();
+		primaryCity2.name = "Guntur";
+		primaryCity2.state = State.ANDHRA_PRADESH;
+		primaryCity2.save();
+		flash().put("alert", new Alert("alert-info","Primary City Added").toString());
+		return ok();
 	}
 
 

@@ -53,7 +53,7 @@ public class LoginController extends Controller {
 
 	/**
 	 *	Action to process login and redirecting to respective user's dashboard
-	 *	POST   /login
+	 *	POST   /secure-user/login
 	 */
 	public static Result processLogin() {
 
@@ -187,7 +187,7 @@ public class LoginController extends Controller {
 	//Forgot Password
 	/**
 	 *	Action to render a page where unauthorized user can enter his email id
-	 *	GET	/forgot-password
+	 *	GET/secure-user/forgot-password
 	 */
 	public static Result forgotPassword(){
 		return ok(views.html.forgotPassword.render());
@@ -197,7 +197,7 @@ public class LoginController extends Controller {
 	/**
 	 *	Action to check whether an appUser exists with the provided email id
 	 *	and to mail a link to change password page
-	 *	POST	/forgot-password
+	 *	POST/secure-user/forgot-password
 	 */
 	public static Result processForgotPassword(){
 		final String email = request().body().asFormUrlEncoded().get("email")[0].trim();
@@ -213,7 +213,7 @@ public class LoginController extends Controller {
 
 	/**
 	 *	Action to render a page to appUser to change his forgotten password
-	 *	GET	/forgot-reset-password/:userId/:forgotPasswordKey
+	 *	GET/secure-user/forgot-reset-password/:userId/:forgotPasswordKey
 	 */
 	public static Result editForgotPassword(final Long userId, final String forgotPasswordKey){
 		final AppUser appUser = AppUser.find.byId(userId);

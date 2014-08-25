@@ -188,6 +188,8 @@ public class PublicController extends Controller{
 			return ok(views.html.pharmacist.searched_pharmacies.render(false,searchKey,new ArrayList<Pharmacy>()));
 		}
 		else{
+			Logger.info
+			("City id..."+session(Constants.CITY_ID).toString());
 			final PrimaryCity city = PrimaryCity.find.byId(Long.parseLong(session(Constants.CITY_ID)));
 			final List<Pharmacy>pharmacyList = Pharmacy.find.where()
 					.eq("primaryCity", city)
@@ -475,11 +477,16 @@ public class PublicController extends Controller{
 			return ok(views.html.diagnostic.searched_diagnostic_Centres.render(false,searchKey,new ArrayList<DiagnosticCentre>()));
 		}
 		else{
+			Logger.info("search string=="+searchStr);
+			Logger.info
+			("City id..."+session(Constants.CITY_ID).toString());
 			final PrimaryCity city = PrimaryCity.find.byId(Long.parseLong(session(Constants.CITY_ID)));
 			final List<DiagnosticCentre> diagnosticCentreList =  DiagnosticCentre.find.where()
 					.eq("primaryCity", city)
 					.like("searchIndex","%"+searchStr+"%")
 					.findList();
+			Logger.info
+			("City id..."+diagnosticCentreList.size());
 			return ok(views.html.diagnostic.searched_diagnostic_Centres.render(true,searchKey,diagnosticCentreList));
 		}
 	}
