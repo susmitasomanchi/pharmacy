@@ -71,7 +71,7 @@ public class DoctorController extends Controller {
 
 	/**
 	 * Action to update basic field of doctor like name, specialization, degree
-	 * etc. POST /doctor/doctor-basic-update
+	 * etc. POST /secure-doctor/doctor-basic-update
 	 */
 	public static Result basicUpdate() {
 		final Map<String, String[]> requestMap = request().body()
@@ -206,7 +206,7 @@ public class DoctorController extends Controller {
 
 	/**
 	 * Action to update profile and background images of Doctor POST
-	 * /doctor/doctor-images-update
+	 * /secure-doctor/doctor-images-update
 	 */
 	public static Result imagesUpdate() {
 		final MultipartFormData formData = request().body()
@@ -245,7 +245,7 @@ public class DoctorController extends Controller {
 
 	/**
 	 * Action to create or update DoctorExperience entity for the loggedIn
-	 * Doctor POST /doctor/add-work-experience
+	 * Doctor POST /secure-doctor/add-work-experience
 	 */
 	public static Result addWorkExperience() {
 
@@ -323,7 +323,7 @@ public class DoctorController extends Controller {
 
 	/**
 	 * Action to remove a DoctorExperience entity for the loggedIn Doctor GET
-	 * /doctor/remove-work-experience/:docId/:id
+	 * /secure-doctor/remove-work-experience/:docId/:id
 	 */
 	public static Result removeWorkExperience(final Long docId, final Long id) {
 		final Doctor doctor = Doctor.find.byId(docId);
@@ -349,7 +349,7 @@ public class DoctorController extends Controller {
 
 	/**
 	 * Action to create / edit an Award entity of the loggedIn Doctor POST
-	 * /doctor/add-award
+	 * /secure-doctor/add-award
 	 */
 	public static Result addAward() {
 		final Map<String, String[]> requestMap = request().body()
@@ -416,7 +416,7 @@ public class DoctorController extends Controller {
 
 	/**
 	 * Action to remove a Award entity from the loggedIn Doctor GET
-	 * /doctor/remove-award/:docId/:id
+	 * /secure-doctor/remove-award/:docId/:id
 	 */
 	public static Result removeAward(final Long docId, final Long id) {
 		final Doctor doctor = Doctor.find.byId(docId);
@@ -440,7 +440,7 @@ public class DoctorController extends Controller {
 
 	/**
 	 * Action to create new/update DoctorEducation entity for the loggedIn
-	 * Doctor POST /doctor/add-education
+	 * Doctor POST /secure-doctor/add-education
 	 */
 	public static Result addEducation() {
 		final Map<String, String[]> requestMap = request().body()
@@ -514,7 +514,7 @@ public class DoctorController extends Controller {
 
 	/**
 	 * Action to remove a DoctorEducation entity from the loggedIn Doctor GET
-	 * /doctor/remove-education/:docId/:id
+	 * /secure-doctor/remove-education/:docId/:id
 	 */
 	public static Result removeEducation(final Long docId, final Long id) {
 		final Doctor doctor = Doctor.find.byId(docId);
@@ -538,7 +538,7 @@ public class DoctorController extends Controller {
 
 	/**
 	 * Action to create/update a SocialWork entity for the loggedIn Doctor POST
-	 * /doctor/add-social-work
+	 * /secure-doctor/add-social-work
 	 */
 	public static Result addSocialWork() {
 		final Map<String, String[]> requestMap = request().body()
@@ -586,7 +586,7 @@ public class DoctorController extends Controller {
 
 	/**
 	 * Action to remove a SocialWork entity from the loggedIn Doctor GET
-	 * /doctor/remove-social-work/:docId/:id
+	 * /secure-doctor/remove-social-work/:docId/:id
 	 */
 	public static Result removeSocialWork(final Long docId, final Long id) {
 		final Doctor doctor = Doctor.find.byId(docId);
@@ -611,7 +611,7 @@ public class DoctorController extends Controller {
 
 	/**
 	 * @author Mitesh Action to render a page with form for adding new clinic of
-	 *         the loggedInDoctor GET /doctor/new-clinic
+	 *         the loggedInDoctor GET /secure-doctor/new-clinic
 	 */
 	@ConfirmAppUser
 	public static Result newClinic() {
@@ -622,7 +622,7 @@ public class DoctorController extends Controller {
 	 * @author Mitesh Action to process adding new clinic of the loggedInDoctor
 	 *         by creating a clinicInfo object and then calls
 	 *         DoctorController.createAppointment(clinicInfo) method to create
-	 *         requisite appointments POST /doctor/new-clinic
+	 *         requisite appointments POST /secure-doctor/new-clinic
 	 */
 	@ConfirmAppUser
 	public static Result processNewClinic() {
@@ -760,7 +760,7 @@ public class DoctorController extends Controller {
 
 	/**
 	 * @author Mitesh Action to show all active clinics of the loggedIn Doctor
-	 *         GET /doctor/clinics
+	 *         GET /secure-doctor/clinics
 	 */
 	@ConfirmAppUser
 	public static Result myClinics() {
@@ -772,7 +772,7 @@ public class DoctorController extends Controller {
 
 	/**
 	 * @author Mitesh Action to show form to edit one of loggedIn doctor's
-	 *         clinic GET /doctor/edit-clinic/:id Depricated on 18th July 2014.
+	 *         clinic GET /secure-doctor/edit-clinic/:id Depricated on 18th July 2014.
 	 *         Use DoctorController.editClinicInfo(Long docClinicId) and
 	 *         DoctorController.editClinicSchedule(Long docClinicId) instead.
 	 */
@@ -806,7 +806,7 @@ public class DoctorController extends Controller {
 	/**
 	 * @author Mitesh Action to update one of loggedInDoctor's clinics
 	 *         (non-schedule) information like name, address etc. POST
-	 *         /doctor/update-clinic
+	 *         /secure-doctor/update-clinic
 	 */
 	@ConfirmAppUser
 	public static Result processUpdateClinicInfo() {
@@ -854,7 +854,7 @@ public class DoctorController extends Controller {
 	/**
 	 * @author Mitesh Action to update one of loggedInDoctor's clinics
 	 *         appointments/schedule information POST
-	 *         /doctor/update-clinic-schedule
+	 *         /secure-doctor/update-clinic-schedule
 	 */
 	@ConfirmAppUser
 	public static Result processUpdateClinicSchedule() {
@@ -917,7 +917,7 @@ public class DoctorController extends Controller {
 
 	/**
 	 * @author Mitesh Action to delete (make inActive) one of loggedInDoctor's
-	 *         clinics GET /doctor/delete-clinic/:id
+	 *         clinics GET /secure-doctor/delete-clinic/:id
 	 */
 	@ConfirmAppUser
 	public static Result deleteClinic(final Long id) {
@@ -958,7 +958,7 @@ public class DoctorController extends Controller {
 
 	/**
 	 * @author Mitesh Action to show form to edit one of loggedIn doctor's
-	 *         clinic information GET /doctor/edit-clinic-info/:id
+	 *         clinic information GET /secure-doctor/edit-clinic-info/:id
 	 */
 	@ConfirmAppUser
 	public static Result editClinicInfo(final Long docClinicId) {
@@ -978,7 +978,7 @@ public class DoctorController extends Controller {
 
 	/**
 	 * @author Mitesh Action to show form to edit one of loggedIn doctor's
-	 *         clinic schedule GET /doctor/edit-clinic-schedule/:id
+	 *         clinic schedule GET /secure-doctor/edit-clinic-schedule/:id
 	 */
 	@ConfirmAppUser
 	public static Result editClinicSchedule(final Long docClinicId) {
@@ -999,7 +999,7 @@ public class DoctorController extends Controller {
 
 	/**
 	 * @author Mitesh Action to Display appointment requested to logged-in
-	 *         DOCTOR GET /doctor/all-appointments
+	 *         DOCTOR GET /secure-doctor/all-appointments
 	 */
 	@ConfirmAppUser
 	public static Result viewAllAppointments() {
@@ -1033,7 +1033,7 @@ public class DoctorController extends Controller {
 
 	/**
 	 * @author Mitesh Action to Display appointment requested to logged-in
-	 *         DOCTOR GET /doctor/todays-appointments
+	 *         DOCTOR GET /secure-doctor/todays-appointments
 	 */
 	@ConfirmAppUser
 	public static Result viewTodaysAppointments() {
@@ -1072,7 +1072,7 @@ public class DoctorController extends Controller {
 
 	/**
 	 * Action to render list of Sig Codes of the loggedInDoctor GET
-	 * /doctor/sig-codes
+	 * /secure-doctor/sig-codes
 	 */
 	@ConfirmAppUser
 	public static Result showSigCodes() {
@@ -1082,7 +1082,7 @@ public class DoctorController extends Controller {
 
 	/**
 	 * Action to save a sig-code to the loggedInDoctor's sigcode List POST
-	 * /doctor/add-sig-code
+	 * /secure-doctor/add-sig-code
 	 */
 	@ConfirmAppUser
 	public static Result addSigCode() {
@@ -1109,7 +1109,7 @@ public class DoctorController extends Controller {
 
 	/**
 	 * Action to render the prescription form to the loggedInDoctor GET
-	 * /doctor/prescription/:appointmentId
+	 * /secure-doctor/prescription/:appointmentId
 	 */
 	@ConfirmAppUser
 	public static Result showPrescriptionForm(final Long appointmentId) {
@@ -1125,7 +1125,7 @@ public class DoctorController extends Controller {
 
 	/**
 	 * Action to save prescription of the loggedInDoctor POST
-	 * /doctor/save-prescription
+	 * /secure-doctor/save-prescription
 	 */
 	@ConfirmAppUser
 	public static Result savePrescription() {
@@ -1206,7 +1206,7 @@ public class DoctorController extends Controller {
 
 	/**
 	 * Action to show logged In doctor a page to assign a prescription to a
-	 * pharmacy / diagnostic centre GET /doctor/show-prescription
+	 * pharmacy / diagnostic centre GET /secure-doctor/show-prescription
 	 */
 	@ConfirmAppUser
 	public static Result showPrescription(final Long prescriptionId) {
@@ -1223,7 +1223,7 @@ public class DoctorController extends Controller {
 
 	/**
 	 * Action to show logged In doctor a page to assign a prescription to a
-	 * pharmacy / diagnostic centre GET /doctor/share-prescription
+	 * pharmacy / diagnostic centre GET /secure-doctor/share-prescription
 	 */
 	@ConfirmAppUser
 	public static Result sharePrescription(final Long prId,
@@ -1395,7 +1395,7 @@ public class DoctorController extends Controller {
 
 	/**
 	 * Action to show todays prescription created by loggedIn doctor GET
-	 * /doctor/todays-prescriptions
+	 * /secure-doctor/todays-prescriptions
 	 */
 	@ConfirmAppUser
 	public static Result viewTodaysPrescription() {
@@ -1427,7 +1427,7 @@ public class DoctorController extends Controller {
 
 	/**
 	 * Action to show all prescription created by loggedIn doctor GET
-	 * /doctor/all-prescriptions
+	 * /secure-doctor/all-prescriptions
 	 */
 	@ConfirmAppUser
 	public static Result viewAllPrescription() {
@@ -1441,7 +1441,7 @@ public class DoctorController extends Controller {
 	}
 
 	/**
-	 * Action to get all Products' names GET /doctor/products/get-json
+	 * Action to get all Products' names GET /secure-doctor/products/get-json
 	 */
 	@BodyParser.Of(BodyParser.Json.class)
 	public static Result getAllProductsJson() {
@@ -1465,7 +1465,7 @@ public class DoctorController extends Controller {
 	}
 
 	/**
-	 * Action to get all Products' names GET /doctor/diagnostic-tests/get-json
+	 * Action to get all Products' names GET /secure-doctor/diagnostic-tests/get-json
 	 */
 	@BodyParser.Of(BodyParser.Json.class)
 	public static Result getAllDiagnosticJson() {
@@ -1590,7 +1590,7 @@ public class DoctorController extends Controller {
 
 	/**
 	 * @author lakshmi Action to list out favorite Pharmacies of Doctor of
-	 *         loggedin DOCTOR GET/doctor/my-favorite-pharmacies
+	 *         loggedin DOCTOR GET/secure-doctor/my-favorite-pharmacies
 	 */
 	@ConfirmAppUser
 	public static Result myFavoritePharmacies() {
@@ -1655,31 +1655,5 @@ public class DoctorController extends Controller {
 			return ok("-1");
 		}
 	}
-
-	/**
-	 * @author lakshmi
-	 * Action to purge the doctor details
-	 * 
-	 *//*
-	public static Result purgeDoctor(){
-		final AppUser appUser = AppUser.find.byId(143L);
-		final Doctor doctor = Doctor.find.where().eq("appUser", appUser).findUnique();
-		final List<DoctorClinicInfo> doctorClinicInfos = DoctorClinicInfo.find.where().eq("doctor", doctor).findList();
-		final List<Appointment> appointments= Appointment.find.where().eq("doctorClinicInfo.doctor", doctor).findList();;
-		final List<Prescription> prescriptions = Prescription.find.where().eq("doctor", doctor).findList();
-		final List<Clinic> clinics = new ArrayList<Clinic>();
-		for (final DoctorClinicInfo doctorClinicInfo : doctorClinicInfos) {
-			clinics.add(Clinic.find.where().eq("id", doctorClinicInfo.clinic.id).findUnique());
-		}
-		Ebean.delete(appointments);
-		Ebean.delete(clinics);
-		Ebean.delete(prescriptions);
-		Ebean.delete(doctorClinicInfos);
-		doctor.delete();
-		appUser.delete();
-
-		return ok("hello deleted");
-	}
-	  */
 
 }

@@ -45,7 +45,7 @@ public class MednetworkAdminController extends Controller {
 
 	/**
 	 * @author Lakshmi
-	 * GET		/admin/specialization-list
+	 * GET		/secure-admin/specialization-list
 	 * @return
 	 */
 	public static Result getSpecializationList(){
@@ -54,7 +54,7 @@ public class MednetworkAdminController extends Controller {
 
 	/**
 	 * @author Lakshmi
-	 * POST		/admin/add-specialization
+	 * POST		/secure-admin/add-specialization
 	 * @return
 	 */
 	public static Result addSpecialization(){
@@ -76,7 +76,7 @@ public class MednetworkAdminController extends Controller {
 
 	/**
 	 * @author Lakshmi
-	 * POST		/admin/update-specialization
+	 * POST		/secure-admin/update-specialization
 	 * @return
 	 */
 	public static Result updateSpecialization(){
@@ -101,7 +101,7 @@ public class MednetworkAdminController extends Controller {
 
 	/**
 	 * @author Lakshmi
-	 * GET		/admin/specialization-list
+	 * GET		/secure-admin/specialization-list
 	 * @return
 	 */
 	public static Result getFeedbackList(){
@@ -112,7 +112,7 @@ public class MednetworkAdminController extends Controller {
 
 	/**
 	 * @author Lakshmi
-	 * GET		/admin/delete-feedback/:id
+	 * GET		/secure-admin/delete-feedback/:id
 	 */
 	public static Result deleteFeedback(final Long id){
 		Feedback.find.byId(id).delete();
@@ -122,7 +122,7 @@ public class MednetworkAdminController extends Controller {
 
 
 	/**
-	 * GET	/admin/get-user-date-between-dates/:from/:to
+	 * GET	/secure-admin/get-user-date-between-dates/:from/:to
 	 * Get count of Appusers and other roles created between :from and :to
 	 */
 	public static Result getUserDateBetweenDates(final String fromDate, final String toDate){
@@ -154,7 +154,7 @@ public class MednetworkAdminController extends Controller {
 	/**
 	 * @author lakshmi
 	 * Action to render purgeDoctorDetails scala template
-	 * GET    /admin/purge-doctor-find
+	 * GET    /secure-admin/purge-doctor-find
 	 */
 	public static Result purgeDoctor(){
 		return ok(views.html.mednetAdmin.purgeDoctorDetails.render(null,false));
@@ -162,7 +162,7 @@ public class MednetworkAdminController extends Controller {
 	/**
 	 * @author lakshmi
 	 * Action to get the Doctor Information
-	 * POST    /admin/purge-doctor-details
+	 * POST    /secure-admin/purge-doctor-details
 	 */
 	public static Result getAppUserDetails(final String role){
 		if(request().body().asFormUrlEncoded().get("appUserId")[0] != null && !(request().body().asFormUrlEncoded().get("appUserId")[0].trim().isEmpty())){
@@ -189,7 +189,7 @@ public class MednetworkAdminController extends Controller {
 	/**
 	 * @author lakshmi
 	 * Action to purge the Doctor Information
-	 * GET     /admin/purge-doctor/:id
+	 * GET     /secure-admin/purge-doctor/:id
 	 */
 	public static Result processPurgeDoctor(final Long id){
 		if(!(LoginController.getLoggedInUser().role.equals(Role.MEDNETWORK_ADMIN))){
@@ -226,7 +226,7 @@ public class MednetworkAdminController extends Controller {
 	/**
 	 * @author lakshmi
 	 * Action to render purgePharmacyDetails scala template
-	 * GET    /admin/purge-pharmacy-find
+	 * GET    /secure-admin/purge-pharmacy-find
 	 */
 	public static Result purgePharmacy(){
 		return ok(views.html.mednetAdmin.purgePharmacyDetails.render(null,false));
@@ -276,7 +276,7 @@ public class MednetworkAdminController extends Controller {
 	/**
 	 * @author lakshmi
 	 * Action to render purgeDoctorDetails scala template
-	 * GET    /admin/purge-diagnostic-find
+	 * GET    /secure-admin/purge-diagnostic-find
 	 */
 	public static Result purgeDiagnosticCentre(){
 		return ok(views.html.mednetAdmin.purgeDiagnosticCentreDetails.render(null,false));
@@ -339,7 +339,7 @@ public class MednetworkAdminController extends Controller {
 
 	/**
 	 * Action to render list of Primary Cities and a form to add one
-	 * GET	/admin/primary-cities
+	 * GET	/secure-admin/primary-cities
 	 */
 	public static Result getPrimaryCitiesList(){
 		return ok(views.html.mednetAdmin.primaryCitiesList.render());
@@ -347,7 +347,7 @@ public class MednetworkAdminController extends Controller {
 
 	/**
 	 * Action create a Primary City
-	 * POST	/admin/add-primary-city
+	 * POST	/secure-admin/add-primary-city
 	 */
 	public static Result addPrimaryCity(){
 		if(

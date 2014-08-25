@@ -201,7 +201,7 @@ function sharePrescription(){
 	if ($('#patient-consent-check').is(':checked')) {
 		var pharId = $('#sharePharmacy').val();
 		var diagId = $('#shareDiagnostic').val();
-		window.location.href='/doctor/share-prescription?prId=@prescription.id&pharmacyId='+pharId+'&diagnosticId='+diagId+'&consent=true';
+		window.location.href='/secure-doctor/share-prescription?prId=@prescription.id&pharmacyId='+pharId+'&diagnosticId='+diagId+'&consent=true';
 	}
 	else{
 		alert('Sorry! Patient\'s consent is mandatory to share prescriptions.');
