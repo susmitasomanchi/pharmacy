@@ -62,7 +62,7 @@ GET		/pharmacy/search									controllers.PublicController.searchPharmaciesPage(
 GET   	/diagnostic/search/:searchString                  				controllers.PublicController.processSearchDiagnosticCentres(searchString: String)
 GET    /diagnostic/search												controllers.PublicController.searchDiagnosticPage()
 
-GET    /secure-feedback											controllers.PublicController.feedBack()
+GET    /feedback											controllers.PublicController.feedBack()
 POST    /secure-feedback											controllers.PublicController.saveFeedBack()
 GET    /help												controllers.PublicController.helpDocument()
 
