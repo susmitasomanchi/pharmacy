@@ -27,12 +27,9 @@ input[type=checkbox]{
 <h4>@prescription.doctor.degree
 
 <span class="noprint pull-right" style="cursor:pointer; color:#0079a1;" onclick="printPrescription();" style="font-size:25px;"><i class="fa fa-print"></i> Print</span>
-
 </h4>
 <h4>@prescription.doctor.getSpecializations()</h4>
-
 <hr>
-
 <h4 style="margin:0px; padding:0px;">@prescription.patient.appUser.name</h4>
 <p style="margin:0px; padding:0px;">Age: @prescription.patient.appUser.getAge()</p>
 <p>Sex: @org.apache.commons.lang3.text.WordUtils.capitalizeFully(prescription.patient.appUser.sex.toString())</p>

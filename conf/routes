@@ -214,7 +214,7 @@ GET     /secure-admin/purge-diagnostic-find																controllers.Mednetwor
 GET     /secure-admin/purge-diagnostic/:id																controllers.MednetworkAdminController.processPurgeDiagnosticCentre(id: Long)
 GET		/secure-admin/primary-cities							controllers.MednetworkAdminController.getPrimaryCitiesList()
 POST	/secure-admin/add-primary-city							controllers.MednetworkAdminController.addPrimaryCity()
-GET		/secure-admin/add-primary-city-to-session/:cityId			controllers.PublicController.addPrimaryCityToSession(cityId: Long)
+GET		/add-primary-city-to-session/:cityId			controllers.PublicController.addPrimaryCityToSession(cityId: Long)
 
 
 #############################	PRODUCTION	#################################################################################

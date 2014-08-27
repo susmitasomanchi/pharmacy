@@ -27,7 +27,7 @@
     <div class="col-md-3 form-group">
     <label for="to" class="col-md-3 control-label" style="padding-top:0px" >Order Status</label>
     <div class="col-lg-9">
-    	<select class="chzn" name="status" style="width:100%;" data-placeholder="Select Status">
+    	<select class="chzn" id="status-select" name="status" style="width:100%;" data-placeholder="Select Status">
 			<option></option>
 			<option value="any" @if(status.trim.toLowerCase().compareTo("any")==0){selected}>Any</option>
 			<option value="RECEIVED" @if(status.trim.toLowerCase().compareTo("received")==0){selected}>Received</option>
