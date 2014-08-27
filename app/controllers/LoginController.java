@@ -36,6 +36,8 @@ public class LoginController extends Controller {
 
 
 
+
+	/*
 	public static Result loginForm() {
 
 
@@ -49,6 +51,7 @@ public class LoginController extends Controller {
 
 		//return ok(views.html.home.render(loginForm));
 	}
+	 */
 
 
 	/**
