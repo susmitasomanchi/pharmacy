@@ -78,7 +78,6 @@
     	
     	<script>
 		function addToSession(cityId){
-		alert("hello");
 			$.get('/add-primary-city-to-session/'+cityId,function(cityName){
 				$('#cityName').html(cityName);
 				$('#citymodal').modal('hide');
