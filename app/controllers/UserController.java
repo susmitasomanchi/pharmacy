@@ -194,6 +194,7 @@ public class UserController extends Controller {
 		if(appUser.role.equals(Role.PATIENT)){
 			final Patient patient = new Patient();
 			patient.appUser = appUser;
+			patient.primaryCity = city;
 			patient.save();
 		}
 
