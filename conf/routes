@@ -268,10 +268,6 @@ GET 	/pharmacy/order									controllers.PharmacistController.orderManagement()
 #POST   /medical-representative/proccess            controllers.Application.medicalRepresentativeProccess()
 GET    /diagRep/                          		controllers.Application.diagnosticRep()
 POST   /diagRepProccess/                  		controllers.Application.diagnosticRepProccess()
-GET    /sampledata/populate               		controllers.SampleDataController.populate()
-GET    /sampledata/cleanup                		controllers.SampleDataController.cleanUp()
-GET    /sampledata/temp                   		controllers.SampleDataController.temp()
-GET		/sampledata/create-patdoc				controllers.SampleDataController.createSamplePatientDoctor()
 #POST   /userform/patientproccess/       		controllers.PatientController.process()
 
 GET    /home/                             		controllers.Application.homePage()
@@ -385,7 +381,6 @@ POST    /mr/add                                    controllers.MRController.medi
 #POST    /mr/editmr                                 controllers.MRController.medicalRepresentativeProccessUpdate()
 GET     /mr/del	                                   controllers.MRController.removeMR(id: Long)
 GET     /mr/edit/:id	                           controllers.MRController.editMR(id: Long)
-GET    /mr/add-value                               controllers.SampleDataController.values()
 
 
 #common module
@@ -398,14 +393,9 @@ GET    /view-products                              controllers.ProductController
 
 
 #sample data
-#GET   /sampledata/day					controllers.SampleDataController.days()
-GET		/patient_data					controllers.SampleDataController.patientTest()
-GET		/prescription_data					controllers.SampleDataController.prescripetionTest()
-GET	/mr/sample-data					controllers.SampleDataController.mrSampleData()
 
 #Mednetwork-Admin
 GET		/add-primary-city						controllers.SampleDataController.addPrimaryCity()
-#GET    /appointment					controllers.SampleDataController.createAppointment()
 
 
 #Cron
