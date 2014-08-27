@@ -53,7 +53,11 @@
       <a class="navbar-brand" href="@routes.UserActions.dashboard()">@Messages.get("MedNetwork")</a>
       *@
       <a class="navbar-brand" href="/">
-      	<img style="height:56px; margin-top:-12px;" src="/assets/images/medlogotrans.png" alt="MedNetwork">
+      	@if(LoginController.isLoggedIn()){
+      		<img style="height:45px; margin-top:-12px;" src="/assets/images/medlogotrans.png" alt="MedNetwork">
+      	}else{
+      		<img style="height:56px; margin-top:-12px;" src="/assets/images/medlogotrans.png" alt="MedNetwork">
+      	}
       </a>
     </div> 
      <!-- Collect the nav links, forms, and other content for toggling -->
