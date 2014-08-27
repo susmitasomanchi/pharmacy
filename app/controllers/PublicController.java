@@ -91,7 +91,7 @@ public class PublicController extends Controller{
 	public static Result addToFavDoctor(final Long docId) {
 		if(!LoginController.isLoggedIn()){
 			flash().put("alert", new Alert("alert-info","Please Login To Add Your Favorite Doctor").toString());
-			return redirect(routes.LoginController.loginForm());
+			return redirect(routes.Application.index());
 		}
 		else{
 			final String loggedInRole=LoginController.getLoggedInUserRole();
@@ -207,7 +207,7 @@ public class PublicController extends Controller{
 	public static Result addPharmacyToLoggedInUser(final Long pharmacyId) {
 		if(!LoginController.isLoggedIn()){
 			flash().put("alert", new Alert("alert-info","Please Login To Add Pharmacy.").toString());
-			return redirect(routes.LoginController.loginForm());
+			return redirect(routes.Application.index());
 		}
 		else{
 			final String loggedInRole=LoginController.getLoggedInUserRole();
@@ -400,7 +400,7 @@ public class PublicController extends Controller{
 					return redirect(routes.UserActions.dashboard());
 				}
 				else{
-					return redirect(routes.LoginController.loginForm());
+					return redirect(routes.Application.index());
 				}
 			}
 			else{
@@ -410,7 +410,7 @@ public class PublicController extends Controller{
 					return redirect(routes.UserController.confirmAppUserPage());
 				}
 				else{
-					return redirect(routes.LoginController.loginForm());
+					return redirect(routes.Application.index());
 				}
 			}
 		}
@@ -501,7 +501,7 @@ public class PublicController extends Controller{
 	public static Result addDiagnosticCentreToLoggedInUser(final Long diagnosticId) {
 		if(!LoginController.isLoggedIn()){
 			flash().put("alert", new Alert("alert-info","Please Login To Add DiagnosticCentre.").toString());
-			return redirect(routes.LoginController.loginForm());
+			return redirect(routes.Application.index());
 		}
 		else{
 			final String loggedInRole=LoginController.getLoggedInUserRole();
@@ -552,7 +552,7 @@ public class PublicController extends Controller{
 	public static Result removeFavoriteDiagnosticCentre(final Long diagnosticId) {
 		if(!LoginController.isLoggedIn()){
 			flash().put("alert", new Alert("alert-info","Please Login To Delete DiagnosticCentre.").toString());
-			return redirect(routes.LoginController.loginForm());
+			return redirect(routes.Application.index());
 		}else{
 			final String loggedInRole=LoginController.getLoggedInUserRole();
 			if(loggedInRole.compareTo(Role.PATIENT.toString()) == 0){
@@ -581,7 +581,7 @@ public class PublicController extends Controller{
 	public static Result removeFavoritePharmacy(final Long pharmacyId) {
 		if(!LoginController.isLoggedIn()){
 			flash().put("alert", new Alert("alert-info","Please Login To Delete DiagnosticCentre.").toString());
-			return redirect(routes.LoginController.loginForm());
+			return redirect(routes.Application.index());
 		}else{
 			final String loggedInRole=LoginController.getLoggedInUserRole();
 			if(loggedInRole.compareTo(Role.PATIENT.toString()) == 0){

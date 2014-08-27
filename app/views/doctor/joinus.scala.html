@@ -7,6 +7,22 @@
 @no_navbar("Join MedNetwork"){
 
 
+
+<style>
+.chosen-container .chosen-single{
+	height:37px;
+}
+
+.chosen-container .chosen-single span{
+	padding-top:5px;
+}
+
+.chosen-container .chosen-single b{
+	margin-top:7px;
+}
+
+</style>
+
         
 
 <div class="row">
@@ -129,7 +145,9 @@
         <select class="form-control chzn-no-deselect" required data-placeholder="Select City" name="city" id="inputCity" style="width:100%;">
 			<option></option>
 			@for(city <- models.PrimaryCity.getAllInOrder()){
-				<option value="@city.id">@city.name</option>
+				<option value="@city.id"
+				@if(session().get(utils.Constants.CITY_ID) != null && session().get(utils.Constants.CITY_ID).equals(city.id.toString())){selected}
+				>@city.name</option>
 			}
 		</select>
       </div>
