@@ -165,10 +165,12 @@ public class MednetworkAdminController extends Controller {
 	 * POST    /secure-admin/purge-doctor-details
 	 */
 	public static Result getAppUserDetails(final String role){
+		Logger.info("test1");
 		if(request().body().asFormUrlEncoded().get("appUserId")[0] != null && !(request().body().asFormUrlEncoded().get("appUserId")[0].trim().isEmpty())){
 			if(AppUser.find.byId(Long.parseLong(request().body().asFormUrlEncoded().get("appUserId")[0])) != null){
 				final AppUser appUser = AppUser.find.byId(Long.parseLong(request().body().asFormUrlEncoded().get("appUserId")[0]));
 				if(role.equalsIgnoreCase("doctor")) {
+					Logger.info("test2");
 					return ok(views.html.mednetAdmin.purgeDoctorDetails.render(appUser,true));
 				}
 				if(role.equalsIgnoreCase("Pharmacy")) {

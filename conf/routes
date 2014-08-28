@@ -4,6 +4,7 @@
 
 
 #Blog
+
 GET		/blog										controllers.BlogController.blogHome()
 GET		/blog-admin/new-category					controllers.BlogController.categoryForm()
 POST	/blog-admin/new-category					controllers.BlogController.processCategoryForm()
@@ -30,21 +31,21 @@ GET		/sitemap.xml								controllers.Application.sitemap()
 
 # Home page & Logins
 GET    /                                 			controllers.Application.index()
-POST   /secure-login                             			controllers.LoginController.processLogin()
-GET    /secure-logout                            			controllers.LoginController.processLogout()
+POST   /secure-user/login                             			controllers.LoginController.processLogin()
+GET    /secure-user/logout                            			controllers.LoginController.processLogout()
 
-GET    /secure-forgot-password                            	controllers.LoginController.forgotPassword()
-POST   /secure-forgot-password                            	controllers.LoginController.processForgotPassword()
-GET		/secure-forgot-reset-password/:userId/:forgotPasswordKey	controllers.LoginController.editForgotPassword(userId: Long, forgotPasswordKey:String)
-POST	/secure-forgot-reset-password						controllers.LoginController.updateForgotPassword()
+GET    /secure-user/forgot-password                            	controllers.LoginController.forgotPassword()
+POST   /secure-user/forgot-password                            	controllers.LoginController.processForgotPassword()
+GET	/secure-user/forgot-reset-password/:userId/:forgotPasswordKey	controllers.LoginController.editForgotPassword(userId: Long, forgotPasswordKey:String)
+POST	/secure-user/forgot-reset-password						controllers.LoginController.updateForgotPassword()
 
-GET    /secure-edit-password                            	controllers.LoginController.editPassword()
-POST   /secure-update-password                            	controllers.LoginController.updatePassword()
+GET    /secure-user/edit-password                            	controllers.LoginController.editPassword()
+POST   /secure-user/update-password                            	controllers.LoginController.updatePassword()
 
-GET	   /secure-edit-my-profile								controllers.UserController.editAppUserProfile()
-POST   /secure-edit-my-profile								controllers.UserController.updateAppUserProfile()
+GET	   /secure-user/edit-my-profile								controllers.UserController.editAppUserProfile()
+POST   /secure-user/edit-my-profile								controllers.UserController.updateAppUserProfile()
 
-GET		/secure-not-confirmed-yet							controllers.UserController.confirmAppUserPage()
+GET		/secure-user/not-confirmed-yet							controllers.UserController.confirmAppUserPage()
 GET		/secure-user/verify-email							controllers.UserController.sendConformationEmail()
 GET 	/secure-user/confirmation/:userId/:randomString	controllers.PublicController.emailConfirmation(userId: Long, randomString:String)
 GET		/secure-user/send-verificaion-code					controllers.UserController.sendMobVerificationCode()
@@ -62,8 +63,8 @@ GET		/pharmacy/search									controllers.PublicController.searchPharmaciesPage(
 GET   	/diagnostic/search/:searchString                  				controllers.PublicController.processSearchDiagnosticCentres(searchString: String)
 GET    /diagnostic/search												controllers.PublicController.searchDiagnosticPage()
 
-GET    /secure-feedback											controllers.PublicController.feedBack()
-POST    /secure-feedback											controllers.PublicController.saveFeedBack()
+GET    /feedback											controllers.PublicController.feedBack()
+POST    /feedback											controllers.PublicController.saveFeedBack()
 GET    /help												controllers.PublicController.helpDocument()
 
 
@@ -73,14 +74,14 @@ GET		/diagnostic/remove-diagnostic/:diagnosticId					controllers.PublicControlle
 GET		/doctor/remove-pharmacy/:pharmacyId							controllers.PublicController.removeFavoritePharmacy(pharmacyId:Long)
 GET 	/sendTestmail									controllers.DiagnosticController.sendSampleAttchEmail() 
 # Sign up page
-GET    /secure-doctor/join                              			controllers.UserController.joinUsDoctor()
-GET    /secure-pharmacy/join                              			controllers.UserController.joinUsPharmacy()
-GET    /secure-diagnostic/join                              		controllers.UserController.joinUsDiagnostic()
-GET    /secure-user/join											controllers.UserController.joinUsPatient()
-POST   /secure-join		                              			controllers.UserController.processJoinUs()
+GET    /doctor/join                              			controllers.UserController.joinUsDoctor()
+GET    /pharmacy/join                              			controllers.UserController.joinUsPharmacy()
+GET    /diagnostic/join                              		controllers.UserController.joinUsDiagnostic()
+GET    /user/join											controllers.UserController.joinUsPatient()
+POST   /join		                              			controllers.UserController.processJoinUs()
 
 # Dashboard of LoggedInUser
-GET		/secure-dashboard                                  controllers.UserActions.dashboard()
+GET		/dashboard                                  controllers.UserActions.dashboard()
 
 # Doctor's Actions
 POST	/secure-doctor/doctor-basic-update					controllers.DoctorController.basicUpdate()
@@ -125,7 +126,7 @@ GET		/secure-doctor/todays-prescriptions						controllers.DoctorController.viewT
 GET		/secure-doctor/products/get-json							controllers.DoctorController.getAllProductsJson()
 GET		/secure-doctor/diagnostic-tests/get-json					controllers.DoctorController.getAllDiagnosticJson()
 #slug url (must be the last route in /doctor/)
-GET 	/dr/:slugUrl								controllers.PublicController.getDoctorWithSlug(slugUrl:String)
+GET 	/doctor/:slugUrl								controllers.PublicController.getDoctorWithSlug(slugUrl:String)
 
 # Patient Module
 GET    /secure-user/my-doctors									controllers.PatientController.myFavouriteDoctors()
@@ -268,6 +269,10 @@ GET 	/pharmacy/order									controllers.PharmacistController.orderManagement()
 #POST   /medical-representative/proccess            controllers.Application.medicalRepresentativeProccess()
 GET    /diagRep/                          		controllers.Application.diagnosticRep()
 POST   /diagRepProccess/                  		controllers.Application.diagnosticRepProccess()
+GET    /sampledata/populate               		controllers.SampleDataController.populate()
+GET    /sampledata/cleanup                		controllers.SampleDataController.cleanUp()
+GET    /sampledata/temp                   		controllers.SampleDataController.temp()
+GET		/sampledata/create-patdoc				controllers.SampleDataController.createSamplePatientDoctor()
 #POST   /userform/patientproccess/       		controllers.PatientController.process()
 
 GET    /home/                             		controllers.Application.homePage()
@@ -381,6 +386,7 @@ POST    /mr/add                                    controllers.MRController.medi
 #POST    /mr/editmr                                 controllers.MRController.medicalRepresentativeProccessUpdate()
 GET     /mr/del	                                   controllers.MRController.removeMR(id: Long)
 GET     /mr/edit/:id	                           controllers.MRController.editMR(id: Long)
+GET    /mr/add-value                               controllers.SampleDataController.values()
 
 
 #common module
@@ -393,9 +399,16 @@ GET    /view-products                              controllers.ProductController
 
 
 #sample data
+#GET   /sampledata/day					controllers.SampleDataController.days()
+GET		/patient_data					controllers.SampleDataController.patientTest()
+GET		/prescription_data					controllers.SampleDataController.prescripetionTest()
+GET	/mr/sample-data					controllers.SampleDataController.mrSampleData()
 
 #Mednetwork-Admin
+GET		/admin						controllers.SampleDataController.mednetAdmin()
 GET		/add-primary-city						controllers.SampleDataController.addPrimaryCity()
+GET		/default-primarycity					controllers.SampleDataController.addDefaultPrimaryCity()
+#GET    /appointment					controllers.SampleDataController.createAppointment()
 
 
 #Cron

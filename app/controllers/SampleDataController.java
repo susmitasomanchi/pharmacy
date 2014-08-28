@@ -443,6 +443,19 @@ public class SampleDataController extends Controller {
 		flash().put("alert", new Alert("alert-info","Primary City Added").toString());
 		return ok();
 	}
+	public static Result addDefaultPrimaryCity(){
+		final List<AppUser> appUsers = AppUser.find.where().eq("role", Role.DOCTOR).findList();
+		Logger.info("size()=="+appUsers.get(0).role);
+		for (final AppUser appUser : appUsers) {
+			final Doctor doctor = Doctor.find.where().eq("appUser", appUser).findUnique();
+			Logger.info("doctor..."+doctor.appUser.name);
+			if(doctor.primaryCity == null){
+				doctor.primaryCity = PrimaryCity.find.byId(21L);
+				doctor.update();
+			}
+		}
+		return ok("added primary city");
+	}
 
 
 }

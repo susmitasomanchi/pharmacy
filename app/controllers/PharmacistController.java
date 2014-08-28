@@ -394,6 +394,7 @@ public class PharmacistController extends Controller {
 	 */
 	@ConfirmAppUser
 	public static Result viewTodaysPrescriptions() {
+		Logger.info("hello1");
 		final Date now = new Date();
 		final Calendar calendarFrom = Calendar.getInstance();
 		calendarFrom.setTime(now);
@@ -416,6 +417,7 @@ public class PharmacistController extends Controller {
 				.ge("sharedDate", calendarFrom.getTime())
 				.le("sharedDate", calendarTo.getTime())
 				.findList();
+		Logger.info("hello2 "+pharmacyPrescriptionInfos.size());
 		return ok(views.html.pharmacist.pharmacyTodaysPrescriptions.render(pharmacyPrescriptionInfos, ""));
 	}
 	/**

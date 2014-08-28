@@ -133,7 +133,7 @@ public class Doctor extends BaseEntity{
 		return Prescription.find.where().eq("doctor", this).findRowCount();
 	}
 	public int getAppointmentRowCount(){
-		return Appointment.find.where().eq("doctorClinicInfo.doctor", this).findRowCount();
+		return Appointment.find.where().eq("doctorClinicInfo.doctor", this).eq("appointmentStatus", AppointmentStatus.SERVED).findRowCount();
 	}
 	public List<PatientDoctorInfo> getPatientDoctorInfo(){
 		return PatientDoctorInfo.find.where().eq("doctor", this).findList();
