@@ -23,7 +23,7 @@ public class UserActions extends Controller {
 	/**
 	 * @lastUpdateBy: Buta
 	 * Action to render the respective dashboard of the loggedIn user based on his/her role
-	 * GET	/dashboard
+	 * GET	/secure-dashboard
 	 */
 	public static Result dashboard() {
 		final AppUser appUser = LoginController.getLoggedInUser();
