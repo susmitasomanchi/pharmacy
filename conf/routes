@@ -38,13 +38,10 @@ GET    /secure-user/forgot-password                            	controllers.Logi
 POST   /secure-user/forgot-password                            	controllers.LoginController.processForgotPassword()
 GET	/secure-user/forgot-reset-password/:userId/:forgotPasswordKey	controllers.LoginController.editForgotPassword(userId: Long, forgotPasswordKey:String)
 POST	/secure-user/forgot-reset-password						controllers.LoginController.updateForgotPassword()
-
 GET    /secure-user/edit-password                            	controllers.LoginController.editPassword()
 POST   /secure-user/update-password                            	controllers.LoginController.updatePassword()
-
 GET	   /secure-user/edit-my-profile								controllers.UserController.editAppUserProfile()
 POST   /secure-user/edit-my-profile								controllers.UserController.updateAppUserProfile()
-
 GET		/secure-user/not-confirmed-yet							controllers.UserController.confirmAppUserPage()
 GET		/secure-user/verify-email							controllers.UserController.sendConformationEmail()
 GET 	/secure-user/confirmation/:userId/:randomString	controllers.PublicController.emailConfirmation(userId: Long, randomString:String)
@@ -408,6 +405,8 @@ GET	/mr/sample-data					controllers.SampleDataController.mrSampleData()
 GET		/admin						controllers.SampleDataController.mednetAdmin()
 GET		/add-primary-city						controllers.SampleDataController.addPrimaryCity()
 GET		/default-primarycity					controllers.SampleDataController.addDefaultPrimaryCity()
+GET 	/specz									controllers.SampleDataController.createDocSpez()
+
 #GET    /appointment					controllers.SampleDataController.createAppointment()
 
 

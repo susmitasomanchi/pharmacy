@@ -11,6 +11,7 @@ import models.diagnostic.DiagnosticCentre;
 import models.doctor.Doctor;
 import models.patient.Patient;
 import models.pharmacist.Pharmacy;
+import play.Logger;
 import play.mvc.Controller;
 import play.mvc.Result;
 import actions.BasicAuth;
@@ -37,7 +38,6 @@ public class UserActions extends Controller {
 		}
 		if(appUser.role.equals(Role.PATIENT)){
 			final Patient patient = appUser.getPatient();
-
 			return ok(views.html.patient.fav_doctors.render(patient.patientDoctorInfoList));
 		}
 
