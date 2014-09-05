@@ -231,3 +231,4 @@ public class Doctor extends BaseEntity{
 	}
 
 }
+

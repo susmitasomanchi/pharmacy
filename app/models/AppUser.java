@@ -60,6 +60,8 @@ public class AppUser extends BaseEntity {
 
 	public Date dob;
 
+	public BloodGroup bloodGroup;
+
 	public List<Language> languageList = new ArrayList<Language>();
 
 	public Role role;

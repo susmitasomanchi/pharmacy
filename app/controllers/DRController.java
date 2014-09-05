@@ -49,6 +49,7 @@ public class DRController extends Controller {
 			diagnosticRepresentative.appUser = appUser;
 			dc.diagnosticRepresentativelist.add(diagnosticRepresentative);
 			dc.update();
+
 			return ok("Registerd ");
 		}
 

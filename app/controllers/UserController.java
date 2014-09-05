@@ -11,6 +11,7 @@ import java.util.Random;
 
 import models.Alert;
 import models.AppUser;
+import models.BloodGroup;
 import models.PrimaryCity;
 import models.Role;
 import models.Sex;
@@ -292,6 +293,15 @@ public class UserController extends Controller {
 			if (oldNumber == null || (oldNumber.longValue() != newNumber.longValue())) {
 				loggedInUser.mobileNumber = newNumber;
 				loggedInUser.mobileNumberConfirmed = false;
+				//TODO: make it async
+				SMSService.sendConfirmationSMS(loggedInUser);
+			}
+		}
+		if(requestMap.get("bloodgroup")[0]!=null && requestMap.get("bloodgroup")[0].trim()!=""){
+			final BloodGroup oldGroup = loggedInUser.bloodGroup;
+			final String newGroup = requestMap.get("bloodgroup")[0].trim();
+			if (oldGroup == null || (oldGroup.toString() != newGroup)) {
+				loggedInUser.bloodGroup = BloodGroup.valueOf(newGroup);
 				//TODO: make it async
 				SMSService.sendConfirmationSMS(loggedInUser);
 			}
