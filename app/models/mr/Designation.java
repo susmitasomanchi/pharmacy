@@ -25,6 +25,8 @@ public class Designation extends BaseEntity{
 	@OneToOne
 	public MedicalRepresentative mr;
 	
+	//public String test;
+	
 	public static Finder<Long, Designation> find = new Finder<Long, Designation>(
 			Long.class, Designation.class);
 

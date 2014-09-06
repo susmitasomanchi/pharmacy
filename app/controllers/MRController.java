@@ -168,6 +168,7 @@ public class MRController extends Controller {
 
 				mr.pharmaceuticalCompany = company;
 				mr.appUser = appUser;
+				mr.designation = Designation.find.byId(medicalRepresentativeBean.designationId);
 				mr.manager = MedicalRepresentative.find
 						.byId(medicalRepresentativeBean.manager);
 				mr.update();
