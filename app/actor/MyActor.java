@@ -20,9 +20,10 @@ public class MyActor extends UntypedActor  {
 			// Async Execution
 			Promise.promise(new Function0<Integer>() {
 				//@Override
+				@Override
 				public Integer apply() {
 					int result = 0;
-					if(!EmailService.sendSimpleHtmlEMail("admin@mednetwork.in", "Cron update", "<html>A cron has been started</html>")){
+					if(!EmailService.sendSimpleHtmlEMail("admin@mednetwork.in", "Cron update", "<html>Appointment Cron has been started</html>")){
 						result=1;
 					}
 
@@ -36,9 +37,10 @@ public class MyActor extends UntypedActor  {
 			// Async Execution
 			Promise.promise(new Function0<Integer>() {
 				//@Override
+				@Override
 				public Integer apply() {
 					int result = 0;
-					if(!EmailService.sendSimpleHtmlEMail("admin@mednetwork.in", "Cron update", "<html>A cron has been started</html>")){
+					if(!EmailService.sendSimpleHtmlEMail("admin@mednetwork.in", "Cron update", "<html>Appointment Cron has ended</html>")){
 						result=1;
 					}
 

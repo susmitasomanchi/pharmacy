@@ -1,31 +1,23 @@
 package models;
 
 import java.sql.Timestamp;
-import java.util.Date;
 
 import javax.persistence.MappedSuperclass;
 import javax.persistence.Version;
-import javax.validation.constraints.NotNull;
-
-import com.avaje.ebean.annotation.CreatedTimestamp;
 
 import play.db.ebean.Model;
+
+import com.avaje.ebean.annotation.CreatedTimestamp;
 
 @SuppressWarnings("serial")
 @MappedSuperclass
 public abstract class BaseEntity extends Model {
 
 
-	@NotNull
 	@CreatedTimestamp
-	Timestamp createdOn;
+	public Timestamp createdOn;
 
 	@Version
-	Timestamp lastUpdate;
+	public Timestamp lastUpdate;
 
-	@Override
-	public void save() {
-		this.createdOn = new Timestamp(new Date().getTime());
-		super.save();
-	}
 }

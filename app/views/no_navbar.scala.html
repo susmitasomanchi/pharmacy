@@ -1,7 +1,26 @@
-@(title: String)(content: Html)
+@(title: String, desc : String="",keys:String="")(content: Html)
 <!DOCTYPE html>
 <html>
     <head>
+	@if(title != null && title != ""){
+		<title>@title</title>
+		<meta property="og:title" content="@title" />
+  	}else{
+		<title>MedNetwork</title>
+	}
+	@if(desc != null && desc != ""){
+		<meta name="description" content="@desc">
+		<meta property="og:description" content="@desc" />
+	}else{
+		<meta name="description" content="MedNetwork is an online platform for all stakeholders in healthcare to synergise their efforts in making healthcare smart, integrated and networked. Integrates efforts by networking doctors, patients, pharmacies, pharmaceutical companies, diagnostic centres, blood banks etc.">
+	}
+	@if(keys != null && keys != ""){
+		<meta name="keywords" content="@keys">
+	}else{
+		<meta name="keywords" content="mednetwork, med, network, doctor, patient, mr, medical representative, pharma, pharmaceutical, medical, pharmacy, diagnostic, blood bank">
+	}
+	<meta charset="UTF-8">
+   
         <title>@title</title>
         <link rel="stylesheet" media="screen" href="@routes.Assets.at("stylesheets/chosen.min.css")">
         <link rel="stylesheet" media="screen" href="@routes.Assets.at("stylesheets/main.css")">
@@ -9,14 +28,116 @@
         <link href="//netdna.bootstrapcdn.com/bootswatch/3.1.1/yeti/bootstrap.min.css" rel="stylesheet">
         <link href="//netdna.bootstrapcdn.com/font-awesome/4.1.0/css/font-awesome.min.css" rel="stylesheet">
         <link rel="stylesheet" media="screen" href="@routes.Assets.at("stylesheets/datepicker.css")">
+        <link rel="stylesheet" media="screen" href="@routes.Assets.at("stylesheets/application.css")">
         <script src="@routes.Assets.at("javascripts/jquery-1.9.0.min.js")" type="text/javascript"></script>
         <script src="@routes.Assets.at("javascripts/bootstrap.min.js")" type="text/javascript"></script>
-        <script src="@routes.Assets.at("javascripts/application.js")" type="text/javascript"></script>
         <script src="@routes.Assets.at("javascripts/bootstrap-datepicker.js")" type="text/javascript"></script>
         <script src="@routes.Assets.at("javascripts/chosen.jquery.min.js")" type="text/javascript"></script>
+        <script src="@routes.Assets.at("javascripts/application.js")" type="text/javascript"></script>
      </head>
     <body>		
-    
+
+
+
+<nav class="navbar navbar-inverse navbar-fixed-top" role="navigation">
+  <div class="container-fluid">
+    <!-- Brand and toggle get grouped for better mobile display -->
+    <div class="navbar-header">
+    <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1">
+        <span class="sr-only">Toggle navigation</span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+    </button>
+      @*
+      <a class="navbar-brand" href="@routes.UserActions.dashboard()">@Messages.get("MedNetwork")</a>
+      *@
+      <a class="navbar-brand" href="/">
+      	@if(LoginController.isLoggedIn()){
+      		<img style="height:45px; margin-top:-12px;" src="/assets/images/medlogotrans.png" alt="MedNetwork">
+      	}else{
+      		<img style="height:56px; margin-top:-12px;" src="/assets/images/medlogotrans.png" alt="MedNetwork">
+      	}
+      </a>
+    </div> 
+     <!-- Collect the nav links, forms, and other content for toggling -->
+    <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+    	
+    	<ul class="nav navbar-nav" style="margin-left:33%;">
+    	<li class="dropdown">
+          <a href="#" class="dropdown-toggle" data-toggle="dropdown">
+          @if(session().get(utils.Constants.CITY_ID) == null){
+          	<span id="cityName"></>Select City</span>
+          }else{
+          	<span id="cityName"></>@models.PrimaryCity.find.byId(Long.parseLong(session().get(utils.Constants.CITY_ID))).name</span>
+          }
+          <b class="caret"></b></a>
+          <ul class="dropdown-menu">
+          	@for(city <- models.PrimaryCity.getCitiesStateWise()){
+ 	         	<li><a style="cursor:pointer;" onclick="addToSession('@city.id')">@city.name</a></li>
+          	}
+          </ul>
+        </li>
+    	</ul>
+    	
+    	<script>
+		function addToSession(cityId){
+			$.get('/add-primary-city-to-session/'+cityId,function(cityName){
+				$('#cityName').html(cityName);
+				$('#citymodal').modal('hide');
+				window.location.href='';
+			});
+			
+		}
+    	</script>
+
+		<ul class="nav navbar-nav navbar-right">
+		@if(LoginController.isLoggedIn()) {
+			
+		<li class="dropdown"><a href="#" class="dropdown-toggle" data-toggle="dropdown">@LoginController.getLoggedInUser().name <b class="caret"></b></a>
+		<ul class="dropdown-menu">
+			@if(!LoginController.getLoggedInUser().emailConfirmed || !LoginController.getLoggedInUser().mobileNumberConfirmed){
+				<li><a href="@routes.UserController.confirmAppUserPage()"><i class="fa fa-check-square-o"></i>&nbsp;&nbsp;Confirm Details</a></li>
+			}
+			
+			@if(!LoginController.getLoggedInUserRole().equals(Role.DOCTOR.toString())){			
+			<li><a href="@routes.UserController.editAppUserProfile()"><i class="fa fa-user"></i>&nbsp;&nbsp;My Profile</a></li>
+			}
+			<li><a href="@routes.LoginController.editPassword()"><i class="fa fa-lock"></i>&nbsp;&nbsp;Change Password</a></li>
+			<li class="divider"></li>
+			<li><a href="@routes.LoginController.processLogout()"><i class="fa fa-sign-out"></i>&nbsp;&nbsp;Logout</a></li>
+		</ul>
+		</li>
+		} else {
+    			@helper.form(action=routes.LoginController.processLogin()) {
+  				<div class="row" style="margin-top:3px;">
+  					<div class="col-md-5">
+  						<input id="uname" type="email" name="email" placeholder="Email" style="width:100%" required>
+  					</div>
+  					<div class="col-md-5">
+  						<input type="password" id="pwd" name="password" placeholder="Password" style="width:100%" required>
+  						<a href="@routes.LoginController.forgotPassword()" style="color:#292929; font-size:12px"><b>Forgot password ?</b></a>
+      				</div>
+     				<div class="col-md-2">
+          				<input type="submit" class="btn btn-sm btn-success" value="Sign in" style="">
+      				</div>
+  				</div>
+  				}
+		}
+		</ul>
+   	  
+   	  
+    </div><!-- /.navbar-collapse -->
+  </div><!-- /.container-fluid -->
+</nav>
+
+
+
+
+
+
+
+
     			@if(flash().get("alert") != null){
   				<div class="alert @flash().get("alert").split("~")(0)">
   					<button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
@@ -25,9 +146,41 @@
   				}
     			@content
 
-
     			
 		<span style="width:100%; margin-left:500px; font-size:12px"> &copy; <a href="http://www.greensoftware.in/">Green Software</a> 2014. All rights reserved | Share your <a href="/feedback"><b> feedback </b></a> |  <a href="/help"><b>Help</b></a></span>
     	<br><br>
+    	
+    	
+    	
+    	
+
+			@if(session().get(utils.Constants.CITY_ID) == null){
+				<div class="modal fade" id="citymodal" tabindex="-1" role="dialog" data-backdrop="static" data-keyboard="false" aria-labelledby="myModalLabel" aria-hidden="true">
+  				<div class="modal-dialog" style="padding-top:200px">
+    			<div class="modal-content" style="padding-left:0px">
+      			<div class="modal-header alert-info">
+      			<h4>Please Select Your City</h4>
+      			</div>
+				<div class="modal-body">
+					@for(city <- models.PrimaryCity.getCitiesStateWise()){
+						<a style="cursor:pointer;" onclick="addToSession('@city.id')">@city.name</a><br>
+          			}
+				</div>
+				</div>
+				</div>
+				</div>
+			
+			<script>
+			window.onload = function(){
+				$('#citymodal').modal('show')
+			}
+			</script>
+			}
+
+
+
     </body>
 </html>
+
+
+

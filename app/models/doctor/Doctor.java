@@ -18,7 +18,9 @@ import javax.persistence.OneToOne;
 
 import models.AppUser;
 import models.BaseEntity;
+import models.PrimaryCity;
 import models.diagnostic.DiagnosticCentre;
+import models.patient.PatientDoctorInfo;
 import models.pharmacist.Pharmacy;
 import play.data.validation.Constraints.Required;
 import play.db.ebean.Model;
@@ -90,8 +92,10 @@ public class Doctor extends BaseEntity{
 	@ManyToMany(cascade=CascadeType.ALL)
 	public List<DiagnosticCentre> diagnosticCentreList=new ArrayList<DiagnosticCentre>();
 
-	/** Using it to capture starting year of experience.
+	/**
+	 * 	Using it to capture starting year of experience.
 	 * 	So, Doctor's experience = currentYear - this.experience
+	 * 	Check out doctor.getYearsOfExperience()
 	 */
 	public Integer experience;
 
@@ -102,7 +106,12 @@ public class Doctor extends BaseEntity{
 	@Column(columnDefinition="TEXT")
 	public String slugUrl;
 
-	public static Model.Finder<Long,Doctor> find = new Finder<Long, Doctor>(Long.class, Doctor.class);
+	@OneToOne
+	public PrimaryCity primaryCity;
+
+
+
+	public static Model.Finder<Long,Doctor> find = new Model.Finder<Long, Doctor>(Long.class, Doctor.class);
 
 	public List<DoctorExperience> getExperienceListInOrder(){
 		return DoctorExperience.find.where().eq("doctor_id", this.id).orderBy("workedFrom DESC").findList();
@@ -118,6 +127,16 @@ public class Doctor extends BaseEntity{
 
 	public List<DoctorClinicInfo> getActiveClinic(){
 		return DoctorClinicInfo.find.where().eq("doctor", this).eq("active", true).findList();
+	}
+
+	public int getPrescriptionRowCount(){
+		return Prescription.find.where().eq("doctor", this).findRowCount();
+	}
+	public int getAppointmentRowCount(){
+		return Appointment.find.where().eq("doctorClinicInfo.doctor", this).eq("appointmentStatus", AppointmentStatus.APPROVED).findRowCount();
+	}
+	public List<PatientDoctorInfo> getPatientDoctorInfo(){
+		return PatientDoctorInfo.find.where().eq("doctor", this).findList();
 	}
 
 	@OneToMany(cascade = CascadeType.ALL)
@@ -152,8 +171,11 @@ public class Doctor extends BaseEntity{
 	public void update() {
 		final StringBuilder stringBuilder = new StringBuilder();
 		for (final DoctorClinicInfo clinicInfo : this.doctorClinicInfoList) {
-			if(clinicInfo.clinic != null){
+			if(clinicInfo.clinic != null && clinicInfo.active){
 				stringBuilder.append(clinicInfo.clinic.name.toLowerCase());
+				if(clinicInfo.clinic.address != null){
+					stringBuilder.append(clinicInfo.clinic.address.area.toLowerCase());
+				}
 			}
 		}
 		if(this.appUser.name != null){
@@ -209,3 +231,4 @@ public class Doctor extends BaseEntity{
 	}
 
 }
+

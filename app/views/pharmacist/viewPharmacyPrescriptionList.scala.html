@@ -27,7 +27,7 @@
     <div class="col-md-3 form-group">
     <label for="to" class="col-md-3 control-label" style="padding-top:0px" >Order Status</label>
     <div class="col-lg-9">
-    	<select class="chzn" name="status" style="width:100%;" data-placeholder="Select Status">
+    	<select class="chzn" id="status-select" name="status" style="width:100%;" data-placeholder="Select Status">
 			<option></option>
 			<option value="any" @if(status.trim.toLowerCase().compareTo("any")==0){selected}>Any</option>
 			<option value="RECEIVED" @if(status.trim.toLowerCase().compareTo("received")==0){selected}>Received</option>
@@ -59,7 +59,7 @@
 <script>
 $('#status-select').on('change', function(){
 	var selValue = $('#status-select').val();
-	window.location.href='/pharmacy/prescriptions?status='+selValue;	
+	window.location.href='/secure-pharmacy/prescriptions?status='+selValue;	
 });
 
 
@@ -115,7 +115,26 @@ $('#status-select').on('change', function(){
 <span class="badge" style=""><b>@pharmacyPrescriptionInfo.pharmacyPrescriptionStatus</b></span>
 @if(!pharmacyPrescriptionInfo.pharmacyPrescriptionStatus.equals(models.pharmacist.PharmacyPrescriptionStatus.SERVED)){
 	<br><br>
-Mark as <a href="@routes.PharmacistController.servedPrescription(pharmacyPrescriptionInfo.id)" class="" ><b>Served</b></a>
+Mark as <button class="btn btn-primary btn-xs" data-toggle="modal" data-target="#myModal1@pharmacyPrescriptionInfo.id">Served</button>
+<div class="modal fade" id="myModal1@pharmacyPrescriptionInfo.id" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+  <div class="modal-dialog" style="padding-top:200px">
+    <div class="modal-content" style="padding-left:0px">
+      <div class="modal-header alert-info">
+      <h4>Mark as Served. Are you sure ?</h4>
+      </div>
+      
+      <div class="modal-body">
+      <h4>The patient will be intimated that the order has been served.</h4>
+      </div>
+      
+      <div class="modal-footer">
+        <button type="button" class="btn btn-default btn-xs" data-dismiss="modal">Close</button>
+        <a href="@routes.PharmacistController.servedPrescription(pharmacyPrescriptionInfo.id)" class="btn btn-primary btn-xs">Served</a>
+            
+      </div>
+    </div>
+  </div>
+</div>
 }
 </td>
 

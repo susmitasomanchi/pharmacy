@@ -149,4 +149,14 @@ public class DoctorClinicInfo extends BaseEntity {
 
 	}
 
+	public List<Appointment> getAllAppointments(){
+		return Appointment.find.where().eq("doctorClinicInfo", this).eq("appointmentStatus", AppointmentStatus.APPROVED).findList();
+	}
+	public int getAppointmentsCount(){
+		return Appointment.find.where().eq("doctorClinicInfo", this).eq("appointmentStatus", AppointmentStatus.APPROVED).findRowCount();
+	}
+	public int getPrescriptionCount(){
+		return Prescription.find.where().eq("doctor", this.doctor).eq("clinic", this.clinic).findRowCount();
+	}
+
 }

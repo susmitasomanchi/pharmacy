@@ -47,6 +47,8 @@ public class BlogController extends Controller {
 	public static Result processCategoryForm(){
 		final Form<ArticleCategory> filledForm = categoryForm.bindFromRequest();
 		if(filledForm.hasErrors()) {
+			Logger.info("ERROR!");
+			Logger.error(filledForm.errors().toString());
 			return badRequest(views.html.blog.categoryForm.render(filledForm));
 		}
 		else {

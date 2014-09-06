@@ -60,7 +60,7 @@ public class PharmacistController extends Controller {
 	/**
 	 * @author : lakshmi
 	 * Action to upload Background and Profile Images of the Pharmacy of the LoggedIn ADMIN_PHARMACIST
-	 * POST	/pharmacy/upload-pharmacy-images
+	 * POST	/secure-pharmacy/upload-pharmacy-images
 	 */
 	public static Result uploadPharmacyImageProcess()  {
 		try{
@@ -110,7 +110,7 @@ public class PharmacistController extends Controller {
 
 	/**
 	 * @author : lakshmi
-	 * POST	/pharmacy/basic-update
+	 * POST	/secure-pharmacy/basic-update
 	 * Action to update the basic details(like name & brief description etc) of Pharmacy
 	 * of the loggedIn ADMIN_PHARMACIST
 	 */
@@ -161,7 +161,7 @@ public class PharmacistController extends Controller {
 
 	/**
 	 * @author : lakshmi
-	 * POST	/pharmacy/address-update
+	 * POST	/secure-pharmacy/address-update
 	 * Action to update the address details of Pharmacy
 	 * of the loggedIn ADMIN_PHARMACIST
 	 */
@@ -229,7 +229,7 @@ public class PharmacistController extends Controller {
 
 	/**
 	 * @author lakshmi
-	 * GET /pharmacy/remove-image/:pharmacyId/:fileId
+	 * GET /secure-pharmacy/remove-image/:pharmacyId/:fileId
 	 * Action to remove a profile image of the Pharmacy of the loggedIn ADMIN_PHARMACIST
 	 */
 	public static Result removeImage(final Long pharmacyId,final Long imageId){
@@ -262,7 +262,7 @@ public class PharmacistController extends Controller {
 	/**
 	 * @author lakshmi
 	 * Action to display prescriptions of Pharmacy
-	 * GET 	/pharmacy/prescriptions
+	 * GET 	/secure-pharmacy/prescriptions
 	 */
 	@ConfirmAppUser
 	public static Result pharmacyPrescriptionList(final String status){
@@ -288,7 +288,7 @@ public class PharmacistController extends Controller {
 	 * @author lakshmi
 	 * Action to display a shared prescription to the LoggedInPharmacist
 	 * (Only the medicines part of prescription should be shown)
-	 * GET 	/pharmacy/prescription/:pharmacyPrescriptionInfoId
+	 * GET 	/secure-pharmacy/prescription/:pharmacyPrescriptionInfoId
 	 */
 	@ConfirmAppUser
 	public static Result getPrescriptionDetails(final Long pharmacyPrescriptionInfoId){
@@ -318,7 +318,7 @@ public class PharmacistController extends Controller {
 	/**
 	 * @author lakshmi
 	 * Action to change the status of loggedInPharmcy's prescription to SERVED
-	 * GET 	/pharmacy/served-prescription/:pharmacyPrescriptionInfoId
+	 * GET 	/secure-pharmacy/served-prescription/:pharmacyPrescriptionInfoId
 	 */
 	@ConfirmAppUser
 	public static Result servedPrescription(final Long pharmacyPrescriptionInfoId){
@@ -343,6 +343,7 @@ public class PharmacistController extends Controller {
 		// Async Execution
 		Promise.promise(new Function0<Integer>() {
 			//@Override
+			@Override
 			public Integer apply() {
 				int result = 0;
 				if(!EmailService.sendSimpleHtmlEMail(pharmacyPrescriptionInfo.pharmacy.adminPharmacist.appUser.email, "Prescription Served", messagetopharmaciest.toString())){
@@ -362,6 +363,7 @@ public class PharmacistController extends Controller {
 		// Async Execution
 		Promise.promise(new Function0<Integer>() {
 			//@Override
+			@Override
 			public Integer apply() {
 				int result = 0;
 				if(!EmailService.sendSimpleHtmlEMail(pharmacyPrescriptionInfo.prescription.patient.appUser.email, "Prescription Served", messagetopatient.toString())){
@@ -388,10 +390,11 @@ public class PharmacistController extends Controller {
 	/**
 	 * @author lakshmi
 	 * Action to Display Todays Prescriptions requested by logged-in ADMIN_PHARMACIST
-	 * GET 	/pharmacy/todays-prescriptions
+	 * GET 	/secure-pharmacy/todays-prescriptions
 	 */
 	@ConfirmAppUser
 	public static Result viewTodaysPrescriptions() {
+		Logger.info("hello1");
 		final Date now = new Date();
 		final Calendar calendarFrom = Calendar.getInstance();
 		calendarFrom.setTime(now);
@@ -414,12 +417,13 @@ public class PharmacistController extends Controller {
 				.ge("sharedDate", calendarFrom.getTime())
 				.le("sharedDate", calendarTo.getTime())
 				.findList();
+		Logger.info("hello2 "+pharmacyPrescriptionInfos.size());
 		return ok(views.html.pharmacist.pharmacyTodaysPrescriptions.render(pharmacyPrescriptionInfos, ""));
 	}
 	/**
 	 * @author lakshmi
 	 * Action to Display Prescriptions between 2 dates as requested by logged-in ADMIN_PHARMACIST
-	 * POST /pharmacy/from-and-to-date-prescriptions
+	 * POST /secure-pharmacy/from-and-to-date-prescriptions
 	 */
 	@ConfirmAppUser
 	public static Result getFromAndToDatePrescriptions() {
@@ -479,7 +483,7 @@ public class PharmacistController extends Controller {
 
 	/**
 	 * @author : lakshmi
-	 * GET/pharmacy/add-pharmacy-product
+	 * GET/secure-pharmacy/add-pharmacy-product
 	 * Action to render the form of new PharmacyProduct of Pharmacy
 	 * of the loggedIn ADMIN_PHARMACIST
 	 */
@@ -490,7 +494,7 @@ public class PharmacistController extends Controller {
 
 	/**
 	 * @author : lakshmi
-	 * POST/pharmacy/add-pharmacy-product
+	 * POST/secure-pharmacy/add-pharmacy-product
 	 * Action to add new PharmacyProduct of Pharmacy
 	 * of the loggedIn ADMIN_PHARMACIST
 	 */
@@ -526,7 +530,7 @@ public class PharmacistController extends Controller {
 
 	/**
 	 * @author : lakshmi
-	 * GET/pharmacy/pharmacy-product-list
+	 * GET/secure-pharmacy/pharmacy-product-list
 	 * Action to get all PharmacyProducts of Pharmacy
 	 * of the loggedIn ADMIN_PHARMACIST
 	 */
@@ -537,7 +541,7 @@ public class PharmacistController extends Controller {
 	}
 	/**
 	 * @author : lakshmi
-	 * POST/pharmacy/add-product-to-inventory
+	 * POST/secure-pharmacy/add-product-to-inventory
 	 * Action to get all PharmacyProducts of Pharmacy
 	 * of the loggedIn ADMIN_PHARMACIST
 	 */
@@ -547,7 +551,7 @@ public class PharmacistController extends Controller {
 
 	/**
 	 * @author : lakshmi
-	 * POST/pharmacy/add-product-to-inventory
+	 * POST/secure-pharmacy/add-product-to-inventory
 	 * Action to get all PharmacyProducts of Pharmacy
 	 * of the loggedIn ADMIN_PHARMACIST
 	 */

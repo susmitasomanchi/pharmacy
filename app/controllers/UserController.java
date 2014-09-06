@@ -1,15 +1,5 @@
-
-/*****
-
-THIS IS AN AUTO GENERATED CODE
-PLEASE DO NOT MODIFY IT BY HAND
- *****/
-/*****
-
-THIS IS AN AUTO GENERATED CODE
-PLEASE DO NOT MODIFY IT BY HAND
- *****/
 package controllers;
+
 import java.security.MessageDigest;
 import java.security.SecureRandom;
 import java.text.ParseException;
@@ -21,6 +11,8 @@ import java.util.Random;
 
 import models.Alert;
 import models.AppUser;
+import models.BloodGroup;
+import models.PrimaryCity;
 import models.Role;
 import models.Sex;
 import models.diagnostic.DiagnosticCentre;
@@ -28,6 +20,7 @@ import models.diagnostic.DiagnosticRepresentative;
 import models.doctor.Doctor;
 import models.mr.MedicalRepresentative;
 import models.patient.Patient;
+import models.patient.SugarTracker;
 import models.pharmacist.Pharmacist;
 import models.pharmacist.Pharmacy;
 
@@ -57,7 +50,7 @@ public class UserController extends Controller {
 
 	/**
 	 * Action to render the joinUs page for Doctor
-	 * GET    /doctor/join
+	 * GET    /secure-doctor/join
 	 */
 	public static Result joinUsDoctor(){
 		return ok(views.html.doctor.joinus.render());
@@ -66,7 +59,7 @@ public class UserController extends Controller {
 
 	/**
 	 * Action to render the joinUs page for Pharmacy
-	 * GET    /pharmacy/join
+	 * GET    /secure-pharmacy/join
 	 */
 	public static Result joinUsPharmacy(){
 		return ok(views.html.pharmacist.joinus.render());
@@ -74,7 +67,7 @@ public class UserController extends Controller {
 
 	/**
 	 * Action to render the joinUs page for Diagnostic Centre
-	 * GET    /diagnostic/join
+	 * GET    /secure-diagnostic/join
 	 */
 	public static Result joinUsDiagnostic(){
 		return ok(views.html.diagnostic.joinus.render());
@@ -82,7 +75,7 @@ public class UserController extends Controller {
 
 	/**
 	 * Action to render the joinUs page for Patients("User")
-	 * GET    /user/join
+	 * GET    /secure-user/join
 	 */
 	public static Result joinUsPatient(){
 		return ok(views.html.patient.joinus.render());
@@ -155,6 +148,8 @@ public class UserController extends Controller {
 		appUser.mobileNumber = 9999999999L;
 		appUser.save();
 
+		final PrimaryCity city = PrimaryCity.find.byId(Long.parseLong(requestMap.get("city")[0].trim()));
+
 		if(appUser.role.equals(Role.DOCTOR)){
 			final Doctor doctor = new Doctor();
 			doctor.degree = "Degree";
@@ -164,6 +159,7 @@ public class UserController extends Controller {
 			doctor.registrationNumber = "00000";
 			doctor.slugUrl = Util.simpleSlugify(appUser.name)+appUser.id;
 			doctor.appUser = appUser;
+			doctor.primaryCity = city;
 			doctor.save();
 		}
 
@@ -176,6 +172,7 @@ public class UserController extends Controller {
 			pharmacy.name = request().body().asFormUrlEncoded().get("pharmacyName")[0];
 			pharmacy.adminPharmacist = pharmacist;
 			pharmacy.slugUrl = Util.simpleSlugify(pharmacy.name)+pharmacist.id;
+			pharmacy.primaryCity = city;
 			pharmacy.save();
 			pharmacist.pharmacy = pharmacy;
 			pharmacist.update();
@@ -190,6 +187,7 @@ public class UserController extends Controller {
 			diagnosticCentre.name = request().body().asFormUrlEncoded().get("diagnosticCentreName")[0];
 			diagnosticCentre.diagnosticRepAdmin = diagnosticRepresentative;
 			diagnosticCentre.slugUrl = Util.simpleSlugify(diagnosticCentre.name)+diagnosticRepresentative.id;
+			diagnosticCentre.primaryCity = city;
 			diagnosticCentre.save();
 			diagnosticRepresentative.diagnosticCentre = diagnosticCentre;
 			diagnosticRepresentative.update();
@@ -198,10 +196,11 @@ public class UserController extends Controller {
 		if(appUser.role.equals(Role.PATIENT)){
 			final Patient patient = new Patient();
 			patient.appUser = appUser;
+			patient.primaryCity = city;
 			patient.save();
 		}
 
-		session().clear();
+		//session().clear();
 		session(Constants.LOGGED_IN_USER_ID, appUser.id + "");
 		session(Constants.LOGGED_IN_USER_ROLE, appUser.role+ "");
 		// Async Execution
@@ -220,7 +219,6 @@ public class UserController extends Controller {
 			}
 		});
 		// End of async
-
 
 		return redirect(routes.UserActions.dashboard());
 	}
@@ -266,7 +264,10 @@ public class UserController extends Controller {
 		final AppUser loggedInUser = LoginController.getLoggedInUser();
 		// server-side check
 		if(appUserId.longValue() != loggedInUser.id.longValue()){
-			session().clear();
+			//session().clear();
+			session().remove(Constants.LOGGED_IN_USER_ID);
+			session().remove(Constants.LOGGED_IN_USER_ROLE);
+
 			return redirect(routes.LoginController.processLogout());
 		}
 
@@ -297,6 +298,26 @@ public class UserController extends Controller {
 				SMSService.sendConfirmationSMS(loggedInUser);
 			}
 		}
+		if(requestMap.get("bloodgroup")[0]!=null && requestMap.get("bloodgroup")[0].trim()!=""){
+			final BloodGroup oldGroup = loggedInUser.bloodGroup;
+			final String newGroup = requestMap.get("bloodgroup")[0].trim();
+			if (oldGroup == null || (oldGroup.toString() != newGroup)) {
+				loggedInUser.bloodGroup = BloodGroup.valueOf(newGroup);
+				//TODO: make it async
+				SMSService.sendConfirmationSMS(loggedInUser);
+			}
+		}
+		if(requestMap.get("allergy")[0]!=null && requestMap.get("allergy")[0].trim()!=""){
+			loggedInUser.allergy = requestMap.get("allergy")[0].trim();
+		}
+		Logger.info("sugar avilable  : "+requestMap.get("sugarAvilable")[0]);
+		if(requestMap.get("sugarAvilable")[0]!=null && requestMap.get("sugarAvilable")[0].trim()!=""){
+			SugarTracker sugarTracker = new SugarTracker();
+			sugarTracker.sugarLevel= Float.parseFloat(requestMap.get("sugarAvilable")[0]);
+			sugarTracker.save();
+			loggedInUser.sugarTracker = sugarTracker;
+		}
+		
 		if(requestMap.get("dob")[0]!=null ){
 			try {
 				loggedInUser.dob =new SimpleDateFormat("dd-mm-yyyy").parse(requestMap.get("dob")[0].trim());
@@ -332,7 +353,7 @@ public class UserController extends Controller {
 
 	/**
 	 * @author Mitesh Action to Display form to verify the mobile number of
-	 *         currently logged in user GET /user/verify-mobile-number
+	 *         currently logged in user GET /secure-user/verify-mobile-number
 	 */
 	public static Result displayMobVerificationForm() {
 		return ok(views.html.common.verifyMobileNumber.render());
@@ -342,7 +363,7 @@ public class UserController extends Controller {
 
 	/**
 	 * @author Mitesh Action to verify the mobileNumberConfirmationKey send to
-	 *         currently logged in user'mobile POST /user/verify-mobile-number
+	 *         currently logged in user'mobile POST /secure-user/verify-mobile-number
 	 */
 	public static Result verifyMobileNumberConfirmationKey() {
 
@@ -445,7 +466,10 @@ public class UserController extends Controller {
 		doctor.appUser = appUser;
 		doctor.save();
 
-		session().clear();
+		//session().clear();
+		session().remove(Constants.LOGGED_IN_USER_ID);
+		session().remove(Constants.LOGGED_IN_USER_ROLE);
+
 		session(Constants.LOGGED_IN_USER_ID, appUser.id + "");
 		session(Constants.LOGGED_IN_USER_ROLE, appUser.role+ "");
 

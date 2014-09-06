@@ -36,27 +36,34 @@ public class LoginController extends Controller {
 
 
 
+
+	/*
 	public static Result loginForm() {
 
-		/*
+
 		if (LoginController.isLoggedIn()) {
 			return redirect(routes.UserActions.dashboard());
 		} else {
 			//return ok(views.html.loginForm.render(loginForm));
 			return ok(views.html.adminlogin.render(loginForm));
 		}
-		 */
 
-		return ok(views.html.home.render(loginForm));
+
+		//return ok(views.html.home.render(loginForm));
 	}
+	 */
 
 
 	/**
 	 *	Action to process login and redirecting to respective user's dashboard
-	 *	POST   /login
+	 *	POST   /secure-user/login
 	 */
 	public static Result processLogin() {
-		session().clear();
+
+		//session().clear(); Cannot clear session() as its used to store Primary City Id
+		session().remove(Constants.LOGGED_IN_USER_ID);
+		session().remove(Constants.LOGGED_IN_USER_ROLE);
+
 		final Form<LoginBean> filledForm = loginForm.bindFromRequest();
 		if (filledForm.hasErrors()) {
 			return badRequest(views.html.adminlogin.render(filledForm));
@@ -64,7 +71,7 @@ public class LoginController extends Controller {
 		else {
 			final LoginBean loginBean = filledForm.get();
 			final List<AppUser> appUsers = AppUser.find.where().eq("email", loginBean.email.trim().toLowerCase()).findList();
-			Logger.info("found users " + appUsers.toString());
+			Logger.info("found appUsers: " + appUsers.size());
 			if(appUsers.size() < 1) {
 				// return invalid login/password
 				Logger.error("Invalid username/password");
@@ -84,7 +91,19 @@ public class LoginController extends Controller {
 				}
 				session(Constants.LOGGED_IN_USER_ID, appUsers.get(0).id + "");
 				session(Constants.LOGGED_IN_USER_ROLE, appUsers.get(0).role+ "");
-				return redirect(routes.UserActions.dashboard());
+
+				Logger.info("Session URL: "+session(Constants.URL_AFTER_LOGIN));
+
+				if(session(Constants.URL_AFTER_LOGIN) != null && !session(Constants.URL_AFTER_LOGIN).trim().isEmpty()){
+					final String url = session(Constants.URL_AFTER_LOGIN);
+					Logger.info("url: "+url);
+					session(Constants.URL_AFTER_LOGIN, "");
+					return redirect(session(url));
+				}
+				else{
+					Logger.info("url null");
+					return redirect(routes.UserActions.dashboard());
+				}
 			}
 			if(appUsers.size() > 1) {
 				session(Constants.LOGGED_IN_USER_ID, appUsers.get(0).id + "");
@@ -98,7 +117,9 @@ public class LoginController extends Controller {
 
 	//@BasicAuth
 	public static Result processLogout() {
-		session().clear();
+		//session().clear();
+		session().remove(Constants.LOGGED_IN_USER_ID);
+		session().remove(Constants.LOGGED_IN_USER_ROLE);
 		return redirect(routes.Application.index());
 	}
 
@@ -118,7 +139,9 @@ public class LoginController extends Controller {
 		final AppUser loggedInUser = LoginController.getLoggedInUser();
 
 		if(appUserId.longValue() != loggedInUser.id.longValue()){
-			session().clear();
+			//session().clear();
+			session().remove(Constants.LOGGED_IN_USER_ID);
+			session().remove(Constants.LOGGED_IN_USER_ROLE);
 			return redirect(routes.LoginController.processLogout());
 		}
 
@@ -155,7 +178,9 @@ public class LoginController extends Controller {
 			loggedInUser.update();
 			Logger.info("Password Changed Successfully By AppUser: "+loggedInUser.id);
 			flash().put("alert", new Alert("alert-info", "Password has been changed. Please login with the new password.").toString());
-			session().clear();
+			//session().clear();
+			session().remove(Constants.LOGGED_IN_USER_ID);
+			session().remove(Constants.LOGGED_IN_USER_ROLE);
 			return redirect(routes.Application.index());
 		}
 
@@ -165,7 +190,7 @@ public class LoginController extends Controller {
 	//Forgot Password
 	/**
 	 *	Action to render a page where unauthorized user can enter his email id
-	 *	GET	/forgot-password
+	 *	GET/secure-user/forgot-password
 	 */
 	public static Result forgotPassword(){
 		return ok(views.html.forgotPassword.render());
@@ -175,7 +200,7 @@ public class LoginController extends Controller {
 	/**
 	 *	Action to check whether an appUser exists with the provided email id
 	 *	and to mail a link to change password page
-	 *	POST	/forgot-password
+	 *	POST/secure-user/forgot-password
 	 */
 	public static Result processForgotPassword(){
 		final String email = request().body().asFormUrlEncoded().get("email")[0].trim();
@@ -191,7 +216,7 @@ public class LoginController extends Controller {
 
 	/**
 	 *	Action to render a page to appUser to change his forgotten password
-	 *	GET	/forgot-reset-password/:userId/:forgotPasswordKey
+	 *	GET/secure-user/forgot-reset-password/:userId/:forgotPasswordKey
 	 */
 	public static Result editForgotPassword(final Long userId, final String forgotPasswordKey){
 		final AppUser appUser = AppUser.find.byId(userId);
@@ -253,7 +278,9 @@ public class LoginController extends Controller {
 			appUser.update();
 			Logger.info("Forgotten Password Changed Successfully By AppUser: "+appUser.id);
 			flash().put("alert", new Alert("alert-info", "Password has been changed. Please login with the new password.").toString());
-			session().clear();
+			//session().clear();
+			session().remove(Constants.LOGGED_IN_USER_ID);
+			session().remove(Constants.LOGGED_IN_USER_ROLE);
 			return redirect(routes.Application.index());
 		}
 

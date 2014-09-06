@@ -1,6 +1,6 @@
-# --- Author: Buta
-# --- Script to add created_on column to all entity tables. 
-# --- Timestamp createdOn; added in BaseEntity
+--- Author: Buta
+--- Script to add created_on column to all entity tables. 
+--- Timestamp createdOn; added in BaseEntity
 
 ALTER TABLE app_user ADD created_on timestamp NOT NULL DEFAULT '2014-08-15 00:00:00.001';
 ALTER TABLE doctor ADD created_on timestamp NOT NULL DEFAULT '2014-08-15 00:00:00.001';

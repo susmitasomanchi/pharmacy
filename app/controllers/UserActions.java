@@ -11,6 +11,7 @@ import models.diagnostic.DiagnosticCentre;
 import models.doctor.Doctor;
 import models.patient.Patient;
 import models.pharmacist.Pharmacy;
+import play.Logger;
 import play.mvc.Controller;
 import play.mvc.Result;
 import actions.BasicAuth;
@@ -22,7 +23,7 @@ public class UserActions extends Controller {
 	/**
 	 * @lastUpdateBy: Buta
 	 * Action to render the respective dashboard of the loggedIn user based on his/her role
-	 * GET	/dashboard
+	 * GET	/secure-dashboard
 	 */
 	public static Result dashboard() {
 		final AppUser appUser = LoginController.getLoggedInUser();
@@ -37,7 +38,6 @@ public class UserActions extends Controller {
 		}
 		if(appUser.role.equals(Role.PATIENT)){
 			final Patient patient = appUser.getPatient();
-
 			return ok(views.html.patient.fav_doctors.render(patient.patientDoctorInfoList));
 		}
 
@@ -66,7 +66,7 @@ public class UserActions extends Controller {
 			weekMap.put("pharmacies", Pharmacy.find.where().ge("createdOn", cal.getTime()).findRowCount());
 			weekMap.put("dc", DiagnosticCentre.find.where().ge("createdOn", cal.getTime()).findRowCount());
 
-			return ok(views.html.mednetAdmin.adminProfile.render(todayMap, weekMap));
+			return ok(views.html.mednetAdmin.adminDashboard.render(todayMap, weekMap));
 		}
 
 		//@TODO: none should render the dashboard of patient

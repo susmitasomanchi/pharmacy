@@ -4,18 +4,15 @@
 
 
 #Blog
-GET    /blog/create-blog-admin                     	controllers.SampleDataController.createBlogAdmin()
-GET    /login	                              	   	controllers.LoginController.loginForm()
-
 GET		/blog										controllers.BlogController.blogHome()
-GET		/blog/admin/new-category					controllers.BlogController.categoryForm()
-POST	/blog/admin/new-category					controllers.BlogController.processCategoryForm()
-GET		/blog/admin/categories						controllers.BlogController.categories()
-GET		/blog/admin/edit-category/:id				controllers.BlogController.editCategoryForm(id: Long)
-GET		/blog/admin/new-article						controllers.BlogController.articleForm()
-POST	/blog/admin/new-article						controllers.BlogController.processArticleForm()
-GET		/blog/admin/articles/:categoryId			controllers.BlogController.articles(categoryId: Long)
-GET		/blog/admin/edit-article/:id				controllers.BlogController.editArticleForm(id: Long)
+GET		/blog-admin/new-category					controllers.BlogController.categoryForm()
+POST	/blog-admin/new-category					controllers.BlogController.processCategoryForm()
+GET		/blog-admin/categories						controllers.BlogController.categories()
+GET		/blog-admin/edit-category/:id				controllers.BlogController.editCategoryForm(id: Long)
+GET		/blog-admin/new-article						controllers.BlogController.articleForm()
+POST	/blog-admin/new-article						controllers.BlogController.processArticleForm()
+GET		/blog-admin/articles/:categoryId			controllers.BlogController.articles(categoryId: Long)
+GET		/blog-admin/edit-article/:id				controllers.BlogController.editArticleForm(id: Long)
 GET		/blog/get-thumbnail/:id						controllers.BlogController.getThumbnail(id: Long)
 GET		/blog/get-main-image/:id					controllers.BlogController.getMainImage(id: Long)
 
@@ -33,37 +30,40 @@ GET		/sitemap.xml								controllers.Application.sitemap()
 
 # Home page & Logins
 GET    /                                 			controllers.Application.index()
-POST   /login                             			controllers.LoginController.processLogin()
-GET    /logout                            			controllers.LoginController.processLogout()
+POST   /secure-login                             			controllers.LoginController.processLogin()
+GET    /secure-logout                            			controllers.LoginController.processLogout()
 
-GET    /forgot-password                            	controllers.LoginController.forgotPassword()
-POST   /forgot-password                            	controllers.LoginController.processForgotPassword()
-GET	/forgot-reset-password/:userId/:forgotPasswordKey	controllers.LoginController.editForgotPassword(userId: Long, forgotPasswordKey:String)
-POST	/forgot-reset-password						controllers.LoginController.updateForgotPassword()
+GET    /secure-forgot-password                            	controllers.LoginController.forgotPassword()
+POST   /secure-forgot-password                            	controllers.LoginController.processForgotPassword()
+GET		/secure-forgot-reset-password/:userId/:forgotPasswordKey	controllers.LoginController.editForgotPassword(userId: Long, forgotPasswordKey:String)
+POST	/secure-forgot-reset-password						controllers.LoginController.updateForgotPassword()
 
-GET    /edit-password                            	controllers.LoginController.editPassword()
-POST   /update-password                            	controllers.LoginController.updatePassword()
+GET    /secure-edit-password                            	controllers.LoginController.editPassword()
+POST   /secure-update-password                            	controllers.LoginController.updatePassword()
 
-GET	   /edit-my-profile								controllers.UserController.editAppUserProfile()
-POST   /edit-my-profile								controllers.UserController.updateAppUserProfile()
+GET	   /secure-edit-my-profile								controllers.UserController.editAppUserProfile()
+POST   /secure-edit-my-profile								controllers.UserController.updateAppUserProfile()
 
-GET		/not-confirmed-yet							controllers.UserController.confirmAppUserPage()
-GET		/user/verify-email							controllers.UserController.sendConformationEmail()
-GET 	/user/confirmation/:userId/:randomString	controllers.PublicController.emailConfirmation(userId: Long, randomString:String)
-GET		/user/send-verificaion-code					controllers.UserController.sendMobVerificationCode()
-GET 	/user/verify-mobile-number					controllers.UserController.displayMobVerificationForm()
-POST 	/user/verify-mobile-number					controllers.UserController.verifyMobileNumberConfirmationKey()
+GET		/secure-not-confirmed-yet							controllers.UserController.confirmAppUserPage()
+GET		/secure-user/verify-email							controllers.UserController.sendConformationEmail()
+GET 	/secure-user/confirmation/:userId/:randomString	controllers.PublicController.emailConfirmation(userId: Long, randomString:String)
+GET		/secure-user/send-verificaion-code					controllers.UserController.sendMobVerificationCode()
+GET 	/secure-user/verify-mobile-number					controllers.UserController.displayMobVerificationForm()
+POST 	/secure-user/verify-mobile-number					controllers.UserController.verifyMobileNumberConfirmationKey()
 
 
 # Public Pages
 
 GET		/doctor/search									controllers.PublicController.searchDoctorsPage()
-GET		/doctor/search/:key								controllers.PublicController.processSearchDoctors(key: String)
+GET		/doctor/search/:spez/:key								controllers.PublicController.processSearchDoctors(spez: String, key: String)
 GET		/pharmacy/search/:searchString                  controllers.PublicController.processSearchPharmacies(searchString: String)
 #GET   	/pharmacy/add-favourite-pharmacy/:pharmacyId/:str   controllers.PublicController.myFavoritePharmacy(pharmacyId : Long,str: String)
 GET		/pharmacy/search									controllers.PublicController.searchPharmaciesPage()
+GET   	/diagnostic/search/:searchString                  				controllers.PublicController.processSearchDiagnosticCentres(searchString: String)
+GET    /diagnostic/search												controllers.PublicController.searchDiagnosticPage()
+
 GET    /feedback											controllers.PublicController.feedBack()
-POST    /feedback											controllers.PublicController.saveFeedBack()
+POST    /secure-feedback											controllers.PublicController.saveFeedBack()
 GET    /help												controllers.PublicController.helpDocument()
 
 
@@ -73,92 +73,92 @@ GET		/diagnostic/remove-diagnostic/:diagnosticId					controllers.PublicControlle
 GET		/doctor/remove-pharmacy/:pharmacyId							controllers.PublicController.removeFavoritePharmacy(pharmacyId:Long)
 GET 	/sendTestmail									controllers.DiagnosticController.sendSampleAttchEmail() 
 # Sign up page
-GET    /doctor/join                              			controllers.UserController.joinUsDoctor()
-GET    /pharmacy/join                              			controllers.UserController.joinUsPharmacy()
-GET    /diagnostic/join                              		controllers.UserController.joinUsDiagnostic()
-GET    /user/join											controllers.UserController.joinUsPatient()
-POST   /join		                              			controllers.UserController.processJoinUs()
+GET    /secure-doctor/join                              			controllers.UserController.joinUsDoctor()
+GET    /secure-pharmacy/join                              			controllers.UserController.joinUsPharmacy()
+GET    /secure-diagnostic/join                              		controllers.UserController.joinUsDiagnostic()
+GET    /secure-user/join											controllers.UserController.joinUsPatient()
+POST   /secure-join		                              			controllers.UserController.processJoinUs()
 
 # Dashboard of LoggedInUser
-GET		/dashboard                                  controllers.UserActions.dashboard()
+GET		/secure-dashboard                                  controllers.UserActions.dashboard()
 
 # Doctor's Actions
-POST	/doctor/doctor-basic-update					controllers.DoctorController.basicUpdate()
-POST	/doctor/doctor-images-update				controllers.DoctorController.imagesUpdate()
-GET    	/doctor/get-image/:id/:type                 controllers.PublicController.getImage(id: Long, type :String)
-POST	/doctor/add-work-experience					controllers.DoctorController.addWorkExperience()
-GET		/doctor/remove-work-experience/:docId/:id	controllers.DoctorController.removeWorkExperience(docId: Long, id: Long)
-POST	/doctor/add-award							controllers.DoctorController.addAward()
-GET		/doctor/remove-award/:docId/:id				controllers.DoctorController.removeAward(docId: Long, id: Long)
-POST	/doctor/add-education						controllers.DoctorController.addEducation()
-GET		/doctor/remove-education/:docId/:id			controllers.DoctorController.removeEducation(docId: Long, id: Long)
-POST	/doctor/add-social-work						controllers.DoctorController.addSocialWork()
-GET		/doctor/remove-social-work/:docId/:id		controllers.DoctorController.removeSocialWork(docId: Long, id: Long)
-GET		/doctor/add-favorite-pharmacy/:pharmacyId/:str							controllers.DoctorController.addFavoritePharmacy(pharmacyId: Long,str: String)
-GET		/doctor/my-favorite-pharmacies											controllers.DoctorController.myFavoritePharmacies()
-GET		/doctor/favorite-diagnostic-centres											controllers.DoctorController.myFavoriteDiagnosticCentres()
-GET		/doctor/add-favorite-diagnosticCentre/:diagnosticId/:str					controllers.DoctorController.addFavoriteDiagnosticCentre(diagnosticId: Long,str: String)
+POST	/secure-doctor/doctor-basic-update					controllers.DoctorController.basicUpdate()
+POST	/secure-doctor/doctor-images-update				controllers.DoctorController.imagesUpdate()
+GET    	/secure-doctor/get-image/:id/:type                 controllers.PublicController.getImage(id: Long, type :String)
+POST	/secure-doctor/add-work-experience					controllers.DoctorController.addWorkExperience()
+GET		/secure-doctor/remove-work-experience/:docId/:id	controllers.DoctorController.removeWorkExperience(docId: Long, id: Long)
+POST	/secure-doctor/add-award							controllers.DoctorController.addAward()
+GET		/secure-doctor/remove-award/:docId/:id				controllers.DoctorController.removeAward(docId: Long, id: Long)
+POST	/secure-doctor/add-education						controllers.DoctorController.addEducation()
+GET		/secure-doctor/remove-education/:docId/:id			controllers.DoctorController.removeEducation(docId: Long, id: Long)
+POST	/secure-doctor/add-social-work						controllers.DoctorController.addSocialWork()
+GET		/secure-doctor/remove-social-work/:docId/:id		controllers.DoctorController.removeSocialWork(docId: Long, id: Long)
+GET		/secure-doctor/add-favorite-pharmacy/:pharmacyId/:str							controllers.DoctorController.addFavoritePharmacy(pharmacyId: Long,str: String)
+GET		/secure-doctor/my-favorite-pharmacies											controllers.DoctorController.myFavoritePharmacies()
+GET		/secure-doctor/favorite-diagnostic-centres											controllers.DoctorController.myFavoriteDiagnosticCentres()
+GET		/secure-doctor/add-favorite-diagnosticCentre/:diagnosticId/:str					controllers.DoctorController.addFavoriteDiagnosticCentre(diagnosticId: Long,str: String)
 
 
 
 # Doctor's Clinics
-GET    /doctor/new-clinic                 		controllers.DoctorController.newClinic()
-POST   /doctor/new-clinic                 		controllers.DoctorController.processNewClinic()
-GET    /doctor/clinics                    		controllers.DoctorController.myClinics()
-GET    /doctor/edit-clinic-info/:id                  	controllers.DoctorController.editClinicInfo(id:Long)
-GET    /doctor/edit-clinic-schedule/:id                 controllers.DoctorController.editClinicSchedule(id:Long)
-POST   /doctor/update-clinic                            controllers.DoctorController.processUpdateClinicInfo()
-POST   /doctor/update-clinic-schedule                   controllers.DoctorController.processUpdateClinicSchedule()
-GET    /doctor/delete-clinic/:id                        controllers.DoctorController.deleteClinic(id:Long)
+GET    /secure-doctor/new-clinic                 		controllers.DoctorController.newClinic()
+POST   /secure-doctor/new-clinic                 		controllers.DoctorController.processNewClinic()
+GET    /secure-doctor/clinics                    		controllers.DoctorController.myClinics()
+GET    /secure-doctor/edit-clinic-info/:id                  	controllers.DoctorController.editClinicInfo(id:Long)
+GET    /secure-doctor/edit-clinic-schedule/:id                 controllers.DoctorController.editClinicSchedule(id:Long)
+POST   /secure-doctor/update-clinic                            controllers.DoctorController.processUpdateClinicInfo()
+POST   /secure-doctor/update-clinic-schedule                   controllers.DoctorController.processUpdateClinicSchedule()
+GET    /secure-doctor/delete-clinic/:id                        controllers.DoctorController.deleteClinic(id:Long)
 
 
-GET		/doctor/sig-codes									controllers.DoctorController.showSigCodes()
-POST	/doctor/add-sig-code								controllers.DoctorController.addSigCode()
-GET		/doctor/all-appointments							controllers.DoctorController.viewAllAppointments()
-GET		/doctor/todays-appointments							controllers.DoctorController.viewTodaysAppointments()
-GET		/doctor/prescription/:appointmentId					controllers.DoctorController.showPrescriptionForm(appointmentId: Long)
-POST	/doctor/save-prescription							controllers.DoctorController.savePrescription()
-GET		/doctor/show-prescription/:prescriptionId			controllers.DoctorController.showPrescription(prescriptionId: Long)
-GET		/doctor/share-prescription							controllers.DoctorController.sharePrescription(prId: Long, pharmacyId: String, diagnosticId: String, consent: Boolean)
-GET		/doctor/all-prescriptions					controllers.DoctorController.viewAllPrescription()
-GET		/doctor/todays-prescriptions						controllers.DoctorController.viewTodaysPrescription()
-GET		/doctor/products/get-json							controllers.DoctorController.getAllProductsJson()
-GET		/doctor/diagnostic-tests/get-json					controllers.DoctorController.getAllDiagnosticJson()
+GET		/secure-doctor/sig-codes									controllers.DoctorController.showSigCodes()
+POST	/secure-doctor/add-sig-code								controllers.DoctorController.addSigCode()
+GET		/secure-doctor/all-appointments							controllers.DoctorController.viewAllAppointments()
+GET		/secure-doctor/todays-appointments							controllers.DoctorController.viewTodaysAppointments()
+GET		/secure-doctor/prescription/:appointmentId					controllers.DoctorController.showPrescriptionForm(appointmentId: Long)
+POST	/secure-doctor/save-prescription							controllers.DoctorController.savePrescription()
+GET		/secure-doctor/show-prescription/:prescriptionId			controllers.DoctorController.showPrescription(prescriptionId: Long)
+GET		/secure-doctor/share-prescription							controllers.DoctorController.sharePrescription(prId: Long, pharmacyId: String, diagnosticId: String, consent: Boolean)
+GET		/secure-doctor/all-prescriptions					controllers.DoctorController.viewAllPrescription()
+GET		/secure-doctor/todays-prescriptions						controllers.DoctorController.viewTodaysPrescription()
+GET		/secure-doctor/products/get-json							controllers.DoctorController.getAllProductsJson()
+GET		/secure-doctor/diagnostic-tests/get-json					controllers.DoctorController.getAllDiagnosticJson()
 #slug url (must be the last route in /doctor/)
-GET 	/doctor/:slugUrl								controllers.PublicController.getDoctorWithSlug(slugUrl:String)
+GET 	/dr/:slugUrl								controllers.PublicController.getDoctorWithSlug(slugUrl:String)
 
 # Patient Module
-GET    /user/my-doctors									controllers.PatientController.myFavouriteDoctors()
-GET		/user/prescriptions										controllers.PatientController.viewAllPatientPrescriptions()
-GET		/user/show-prescription/:prescriptionId			controllers.PatientController.viewPrescription(prescriptionId: Long)
-GET		/user/favorite-diagnostic-centres				controllers.PatientController.patientFavoriteDiagnosticCentres()
-GET		/user/my-pharmacies						controllers.PatientController.patientFavoritePharmacies()
-#GET		/user/appointments								controllers.PatientController.viewPatientAppointments()
-GET		/user/appointments									controllers.PatientController.viewMyAppointments()
-GET		/user/share-prescription							controllers.PatientController.sharePrescription(prId: Long, pharmacyId: String, diagnosticId: String)
-GET    /user/diagnostic-reports							 	controllers.PatientController.viewDiagnosticReports()
+GET    /secure-user/my-doctors									controllers.PatientController.myFavouriteDoctors()
+GET		/secure-user/prescriptions										controllers.PatientController.viewAllPatientPrescriptions()
+GET		/secure-user/show-prescription/:prescriptionId			controllers.PatientController.viewPrescription(prescriptionId: Long)
+GET		/secure-user/favorite-diagnostic-centres				controllers.PatientController.patientFavoriteDiagnosticCentres()
+GET		/secure-user/my-pharmacies						controllers.PatientController.patientFavoritePharmacies()
+#GET	/secure-user/appointments								controllers.PatientController.viewPatientAppointments()
+GET		/secure-user/appointments									controllers.PatientController.viewMyAppointments()
+GET		/secure-user/share-prescription							controllers.PatientController.sharePrescription(prId: Long, pharmacyId: String, diagnosticId: String)
+GET    /secure-user/diagnostic-reports							 	controllers.PatientController.viewDiagnosticReports()
 
 
-POST	/pharmacy/upload-pharmacy-images					controllers.PharmacistController.uploadPharmacyImageProcess()
-POST	/pharmacy/basic-update								controllers.PharmacistController.pharmacyBasicUpdate()
-POST	/pharmacy/address-update			  				controllers.PharmacistController.pharmacyAddressUpdate()
-GET		/pharmacy/get-image/:pharmacyId/:fileId				controllers.PublicController.getPharmacyImages(pharmacyId: Long,fileId: Long)
-GET		/pharmacy/remove-image/:pharmacyId/:fileId			controllers.PharmacistController.removeImage(pharmacyId: Long,fileId: Long)
-GET		/pharmacy/add-to-user/:pharmacyId					controllers.PublicController.addPharmacyToLoggedInUser(pharmacyId: Long)
+POST	/secure-pharmacy/upload-pharmacy-images					controllers.PharmacistController.uploadPharmacyImageProcess()
+POST	/secure-pharmacy/basic-update								controllers.PharmacistController.pharmacyBasicUpdate()
+POST	/secure-pharmacy/address-update			  				controllers.PharmacistController.pharmacyAddressUpdate()
+GET		/secure-pharmacy/get-image/:pharmacyId/:fileId				controllers.PublicController.getPharmacyImages(pharmacyId: Long,fileId: Long)
+GET		/secure-pharmacy/remove-image/:pharmacyId/:fileId			controllers.PharmacistController.removeImage(pharmacyId: Long,fileId: Long)
+GET		/secure-pharmacy/add-to-user/:pharmacyId					controllers.PublicController.addPharmacyToLoggedInUser(pharmacyId: Long)
 
 #GET 	/pharmacy/add-pharmacy-order/:pharmacyId/:prescriptionId		controllers.PharmacistController.addPharmacyOrderFromDoctor(pharmacyId: Long,prescriptionId: Long)
 
-GET 	/pharmacy/prescriptions								controllers.PharmacistController.pharmacyPrescriptionList(status: String ?= "any")
+GET 	/secure-pharmacy/prescriptions								controllers.PharmacistController.pharmacyPrescriptionList(status: String ?= "any")
 #GET 	/pharmacy/received-prescriptions					controllers.PharmacistController.receivedPrescriptionList()
 
-GET 	/pharmacy/todays-prescriptions						controllers.PharmacistController.viewTodaysPrescriptions()
-POST 	/pharmacy/from-and-to-date-prescriptions						controllers.PharmacistController.getFromAndToDatePrescriptions()
+GET 	/secure-pharmacy/todays-prescriptions						controllers.PharmacistController.viewTodaysPrescriptions()
+POST 	/secure-pharmacy/from-and-to-date-prescriptions						controllers.PharmacistController.getFromAndToDatePrescriptions()
 
-GET 	/pharmacy/prescription/:pharmacyPrescriptionInfoId						controllers.PharmacistController.getPrescriptionDetails(pharmacyPrescriptionInfoId: Long)
-#GET 	/pharmacy/confirm-prescription/:pharmacyPrescriptionInfoId               controllers.PharmacistController.confirmPrescription(pharmacyPrescriptionInfoId: Long)
-GET 	/pharmacy/served-prescription/:pharmacyPrescriptionInfoId                controllers.PharmacistController.servedPrescription(pharmacyPrescriptionInfoId: Long)
-#GET		/pharmacy/order						controllers.PharmacistController.placePharmacyOrder()
-#POST		/pharmacy/order						controllers.PharmacistController.placePharmacyOrderProcess()
+GET 	/secure-pharmacy/prescription/:pharmacyPrescriptionInfoId						controllers.PharmacistController.getPrescriptionDetails(pharmacyPrescriptionInfoId: Long)
+#GET 	/secure-pharmacy/confirm-prescription/:pharmacyPrescriptionInfoId               controllers.PharmacistController.confirmPrescription(pharmacyPrescriptionInfoId: Long)
+GET 	/secure-pharmacy/served-prescription/:pharmacyPrescriptionInfoId                controllers.PharmacistController.servedPrescription(pharmacyPrescriptionInfoId: Long)
+#GET	/secure-pharmacy/order															controllers.PharmacistController.placePharmacyOrder()
+#POST	/secure-pharmacy/order															controllers.PharmacistController.placePharmacyOrderProcess()
 
 
 #slug url (must be the last route in /pharmacy/)
@@ -166,21 +166,22 @@ GET /pharmacy/:slugUrl										controllers.PublicController.getPharmacyWithSlug
 
 
 # Doagnostic Centre Module
-POST   /diagnostic/upload-diagnostic-images             				controllers.DiagnosticController.uploadDiagnosticImageProcess()
-GET   	/diagnostic/search/:searchString                  				controllers.PublicController.processSearchDiagnosticCentres(searchString: String)
-GET    /diagnostic/search												controllers.PublicController.searchDiagnosticPage()
-GET    /diagnostic/remove-report/:reportId/:diagnosticInfoId						  		controllers.DiagnosticController.removeDiagnosticReport(reportId: Long,diagnosticInfoId: Long)											
-GET		/diagnostic/add-to-user/:diagnosticId							controllers.PublicController.addDiagnosticCentreToLoggedInUser(diagnosticId: Long)
-GET 	/diagnostic/prescriptions										controllers.DiagnosticController.getDiagnosticCentrePrescriptions(status: String ?= "any")
-GET 	/diagnostic/prescription/:dpInfoId								controllers.DiagnosticController.showDiagnosticPrescription(dpInfoId: Long)
-GET		/diagnostic/order-confirmed/:diagInfoId							controllers.DiagnosticController.orderServed(diagInfoId: Long)
-#GET		/diagnostic/order-cancelled/:diagInfoId							controllers.DiagnosticController.orderCancelled(diagInfoId: Long)
-GET		/diagnostic/ordered-tests/:diagInfoId							controllers.DiagnosticController.viewOrderedTest(diagInfoId: Long)
-GET   	/diagnostic/upload-diagnostic-Report/:diagInfoId				controllers.DiagnosticController.uploadDiagnosticReport(diagInfoId: Long)
-POST    /diagnostic/upload-diagnostic-Report/:diagInfoId		  		controllers.DiagnosticController.uploadDiagnosticReportProcess(diagInfoId: Long)
-GET     /diagnostic/todays-appointments									controllers.DiagnosticController.TodaysDiagnosticPrescriptions()
-POST    /diagnostic/from-to-prescription									controllers.DiagnosticController.getFromToDatePrescriptions()
-GET    /diagnostic/download-report/:reportId/:diagnosticInfoId						  		controllers.DiagnosticController.downloadDiagnosticReport(reportId: Long,diagnosticInfoId: Long)
+POST	/secure-diagnostic/basic-update											controllers.DiagnosticController.diagnosticBasicUpdate()
+POST	/secure-diagnostic/address-update											controllers.DiagnosticController.diagnosticAddressUpdate()
+GET		/secure-diagnostic/remove-image/:diagnosticId/:fileId						controllers.DiagnosticController.removeDiagnosticImage(diagnosticId: Long,fileId: Long)
+POST   /secure-diagnostic/upload-diagnostic-images             				controllers.DiagnosticController.uploadDiagnosticImageProcess()
+GET    /secure-diagnostic/remove-report/:reportId/:diagnosticInfoId						  		controllers.DiagnosticController.removeDiagnosticReport(reportId: Long,diagnosticInfoId: Long)											
+GET		/secure-diagnostic/add-to-user/:diagnosticId							controllers.PublicController.addDiagnosticCentreToLoggedInUser(diagnosticId: Long)
+GET 	/secure-diagnostic/prescriptions										controllers.DiagnosticController.getDiagnosticCentrePrescriptions(status: String ?= "any")
+GET 	/secure-diagnostic/prescription/:dpInfoId								controllers.DiagnosticController.showDiagnosticPrescription(dpInfoId: Long)
+GET		/secure-diagnostic/order-confirmed/:diagInfoId							controllers.DiagnosticController.orderServed(diagInfoId: Long)
+#GET	/secure-diagnostic/order-cancelled/:diagInfoId							controllers.DiagnosticController.orderCancelled(diagInfoId: Long)
+GET		/secure-diagnostic/ordered-tests/:diagInfoId							controllers.DiagnosticController.viewOrderedTest(diagInfoId: Long)
+GET   	/secure-diagnostic/upload-diagnostic-Report/:diagInfoId				controllers.DiagnosticController.uploadDiagnosticReport(diagInfoId: Long)
+POST    /secure-diagnostic/upload-diagnostic-Report/:diagInfoId		  		controllers.DiagnosticController.uploadDiagnosticReportProcess(diagInfoId: Long)
+GET     /secure-diagnostic/todays-appointments									controllers.DiagnosticController.TodaysDiagnosticPrescriptions()
+POST    /secure-diagnostic/from-to-prescription									controllers.DiagnosticController.getFromToDatePrescriptions()
+GET    /secure-diagnostic/download-report/:reportId/:diagnosticInfoId						  		controllers.DiagnosticController.downloadDiagnosticReport(reportId: Long,diagnosticInfoId: Long)
 
 #slug url (must be the last route in /diagnostic/)
 GET 	/diagnostic/:slugUrl								controllers.PublicController.getDiagnosticCentreWithSlug(slugUrl: String)
@@ -195,16 +196,24 @@ GET 	/diagnostic/:slugUrl								controllers.PublicController.getDiagnosticCentr
 
 
 GET		/static/fav/pharmacies							controllers.PharmacistController.staticFavPharmacies()
-GET		/create/master									controllers.SampleDataController.createMasterMedicinesAndTests()
-GET		/create/spez									controllers.SampleDataController.createDocSpez()
-GET		/sms											controllers.SampleDataController.testurl()
 
-GET		/admin/specializations							controllers.MednetworkAdminController.getSpecializationList()
-POST	/admin/add-specialization						controllers.MednetworkAdminController.addSpecialization()
-POST	/admin/update-specialization					controllers.MednetworkAdminController.updateSpecialization()
-GET		/admin/feedback-list							controllers.MednetworkAdminController.getFeedbackList()
-GET		/admin/delete-feedback/:id						controllers.MednetworkAdminController.deleteFeedback(id: Long)
-GET		/admin/get-user-date-between-dates/:from/:to 	controllers.MednetworkAdminController.getUserDateBetweenDates(from: String, to: String)
+GET		/secure-admin/specializations							controllers.MednetworkAdminController.getSpecializationList()
+POST	/secure-admin/add-specialization						controllers.MednetworkAdminController.addSpecialization()
+POST	/secure-admin/update-specialization					controllers.MednetworkAdminController.updateSpecialization()
+GET		/secure-admin/feedback-list							controllers.MednetworkAdminController.getFeedbackList()
+GET		/secure-admin/delete-feedback/:id						controllers.MednetworkAdminController.deleteFeedback(id: Long)
+GET		/secure-admin/get-user-date-between-dates/:from/:to 	controllers.MednetworkAdminController.getUserDateBetweenDates(from: String, to: String)
+GET    /secure-admin/purge-doctor-find																controllers.MednetworkAdminController.purgeDoctor()
+POST    /secure-admin/purge-doctor-details/:role																controllers.MednetworkAdminController.getAppUserDetails(role: String)
+GET     /secure-admin/purge-doctor/:id																controllers.MednetworkAdminController.processPurgeDoctor(id: Long)
+GET     /secure-admin/purge-pharmacy-find																controllers.MednetworkAdminController.purgePharmacy()
+GET     /secure-admin/purge-pharmacy/:id																controllers.MednetworkAdminController.processPurgePharmacy(id: Long)
+GET     /secure-admin/purge-diagnostic-find																controllers.MednetworkAdminController.purgeDiagnosticCentre()
+GET     /secure-admin/purge-diagnostic/:id																controllers.MednetworkAdminController.processPurgeDiagnosticCentre(id: Long)
+GET		/secure-admin/primary-cities							controllers.MednetworkAdminController.getPrimaryCitiesList()
+POST	/secure-admin/add-primary-city							controllers.MednetworkAdminController.addPrimaryCity()
+GET		/add-primary-city-to-session/:cityId			controllers.PublicController.addPrimaryCityToSession(cityId: Long)
+
 
 #############################	PRODUCTION	#################################################################################
 
@@ -231,9 +240,9 @@ POST   	/pharmacy/add-pharmacy-product                      					controllers.Pha
 GET		/pharmacy/pharmacy-product-list											controllers.PharmacistController.getPharmacyProducts()
 GET	    /pharmacy/addProductToInventory/:productId/:pharmacyId            		controllers.PharmacistController.addProductToInventory(productId :Long,pharmacyId : Long)
 POST	/pharmacy/addProductToInventory/:productId/:pharmacyId            		controllers.PharmacistController.addProductToInventoryProcess(productId:Long,pharmacyId : Long)
-GET   	/edit-product/:id                      	controllers.PharmacistController.editProduct(id: Long)
-#GET     /remove-product/:id                      	controllers.PharmacistController.removeProduct(id: Long)
-POST	/addProductToInventory/					controllers.PharmacistController.addProductForm(id: Long)
+GET   	/edit-product/:id                      									controllers.PharmacistController.editProduct(id: Long)
+#GET     /remove-product/:id                      								controllers.PharmacistController.removeProduct(id: Long)
+POST	/addProductToInventory/													controllers.PharmacistController.addProductForm(id: Long)
 		
 #GET		/order									controllers.PharmacistController.orderRecord()
 #GET     /searchProduct                           controllers.PharmacistController.searchForm()
@@ -259,10 +268,6 @@ GET 	/pharmacy/order									controllers.PharmacistController.orderManagement()
 #POST   /medical-representative/proccess            controllers.Application.medicalRepresentativeProccess()
 GET    /diagRep/                          		controllers.Application.diagnosticRep()
 POST   /diagRepProccess/                  		controllers.Application.diagnosticRepProccess()
-GET    /sampledata/populate               		controllers.SampleDataController.populate()
-GET    /sampledata/cleanup                		controllers.SampleDataController.cleanUp()
-GET    /sampledata/temp                   		controllers.SampleDataController.temp()
-GET		/sampledata/create-patdoc				controllers.SampleDataController.createSamplePatientDoctor()
 #POST   /userform/patientproccess/       		controllers.PatientController.process()
 
 GET    /home/                             		controllers.Application.homePage()
@@ -302,9 +307,7 @@ GET    /diagnostic-centre/all-doctors      		controllers.DRController.displayDia
 
 #Diagnostic Profile
 
-POST	/diagnostic/basic-update								controllers.DiagnosticController.diagnosticBasicUpdate()
-POST	/diagnostic/address-update								controllers.DiagnosticController.diagnosticAddressUpdate()
-GET		/diagnostic/remove-image/:diagnosticId/:fileId			controllers.DiagnosticController.removeDiagnosticImage(diagnosticId: Long,fileId: Long)
+
 #GET		/diagnostic/add-order-from-doctor/:diagnosticId/:prescriptionId									controllers.DiagnosticController.addOrderFromDoctor(diagnosticId: Long,prescriptionId: Long)
 #GET		/diagnostic/display-orders							controllers.DiagnosticController.viewDiagnosticOrders()
 
@@ -382,7 +385,6 @@ GET		/mr/add-designation							controllers.MRController.addDesignation()
 POST	/mr/add-designation							controllers.MRController.addDesignationProccess()
 
 
-GET    /mr/add-value                               controllers.SampleDataController.values()
 
 
 #common module
@@ -395,13 +397,15 @@ GET    /view-products                              controllers.ProductController
 
 
 #sample data
-#GET   /sampledata/day					controllers.SampleDataController.days()
-GET		/patient_data					controllers.SampleDataController.patientTest()
-GET		/prescription_data					controllers.SampleDataController.prescripetionTest()
-GET	/mr/sample-data					controllers.SampleDataController.mrSampleData()
 
 #Mednetwork-Admin
 GET		/admin						controllers.SampleDataController.mednetAdmin()
+GET		/add-primary-city						controllers.SampleDataController.addPrimaryCity()
+GET		/default-primarycity					controllers.SampleDataController.addDefaultPrimaryCity()
+GET 	/specz									controllers.SampleDataController.createDocSpez()
+
+#GET    /appointment					controllers.SampleDataController.createAppointment()
+
 
 #Cron
 GET		/cron/start						controllers.CronController.startCron()

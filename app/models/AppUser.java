@@ -21,6 +21,7 @@ import models.diagnostic.DiagnosticRepresentative;
 import models.doctor.Doctor;
 import models.mr.MedicalRepresentative;
 import models.patient.Patient;
+import models.patient.SugarTracker;
 import models.pharmacist.Pharmacist;
 
 import org.apache.commons.codec.binary.Base64;
@@ -60,6 +61,8 @@ public class AppUser extends BaseEntity {
 
 	public Date dob;
 
+	public BloodGroup bloodGroup;
+
 	public List<Language> languageList = new ArrayList<Language>();
 
 	public Role role;
@@ -79,6 +82,12 @@ public class AppUser extends BaseEntity {
 
 	@Column(columnDefinition="TEXT")
 	public String forgotPasswordConfirmationKey;
+	
+	@Column(columnDefinition="TEXT")
+	public String allergy;
+	
+	@OneToOne
+	public SugarTracker sugarTracker;
 
 	public static Model.Finder<Long, AppUser> find = new Finder<Long, AppUser>(Long.class, AppUser.class);
 

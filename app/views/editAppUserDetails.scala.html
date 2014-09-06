@@ -18,6 +18,26 @@
 	<label for="Contact Number">Contact Number</label>
 	<input type="text"  class="form-control" name="contactNo" required value="@appUser.mobileNumber">
 	</div>
+	@if(LoginController.getLoggedInUserRole().equals(Role.PATIENT.toString())){
+	<div class="form-group">
+	 <label for="bloodGroup">Blood Group</label>
+        <select id="bloodgroup" name="bloodgroup">
+        <option></option>
+			@for(((k,v),index) <- BloodGroup.options().zipWithIndex){
+				<option value="@k">@if((v.toString()).contains("POSITIVE")){@v.replace("_POSITIVE", "+")}else{@v.replace("_NEGATIVE", "-")}</option>
+			}
+        </select>
+	</div>
+	}
+	<div>
+	<label for="Allergy">Allergy</label>
+	<input type="text"  class="allergy" name="allergy"  />
+	</div>
+	
+	<div>
+	<label for="sugarAvilable">Sugar Avilable</label>
+	<input type="text"  class="sugarAvilable" name="sugarAvilable"  />
+	</div>
 	
 	<div class="form-group">
 	<input type="hidden" name="appUserId" value="@LoginController.getLoggedInUser().id">

@@ -5,6 +5,8 @@ window.onload=function(){
 	
 	$(".chzn").chosen({allow_single_deselect: true});
 	
+	$(".chzn-no-deselect").chosen();
+	
 	$(".boottip").tooltip();
 	$('.datepicker').datepicker();
 

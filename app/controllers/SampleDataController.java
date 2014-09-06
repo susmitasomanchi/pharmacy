@@ -14,7 +14,9 @@ import models.Alert;
 import models.AppUser;
 import models.MasterDiagnosticTest;
 import models.MasterProduct;
+import models.PrimaryCity;
 import models.Role;
+import models.State;
 import models.diagnostic.DiagnosticCentrePrescriptionInfo;
 import models.doctor.DiagnosticTestLineItem;
 import models.doctor.Doctor;
@@ -243,7 +245,7 @@ public class SampleDataController extends Controller {
 		final AppUser appUser = new AppUser();
 		appUser.name = "anand";
 		appUser.email = "anand@gmail.com";
-		String password = "123";
+		final String password = "123";
 		appUser.role = Role.ADMIN_MR;
 		if(AppUser.find.where().eq("email", appUser.email).findRowCount()>0){
 			flash().put("alert", new Alert("alert-danger", "Sorry! User with email id "+appUser.email.trim()+" already exists!").toString());
@@ -440,11 +442,34 @@ public class SampleDataController extends Controller {
 		SMSService.sendSMS("9949254085", "From Paris With Love!");
 		return ok("This Page");
 	}
-
-
-	public static Result test222(){
-		Logger.info("Test 2222222");
+	public static Result addPrimaryCity(){
+		final PrimaryCity primaryCity = new PrimaryCity();
+		primaryCity.name = "Macherla";
+		primaryCity.state = State.ANDHRA_PRADESH;
+		primaryCity.save();
+		final PrimaryCity primaryCity2 = new PrimaryCity();
+		primaryCity2.name = "Guntur";
+		primaryCity2.state = State.ANDHRA_PRADESH;
+		primaryCity2.save();
+		flash().put("alert", new Alert("alert-info","Primary City Added").toString());
 		return ok();
 	}
+	public static Result addDefaultPrimaryCity(){
+		final List<AppUser> appUsers = AppUser.find.where().eq("role", Role.DOCTOR).findList();
+		Logger.info("size()=="+appUsers.get(0).role);
+		final PrimaryCity primaryCity = new PrimaryCity();
+		primaryCity.name = "Vijayawada";
+		primaryCity.state = State.ANDHRA_PRADESH;
+		primaryCity.save();
+		for (final AppUser appUser : appUsers) {
+			final Doctor doctor = Doctor.find.where().eq("appUser", appUser).findUnique();
+			Logger.info("doctor..."+doctor.appUser.name);
+			doctor.primaryCity = primaryCity;
+			doctor.update();
+		}
+		return ok("added primary city");
+	}
+
+
 }
 

@@ -3,7 +3,7 @@
 @import helper.twitterBootstrap._
 @import helper._
 
-@main("Share Prescription"){
+@main(("Dr. "+prescription.doctor.appUser.name+"'s Prescription For "+prescription.patient.appUser.name+" ("+prescription.patient.getSexAndAge()+")")){
 
 <style>
 input[type=checkbox]{
@@ -24,11 +24,12 @@ input[type=checkbox]{
 <div class="row" style="padding-left:20px; padding-right:100px;">
 
 <h3>Dr. @prescription.doctor.appUser.name <span class="pull-right" style="font-size:18px;">@prescription.prescriptionDate.format("dd-MMM-yyyy HH:mm")</span></h3>
-<h4>@prescription.doctor.degree</h4>
+<h4>@prescription.doctor.degree
+
+<span class="noprint pull-right" style="cursor:pointer; color:#0079a1;" onclick="printPrescription();" style="font-size:25px;"><i class="fa fa-print"></i> Print</span>
+</h4>
 <h4>@prescription.doctor.getSpecializations()</h4>
-
 <hr>
-
 <h4 style="margin:0px; padding:0px;">@prescription.patient.appUser.name</h4>
 <p style="margin:0px; padding:0px;">Age: @prescription.patient.appUser.getAge()</p>
 <p>Sex: @org.apache.commons.lang3.text.WordUtils.capitalizeFully(prescription.patient.appUser.sex.toString())</p>
@@ -93,12 +94,20 @@ input[type=checkbox]{
 
 <h4><u>Remarks:</u></h4>
 <p>@prescription.remarks</p>
+<br>
 </div>
 
+<div class="noprint">
+
+@*
+<div class="row">
+<div class="col-md-3">
+<a class="btn btn-primary" onclick="printPrescription();" style="font-size:25px;"><i class="fa fa-print"></i> Print</a>
+</div>
+</div>
+*@
+
 <hr>
-
-
-
 
 <div class="row" style="padding-left:20px; padding-right:100px;">
 <h4>Prescription shared with:</h4>
@@ -160,16 +169,36 @@ input[type=checkbox]{
 
 </div>
 
+
 <div class="row">
 <br><br><br><br><br>
 </div>
+
+
+<div class="row">
+<br><br><br><br><br>
+</div>
+
+
+</div>
+
+
+<script>
+function printPrescription() {
+	var originalContents = document.body.innerHTML;
+	$('.noprint').remove();
+    window.print();
+    document.body.innerHTML = originalContents;
+}
+</script>
+
 
 <script>
 function sharePrescription(){
 	if ($('#patient-consent-check').is(':checked')) {
 		var pharId = $('#sharePharmacy').val();
 		var diagId = $('#shareDiagnostic').val();
-		window.location.href='/doctor/share-prescription?prId=@prescription.id&pharmacyId='+pharId+'&diagnosticId='+diagId+'&consent=true';
+		window.location.href='/secure-doctor/share-prescription?prId=@prescription.id&pharmacyId='+pharId+'&diagnosticId='+diagId+'&consent=true';
 	}
 	else{
 		alert('Sorry! Patient\'s consent is mandatory to share prescriptions.');

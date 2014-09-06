@@ -7,11 +7,28 @@
 @no_navbar("Join MedNetwork"){
 
 
+
+<style>
+.chosen-container .chosen-single{
+	height:37px;
+}
+
+.chosen-container .chosen-single span{
+	padding-top:5px;
+}
+
+.chosen-container .chosen-single b{
+	margin-top:7px;
+}
+
+</style>
+
         
 
 <div class="row">
 <div class="col-md-10 col-md-offset-1">
 	
+	@*
 	<div class="row">
       <div class="col-md-2" style="margin-top:-1%; margin-bottom:-2%; cursor:pointer;" onclick="window.location.href='@routes.Application.index()';">
           <img style="" src="@routes.Assets.at("images/mednlogo.png")" alt="MedNetwork" width="150px">
@@ -24,11 +41,11 @@
       <div class="col-md-4 col-md-offset-6" align="right">
       	<h5><span style="cursor:pointer; margin-top:150px;" onClick="window.location.href=&#39;/&#39;;">Coming this Independence Day..</span></h5>   	
       </div>
-      *@
+      * @
       
 	</div>
-    
     <hr>
+    *@
   
   <div class="row">
    
@@ -154,12 +171,39 @@
 	
 	    
     <div class="form-group">
-      <label for="inputDOB" class="col-lg-2 control-label">Birth Date*<br><span style="font-size:10px;"><b>(DD-MM-YYYY)</b></span></label>
+      <label for="inputDOB" class="col-lg-2 control-label">Birth Date*<br><span style="font-size:10px; margin-left:-5px;"><b>(DD-MM-YYYY)</b></span></label>
       <div class="col-lg-10">
-		<div class="input-append date" data-date="01-01-1990" data-date-format="dd-mm-yyyy">
+		<div class="input-append date" data-date="01-01-1990" data-date-format="dd-mm-yyyy" data-date-viewmode="years">
 			<input id="dob-datepicker" class="span2" size="16" type="text" name="dob" value="01-01-1990">
 			<span class="add-on"><i class="icon-th"></i></span>
 		</div>
+      </div>
+     @* <div class="input-append date" id="datepicker" data-date-format="dd-mm -yyyy">
+    <input class="col-md-3" size="16" type="text" readonly="">
+    <span class="add-on col-md-5"><i class="fa fa-calendar"></i></span>
+     </div>
+     	  <script>
+			  var checkin = $('#datepicker').datepicker().on('changeDate', function(ev) {
+	checkin.datepicker('hide');
+	
+	//$("#dob-datepicker").datepicker('place');
+	
+});
+			  </script>*@
+    </div>
+    
+    
+    <div class="form-group">
+      <label for="inputCity" class="col-lg-2 control-label">City*</label>
+      <div class="col-lg-10">
+        <select class="form-control chzn-no-deselect" required data-placeholder="Select City" name="city" id="inputCity" style="width:100%;">
+			<option></option>
+			@for(city <- models.PrimaryCity.getAllInOrder()){
+				<option value="@city.id"
+				@if(session().get(utils.Constants.CITY_ID) != null && session().get(utils.Constants.CITY_ID).equals(city.id.toString())){selected}
+				>@city.name</option>
+			}
+		</select>
       </div>
     </div>
     
@@ -240,16 +284,6 @@ var checkin =$('#dob-datepicker').datepicker({
 
 
 
-<script>
-  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
-  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
-  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
-  })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
-
-  ga('create', 'UA-53869853-1', 'auto');
-  ga('send', 'pageview');
-
-</script>
 
 
 }

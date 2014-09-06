@@ -76,7 +76,7 @@ $('.admin-datepicker').datepicker({format: 'dd-mm-yyyy'});
 function getData(){
 	var from = $('#from').val();
 	var to = $('#to').val();
-	$.get('/admin/get-user-date-between-dates/'+from+'/'+to, function(data){
+	$.get('/secure-admin/get-user-date-between-dates/'+from+'/'+to, function(data){
 		var obj = jQuery.parseJSON(data);
 		if(obj.error == 0){
 			$('#result').html('<br><p style="color:#292929; font-size:20px;">Registrations between '+from+' and '+to+': </p><p>AppUsers: '+obj.appUsers+'</p><p>Patients: '+obj.patients+'</p><p>Doctors: '+obj.doctors+'</p><p>Pharmacies: '+obj.pharmacies+'</p><p>Diagnostic Centres: '+obj.dc+'</p>');

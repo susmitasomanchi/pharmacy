@@ -59,9 +59,9 @@ public class Global extends GlobalSettings {
 		Promise.promise(new Function0<Integer>() {
 			@Override
 			public Integer apply() {
-				/*if(!EmailService.sendSimpleHtmlEMail("admin@mednetwork.in", "Production Error 500: "+t.getMessage(), sb.toString())){
-					return 1;
-				}*/
+				//	if(!EmailService.sendSimpleHtmlEMail("admin@mednetwork.in", "Production Error 500: "+t.getMessage(), sb.toString())){
+				//		return 1;
+				//	}
 				return 0;
 			}
 		});

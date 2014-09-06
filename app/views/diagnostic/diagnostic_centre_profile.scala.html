@@ -123,7 +123,7 @@ function validateSlugUrl(){
       @for(profileImages <- diagnosticCentre.profileImageList){
       <tr>
       <td style="width:200px"> <img src="@routes.PublicController.getDiagnosticImages(diagnosticCentre.id,profileImages.id)" width="150" height="75" /> </td>
-      <td> <button class="btn btn-danger btn-xs"><a href="/diagnostic/remove-image/@diagnosticCentre.id/@profileImages.id" style="color:white">Delete</a></button> </td>
+      <td> <button class="btn btn-danger btn-xs"><a href="@routes.DiagnosticController.removeDiagnosticImage(diagnosticCentre.id,profileImages.id)" style="color:white">Delete</a></button> </td>
       </tr>
       }      
      </table>
