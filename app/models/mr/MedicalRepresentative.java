@@ -34,8 +34,11 @@ public class MedicalRepresentative extends BaseEntity {
 
 	public String companyName;
 
-	public String designation;
-
+	//public String designation;
+	
+	@OneToOne(mappedBy="mr")
+	public Designation designation;
+	
 	public boolean isActive = true;
 
 	public String status;
@@ -68,6 +71,7 @@ public class MedicalRepresentative extends BaseEntity {
 
 	@Embedded
 	public TourPlanConfiguration tourPlanConfiguration = new TourPlanConfiguration();
+	
 
 	public MedicalRepresentativeBean toBean() {
 		final MedicalRepresentativeBean bean = new MedicalRepresentativeBean();
@@ -92,7 +96,7 @@ public class MedicalRepresentative extends BaseEntity {
 		}
 
 		if (this.designation != null) {
-			bean.designation = this.designation;
+			bean.designationId = this.designation.id;
 		}
 
 		if (this.status != null) {

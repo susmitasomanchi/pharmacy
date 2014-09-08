@@ -22,6 +22,7 @@ import models.diagnostic.DiagnosticRepresentative;
 import models.doctor.Doctor;
 import models.mr.MedicalRepresentative;
 import models.patient.Patient;
+import models.patient.SugarTracker;
 import models.pharmacist.Pharmacist;
 import models.pharmacist.Pharmacy;
 
@@ -313,6 +314,16 @@ public class UserController extends Controller {
 			loggedInUser.isBloodDonor = Boolean.valueOf(requestMap.get("checkbox")[0]);
 			//TODO: make it async
 			SMSService.sendConfirmationSMS(loggedInUser);
+		}
+		if(requestMap.get("allergy")[0]!=null && requestMap.get("allergy")[0].trim()!=""){
+			loggedInUser.allergy = requestMap.get("allergy")[0].trim();
+		}
+		Logger.info("sugar avilable  : "+requestMap.get("sugarAvilable")[0]);
+		if(requestMap.get("sugarAvilable")[0]!=null && requestMap.get("sugarAvilable")[0].trim()!=""){
+			SugarTracker sugarTracker = new SugarTracker();
+			sugarTracker.sugarLevel= Float.parseFloat(requestMap.get("sugarAvilable")[0]);
+			sugarTracker.save();
+			loggedInUser.sugarTracker = sugarTracker;
 		}
 		if(requestMap.get("dob")[0]!=null ){
 			try {
