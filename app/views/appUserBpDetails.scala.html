@@ -1,6 +1,6 @@
 @(appUser: models.AppUser,bloodPressureTrackers: List[models.BloodPressureTracker])
 
-@main("Weight Tracker Form") {
+@main("Blood Pressure Tracker Form") {
 <style>
 .flabel{
 margin-bottom: 0;
@@ -34,6 +34,7 @@ vertical-align: middle;
 <link rel="stylesheet" media="screen" href="@routes.Assets.at("stylesheets/datepicker.css")">
 <div class="row">
 <form action="@routes.TrackerController.processBpDetails()" method="POST">
+<br><br>
 <div class="col-md-12" style="padding:0px">
 <div class="col-md-4">
 <div class="form-group">
@@ -49,26 +50,28 @@ vertical-align: middle;
     $("#datepicker").datepicker('setValue', new Date());
     </script>
 </div>
-</div>
-<div class="col-md-4">
+
+<div class="col-md-3">
 <div class="form-group">
-<label for="lowBp" class="col-md-5 flabel"> Diastolic(lower #) </label>
-<div class="col-lg-4">
-<input type="text" class="form-control" name="lowBp" style="font-size:12px" placeholder="in mmHg"></div>
+<label for="lowBp" class="col-md-7 flabel"> Diastolic (lower #) </label>
+<div class="col-lg-5">
+<input type="text" class="form-control" name="lowBp" style="font-size:12px" placeholder="in mmHg" required></div>
 </div>
 </div>
-<div class="col-md-4">
+<div class="col-md-3">
 <div class="form-group">
-<label for="highBp" class="col-md-5 flabel"> Systolic(upper #) </label>
-<div class="col-lg-4">
-<input type="text" class="form-control" name="highBp" style="font-size:12px" placeholder="in mmHg"></div>
-</div>
+<label for="highBp" class="col-md-7 flabel"> Systolic (upper #) </label>
+<div class="col-lg-5">
+<input type="text" class="form-control" name="highBp" style="font-size:12px" placeholder="in mmHg" required></div>
 </div>
 <div class="form-group">
 	<input type="hidden" name="appUserId" value="@LoginController.getLoggedInUser().id">
 	</div>
+</div>
+
 <div class="col-md-2">
-<input type="submit" value="submit" class="btn btn-primary btn-sm">
+<input type="submit" value="submit" class="btn btn-success btn-sm pull-right">
+</div>
 </div>
 </div>
 </form>
