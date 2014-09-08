@@ -6,7 +6,6 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
-import java.util.List;
 import java.util.Map;
 import java.util.Random;
 
@@ -16,13 +15,11 @@ import models.BloodGroup;
 import models.PrimaryCity;
 import models.Role;
 import models.Sex;
-import models.WeightTracker;
 import models.diagnostic.DiagnosticCentre;
 import models.diagnostic.DiagnosticRepresentative;
 import models.doctor.Doctor;
 import models.mr.MedicalRepresentative;
 import models.patient.Patient;
-import models.patient.SugarTracker;
 import models.pharmacist.Pharmacist;
 import models.pharmacist.Pharmacy;
 
@@ -39,7 +36,6 @@ import utils.EmailService;
 import utils.SMSService;
 import utils.Util;
 import actions.BasicAuth;
-import actions.ConfirmAppUser;
 import beans.JoinUsBean;
 
 
@@ -319,13 +315,6 @@ public class UserController extends Controller {
 		}
 		if(requestMap.get("allergy")[0]!=null && requestMap.get("allergy")[0].trim()!=""){
 			loggedInUser.allergy = requestMap.get("allergy")[0].trim();
-		}
-		Logger.info("sugar avilable  : "+requestMap.get("sugarAvilable")[0]);
-		if(requestMap.get("sugarAvilable")[0]!=null && requestMap.get("sugarAvilable")[0].trim()!=""){
-			final SugarTracker sugarTracker = new SugarTracker();
-			sugarTracker.sugarLevel= Float.parseFloat(requestMap.get("sugarAvilable")[0]);
-			sugarTracker.save();
-			loggedInUser.sugarTracker = sugarTracker;
 		}
 		if(requestMap.get("dob")[0]!=null ){
 			try {
