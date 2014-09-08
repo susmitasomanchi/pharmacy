@@ -4,6 +4,7 @@
 
 create table sugar_tracker (
   id                        bigint not null,
+  date			    timestamp not null,
   sugerLevel                double precision,
   created_on                timestamp not null,
   last_update               timestamp not null,
@@ -13,7 +14,7 @@ create table sugar_tracker (
 create sequence sugar_tracker_seq;
 
 alter table app_user add column allergy text;
+alter table sugar_tracker add column app_user_id bigint references app_user(id);
 
-alter table app_user add column sugar_tracker_id bigint ;
-alter table app_user add constraint fk_app_user_sugar_tracker_1 foreign key (sugar_tracker_id) references sugar_tracker (id);
-create index ix_app_user_sugar_tracker_1 on app_user (sugar_tracker_id);
+alter table sugar_tracker add constraint fk_sugar_tracker_app_user_1 foreign key (app_user_id) references app_user (id);
+create index ix_sugar_tracker_app_user_1 on sugar_tracker (app_user_id);
