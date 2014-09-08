@@ -44,6 +44,10 @@ POST   /secure-update-password                            	controllers.LoginCont
 GET	   /secure-edit-my-profile								controllers.UserController.editAppUserProfile()
 POST   /secure-edit-my-profile								controllers.UserController.updateAppUserProfile()
 
+GET		/secure-weight-details							controllers.TrackerController.appUserWeightDetails()
+POST   /secure-weight-details							controllers.TrackerController.processWeightDetails()
+GET		/secure-remove-weight-details/:id							controllers.TrackerController.removeAppUserDetails(id: Long)
+
 GET		/secure-not-confirmed-yet							controllers.UserController.confirmAppUserPage()
 GET		/secure-user/verify-email							controllers.UserController.sendConformationEmail()
 GET 	/secure-user/confirmation/:userId/:randomString	controllers.PublicController.emailConfirmation(userId: Long, randomString:String)
@@ -98,6 +102,7 @@ GET		/secure-doctor/add-favorite-pharmacy/:pharmacyId/:str							controllers.Doc
 GET		/secure-doctor/my-favorite-pharmacies											controllers.DoctorController.myFavoritePharmacies()
 GET		/secure-doctor/favorite-diagnostic-centres											controllers.DoctorController.myFavoriteDiagnosticCentres()
 GET		/secure-doctor/add-favorite-diagnosticCentre/:diagnosticId/:str					controllers.DoctorController.addFavoriteDiagnosticCentre(diagnosticId: Long,str: String)
+#GET  	/secure-doctor/get-doctors-by-specialization/:speczId							controllers.DoctorController.getDoctorsBySpecz(speczId: Long)
 
 
 

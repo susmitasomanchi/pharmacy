@@ -62,6 +62,8 @@ public class AppUser extends BaseEntity {
 
 	public BloodGroup bloodGroup;
 
+	public Boolean isBloodDonor;
+
 	public List<Language> languageList = new ArrayList<Language>();
 
 	public Role role;

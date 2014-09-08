@@ -20,7 +20,7 @@
 	</div>
 	@if(LoginController.getLoggedInUserRole().equals(Role.PATIENT.toString())){
 	<div class="form-group">
-	 <label for="bloodGroup">Blood Group</label>
+	 <label for="bloodGroup">Blood Group</label><br>
         <select id="bloodgroup" name="bloodgroup">
         <option></option>
 			@for(((k,v),index) <- BloodGroup.options().zipWithIndex){
@@ -30,6 +30,17 @@
 	</div>
 	}
 	
+	@*<div class="col-md-4">
+	@if(appUser.isBloodDonor == true){
+	<input type="checkbox" id="checkbox" name="checkbox" checked="checked" value="this.status" class="checkbox">}else{<input type="checkbox" id="checkbox" name="checkbox" value="this.status" class="checkbox">}Do you like to donate blood?
+	
+       <script>
+       $('.checkbox').change(function() {
+			 var status = $('#checkbox').is(":checked");
+			  $("#checkbox").attr("value", status);
+       		});
+       </script>
+       </div>*@
 	<div class="form-group">
 	<input type="hidden" name="appUserId" value="@LoginController.getLoggedInUser().id">
 	</div>
@@ -64,3 +75,6 @@ var checkin =$('#dob-datepicker').datepicker({
 });
 </script>
 }
+	
+	
+	

@@ -6,6 +6,7 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.List;
 import java.util.Map;
 import java.util.Random;
 
@@ -15,6 +16,7 @@ import models.BloodGroup;
 import models.PrimaryCity;
 import models.Role;
 import models.Sex;
+import models.WeightTracker;
 import models.diagnostic.DiagnosticCentre;
 import models.diagnostic.DiagnosticRepresentative;
 import models.doctor.Doctor;
@@ -36,6 +38,7 @@ import utils.EmailService;
 import utils.SMSService;
 import utils.Util;
 import actions.BasicAuth;
+import actions.ConfirmAppUser;
 import beans.JoinUsBean;
 
 
@@ -306,6 +309,11 @@ public class UserController extends Controller {
 				SMSService.sendConfirmationSMS(loggedInUser);
 			}
 		}
+		if(requestMap.get("checkbox")[0]!=null && requestMap.get("checkbox")[0].trim()!=""){
+			loggedInUser.isBloodDonor = Boolean.valueOf(requestMap.get("checkbox")[0]);
+			//TODO: make it async
+			SMSService.sendConfirmationSMS(loggedInUser);
+		}
 		if(requestMap.get("dob")[0]!=null ){
 			try {
 				loggedInUser.dob =new SimpleDateFormat("dd-mm-yyyy").parse(requestMap.get("dob")[0].trim());
@@ -319,10 +327,6 @@ public class UserController extends Controller {
 		loggedInUser.update();
 		return redirect(routes.UserActions.dashboard());
 	}
-
-
-
-
 
 
 	/**

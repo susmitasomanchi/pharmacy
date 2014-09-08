@@ -1655,5 +1655,21 @@ public class DoctorController extends Controller {
 			return ok("-1");
 		}
 	}
+	/**
+	 * @author lakshmi
+	 * Action to get Doctors based on specialization
+	 * @return
+	 */
+	public static List<Doctor> getDoctorsBySpecz(final Long id){
+		final MasterSpecialization masterSpecialization = MasterSpecialization.find.byId(id);
+		final List<Doctor> doctors =  new ArrayList<Doctor>();
+		for (final Doctor doctor : Doctor.find.all()) {
+			if(doctor.specializationList.contains(masterSpecialization)){
+				doctors.add(doctor);
+			}
+
+		}
+		return doctors;
+	}
 
 }
