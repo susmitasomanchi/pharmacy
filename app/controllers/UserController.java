@@ -314,13 +314,15 @@ public class UserController extends Controller {
 			loggedInUser.isBloodDonor = Boolean.valueOf(requestMap.get("checkbox")[0]);
 			//TODO: make it async
 			SMSService.sendConfirmationSMS(loggedInUser);
+		}else{
+			loggedInUser.isBloodDonor = false;
 		}
 		if(requestMap.get("allergy")[0]!=null && requestMap.get("allergy")[0].trim()!=""){
 			loggedInUser.allergy = requestMap.get("allergy")[0].trim();
 		}
 		Logger.info("sugar avilable  : "+requestMap.get("sugarAvilable")[0]);
 		if(requestMap.get("sugarAvilable")[0]!=null && requestMap.get("sugarAvilable")[0].trim()!=""){
-			SugarTracker sugarTracker = new SugarTracker();
+			final SugarTracker sugarTracker = new SugarTracker();
 			sugarTracker.sugarLevel= Float.parseFloat(requestMap.get("sugarAvilable")[0]);
 			sugarTracker.save();
 			loggedInUser.sugarTracker = sugarTracker;

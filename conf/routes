@@ -47,6 +47,9 @@ POST   /secure-edit-my-profile								controllers.UserController.updateAppUserPr
 GET		/secure-weight-details							controllers.TrackerController.appUserWeightDetails()
 POST   /secure-weight-details							controllers.TrackerController.processWeightDetails()
 GET		/secure-remove-weight-details/:id							controllers.TrackerController.removeAppUserDetails(id: Long)
+GET		/secure-bp-details							controllers.TrackerController.appUserBpDetails()
+POST   /secure-bp-details							controllers.TrackerController.processBpDetails()
+
 
 GET		/secure-not-confirmed-yet							controllers.UserController.confirmAppUserPage()
 GET		/secure-user/verify-email							controllers.UserController.sendConformationEmail()

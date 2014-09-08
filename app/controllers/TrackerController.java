@@ -7,6 +7,7 @@ import java.util.Map;
 
 import models.Alert;
 import models.AppUser;
+import models.BloodPressureTracker;
 import models.WeightTracker;
 import actions.ConfirmAppUser;
 import play.Logger;
@@ -18,8 +19,8 @@ public class TrackerController extends Controller{
 
 	/**
 	 * @author Lakshmi
-	 * Action to render the page to edit emailId and mobileNumber of loggedInUser
-	 * GET	   /edit-contact-details
+	 * Action to render the page for weight details of loggedInUser
+	 * GET		/secure-weight-details
 	 */
 	public static Result appUserWeightDetails(){
 		final List<WeightTracker> weightTrackers = WeightTracker.find.where().eq("appUser", LoginController.getLoggedInUser()).orderBy().desc("date").findList();
@@ -29,6 +30,7 @@ public class TrackerController extends Controller{
 	/**
 	 * @author lakshmi
 	 * Action to persist weight details of AppUser
+	 * POST		/secure-weight-details
 	 */
 	@ConfirmAppUser
 	public static Result processWeightDetails(){
@@ -63,7 +65,9 @@ public class TrackerController extends Controller{
 		return redirect(routes.TrackerController.appUserWeightDetails());
 	}
 	/**
-	 * 
+	 * @author lakshmi
+	 * Action to remove weight details of loggedinUser
+	 * GET		/secure-remove-weight-details/:id
 	 */
 	public static Result removeAppUserDetails(final Long id){
 		final WeightTracker weightTracker = WeightTracker.find.byId(id);
@@ -73,8 +77,55 @@ public class TrackerController extends Controller{
 	}
 
 
+	/**
+	 * @author Lakshmi
+	 * Action to render the page for BloodPressure Deatails of loggedInUser
+	 * GET	   //secure-bp-details
+	 */
+	public static Result appUserBpDetails(){
+		final List<BloodPressureTracker> bloodPressureTrackers = BloodPressureTracker.find.where().eq("appUser", LoginController.getLoggedInUser()).orderBy().desc("date").findList();
+		return ok(views.html.appUserBpDetails.render(LoginController.getLoggedInUser(),bloodPressureTrackers));
+	}
+	/**
+	 * @author lakshmi
+	 * Action to persist weight details of AppUser
+	 * POST		/secure-weight-details
+	 */
+	@ConfirmAppUser
+	public static Result processBpDetails(){
+		final BloodPressureTracker bloodPressureTracker = new BloodPressureTracker();
+		final Map<String, String[]> requestMap = request().body().asFormUrlEncoded();
+		final Long appUserId = Long.parseLong(requestMap.get("appUserId")[0]);
+		final AppUser loggedInUser = LoginController.getLoggedInUser();
+		// server-side check
+		if(appUserId.longValue() != loggedInUser.id.longValue()){
+			//session().clear();
+			session().remove(Constants.LOGGED_IN_USER_ID);
+			session().remove(Constants.LOGGED_IN_USER_ROLE);
 
-
+			return redirect(routes.LoginController.processLogout());
+		}else{
+			bloodPressureTracker.appUser = AppUser.find.byId(appUserId);
+		}
+		if(requestMap.get("lowBp")[0]!=null && requestMap.get("lowBp")[0].trim()!=""){
+			bloodPressureTracker.lowBp = Integer.parseInt(requestMap.get("lowBp")[0]);
+		}
+		if(requestMap.get("highBp")[0]!=null && requestMap.get("highBp")[0].trim()!=""){
+			bloodPressureTracker.highBp = Integer.parseInt(requestMap.get("highBp")[0]);
+		}
+		if(requestMap.get("date")[0]!=null && !(requestMap.get("date")[0].trim().isEmpty())){
+			final String date = requestMap.get("date")[0].replaceAll(" ","").trim();
+			final SimpleDateFormat sdf = new SimpleDateFormat("dd-MM-yyyy");
+			try {
+				bloodPressureTracker.date =  sdf.parse(date);
+			} catch (final ParseException e) {
+				Logger.error("ERROR WHILE PARSING DOB");
+				e.printStackTrace();
+			}
+		}
+		bloodPressureTracker.save();
+		return redirect(routes.TrackerController.appUserBpDetails());
+	}
 
 
 }
