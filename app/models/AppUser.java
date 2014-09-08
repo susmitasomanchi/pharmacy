@@ -62,7 +62,7 @@ public class AppUser extends BaseEntity {
 
 	public BloodGroup bloodGroup;
 
-	public Boolean isBloodDonor;
+	public Boolean isBloodDonor = false;
 
 	public List<Language> languageList = new ArrayList<Language>();
 
@@ -83,7 +83,7 @@ public class AppUser extends BaseEntity {
 
 	@Column(columnDefinition="TEXT")
 	public String forgotPasswordConfirmationKey;
-	
+
 	@Column(columnDefinition="TEXT")
 	public String allergy;
 	
