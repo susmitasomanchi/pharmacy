@@ -69,7 +69,7 @@ public class TrackerController extends Controller{
 	 * Action to remove weight details of loggedinUser
 	 * GET		/secure-remove-weight-details/:id
 	 */
-	public static Result removeAppUserDetails(final Long id){
+	public static Result removeAppUserWeightDetails(final Long id){
 		final WeightTracker weightTracker = WeightTracker.find.byId(id);
 		weightTracker.delete();
 		flash().put("alert", new Alert("alert-success", "Weight Details Are Deleted Successfully.").toString());
@@ -80,7 +80,7 @@ public class TrackerController extends Controller{
 	/**
 	 * @author Lakshmi
 	 * Action to render the page for BloodPressure Deatails of loggedInUser
-	 * GET	   //secure-bp-details
+	 * GET/secure-bp-details
 	 */
 	public static Result appUserBpDetails(){
 		final List<BloodPressureTracker> bloodPressureTrackers = BloodPressureTracker.find.where().eq("appUser", LoginController.getLoggedInUser()).orderBy().desc("date").findList();
@@ -89,7 +89,7 @@ public class TrackerController extends Controller{
 	/**
 	 * @author lakshmi
 	 * Action to persist weight details of AppUser
-	 * POST		/secure-weight-details
+	 * POST/secure-bp-details
 	 */
 	@ConfirmAppUser
 	public static Result processBpDetails(){
@@ -127,5 +127,15 @@ public class TrackerController extends Controller{
 		return redirect(routes.TrackerController.appUserBpDetails());
 	}
 
-
+	/**
+	 * @author lakshmi
+	 * Action to remove BloodPressure details of loggedinUser
+	 * GET		/secure-remove-bp-details/:id
+	 */
+	public static Result removeAppUserBpDetails(final Long id){
+		final BloodPressureTracker bloodPressureTracker = BloodPressureTracker.find.byId(id);
+		bloodPressureTracker.delete();
+		flash().put("alert", new Alert("alert-success", "Weight Details Are Deleted Successfully.").toString());
+		return redirect(routes.TrackerController.appUserWeightDetails());
+	}
 }

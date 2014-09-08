@@ -92,7 +92,7 @@ vertical-align: middle;
   <tr>
     <td>@bloodPressureTracker.date.format("dd-MM-yyyy")</td>
     <td>@bloodPressureTracker.lowBp/@bloodPressureTracker.highBp mmHg</td>
-    <td><a class="btn btn-danger btn-sm" href="#" style="color:white"><i class="fa fa-trash-o"></i> Delete</a></td>
+    <td><a class="btn btn-danger btn-sm" href="@routes.TrackerController.removeAppUserWeightDetails(bloodPressureTracker.id)" style="color:white"><i class="fa fa-trash-o"></i> Delete</a></td>
   </tr>
   }
   

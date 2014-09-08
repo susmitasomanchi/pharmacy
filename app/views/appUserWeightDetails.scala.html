@@ -83,9 +83,29 @@ vertical-align: middle;
   </tr>
   @for(weightTracker <- weightTrackers){
   <tr>
+ 
     <td>@weightTracker.date.format("dd-MM-yyyy")</td>
-    <td>@weightTracker.weight</td>
-    <td><a class="btn btn-danger btn-sm" href="@routes.TrackerController.removeAppUserDetails(weightTracker.id)" style="color:white"><i class="fa fa-trash-o"></i> Delete</a></td>
+    <td>@weightTracker.weight Kgs</td>
+    <td><a class="btn btn-danger btn-sm" href="#myModal" style="color:white" data-toggle="modal" data-target="#myModal@weightTracker.id"><i class="fa fa-trash-o"></i> Delete</a></td>
+    <div class="modal fade" id="myModal@weightTracker.id" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+        <h4 class="modal-title" id="myModalLabel">Delete Weight Details</h4>
+      </div>
+      <div class="modal-body">
+        Do you want to continue?
+        </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-info" data-dismiss="modal">Cancel</button>
+        <a href=" @routes.TrackerController.removeAppUserWeightDetails(weightTracker.id)" id="del" type="button" class="btn btn-danger">Delete</a>
+      </div>
+    </div>
+  </div>
+</div>
+
+    
   </tr>
   }
   
