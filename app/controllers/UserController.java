@@ -307,8 +307,10 @@ public class UserController extends Controller {
 				SMSService.sendConfirmationSMS(loggedInUser);
 			}
 		}
-		if(requestMap.get("checkbox")[0]!=null && requestMap.get("checkbox")[0].trim()!=""){
-			loggedInUser.isBloodDonor = Boolean.valueOf(requestMap.get("checkbox")[0]);
+		Logger.info(requestMap.keySet().toString());
+		if(requestMap.containsKey("isBloodDonar")){
+			Logger.info("on");
+			loggedInUser.isBloodDonor = true;
 			//TODO: make it async
 			SMSService.sendConfirmationSMS(loggedInUser);
 		}else{

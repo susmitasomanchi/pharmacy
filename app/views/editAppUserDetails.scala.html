@@ -1,5 +1,10 @@
 @(appUser: models.AppUser)
 @main("Edit Contact Details"){
+	<script>
+	$( document ).ready(function() {
+		$("#allergy").hide();
+		});
+	</script>
 	<div class="container">
 	<form id="form" class="form-horizontal" action="@routes.UserController.updateAppUserProfile()" method="POST" data-toggle="validator">
   	<div class="col-md-4">
@@ -32,10 +37,26 @@
 	
 	<div class="row">
 	@if(appUser.isBloodDonor == true){
-	<input type="checkbox" id="checkbox" name="checkbox" checked="checked" value="true" class="checkbox">}else{<input type="checkbox" id="checkbox" name="checkbox" value="true" class="checkbox">}Do you like to donate blood?
+	<input type="checkbox" id="isBloodDonar" name="isBloodDonar" checked="checked" />
+	}else{
+	<input type="checkbox" id="isBloodDonar" name="isBloodDonar" />
+	}
+	Would you like to donate blood?
      </div>
      <br>
-	<div>
+    <input type="checkbox" id="anyAllergy" name="anyAllergy" /> Any Allergy ?
+    <br>
+    <script>
+    $("#anyAllergy").click(function() {
+    if($(this).is(":checked")) 
+    {
+    	$("#allergy").show();
+    }else{
+    	$("#allergy").hide();
+    }
+});
+</script>
+	<div id="allergy">
 	<label for="Allergy">Allergy</label>
 	<input type="text"  class="allergy" name="allergy"  />
 	</div>
