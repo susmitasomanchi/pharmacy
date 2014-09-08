@@ -1,0 +1,64 @@
+--- Author: Buta
+--- Script to add created_on column to all entity tables. 
+--- Timestamp createdOn; added in BaseEntity
+
+ALTER TABLE app_user ADD created_on timestamp NOT NULL DEFAULT '2014-08-15 00:00:00.001';
+ALTER TABLE doctor ADD created_on timestamp NOT NULL DEFAULT '2014-08-15 00:00:00.001';
+ALTER TABLE address ADD created_on timestamp NOT NULL DEFAULT '2014-08-15 00:00:00.001';
+ALTER TABLE appointment ADD created_on timestamp NOT NULL DEFAULT '2014-08-15 00:00:00.001';
+ALTER TABLE article ADD created_on timestamp NOT NULL DEFAULT '2014-08-15 00:00:00.001';
+ALTER TABLE article_category ADD created_on timestamp NOT NULL DEFAULT '2014-08-15 00:00:00.001';
+ALTER TABLE batch ADD created_on timestamp NOT NULL DEFAULT '2014-08-15 00:00:00.001';
+ALTER TABLE blog_comment ADD created_on timestamp NOT NULL DEFAULT '2014-08-15 00:00:00.001';
+ALTER TABLE blog_comment_reply ADD created_on timestamp NOT NULL DEFAULT '2014-08-15 00:00:00.001';
+ALTER TABLE clinic ADD last_update timestamp NOT NULL DEFAULT '2014-08-15 00:00:00.001';
+ALTER TABLE clinic ADD created_on timestamp NOT NULL DEFAULT '2014-08-15 00:00:00.001';
+ALTER TABLE dcrline_item ADD created_on timestamp NOT NULL DEFAULT '2014-08-15 00:00:00.001';
+ALTER TABLE daily_call_report ADD created_on timestamp NOT NULL DEFAULT '2014-08-15 00:00:00.001';
+ALTER TABLE day_schedule ADD created_on timestamp NOT NULL DEFAULT '2014-08-15 00:00:00.001';
+ALTER TABLE diagnostic_centre ADD created_on timestamp NOT NULL DEFAULT '2014-08-15 00:00:00.001';
+ALTER TABLE diagnostic_centre_prescription_info ADD created_on timestamp NOT NULL DEFAULT '2014-08-15 00:00:00.001';
+ALTER TABLE diagnostic_order ADD created_on timestamp NOT NULL DEFAULT '2014-08-15 00:00:00.001';
+ALTER TABLE diagnostic_report ADD created_on timestamp NOT NULL DEFAULT '2014-08-15 00:00:00.001';
+ALTER TABLE diagnostic_representative ADD created_on timestamp NOT NULL DEFAULT '2014-08-15 00:00:00.001';
+ALTER TABLE diagnostic_test ADD created_on timestamp NOT NULL DEFAULT '2014-08-15 00:00:00.001';
+ALTER TABLE diagnostic_test_line_item ADD created_on timestamp NOT NULL DEFAULT '2014-08-15 00:00:00.001';
+ALTER TABLE doctor_assistant ADD created_on timestamp NOT NULL DEFAULT '2014-08-15 00:00:00.001';
+ALTER TABLE doctor_award ADD created_on timestamp NOT NULL DEFAULT '2014-08-15 00:00:00.001';
+ALTER TABLE doctor_clinic_info ADD created_on timestamp NOT NULL DEFAULT '2014-08-15 00:00:00.001';
+ALTER TABLE doctor_diagnostic_test ADD created_on timestamp NOT NULL DEFAULT '2014-08-15 00:00:00.001';
+ALTER TABLE doctor_education ADD created_on timestamp NOT NULL DEFAULT '2014-08-15 00:00:00.001';
+ALTER TABLE doctor_experience ADD created_on timestamp NOT NULL DEFAULT '2014-08-15 00:00:00.001';
+ALTER TABLE doctor_product ADD created_on timestamp NOT NULL DEFAULT '2014-08-15 00:00:00.001';
+ALTER TABLE doctor_publication ADD created_on timestamp NOT NULL DEFAULT '2014-08-15 00:00:00.001';
+ALTER TABLE doctor_social_work ADD created_on timestamp NOT NULL DEFAULT '2014-08-15 00:00:00.001';
+ALTER TABLE feedback ADD created_on timestamp NOT NULL DEFAULT '2014-08-15 00:00:00.001';
+ALTER TABLE file_entity ADD created_on timestamp NOT NULL DEFAULT '2014-08-15 00:00:00.001';
+ALTER TABLE head_quarter ADD created_on timestamp NOT NULL DEFAULT '2014-08-15 00:00:00.001';
+ALTER TABLE inventory ADD created_on timestamp NOT NULL DEFAULT '2014-08-15 00:00:00.001';
+ALTER TABLE master_diagnostic_test ADD created_on timestamp NOT NULL DEFAULT '2014-08-15 00:00:00.001';
+ALTER TABLE master_product ADD created_on timestamp NOT NULL DEFAULT '2014-08-15 00:00:00.001';
+ALTER TABLE master_sig_code ADD created_on timestamp NOT NULL DEFAULT '2014-08-15 00:00:00.001';
+ALTER TABLE master_specialization ADD created_on timestamp NOT NULL DEFAULT '2014-08-15 00:00:00.001';
+ALTER TABLE medical_representative ADD created_on timestamp NOT NULL DEFAULT '2014-08-15 00:00:00.001';
+ALTER TABLE medicine_line_item ADD created_on timestamp NOT NULL DEFAULT '2014-08-15 00:00:00.001';
+ALTER TABLE order_line_item ADD created_on timestamp NOT NULL DEFAULT '2014-08-15 00:00:00.001';
+ALTER TABLE patient ADD created_on timestamp NOT NULL DEFAULT '2014-08-15 00:00:00.001';
+ALTER TABLE patient_doctor_info ADD created_on timestamp NOT NULL DEFAULT '2014-08-15 00:00:00.001';
+ALTER TABLE pharmaceutical_company ADD created_on timestamp NOT NULL DEFAULT '2014-08-15 00:00:00.001';
+ALTER TABLE pharmaceutical_product ADD created_on timestamp NOT NULL DEFAULT '2014-08-15 00:00:00.001';
+ALTER TABLE pharmacist ADD created_on timestamp NOT NULL DEFAULT '2014-08-15 00:00:00.001';
+ALTER TABLE pharmacy ADD created_on timestamp NOT NULL DEFAULT '2014-08-15 00:00:00.001';
+ALTER TABLE pharmacy_order ADD created_on timestamp NOT NULL DEFAULT '2014-08-15 00:00:00.001';
+ALTER TABLE pharmacy_prescription_info ADD created_on timestamp NOT NULL DEFAULT '2014-08-15 00:00:00.001';
+ALTER TABLE pharmacy_product ADD created_on timestamp NOT NULL DEFAULT '2014-08-15 00:00:00.001';
+ALTER TABLE prescription ADD created_on timestamp NOT NULL DEFAULT '2014-08-15 00:00:00.001';
+ALTER TABLE question_and_answer ADD created_on timestamp NOT NULL DEFAULT '2014-08-15 00:00:00.001';
+ALTER TABLE sample ADD created_on timestamp NOT NULL DEFAULT '2014-08-15 00:00:00.001';
+ALTER TABLE show_cased_product ADD created_on timestamp NOT NULL DEFAULT '2014-08-15 00:00:00.001';
+ALTER TABLE show_cased_service ADD created_on timestamp NOT NULL DEFAULT '2014-08-15 00:00:00.001';
+ALTER TABLE sig_code ADD created_on timestamp NOT NULL DEFAULT '2014-08-15 00:00:00.001';
+ALTER TABLE social_user ADD created_on timestamp NOT NULL DEFAULT '2014-08-15 00:00:00.001';
+ALTER TABLE tpline_item ADD created_on timestamp NOT NULL DEFAULT '2014-08-15 00:00:00.001';
+ALTER TABLE tour_plan ADD created_on timestamp NOT NULL DEFAULT '2014-08-15 00:00:00.001';
+
