@@ -33,7 +33,7 @@ vertical-align: middle;
 <script src="@routes.Assets.at("javascripts/bootstrap-datepicker.js")" type="text/javascript"></script>
 <link rel="stylesheet" media="screen" href="@routes.Assets.at("stylesheets/datepicker.css")">
 <div class="row">
-<form action="@routes.TrackerController.processBpDetails()" method="POST">
+<form action="@routes.TrackerController.processBpTracker()" method="POST">
 <br><br>
 <div class="col-md-12" style="padding:0px">
 <div class="col-md-4">
@@ -54,6 +54,17 @@ vertical-align: middle;
 <div class="col-md-3">
 <div class="form-group">
 <label for="lowBp" class="col-md-7 flabel"> Diastolic (lower #) </label>
+@*<div class="col-lg-5" style="padding:0px;">
+<select id="bloodgroup" name="lowBp">
+        <option value="40-49">40-49</option>
+        <option value="50-59">50-59</option>
+        <option value="60-69">60-69</option>
+        <option value="70-79">70-79</option>
+        <option value="80-89">80-89</option>
+        <option value="90-100">90-100</option>
+        <option value=">More than 100</option>
+        </select>
+        </div>*@
 <div class="col-lg-5" style="padding:0px;">
 <input type="text" class="form-control" name="lowBp" style="font-size:12px" placeholder="in mmHg" required></div>
 </div>

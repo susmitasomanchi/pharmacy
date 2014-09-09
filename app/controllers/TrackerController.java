@@ -23,7 +23,7 @@ public class TrackerController extends Controller{
 	 * Action to render the page for weight details of loggedInUser
 	 * GET		/secure-weight-details
 	 */
-	public static Result appUserWeightDetails(){
+	public static Result appUserWeightTracker(){
 		final List<WeightTracker> weightTrackers = WeightTracker.find.where().eq("appUser", LoginController.getLoggedInUser()).orderBy().desc("date").findList();
 		return ok(views.html.appUserWeightDetails.render(LoginController.getLoggedInUser(),weightTrackers));
 	}
@@ -34,7 +34,7 @@ public class TrackerController extends Controller{
 	 * POST		/secure-weight-details
 	 */
 	@ConfirmAppUser
-	public static Result processWeightDetails(){
+	public static Result processWeightTracker(){
 		final WeightTracker weightTracker = new WeightTracker();
 		final Map<String, String[]> requestMap = request().body().asFormUrlEncoded();
 		final Long appUserId = Long.parseLong(requestMap.get("appUserId")[0]);
@@ -63,7 +63,7 @@ public class TrackerController extends Controller{
 			}
 		}
 		weightTracker.save();
-		return redirect(routes.TrackerController.appUserWeightDetails());
+		return redirect(routes.TrackerController.appUserWeightTracker());
 	}
 	/**
 	 * @author lakshmi
@@ -74,7 +74,7 @@ public class TrackerController extends Controller{
 		final WeightTracker weightTracker = WeightTracker.find.byId(id);
 		weightTracker.delete();
 		flash().put("alert", new Alert("alert-success", "Weight Details Are Deleted Successfully.").toString());
-		return redirect(routes.TrackerController.appUserWeightDetails());
+		return redirect(routes.TrackerController.appUserWeightTracker());
 	}
 
 
@@ -83,7 +83,7 @@ public class TrackerController extends Controller{
 	 * Action to render the page for BloodPressure Deatails of loggedInUser
 	 * GET/secure-bp-details
 	 */
-	public static Result appUserBpDetails(){
+	public static Result appUserBpTracker(){
 		final List<BloodPressureTracker> bloodPressureTrackers = BloodPressureTracker.find.where().eq("appUser", LoginController.getLoggedInUser()).orderBy().desc("date").findList();
 		return ok(views.html.appUserBpDetails.render(LoginController.getLoggedInUser(),bloodPressureTrackers));
 	}
@@ -93,7 +93,7 @@ public class TrackerController extends Controller{
 	 * POST/secure-bp-details
 	 */
 	@ConfirmAppUser
-	public static Result processBpDetails(){
+	public static Result processBpTracker(){
 		final BloodPressureTracker bloodPressureTracker = new BloodPressureTracker();
 		final Map<String, String[]> requestMap = request().body().asFormUrlEncoded();
 		final Long appUserId = Long.parseLong(requestMap.get("appUserId")[0]);
@@ -125,7 +125,7 @@ public class TrackerController extends Controller{
 			}
 		}
 		bloodPressureTracker.save();
-		return redirect(routes.TrackerController.appUserBpDetails());
+		return redirect(routes.TrackerController.appUserBpTracker());
 	}
 
 	/**
@@ -137,7 +137,7 @@ public class TrackerController extends Controller{
 		final BloodPressureTracker bloodPressureTracker = BloodPressureTracker.find.byId(id);
 		bloodPressureTracker.delete();
 		flash().put("alert", new Alert("alert-success", "Weight Details Are Deleted Successfully.").toString());
-		return redirect(routes.TrackerController.appUserWeightDetails());
+		return redirect(routes.TrackerController.appUserWeightTracker());
 	}
 	/**
 	 * @author : anand

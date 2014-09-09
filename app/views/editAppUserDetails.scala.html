@@ -43,8 +43,10 @@
 	}
 	Would you like to donate blood?
      </div>
+     <div class="row">
      <br>
-    <input type="checkbox" id="anyAllergy" name="anyAllergy" /> Any Allergy ?
+    <input type="checkbox" id="anyAllergy" name="anyAllergy"  /> Any Allergy ?
+    </div>
     <br>
     <script>
     $("#anyAllergy").click(function() {
@@ -56,9 +58,9 @@
     }
 });
 </script>
-	<div id="allergy">
+	<div id="allergy" class="row">
 	<label for="Allergy">Allergy</label>
-	<input type="text"  class="allergy" name="allergy"  />
+	<input type="text"  class="allergy" name="allergy" @if(appUser.allergy != null){value=@appUser.allergy} />
 	</div>
 	
 	
