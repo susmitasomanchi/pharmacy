@@ -73,7 +73,7 @@ public class TrackerController extends Controller{
 	public static Result removeAppUserWeightDetails(final Long id){
 		final WeightTracker weightTracker = WeightTracker.find.byId(id);
 		weightTracker.delete();
-		flash().put("alert", new Alert("alert-success", "Weight Details Are Deleted Successfully.").toString());
+		flash().put("alert", new Alert("alert-danger", "Weight Details Are Deleted Successfully.").toString());
 		return redirect(routes.TrackerController.appUserWeightTracker());
 	}
 
@@ -109,10 +109,10 @@ public class TrackerController extends Controller{
 			bloodPressureTracker.appUser = AppUser.find.byId(appUserId);
 		}
 		if(requestMap.get("lowBp")[0]!=null && requestMap.get("lowBp")[0].trim()!=""){
-			bloodPressureTracker.lowBp = Integer.parseInt(requestMap.get("lowBp")[0]);
+			bloodPressureTracker.lowBp = Float.parseFloat(requestMap.get("lowBp")[0]);
 		}
 		if(requestMap.get("highBp")[0]!=null && requestMap.get("highBp")[0].trim()!=""){
-			bloodPressureTracker.highBp = Integer.parseInt(requestMap.get("highBp")[0]);
+			bloodPressureTracker.highBp = Float.parseFloat(requestMap.get("highBp")[0]);
 		}
 		if(requestMap.get("date")[0]!=null && !(requestMap.get("date")[0].trim().isEmpty())){
 			final String date = requestMap.get("date")[0].replaceAll(" ","").trim();
@@ -136,7 +136,7 @@ public class TrackerController extends Controller{
 	public static Result removeAppUserBpDetails(final Long id){
 		final BloodPressureTracker bloodPressureTracker = BloodPressureTracker.find.byId(id);
 		bloodPressureTracker.delete();
-		flash().put("alert", new Alert("alert-success", "Weight Details Are Deleted Successfully.").toString());
+		flash().put("alert", new Alert("alert-danger", "Blood Pressure Details Are Deleted Successfully.").toString());
 		return redirect(routes.TrackerController.appUserWeightTracker());
 	}
 	/**
@@ -199,7 +199,7 @@ public class TrackerController extends Controller{
 	public static Result removeAppUserSugarDetails(final Long id){
 		final SugarTracker sugarTracker = SugarTracker.find.byId(id);
 		sugarTracker.delete();
-		flash().put("alert", new Alert("alert-success", "sugar Details Are Deleted Successfully.").toString());
+		flash().put("alert", new Alert("alert-danger", "Sugar Details Are Deleted Successfully.").toString());
 		return redirect(routes.TrackerController.sugarTracker());
 	}
 }

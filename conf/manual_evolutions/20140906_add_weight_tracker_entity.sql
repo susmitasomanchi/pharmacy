@@ -17,8 +17,8 @@ create table blood_pressure_tracker (
 id                        bigint not null,
 created_on                timestamp not null,
 app_user_id               bigint,
-low_bp                    integer,
-high_bp			  integer,
+low_bp                    float,
+high_bp			  float,
 date                      timestamp,
 last_update             timestamp not null,
 constraint pk_blood_pressure_tracker primary key (id))

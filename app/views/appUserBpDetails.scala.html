@@ -54,26 +54,27 @@ vertical-align: middle;
 <div class="col-md-3">
 <div class="form-group">
 <label for="lowBp" class="col-md-7 flabel"> Diastolic (lower #) </label>
-@*<div class="col-lg-5" style="padding:0px;">
-<select id="bloodgroup" name="lowBp">
-        <option value="40-49">40-49</option>
-        <option value="50-59">50-59</option>
-        <option value="60-69">60-69</option>
-        <option value="70-79">70-79</option>
-        <option value="80-89">80-89</option>
-        <option value="90-100">90-100</option>
-        <option value=">More than 100</option>
-        </select>
-        </div>*@
 <div class="col-lg-5" style="padding:0px;">
-<input type="text" class="form-control" name="lowBp" style="font-size:12px" placeholder="in mmHg" required></div>
+<input type="text" class="form-control" onkeypress="return isNumberKey(event)" name="lowBp" style="font-size:12px" placeholder="in mmHg" required></div>
+<script>
+function isNumberKey(evt)
+          {
+             var charCode = (evt.which) ? evt.which : event.keyCode
+             if (charCode > 31 && (charCode < 48 || charCode > 57) && charCode != 46){
+             alert("enter numeric values only");
+                return false;
+                }
+              return true;
+          }
+
+</script>
 </div>
 </div>
 <div class="col-md-3">
 <div class="form-group">
 <label for="highBp" class="col-md-7 flabel"> Systolic (upper #) </label>
 <div class="col-lg-5" style="padding:0px;">
-<input type="text" class="form-control" name="highBp" style="font-size:12px" placeholder="in mmHg" required></div>
+<input type="text" class="form-control" onkeypress="return isNumberKey(event)" name="highBp" style="font-size:12px" placeholder="in mmHg" required></div>
 </div>
 <div class="form-group">
 	<input type="hidden" name="appUserId" value="@LoginController.getLoggedInUser().id">
