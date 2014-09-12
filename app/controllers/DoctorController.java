@@ -6,8 +6,11 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
+
+import javax.print.Doc;
 
 import models.Alert;
 import models.AppUser;
@@ -631,10 +634,59 @@ public class DoctorController extends Controller {
 		if (filledForm.hasErrors()) {
 			return ok(views.html.doctor.newClinic.render(clinicForm));
 		} else {
-			final DoctorClinicInfo clinicInfo = filledForm.get()
-					.toDoctorClinicInfo();
+			final DoctorClinicInfo clinicInfo = filledForm.get().toDoctorClinicInfo();
 			clinicInfo.doctor = LoginController.getLoggedInUser().getDoctor();
 			clinicInfo.save();
+			try{
+				final SimpleDateFormat dateFormat = new SimpleDateFormat("kk:mm");
+				final List<DoctorClinicInfo> doctorClinicInfos = clinicInfo.doctor.getActiveClinic();
+				if(doctorClinicInfos.size() > 0){
+					final Iterator<DaySchedule> dayScheduleItr = clinicInfo.scheduleDays.iterator();
+					while (dayScheduleItr.hasNext()){
+						final DaySchedule newSchedule = dayScheduleItr.next();
+						for (final DoctorClinicInfo doctorClinicInfo : doctorClinicInfos) {
+							if(doctorClinicInfo.id.longValue() != clinicInfo.id.longValue()){
+								for (final DaySchedule previousSchedule : doctorClinicInfo.scheduleDays) {
+									Logger.info("Previous Clinic: "+doctorClinicInfo.clinic.name);
+									Logger.info("to time old == "+previousSchedule.toTime);
+									Logger.info("from time new == "+newSchedule.fromTime);
+									if(
+											((previousSchedule.day).equals(newSchedule.day))
+											&&
+											(dateFormat.parse(newSchedule.fromTime)).before(dateFormat.parse(previousSchedule.toTime))
+											&&
+											(dateFormat.parse(newSchedule.fromTime)).after(dateFormat.parse(previousSchedule.fromTime))){
+										Logger.info("hello");
+										if(
+												(dateFormat.parse(newSchedule.fromTime)).after(dateFormat.parse(previousSchedule.fromTime))
+												&&
+												(dateFormat.parse(newSchedule.toTime)).before(dateFormat.parse(previousSchedule.toTime))
+												){
+											Logger.info("Time Clash!");
+											Logger.info("day new "+newSchedule.day.toString()+"  "+dateFormat.parse(newSchedule.fromTime));
+											Logger.info("day old "+previousSchedule.day.toString()+"   "+dateFormat.parse(previousSchedule.toTime));
+
+											//clinicInfo.scheduleDays.clear();
+											//clinicInfo.scheduleDays = new ArrayList<DaySchedule>();
+											final Iterator<DaySchedule> removalDayScheduleItr = clinicInfo.scheduleDays.iterator();
+											while (removalDayScheduleItr.hasNext()){
+												//clinicInfo.scheduleDays.remove(removalDayScheduleItr.next());
+												removalDayScheduleItr.next().delete();
+											}
+											clinicInfo.update();
+											flash().put("alert",new Alert("alert-danger", clinicInfo.clinic.name+ " created successfully but got time clashes with "+doctorClinicInfo.clinic.name+" while creating schedules.").toString());
+											return redirect(routes.DoctorController.myClinics());
+										}
+									}
+								}
+							}
+						}
+					}
+				}
+			}
+			catch (final Exception e){
+				e.printStackTrace();
+			}
 			return DoctorController.createAppointment(clinicInfo);
 		}
 	}
@@ -662,9 +714,34 @@ public class DoctorController extends Controller {
 			return redirect(routes.LoginController.processLogout());
 		}
 		try {
+			final SimpleDateFormat dateFormat = new SimpleDateFormat("kk:mm");
+			/*final List<DoctorClinicInfo> doctorClinicInfos = DoctorClinicInfo.find.where().eq("doctor", docClinicInfo.doctor).eq("active", true).findList();
+			if(doctorClinicInfos.size() > 0){
+				for (final DaySchedule newSchedule : docClinicInfo.scheduleDays){
+					for (final DoctorClinicInfo doctorClinicInfo : doctorClinicInfos) {
+						if(doctorClinicInfo.id.longValue() != docClinicInfo.id.longValue()){
+							for (final DaySchedule previousSchedule : doctorClinicInfo.scheduleDays) {
+								Logger.info("to time old =="+previousSchedule.toTime);
+								Logger.info("from time new =="+newSchedule.fromTime);
+								if(
+										((previousSchedule.day).equals(newSchedule.day))
+										&&
+										(dateFormat.parse(newSchedule.fromTime)).before(dateFormat.parse(previousSchedule.toTime))){
+									Logger.info("day new"+newSchedule.day.toString()+"  "+dateFormat.parse(newSchedule.toTime));
+									Logger.info("day old"+previousSchedule.day.toString()+"   "+dateFormat.parse(previousSchedule.toTime));
+									flash().put("alert",new Alert("alert-danger", docClinicInfo.clinic.name+ " created successfully but got time clashes while scheduling appointments.").toString());
+									return redirect(routes.DoctorController.myClinics());
+								}
+							}
+						}
+					}
+				}
+			}*/
+			//else{
+
 			final Calendar calendar1 = Calendar.getInstance();
 			final Calendar calendar2 = Calendar.getInstance();
-			final SimpleDateFormat dateFormat = new SimpleDateFormat("kk:mm");
+
 			final Calendar calendar = Calendar.getInstance();
 			calendar.setTime(new Date());
 			for (int date = 0; date < 90; date++) {
@@ -745,7 +822,9 @@ public class DoctorController extends Controller {
 					"alert",
 					new Alert("alert-success", docClinicInfo.clinic.name
 							+ " created successfully.").toString());
+			//}
 			return redirect(routes.DoctorController.myClinics());
+
 		} catch (final Exception e) {
 			Logger.error("ERROR WHILE CREATING APPOINTMENTS.");
 			e.printStackTrace();
@@ -1671,5 +1750,29 @@ public class DoctorController extends Controller {
 		}
 		return doctors;
 	}
+	/**
+	 * @author lakshmi
+	 * Action to get Doctors based on specialization
+	 * @return
+	 */
+	public static Result getClinicTiming(){
+		final Doctor loggedInDoctor = LoginController.getLoggedInUser()
+				.getDoctor();
+		final List<DoctorClinicInfo> doctorClinicInfos = loggedInDoctor.getActiveClinic();
+
+		//	final List<DoctorClinicInfo> doctorClinicInfos = DoctorClinicInfo.find.where().eq("doctor", Doctor.find.byId(id)).findList();
+		Logger.info(doctorClinicInfos.size()+"   size1");
+		for (final DoctorClinicInfo doctorClinicInfo : doctorClinicInfos) {
+			final List<DaySchedule> daySchedules = DaySchedule.find.where().eq("doctor_clinic_info_id", doctorClinicInfo.id).findList();
+			for (final DaySchedule daySchedule : daySchedules) {
+				Logger.info("day=="+daySchedule.day);
+				Logger.info("day=="+daySchedule.fromTime);
+				Logger.info("day=="+daySchedule.toTime);
+
+			}
+		}
+		return ok();
+	}
+
 
 }

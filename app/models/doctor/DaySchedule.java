@@ -1,5 +1,8 @@
 package models.doctor;
 
+import java.util.Date;
+import java.util.List;
+
 import javax.persistence.Entity;
 import javax.persistence.Id;
 
@@ -34,7 +37,10 @@ public class DaySchedule extends BaseEntity {
 			return true;
 		}
 	};
-
+	public static List<DaySchedule> getAvailableAppointmentsList( final Long docId) {
+		final List<DaySchedule>  list=DaySchedule.find.where().eq("doctorClinicInfo.doctor", Doctor.find.byId(docId)).findList();
+		return list;
+	}
 	public static Model.Finder<Long, DaySchedule> find = new Finder<Long, DaySchedule>(Long.class, DaySchedule.class);
 
 }

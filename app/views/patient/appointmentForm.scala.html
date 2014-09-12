@@ -6,10 +6,12 @@
 	     <th class="danger" style="text-align:center">@date.format("dd-MMM-yy")<br>@date.format("EE")</th>
 		@for(appointment<-value){
 			@if(appointment.appointmentStatus.equals(models.doctor.AppointmentStatus.AVAILABLE)){
-      	 			   <tr><td id="@appointment.id"  clinic=" @appointment.doctorClinicInfo.clinic.name" detail=" @appointment.appointmentTime.format("EE"), @appointment.appointmentTime.format("dd-MMM-yy") at " date="@appointment.appointmentTime.format("HH:mm") " class="success appointment" style="cursor:pointer" data-toggle="modal" data-target="#myModal">@appointment.appointmentTime.format("HH:mm") </td></tr>  
-      	 			
+			
+			 @if(new Date().format("HH:mm") >= appointment.appointmentTime.format("HH:mm") && new Date().format("dd-MMM-yy") == appointment.appointmentTime.format("dd-MMM-yy")){
+			 <tr><td class="active" disabled>@appointment.appointmentTime.format("HH:mm")</td></tr>
       	 		}else{
-      	 		      	 <tr><td class="active" disabled>@appointment.appointmentTime.format("HH:mm")</td></tr>  
+      	 		     <tr><td id="@appointment.id"  clinic=" @appointment.doctorClinicInfo.clinic.name" detail=" @appointment.appointmentTime.format("EE"), @appointment.appointmentTime.format("dd-MMM-yy") at " date="@appointment.appointmentTime.format("HH:mm") " class="success appointment" style="cursor:pointer" data-toggle="modal" data-target="#myModal">@appointment.appointmentTime.format("HH:mm") </td></tr> 	   
+      	 		}
       	 		}
 		}
 	

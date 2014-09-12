@@ -3,7 +3,9 @@ package models.doctor;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
@@ -16,14 +18,17 @@ import javax.persistence.ManyToMany;
 import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 
+import controllers.LoginController;
 import models.AppUser;
 import models.BaseEntity;
 import models.PrimaryCity;
 import models.diagnostic.DiagnosticCentre;
 import models.patient.PatientDoctorInfo;
 import models.pharmacist.Pharmacy;
+import play.Logger;
 import play.data.validation.Constraints.Required;
 import play.db.ebean.Model;
+import play.mvc.Result;
 
 @SuppressWarnings("serial")
 @Entity
@@ -229,6 +234,25 @@ public class Doctor extends BaseEntity{
 			return "Specialization";
 		}
 	}
+	public static Boolean getClinicTimings(){
+		final Doctor loggedInDoctor = LoginController.getLoggedInUser()
+				.getDoctor();
+		final List<DoctorClinicInfo> doctorClinicInfos = loggedInDoctor.getActiveClinic();
+
+		//	final List<DoctorClinicInfo> doctorClinicInfos = DoctorClinicInfo.find.where().eq("doctor", Doctor.find.byId(id)).findList();
+		Logger.info(doctorClinicInfos.size()+"   size1");
+		for (final DoctorClinicInfo doctorClinicInfo : doctorClinicInfos) {
+			final List<DaySchedule> daySchedules = DaySchedule.find.where().eq("doctor_clinic_info_id", doctorClinicInfo.id).findList();
+			for (final DaySchedule daySchedule : daySchedules) {
+				Logger.info("day=="+daySchedule.day);
+				Logger.info("day=="+daySchedule.fromTime);
+				Logger.info("day=="+daySchedule.toTime);
+
+			}
+		}
+		return true;
+	}
+
 
 }
 
