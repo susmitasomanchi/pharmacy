@@ -63,7 +63,7 @@ GET   	/diagnostic/search/:searchString                  				controllers.PublicC
 GET    /diagnostic/search												controllers.PublicController.searchDiagnosticPage()
 
 GET    /feedback											controllers.PublicController.feedBack()
-POST    /secure-feedback											controllers.PublicController.saveFeedBack()
+POST    /secure-feedback									controllers.PublicController.saveFeedBack()
 GET    /help												controllers.PublicController.helpDocument()
 
 
@@ -393,6 +393,7 @@ GET    /view-products                              controllers.ProductController
 
 
 #sample data
+
 
 #Mednetwork-Admin
 GET		/add-primary-city						controllers.SampleDataController.addPrimaryCity()

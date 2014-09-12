@@ -148,7 +148,7 @@ public class EmailService {
 			final StringBuilder builder=new StringBuilder();
 			builder.append("<html><body>");
 			builder.append("<p>Dear "+appUser.name+",<br><br>To reset your password, please ");
-			builder.append("<a href=\"http://mednetwork.in/secure-user/forgot-reset-password/");
+			builder.append("<a href=\"http://mednetwork.in/secure-forgot-reset-password/");
 			builder.append(appUser.id);
 			builder.append("/"+randomString +"\">");
 			builder.append("<b>click here.</b>");
