@@ -121,7 +121,6 @@ GET    /secure-doctor/edit-clinic-schedule/:id                 controllers.Docto
 POST   /secure-doctor/update-clinic                            controllers.DoctorController.processUpdateClinicInfo()
 POST   /secure-doctor/update-clinic-schedule                   controllers.DoctorController.processUpdateClinicSchedule()
 GET    /secure-doctor/delete-clinic/:id                        controllers.DoctorController.deleteClinic(id:Long)
-GET    /secure-doctor/get-clinic                       controllers.DoctorController.getClinicTiming()
 
 
 GET		/secure-doctor/sig-codes									controllers.DoctorController.showSigCodes()
