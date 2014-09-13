@@ -1750,29 +1750,5 @@ public class DoctorController extends Controller {
 		}
 		return doctors;
 	}
-	/**
-	 * @author lakshmi
-	 * Action to get Doctors based on specialization
-	 * @return
-	 */
-	public static Result getClinicTiming(){
-		final Doctor loggedInDoctor = LoginController.getLoggedInUser()
-				.getDoctor();
-		final List<DoctorClinicInfo> doctorClinicInfos = loggedInDoctor.getActiveClinic();
-
-		//	final List<DoctorClinicInfo> doctorClinicInfos = DoctorClinicInfo.find.where().eq("doctor", Doctor.find.byId(id)).findList();
-		Logger.info(doctorClinicInfos.size()+"   size1");
-		for (final DoctorClinicInfo doctorClinicInfo : doctorClinicInfos) {
-			final List<DaySchedule> daySchedules = DaySchedule.find.where().eq("doctor_clinic_info_id", doctorClinicInfo.id).findList();
-			for (final DaySchedule daySchedule : daySchedules) {
-				Logger.info("day=="+daySchedule.day);
-				Logger.info("day=="+daySchedule.fromTime);
-				Logger.info("day=="+daySchedule.toTime);
-
-			}
-		}
-		return ok();
-	}
-
 
 }
