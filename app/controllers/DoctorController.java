@@ -653,30 +653,30 @@ public class DoctorController extends Controller {
 									if(
 											((previousSchedule.day).equals(newSchedule.day))
 											&&
-											(dateFormat.parse(newSchedule.fromTime)).before(dateFormat.parse(previousSchedule.toTime))
-											&&
-											(dateFormat.parse(newSchedule.fromTime)).after(dateFormat.parse(previousSchedule.fromTime))){
-										Logger.info("hello");
-										if(
-												(dateFormat.parse(newSchedule.fromTime)).after(dateFormat.parse(previousSchedule.fromTime))
-												&&
-												(dateFormat.parse(newSchedule.toTime)).before(dateFormat.parse(previousSchedule.toTime))
-												){
-											Logger.info("Time Clash!");
-											Logger.info("day new "+newSchedule.day.toString()+"  "+dateFormat.parse(newSchedule.fromTime));
-											Logger.info("day old "+previousSchedule.day.toString()+"   "+dateFormat.parse(previousSchedule.toTime));
+											((dateFormat.parse(newSchedule.fromTime)).before(dateFormat.parse(previousSchedule.toTime))
+													||
+													(dateFormat.parse(newSchedule.fromTime)).after(dateFormat.parse(previousSchedule.fromTime))
+													||
+													(dateFormat.parse(newSchedule.fromTime)).after(dateFormat.parse(previousSchedule.fromTime))
+													||
+													(dateFormat.parse(newSchedule.toTime)).after(dateFormat.parse(previousSchedule.fromTime))
+													||
+													(dateFormat.parse(newSchedule.toTime)).before(dateFormat.parse(previousSchedule.toTime)))
+											){
+										Logger.info("Time Clash!");
+										Logger.info("day new "+newSchedule.day.toString()+"  "+dateFormat.parse(newSchedule.fromTime));
+										Logger.info("day old "+previousSchedule.day.toString()+"   "+dateFormat.parse(previousSchedule.toTime));
 
-											//clinicInfo.scheduleDays.clear();
-											//clinicInfo.scheduleDays = new ArrayList<DaySchedule>();
-											final Iterator<DaySchedule> removalDayScheduleItr = clinicInfo.scheduleDays.iterator();
-											while (removalDayScheduleItr.hasNext()){
-												//clinicInfo.scheduleDays.remove(removalDayScheduleItr.next());
-												removalDayScheduleItr.next().delete();
-											}
-											clinicInfo.update();
-											flash().put("alert",new Alert("alert-danger", clinicInfo.clinic.name+ " created successfully but got time clashes with "+doctorClinicInfo.clinic.name+" while creating schedules.").toString());
-											return redirect(routes.DoctorController.myClinics());
+										//clinicInfo.scheduleDays.clear();
+										//clinicInfo.scheduleDays = new ArrayList<DaySchedule>();
+										final Iterator<DaySchedule> removalDayScheduleItr = clinicInfo.scheduleDays.iterator();
+										while (removalDayScheduleItr.hasNext()){
+											//clinicInfo.scheduleDays.remove(removalDayScheduleItr.next());
+											removalDayScheduleItr.next().delete();
 										}
+										clinicInfo.update();
+										flash().put("alert",new Alert("alert-danger", clinicInfo.clinic.name+ " created successfully but got time clashes with "+doctorClinicInfo.clinic.name+" while creating schedules.").toString());
+										return redirect(routes.DoctorController.myClinics());
 									}
 								}
 							}
