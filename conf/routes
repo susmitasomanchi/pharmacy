@@ -361,8 +361,9 @@ GET    /patient-search/list 					controllers.DiagnosticController.patientSearchP
 
 #Clinics
 
-GET    /secure-clinic/add-doctor      					controllers.ClinicController.searchDoctorsByEmail()
+GET    /secure-clinic/invite-doctor      					controllers.ClinicController.searchDoctorsByEmail()
 GET    /secure-clinic/invite-doctor/:email      					controllers.ClinicController.invitationEmailToTheDoctor(email: String)
+GET		/secure-clinic/add-doctor/:docId							controllers.ClinicController.addDoctorToTheClinic(docId: Long)
 																										
 #MR Module
 
