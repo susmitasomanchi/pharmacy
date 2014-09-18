@@ -13,6 +13,7 @@ import javax.activation.DataSource;
 import models.AppUser;
 import models.FileEntity;
 import models.doctor.Appointment;
+import models.doctor.Clinic;
 
 import org.apache.commons.mail.ByteArrayDataSource;
 import org.apache.commons.mail.DefaultAuthenticator;
@@ -349,5 +350,48 @@ public class EmailService {
 		return result;
 
 	}
+
+	/**
+	 * @author Mitesh
+	 * Action to send mail user to conform its email-id
+	 * NO URL
+	 */
+	public static boolean sendClinicInvitationConfirmationEmail(final AppUser appUser,final Clinic clinic){
+		final Random random = new SecureRandom();
+		final String randomString = new BigInteger(130,random).toString(32);
+		boolean result = true;
+		try{
+			final StringBuilder builder=new StringBuilder();
+			builder.append("<html><body>");
+			builder.append("<p> Dr "+appUser.name+",<br><br> You have an Invitation from "+clinic.name+", Please ");
+			builder.append("<a href=\"http://mednetwork.in/secure-user/confirmation/");
+			builder.append(appUser.id);
+			builder.append("/"+randomString +"\">");
+			builder.append("<b>click here</b>");
+			builder.append("</a> To Accept invitation from "+clinic.name+".<br><br>Best regards,<br>MedNetwork.in</p>");
+			builder.append("</body></html>");
+			final HtmlEmail email = new HtmlEmail();
+			email.setHostName("smtp.gmail.com");
+			email.setSmtpPort(587);
+			email.setAuthenticator(new DefaultAuthenticator("noreply@mednetwork.in", "we#will#win"));
+			email.setSSLOnConnect(true);
+			email.setFrom("noreply@mednetwork.in","MedNetwork");
+			email.setSubject("Clinic Invitation");
+			email.setHtmlMsg(builder.toString());
+			email.addTo(appUser.email);
+			email.send();
+			System.out.println("Mail Sent Successfully!");
+			appUser.emailConfirmationKey = randomString;
+			appUser.update();
+			Logger.info(builder.toString());
+		}
+		catch (final Exception e){
+			System.out.println("ERROR While Sending Email");
+			e.printStackTrace();
+			result=false;
+		}
+		return result;
+	}
+
 }
 

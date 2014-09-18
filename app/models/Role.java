@@ -30,6 +30,8 @@ public enum Role {
 	ADMIN_DIAGREP,
 	@EnumValue("DIAGREP")
 	DIAGREP,
+	@EnumValue("CLINIC_ADMIN")
+	CLINIC_ADMIN,
 	@EnumValue("BLOG_ADMIN")
 	BLOG_ADMIN;
 

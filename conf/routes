@@ -87,6 +87,8 @@ GET    /secure-doctor/join                              			controllers.UserContr
 GET    /secure-pharmacy/join                              			controllers.UserController.joinUsPharmacy()
 GET    /secure-diagnostic/join                              		controllers.UserController.joinUsDiagnostic()
 GET    /secure-user/join											controllers.UserController.joinUsPatient()
+GET    /secure-clinic/join											controllers.UserController.joinUsClinic()
+
 POST   /secure-join		                              			controllers.UserController.processJoinUs()
 
 # Dashboard of LoggedInUser
@@ -356,6 +358,11 @@ GET		/diagnostic/remove-image-from-showcasedService			controllers.DiagnosticCont
 GET    /patient-search      					controllers.DiagnosticController.patientSearch()
 GET    /patient-search/list 					controllers.DiagnosticController.patientSearchProcess()
 
+
+#Clinics
+
+GET    /secure-clinic/add-doctor      					controllers.ClinicController.searchDoctorsByEmail()
+GET    /secure-clinic/invite-doctor/:email      					controllers.ClinicController.invitationEmailToTheDoctor(email: String)
 																										
 #MR Module
 
@@ -414,6 +421,7 @@ GET		/admin						controllers.SampleDataController.mednetAdmin()
 GET		/add-primary-city						controllers.SampleDataController.addPrimaryCity()
 GET		/default-primarycity					controllers.SampleDataController.addDefaultPrimaryCity()
 GET 	/specz									controllers.SampleDataController.createDocSpez()
+GET 	/add_clinic									controllers.SampleDataController.patientTest()
 
 #GET    /appointment					controllers.SampleDataController.createAppointment()
 

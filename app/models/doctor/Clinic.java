@@ -8,6 +8,9 @@ import javax.persistence.OneToOne;
 
 import models.Address;
 import models.BaseEntity;
+import models.PrimaryCity;
+import models.clinic.ClinicAdministrator;
+import models.pharmacist.Pharmacist;
 import play.db.ebean.Model;
 
 @SuppressWarnings("serial")
@@ -27,6 +30,11 @@ public class Clinic extends BaseEntity{
 	@OneToOne
 	public Address address;
 
+	@OneToOne
+	public ClinicAdministrator clinicAdministrator;
+
+	@OneToOne
+	public PrimaryCity primaryCity;
 
 	public static Model.Finder<Long, Clinic> find = new Finder<Long, Clinic>(Long.class, Clinic.class);
 

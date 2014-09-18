@@ -40,6 +40,9 @@ public class UserActions extends Controller {
 			final Patient patient = appUser.getPatient();
 			return ok(views.html.patient.fav_doctors.render(patient.patientDoctorInfoList));
 		}
+		if(appUser.role.equals(Role.CLINIC_ADMIN)){
+			return ok(views.html.clinic.clinicProfile.render());
+		}
 
 
 		if(appUser.role.equals(Role.MEDNETWORK_ADMIN)){
