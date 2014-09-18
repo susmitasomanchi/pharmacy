@@ -1,15 +1,9 @@
 package beans;
 
 import java.io.Serializable;
-import java.security.MessageDigest;
-import java.security.SecureRandom;
-import java.util.Random;
-
-import org.apache.commons.codec.binary.Base64;
-
-import models.Alert;
 import models.AppUser;
 import models.Role;
+import models.mr.Designation;
 import models.mr.MedicalRepresentative;
 
 @SuppressWarnings("serial")
@@ -19,11 +13,10 @@ public class MedicalRepresentativeBean implements Serializable {
 	public Long   id;
 	public Long   appid;
 	public String name;
-	public String designation;
+	public Long designationId;
 	public String username;
 	public String email;
 	public int age;
-	// public String role;
 	public String sex;
 	public String regionAlloted;
 	public String companyName;
@@ -61,8 +54,8 @@ public class MedicalRepresentativeBean implements Serializable {
 			mr.id=this.id;
 		}
 
-		if(this.designation != null) {
-			mr.designation= this.designation;
+		if(this.designationId != 0) {
+			mr.designation= Designation.find.byId(this.designationId);
 		}
 		/*if(this.age != 0) {
 			mr.age= this.age;

@@ -44,6 +44,16 @@
           <li><a href="@routes.MednetworkAdminController.getPrimaryCitiesList()">Primary Cities</a></li>
           </ul>
         </li>
+        <li class="dropdown">
+          	<a href="#" class="dropdown-toggle" data-toggle="dropdown">
+          	Purge
+          	<b class="caret"></b></a>
+          	<ul class="dropdown-menu">
+          	<li><a href="@routes.MednetworkAdminController.purgeDoctor()">Doctor</a></li>
+          	<li><a href="@routes.MednetworkAdminController.purgePharmacy()">Pharmacy</a></li>
+          	<li><a href="@routes.MednetworkAdminController.purgeDiagnosticCentre()">Diagnostic Centre</a></li>
+          	</ul>
+        	</li>
         
 		}
 		
@@ -93,6 +103,16 @@
             	<li><a href="@routes.PatientController.viewDiagnosticReports()">Diagnostic Reports</a></li>
 	           </ul>
         </li>
+        <li class="dropdown">
+          <a href="#" class="dropdown-toggle" data-toggle="dropdown">
+         Trackers
+          <b class="caret"></b></a>
+          <ul class="dropdown-menu">
+	           	<li><a href="@routes.TrackerController.appUserWeightTracker()">Weight Tracker</a></li>
+	           	<li><a href="@routes.TrackerController.appUserBpTracker()">BloodPressure Tracker</a></li>
+	           	<li><a href="@routes.TrackerController.sugarTracker()">Sugar Tracker</a></li>
+	          </ul>
+	    </li>
         @*
         <li class="dropdown">
           <a href="#" class="dropdown-toggle" data-toggle="dropdown">
@@ -248,7 +268,8 @@
         }    
         
        @if(LoginController.getLoggedInUserRole().equals(Role.ADMIN_MR.toString()) || LoginController.getLoggedInUserRole().equals(Role.MR.toString())){
-         <li class="dropdown">
+         @if(LoginController.getLoggedInUserRole().equals(Role.ADMIN_MR.toString())){
+          <li class="dropdown">
           <a href="#" class="dropdown-toggle" data-toggle="dropdown">
          User
           <b class="caret"></b></a>
@@ -257,7 +278,7 @@
             <li><a href="@routes.MRController.mrList()">View Medical Representative</a></li>            
           </ul>
         </li> 
-        @if(LoginController.getLoggedInUserRole().equals(Role.ADMIN_MR.toString())){
+       
         <li class="dropdown">
           <a href="#" class="dropdown-toggle" data-toggle="dropdown">
          Geography
@@ -329,6 +350,17 @@
             }
           </ul>
         </li>
+        @if(LoginController.getLoggedInUserRole().equals(Role.ADMIN_MR.toString())){
+        <li class="dropdown">
+          <a href="#" class="dropdown-toggle" data-toggle="dropdown">
+          Designation
+          <b class="caret"></b></a>
+          <ul class="dropdown-menu">
+            <li><a href="@routes.MRController.addDesignation()">Add Designation</a></li>
+            <li><a href="#">Designation List</a></li>
+          </ul>
+        </li>
+        }
         }
         
     	@if(LoginController.getLoggedInUserRole().equals(Role.ADMIN_DIAGREP.toString())){
@@ -427,21 +459,7 @@
 		
 		<ul class="nav navbar-nav navbar-right">
 		@if(LoginController.isLoggedIn()) {
-
-		@if(LoginController.getLoggedInUserRole().equals(Role.MEDNETWORK_ADMIN.toString())){
-			<li class="dropdown">
-          	<a href="#" class="dropdown-toggle" data-toggle="dropdown">
-          	Purge
-          	<b class="caret"></b></a>
-          	<ul class="dropdown-menu">
-          	<li><a href="@routes.MednetworkAdminController.purgeDoctor()">Doctor</a></li>
-          	<li><a href="@routes.MednetworkAdminController.purgePharmacy()">Pharmacy</a></li>
-          	<li><a href="@routes.MednetworkAdminController.purgeDiagnosticCentre()">Diagnostic Centre</a></li>
-          	</ul>
-        	</li>
-		}
-		
-			
+	
 		<li class="dropdown"><a href="#" class="dropdown-toggle" data-toggle="dropdown">@LoginController.getLoggedInUser().name <b class="caret"></b></a>
 		<ul class="dropdown-menu">
 			<!--
@@ -461,8 +479,7 @@
 		</ul>
 		</li>
 		} else {
-			
-    			@helper.form(action=routes.LoginController.processLogin()) {
+			@helper.form(action=routes.LoginController.processLogin()) {
   				<div class="row" style="margin-top:3px;">
   					<div class="col-md-5">
   						<input id="uname" type="email" name="email" placeholder="Email" style="width:100%" required>
@@ -481,8 +498,8 @@
 						$('#pwd').focus();
 					});
   				</script>
-			
-		}
+			}
+		
 		</ul>
    	  
    	  

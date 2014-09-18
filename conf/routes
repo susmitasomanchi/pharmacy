@@ -44,6 +44,16 @@ POST   /secure-update-password                            	controllers.LoginCont
 GET	   /secure-edit-my-profile								controllers.UserController.editAppUserProfile()
 POST   /secure-edit-my-profile								controllers.UserController.updateAppUserProfile()
 
+GET		/secure-weight-details							controllers.TrackerController.appUserWeightTracker()
+POST   /secure-weight-details							controllers.TrackerController.processWeightTracker()
+GET		/secure-remove-weight-details/:id							controllers.TrackerController.removeAppUserWeightDetails(id: Long)
+GET		/secure-bp-details							controllers.TrackerController.appUserBpTracker()
+POST   /secure-bp-details							controllers.TrackerController.processBpTracker()
+GET		/secure-remove-bp-details/:id							controllers.TrackerController.removeAppUserBpDetails(id: Long)
+GET 	/secure-sugar-tracker									controllers.TrackerController.sugarTracker()
+POST    /secure-sugar-tracker-process														controllers.TrackerController.processSugarTracker()
+GET		/secure-remove-sugar-details/:id							controllers.TrackerController.removeAppUserSugarDetails(id: Long)
+
 GET		/secure-not-confirmed-yet							controllers.UserController.confirmAppUserPage()
 GET		/secure-user/verify-email							controllers.UserController.sendConformationEmail()
 GET 	/secure-user/confirmation/:userId/:randomString	controllers.PublicController.emailConfirmation(userId: Long, randomString:String)
@@ -98,6 +108,7 @@ GET		/secure-doctor/add-favorite-pharmacy/:pharmacyId/:str							controllers.Doc
 GET		/secure-doctor/my-favorite-pharmacies											controllers.DoctorController.myFavoritePharmacies()
 GET		/secure-doctor/favorite-diagnostic-centres											controllers.DoctorController.myFavoriteDiagnosticCentres()
 GET		/secure-doctor/add-favorite-diagnosticCentre/:diagnosticId/:str					controllers.DoctorController.addFavoriteDiagnosticCentre(diagnosticId: Long,str: String)
+#GET  	/secure-doctor/get-doctors-by-specialization/:speczId							controllers.DoctorController.getDoctorsBySpecz(speczId: Long)
 
 
 
@@ -381,6 +392,10 @@ POST    /mr/add                                    controllers.MRController.medi
 #POST    /mr/editmr                                 controllers.MRController.medicalRepresentativeProccessUpdate()
 GET     /mr/del	                                   controllers.MRController.removeMR(id: Long)
 GET     /mr/edit/:id	                           controllers.MRController.editMR(id: Long)
+GET		/mr/add-designation							controllers.MRController.addDesignation()
+POST	/mr/add-designation							controllers.MRController.addDesignationProccess()
+
+
 
 
 #common module
@@ -393,10 +408,15 @@ GET    /view-products                              controllers.ProductController
 
 
 #sample data
-
+GET    /ttt			                              controllers.SampleDataController.ttt()
 
 #Mednetwork-Admin
+GET		/admin						controllers.SampleDataController.mednetAdmin()
 GET		/add-primary-city						controllers.SampleDataController.addPrimaryCity()
+GET		/default-primarycity					controllers.SampleDataController.addDefaultPrimaryCity()
+GET 	/specz									controllers.SampleDataController.createDocSpez()
+
+#GET    /appointment					controllers.SampleDataController.createAppointment()
 
 
 #Cron

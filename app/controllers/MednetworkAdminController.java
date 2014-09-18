@@ -165,10 +165,12 @@ public class MednetworkAdminController extends Controller {
 	 * POST    /secure-admin/purge-doctor-details
 	 */
 	public static Result getAppUserDetails(final String role){
+		Logger.info("test1");
 		if(request().body().asFormUrlEncoded().get("appUserId")[0] != null && !(request().body().asFormUrlEncoded().get("appUserId")[0].trim().isEmpty())){
 			if(AppUser.find.byId(Long.parseLong(request().body().asFormUrlEncoded().get("appUserId")[0])) != null){
 				final AppUser appUser = AppUser.find.byId(Long.parseLong(request().body().asFormUrlEncoded().get("appUserId")[0]));
 				if(role.equalsIgnoreCase("doctor")) {
+					Logger.info("test2");
 					return ok(views.html.mednetAdmin.purgeDoctorDetails.render(appUser,true));
 				}
 				if(role.equalsIgnoreCase("Pharmacy")) {
@@ -339,7 +341,7 @@ public class MednetworkAdminController extends Controller {
 
 	/**
 	 * Action to render list of Primary Cities and a form to add one
-	 * GET	/secure-admin/primary-cities
+	 * GET	/primary-cities
 	 */
 	public static Result getPrimaryCitiesList(){
 		return ok(views.html.mednetAdmin.primaryCitiesList.render());
@@ -347,7 +349,7 @@ public class MednetworkAdminController extends Controller {
 
 	/**
 	 * Action create a Primary City
-	 * POST	/secure-admin/add-primary-city
+	 * POST	/add-primary-city
 	 */
 	public static Result addPrimaryCity(){
 		if(

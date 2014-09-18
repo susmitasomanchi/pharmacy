@@ -27,12 +27,9 @@ input[type=checkbox]{
 <h4>@prescription.doctor.degree
 
 <span class="noprint pull-right" style="cursor:pointer; color:#0079a1;" onclick="printPrescription();" style="font-size:25px;"><i class="fa fa-print"></i> Print</span>
-
 </h4>
 <h4>@prescription.doctor.getSpecializations()</h4>
-
 <hr>
-
 <h4 style="margin:0px; padding:0px;">@prescription.patient.appUser.name</h4>
 <p style="margin:0px; padding:0px;">Age: @prescription.patient.appUser.getAge()</p>
 <p>Sex: @org.apache.commons.lang3.text.WordUtils.capitalizeFully(prescription.patient.appUser.sex.toString())</p>
@@ -108,8 +105,38 @@ input[type=checkbox]{
 <a class="btn btn-primary" onclick="printPrescription();" style="font-size:25px;"><i class="fa fa-print"></i> Print</a>
 </div>
 </div>
-*@
 
+<hr>
+<div class="row" style="padding-left:20px; padding-right:100px;">
+<div class="col-md-3">
+<h4>Refer to other doctors:</h4>
+<select name="specialization" class="chzn" style="width:100%;" onchange="getDoctors();">
+<option></option>
+@for(specialization <- models.doctor.MasterSpecialization.getAll()){
+	<option value="@specialization.id">@specialization.name</option>
+}
+</select>
+<script>
+function getDoctors(){
+window.location.href='/secure-doctor/get-doctors-by-specialization/'+$('#specialization').val().trim();
+}
+$('#click').append();
+</script>
+</div>
+<div class="col-md-3" id="click">
+
+</div>
+<div class="col-md-3">
+<select id="specialization" class="chzn" style="width:100%;">
+<option></option>
+@for(specialization <- @routes.DoctorController.getDoctorsBySpecz(1L)){
+	<option value="@specialization.id">@specialization.name</option>
+}
+</select>
+</div>
+
+</div>
+*@
 <hr>
 
 <div class="row" style="padding-left:20px; padding-right:100px;">

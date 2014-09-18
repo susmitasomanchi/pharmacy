@@ -19,7 +19,6 @@ import models.diagnostic.DiagnosticCentrePrescriptionInfo;
 import models.diagnostic.DiagnosticCentrePrescritionStatus;
 import models.doctor.Appointment;
 import models.doctor.AppointmentStatus;
-import models.doctor.Clinic;
 import models.doctor.Day;
 import models.doctor.DaySchedule;
 import models.doctor.DiagnosticTestLineItem;
@@ -170,11 +169,7 @@ public class DoctorController extends Controller {
 					if (availableSlug == 0) {
 						doctor.slugUrl = requestMap.get("slugUrl")[0].trim();
 					} else {
-						flash().put(
-								"alert",
-								new Alert("alert-danger",
-										"Requested Url is not available.")
-								.toString());
+						flash().put("alert",new Alert("alert-danger","Requested Url is not available.").toString());
 						return redirect(routes.UserActions.dashboard());
 					}
 				}
@@ -626,13 +621,12 @@ public class DoctorController extends Controller {
 	 */
 	@ConfirmAppUser
 	public static Result processNewClinic() {
-		final Form<DoctorClinicInfoBean> filledForm = clinicForm
-				.bindFromRequest();
+		final Form<DoctorClinicInfoBean> filledForm = clinicForm.bindFromRequest();
 		if (filledForm.hasErrors()) {
 			return ok(views.html.doctor.newClinic.render(clinicForm));
-		} else {
-			final DoctorClinicInfo clinicInfo = filledForm.get()
-					.toDoctorClinicInfo();
+		}
+		else {
+			final DoctorClinicInfo clinicInfo = filledForm.get().toDoctorClinicInfo();
 			clinicInfo.doctor = LoginController.getLoggedInUser().getDoctor();
 			clinicInfo.save();
 			return DoctorController.createAppointment(clinicInfo);
@@ -650,18 +644,19 @@ public class DoctorController extends Controller {
 	@ConfirmAppUser
 	private static Result createAppointment(final DoctorClinicInfo docClinicInfo) {
 		// Server side validation
-		if (docClinicInfo.doctor.id.longValue() != LoginController
-				.getLoggedInUser().getDoctor().id.longValue()) {
+		if (docClinicInfo.doctor.id.longValue() != LoginController.getLoggedInUser().getDoctor().id.longValue()) {
 			Logger.warn("COULD NOT VALIDATE LOGGED IN USER TO PERFORM THIS TASK");
-			Logger.warn("update attempted for doctor id: "
-					+ docClinicInfo.doctor.id);
-			Logger.warn("logged in AppUser: "
-					+ LoginController.getLoggedInUser().id);
-			Logger.warn("logged in Doctor: "
-					+ LoginController.getLoggedInUser().getDoctor().id);
+			Logger.warn("update attempted for doctor id: "+ docClinicInfo.doctor.id);
+			Logger.warn("logged in AppUser: "+ LoginController.getLoggedInUser().id);
+			Logger.warn("logged in Doctor: "+ LoginController.getLoggedInUser().getDoctor().id);
 			return redirect(routes.LoginController.processLogout());
 		}
 		try {
+
+
+
+
+
 			final Calendar calendar1 = Calendar.getInstance();
 			final Calendar calendar2 = Calendar.getInstance();
 			final SimpleDateFormat dateFormat = new SimpleDateFormat("kk:mm");
@@ -669,26 +664,18 @@ public class DoctorController extends Controller {
 			calendar.setTime(new Date());
 			for (int date = 0; date < 90; date++) {
 				for (final DaySchedule schedule : docClinicInfo.scheduleDays) {
-					if (schedule.day == Day.getDay(calendar
-							.get(Calendar.DAY_OF_WEEK) - 1)) {
+					if (schedule.day == Day.getDay(calendar.get(Calendar.DAY_OF_WEEK) - 1)) {
 						try {
-							calendar1
-							.setTime(dateFormat.parse(schedule.toTime));
-							calendar2.setTime(dateFormat
-									.parse(schedule.fromTime));
-						} catch (final Exception e) {
+							calendar1.setTime(dateFormat.parse(schedule.toTime));
+							calendar2.setTime(dateFormat.parse(schedule.fromTime));
+						}
+						catch (final Exception e) {
 							e.printStackTrace();
 						}
-						final int hoursToClinic = calendar1
-								.get(Calendar.HOUR_OF_DAY)
-								- calendar2.get(Calendar.HOUR_OF_DAY);
-						final int minutsToClinic = calendar1
-								.get(Calendar.MINUTE)
-								- calendar2.get(Calendar.MINUTE);
-						calendar.set(Calendar.HOUR_OF_DAY,
-								calendar2.get(Calendar.HOUR_OF_DAY));
-						calendar.set(Calendar.MINUTE,
-								calendar2.get(Calendar.MINUTE));
+						final int hoursToClinic = calendar1.get(Calendar.HOUR_OF_DAY) - calendar2.get(Calendar.HOUR_OF_DAY);
+						final int minutsToClinic = calendar1.get(Calendar.MINUTE) - calendar2.get(Calendar.MINUTE);
+						calendar.set(Calendar.HOUR_OF_DAY, calendar2.get(Calendar.HOUR_OF_DAY));
+						calendar.set(Calendar.MINUTE, calendar2.get(Calendar.MINUTE));
 						calendar.set(Calendar.SECOND, 0);
 						calendar.set(Calendar.MILLISECOND, 0);
 						if (schedule.requester.equals(Role.PATIENT)) {
@@ -1654,6 +1641,22 @@ public class DoctorController extends Controller {
 			e.printStackTrace();
 			return ok("-1");
 		}
+	}
+	/**
+	 * @author lakshmi
+	 * Action to get Doctors based on specialization
+	 * @return
+	 */
+	public static List<Doctor> getDoctorsBySpecz(final Long id){
+		final MasterSpecialization masterSpecialization = MasterSpecialization.find.byId(id);
+		final List<Doctor> doctors =  new ArrayList<Doctor>();
+		for (final Doctor doctor : Doctor.find.all()) {
+			if(doctor.specializationList.contains(masterSpecialization)){
+				doctors.add(doctor);
+			}
+
+		}
+		return doctors;
 	}
 
 }

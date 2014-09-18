@@ -60,6 +60,10 @@ public class AppUser extends BaseEntity {
 
 	public Date dob;
 
+	public BloodGroup bloodGroup;
+
+	public Boolean isBloodDonor = false;
+
 	public List<Language> languageList = new ArrayList<Language>();
 
 	public Role role;
@@ -80,6 +84,9 @@ public class AppUser extends BaseEntity {
 	@Column(columnDefinition="TEXT")
 	public String forgotPasswordConfirmationKey;
 
+	@Column(columnDefinition="TEXT")
+	public String allergy;
+	
 	public static Model.Finder<Long, AppUser> find = new Finder<Long, AppUser>(Long.class, AppUser.class);
 
 	public Patient getPatient() {

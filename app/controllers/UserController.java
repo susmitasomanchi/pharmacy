@@ -11,6 +11,7 @@ import java.util.Random;
 
 import models.Alert;
 import models.AppUser;
+import models.BloodGroup;
 import models.PrimaryCity;
 import models.Role;
 import models.Sex;
@@ -35,6 +36,7 @@ import utils.EmailService;
 import utils.SMSService;
 import utils.Util;
 import actions.BasicAuth;
+import actions.ConfirmAppUser;
 import beans.JoinUsBean;
 
 
@@ -296,6 +298,25 @@ public class UserController extends Controller {
 				SMSService.sendConfirmationSMS(loggedInUser);
 			}
 		}
+		if(requestMap.get("bloodgroup")[0]!=null && requestMap.get("bloodgroup")[0].trim()!=""){
+			final BloodGroup oldGroup = loggedInUser.bloodGroup;
+			final String newGroup = requestMap.get("bloodgroup")[0].trim();
+			if (oldGroup == null || (oldGroup.toString() != newGroup)) {
+				loggedInUser.bloodGroup = BloodGroup.valueOf(newGroup);
+				//TODO: make it async
+				SMSService.sendConfirmationSMS(loggedInUser);
+			}
+		}
+		if(requestMap.containsKey("isBloodDonar")){
+			loggedInUser.isBloodDonor = true;
+			//TODO: make it async
+			//SMSService.sendConfirmationSMS(loggedInUser);
+		}else{
+			loggedInUser.isBloodDonor = false;
+		}
+		if(requestMap.get("allergy")[0]!=null && requestMap.get("allergy")[0].trim()!=""){
+			loggedInUser.allergy = requestMap.get("allergy")[0].trim();
+		}
 		if(requestMap.get("dob")[0]!=null ){
 			try {
 				loggedInUser.dob = new SimpleDateFormat("dd-MM-yyyy").parse(requestMap.get("dob")[0].trim());
@@ -309,10 +330,6 @@ public class UserController extends Controller {
 		loggedInUser.update();
 		return redirect(routes.UserActions.dashboard());
 	}
-
-
-
-
 
 
 	/**

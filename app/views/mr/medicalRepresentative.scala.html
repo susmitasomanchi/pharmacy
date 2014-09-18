@@ -1,4 +1,4 @@
-@(dataForm: play.data.Form[beans.MedicalRepresentativeBean],mrList: List[models.mr.MedicalRepresentative])
+@(dataForm: play.data.Form[beans.MedicalRepresentativeBean],adminMr: models.mr.MedicalRepresentative,mrList: List[models.mr.MedicalRepresentative])
 @import helper._
 @import helper.twitterBootstrap._
 @main("MedicalRepresentative form") {
@@ -7,7 +7,13 @@
     @helper.form(action=routes.MRController.medicalRepresentativeProccess()) {
 	
 	@helper.inputText(dataForm("name"),'_label->"Name")
-	@helper.inputText(dataForm("designation"),'_label->"designation")
+	<select class = "chzn" name="designationId" placeholder="Assigne Designation">  
+    @for(designation <- adminMr.pharmaceuticalCompany.designationList){
+      <option value = @designation.id>
+        @designation.name
+      </option>
+    } 
+    </select>	<br>
 	@helper.inputText(dataForm("username"),'_label->"User Name")
 	@helper.inputText(dataForm("email"),'_label->"Email")
 	Male<input type="radio" name="sex" value="Male">

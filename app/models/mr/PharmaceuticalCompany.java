@@ -34,6 +34,9 @@ public class PharmaceuticalCompany extends BaseEntity {
 
 	@OneToMany(cascade = CascadeType.ALL)
 	public List<MedicalRepresentative> mrList = new ArrayList<MedicalRepresentative>();
+	
+	@OneToMany(cascade=CascadeType.ALL)
+	public List<Designation> designationList = new ArrayList<Designation>();
 
 	public static Finder<Long, PharmaceuticalCompany> find = new Finder<Long, PharmaceuticalCompany>(
 			Long.class, PharmaceuticalCompany.class);
