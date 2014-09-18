@@ -3,22 +3,30 @@
 @import helper.twitterBootstrap._
 @import helper._
 
-@main("Search Doctors"){
+@main("Invite Doctors"){
 
 <div class="well">
 
 @*<form action="@routes.ClinicController.processSeachDoctorsByEmailId()" method="POST">*@
-<div>
- <label for="emailId">Email Id </label>
+<div class="row">
+<div class="col-md-4">
+ <label for="emailId" class="col-md-6" style="padding-top:7px">Email Id </label>
+ <div class="col-md-4">
 	<input type="search" style="box-shadow: 1px 1px 3px 3px #aaaaaa;"  name="email" id="email" placeholder="Search By Email Id" required>
+	</div>
+</div>
 </div>
 <br>
-<div>
-<label for="confirmEmailId">Confirm EmailId </label>
+<div class="row">
+<div class="col-md-4">
+<label for="confirmEmailId" class="col-md-6" style="padding-top:7px">Confirm EmailId </label>
+<div class="col-md-4">
 	<input type="search" style="box-shadow: 1px 1px 3px 3px #aaaaaa;"  name="confirmEmailId" id="confirmEmailId" placeholder="Enter the same Email Id" required>
 </div>
+</div>
+</div>
    <br>
-<div>
+<div style="padding-left:15px;padding-right:15px">
 	<button style="box-shadow: 1px 1px 3px 3px #aaaaaa;" class="btn btn-sm btn-primary" onclick="submitSearch();"><i class="icon-search icon-large"></i> Invite</button>
 </div>
 

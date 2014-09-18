@@ -1,5 +1,7 @@
 package controllers;
 
+import java.util.List;
+
 import models.Alert;
 import models.AppUser;
 import models.Role;
@@ -94,6 +96,17 @@ public class ClinicController extends Controller{
 		});
 		// End of async
 		return redirect(routes.ClinicController.searchDoctorsByEmail());
+	}
+	/**
+	 * @author lakshmi
+	 * Action to add doctor to the clinic
+	 * GET		/secure-clinic/add-doctor/:docId
+	 */
+	public static Result getDoctors(){
+		final Clinic clinic = LoginController.getLoggedInUser().getClinicAdminstrator().clinic;
+		final List<DoctorClinicInfo> doctorClinicInfos = DoctorClinicInfo.find.where().eq("clinic", clinic).findList();
+		Logger.info("size of the list "+doctorClinicInfos.size());
+		return ok(views.html.clinic.clinicDoctors.render(doctorClinicInfos));
 	}
 
 }

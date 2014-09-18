@@ -357,8 +357,6 @@ public class EmailService {
 	 * NO URL
 	 */
 	public static boolean sendClinicInvitationConfirmationEmail(final AppUser appUser,final Clinic clinic){
-		final Random random = new SecureRandom();
-		final String randomString = new BigInteger(130,random).toString(32);
 		boolean result = true;
 		try{
 			final StringBuilder builder=new StringBuilder();
@@ -381,8 +379,6 @@ public class EmailService {
 			email.addTo(appUser.email);
 			email.send();
 			System.out.println("Mail Sent Successfully!");
-			appUser.emailConfirmationKey = randomString;
-			appUser.update();
 			Logger.info(builder.toString());
 		}
 		catch (final Exception e){
@@ -397,8 +393,6 @@ public class EmailService {
 	 * Action to send successfully added  to the Clinic message to the Doctor
 	 */
 	public static boolean sendClinicInvitationSuccessEmail(final AppUser appUser,final Clinic clinic){
-		final Random random = new SecureRandom();
-		final String randomString = new BigInteger(130,random).toString(32);
 		boolean result = true;
 		try{
 			final StringBuilder builder=new StringBuilder();
@@ -417,8 +411,6 @@ public class EmailService {
 			email.addTo(appUser.email);
 			email.send();
 			System.out.println("Mail Sent Successfully!");
-			appUser.emailConfirmationKey = randomString;
-			appUser.update();
 			Logger.info(builder.toString());
 		}
 		catch (final Exception e){
