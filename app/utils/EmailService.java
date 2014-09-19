@@ -14,6 +14,7 @@ import models.AppUser;
 import models.FileEntity;
 import models.doctor.Appointment;
 import models.doctor.Clinic;
+import models.doctor.Doctor;
 
 import org.apache.commons.mail.ByteArrayDataSource;
 import org.apache.commons.mail.DefaultAuthenticator;
@@ -362,9 +363,7 @@ public class EmailService {
 			final StringBuilder builder=new StringBuilder();
 			builder.append("<html><body>");
 			builder.append("<p> Dr "+appUser.name+",<br><br> You have an Invitation from "+clinic.name+", Please ");
-			builder.append("<a href=\"http://mednetwork.in/secure-clinic/add-doctor/"+appUser.id+"\"");
-			/*builder.append(appUser.id);
-			builder.append("/"+randomString +"\">");*/
+			builder.append("<a href=\"http://mednetwork.in/secure-clinic/add-doctor/"+appUser.getDoctor().id+"/"+clinic.id+"\"");
 			builder.append("<b>click here</b>");
 			builder.append("</a> To Accept invitation from "+clinic.name+".<br><br>Best regards,<br>MedNetwork.in</p>");
 			builder.append("</body></html>");
@@ -392,12 +391,12 @@ public class EmailService {
 	 * @author lakshmi
 	 * Action to send successfully added  to the Clinic message to the Doctor
 	 */
-	public static boolean sendClinicInvitationSuccessEmail(final AppUser appUser,final Clinic clinic){
+	public static boolean sendClinicInvitationSuccessEmail(final Doctor doctor,final Clinic clinic){
 		boolean result = true;
 		try{
 			final StringBuilder builder=new StringBuilder();
 			builder.append("<html><body>");
-			builder.append("<p> Dr "+appUser.name+",<br><br> You have been added to the Clinic "+clinic.name);
+			builder.append("<p> Dr "+doctor.appUser.name+",<br><br> You have been added to the Clinic "+clinic.name);
 			builder.append("<br><br>Best regards,<br>MedNetwork.in</p>");
 			builder.append("</body></html>");
 			final HtmlEmail email = new HtmlEmail();
@@ -408,7 +407,7 @@ public class EmailService {
 			email.setFrom("noreply@mednetwork.in","MedNetwork");
 			email.setSubject("Clinic Invitation");
 			email.setHtmlMsg(builder.toString());
-			email.addTo(appUser.email);
+			email.addTo(doctor.appUser.email);
 			email.send();
 			System.out.println("Mail Sent Successfully!");
 			Logger.info(builder.toString());

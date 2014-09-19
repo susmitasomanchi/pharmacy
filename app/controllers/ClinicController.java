@@ -33,15 +33,11 @@ public class ClinicController extends Controller{
 		if((appUser != null) && (appUser.role.equals(Role.DOCTOR))){
 			final int count = DoctorClinicInfo.find.where().eq("clinic", clinic).eq("doctor", appUser.getDoctor()).findRowCount();
 			if(count>0){
-				flash().put(
-						"alert",
-						new Alert("alert-info",
-								" Dr."+appUser.name+" is already associated with clinic "+clinic.name).toString());
-
+				flash().put("alert",new Alert("alert-info"," Dr."+appUser.name+" is already associated with clinic "+clinic.name).toString());
 			}else{
-				final boolean result;
-				Promise.promise(new Function0<Integer>() {
-
+				EmailService
+				.sendClinicInvitationConfirmationEmail(appUser,clinic);
+				/*Promise.promise(new Function0<Integer>() {
 					// @Override
 					//@Override
 					@Override
@@ -50,20 +46,13 @@ public class ClinicController extends Controller{
 								.sendClinicInvitationConfirmationEmail(appUser,clinic);
 						return 0;
 					}
-				});
+				});*/
 				// End of async
-				flash().put(
-						"alert",
-						new Alert("alert-success",
-								"An Invitation has been sent to the Dr."+appUser.name).toString());
+				flash().put("alert",new Alert("alert-success","An Invitation has been sent to the Dr."+appUser.name).toString());
 			}
 
 		}else{
-			flash().put(
-					"alert",
-					new Alert("alert-info",
-							"With "+doctorEmail+" no Doctor found").toString());
-
+			flash().put("alert",new Alert("alert-info","With "+doctorEmail+" no Doctor found").toString());
 		}
 		return redirect(routes.ClinicController.searchDoctorsByEmail());
 
@@ -73,16 +62,13 @@ public class ClinicController extends Controller{
 	 * Action to add doctor to the clinic
 	 * GET		/secure-clinic/add-doctor/:docId
 	 */
-	public static Result addDoctorToTheClinic(final Long appId){
-		final Clinic clinic = LoginController.getLoggedInUser().getClinicAdminstrator().clinic;
-		final Doctor doctor = AppUser.find.byId(appId).getDoctor();
+	public static Result addDoctorToTheClinic(final Long doctorId,final Long clinicId){
+		final Clinic clinic = Clinic.find.byId(clinicId);
+		final Doctor doctor = Doctor.find.byId(doctorId);
 		final DoctorClinicInfo doctorClinicInfo = new DoctorClinicInfo();
 		doctorClinicInfo.clinic = clinic;
 		doctorClinicInfo.doctor = doctor;
 		doctorClinicInfo.save();
-
-		final AppUser appUser = AppUser.find.byId(appId);
-		final boolean result;
 		Promise.promise(new Function0<Integer>() {
 
 			// @Override
@@ -90,12 +76,12 @@ public class ClinicController extends Controller{
 			@Override
 			public Integer apply() {
 				final boolean result1 = EmailService
-						.sendClinicInvitationSuccessEmail(appUser,clinic);
+						.sendClinicInvitationSuccessEmail(doctor,clinic);
 				return 0;
 			}
 		});
 		// End of async
-		return redirect(routes.ClinicController.searchDoctorsByEmail());
+		return redirect(routes.UserActions.dashboard());
 	}
 	/**
 	 * @author lakshmi

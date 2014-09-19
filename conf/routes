@@ -363,7 +363,7 @@ GET    /patient-search/list 					controllers.DiagnosticController.patientSearchP
 
 GET    /secure-clinic/invite-doctor      					controllers.ClinicController.searchDoctorsByEmail()
 GET    /secure-clinic/invite-doctor/:email      					controllers.ClinicController.invitationEmailToTheDoctor(email: String)
-GET		/secure-clinic/add-doctor/:docId							controllers.ClinicController.addDoctorToTheClinic(docId: Long)
+GET		/secure-clinic/add-doctor/:docId/:clinicId							controllers.ClinicController.addDoctorToTheClinic(docId: Long,clinicId : Long)
 GET		/secure-clinic/view-all-doctors							controllers.ClinicController.getDoctors()
 
 																										

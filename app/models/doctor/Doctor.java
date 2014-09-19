@@ -23,6 +23,7 @@ import models.AppUser;
 import models.BaseEntity;
 import models.PrimaryCity;
 import models.diagnostic.DiagnosticCentre;
+import models.patient.Patient;
 import models.patient.PatientDoctorInfo;
 import models.pharmacist.Pharmacy;
 import play.Logger;
@@ -218,6 +219,9 @@ public class Doctor extends BaseEntity{
 
 	public List<DoctorClinicInfo> doctorActiveClinicInfoList(){
 		return DoctorClinicInfo.find.where().eq("doctor", this).eq("active", true).findList();
+	}
+	public List<Prescription> doctorPatientPrescriptionList(final Long id){
+		return Prescription.find.where().eq("doctor", this).eq("patient", AppUser.find.byId(id).getPatient()).orderBy().desc("prescriptionDate").findList();
 	}
 
 	public String getSpecializations(){
