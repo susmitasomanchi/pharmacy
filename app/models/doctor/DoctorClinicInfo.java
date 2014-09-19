@@ -130,24 +130,26 @@ public class DoctorClinicInfo extends BaseEntity {
 		if(this.clinic.address != null){
 			bean.addressId = this.clinic.address.id;
 		}
-		if(this.clinic.address.addressLine1!=null){
-			bean.street=this.clinic.address.addressLine1;
-		}
-		if(this.clinic.address.area!=null){
-			bean.area=this.clinic.address.area;
-		}
-		if(this.clinic.address.state!=null){
-			bean.state=this.clinic.address.state.toString();
-		}
-		if(this.clinic.address.city!=null){
-			bean.city=this.clinic.address.city;
-		}
-		if(this.clinic.address.pinCode!=null){
-			bean.pinCode=this.clinic.address.pinCode;
-		}
-		bean.lat = this.clinic.address.latitude;
+		if(this.clinic.address != null){
+			if(this.clinic.address.addressLine1!=null){
+				bean.street=this.clinic.address.addressLine1;
+			}
+			if(this.clinic.address.area!=null){
+				bean.area=this.clinic.address.area;
+			}
+			if(this.clinic.address.state!=null){
+				bean.state=this.clinic.address.state.toString();
+			}
+			if(this.clinic.address.city!=null){
+				bean.city=this.clinic.address.city;
+			}
+			if(this.clinic.address.pinCode!=null){
+				bean.pinCode=this.clinic.address.pinCode;
+			}
+			bean.lat = this.clinic.address.latitude;
 
-		bean.lng = this.clinic.address.longitude;
+			bean.lng = this.clinic.address.longitude;
+		}
 
 		return bean;
 
