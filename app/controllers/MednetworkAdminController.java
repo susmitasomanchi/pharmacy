@@ -8,9 +8,11 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import models.Address;
 import models.Alert;
 import models.AppUser;
 import models.Feedback;
+import models.MasterProduct;
 import models.PrimaryCity;
 import models.Role;
 import models.State;
@@ -369,6 +371,50 @@ public class MednetworkAdminController extends Controller {
 			flash().put("alert", new Alert("alert-info","Primary City Added").toString());
 		}
 		return redirect(routes.MednetworkAdminController.getPrimaryCitiesList());
+	}
+	/**
+	 * @author lakshmi
+	 * Action to render to addMasterProduct form
+	 * GET	/primary-cities
+	 */
+	public static Result getMasterProductForm(){
+		List<MasterProduct> masterProducts = MasterProduct.find.all();
+		if(masterProducts.size() == 0){
+			masterProducts = new ArrayList<MasterProduct>();
+		}
+		return ok(views.html.mednetAdmin.addMasterProduct.render(masterProducts));
+	}
+
+	public static Result addMasterProduct(){
+		final Map<String, String[]> requestMap = request().body().asFormUrlEncoded();
+		final AppUser appUser = AppUser.find.byId(Long.parseLong(requestMap.get("appUserId")[0]));
+		final MasterProduct masterProduct = new MasterProduct();
+		Logger.info("map size"+requestMap.toString());
+		if(requestMap.get("medicineName") != null && !(requestMap.get("medicineName")[0].trim().isEmpty())){
+			masterProduct.medicineName = requestMap.get("medicineName")[0];
+		}
+		if(requestMap.get("brandName") != null && !(requestMap.get("brandName")[0].trim().isEmpty())){
+			masterProduct.brandName = requestMap.get("brandName")[0];
+		}
+		if(requestMap.get("salt") != null && !(requestMap.get("salt")[0].trim().isEmpty())){
+			masterProduct.salt = requestMap.get("salt")[0];
+		}
+		if(requestMap.get("strength") != null && !(requestMap.get("strength")[0].trim().isEmpty())){
+			masterProduct.strength = requestMap.get("strength")[0];
+		}
+		if(requestMap.get("unitsPerPack") != null && !(requestMap.get("unitsPerPack")[0].trim().isEmpty())){
+			masterProduct.unitsPerPack = Long.parseLong(requestMap.get("unitsPerPack")[0]);
+		}
+		if(requestMap.get("description") != null && !(requestMap.get("description")[0].trim().isEmpty())){
+			masterProduct.description = requestMap.get("description")[0];
+		}
+		masterProduct.save();
+		flash().put("alert", new Alert("alert-info",(requestMap.get("medicineName")[0])+" added to the master product.").toString());
+		return redirect(routes.MednetworkAdminController.getMasterProductForm());
+	}
+	public static Result getMasterProducts(){
+		final List<MasterProduct> masterProducts = MasterProduct.find.all();
+		return ok(views.html.mednetAdmin.addMasterProduct.render(masterProducts));
 	}
 
 }

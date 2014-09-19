@@ -226,6 +226,8 @@ GET     /secure-admin/purge-diagnostic/:id																controllers.Mednetwork
 GET		/secure-admin/primary-cities							controllers.MednetworkAdminController.getPrimaryCitiesList()
 POST	/secure-admin/add-primary-city							controllers.MednetworkAdminController.addPrimaryCity()
 GET		/add-primary-city-to-session/:cityId			controllers.PublicController.addPrimaryCityToSession(cityId: Long)
+GET		/secure-admin/add-master-product							controllers.MednetworkAdminController.getMasterProductForm()
+POST	/secure-admin/add-master-product							controllers.MednetworkAdminController.addMasterProduct()
 
 
 #############################	PRODUCTION	#################################################################################

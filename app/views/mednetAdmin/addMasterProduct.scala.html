@@ -1,0 +1,61 @@
+@(masterProducts: List[models.MasterProduct])
+@main("Master Product Form"){
+	
+	<div class="container">
+	<form id="form" class="form-horizontal" action="@routes.MednetworkAdminController.addMasterProduct()" method="POST" data-toggle="validator">
+	<div class="row">
+  	<div class="col-md-4">
+  	  	
+  	<div class="form-group">
+	<label for="medicineName">Name</label>
+	<input type="text"  class="form-control" name="medicineName" placeholder="Product Name" required >
+	</div>
+	
+  	<div class="form-group">
+	<label for="salt">Salt</label>
+	<input type="text"  class="form-control" name="salt" placeholder="Salt  Of Product">
+	</div>
+	
+	<div class="form-group">
+	<label for="strength">Strength</label>
+	<input type="text"  class="form-control" name="strength" placeholder="Strength Of Product">
+	</div>
+	
+	<div class="form-group">
+	<label for="description">Description</label>
+	<textarea  class="form-control" name="description" placeholder="Description Of Product"></textarea>
+	</div>
+	
+	<div class="form-group">
+	<input type="hidden" name="appUserId" value="@LoginController.getLoggedInUser().id">
+	</div>
+	
+		<button type="submit" class="btn btn-primary btn-sm">Submit</button>
+	</div>
+	</div>
+	</form>
+	
+	@if(masterProducts.size() > 0){
+	<br><br>
+	<table class="table">	
+	<tr>
+	<th>S.No</th>
+	<th>Product Name</th>
+	</tr>
+	@for((masterProduct,index) <- masterProducts.zipWithIndex){
+
+	<tr>
+	<td>@{index+1}</td><td>@masterProduct.medicineName</td>
+	<td>
+	<a href="#" class="btn btn-primary btn-xs">Edit</a>
+	<a href="#" class="btn btn-danger btn-xs">Delete</a>
+	</td>
+	
+	</tr>
+	}
+	
+	}
+	
+	</div>
+
+}
