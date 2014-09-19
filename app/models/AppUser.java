@@ -17,6 +17,7 @@ import javax.persistence.Id;
 import javax.persistence.Lob;
 import javax.persistence.OneToOne;
 
+import models.clinic.ClinicAdministrator;
 import models.diagnostic.DiagnosticRepresentative;
 import models.doctor.Doctor;
 import models.mr.MedicalRepresentative;
@@ -86,7 +87,7 @@ public class AppUser extends BaseEntity {
 
 	@Column(columnDefinition="TEXT")
 	public String allergy;
-	
+
 	public static Model.Finder<Long, AppUser> find = new Finder<Long, AppUser>(Long.class, AppUser.class);
 
 	public Patient getPatient() {
@@ -107,6 +108,10 @@ public class AppUser extends BaseEntity {
 
 	public DiagnosticRepresentative getDiagnosticRepresentative() {
 		return DiagnosticRepresentative.find.where().eq("appUser.id", this.id).findUnique();
+	}
+
+	public ClinicAdministrator getClinicAdminstrator() {
+		return ClinicAdministrator.find.where().eq("appUser.id", this.id).findUnique();
 	}
 
 	public Boolean matchPassword(final String password){

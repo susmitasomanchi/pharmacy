@@ -15,8 +15,10 @@ import models.BloodGroup;
 import models.PrimaryCity;
 import models.Role;
 import models.Sex;
+import models.clinic.ClinicAdministrator;
 import models.diagnostic.DiagnosticCentre;
 import models.diagnostic.DiagnosticRepresentative;
+import models.doctor.Clinic;
 import models.doctor.Doctor;
 import models.mr.MedicalRepresentative;
 import models.patient.Patient;
@@ -80,6 +82,9 @@ public class UserController extends Controller {
 	public static Result joinUsPatient(){
 		return ok(views.html.patient.joinus.render());
 	}
+	public static Result joinUsClinic(){
+		return ok(views.html.clinic.joinus.render());
+	}
 
 
 
@@ -106,6 +111,9 @@ public class UserController extends Controller {
 			}
 			if(appUser.role == Role.ADMIN_DIAGREP){
 				return redirect(routes.UserController.joinUsDiagnostic());
+			}
+			if(appUser.role == Role.CLINIC_ADMIN){
+				return redirect(routes.UserController.joinUsClinic());
 			}
 		}
 
@@ -191,6 +199,19 @@ public class UserController extends Controller {
 			diagnosticCentre.save();
 			diagnosticRepresentative.diagnosticCentre = diagnosticCentre;
 			diagnosticRepresentative.update();
+		}
+		if(appUser.role.equals(Role.CLINIC_ADMIN)){
+			final ClinicAdministrator clinicAdministrator = new ClinicAdministrator();
+			clinicAdministrator.appUser = appUser;
+			clinicAdministrator.save();
+
+			final Clinic clinic = new Clinic();
+			clinic.name = request().body().asFormUrlEncoded().get("clinicName")[0];
+			clinic.clinicAdministrator = clinicAdministrator;
+			clinic.primaryCity = city;
+			clinic.save();
+			clinicAdministrator.clinic = clinic;
+			clinicAdministrator.update();
 		}
 
 		if(appUser.role.equals(Role.PATIENT)){
@@ -470,7 +491,5 @@ public class UserController extends Controller {
 
 		return redirect(routes.UserActions.dashboard());
 	}
-
-
 
 }

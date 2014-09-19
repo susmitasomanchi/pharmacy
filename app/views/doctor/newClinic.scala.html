@@ -1,4 +1,4 @@
-@(clinicForm:play.data.Form[beans.DoctorClinicInfoBean])
+@(clinicForm : play.data.Form[beans.DoctorClinicInfoBean])
 
 @import play.i18n._
 @import helper.twitterBootstrap._
@@ -184,6 +184,27 @@
 			}
 			</tbody>
 			</table>	
+			
+			@*<table>
+			<tr>
+			<th>day</th>
+			<th>from time</th>
+			<th>to time</th>
+			</tr>
+			
+			@for((k,v) <- clinicForm.toDoctorClinicInfo.getScheduleMap()){
+			@if(v == null){
+			<tr>
+			<td>@k</td>
+			<td>@v.fromTime</td>
+			<td>@v.toTime</td>
+			<td></td>
+			</tr>
+			}
+			}
+			
+			</table>*@
+			
 
 			<div class="form-group">
    				 <label for="slotmr" class="col-md-12 " style="padding-left:10px"><br>Slot Timings(in minutes)</label>
@@ -198,7 +219,7 @@
   <div class="modal-dialog modal-sm">
     <div class="modal-content">
         <div class="modal-header alert-info">
-        <h4 class="modal-title" id="myModalLabel"> Please wait while your schedule is created</h4>
+        <h4 class="modal-title" id="myModalLabel"> Please wait while your schedule is creating</h4>
       </div><div class="modal-body">
       	<div style="text-align: center;"><span   style="font-size:50px;"><i class="fa fa-spinner fa-spin"></i></span></div>
       </div>

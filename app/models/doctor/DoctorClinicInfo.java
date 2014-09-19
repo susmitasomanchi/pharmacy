@@ -13,6 +13,7 @@ import javax.persistence.Id;
 import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 
+import controllers.LoginController;
 import models.BaseEntity;
 import models.Role;
 import play.Logger;
@@ -45,6 +46,8 @@ public class DoctorClinicInfo extends BaseEntity {
 	public static Model.Finder<Long, DoctorClinicInfo> find = new Finder<Long, DoctorClinicInfo>(Long.class, DoctorClinicInfo.class);
 
 	public Map<String, String> getScheduleMap(){
+
+
 		final Map<String, String> dayScheduleMap = new HashMap<String, String>();
 		for (final Day day : Day.values()) {
 			final List<DaySchedule> daysSchedules = DaySchedule.find.where().eq("doctor_clinic_info_id", this.id).eq("day", day).findList();
@@ -57,6 +60,7 @@ public class DoctorClinicInfo extends BaseEntity {
 		}
 		return dayScheduleMap;
 	}
+
 
 	public DoctorClinicInfoBean toBean(){
 		final DoctorClinicInfoBean bean = new DoctorClinicInfoBean();
@@ -158,5 +162,6 @@ public class DoctorClinicInfo extends BaseEntity {
 	public int getPrescriptionCount(){
 		return Prescription.find.where().eq("doctor", this.doctor).eq("clinic", this.clinic).findRowCount();
 	}
+
 
 }
