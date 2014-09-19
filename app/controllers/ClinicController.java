@@ -35,9 +35,7 @@ public class ClinicController extends Controller{
 			if(count>0){
 				flash().put("alert",new Alert("alert-info"," Dr."+appUser.name+" is already associated with clinic "+clinic.name).toString());
 			}else{
-				EmailService
-				.sendClinicInvitationConfirmationEmail(appUser,clinic);
-				/*Promise.promise(new Function0<Integer>() {
+				Promise.promise(new Function0<Integer>() {
 					// @Override
 					//@Override
 					@Override
@@ -46,7 +44,7 @@ public class ClinicController extends Controller{
 								.sendClinicInvitationConfirmationEmail(appUser,clinic);
 						return 0;
 					}
-				});*/
+				});
 				// End of async
 				flash().put("alert",new Alert("alert-success","An Invitation has been sent to the Dr."+appUser.name).toString());
 			}

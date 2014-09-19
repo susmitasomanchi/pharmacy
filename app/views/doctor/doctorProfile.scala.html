@@ -616,12 +616,14 @@ You profile is available at
 
 <ul class="nav nav-tabs">
   @for((clinicInfo, index) <- doctor.getActiveClinic().zipWithIndex){
-  	@if(index == 0){
-  		<li onclick="addMarker('@clinicInfo.clinic.address.latitude','@clinicInfo.clinic.address.longitude');" class="active"><a href="#clinic@clinicInfo.id" data-toggle="tab">@clinicInfo.clinic.name</a></li>
-  	}else{
-		<li onclick="addMarker('@clinicInfo.clinic.address.latitude','@clinicInfo.clinic.address.longitude');"><a href="#clinic@clinicInfo.id" data-toggle="tab">@clinicInfo.clinic.name</a></li>  	
+  
+  		@if(index == 0){
+  			<li 	@if((clinicInfo.clinic.address != null) && (clinicInfo.clinic.address.latitude != null) && (clinicInfo.clinic.address.longitude != null)){onclick="addMarker('@clinicInfo.clinic.address.latitude','@clinicInfo.clinic.address.longitude');"} class="active"><a href="#clinic@clinicInfo.id" data-toggle="tab">@clinicInfo.clinic.name</a></li>
+  		}else{
+			<li 	@if((clinicInfo.clinic.address != null) && (clinicInfo.clinic.address.latitude != null) && (clinicInfo.clinic.address.longitude != null)){onclick="addMarker('@clinicInfo.clinic.address.latitude','@clinicInfo.clinic.address.longitude');"}><a href="#clinic@clinicInfo.id" data-toggle="tab">@clinicInfo.clinic.name</a></li>  	
+  		}
   	}
-  }
+  
 </ul>
 <div class="tab-content">
 @for((clinicInfo, index) <- doctor.getActiveClinic().zipWithIndex){
@@ -639,8 +641,11 @@ You profile is available at
 <br>
 <h3 style="color:#006687;"><b>@clinicInfo.clinic.name</b> <span style="cursor:pointer; position:relative; top:-10px" ><i  id="info/@clinicInfo.id"  class="fa fa-cog editInfo"></i></span></h3>
 <h5>
+@if(clinicInfo.clinic.contactPersonName != null){
 @clinicInfo.clinic.contactPersonName
+}
 <br>
+@if(clinicInfo.clinic.address != null){
 @clinicInfo.clinic.address.addressLine1
 <br>
 @clinicInfo.clinic.address.area
@@ -649,6 +654,7 @@ You profile is available at
 <br>
 @clinicInfo.clinic.contactNo
 </h5>
+}
 </div>
 
 <div class="col-md-6">
@@ -785,11 +791,11 @@ You profile is available at
 
 @if(doctor.getActiveClinic().size()>0){
 <script>
+
 var initLat = @doctor.getActiveClinic().get(0).clinic.address.latitude;
 var initLng = @doctor.getActiveClinic().get(0).clinic.address.longitude;
 var map;
 var marker;
-
 function initialize() {
 	var map_canvas = document.getElementById('map_canvas');
 	var map_options = {
@@ -805,6 +811,7 @@ function initialize() {
 	});
 
 }
+
 
 	google.maps.event.addDomListener(window, 'load', initialize);
 	
