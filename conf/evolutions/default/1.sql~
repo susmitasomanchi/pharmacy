@@ -3,7 +3,6 @@
 
 # --- !Ups
 
-<<<<<<< HEAD
 create table address (
   id                        bigint not null,
   address_line1             varchar(255),

@@ -34,28 +34,34 @@
 	</div>
 	</div>
 	</form>
-	
+	</div>
 	@if(masterProducts.size() > 0){
 	<br><br>
-	<table class="table">	
+	<div class="row" style="padding:15px">
+	<table class="table table-bordered">		
 	<tr>
 	<th>S.No</th>
 	<th>Product Name</th>
+	<th>Salt</th>
+	<th>Strength</th>
+	<th>Description</th>
+	<th>Action</th>
 	</tr>
 	@for((masterProduct,index) <- masterProducts.zipWithIndex){
 
 	<tr>
-	<td>@{index+1}</td><td>@masterProduct.medicineName</td>
+	<td>@{index+1}</td><td>@masterProduct.medicineName</td><td>@masterProduct.salt</td><td>@masterProduct.strength</td><td>@masterProduct.description</td>
 	<td>
-	<a href="#" class="btn btn-primary btn-xs">Edit</a>
-	<a href="#" class="btn btn-danger btn-xs">Delete</a>
+	<a href="@routes.MednetworkAdminController.editMasterProduct(masterProduct.id)" class="btn btn-primary btn-xs">Edit</a>
+	<a href="@routes.MednetworkAdminController.removeMasterProduct(masterProduct.id)" class="btn btn-danger btn-xs">Delete</a>
 	</td>
 	
 	</tr>
 	}
-	
+	</table>
+	</div>
 	}
 	
-	</div>
+	
 
 }

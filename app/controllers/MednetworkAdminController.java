@@ -8,10 +8,10 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import models.Address;
 import models.Alert;
 import models.AppUser;
 import models.Feedback;
+import models.MasterDiagnosticTest;
 import models.MasterProduct;
 import models.PrimaryCity;
 import models.Role;
@@ -23,6 +23,7 @@ import models.doctor.Appointment;
 import models.doctor.Clinic;
 import models.doctor.Doctor;
 import models.doctor.DoctorClinicInfo;
+import models.doctor.MasterSigCode;
 import models.doctor.MasterSpecialization;
 import models.doctor.Prescription;
 import models.patient.Patient;
@@ -375,7 +376,7 @@ public class MednetworkAdminController extends Controller {
 	/**
 	 * @author lakshmi
 	 * Action to render to addMasterProduct form
-	 * GET	/primary-cities
+	 * GET		/secure-admin/add-master-product
 	 */
 	public static Result getMasterProductForm(){
 		List<MasterProduct> masterProducts = MasterProduct.find.all();
@@ -384,10 +385,21 @@ public class MednetworkAdminController extends Controller {
 		}
 		return ok(views.html.mednetAdmin.addMasterProduct.render(masterProducts));
 	}
-
+	/**
+	 * @author lakshmi
+	 * Action to add MasterProduct
+	 * GET		/secure-admin/edit-master-product/:id
+	 */
 	public static Result addMasterProduct(){
 		final Map<String, String[]> requestMap = request().body().asFormUrlEncoded();
 		final AppUser appUser = AppUser.find.byId(Long.parseLong(requestMap.get("appUserId")[0]));
+		// Server side validation
+		if((appUser.id.longValue() != LoginController.getLoggedInUser().id.longValue()) || (!LoginController.getLoggedInUser().role.equals(Role.MEDNETWORK_ADMIN))){
+			Logger.warn("COULD NOT VALIDATE LOGGED IN USER TO PERFORM THIS TASK");
+			Logger.warn("update attempted for AppUser id: "+appUser.id);
+			Logger.warn("logged in AppUser: "+LoginController.getLoggedInUser().id);
+			return redirect(routes.LoginController.processLogout());
+		}
 		final MasterProduct masterProduct = new MasterProduct();
 		Logger.info("map size"+requestMap.toString());
 		if(requestMap.get("medicineName") != null && !(requestMap.get("medicineName")[0].trim().isEmpty())){
@@ -412,9 +424,212 @@ public class MednetworkAdminController extends Controller {
 		flash().put("alert", new Alert("alert-info",(requestMap.get("medicineName")[0])+" added to the master product.").toString());
 		return redirect(routes.MednetworkAdminController.getMasterProductForm());
 	}
-	public static Result getMasterProducts(){
-		final List<MasterProduct> masterProducts = MasterProduct.find.all();
-		return ok(views.html.mednetAdmin.addMasterProduct.render(masterProducts));
+	/**
+	 * @author lakshmi
+	 * Action to edit MasterProduct
+	 * GET		/secure-admin/add-master-product
+	 */
+	public static Result editMasterProduct(final Long id){
+		final MasterProduct masterProduct = MasterProduct.find.byId(id);
+		return ok(views.html.mednetAdmin.editMasterProduct.render(masterProduct));
+	}
+	/**
+	 * @author lakshmi
+	 * Action to upate MasterProduct
+	 * POST		/secure-admin/update-master-product
+	 */
+	public static Result updateMasterProduct(){
+		final Map<String, String[]> requestMap = request().body().asFormUrlEncoded();
+		final MasterProduct masterProduct = MasterProduct.find.byId(Long.parseLong(requestMap.get("masterProductId")[0]));
+		Logger.info("map size"+requestMap.toString());
+		if(requestMap.get("medicineName") != null && !(requestMap.get("medicineName")[0].trim().isEmpty())){
+			masterProduct.medicineName = requestMap.get("medicineName")[0];
+		}
+		if(requestMap.get("brandName") != null && !(requestMap.get("brandName")[0].trim().isEmpty())){
+			masterProduct.brandName = requestMap.get("brandName")[0];
+		}
+		if(requestMap.get("salt") != null && !(requestMap.get("salt")[0].trim().isEmpty())){
+			masterProduct.salt = requestMap.get("salt")[0];
+		}
+		if(requestMap.get("strength") != null && !(requestMap.get("strength")[0].trim().isEmpty())){
+			masterProduct.strength = requestMap.get("strength")[0];
+		}
+		if(requestMap.get("unitsPerPack") != null && !(requestMap.get("unitsPerPack")[0].trim().isEmpty())){
+			masterProduct.unitsPerPack = Long.parseLong(requestMap.get("unitsPerPack")[0]);
+		}
+		if(requestMap.get("description") != null && !(requestMap.get("description")[0].trim().isEmpty())){
+			masterProduct.description = requestMap.get("description")[0];
+		}
+		masterProduct.update();
+		flash().put("alert", new Alert("alert-info",(requestMap.get("medicineName")[0])+" successfully updated").toString());
+		return redirect(routes.MednetworkAdminController.getMasterProductForm());
+	}
+	/**
+	 * @author lakshmi
+	 * Action to remove MasterProduct
+	 * POST		/secure-admin/remove-master-product
+	 */
+	public static Result removeMasterProduct(final Long id){
+		final MasterProduct masterProduct = MasterProduct.find.byId(id);
+		masterProduct.delete();
+		flash().put("alert", new Alert("alert-danger","Product deleted successfully").toString());
+		return redirect(routes.MednetworkAdminController.getMasterProductForm());
+	}
+	/**
+	 * @author lakshmi
+	 * Action to render to addDiagnosticTest form
+	 * GET		/secure-admin/add-master-diagnostic-test
+	 */
+	public static Result getMasterDiagnosticTestForm(){
+		List<MasterDiagnosticTest> masterDiagnosticTests = MasterDiagnosticTest.find.all();
+		if(masterDiagnosticTests.size() == 0){
+			masterDiagnosticTests = new ArrayList<MasterDiagnosticTest>();
+		}
+		return ok(views.html.mednetAdmin.addMasterDiagnosticTest.render(masterDiagnosticTests));
+	}
+	/**
+	 * @author lakshmi
+	 * Action to add MasterDiagnosticTest
+	 * POST		/secure-admin/add-master-diagnostic-test
+	 */
+	public static Result addMasterDiagnosticTest(){
+		final Map<String, String[]> requestMap = request().body().asFormUrlEncoded();
+		final AppUser appUser = AppUser.find.byId(Long.parseLong(requestMap.get("appUserId")[0]));
+		// Server side validation
+		if((appUser.id.longValue() != LoginController.getLoggedInUser().id.longValue()) || (!LoginController.getLoggedInUser().role.equals(Role.MEDNETWORK_ADMIN))){
+			Logger.warn("COULD NOT VALIDATE LOGGED IN USER TO PERFORM THIS TASK");
+			Logger.warn("update attempted for AppUser id: "+appUser.id);
+			Logger.warn("logged in AppUser: "+LoginController.getLoggedInUser().id);
+			return redirect(routes.LoginController.processLogout());
+		}
+		final MasterDiagnosticTest masterDiagnosticTest = new MasterDiagnosticTest();
+		Logger.info("map size"+requestMap.toString());
+		if(requestMap.get("name") != null && !(requestMap.get("name")[0].trim().isEmpty())){
+			masterDiagnosticTest.name = requestMap.get("name")[0];
+		}
+		if(requestMap.get("description") != null && !(requestMap.get("description")[0].trim().isEmpty())){
+			masterDiagnosticTest.description = requestMap.get("description")[0];
+		}
+		masterDiagnosticTest.save();
+		flash().put("alert", new Alert("alert-info",(requestMap.get("name")[0])+" added to the master Diagnostic Test.").toString());
+		return redirect(routes.MednetworkAdminController.getMasterDiagnosticTestForm());
+	}
+	/**
+	 * @author lakshmi
+	 * Action to edit MasterDiagnosticTest
+	 * GET		/secure-admin/add-master-diagnostic-test
+	 */
+	public static Result editMasterDiagnosticTest(final Long id){
+		final MasterDiagnosticTest masterDiagnosticTest = MasterDiagnosticTest.find.byId(id);
+		return ok(views.html.mednetAdmin.editMasterDiagnosticTest.render(masterDiagnosticTest));
+	}
+	/**
+	 * @author lakshmi
+	 * Action to upate MasterDiagnosticTest
+	 * POST		/secure-admin/update-master-diagnostic-test
+	 */
+	public static Result updateMasterDiagnosticTest(){
+		final Map<String, String[]> requestMap = request().body().asFormUrlEncoded();
+		final MasterDiagnosticTest masterDiagnosticTest = MasterDiagnosticTest.find.byId(Long.parseLong(requestMap.get("masterDiagnosticTestId")[0]));
+		Logger.info("map size"+requestMap.toString());
+		if(requestMap.get("name") != null && !(requestMap.get("name")[0].trim().isEmpty())){
+			masterDiagnosticTest.name = requestMap.get("name")[0];
+		}
+		if(requestMap.get("description") != null && !(requestMap.get("description")[0].trim().isEmpty())){
+			masterDiagnosticTest.description = requestMap.get("description")[0];
+		}
+		masterDiagnosticTest.update();
+		flash().put("alert", new Alert("alert-info",(requestMap.get("name")[0])+" successfully updated").toString());
+		return redirect(routes.MednetworkAdminController.getMasterDiagnosticTestForm());
+	}
+	/**
+	 * @author lakshmi
+	 * Action to remove MasterDiagnosticTest
+	 * POST		/secure-admin/remove-master-diagnostic-test
+	 */
+	public static Result removeMasterDiagnosticTest(final Long id){
+		final MasterDiagnosticTest masterDiagnosticTest = MasterDiagnosticTest.find.byId(id);
+		masterDiagnosticTest.delete();
+		flash().put("alert", new Alert("alert-danger","Master Test deleted successfully.").toString());
+		return redirect(routes.MednetworkAdminController.getMasterDiagnosticTestForm());
 	}
 
+	/**
+	 * @author lakshmi
+	 * Action to render to addMasterSigCode form
+	 * GET		/secure-admin/add-master-sig-code
+	 */
+	public static Result getMasterSigCodeForm(){
+		List<MasterSigCode> masterSigCodes = MasterSigCode.find.all();
+		if(masterSigCodes.size() == 0){
+			masterSigCodes = new ArrayList<MasterSigCode>();
+		}
+		return ok(views.html.mednetAdmin.addMasterSigCodes.render(masterSigCodes));
+	}
+	/**
+	 * @author lakshmi
+	 * Action to add MasterSigCode
+	 * POST		/secure-admin/add-master-sig-code
+	 */
+	public static Result addMasterSigCode(){
+		final Map<String, String[]> requestMap = request().body().asFormUrlEncoded();
+		final AppUser appUser = AppUser.find.byId(Long.parseLong(requestMap.get("appUserId")[0]));
+		// Server side validation
+		if((appUser.id.longValue() != LoginController.getLoggedInUser().id.longValue()) || (!LoginController.getLoggedInUser().role.equals(Role.MEDNETWORK_ADMIN))){
+			Logger.warn("COULD NOT VALIDATE LOGGED IN USER TO PERFORM THIS TASK");
+			Logger.warn("update attempted for AppUser id: "+appUser.id);
+			Logger.warn("logged in AppUser: "+LoginController.getLoggedInUser().id);
+			return redirect(routes.LoginController.processLogout());
+		}
+		final MasterSigCode masterSigCode = new MasterSigCode();
+		Logger.info("map size"+requestMap.toString());
+		if(requestMap.get("code") != null && !(requestMap.get("code")[0].trim().isEmpty())){
+			masterSigCode.code = requestMap.get("code")[0];
+		}
+		if(requestMap.get("description") != null && !(requestMap.get("description")[0].trim().isEmpty())){
+			masterSigCode.description = requestMap.get("description")[0];
+		}
+		masterSigCode.save();
+		flash().put("alert", new Alert("alert-info",(requestMap.get("code")[0])+" added to the master Sig Code.").toString());
+		return redirect(routes.MednetworkAdminController.getMasterSigCodeForm());
+	}
+	/**
+	 * @author lakshmi
+	 * Action to edit MasterSigCode
+	 * GET		/secure-admin/add-master-sig-code
+	 */
+	public static Result editMasterSigCode(final Long id){
+		final MasterSigCode masterSigCode = MasterSigCode.find.byId(id);
+		return ok(views.html.mednetAdmin.editMasterSigCode.render(masterSigCode));
+	}
+	/**
+	 * @author lakshmi
+	 * Action to upate MasterDiagnosticTest
+	 * POST		/secure-admin/update-master-sig-code
+	 */
+	public static Result updateMasterSigCode(){
+		final Map<String, String[]> requestMap = request().body().asFormUrlEncoded();
+		final MasterSigCode masterSigCode = MasterSigCode.find.byId(Long.parseLong(requestMap.get("masterSigCodeId")[0]));
+		Logger.info("map size"+requestMap.toString());
+		if(requestMap.get("code") != null && !(requestMap.get("code")[0].trim().isEmpty())){
+			masterSigCode.code = requestMap.get("code")[0];
+		}
+		if(requestMap.get("description") != null && !(requestMap.get("description")[0].trim().isEmpty())){
+			masterSigCode.description = requestMap.get("description")[0];
+		}
+		masterSigCode.update();
+		flash().put("alert", new Alert("alert-info",(requestMap.get("code")[0])+" successfully updated").toString());
+		return redirect(routes.MednetworkAdminController.getMasterSigCodeForm());
+	}
+	/**
+	 * @author lakshmi
+	 * Action to remove MasterDiagnosticTest
+	 * POST		/secure-admin/remove-master-sig-code
+	 */
+	public static Result removeMasterSigCode(final Long id){
+		final MasterSigCode masterSigCode = MasterSigCode.find.byId(id);
+		masterSigCode.delete();
+		flash().put("alert", new Alert("alert-danger","Master SigCode deleted successfully.").toString());
+		return redirect(routes.MednetworkAdminController.getMasterSigCodeForm());
+	}
 }
