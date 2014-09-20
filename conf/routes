@@ -132,6 +132,7 @@ GET		/secure-doctor/todays-appointments							controllers.DoctorController.viewT
 GET		/secure-doctor/prescription/:appointmentId					controllers.DoctorController.showPrescriptionForm(appointmentId: Long)
 POST	/secure-doctor/save-prescription							controllers.DoctorController.savePrescription()
 GET		/secure-doctor/show-prescription/:prescriptionId			controllers.DoctorController.showPrescription(prescriptionId: Long)
+GET		/secure-doctor/view-prescription/:prescriptionId			controllers.DoctorController.viewPrescription(prescriptionId: Long)
 GET		/secure-doctor/share-prescription							controllers.DoctorController.sharePrescription(prId: Long, pharmacyId: String, diagnosticId: String, consent: Boolean)
 GET		/secure-doctor/all-prescriptions					controllers.DoctorController.viewAllPrescription()
 GET		/secure-doctor/todays-prescriptions						controllers.DoctorController.viewTodaysPrescription()

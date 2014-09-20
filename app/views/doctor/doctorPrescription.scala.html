@@ -321,10 +321,6 @@ function addDiagTest(){
 <input type="submit" class="pull-right btn btn-success btn-sm" value="save">
 <br><br>
 
-@*
-</form>
-*@
-
 </div>
 
 
@@ -349,9 +345,9 @@ function addDiagTest(){
 <div class="panel-body">
 <ul style="font-size:13px">
 @for(prescription <- appointment.doctorClinicInfo.doctor.doctorPatientPrescriptionList(appointment.requestedBy.id)){
-<li><a href="@routes.DoctorController.showPrescription(prescription.id)">Prescription on @prescription.prescriptionDate.format("dd-MM-yyyy HH:mm")</a></li>
+	<li style="cursor:pointer;color:#008bca" onclick="showpastpres('@prescription.id')">Prescription on @prescription.prescriptionDate.format("dd-MM-yyyy HH:mm")
+	</li>
 }
-
 </ul>
 </div>
 </div>
@@ -359,7 +355,44 @@ function addDiagTest(){
 
 
 
+}
+
+
+
+
+
+<style>
+#modal-content{
+	height: 700px;
+    overflow: scroll;
+}
+</style>
+
+<div class="modal fade" id="past-pres" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+     <div class="modal-header alert-info">
+        <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+        <h4 class="modal-title"></h4>
+      </div>
+      	<div class="modal-body" id="modal-content">
+      	</div>
+     	<div class="modal-footer">
+        <a class="btn btn-default" data-dismiss="modal">Close</a>
+       </div>
+    </div>
+  </div>
+</div>
+
+<script>
+	function showpastpres(pastpresid){
+		$('#past-pres').modal('show');
+			$.get('/secure-doctor/view-prescription/'+pastpresid, function(htmldata) {
+				$('#modal-content').html(htmldata);
+			});
+	}	
+</script>
+
 
 }
 
-}
