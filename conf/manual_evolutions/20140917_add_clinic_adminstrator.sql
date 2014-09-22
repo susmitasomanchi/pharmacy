@@ -8,11 +8,11 @@
 create table clinic_administrator (
   id                        bigint not null,
   app_user_id               bigint,
-  clinic_id		    bigint,
+  clinic_id		    		bigint,
   created_on                timestamp not null,
   last_update               timestamp not null,
-  constraint pk_clinic_administrator primary key (id))
-;
+  constraint pk_clinic_administrator primary key (id)
+);
 
 create sequence clinic_administrator_seq;
 

@@ -4,8 +4,8 @@
 
 create table sugar_tracker (
   id                        bigint not null,
-  date			    timestamp not null,
-  sugar_level                double precision,
+  date			    		timestamp not null,
+  sugar_level               double precision,
   created_on                timestamp not null,
   last_update               timestamp not null,
   constraint pk_sugar_tracker primary key (id))

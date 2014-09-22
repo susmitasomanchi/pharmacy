@@ -329,18 +329,18 @@ function addDiagTest(){
 
 
 
-@*
+
 <div class="col-md-1" style="width:3%">
 </div>
 </div>
 </div>
 <div class="col-md-1" style="width:3%">
 </div>
-*@
 
 
 
-@*
+
+
 <div class="col-md-4" style="width:30%">
 <div class="panel panel-primary">
 <div class="panel-heading">
@@ -348,16 +348,15 @@ function addDiagTest(){
 </div>
 <div class="panel-body">
 <ul style="font-size:13px">
-<li><a href="#">Prescription on 20th June 2014</a></li>
-<li><a href="#">Prescription on 10th June 2014</a></li>
-<li><a href="#">Prescription on 30th May 2014</a></li>
-<li><a href="#">Prescription on 20th May 2014</a></li>
+@for(prescription <- appointment.doctorClinicInfo.doctor.doctorPatientPrescriptionList(appointment.requestedBy.id)){
+<li><a href="@routes.DoctorController.showPrescription(prescription.id)">Prescription on @prescription.prescriptionDate.format("dd-MM-yyyy HH:mm")</a></li>
+}
 
 </ul>
 </div>
 </div>
 </div>
-*@
+
 
 
 

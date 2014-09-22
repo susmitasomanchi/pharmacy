@@ -7,38 +7,41 @@ import com.avaje.ebean.annotation.EnumValue;
 
 public enum BloodGroup {
 
-	@EnumValue("A+")
-	A_POSITIVE,
-	@EnumValue("A-")
-	A_NEGATIVE,
-	@EnumValue("B+")
-	B_POSITIVE,
-	@EnumValue("B-")
-	B_NEGATIVE,
-	@EnumValue("AB+")
-	AB_POSITIVE,
-	@EnumValue("AB-")
-	AB_NEGATIVE,
-	@EnumValue("O+")
-	O_POSITIVE,
-	@EnumValue("O-")
-	O_NEGATIVE;
+	@EnumValue("OPLUS")
+	OPLUS,
 
-	public static String sign(final String sign){
-		if(sign.equalsIgnoreCase("POSITIVE")) {
-			return "+";
-		} else {
-			return "-";
-		}
-	}
+	@EnumValue("OMINUS")
+	OMINUS,
 
-	public static Map<String, String> options() {
-		final LinkedHashMap<String, String> vals = new LinkedHashMap<String, String>();
-		for (final BloodGroup val : BloodGroup.values()) {
-			vals.put(val.toString(), val.toString());
+	@EnumValue("APLUS")
+	APLUS,
+
+	@EnumValue("AMINUS")
+	AMINUS,
+
+	@EnumValue("BPLUS")
+	BPLUS,
+
+	@EnumValue("BMINUS")
+	BMINUS,
+
+	@EnumValue("ABPLUS")
+	ABPLUS,
+
+	@EnumValue("ABMINUS")
+	ABMINUS;
+
+
+
+	public static Map<BloodGroup, String> options() {
+		final LinkedHashMap<BloodGroup, String> vals = new LinkedHashMap<BloodGroup, String>();
+		for (final BloodGroup group : BloodGroup.values()) {
+			vals.put(group, group.toString().replaceAll("PLUS", "+").replaceAll("MINUS", "-"));
 		}
 		return vals;
 	}
 
-
+	public String capitalize(){
+		return this.toString().replaceAll("PLUS", "+").replaceAll("MINUS", "-");
+	}
 }

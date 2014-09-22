@@ -26,7 +26,7 @@ public class Global extends GlobalSettings {
 
 	/**
 	 *	Rendering 500 error page on error
-	 */
+
 	@Override
 	public Promise<SimpleResult> onError(final RequestHeader request, final Throwable t) {
 		final StringBuilder sb = new StringBuilder("");
@@ -70,7 +70,7 @@ public class Global extends GlobalSettings {
 				views.html.page500.render()
 				));
 	}
-
+	 */
 
 	/**
 	 *	Rendering 404 page on not found

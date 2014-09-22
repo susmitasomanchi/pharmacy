@@ -10,8 +10,6 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
-import javax.print.Doc;
-
 import models.Alert;
 import models.AppUser;
 import models.MasterDiagnosticTest;
@@ -22,7 +20,6 @@ import models.diagnostic.DiagnosticCentrePrescriptionInfo;
 import models.diagnostic.DiagnosticCentrePrescritionStatus;
 import models.doctor.Appointment;
 import models.doctor.AppointmentStatus;
-import models.doctor.Clinic;
 import models.doctor.Day;
 import models.doctor.DaySchedule;
 import models.doctor.DiagnosticTestLineItem;
@@ -1202,12 +1199,10 @@ public class DoctorController extends Controller {
 	public static Result showPrescriptionForm(final Long appointmentId) {
 		final Appointment appointment = Appointment.find.byId(appointmentId);
 		// server-side check
-		if (appointment.doctorClinicInfo.doctor.id.longValue() != LoginController
-				.getLoggedInUser().getDoctor().id.longValue()) {
+		if (appointment.doctorClinicInfo.doctor.id.longValue() != LoginController.getLoggedInUser().getDoctor().id.longValue()) {
 			return redirect(routes.LoginController.processLogout());
 		}
-		return ok(views.html.doctor.doctorPrescription.render(prescriptionForm,
-				appointment));
+		return ok(views.html.doctor.doctorPrescription.render(prescriptionForm,appointment));
 	}
 
 	/**
@@ -1257,8 +1252,7 @@ public class DoctorController extends Controller {
 					.ieq("name", diagLineItem.fullNameOfDiagnosticTest.trim())
 					.findRowCount() == 0) {
 				final DoctorDiagnosticTest doctorDiagnosticTest = new DoctorDiagnosticTest();
-				doctorDiagnosticTest.name = diagLineItem.fullNameOfDiagnosticTest
-						.trim();
+				doctorDiagnosticTest.name = diagLineItem.fullNameOfDiagnosticTest.trim();
 				doctorDiagnosticTestList.add(doctorDiagnosticTest);
 			}
 		}
@@ -1283,12 +1277,9 @@ public class DoctorController extends Controller {
 			}
 		});
 		// End of async
-		SMSService.sendSMS(prescription.patient.appUser.mobileNumber.toString(), "Your priscription by Dr. "
-				+doctor.appUser.name+" has been saved.");
-		flash().put("alert",
-				new Alert("alert-success", "Prescription saved!").toString());
-		return redirect(routes.DoctorController
-				.showPrescription(prescription.id));
+		SMSService.sendSMS(prescription.patient.appUser.mobileNumber.toString(), "Your priscription by Dr. "+doctor.appUser.name+" has been saved.");
+		flash().put("alert", new Alert("alert-success", "Prescription saved!").toString());
+		return redirect(routes.DoctorController.showPrescription(prescription.id));
 	}
 
 	/**
