@@ -62,7 +62,8 @@ public class MRController extends Controller {
 			.form(DailyCallReport.class);
 	public static Form<MedicalRepresentativeBean> mrForm = Form
 			.form(MedicalRepresentativeBean.class);
-	public static Form<DesignationBean> designationBeanForm = Form.form(DesignationBean.class);
+	public static Form<DesignationBean> designationBeanForm = Form
+			.form(DesignationBean.class);
 
 	/**
 	 * 
@@ -74,10 +75,12 @@ public class MRController extends Controller {
 	 */
 
 	public static Result addMR() {
-		final MedicalRepresentative adminMr = LoginController.getLoggedInUser().getMedicalRepresentative();
+		final MedicalRepresentative adminMr = LoginController.getLoggedInUser()
+				.getMedicalRepresentative();
 		final List<MedicalRepresentative> mrList = MedicalRepresentative.find
 				.where().eq("appUser.role", "MR").findList();
-		return ok(views.html.mr.medicalRepresentative.render(mrForm,adminMr,mrList));
+		return ok(views.html.mr.medicalRepresentative.render(mrForm, adminMr,
+				mrList));
 	}
 
 	/**
@@ -92,15 +95,16 @@ public class MRController extends Controller {
 	 */
 
 	public static Result medicalRepresentativeProccess() {
-		final MedicalRepresentative adminMr = LoginController.getLoggedInUser().getMedicalRepresentative();
+		final MedicalRepresentative adminMr = LoginController.getLoggedInUser()
+				.getMedicalRepresentative();
 		final Form<MedicalRepresentativeBean> filledForm = mrForm
 				.bindFromRequest();
 		if (filledForm.hasErrors()) {
 			Logger.info("*** user bad request");
 			final List<MedicalRepresentative> mrList = MedicalRepresentative.find
 					.where().eq("appUser.role", "MR").findList();
-			return ok(views.html.mr.medicalRepresentative
-					.render(mrForm,adminMr,mrList));
+			return ok(views.html.mr.medicalRepresentative.render(mrForm,
+					adminMr, mrList));
 		}
 
 		else {
@@ -115,13 +119,18 @@ public class MRController extends Controller {
 			final PharmaceuticalCompany company = LoginController
 					.getLoggedInUser().getMedicalRepresentative().pharmaceuticalCompany;
 
-			
 			String generatedPassword = "";
 			if (mr.id == null) {
-				
-				if(AppUser.find.where().eq("email", appUser.email).findRowCount()>0){
-					flash().put("alert", new Alert("alert-danger", "Sorry! User with email id "+appUser.email.trim()+" already exists!").toString());
-					if(appUser.role == Role.MR){
+
+				if (AppUser.find.where().eq("email", appUser.email)
+						.findRowCount() > 0) {
+					flash().put(
+							"alert",
+							new Alert("alert-danger",
+									"Sorry! User with email id "
+											+ appUser.email.trim()
+											+ " already exists!").toString());
+					if (appUser.role == Role.MR) {
 						return ok("User already exist");
 					}
 				}
@@ -130,12 +139,16 @@ public class MRController extends Controller {
 					final Random random = new SecureRandom();
 					final byte[] saltArray = new byte[32];
 					random.nextBytes(saltArray);
-					final String randomSalt = Base64.encodeBase64String(saltArray);
+					final String randomSalt = Base64
+							.encodeBase64String(saltArray);
 					generatedPassword = GenerateRandomString.generatePassword();
-					final String passwordWithSalt = generatedPassword+randomSalt;
-					final MessageDigest sha256 = MessageDigest.getInstance("SHA-256");
+					final String passwordWithSalt = generatedPassword
+							+ randomSalt;
+					final MessageDigest sha256 = MessageDigest
+							.getInstance("SHA-256");
 					final byte[] passBytes = passwordWithSalt.getBytes();
-					final String hashedPasswordWithSalt = Base64.encodeBase64String(sha256.digest(passBytes));
+					final String hashedPasswordWithSalt = Base64
+							.encodeBase64String(sha256.digest(passBytes));
 
 					appUser.salt = randomSalt;
 					appUser.password = hashedPasswordWithSalt;
@@ -144,13 +157,19 @@ public class MRController extends Controller {
 					Logger.error("ERROR WHILE CREATING SHA2 HASH");
 					e.printStackTrace();
 				}
-				
+
 				appUser.save();
 				StringBuilder message = new StringBuilder();
-				message.append(" Dear "+appUser.name+",<br> Your account has been created at <a href='https://mednetwork.in'>MedNetwork.in</a> Please use the following credentials to login:<br><br> UserName :"+appUser.email+"<br> Password :"+generatedPassword+"<br><br> Thank you <br> MedNetwork");
-					
-				EmailService.sendSimpleHtmlEMail(appUser.email, "\n Account created on MedNetwork",message.toString());
-				Logger.info("email : "+appUser.email+" & Generated password is : "+generatedPassword);
+				message.append(" Dear "
+						+ appUser.name
+						+ ",<br> Your account has been created at <a href='https://mednetwork.in'>MedNetwork.in</a> Please use the following credentials to login:<br><br> UserName :"
+						+ appUser.email + "<br> Password :" + generatedPassword
+						+ "<br><br> Thank you <br> MedNetwork");
+
+				EmailService.sendSimpleHtmlEMail(appUser.email,
+						"\n Account created on MedNetwork", message.toString());
+				Logger.info("email : " + appUser.email
+						+ " & Generated password is : " + generatedPassword);
 				mr.pharmaceuticalCompany = company;
 				mr.appUser = appUser;
 				if (medicalRepresentativeBean.manager != null) {
@@ -168,7 +187,8 @@ public class MRController extends Controller {
 
 				mr.pharmaceuticalCompany = company;
 				mr.appUser = appUser;
-				mr.designation = Designation.find.byId(medicalRepresentativeBean.designationId);
+				mr.designation = Designation.find
+						.byId(medicalRepresentativeBean.designationId);
 				mr.manager = MedicalRepresentative.find
 						.byId(medicalRepresentativeBean.manager);
 				mr.update();
@@ -178,7 +198,8 @@ public class MRController extends Controller {
 			}
 
 		}
-		return redirect(routes.MRController.mrList());
+		return ok("mr is created");
+		// return redirect(routes.MRController.mrList());
 	}
 
 	public static Result headQuarter() {
@@ -192,7 +213,7 @@ public class MRController extends Controller {
 	 *              url : POST POST /mr/add-head-quarter
 	 * 
 	 * 
-	 * url :	POST  POST   /mr/add-head-quarter
+	 *              url : POST POST /mr/add-head-quarter
 	 * */
 	public static Result addHeadQuarter() {
 		final MedicalRepresentative loggedInMr = LoginController
@@ -229,13 +250,14 @@ public class MRController extends Controller {
 		// final List<MedicalRepresentative> mrList =
 		// MedicalRepresentative.find.where().eq("companyName",
 		// loggedInMR.companyName).findList();
-		return ok(views.html.mr.mrList
-				.render(MedicalRepresentative.find
-						.where()
-						.eq("pharmaceutical_company_id",
-								LoginController.getLoggedInUser()
-								.getMedicalRepresentative().pharmaceuticalCompany.id)
-								.findList()));
+		List<MedicalRepresentative> mrList = MedicalRepresentative.find
+				.where()
+				.eq("pharmaceutical_company_id",
+						LoginController.getLoggedInUser()
+						.getMedicalRepresentative().pharmaceuticalCompany.id)
+						.findList();
+		Logger.info("mr list : " + mrList.get(0).appUser.name);
+		return ok(views.html.mr.mrList.render(mrList));
 	}
 
 	/**
@@ -273,7 +295,8 @@ public class MRController extends Controller {
 	 */
 
 	public static Result editMR(final Long id) {
-		final MedicalRepresentative adminMr = LoginController.getLoggedInUser().getMedicalRepresentative();
+		final MedicalRepresentative adminMr = LoginController.getLoggedInUser()
+				.getMedicalRepresentative();
 
 		final MedicalRepresentative filledMr = MedicalRepresentative.find
 				.byId(id);
@@ -286,7 +309,8 @@ public class MRController extends Controller {
 		// =AppUser.find.where().eq("role","MR").findList();
 		final List<MedicalRepresentative> mrList = MedicalRepresentative.find
 				.where().eq("appUser.role", "MR").findList();
-		return ok(views.html.mr.medicalRepresentative.render(editForm,adminMr,mrList));
+		return ok(views.html.mr.medicalRepresentative.render(editForm, adminMr,
+				mrList));
 	}
 
 	/**
@@ -428,10 +452,13 @@ public class MRController extends Controller {
 				headQmap.put(headQuarter.state, headQuarterList);
 			}
 		}
-		final List<MedicalRepresentative> mySubordinatelist = loggedInMr.getSubordinates();
-		//final List<DailyCallReport> mySubordinateDCRList =  loggedInMr.getSubordinatesDCRList();
-		final List<DailyCallReport> mySubordinateDCRList =  new ArrayList<DailyCallReport>();
-		return ok(views.html.mr.dcrList.render(loggedInMr.dcrList, headQmap,mySubordinatelist,mySubordinateDCRList));
+		final List<MedicalRepresentative> mySubordinatelist = loggedInMr
+				.getSubordinates();
+		// final List<DailyCallReport> mySubordinateDCRList =
+		// loggedInMr.getSubordinatesDCRList();
+		final List<DailyCallReport> mySubordinateDCRList = new ArrayList<DailyCallReport>();
+		return ok(views.html.mr.dcrList.render(loggedInMr.dcrList, headQmap,
+				mySubordinatelist, mySubordinateDCRList));
 	}
 
 	/**
@@ -451,7 +478,7 @@ public class MRController extends Controller {
 		final DailyCallReport dcr = new DailyCallReport();
 		final DynamicForm requestData = Form.form().bindFromRequest();
 		final String strDate = requestData.get("forDate");
-		Logger.info("entered date is : "+strDate);
+		Logger.info("entered date is : " + strDate);
 		final String quarterIdString = requestData.get("headQuarter");
 		if (dcr.dcrStatus == null) {
 			dcr.dcrStatus = DCRStatus.DRAFT;
@@ -526,21 +553,22 @@ public class MRController extends Controller {
 
 		return ok(views.html.mr.dcrLineItem.render(dcr, dcrLineItemForm,
 				loggedInMr.doctorList, disabledDoctorList,
-				loggedInMr.pharmaceuticalCompany.pharmaceuticalProductList,loggedInMr));
+				loggedInMr.pharmaceuticalCompany.pharmaceuticalProductList,
+				loggedInMr));
 
 	}
 
 	/**
 	 * @author anand
 	 * 
-	 * url :GET    /mr/approve-dcr/:dcrid
+	 *         url :GET /mr/approve-dcr/:dcrid
 	 * 
 	 * @description : manager can approve mr's submitted dcr
 	 * 
 	 * 
 	 * */
 
-	public static Result approveDCRLineItem( final Long dcrId){
+	public static Result approveDCRLineItem(final Long dcrId) {
 
 		final DailyCallReport dcr = DailyCallReport.find.byId(dcrId);
 
@@ -551,20 +579,19 @@ public class MRController extends Controller {
 		dcr.responseOn = new Date();
 		dcr.update();
 
-
 		return redirect(routes.MRController.listDCR());
 	}
 
 	/**
 	 * @author anand
 	 * 
-	 * url :GET    /mr/reject-dcr/:dcrid
+	 *         url :GET /mr/reject-dcr/:dcrid
 	 * 
 	 * @description : manager can reject mr's submitted dcr
 	 * 
 	 * 
 	 * */
-	public static Result rejectDCRLineItem(final Long dcrId){
+	public static Result rejectDCRLineItem(final Long dcrId) {
 		final DailyCallReport dcr = DailyCallReport.find.byId(dcrId);
 		final MedicalRepresentative loggedInMr = LoginController
 				.getLoggedInUser().getMedicalRepresentative();
@@ -575,17 +602,18 @@ public class MRController extends Controller {
 
 		return redirect(routes.MRController.listDCR());
 	}
+
 	/**
 	 * @author anand
 	 * 
-	 * url :GET    /mr/delete-dcr/:dcrid
+	 *         url :GET /mr/delete-dcr/:dcrid
 	 * 
-	 * @description : mr can delete own dcr which is not  submitted.
+	 * @description : mr can delete own dcr which is not submitted.
 	 * 
 	 * 
 	 * */
 
-	public static Result deleteDCR(final Long dcrid){
+	public static Result deleteDCR(final Long dcrid) {
 		final MedicalRepresentative loggedInMr = LoginController
 				.getLoggedInUser().getMedicalRepresentative();
 		final DailyCallReport dcr = DailyCallReport.find.byId(dcrid);
@@ -641,8 +669,8 @@ public class MRController extends Controller {
 
 			if ((sampleList[i].compareToIgnoreCase("") == 0)) {
 			} else {
-				sample.pharmaceuticalProduct = PharmaceuticalProduct.find.byId(Long
-						.parseLong(sampleList[i]));
+				sample.pharmaceuticalProduct = PharmaceuticalProduct.find
+						.byId(Long.parseLong(sampleList[i]));
 				if (qtyList[i] == "") {
 					sample.quantity = 0;
 				} else {
@@ -655,8 +683,8 @@ public class MRController extends Controller {
 		if (promotionList == null) {
 		} else {
 			for (int i = 0; i < promotionList.length; i++) {
-				dcrLineItem.promotionList.add(PharmaceuticalProduct.find.byId(Long
-						.parseLong(promotionList[i])));
+				dcrLineItem.promotionList.add(PharmaceuticalProduct.find
+						.byId(Long.parseLong(promotionList[i])));
 			}
 		}
 
@@ -728,7 +756,7 @@ public class MRController extends Controller {
 	 * @description : this method is used to submit the mr's dcr line items to
 	 *              crossponding manager
 	 * 
-	 * url: POST /mr/submit-dcr-line-items/:dcrid
+	 *              url: POST /mr/submit-dcr-line-items/:dcrid
 	 * 
 	 * @param dcrId
 	 * 
@@ -746,75 +774,117 @@ public class MRController extends Controller {
 
 		return redirect(routes.MRController.listDCR());
 	}
+
 	/**
 	 * @author anand
 	 * 
 	 * @description : this method is used to display the dcr of which u selected
 	 * 
-	 * url: GET /mr/search-subordinate-dcr
+	 *              url: GET /mr/search-subordinate-dcr
 	 * 
 	 * */
-	public static Result searchSubordinateDcr(){
+	public static Result searchSubordinateDcr() {
 		boolean isSearchDCRForAll = false;
-		final MedicalRepresentative loggedInMr = LoginController.getLoggedInUser().getMedicalRepresentative();
-		final String subordinateId[] = request().body().asFormUrlEncoded().get("dcr-subordinate");
+		final MedicalRepresentative loggedInMr = LoginController
+				.getLoggedInUser().getMedicalRepresentative();
+		final String subordinateId[] = request().body().asFormUrlEncoded()
+				.get("dcr-subordinate");
 		final List<MedicalRepresentative> subordinateList = new ArrayList<MedicalRepresentative>();
-		for(int i=0;i<subordinateId.length;i++){
-			if(subordinateId[i].compareToIgnoreCase("0")==0){
+		for (int i = 0; i < subordinateId.length; i++) {
+			if (subordinateId[i].compareToIgnoreCase("0") == 0) {
 				isSearchDCRForAll = true;
 				subordinateList.removeAll(subordinateList);
 				break;
-			}else{
-				subordinateList.add(MedicalRepresentative.find.byId(Long.parseLong(subordinateId[i])));
+			} else {
+				subordinateList.add(MedicalRepresentative.find.byId(Long
+						.parseLong(subordinateId[i])));
 			}
 		}
 
-		final DateTimeFormatter formatter = DateTimeFormat.forPattern("dd-MM-yyyy");
+		final DateTimeFormatter formatter = DateTimeFormat
+				.forPattern("dd-MM-yyyy");
 		Date dcrFromDate = new Date();
 		Date dcrToDate = new Date();
 
-		final String dcrFromDateStr = request().body().asFormUrlEncoded().get("dcr-from-date")[0];
-		if(dcrFromDateStr != ""){
+		final String dcrFromDateStr = request().body().asFormUrlEncoded()
+				.get("dcr-from-date")[0];
+		if (dcrFromDateStr != "") {
 			dcrFromDate = formatter.parseDateTime(dcrFromDateStr).toDate();
 		}
 
-		final String dcrToDateStr = request().body().asFormUrlEncoded().get("dcr-to-date")[0];
-		if(dcrToDateStr != ""){
+		final String dcrToDateStr = request().body().asFormUrlEncoded()
+				.get("dcr-to-date")[0];
+		if (dcrToDateStr != "") {
 			dcrToDate = formatter.parseDateTime(dcrToDateStr).toDate();
 		}
 
 		List<DailyCallReport> mySubordinateDCRList = new ArrayList<DailyCallReport>();
-		if(isSearchDCRForAll){
-			if(dcrFromDateStr != "" && dcrToDateStr != ""){
-				mySubordinateDCRList = DailyCallReport.find.where().in("submitter", loggedInMr.getSubordinates()).ne("dcrStatus",DCRStatus.DRAFT).le("forDate", dcrToDate).ge("forDate", dcrFromDate).orderBy("forDate DESC").findList();
-			}else{
-				if(dcrFromDateStr != ""){
-					mySubordinateDCRList = DailyCallReport.find.where().in("submitter", loggedInMr.getSubordinates()).ne("dcrStatus",DCRStatus.DRAFT).ge("forDate", dcrFromDate).orderBy("forDate DESC").findList();
-				}else{
-					if(dcrToDateStr != ""){
-						mySubordinateDCRList = DailyCallReport.find.where().in("submitter", loggedInMr.getSubordinates()).ne("dcrStatus",DCRStatus.DRAFT).le("forDate", dcrToDate).orderBy("forDate DESC").findList();
-					}else{
-						//mySubordinateDCRList =  loggedInMr.getSubordinatesDCRList();
-						mySubordinateDCRList = DailyCallReport.find.where().in("submitter", loggedInMr.getSubordinates()).ne("dcrStatus",DCRStatus.DRAFT).orderBy("forDate DESC").findList();
+		if (isSearchDCRForAll) {
+			if (dcrFromDateStr != "" && dcrToDateStr != "") {
+				mySubordinateDCRList = DailyCallReport.find.where()
+						.in("submitter", loggedInMr.getSubordinates())
+						.ne("dcrStatus", DCRStatus.DRAFT)
+						.le("forDate", dcrToDate).ge("forDate", dcrFromDate)
+						.orderBy("forDate DESC").findList();
+			} else {
+				if (dcrFromDateStr != "") {
+					mySubordinateDCRList = DailyCallReport.find.where()
+							.in("submitter", loggedInMr.getSubordinates())
+							.ne("dcrStatus", DCRStatus.DRAFT)
+							.ge("forDate", dcrFromDate).orderBy("forDate DESC")
+							.findList();
+				} else {
+					if (dcrToDateStr != "") {
+						mySubordinateDCRList = DailyCallReport.find.where()
+								.in("submitter", loggedInMr.getSubordinates())
+								.ne("dcrStatus", DCRStatus.DRAFT)
+								.le("forDate", dcrToDate)
+								.orderBy("forDate DESC").findList();
+					} else {
+						// mySubordinateDCRList =
+						// loggedInMr.getSubordinatesDCRList();
+						mySubordinateDCRList = DailyCallReport.find.where()
+								.in("submitter", loggedInMr.getSubordinates())
+								.ne("dcrStatus", DCRStatus.DRAFT)
+								.orderBy("forDate DESC").findList();
 					}
 				}
 			}
 
-		}else{
-			if(dcrFromDateStr != "" && dcrToDateStr != ""){
-				mySubordinateDCRList = DailyCallReport.find.where().in("submitter", subordinateList).ne("dcrStatus",DCRStatus.DRAFT).le("forDate", dcrToDate).ge("forDate", dcrFromDate).orderBy("forDate DESC").findList();
-			}else{
-				if(dcrFromDateStr != ""){
-					mySubordinateDCRList = DailyCallReport.find.where().in("submitter", subordinateList).ne("dcrStatus",DCRStatus.DRAFT).ge("forDate", dcrFromDate).orderBy("forDate DESC").findList();
-				}else{
-					if(dcrToDateStr != ""){
-						mySubordinateDCRList = DailyCallReport.find.where().in("submitter", subordinateList).ne("dcrStatus",DCRStatus.DRAFT).le("forDate", dcrToDate).orderBy("forDate DESC").findList();
-					}else{
-						mySubordinateDCRList = DailyCallReport.find.where().in("submitter", subordinateList).ne("dcrStatus",DCRStatus.DRAFT).orderBy("forDate DESC").findList();
+		} else {
+			if (dcrFromDateStr != "" && dcrToDateStr != "") {
+				mySubordinateDCRList = DailyCallReport.find.where()
+						.in("submitter", subordinateList)
+						.ne("dcrStatus", DCRStatus.DRAFT)
+						.le("forDate", dcrToDate).ge("forDate", dcrFromDate)
+						.orderBy("forDate DESC").findList();
+			} else {
+				if (dcrFromDateStr != "") {
+					mySubordinateDCRList = DailyCallReport.find.where()
+							.in("submitter", subordinateList)
+							.ne("dcrStatus", DCRStatus.DRAFT)
+							.ge("forDate", dcrFromDate).orderBy("forDate DESC")
+							.findList();
+				} else {
+					if (dcrToDateStr != "") {
+						mySubordinateDCRList = DailyCallReport.find.where()
+								.in("submitter", subordinateList)
+								.ne("dcrStatus", DCRStatus.DRAFT)
+								.le("forDate", dcrToDate)
+								.orderBy("forDate DESC").findList();
+					} else {
+						mySubordinateDCRList = DailyCallReport.find.where()
+								.in("submitter", subordinateList)
+								.ne("dcrStatus", DCRStatus.DRAFT)
+								.orderBy("forDate DESC").findList();
 					}
 				}
 			}
-			//mySubordinateDCRList = DailyCallReport.find.where().in("submitter", subordinateList).ne("dcrStatus",DCRStatus.DRAFT).le("forDate", dcrToDate).ge("forDate", dcrFromDate).orderBy("forDate DESC").findList();
+			// mySubordinateDCRList =
+			// DailyCallReport.find.where().in("submitter",
+			// subordinateList).ne("dcrStatus",DCRStatus.DRAFT).le("forDate",
+			// dcrToDate).ge("forDate",
+			// dcrFromDate).orderBy("forDate DESC").findList();
 		}
 
 		final Map<State, List<HeadQuarter>> headQmap = new LinkedHashMap<State, List<HeadQuarter>>();
@@ -831,9 +901,10 @@ public class MRController extends Controller {
 				headQmap.put(headQuarter.state, headQuarterList);
 			}
 		}
-		final List<MedicalRepresentative> mySubordinatelist = loggedInMr.getSubordinates();
-		return ok(views.html.mr.dcrList.render(loggedInMr.dcrList, headQmap,mySubordinatelist,mySubordinateDCRList));
-
+		final List<MedicalRepresentative> mySubordinatelist = loggedInMr
+				.getSubordinates();
+		return ok(views.html.mr.dcrList.render(loggedInMr.dcrList, headQmap,
+				mySubordinatelist, mySubordinateDCRList));
 
 	}
 
@@ -890,60 +961,75 @@ public class MRController extends Controller {
 		return ok(views.html.mr.organizationStructure.render(mrList));
 
 	}
+
+	public static Result hierarchy() {
+		Map<MedicalRepresentative, List<MedicalRepresentative>> mrTree = new HashMap<MedicalRepresentative, List<MedicalRepresentative>>();
+		return ok();
+	}
+
 	/**
 	 * @author anand
 	 * 
-	 * @description : this method render to the monthlyTourPlan view to take input as month and year
+	 * @description : this method render to the monthlyTourPlan view to take
+	 *              input as month and year
 	 * 
-	 * url : GET    /mr/monthly-tour-plan
+	 *              url : GET /mr/monthly-tour-plan
 	 * 
 	 * */
-	public static Result tourPlan(){
-		final MedicalRepresentative loggedInMr = LoginController.getLoggedInUser().getMedicalRepresentative();
+	public static Result tourPlan() {
+		final MedicalRepresentative loggedInMr = LoginController
+				.getLoggedInUser().getMedicalRepresentative();
 		return ok(views.html.mr.tourPlan.render(loggedInMr.tourPlanList));
 	}
 
 	/**
 	 * @author anand
 	 * 
-	 * @description : this method is save month and year and make templete to fill the tour plan
+	 * @description : this method is save month and year and make templete to
+	 *              fill the tour plan
 	 * 
-	 * url : POST	/mr/add-month-for-tour-plan
+	 *              url : POST /mr/add-month-for-tour-plan
 	 * 
 	 * */
-	public static Result addTourPlan(){
+	public static Result addTourPlan() {
 
 		boolean isTourPlanAdded = false;
-		final MedicalRepresentative loggedInmr = LoginController.getLoggedInUser().getMedicalRepresentative();
-		final String monthForTourPlanStr = request().body().asFormUrlEncoded().get("dateForTourPlan")[0];
-		Logger.info("Date for tour plan : "+monthForTourPlanStr);
-		final DateTimeFormatter formatter = DateTimeFormat.forPattern("MM-yyyy");
-		final Date monthForTourPlan = formatter.parseDateTime(monthForTourPlanStr).toDate();
-		Logger.info("Date for tour plan : "+monthForTourPlan);
+		final MedicalRepresentative loggedInmr = LoginController
+				.getLoggedInUser().getMedicalRepresentative();
+		final String monthForTourPlanStr = request().body().asFormUrlEncoded()
+				.get("dateForTourPlan")[0];
+		Logger.info("Date for tour plan : " + monthForTourPlanStr);
+		final DateTimeFormatter formatter = DateTimeFormat
+				.forPattern("MM-yyyy");
+		final Date monthForTourPlan = formatter.parseDateTime(
+				monthForTourPlanStr).toDate();
+		Logger.info("Date for tour plan : " + monthForTourPlan);
 		final TourPlan tourPlan = new TourPlan();
 
-		for(final TourPlan tp : loggedInmr.tourPlanList){
-			if(monthForTourPlan.equals(tp.forMonth)){
+		for (final TourPlan tp : loggedInmr.tourPlanList) {
+			if (monthForTourPlan.equals(tp.forMonth)) {
 				Logger.info("yes");
 				isTourPlanAdded = true;
 				flash().put(
 						"alert",
-						new Alert("alert-danger", "U already select tour plan for this month. ")
+						new Alert("alert-danger",
+								"U already select tour plan for this month. ")
 						.toString());
 				break;
 			}
 		}
-		if(isTourPlanAdded == false){
+		if (isTourPlanAdded == false) {
 			tourPlan.forMonth = monthForTourPlan;
 
 			final Calendar calender = Calendar.getInstance();
 			calender.setTime(tourPlan.forMonth);
-			final int maxDaysInMonth = calender.getActualMaximum(Calendar.DAY_OF_MONTH);
+			final int maxDaysInMonth = calender
+					.getActualMaximum(Calendar.DAY_OF_MONTH);
 			final DateTime dt = new DateTime(tourPlan.forMonth);
 			final List<TPLineItem> tpLineItemList = new ArrayList<TPLineItem>();
-			for(int i=0;i<maxDaysInMonth;i++){
+			for (int i = 0; i < maxDaysInMonth; i++) {
 				final TPLineItem tpLineItem = new TPLineItem();
-				tpLineItem.date= dt.plusDays(i).toDate();
+				tpLineItem.date = dt.plusDays(i).toDate();
 				tpLineItemList.add(tpLineItem);
 			}
 			tourPlan.tpLineItemList.addAll(tpLineItemList);
@@ -951,79 +1037,89 @@ public class MRController extends Controller {
 			loggedInmr.update();
 		}
 
-
 		return ok(views.html.mr.tourPlan.render(loggedInmr.tourPlanList));
 	}
 
 	/**
 	 * @author anand
 	 * 
-	 * @description : this method is rendering to tour plan page,where MR has to fil the tourPlan
+	 * @description : this method is rendering to tour plan page,where MR has to
+	 *              fil the tourPlan
 	 * 
-	 * url : GET    /mr/tourplan-lineitem
+	 *              url : GET /mr/tourplan-lineitem
 	 * 
 	 * 
 	 * */
-	public static Result tourPlanLineItem(final Long tourPlanid){
+	public static Result tourPlanLineItem(final Long tourPlanid) {
 
-		final MedicalRepresentative loggedInMr = LoginController.getLoggedInUser().getMedicalRepresentative();
+		final MedicalRepresentative loggedInMr = LoginController
+				.getLoggedInUser().getMedicalRepresentative();
 
 		final TourPlan tourPlan = TourPlan.find.byId(tourPlanid);
 		final Calendar calender = Calendar.getInstance();
 		calender.setTime(tourPlan.forMonth);
-		final int maxDaysInMonth = calender.getActualMaximum(Calendar.DAY_OF_MONTH);
-		final Map<Integer,TPLineItem> tourPlanLineItemMap = new LinkedHashMap<Integer,TPLineItem>();
-		final List<TPLineItem> tpLineItemList = TPLineItem.find.where().eq("tour_plan_id",tourPlanid).orderBy("date asc").findList();
-		Integer i=0;
-		for(final TPLineItem tpLineItem :tpLineItemList){
-			tourPlanLineItemMap.put(i,tpLineItem);
+		final int maxDaysInMonth = calender
+				.getActualMaximum(Calendar.DAY_OF_MONTH);
+		final Map<Integer, TPLineItem> tourPlanLineItemMap = new LinkedHashMap<Integer, TPLineItem>();
+		final List<TPLineItem> tpLineItemList = TPLineItem.find.where()
+				.eq("tour_plan_id", tourPlanid).orderBy("date asc").findList();
+		Integer i = 0;
+		for (final TPLineItem tpLineItem : tpLineItemList) {
+			tourPlanLineItemMap.put(i, tpLineItem);
 			i++;
 		}
 
-		return ok(views.html.mr.tpLineItem.render(tourPlan,tourPlanLineItemMap,loggedInMr,loggedInMr.doctorList,loggedInMr.pharmaceuticalCompany.pharmaceuticalProductList));
+		return ok(views.html.mr.tpLineItem.render(tourPlan,
+				tourPlanLineItemMap, loggedInMr, loggedInMr.doctorList,
+				loggedInMr.pharmaceuticalCompany.pharmaceuticalProductList));
 	}
+
 	/**
 	 * @author anand
 	 * 
 	 * @description : this method is used to add lineitem for particular date
 	 * 
-	 *  url : POST   /mr/tourplan/add-line-item
+	 *              url : POST /mr/tourplan/add-line-item
 	 * 
 	 * */
-	public static Result addTourPlanLineItem(final Long tourPlanid,final Long tpLineid,final Long index){
-		final MedicalRepresentative loggedInMr = LoginController.getLoggedInUser().getMedicalRepresentative();
+	public static Result addTourPlanLineItem(final Long tourPlanid,
+			final Long tpLineid, final Long index) {
+		final MedicalRepresentative loggedInMr = LoginController
+				.getLoggedInUser().getMedicalRepresentative();
 
 		final TPLineItem tpLineItem = TPLineItem.find.byId(tpLineid);
-		final Map<String,String[]> mapForm = request().body().asFormUrlEncoded();
-		Logger.info("key : "+mapForm.keySet());
+		final Map<String, String[]> mapForm = request().body()
+				.asFormUrlEncoded();
+		Logger.info("key : " + mapForm.keySet());
 
-		final String dayStatus	= mapForm.get("day-status"+index)[0];
+		final String dayStatus = mapForm.get("day-status" + index)[0];
 
-		if("WORKING_DAY".compareToIgnoreCase(dayStatus)==0){
+		if ("WORKING_DAY".compareToIgnoreCase(dayStatus) == 0) {
 			tpLineItem.dayStatus = DayStatus.WORKING_DAY;
-		}else{
+		} else {
 			tpLineItem.dayStatus = DayStatus.HOLIDAY;
 		}
-		if(mapForm.containsKey("selectdoctor"+index)){
-			final String doctorsId[] = mapForm.get("selectdoctor"+index);
-			if(doctorsId != null){
-				for(int i=0;i<doctorsId.length;i++){
-					tpLineItem.doctorList.add(Doctor.find.byId(Long.parseLong(doctorsId[i])));
+		if (mapForm.containsKey("selectdoctor" + index)) {
+			final String doctorsId[] = mapForm.get("selectdoctor" + index);
+			if (doctorsId != null) {
+				for (int i = 0; i < doctorsId.length; i++) {
+					tpLineItem.doctorList.add(Doctor.find.byId(Long
+							.parseLong(doctorsId[i])));
 				}
 			}
 		}
-		if(mapForm.containsKey("sampleList"+index)){
-			final String samples[] = mapForm.get("sampleList"+index);
-			final String quantities[] = mapForm.get("qtyList"+index);
+		if (mapForm.containsKey("sampleList" + index)) {
+			final String samples[] = mapForm.get("sampleList" + index);
+			final String quantities[] = mapForm.get("qtyList" + index);
 
-			if(samples != null){
+			if (samples != null) {
 				for (int i = 0; i < samples.length; i++) {
 					final Sample sample = new Sample();
 
 					if ((samples[i].compareToIgnoreCase("") == 0)) {
 					} else {
-						sample.pharmaceuticalProduct = PharmaceuticalProduct.find.byId(Long
-								.parseLong(samples[i]));
+						sample.pharmaceuticalProduct = PharmaceuticalProduct.find
+								.byId(Long.parseLong(samples[i]));
 						if (quantities[i] == "") {
 							sample.quantity = 0;
 						} else {
@@ -1035,16 +1131,17 @@ public class MRController extends Controller {
 			}
 		}
 
-		if(mapForm.containsKey("promotion"+index)){
-			final String promotions[] = mapForm.get("promotion"+index);
-			if(promotions != null){
-				for(int i=0;i<promotions.length;i++){
-					tpLineItem.promotionList.add(PharmaceuticalProduct.find.byId(Long.parseLong(promotions[i])));
+		if (mapForm.containsKey("promotion" + index)) {
+			final String promotions[] = mapForm.get("promotion" + index);
+			if (promotions != null) {
+				for (int i = 0; i < promotions.length; i++) {
+					tpLineItem.promotionList.add(PharmaceuticalProduct.find
+							.byId(Long.parseLong(promotions[i])));
 				}
 			}
 		}
-		if(mapForm.containsKey("pob"+index)){
-			final String pob = mapForm.get("pob"+index)[0];
+		if (mapForm.containsKey("pob" + index)) {
+			final String pob = mapForm.get("pob" + index)[0];
 
 			if (pob == "") {
 				tpLineItem.pob = 0;
@@ -1053,42 +1150,49 @@ public class MRController extends Controller {
 			}
 		}
 
-		if(mapForm.containsKey("remarks"+index)){
-			final String remarks = mapForm.get("remarks"+index)[0];
+		if (mapForm.containsKey("remarks" + index)) {
+			final String remarks = mapForm.get("remarks" + index)[0];
 			tpLineItem.remarks = remarks;
 		}
-
 
 		tpLineItem.isAddedtoTourplan = true;
 
 		final TourPlan tourPlan = TourPlan.find.byId(tourPlanid);
 		tourPlan.tpLineItemList.add(tpLineItem);
 		tourPlan.update();
-		return ok(views.html.mr.filledTPLineItem.render(loggedInMr,tpLineItem,index));
+		return ok(views.html.mr.filledTPLineItem.render(loggedInMr, tpLineItem,
+				index));
 	}
 
 	/**
 	 * @author anand
 	 * 
-	 * @description : this method is used to indicate tour plan of this month is submitted.
+	 * @description : this method is used to indicate tour plan of this month is
+	 *              submitted.
 	 * 
-	 * url : POST	/mr/submit-tourplan
+	 *              url : POST /mr/submit-tourplan
 	 * 
 	 * */
-	public static Result submitTourPlan(){
+	public static Result submitTourPlan() {
 		return ok();
 	}
+
 	/**
 	 * @author anand
 	 * 
-	 * @description : this method is only access by admin mr and its show which filed will be visible in particular mr tour plan.
+	 * @description : this method is only access by admin mr and its show which
+	 *              filed will be visible in particular mr tour plan.
 	 * 
-	 * url : GET		/mr/tourplan-lineitem-visibity
+	 *              url : GET /mr/tourplan-lineitem-visibity
 	 * 
 	 * */
-	public static Result tpLineItemVisibility(){
-		final MedicalRepresentative loggedInMr = LoginController.getLoggedInUser().getMedicalRepresentative();
-		final List<MedicalRepresentative> myMrList = MedicalRepresentative.find.where().eq("pharmaceuticalCompany", loggedInMr.pharmaceuticalCompany).eq("appUser.role", Role.MR).findList();
+	public static Result tpLineItemVisibility() {
+		final MedicalRepresentative loggedInMr = LoginController
+				.getLoggedInUser().getMedicalRepresentative();
+		final List<MedicalRepresentative> myMrList = MedicalRepresentative.find
+				.where()
+				.eq("pharmaceuticalCompany", loggedInMr.pharmaceuticalCompany)
+				.eq("appUser.role", Role.MR).findList();
 		return ok(views.html.mr.tpLineItemVisibility.render(myMrList));
 	}
 
@@ -1097,83 +1201,91 @@ public class MRController extends Controller {
 	 * 
 	 * @description :
 	 * 
-	 * url : POST		/mr/tourplan-lineitem-visibity-proccess/:mrid/:index
+	 *              url : POST
+	 *              /mr/tourplan-lineitem-visibity-proccess/:mrid/:index
 	 * 
 	 * */
 
-	public static Result tpLineItemVisibilityProccess(final Long medicalRepresentativeId,final Long index){
-		final MedicalRepresentative myMr = MedicalRepresentative.find.byId(medicalRepresentativeId);
-		final Map<String,String[]> tourPlanVisibilityMap = request().body().asFormUrlEncoded();
-		Logger.info("tourPlanVisibilityMap : "+tourPlanVisibilityMap);
-		if(tourPlanVisibilityMap == null){
+	public static Result tpLineItemVisibilityProccess(
+			final Long medicalRepresentativeId, final Long index) {
+		final MedicalRepresentative myMr = MedicalRepresentative.find
+				.byId(medicalRepresentativeId);
+		final Map<String, String[]> tourPlanVisibilityMap = request().body()
+				.asFormUrlEncoded();
+		Logger.info("tourPlanVisibilityMap : " + tourPlanVisibilityMap);
+		if (tourPlanVisibilityMap == null) {
 			myMr.tourPlanConfiguration.isDoctorVisible = true;
 			myMr.tourPlanConfiguration.isSampleVisible = true;
 			myMr.tourPlanConfiguration.isPromotionVisible = true;
 			myMr.tourPlanConfiguration.isPobVisible = true;
 			myMr.tourPlanConfiguration.isRemarksVisible = true;
-		}else{
-			if(tourPlanVisibilityMap.containsKey("is_doctor_visible"+index)){
+		} else {
+			if (tourPlanVisibilityMap.containsKey("is_doctor_visible" + index)) {
 				myMr.tourPlanConfiguration.isDoctorVisible = false;
-			}else{
+			} else {
 				myMr.tourPlanConfiguration.isDoctorVisible = true;
 			}
-			if(tourPlanVisibilityMap.containsKey("is_sample_visible"+index)){
+			if (tourPlanVisibilityMap.containsKey("is_sample_visible" + index)) {
 				myMr.tourPlanConfiguration.isSampleVisible = false;
-			}else{
+			} else {
 				myMr.tourPlanConfiguration.isSampleVisible = true;
 			}
-			if(tourPlanVisibilityMap.containsKey("is_promotion_visible"+index)){
+			if (tourPlanVisibilityMap.containsKey("is_promotion_visible"
+					+ index)) {
 				myMr.tourPlanConfiguration.isPromotionVisible = false;
-			}else{
+			} else {
 				myMr.tourPlanConfiguration.isPromotionVisible = true;
 			}
-			if(tourPlanVisibilityMap.containsKey("is_pob_visible"+index)){
+			if (tourPlanVisibilityMap.containsKey("is_pob_visible" + index)) {
 				myMr.tourPlanConfiguration.isPobVisible = false;
-			}else{
+			} else {
 				myMr.tourPlanConfiguration.isPobVisible = true;
 			}
-			if(tourPlanVisibilityMap.containsKey("is_remarks_visible"+index)){
+			if (tourPlanVisibilityMap.containsKey("is_remarks_visible" + index)) {
 				myMr.tourPlanConfiguration.isRemarksVisible = false;
-			}else{
+			} else {
 				myMr.tourPlanConfiguration.isRemarksVisible = true;
 			}
 		}
 		myMr.update();
 		return ok("visibility modified successfully");
 	}
-		/**
-		 * @author anand
-		 * 
-		 * @description :	this method is rendering the adddesignation page to add designation for company
-		 * 
-		 * url : GET		/mr/add-designation		
-		 * 
-		 * */
-	
-		public static Result addDesignation(){
-			return ok(views.html.mr.addDesignation.render(designationBeanForm));
-		}
-			
-		/**
-		 * @author anand
-		 * 
-		 * @description :	AdminMr is adding the all designation for their company
-		 * 
-		 * url : POST		/mr/add-designation
-		 * 
-		 * */
-	
-			public static Result addDesignationProccess(){
-				
-				MedicalRepresentative loggedInMr = LoginController.getLoggedInUser().getMedicalRepresentative();
-				final Form<DesignationBean> filledform = designationBeanForm.bindFromRequest(); 
-				Designation designation = filledform.get().toDesignation();
-				Logger.info("name : "+designation.name);
-				loggedInMr.pharmaceuticalCompany.designationList.add(designation);
-				loggedInMr.update();
-				
-				
-				return ok("Designation added.");
-			}
-		
+
+	/**
+	 * @author anand
+	 * 
+	 * @description : this method is rendering the adddesignation page to add
+	 *              designation for company
+	 * 
+	 *              url : GET /mr/add-designation
+	 * 
+	 * */
+
+	public static Result addDesignation() {
+		return ok(views.html.mr.addDesignation.render(designationBeanForm));
+	}
+
+	/**
+	 * @author anand
+	 * 
+	 * @description : AdminMr is adding the all designation for their company
+	 * 
+	 *              url : POST /mr/add-designation
+	 * 
+	 * */
+
+	public static Result addDesignationProccess() {
+
+		MedicalRepresentative loggedInMr = LoginController.getLoggedInUser()
+				.getMedicalRepresentative();
+		final Form<DesignationBean> filledform = designationBeanForm
+				.bindFromRequest();
+		Designation designation = filledform.get().toDesignation();
+		Logger.info("name : " + designation.name);
+		loggedInMr.pharmaceuticalCompany.designationList.add(designation);
+		loggedInMr.update();
+
+		return ok("Designation added.");
+	}
+
 }
