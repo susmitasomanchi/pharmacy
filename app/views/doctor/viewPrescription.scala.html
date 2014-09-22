@@ -3,7 +3,11 @@
 @import helper.twitterBootstrap._
 @import helper._
 
+@*
 @no_navbar(("Dr. "+prescription.doctor.appUser.name+"'s Prescription For "+prescription.patient.appUser.name+" ("+prescription.patient.getSexAndAge()+")")){
+*@
+
+@blank{
 
 <style>
 input[type=checkbox]{
