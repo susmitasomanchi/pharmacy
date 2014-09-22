@@ -207,7 +207,7 @@ public class UserController extends Controller {
 
 			final Clinic clinic = new Clinic();
 			clinic.name = request().body().asFormUrlEncoded().get("clinicName")[0];
-			clinic.clinicUser = clinicUser;
+			clinic.clinicAdminstrator = clinicUser;
 			clinic.primaryCity = city;
 			clinic.save();
 			clinicUser.clinic = clinic;
