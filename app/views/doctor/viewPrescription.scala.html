@@ -1,0 +1,163 @@
+@(prescription:models.doctor.Prescription)
+@import play.i18n._
+@import helper.twitterBootstrap._
+@import helper._
+
+@no_navbar(("Dr. "+prescription.doctor.appUser.name+"'s Prescription For "+prescription.patient.appUser.name+" ("+prescription.patient.getSexAndAge()+")")){
+
+<style>
+input[type=checkbox]{
+  /* Double-sized Checkboxes */
+  -ms-transform: scale(2); /* IE */
+  -moz-transform: scale(2); /* FF */
+  -webkit-transform: scale(2); /* Safari and Chrome */
+  -o-transform: scale(2); /* Opera */
+}
+.checkboxtext{
+  /* Checkbox text */
+  font-size: 110%;
+  display: inline;
+  padding: 10px;
+}
+
+</style>
+<style>
+#prescription{
+	height: 800px;
+    overflow: scroll;
+}
+</style>
+
+<div class="row" style="padding-left:20px; padding-right:100px; id="prescription">
+
+<h3>Dr. @prescription.doctor.appUser.name <span class="pull-right" style="font-size:18px;">@prescription.prescriptionDate.format("dd-MMM-yyyy HH:mm")</span></h3>
+<h4>@prescription.doctor.degree
+
+<span class="noprint pull-right" style="cursor:pointer; color:#0079a1;" onclick="printPrescription();" style="font-size:25px;"><i class="fa fa-print"></i> Print</span>
+</h4>
+<h4>@prescription.doctor.getSpecializations()</h4>
+<hr>
+<h4 style="margin:0px; padding:0px;">@prescription.patient.appUser.name</h4>
+<p style="margin:0px; padding:0px;">Age: @prescription.patient.appUser.getAge()</p>
+<p>Sex: @org.apache.commons.lang3.text.WordUtils.capitalizeFully(prescription.patient.appUser.sex.toString())</p>
+
+<br>
+
+<h4><u>Problem Statement:</u></h4>
+<p>@prescription.problemStatement</p>
+<br>
+
+<h4><u>Prognosis:</u></h4>
+<p>@prescription.prognosis</p>
+<br>
+
+<div class="row">
+<div class="col-md-6">
+<h4><u>Medicines:</u></h4>
+<table class="table table-bordered table-condensed">
+<thead>
+	<tr>
+		<th>S No</th>
+		<th>Medicine</th>
+		<th>Dosage</th>
+		<th>Remarks</th>
+	</tr>
+</thead>
+<tbody>
+	@for((medicine, index) <- prescription.medicineLineItemList.zipWithIndex){
+	<tr>
+		<td>@(index+1)</td>
+		<td>@medicine.medicineFullName</td>
+		<td>@medicine.dosage</td>
+		<td>@medicine.remarks</td>
+	</tr>
+	}
+</tbody>
+</table>
+</div>
+
+<div class="col-md-6">
+<h4><u>Diagnostic Tests:</u></h4>
+<table class="table table-bordered table-condensed">
+<thead>
+	<tr>
+		<th>S No</th>
+		<th>Test</th>
+		<th>Remarks</th>
+	</tr>
+</thead>
+<tbody>
+	@for((test, index) <- prescription.diagnosticTestLineItemList.zipWithIndex){
+	<tr>
+		<td>@(index+1)</td>
+		<td>@test.fullNameOfDiagnosticTest</td>
+		<td>@test.remarks</td>
+	</tr>
+	}
+</tbody>
+</table>
+</div>
+</div>
+
+<h4><u>Remarks:</u></h4>
+<p>@prescription.remarks</p>
+<br>
+</div>
+
+<div class="noprint">
+
+@*
+<hr>
+<div class="row" style="padding-left:20px; padding-right:100px;">
+<div class="col-md-3">
+<h4>Refer to other doctors:</h4>
+<select name="specialization" class="chzn" style="width:100%;" onchange="getDoctors();">
+<option></option>
+@for(specialization <- models.doctor.MasterSpecialization.getAll()){
+	<option value="@specialization.id">@specialization.name</option>
+}
+</select>
+<script>
+function getDoctors(){
+window.location.href='/secure-doctor/get-doctors-by-specialization/'+$('#specialization').val().trim();
+}
+$('#click').append();
+</script>
+</div>
+<div class="col-md-3" id="click">
+
+</div>
+<div class="col-md-3">
+<select id="specialization" class="chzn" style="width:100%;">
+<option></option>
+@for(specialization <- @routes.DoctorController.getDoctorsBySpecz(1L)){
+	<option value="@specialization.id">@specialization.name</option>
+}
+</select>
+</div>
+
+</div>
+*@
+
+<div class="row">
+<br><br>
+</div>
+
+</div>
+
+
+<script>
+function sharePrescription(){
+	if ($('#patient-consent-check').is(':checked')) {
+		var pharId = $('#sharePharmacy').val();
+		var diagId = $('#shareDiagnostic').val();
+		window.location.href='/secure-doctor/share-prescription?prId=@prescription.id&pharmacyId='+pharId+'&diagnosticId='+diagId+'&consent=true';
+	}
+	else{
+		alert('Sorry! Patient\'s consent is mandatory to share prescriptions.');
+	}
+}
+</script>
+
+
+}

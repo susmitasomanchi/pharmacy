@@ -1204,6 +1204,21 @@ public class DoctorController extends Controller {
 		}
 		return ok(views.html.doctor.doctorPrescription.render(prescriptionForm,appointment));
 	}
+	/**
+	 * Action to render the prescription form to the loggedInDoctor GET
+	 * /secure-doctor/prescription/:appointmentId
+	 */
+	@ConfirmAppUser
+	public static Result showPrescription(final Long appointmentId) {
+		final Appointment appointment = Appointment.find.byId(appointmentId);
+		// server-side check
+		if (appointment.doctorClinicInfo.doctor.id.longValue() != LoginController
+				.getLoggedInUser().getDoctor().id.longValue()) {
+			return redirect(routes.LoginController.processLogout());
+		}
+		return ok(views.html.doctor.doctorPrescription.render(prescriptionForm,
+				appointment));
+	}
 
 	/**
 	 * Action to save prescription of the loggedInDoctor POST
@@ -1283,20 +1298,18 @@ public class DoctorController extends Controller {
 	}
 
 	/**
-	 * Action to show logged In doctor a page to assign a prescription to a
-	 * pharmacy / diagnostic centre GET /secure-doctor/show-prescription
+	 * Action to show logged In doctor prescription with no_navbar
+	 * GET /secure-doctor/view-prescription
 	 */
 	@ConfirmAppUser
-	public static Result showPrescription(final Long prescriptionId) {
+	public static Result viewPrescription(final Long prescriptionId) {
 		final Doctor doctor = LoginController.getLoggedInUser().getDoctor();
-		final Prescription prescription = Prescription.find
-				.byId(prescriptionId);
+		final Prescription prescription = Prescription.find.byId(prescriptionId);
 		// server-side check
 		if (prescription.doctor.id.longValue() != doctor.id.longValue()) {
 			return redirect(routes.LoginController.processLogout());
 		}
-		return ok(views.html.doctor.doctorSharePrescription
-				.render(prescription));
+		return ok(views.html.doctor.viewPrescription.render(prescription));
 	}
 
 	/**
