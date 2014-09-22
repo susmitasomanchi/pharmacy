@@ -53,6 +53,7 @@ create table appointment (
   appointment_time          timestamp,
   appointment_status        varchar(9),
   requested_by_id           bigint,
+  
   apporoved_by_id           bigint,
   problem_statement         TEXT,
   doctor_clinic_info_id     bigint,

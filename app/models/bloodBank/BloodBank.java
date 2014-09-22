@@ -8,6 +8,7 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.ManyToMany;
 import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 
@@ -42,7 +43,7 @@ public class BloodBank extends BaseEntity{
 	@OneToMany(cascade=CascadeType.ALL)
 	List<BloodBankUser> bloodBankUserList = new ArrayList<BloodBankUser>();
 
-	@OneToMany(cascade=CascadeType.ALL)
+	@ManyToMany(cascade=CascadeType.ALL)
 	public List<FileEntity> fileEntities = new ArrayList<FileEntity>();
 
 	public static Finder<Long, BloodBank> find = new Finder<Long, BloodBank>(Long.class, BloodBank.class);

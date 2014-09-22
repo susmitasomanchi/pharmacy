@@ -8,11 +8,13 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.ManyToMany;
 import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 
 import models.Address;
 import models.BaseEntity;
+import models.FileEntity;
 import models.PrimaryCity;
 import models.clinic.ClinicUser;
 import play.db.ebean.Model;
@@ -42,6 +44,9 @@ public class Clinic extends BaseEntity{
 
 	@OneToMany(cascade=CascadeType.ALL)
 	public List<ClinicUser> clinicUserList = new ArrayList<ClinicUser>();
+
+	@ManyToMany(cascade = CascadeType.ALL)
+	public List<FileEntity> clinicImagesList = new ArrayList<FileEntity>();
 
 	public static Model.Finder<Long, Clinic> find = new Finder<Long, Clinic>(Long.class, Clinic.class);
 
