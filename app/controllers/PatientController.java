@@ -249,7 +249,7 @@ public class PatientController extends Controller {
 	@ConfirmAppUser
 	public static Result viewMyAppointments(){
 		final AppUser patient=LoginController.getLoggedInUser();
-		final List<Appointment> patientApppointments=Appointment.find.where().eq("requestedBy", patient).findList();
+		final List<Appointment> patientApppointments=Appointment.find.where().eq("requestedBy", patient).orderBy().desc("appointmentTime").findList();
 		return ok(views.html.patient.patientViewAppointments.render(patientApppointments));
 	}
 

@@ -138,6 +138,10 @@ GET		/secure-doctor/all-prescriptions					controllers.DoctorController.viewAllPr
 GET		/secure-doctor/todays-prescriptions						controllers.DoctorController.viewTodaysPrescription()
 GET		/secure-doctor/products/get-json							controllers.DoctorController.getAllProductsJson()
 GET		/secure-doctor/diagnostic-tests/get-json					controllers.DoctorController.getAllDiagnosticJson()
+GET		/secure-doctor/follow-up-appointment/:clinicId/:patientId					controllers.DoctorController.getPatientFollowUPAppointment(clinicId : Long,patientId: Long)
+POST		/secure-doctor/follow-up-appointment/:prescriptionId/:patientId					controllers.DoctorController.processPatientFollowUPAppointment(prescriptionId : Long,patientId: Long)
+
+
 #slug url (must be the last route in /doctor/)
 GET 	/dr/:slugUrl								controllers.PublicController.getDoctorWithSlug(slugUrl:String)
 

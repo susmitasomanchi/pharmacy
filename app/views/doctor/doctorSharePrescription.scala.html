@@ -201,13 +201,11 @@ $('#click').append();
 
 
 <div class="row">
-<br><br><br><br><br>
+<br><br>
 </div>
 
 
-<div class="row">
-<br><br><br><br><br>
-</div>
+
 
 
 </div>
@@ -235,6 +233,13 @@ function sharePrescription(){
 	}
 }
 </script>
+
+
+<hr>
+<a href="@routes.DoctorController.getPatientFollowUPAppointment(prescription.clinic.id,prescription.patient.id)" > Click here for follow up appointment</a>
+<div class="row">
+<br><br><br><br><br>
+</div>
 
 
 }

@@ -46,7 +46,7 @@
 				<td>@appointment.appointmentTime.format("dd-MMM-yy HH:mm")</td>
 				</div>
 				<div class="col-md-3 column">
-				<td>@{appointment.requestedBy.name}&nbsp;(@appointment.requestedBy.getPatient().getSexAndAge())</td>
+			<td>@if(appointment.requestedBy != null){@{appointment.requestedBy.name}&nbsp;(@appointment.requestedBy.getPatient().getSexAndAge())}</td>
 				</div>
 				<div class="col-md-3 column">
 				<td>
@@ -97,7 +97,7 @@
 				<td>@appointment.appointmentTime.format("dd-MMM-yy HH:mm")</td>
 				</div>
 				<div class="col-md-3 column">
-				<td>@{appointment.requestedBy.name}&nbsp;(@appointment.requestedBy.getPatient().getSexAndAge())</td>
+				@*<td>@if(appointment.requestedBy != null){@{appointment.requestedBy.name}&nbsp;(@appointment.requestedBy.getPatient().getSexAndAge())}</td>*@
 				</div>
 				<div class="col-md-3 column">
 				<td>

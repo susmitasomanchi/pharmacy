@@ -20,6 +20,7 @@ import models.diagnostic.DiagnosticCentrePrescriptionInfo;
 import models.diagnostic.DiagnosticCentrePrescritionStatus;
 import models.doctor.Appointment;
 import models.doctor.AppointmentStatus;
+import models.doctor.Clinic;
 import models.doctor.Day;
 import models.doctor.DaySchedule;
 import models.doctor.DiagnosticTestLineItem;
@@ -36,6 +37,7 @@ import models.doctor.MedicineLineItem;
 import models.doctor.Prescription;
 import models.doctor.QuestionAndAnswer;
 import models.doctor.SigCode;
+import models.patient.Patient;
 import models.pharmacist.Pharmacy;
 import models.pharmacist.PharmacyPrescriptionInfo;
 import models.pharmacist.PharmacyPrescriptionStatus;
@@ -1211,15 +1213,20 @@ public class DoctorController extends Controller {
 	 * /secure-doctor/prescription/:appointmentId
 	 */
 	@ConfirmAppUser
-	public static Result showPrescription(final Long appointmentId) {
-		final Appointment appointment = Appointment.find.byId(appointmentId);
+	public static Result showPrescription(final Long precsriptionId) {
+		final Doctor doctor = LoginController.getLoggedInUser().getDoctor();
+		final Prescription prescription = Prescription.find.byId(precsriptionId);
+		// server-side check
+		if (prescription.doctor.id.longValue() != doctor.id.longValue()) {
+			return redirect(routes.LoginController.processLogout());
+		}
+		/*final Appointment appointment = Appointment.find.byId(appointmentId);
 		// server-side check
 		if (appointment.doctorClinicInfo.doctor.id.longValue() != LoginController
 				.getLoggedInUser().getDoctor().id.longValue()) {
 			return redirect(routes.LoginController.processLogout());
-		}
-		return ok(views.html.doctor.doctorPrescription.render(prescriptionForm,
-				appointment));
+		}*/
+		return ok(views.html.doctor.doctorSharePrescription.render(prescription));
 	}
 
 	/**
@@ -1757,16 +1764,64 @@ public class DoctorController extends Controller {
 	 * Action to get Doctors based on specialization
 	 * @return
 	 */
-	public static List<Doctor> getDoctorsBySpecz(final Long id){
-		final MasterSpecialization masterSpecialization = MasterSpecialization.find.byId(id);
-		final List<Doctor> doctors =  new ArrayList<Doctor>();
-		for (final Doctor doctor : Doctor.find.all()) {
-			if(doctor.specializationList.contains(masterSpecialization)){
-				doctors.add(doctor);
-			}
-
-		}
-		return doctors;
+	public static Result getPatientFollowUPAppointment(final Long clinicId,final Long patientId){
+		final Doctor doctor = LoginController.getLoggedInUser().getDoctor();
+		final DoctorClinicInfo doctorClinicInfo = DoctorClinicInfo.find.where().eq("doctor", doctor).eq("clinic",Clinic.find.byId(clinicId)).findUnique();
+		return ok(views.html.doctor.patientFollwUpAppointment.render(doctorClinicInfo,Patient.find.byId(patientId)));
 	}
+	/**
+	 * @author Mitesh
+	 * Action to process requested appointments
+	 * POST		/patient/process-appointment
+	 */
+	@ConfirmAppUser
+	public static Result processPatientFollowUPAppointment(final Long appointmentId,final Long patientId) {
+		final String remark=request().body().asFormUrlEncoded().get("remark")[0];
+		Logger.warn(remark);
+		final Appointment appointment = Appointment.find.byId(appointmentId);
+		appointment.appointmentStatus = AppointmentStatus.APPROVED;
+		appointment.problemStatement = remark;
+		appointment.requestedBy = Patient.find.byId(patientId).appUser;
+		appointment.bookedOn = new Date();
+		appointment.update();
+
+
+
+		// Async Execution
+		Promise.promise(new Function0<Integer>() {
+			//@Override
+			@Override
+			public Integer apply() {
+				int result = 0;
+				if(!EmailService.sendAppointmentConformMail(appointment.requestedBy, appointment.doctorClinicInfo.doctor.appUser, appointment)){
+					result=1;
+				}
+
+				return result;
+			}
+		});
+		// End of async
+
+		final StringBuilder smsMessage = new StringBuilder();
+
+		smsMessage.append("You have an follow up appointment with Dr. "+appointment.doctorClinicInfo.doctor.appUser.name+" on ");
+		smsMessage.append( new SimpleDateFormat("dd-MMM-yyyy").format(appointment.appointmentTime));
+		smsMessage.append(" at "+ new SimpleDateFormat("HH:mm").format(appointment.appointmentTime));
+		smsMessage.append(" at "+appointment.doctorClinicInfo.clinic.name+", "+appointment.doctorClinicInfo.clinic.address.area);
+		SMSService.sendSMS(appointment.requestedBy.mobileNumber.toString(), smsMessage.toString());
+
+		/*
+		final StringBuilder smsMessage2 = new StringBuilder();
+		smsMessage2.append("An Appointment has been booked on");
+		smsMessage2.append( new SimpleDateFormat("dd-MMM-yyyy").format(appointment.appointmentTime));
+		smsMessage2.append(","+ new SimpleDateFormat("HH:mm").format(appointment.appointmentTime));
+		smsMessage2.append("at "+appointment.doctorClinicInfo.clinic.name+","+appointment.doctorClinicInfo.clinic.address.area);
+		smsMessage2.append("by patient "+appointment.requestedBy.name+".");
+		SMSService.sendSMS(appointment.doctorClinicInfo.doctor.appUser.mobileNumber.toString(), smsMessage2.toString());
+		 */
+
+		return redirect(routes.DoctorController. viewTodaysAppointments());
+	}
+
 
 }
