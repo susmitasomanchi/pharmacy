@@ -447,6 +447,8 @@ GET 	/specz									controllers.SampleDataController.createDocSpez()
 GET 	/add_clinic									controllers.SampleDataController.patientTest()
 
 #GET    /appointment					controllers.SampleDataController.createAppointment()
+GET    /appointment					controllers.SampleDataController.addBloodBank()
+
 
 
 #Cron

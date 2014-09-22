@@ -3,15 +3,11 @@ package controllers;
 
 import java.security.MessageDigest;
 import java.security.SecureRandom;
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
-import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.Random;
 
-import org.apache.commons.codec.binary.Base64;
-
+import models.Address;
 import models.Alert;
 import models.AppUser;
 import models.MasterDiagnosticTest;
@@ -19,11 +15,11 @@ import models.MasterProduct;
 import models.PrimaryCity;
 import models.Role;
 import models.State;
+import models.bloodBank.BloodBank;
+import models.bloodBank.BloodBankUser;
 import models.diagnostic.DiagnosticCentrePrescriptionInfo;
-import models.doctor.Clinic;
 import models.doctor.DiagnosticTestLineItem;
 import models.doctor.Doctor;
-import models.doctor.DoctorClinicInfo;
 import models.doctor.MasterSpecialization;
 import models.doctor.Prescription;
 import models.mr.Designation;
@@ -31,16 +27,13 @@ import models.mr.MedicalRepresentative;
 import models.mr.PharmaceuticalCompany;
 import models.patient.Patient;
 import models.patient.PatientDoctorInfo;
+
+import org.apache.commons.codec.binary.Base64;
+
 import play.Logger;
-import play.libs.WS;
 import play.mvc.Controller;
 import play.mvc.Result;
-import utils.EmailService;
 import utils.SMSService;
-import play.libs.WS;
-import play.mvc.Result;
-import static play.libs.F.Function;
-import static play.libs.F.Promise;
 
 public class SampleDataController extends Controller {
 
@@ -462,7 +455,24 @@ public class SampleDataController extends Controller {
 		return ok("added primary city");
 	}
 
-
+	public static Result addBloodBank(){
+		final BloodBankUser bloodBankUser = new BloodBankUser();
+		final AppUser appUser = new AppUser();
+		appUser.name = "BlooBankAppUser";
+		appUser.email = "bloodbank@bloodbank.com";
+		appUser.role = Role.BLOOD_BANK_ADMIN;
+		appUser.save();
+		bloodBankUser.appUser = appUser;
+		bloodBankUser.save();
+		final BloodBank bloodBank = new BloodBank();
+		bloodBank.name="Red Cross Blood Bank";
+		bloodBank.bloodBankAdmin = bloodBankUser;
+		bloodBank.address = Address.find.byId(1L);
+		bloodBank.save();
+		bloodBankUser.bloodBank = bloodBank;
+		bloodBankUser.update();
+		return ok("added blood bank");
+	}
 
 }
 

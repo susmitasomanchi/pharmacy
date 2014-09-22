@@ -15,7 +15,7 @@ import models.BloodGroup;
 import models.PrimaryCity;
 import models.Role;
 import models.Sex;
-import models.clinic.ClinicAdministrator;
+import models.clinic.ClinicUser;
 import models.diagnostic.DiagnosticCentre;
 import models.diagnostic.DiagnosticRepresentative;
 import models.doctor.Clinic;
@@ -201,17 +201,17 @@ public class UserController extends Controller {
 			diagnosticRepresentative.update();
 		}
 		if(appUser.role.equals(Role.CLINIC_ADMIN)){
-			final ClinicAdministrator clinicAdministrator = new ClinicAdministrator();
-			clinicAdministrator.appUser = appUser;
-			clinicAdministrator.save();
+			final ClinicUser clinicUser = new ClinicUser();
+			clinicUser.appUser = appUser;
+			clinicUser.save();
 
 			final Clinic clinic = new Clinic();
 			clinic.name = request().body().asFormUrlEncoded().get("clinicName")[0];
-			clinic.clinicAdministrator = clinicAdministrator;
+			clinic.clinicUser = clinicUser;
 			clinic.primaryCity = city;
 			clinic.save();
-			clinicAdministrator.clinic = clinic;
-			clinicAdministrator.update();
+			clinicUser.clinic = clinic;
+			clinicUser.update();
 		}
 
 		if(appUser.role.equals(Role.PATIENT)){

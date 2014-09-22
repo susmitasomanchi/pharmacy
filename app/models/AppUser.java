@@ -9,6 +9,7 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -18,7 +19,8 @@ import javax.persistence.Lob;
 import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 
-import models.clinic.ClinicAdministrator;
+import models.bloodBank.BloodDonation;
+import models.clinic.ClinicUser;
 import models.diagnostic.DiagnosticRepresentative;
 import models.doctor.Doctor;
 import models.mr.MedicalRepresentative;
@@ -89,6 +91,8 @@ public class AppUser extends BaseEntity {
 	@Column(columnDefinition="TEXT")
 	public String allergy;
 
+	@OneToMany(cascade=CascadeType.ALL)
+	List<BloodDonation> bloodDonations = new ArrayList<BloodDonation>();
 
 	public static Model.Finder<Long, AppUser> find = new Finder<Long, AppUser>(Long.class, AppUser.class);
 
@@ -112,8 +116,8 @@ public class AppUser extends BaseEntity {
 		return DiagnosticRepresentative.find.where().eq("appUser.id", this.id).findUnique();
 	}
 
-	public ClinicAdministrator getClinicAdminstrator() {
-		return ClinicAdministrator.find.where().eq("appUser.id", this.id).findUnique();
+	public ClinicUser getClinicAdminstrator() {
+		return ClinicUser.find.where().eq("appUser.id", this.id).findUnique();
 	}
 
 	public Boolean matchPassword(final String password){
