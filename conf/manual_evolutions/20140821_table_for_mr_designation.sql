@@ -23,7 +23,7 @@ create sequence designation_seq;
 # --create sequence medical_representative_seq;
 # --create sequence pharmaceutical_company_seq;
 ALTER TABLE medical_representative ADD COLUMN designation_id bigint;
-ALTER TABLE Designation ADD COLUMN medical_representative_id bigint;
+ALTER TABLE designation ADD COLUMN medical_representative_id bigint;
 
 alter table medical_representative add constraint fk_medical_representative_designation_1 foreign key (designation_id) references designation (id);
 alter table designation add constraint fk_pharmaceutical_company_designation_1 foreign key (pharmaceutical_company_id) references pharmaceutical_company (id);

@@ -7,5 +7,8 @@ public class Constants {
 	public static final String URL_AFTER_LOGIN = "UrlAfterLogin";
 	public static final String CITY_ID = "cityId";
 
+	public static final String EMAIL_ID = "noreply@mednetwork.in";
+	public static final String EMAIL_PASSWORD= "we#will#win";
+
 }
 

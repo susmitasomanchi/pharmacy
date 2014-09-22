@@ -15,6 +15,7 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Lob;
+import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 
 import models.clinic.ClinicAdministrator;
@@ -87,6 +88,7 @@ public class AppUser extends BaseEntity {
 
 	@Column(columnDefinition="TEXT")
 	public String allergy;
+
 
 	public static Model.Finder<Long, AppUser> find = new Finder<Long, AppUser>(Long.class, AppUser.class);
 

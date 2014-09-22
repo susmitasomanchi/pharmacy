@@ -10,7 +10,6 @@ import models.Address;
 import models.BaseEntity;
 import models.PrimaryCity;
 import models.clinic.ClinicAdministrator;
-import models.pharmacist.Pharmacist;
 import play.db.ebean.Model;
 
 @SuppressWarnings("serial")

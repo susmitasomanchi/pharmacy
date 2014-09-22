@@ -73,7 +73,7 @@ GET   	/diagnostic/search/:searchString                  				controllers.PublicC
 GET    /diagnostic/search												controllers.PublicController.searchDiagnosticPage()
 
 GET    /feedback											controllers.PublicController.feedBack()
-POST    /secure-feedback											controllers.PublicController.saveFeedBack()
+POST    /secure-feedback									controllers.PublicController.saveFeedBack()
 GET    /help												controllers.PublicController.helpDocument()
 
 
@@ -382,9 +382,9 @@ GET    /patient-search/list 					controllers.DiagnosticController.patientSearchP
 #Clinics
 
 GET    /secure-clinic/invite-doctor      					controllers.ClinicController.searchDoctorsByEmail()
-GET    /secure-clinic/invite-doctor/:email      					controllers.ClinicController.invitationEmailToTheDoctor(email: String)
-GET		/secure-clinic/add-doctor/:docId/:clinicId							controllers.ClinicController.addDoctorToTheClinic(docId: Long,clinicId : Long)
-GET		/secure-clinic/view-all-doctors							controllers.ClinicController.getDoctors()
+POST    /secure-clinic/invite-doctor      					controllers.ClinicController.processSeachDoctorsByEmailId()
+GET		/secure-clinic/add-doctor/:docId/:clinicId/:verCode			controllers.ClinicController.addDoctorToTheClinic(docId: Long, clinicId : Long, verCode:String)
+GET		/secure-clinic/view-all-doctors						controllers.ClinicController.getDoctors()
 
 																										
 #MR Module

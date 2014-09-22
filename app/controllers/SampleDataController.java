@@ -2,11 +2,15 @@ package controllers;
 
 
 import java.security.MessageDigest;
-
 import java.security.SecureRandom;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.Random;
+
+import org.apache.commons.codec.binary.Base64;
 
 import models.Alert;
 import models.AppUser;
@@ -15,11 +19,11 @@ import models.MasterProduct;
 import models.PrimaryCity;
 import models.Role;
 import models.State;
-import models.clinic.ClinicAdministrator;
 import models.diagnostic.DiagnosticCentrePrescriptionInfo;
 import models.doctor.Clinic;
 import models.doctor.DiagnosticTestLineItem;
 import models.doctor.Doctor;
+import models.doctor.DoctorClinicInfo;
 import models.doctor.MasterSpecialization;
 import models.doctor.Prescription;
 import models.mr.Designation;
@@ -27,13 +31,16 @@ import models.mr.MedicalRepresentative;
 import models.mr.PharmaceuticalCompany;
 import models.patient.Patient;
 import models.patient.PatientDoctorInfo;
-
-import org.apache.commons.codec.binary.Base64;
-
 import play.Logger;
+import play.libs.WS;
 import play.mvc.Controller;
 import play.mvc.Result;
+import utils.EmailService;
 import utils.SMSService;
+import play.libs.WS;
+import play.mvc.Result;
+import static play.libs.F.Function;
+import static play.libs.F.Promise;
 
 public class SampleDataController extends Controller {
 
@@ -90,18 +97,6 @@ public class SampleDataController extends Controller {
 	}
 
 
-	public static Result createBlogAdmin(){
-		if(AppUser.find.where().eq("email", "blog@mednetwork.in").findList().size()>0){
-			return redirect(routes.Application.index());
-		}
-		final AppUser appUser = new AppUser();
-		appUser.name = "Blog Admin";
-		appUser.role = Role.BLOG_ADMIN;
-		appUser.email = "blog@mednetwork.in";
-		appUser.password = "med2014blog";
-		appUser.save();
-		return redirect(routes.Application.index());
-	}
 
 	/**
 	 * @author Mitesh
@@ -296,22 +291,14 @@ public class SampleDataController extends Controller {
 	public static Result patientTest(){
 		final AppUser appUser1 = new AppUser();
 		appUser1.name = "laxmi";
-		appUser1.email = "clinic@clinic.com";
-		appUser1.password = "123456";
-		appUser1.role = Role.CLINIC_ADMIN;
+		appUser1.email = "patient@gmail.com";
+		appUser1.password = "1111";
+		appUser1.role = Role.PATIENT;
 		appUser1.save();
-		final ClinicAdministrator clinicAdministrator = new ClinicAdministrator();
-		clinicAdministrator.appUser = appUser1;
-		clinicAdministrator.save();
-		final Clinic clinic = new Clinic();
-		clinic.name = "Laxmi Clinics";
-		clinic.primaryCity = PrimaryCity.find.byId(1L);
-		clinic.clinicAdministrator = clinicAdministrator;
-		clinic.save();
-		clinicAdministrator.clinic  = clinic;
-		clinicAdministrator.update();
-
-		return ok("Added new clinic");
+		final Patient patient = new Patient();
+		patient.appUser = appUser1;
+		patient.save();
+		return ok();
 	}
 	/**
 	 * Action to create Prescription for the Diagnostic Centre
@@ -474,6 +461,7 @@ public class SampleDataController extends Controller {
 		}
 		return ok("added primary city");
 	}
+
 
 
 }

@@ -5,40 +5,41 @@
 
 @main("Invite Doctors"){
 <div class="well">
-@*<form action="@routes.ClinicController.processSeachDoctorsByEmailId()" method="POST">*@
+<form action="@routes.ClinicController.processSeachDoctorsByEmailId()" method="POST">
 <div class="row">
 <div class="col-md-4">
  <label for="emailId" class="col-md-6" style="padding-top:7px">Email Id </label>
  <div class="col-md-4">
-	<input type="search" style="box-shadow: 1px 1px 3px 3px #aaaaaa;"  name="email" id="email" placeholder="Search By Email Id" required>
+	<input type="email" style="box-shadow: 1px 1px 3px 3px #aaaaaa;"  name="email" id="email" placeholder="Doctor's Email Id" required>
 	</div>
 </div>
 </div>
 <br>
 <div class="row">
 <div class="col-md-4">
-<label for="confirmEmailId" class="col-md-6" style="padding-top:7px">Confirm EmailId </label>
+<label for="confirmEmailId" class="col-md-6" style="padding-top:7px">Confirm Email Id </label>
 <div class="col-md-4">
-	<input type="search" style="box-shadow: 1px 1px 3px 3px #aaaaaa;"  name="confirmEmailId" id="confirmEmailId" placeholder="Enter the same Email Id" required>
+	<input type="email" style="box-shadow: 1px 1px 3px 3px #aaaaaa;"  name="confirmEmail" id="confirmEmail" placeholder="Re-Enter Doctor's Email Id" required>
 </div>
 </div>
 </div>
    <br>
 <div style="padding-left:15px;padding-right:15px">
+	@*
 	<button style="box-shadow: 1px 1px 3px 3px #aaaaaa;" class="btn btn-sm btn-primary" onclick="submitSearch();"><i class="icon-search icon-large"></i> Invite</button>
+	*@
+	<input style="box-shadow: 1px 1px 3px 3px #aaaaaa;" type="submit" onclick="return validateAndSubmit();" class="btn btn-sm btn-primary" value="Invite" >
 </div>
-
+</form>
 <script>
-function submitSearch(){
+function validateAndSubmit(){
 	var email = $('#email').val().trim();
-	var confirmEmailId = $('#confirmEmailId').val().trim();
-    	if(email == confirmEmailId){
-    		 window.location.href='/secure-clinic/invite-doctor/'+$('#email').val().trim();
-    	}else{
-    	alert("Emails not matched");
+	var confirmEmailId = $('#confirmEmail').val().trim();
+    	if(email != confirmEmailId){
+    		alert("Email Ids Do Not Match!");
+    	    return false;
     	}
-       
-    }
+}
 
 </script>
 </div>
