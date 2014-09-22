@@ -15,7 +15,7 @@ import models.pharmacist.Pharmacist;
 
 @SuppressWarnings("serial")
 @Entity
-public class ClinicAdministrator extends BaseEntity{
+public class ClinicUser extends BaseEntity{
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO)
@@ -27,6 +27,6 @@ public class ClinicAdministrator extends BaseEntity{
 	@ManyToOne(cascade=CascadeType.ALL)
 	public Clinic clinic;
 
-	public static Finder<Long, ClinicAdministrator> find = new Finder<Long, ClinicAdministrator>(Long.class, ClinicAdministrator.class);
+	public static Finder<Long, ClinicUser> find = new Finder<Long, ClinicUser>(Long.class, ClinicUser.class);
 
 }

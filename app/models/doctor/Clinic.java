@@ -1,15 +1,20 @@
 package models.doctor;
 
+import java.util.ArrayList;
+import java.util.List;
+
+import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 
 import models.Address;
 import models.BaseEntity;
 import models.PrimaryCity;
-import models.clinic.ClinicAdministrator;
+import models.clinic.ClinicUser;
 import play.db.ebean.Model;
 
 @SuppressWarnings("serial")
@@ -30,10 +35,13 @@ public class Clinic extends BaseEntity{
 	public Address address;
 
 	@OneToOne
-	public ClinicAdministrator clinicAdministrator;
+	public ClinicUser clinicAdminstrator;
 
 	@OneToOne
 	public PrimaryCity primaryCity;
+
+	@OneToMany(cascade=CascadeType.ALL)
+	public List<ClinicUser> clinicUserList = new ArrayList<ClinicUser>();
 
 	public static Model.Finder<Long, Clinic> find = new Finder<Long, Clinic>(Long.class, Clinic.class);
 
