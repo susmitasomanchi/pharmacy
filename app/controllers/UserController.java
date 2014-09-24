@@ -15,6 +15,8 @@ import models.BloodGroup;
 import models.PrimaryCity;
 import models.Role;
 import models.Sex;
+import models.bloodBank.BloodBank;
+import models.bloodBank.BloodBankUser;
 import models.clinic.ClinicUser;
 import models.diagnostic.DiagnosticCentre;
 import models.diagnostic.DiagnosticRepresentative;
@@ -38,7 +40,6 @@ import utils.EmailService;
 import utils.SMSService;
 import utils.Util;
 import actions.BasicAuth;
-import actions.ConfirmAppUser;
 import beans.JoinUsBean;
 
 
@@ -85,6 +86,9 @@ public class UserController extends Controller {
 	public static Result joinUsClinic(){
 		return ok(views.html.clinic.joinus.render());
 	}
+	public static Result joinUsBloodBank(){
+		return ok(views.html.bloodBank.joinus.render());
+	}
 
 
 
@@ -114,6 +118,9 @@ public class UserController extends Controller {
 			}
 			if(appUser.role == Role.CLINIC_ADMIN){
 				return redirect(routes.UserController.joinUsClinic());
+			}
+			if(appUser.role == Role.BLOOD_BANK_ADMIN){
+				return redirect(routes.UserController.joinUsBloodBank());
 			}
 		}
 
@@ -212,6 +219,19 @@ public class UserController extends Controller {
 			clinic.save();
 			clinicUser.clinic = clinic;
 			clinicUser.update();
+		}
+		if(appUser.role.equals(Role.BLOOD_BANK_ADMIN)){
+			final BloodBankUser bloodBankUser = new BloodBankUser();
+			bloodBankUser.appUser = appUser;
+			bloodBankUser.save();
+
+			final BloodBank bloodBank = new BloodBank();
+			bloodBank.name = request().body().asFormUrlEncoded().get("bloodBankName")[0];
+			bloodBank.bloodBankAdmin = bloodBankUser;
+			bloodBank.primaryCity = city;
+			bloodBank.save();
+			bloodBankUser.bloodBank = bloodBank;
+			bloodBankUser.update();
 		}
 
 		if(appUser.role.equals(Role.PATIENT)){
@@ -334,6 +354,11 @@ public class UserController extends Controller {
 			//SMSService.sendConfirmationSMS(loggedInUser);
 		}else{
 			loggedInUser.isBloodDonor = false;
+		}
+		if(requestMap.containsKey("shareContactNo")){
+			loggedInUser.isMobileNumberShared = true;
+			//TODO: make it async
+			//SMSService.sendConfirmationSMS(loggedInUser);
 		}
 		if(requestMap.get("allergy")[0]!=null && requestMap.get("allergy")[0].trim()!=""){
 			loggedInUser.allergy = requestMap.get("allergy")[0].trim();

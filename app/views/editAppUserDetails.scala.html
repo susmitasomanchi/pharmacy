@@ -28,8 +28,8 @@
 	 <label for="bloodGroup">Blood Group</label><br>
         <select id="bloodgroup" name="bloodgroup">
         <option></option>
-			@for(((k,v),index) <- BloodGroup.options().zipWithIndex){
-				<option value="@k">@if((v.toString()).contains("POSITIVE")){@v.replace("_POSITIVE", "+")}else{@v.replace("_NEGATIVE", "-")}</option>
+			@for((k,v) <- BloodGroup.options()){
+				<option value="@k">@v</option>
 			}
         </select>
 	</div>
@@ -43,11 +43,28 @@
 	}
 	Would you like to donate blood?
      </div>
-     <div class="row">
+    
+    
+     <script>
+    $("#isBloodDonar").click(function() {
+    if($(this).is(":checked")) 
+    {
+    	$("#shareContactNo").show();
+    }else{
+    	$("#shareContactNo").hide();
+    }
+});
+</script>
+ <div id="shareContactNo" class="row">
+	<input type="checkbox" id="shareContactNo" name="shareContactNo" />would you like to share your mobile number?
+	</div>
      <br>
+     
+ <div class="row">
     <input type="checkbox" id="anyAllergy" name="anyAllergy"  /> Any Allergy ?
     </div>
     <br>
+
     <script>
     $("#anyAllergy").click(function() {
     if($(this).is(":checked")) 
@@ -58,10 +75,12 @@
     }
 });
 </script>
+
 	<div id="allergy" class="row">
 	<label for="Allergy">Allergy</label>
 	<input type="text"  class="allergy" name="allergy" @if(appUser.allergy != null){value=@appUser.allergy} />
 	</div>
+	
 	
 	
 	

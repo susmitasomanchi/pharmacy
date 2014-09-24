@@ -88,6 +88,7 @@ GET    /secure-pharmacy/join                              			controllers.UserCon
 GET    /secure-diagnostic/join                              		controllers.UserController.joinUsDiagnostic()
 GET    /secure-user/join											controllers.UserController.joinUsPatient()
 GET    /secure-clinic/join											controllers.UserController.joinUsClinic()
+GET    /secure-blood-bank/join											controllers.UserController.joinUsBloodBank()
 
 POST   /secure-join		                              			controllers.UserController.processJoinUs()
 
@@ -155,6 +156,8 @@ GET		/secure-user/my-pharmacies						controllers.PatientController.patientFavori
 GET		/secure-user/appointments									controllers.PatientController.viewMyAppointments()
 GET		/secure-user/share-prescription							controllers.PatientController.sharePrescription(prId: Long, pharmacyId: String, diagnosticId: String)
 GET    /secure-user/diagnostic-reports							 	controllers.PatientController.viewDiagnosticReports()
+GET    /secure-user/blood-donation-info							 	controllers.PatientController.getPatientBloodDonationInfo()
+
 
 
 POST	/secure-pharmacy/upload-pharmacy-images					controllers.PharmacistController.uploadPharmacyImageProcess()
@@ -385,6 +388,17 @@ GET    /secure-clinic/invite-doctor      					controllers.ClinicController.searc
 POST    /secure-clinic/invite-doctor      					controllers.ClinicController.processSeachDoctorsByEmailId()
 GET		/secure-clinic/add-doctor/:docId/:clinicId/:verCode			controllers.ClinicController.addDoctorToTheClinic(docId: Long, clinicId : Long, verCode:String)
 GET		/secure-clinic/view-all-doctors						controllers.ClinicController.getDoctors()
+
+#BloodBank
+GET    /secure-blood-bank/get-blood-donors      					controllers.BloodBankController.getBloodDonorsInCityForm()
+POST    /secure-blood-bank/list-blood-donors      					controllers.BloodBankController.listBloodDonorsInCity()
+GET    /secure-blood-bank/received-blood-info-form      					controllers.BloodBankController.receivedBloodDonorFrom()
+GET    /secure-blood-bank/get-received-blood-info/:emailId      					controllers.BloodBankController.getReceivedBloodDonorInfo(emailId: String)
+POST    /secure-blood-bank/save-received-blood-info/:patientId      					controllers.BloodBankController.saveReceivedBloodDonorInfo(patientId: Long)
+
+
+
+
 
 																										
 #MR Module

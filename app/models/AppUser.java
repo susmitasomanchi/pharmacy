@@ -19,6 +19,7 @@ import javax.persistence.Lob;
 import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 
+import models.bloodBank.BloodBankUser;
 import models.bloodBank.BloodDonation;
 import models.clinic.ClinicUser;
 import models.diagnostic.DiagnosticRepresentative;
@@ -68,6 +69,10 @@ public class AppUser extends BaseEntity {
 
 	public Boolean isBloodDonor = false;
 
+	public Boolean isMobileNumberShared;
+
+	public Date lastBloodDonatedDate;
+
 	public List<Language> languageList = new ArrayList<Language>();
 
 	public Role role;
@@ -92,7 +97,7 @@ public class AppUser extends BaseEntity {
 	public String allergy;
 
 	@OneToMany(cascade=CascadeType.ALL)
-	List<BloodDonation> bloodDonations = new ArrayList<BloodDonation>();
+	public List<BloodDonation> bloodDonationList = new ArrayList<BloodDonation>();
 
 	public static Model.Finder<Long, AppUser> find = new Finder<Long, AppUser>(Long.class, AppUser.class);
 
@@ -118,6 +123,9 @@ public class AppUser extends BaseEntity {
 
 	public ClinicUser getClinicAdminstrator() {
 		return ClinicUser.find.where().eq("appUser.id", this.id).findUnique();
+	}
+	public BloodBankUser getBloodBankAdmin() {
+		return BloodBankUser.find.where().eq("appUser.id", this.id).findUnique();
 	}
 
 	public Boolean matchPassword(final String password){

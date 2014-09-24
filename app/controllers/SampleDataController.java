@@ -467,6 +467,7 @@ public class SampleDataController extends Controller {
 		final BloodBank bloodBank = new BloodBank();
 		bloodBank.name="Red Cross Blood Bank";
 		bloodBank.bloodBankAdmin = bloodBankUser;
+		bloodBank.contactPersonName = "laxmi";
 		bloodBank.address = Address.find.byId(1L);
 		bloodBank.save();
 		bloodBankUser.bloodBank = bloodBank;

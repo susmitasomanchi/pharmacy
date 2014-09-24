@@ -2,6 +2,7 @@ package controllers;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
@@ -10,6 +11,8 @@ import models.AppUser;
 import models.BloodPressureTracker;
 import models.SugarTracker;
 import models.WeightTracker;
+import models.bloodBank.BloodDonation;
+import models.patient.Patient;
 import play.Logger;
 import play.mvc.Controller;
 import play.mvc.Result;
@@ -202,4 +205,5 @@ public class TrackerController extends Controller{
 		flash().put("alert", new Alert("alert-danger", "Sugar Details Are Deleted Successfully.").toString());
 		return redirect(routes.TrackerController.sugarTracker());
 	}
+
 }

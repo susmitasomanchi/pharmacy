@@ -114,6 +114,7 @@
 	           	<li><a href="@routes.TrackerController.appUserWeightTracker()">Weight Tracker</a></li>
 	           	<li><a href="@routes.TrackerController.appUserBpTracker()">BloodPressure Tracker</a></li>
 	           	<li><a href="@routes.TrackerController.sugarTracker()">Sugar Tracker</a></li>
+	           		<li><a href="@routes.PatientController.getPatientBloodDonationInfo()">Blood Donation Tracker</a></li>
 	          </ul>
 	    </li>
         @*
@@ -445,7 +446,18 @@
              </ul>
         </li>
         }    
-    	
+    	@if(LoginController.getLoggedInUserRole().equals(Role.BLOOD_BANK_ADMIN.toString())){
+		
+		<li class="dropdown">
+          <a href="#" class="dropdown-toggle" data-toggle="dropdown">
+        	Donors
+          <b class="caret"></b></a>
+          <ul class="dropdown-menu">
+            <li><a href="@routes.BloodBankController.getBloodDonorsInCityForm()">Blood Donors</a></li>
+            <li><a href="@routes.BloodBankController.receivedBloodDonorFrom()">Received Blood</a></li>
+             </ul>
+        </li>
+        }  
     	<!--
         <li class="dropdown">
           <a href="#" class="dropdown-toggle" data-toggle="dropdown">
