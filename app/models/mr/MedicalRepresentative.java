@@ -36,7 +36,7 @@ public class MedicalRepresentative extends BaseEntity {
 
 	//public String designation;
 	
-	@OneToOne(mappedBy="mr")
+	@OneToOne
 	public Designation designation;
 	
 	public boolean isActive = true;

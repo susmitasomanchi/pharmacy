@@ -13,7 +13,10 @@ var map = new Object()
 @for(mr <- mrList){
 
 	@if(mr.id != 1){
-	<li id="li-id-@mr.id">MR-@mr.id<ul  id="ul-id-@mr.id"></ul></li>
+	<li id="li-id-@mr.id">
+		MR-@mr.id
+		<ul  id="ul-id-@mr.id"></ul>
+	</li>
 	}
 	<script>
 		@if(mr.manager != null){

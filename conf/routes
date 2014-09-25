@@ -475,3 +475,16 @@ GET		/cron/start						controllers.CronController.startCron()
 # Map static resources from the /public folder to the /assets URL path
 GET    /assets/*file                                    controllers.Assets.at(path="/public", file)
 
+
+########################## MedNetwork Android App ###############################################
+
+#MR Module
+
+GET    /web-services/mr/login                                             controllers.WebServices.login(email: String ?= "email" , password: String ?= "password")
+GET    /web-services/mr/logout                                            controllers.WebServices.logout()
+GET    /web-services/mr/doctor-list                                       controllers.WebServices.myDoctor()
+#GET    /web-services/mr/product-list                                      controllers.WebServices.myProduct()
+#GET		/web-services/mr/dcr										   controllers.WebServices.dcrLineItem(date: String ?= "date",doctor: String ?= "String" , sampleList: List<String> ?= "sampleList" ,promotion: List<String> ?= "String" pob: String ?= pob)
+
+
+
