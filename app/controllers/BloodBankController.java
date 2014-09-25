@@ -2,29 +2,29 @@ package controllers;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Map;
-import java.util.StringTokenizer;
 
-import org.joda.time.DateTime;
-import org.joda.time.LocalDate;
-
-import com.avaje.ebean.ExpressionList;
-
+import models.Address;
 import models.Alert;
 import models.AppUser;
 import models.BloodGroup;
+import models.FileEntity;
 import models.PrimaryCity;
 import models.Role;
-import models.bloodBank.BloodBankUser;
+import models.State;
+import models.bloodBank.BloodBank;
 import models.bloodBank.BloodDonation;
+import models.diagnostic.DiagnosticCentre;
 import models.patient.Patient;
 import play.Logger;
 import play.mvc.Controller;
+import play.mvc.Http.MultipartFormData.FilePart;
 import play.mvc.Result;
 import actions.BasicAuth;
 import actions.ConfirmAppUser;
+
+import com.avaje.ebean.ExpressionList;
+import com.google.common.io.Files;
 
 @BasicAuth
 public class BloodBankController extends Controller{
@@ -162,6 +162,164 @@ public class BloodBankController extends Controller{
 		appUser.update();
 		flash().put("alert", new Alert("alert-success", "Successfully Stored Blood Donation Information of "+appUser.email).toString());
 		return redirect(routes.BloodBankController.receivedBloodDonorFrom());
+	}
+
+	/**
+	 * @author lakshmi
+	 * Action for BloodBank backgroundImage and profile
+	 * Images of of BloodBank of the loggedIn OOD_BANK_ADMIN
+	 * POST	/secure-diagnostic/upload-diagnostic-images
+	 */
+	public static Result uploadBloodBankImageProcess() {
+		try{
+			final BloodBank bloodBank = BloodBank.find.byId(Long.parseLong(request().body().asMultipartFormData().asFormUrlEncoded().get("bloodBankId")[0]));
+			// Server side validation
+			if((bloodBank.id.longValue() != LoginController.getLoggedInUser().getBloodBankAdmin().bloodBank.id.longValue()) || (!LoginController.getLoggedInUser().role.equals(Role.BLOOD_BANK_ADMIN))){
+				Logger.warn("COULD NOT VALIDATE LOGGED IN USER TO PERFORM THIS TASK");
+				Logger.warn("update attempted for BloodBank id: "+bloodBank.id);
+				Logger.warn("logged in AppUser: "+LoginController.getLoggedInUser().id);
+				Logger.warn("logged in BloodBankUser: "+LoginController.getLoggedInUser().getBloodBankAdmin().id);
+				return redirect(routes.LoginController.processLogout());
+			}
+			//final String pattern="([^\\s]+(\\.(?i)(JPEG|jpg|png|gif|bmp))$)";
+			if (request().body().asMultipartFormData().getFile("backgroundImage") != null) {
+				final FilePart image = request().body().asMultipartFormData().getFile("backgroundImage");
+				if(image.getContentType().equalsIgnoreCase("image/bmp")||image.getContentType().equalsIgnoreCase("image/png")||image.getContentType().equalsIgnoreCase("image/jpeg")||image.getContentType().equalsIgnoreCase("image/gif")){
+					bloodBank.backgroudImage = Files.toByteArray(image.getFile());
+				}else{
+					flash().put("alert", new Alert("alert-info", "Sorry. Images Should Be In The Following Formats .JPEG,.jpg,.png,.gif,.bmp").toString());
+				}
+				bloodBank.update();
+			}
+
+			if (request().body().asMultipartFormData().getFile("profileImage") != null) {
+				final FileEntity fileEntity = new FileEntity();
+				final FilePart image = request().body().asMultipartFormData().getFile("profileImage");
+				if(image.getContentType().equalsIgnoreCase("image/bmp")||image.getContentType().equalsIgnoreCase("image/png")||image.getContentType().equalsIgnoreCase("image/jpeg")||image.getContentType().equalsIgnoreCase("image/gif")){
+					fileEntity.fileName = image.getFilename();
+					fileEntity.mimeType = image.getContentType();
+					fileEntity.byteContent = Files.toByteArray(image.getFile());
+					fileEntity.save();
+					final Long imageId=fileEntity.id;
+					bloodBank.profileImageList.add(FileEntity.find.byId(imageId));
+					bloodBank.update();
+				}else{
+					flash().put("alert", new Alert("alert-info", "Sorry. Images Should Be In The Following Formats .JPEG,.jpg,.png,.gif,.bmp").toString());
+				}
+			} else {
+				Logger.info("BG IMAGE NULL");
+			}
+		}catch(final Exception e){
+			e.printStackTrace();
+			Logger.error("");
+			flash().put("alert", new Alert("alert-danger", "Sorry. Something went wrong. Please try again.").toString());
+		}
+		//return ok(views.html.pharmacist.pharmacy_profile.render(pharmacy.inventoryList, pharmacy));
+		return redirect(routes.UserActions.dashboard());
+
+	}
+
+	/**
+	 * @author lakshmi
+	 * Action to remove profileImage of BloodBank
+	 * GET/secure-blood-bank/remove-image/:bloodBankId/:fileId
+	 */
+	public static Result removeBloodBankImage(final Long bloodBankId,final Long imageId){
+		final BloodBank bloodBank = BloodBank.find.byId(bloodBankId);
+		Logger.info("before list size="+bloodBank.profileImageList.size());
+		final FileEntity image = FileEntity.find.byId(imageId);
+		bloodBank.profileImageList.remove(image);
+		bloodBank.update();
+		//image.delete();
+		Logger.info("after list size="+bloodBank.profileImageList.size());
+		//		return ok(views.html.pharmacist.pharmacy_profile.render(pharmacy.inventoryList, pharmacy));
+		return redirect(routes.UserActions.dashboard());
+	}
+	/**
+	 * @author : lakshmi
+	 * POST	/secure-blood-bank/basic-update
+	 * Action to update the basic details(like name & brief description etc) of BloodBank
+	 */
+
+	public static Result bloodBankBasicUpdate() {
+		try{
+			final Map<String, String[]> requestMap = request().body().asFormUrlEncoded();
+			final BloodBank bloodBank = BloodBank.find.byId(Long.parseLong(requestMap.get("bloodBankId")[0]));
+			// Server side validation
+			if((bloodBank.id.longValue() != LoginController.getLoggedInUser().getBloodBankAdmin().bloodBank.id.longValue()) || (!LoginController.getLoggedInUser().role.equals(Role.BLOOD_BANK_ADMIN))){
+				Logger.warn("COULD NOT VALIDATE LOGGED IN USER TO PERFORM THIS TASK");
+				Logger.warn("update attempted for BloodBank id: "+bloodBank.id);
+				Logger.warn("logged in AppUser: "+LoginController.getLoggedInUser().id);
+				Logger.warn("logged in DiagnosticRep: "+LoginController.getLoggedInUser().getBloodBankAdmin().bloodBank.id);
+				return redirect(routes.LoginController.processLogout());
+			}
+			if(requestMap.get("name") != null && (requestMap.get("name")[0].trim().compareToIgnoreCase("")!=0)){
+				bloodBank.name = requestMap.get("name")[0].trim();
+			}
+			if(requestMap.get("description") != null && (requestMap.get("description")[0].trim().compareToIgnoreCase("")!=0)){
+				bloodBank.description = requestMap.get("description")[0].trim();
+			}
+
+			bloodBank.update();
+		}
+		catch (final Exception e){
+			flash().put("alert", new Alert("alert-danger", "Sorry. Something went wrong. Please try again.").toString());
+		}
+		return redirect(routes.UserActions.dashboard());
+	}
+	/**
+	 * @author : lakshmi
+	 * POST	/secure-blood-bank/address-update
+	 * Action to update the address details of BloodBank
+	 */
+
+	public static Result bloodBankAddressUpdate() {
+
+		try{
+			final Map<String, String[]> requestMap = request().body().asFormUrlEncoded();
+			final BloodBank bloodBank = BloodBank.find.byId(Long.parseLong(requestMap.get("bloodBankId")[0]));
+			Logger.info("map size"+requestMap.toString());
+			if(bloodBank.address == null){
+				final Address address = new Address();
+				address.save();
+				bloodBank.address = address;
+			}
+			if(requestMap.get("contactPerson") != null && (requestMap.get("contactPerson")[0].trim().compareToIgnoreCase("")!=0)){
+				bloodBank.contactPersonName = requestMap.get("contactPerson")[0];
+			}
+			if(requestMap.get("addressLine1") != null && (requestMap.get("addressLine1")[0].trim().compareToIgnoreCase("")!=0)){
+				bloodBank.address.addressLine1 = requestMap.get("addressLine1")[0];
+			}
+			if(requestMap.get("city") != null && (requestMap.get("city")[0].trim().compareToIgnoreCase("")!=0)){
+				bloodBank.address.city = requestMap.get("city")[0];
+			}
+			if(requestMap.get("area") != null && (requestMap.get("area")[0].trim().compareToIgnoreCase("")!=0)){
+				bloodBank.address.area = requestMap.get("area")[0];
+			}
+			if(requestMap.get("pincode") != null && (requestMap.get("pincode")[0].trim().compareToIgnoreCase("")!=0)){
+				bloodBank.address.pinCode = requestMap.get("pincode")[0];
+			}
+			if(requestMap.get("state") != null && (requestMap.get("state")[0].trim().compareToIgnoreCase("")!=0)){
+				bloodBank.address.state = Enum.valueOf(State.class,requestMap.get("state")[0]);
+			}
+			if(requestMap.get("latitude") != null && (requestMap.get("latitude")[0].trim().compareToIgnoreCase("")!=0)){
+				bloodBank.address.latitude = requestMap.get("latitude")[0];
+			}
+			if(requestMap.get("longitude") != null && (requestMap.get("longitude")[0].trim().compareToIgnoreCase("")!=0)){
+				bloodBank.address.longitude = requestMap.get("longitude")[0];
+			}
+			if(requestMap.get("contactNo") != null && (requestMap.get("contactNo")[0].trim().compareToIgnoreCase("")!=0)){
+				bloodBank.contactNo = requestMap.get("contactNo")[0];
+			}
+			bloodBank.address.update();
+			bloodBank.update();
+
+		}
+		catch (final Exception e){
+			e.printStackTrace();
+			flash().put("alert", new Alert("alert-danger", "Sorry. Something went wrong. Please try again.").toString());
+		}
+		return redirect(routes.UserActions.dashboard());
 	}
 
 

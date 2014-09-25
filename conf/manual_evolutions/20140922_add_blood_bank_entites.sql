@@ -11,6 +11,8 @@ create table blood_bank (
   address_id					bigint,					
   primary_city_id				bigint,
   blood_bank_admin_id			bigint,	
+  backgroud_image				 bytea;
+ description					TEXT,
   created_on                timestamp not null,
   last_update               timestamp not null,
   constraint pk_blood_bank primary key (id)

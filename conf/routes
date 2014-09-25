@@ -81,6 +81,7 @@ GET		/doctor/add-to-favorite/:docId					controllers.PublicController.addToFavDoc
 GET		/diagnostic/get-image/:diagnosticId/:imageId	controllers.PublicController.getDiagnosticImages(diagnosticId: Long,imageId: Long)
 GET		/diagnostic/remove-diagnostic/:diagnosticId					controllers.PublicController.removeFavoriteDiagnosticCentre(diagnosticId: Long)
 GET		/doctor/remove-pharmacy/:pharmacyId							controllers.PublicController.removeFavoritePharmacy(pharmacyId:Long)
+GET		/bloodBank/get-image/:bloodBankId/:imageId					controllers.PublicController.getBloodBankImages(bloodBankId: Long,imageId: Long)
 GET 	/sendTestmail									controllers.DiagnosticController.sendSampleAttchEmail() 
 # Sign up page
 GET    /secure-doctor/join                              			controllers.UserController.joinUsDoctor()
@@ -395,7 +396,10 @@ POST    /secure-blood-bank/list-blood-donors      					controllers.BloodBankCont
 GET    /secure-blood-bank/received-blood-info-form      					controllers.BloodBankController.receivedBloodDonorFrom()
 GET    /secure-blood-bank/get-received-blood-info/:emailId/:appUserId      					controllers.BloodBankController.getReceivedBloodDonorInfo(emailId: String,appUserId: Long)
 POST    /secure-blood-bank/save-received-blood-info/:patientId      					controllers.BloodBankController.saveReceivedBloodDonorInfo(patientId: Long)
-
+POST	/secure-blood-bank/upload-blood-bank-images										controllers.BloodBankController.uploadBloodBankImageProcess()
+GET		/secure-blood-bank/remove-image/:bloodBankId/:fileId						controllers.BloodBankController.removeBloodBankImage(bloodBankId: Long,fileId: Long)
+POST	/secure-blood-bank/basic-update												controllers.BloodBankController.bloodBankBasicUpdate()
+POST	/secure-blood-bank/address-update 											controllers.BloodBankController.bloodBankAddressUpdate()
 
 
 
