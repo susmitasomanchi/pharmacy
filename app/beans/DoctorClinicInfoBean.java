@@ -64,20 +64,16 @@ public class DoctorClinicInfoBean implements Serializable {
 	public Integer slotMR;
 
 	public DoctorClinicInfo toDoctorClinicInfo() {
-
 		final DoctorClinicInfo doctorClinicInfo = new DoctorClinicInfo();
-
 		if (this.id != null) {
 			doctorClinicInfo.id = this.id;
 		}
-
 		if(this.doctorId != null){
 			doctorClinicInfo.doctor = Doctor.find.byId(this.doctorId);
 		}
 
-
-		Logger.info("" + this.id);
-		Logger.info("name null");
+		//Logger.info("" + this.id);
+		//Logger.info("name null");
 
 		final Clinic clinic = new Clinic();
 		clinic.name = this.name;
@@ -88,13 +84,12 @@ public class DoctorClinicInfoBean implements Serializable {
 		}
 		doctorClinicInfo.clinic = clinic;
 
-		Logger.info(doctorClinicInfo.clinic.name);
-		Logger.info("from hrs" + this.fromHrs.size());
-		Logger.info("" + this.toHrs);
-		Logger.info(this.daysOfWeek.size() + "");
+		//Logger.info(doctorClinicInfo.clinic.name);
+		//Logger.info("from hrs" + this.fromHrs.size());
+		//Logger.info("" + this.toHrs);
+		//Logger.info(this.daysOfWeek.size() + "");
 
 		for (int index = 0; index < this.daysOfWeek.size(); index++) {
-
 			if (this.daysOfWeek.get(index) != null) {
 				final DaySchedule schedule = new DaySchedule();
 				schedule.fromTime = this.fromHrs.get(index);
@@ -106,7 +101,7 @@ public class DoctorClinicInfoBean implements Serializable {
 			}
 		}
 
-		Logger.info(this.daysOfWeekMr.size() + "mr size");
+		//Logger.info(this.daysOfWeekMr.size() + "mr size");
 
 		for (int index = 0; index < this.daysOfWeekMr.size(); index++) {
 			if (this.daysOfWeekMr.get(index) != null) {

@@ -32,7 +32,7 @@ public class Patient extends BaseEntity {
 	@OneToOne
 	public AppUser appUser;
 
-	public String age;
+	public String age ;
 
 	@OneToMany(cascade = CascadeType.ALL)
 	public List<PatientDoctorInfo> patientDoctorInfoList = new ArrayList<PatientDoctorInfo>();
@@ -48,7 +48,7 @@ public class Patient extends BaseEntity {
 
 	@OneToOne
 	public PrimaryCity primaryCity;
-	
+
 	public static Model.Finder<Long, Patient> find = new Finder<Long, Patient>(Long.class, Patient.class);
 
 	public List<Appointment> getAppointments(){

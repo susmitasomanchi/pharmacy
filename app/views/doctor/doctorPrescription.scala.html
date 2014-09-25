@@ -321,26 +321,23 @@ function addDiagTest(){
 <input type="submit" class="pull-right btn btn-success btn-sm" value="save">
 <br><br>
 
-@*
-</form>
-*@
-
 </div>
 
 
 
-@*
+
 <div class="col-md-1" style="width:3%">
 </div>
 </div>
 </div>
+}
 <div class="col-md-1" style="width:3%">
 </div>
-*@
 
 
 
-@*
+
+
 <div class="col-md-4" style="width:30%">
 <div class="panel panel-primary">
 <div class="panel-heading">
@@ -348,19 +345,56 @@ function addDiagTest(){
 </div>
 <div class="panel-body">
 <ul style="font-size:13px">
-<li><a href="#">Prescription on 20th June 2014</a></li>
-<li><a href="#">Prescription on 10th June 2014</a></li>
-<li><a href="#">Prescription on 30th May 2014</a></li>
-<li><a href="#">Prescription on 20th May 2014</a></li>
-
+@for(prescription <- appointment.doctorClinicInfo.doctor.doctorPatientPrescriptionList(appointment.requestedBy.id)){
+	<li style="cursor:pointer;color:#008bca" onclick="showpastpres('@prescription.id')">Prescription on @prescription.prescriptionDate.format("dd-MM-yyyy HH:mm")
+	</li>
+}
 </ul>
 </div>
 </div>
 </div>
-*@
 
+
+
+
+
+
+
+
+
+<style>
+#modal-content{
+	height: 700px;
+    overflow: scroll;
+}
+</style>
+
+<div class="modal fade" id="past-pres" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+     <div class="modal-header alert-info">
+        <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+        <h4 class="modal-title"></h4>
+      </div>
+      	<div class="modal-body" id="modal-content">
+      	</div>
+     	<div class="modal-footer">
+        <a class="btn btn-default" data-dismiss="modal">Close</a>
+       </div>
+    </div>
+  </div>
+</div>
+
+<script>
+	function showpastpres(pastpresid){
+		$('#past-pres').modal('show');
+			$.get('/secure-doctor/view-prescription/'+pastpresid, function(htmldata) {
+				$('#modal-content').html(htmldata);
+			});
+	}	
+</script>
 
 
 }
 
-}
+

@@ -18,9 +18,9 @@ public class BloodPressureTracker extends BaseEntity{
 	@GeneratedValue(strategy = GenerationType.AUTO)
 	public Long id;
 
-	public int lowBp;
+	public float lowBp;
 
-	public int highBp;
+	public float highBp;
 
 	public Date date;
 

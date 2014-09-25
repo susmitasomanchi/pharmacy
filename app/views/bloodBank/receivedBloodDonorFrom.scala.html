@@ -1,0 +1,150 @@
+@(patient : models.patient.Patient)
+@import play.i18n._
+@import helper.twitterBootstrap._
+@import helper._
+
+@main("Blood Donation Form"){
+<div class="well">
+@*<form action="@routes.BloodBankController.getReceivedBloodDonorInfo()" method="POST">*@
+<div class="row">
+<div class="col-md-4">
+ <label for="emailId" class="col-md-6" style="padding-top:7px">Email Id </label>
+ <div class="col-md-4">
+	<input type="email" style="box-shadow: 1px 1px 3px 3px #aaaaaa;"  name="email" id="email" placeholder=" Email Id" required>
+	</div>
+</div>
+</div>
+<br>
+<div class="row">
+<div class="col-md-4">
+<label for="confirmEmailId" class="col-md-6" style="padding-top:7px">Confirm Email Id </label>
+<div class="col-md-4">
+	<input type="email" style="box-shadow: 1px 1px 3px 3px #aaaaaa;"  name="confirmEmail" id="confirmEmail" placeholder="Re-Enter Email Id" required>
+</div>
+</div>
+</div>
+   <br>
+<div style="padding-left:15px;padding-right:15px">
+	@*
+	<button style="box-shadow: 1px 1px 3px 3px #aaaaaa;" class="btn btn-sm btn-primary" onclick="submitSearch();"><i class="icon-search icon-large"></i> Find</button>
+	*@
+	<button style="box-shadow: 1px 1px 3px 3px #aaaaaa;"  onclick="return validateAndSubmit(@LoginController.getLoggedInUser().id);" class="btn btn-sm btn-primary">Find</button>
+</div>
+<script>
+function validateAndSubmit(appUserId){
+	var email = $('#email').val().trim();
+	var confirmEmailId = $('#confirmEmail').val().trim();
+    	if(email != confirmEmailId){
+    		alert("Email Ids Do Not Match!");
+    	    return false;
+    	}
+    	if(email == ""){
+    		alert("Enter Email Id");
+    	    return false;
+    	}
+    	window.location.href = '/secure-blood-bank/get-received-blood-info/'+email+'/'+appUserId;
+    	
+}
+
+</script>
+</div>
+
+@if(patient != null){
+<hr>
+<div class="well">
+<div class="row" style="padding:15px;">
+<div class="col-md-4">
+<h5>@patient.appUser.name&nbsp;(@{patient.getSexAndAge()})</h5>
+<h5>@patient.appUser.email</h5>
+<h5>@if(patient.appUser.isMobileNumberShared == true){@patient.appUser.mobileNumber}</h5>
+</div>
+</div>
+<form action="@routes.BloodBankController.saveReceivedBloodDonorInfo(patient.id)" method="POST">
+<div class="col-md-12" style="padding:0px">
+<div class="col-md-6">
+<div class="form-group">
+ <label for="quantity" class="col-md-4 form-label"><b> Blood Group  <span style="color:red;">*</span> </b></label>
+ <div class="col-md-4">
+<select id="bloodGroup" name="bloodGroup">
+<option></option>
+@for((k,v) <- BloodGroup.options()){
+<option value="@k">@v</option>
+}
+</select>
+	</div>
+</div>
+</div>
+</div>
+<br><br>
+ <div class="col-md-12" style="padding:0px">
+<div class="col-md-6">
+<div class="form-group">
+<label for="quantity" class="col-md-4 form-label"><b> Quantity  <span style="color:red;">*</span> </b></label>
+<div class="col-lg-6">
+<input type="text" class="form-control" name="quantity" id="quantity" placeholder="Quantity Of BloodDonated"></div>
+</div>
+</div>
+<div class="col-md-6">
+<div class="form-group">
+      <label for="inputDOB" class="col-lg-5 control-label">Date <span style="color:red;">*</span><br><span style="font-size:10px;"><b>(DD-MM-YYYY)</b></span></label>
+      <div class="col-lg-7" style="padding:0px">
+		<div class="input-append date" id="datepicker" data-date-format="dd-mm -yyyy">
+				<input name="date" class="col-md-7" size="16" type="text" readonly="">
+				<span class="add-on col-md-5"><i class="fa fa-calendar"></i></span>
+			  </div>
+      </div>
+    </div>
+    </div>
+    </div>
+    <script>
+    $("#datepicker").datepicker('setValue', new Date());
+    </script>
+
+<br><br>
+<div class="col-md-12" style="padding:0px">
+<div class="col-md-6">
+<div class="form-group">
+<label for="weight" class="col-md-4 form-label"><b> Weight <span style="color:red;">*</span></b></label>
+<div class="col-lg-6">
+<input type="text" class="form-control" name="weight" id="weight" placeholder="in kgs"></div>
+</div>
+</div>
+<div class="col-md-6">
+<div class="form-group">
+<label for="hemoglobin" class="col-md-4 form-label"><b> Hemoglobin Level </b></label>
+<div class="col-lg-6">
+<input type="text" class="form-control" name="hemoglobin"  id="hemoglobin" placeholder="HemoGlobin Leve"></div>
+</div>
+</div>
+</div>
+<input type="hidden" name="appUserId" value="@LoginController.getLoggedInUser().id"/> 
+   <br>
+<div style="padding-left:15px;padding-right:15px">
+		<input style="box-shadow: 1px 1px 3px 3px #aaaaaa;" onclick="return validate();" type="submit" class="btn btn-sm btn-primary" value="save" >
+</div>
+</form>
+
+</div>
+<script>
+function validate(){
+	if( $('#bloodGroup').val().trim() == ""){
+		alert("Enter Quantity of Blood Donated");
+		return false;
+	}
+	if( $('#quantity').val().trim() == ""){
+		alert("Enter Quantity of Blood Donated");
+		return false;
+	}
+	if( $('#weight').val().trim() == ""){
+		alert("Enter Weight");
+		return false;
+	}
+	if( $('#date').val().trim() == ""){
+		alert("Enter Date Of Blood Donation");
+		return false;
+	}
+}
+</script>
+}
+
+}

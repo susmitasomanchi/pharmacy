@@ -6,6 +6,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
@@ -36,6 +37,7 @@ import models.doctor.MedicineLineItem;
 import models.doctor.Prescription;
 import models.doctor.QuestionAndAnswer;
 import models.doctor.SigCode;
+import models.patient.Patient;
 import models.pharmacist.Pharmacy;
 import models.pharmacist.PharmacyPrescriptionInfo;
 import models.pharmacist.PharmacyPrescriptionStatus;
@@ -631,10 +633,57 @@ public class DoctorController extends Controller {
 		if (filledForm.hasErrors()) {
 			return ok(views.html.doctor.newClinic.render(clinicForm));
 		} else {
-			final DoctorClinicInfo clinicInfo = filledForm.get()
-					.toDoctorClinicInfo();
+			final DoctorClinicInfo clinicInfo = filledForm.get().toDoctorClinicInfo();
 			clinicInfo.doctor = LoginController.getLoggedInUser().getDoctor();
 			clinicInfo.save();
+			try{
+				final SimpleDateFormat dateFormat = new SimpleDateFormat("kk:mm");
+				final List<DoctorClinicInfo> doctorClinicInfos = clinicInfo.doctor.getActiveClinic();
+				if(doctorClinicInfos.size() > 0){
+					final Iterator<DaySchedule> dayScheduleItr = clinicInfo.scheduleDays.iterator();
+					while (dayScheduleItr.hasNext()){
+						final DaySchedule newSchedule = dayScheduleItr.next();
+						for (final DoctorClinicInfo doctorClinicInfo : doctorClinicInfos) {
+							if(doctorClinicInfo.id.longValue() != clinicInfo.id.longValue()){
+								for (final DaySchedule previousSchedule : doctorClinicInfo.scheduleDays) {
+									Logger.info("Previous Clinic: "+doctorClinicInfo.clinic.name);
+									Logger.info("to time old == "+previousSchedule.toTime);
+									Logger.info("from time new == "+newSchedule.fromTime);
+									if(
+											((previousSchedule.day).equals(newSchedule.day))
+											&&
+											(((dateFormat.parse(newSchedule.fromTime)).before(dateFormat.parse(previousSchedule.toTime))
+													&&
+													(dateFormat.parse(newSchedule.fromTime)).after(dateFormat.parse(previousSchedule.fromTime)))
+													||
+													((dateFormat.parse(newSchedule.toTime)).after(dateFormat.parse(previousSchedule.fromTime))
+															&&
+															(dateFormat.parse(newSchedule.toTime)).before(dateFormat.parse(previousSchedule.toTime)))
+													)){
+										/*Logger.info("Time Clash!");
+										Logger.info("day new "+newSchedule.day.toString()+"  "+dateFormat.parse(newSchedule.fromTime));
+										Logger.info("day old "+previousSchedule.day.toString()+"   "+dateFormat.parse(previousSchedule.toTime));
+
+										//clinicInfo.scheduleDays.clear();
+										//clinicInfo.scheduleDays = new ArrayList<DaySchedule>();
+										 */										final Iterator<DaySchedule> removalDayScheduleItr = clinicInfo.scheduleDays.iterator();
+										 while (removalDayScheduleItr.hasNext()){
+											 //clinicInfo.scheduleDays.remove(removalDayScheduleItr.next());
+											 removalDayScheduleItr.next().delete();
+										 }
+										 clinicInfo.update();
+										 flash().put("alert",new Alert("alert-danger", clinicInfo.clinic.name+ " created successfully but got time clashes with "+doctorClinicInfo.clinic.name+" while creating schedules.").toString());
+										 return redirect(routes.DoctorController.myClinics());
+									}
+								}
+							}
+						}
+					}
+				}
+			}
+			catch (final Exception e){
+				e.printStackTrace();
+			}
 			return DoctorController.createAppointment(clinicInfo);
 		}
 	}
@@ -662,9 +711,10 @@ public class DoctorController extends Controller {
 			return redirect(routes.LoginController.processLogout());
 		}
 		try {
+			final SimpleDateFormat dateFormat = new SimpleDateFormat("kk:mm");
 			final Calendar calendar1 = Calendar.getInstance();
 			final Calendar calendar2 = Calendar.getInstance();
-			final SimpleDateFormat dateFormat = new SimpleDateFormat("kk:mm");
+
 			final Calendar calendar = Calendar.getInstance();
 			calendar.setTime(new Date());
 			for (int date = 0; date < 90; date++) {
@@ -746,6 +796,7 @@ public class DoctorController extends Controller {
 					new Alert("alert-success", docClinicInfo.clinic.name
 							+ " created successfully.").toString());
 			return redirect(routes.DoctorController.myClinics());
+
 		} catch (final Exception e) {
 			Logger.error("ERROR WHILE CREATING APPOINTMENTS.");
 			e.printStackTrace();
@@ -882,6 +933,41 @@ public class DoctorController extends Controller {
 					.byId(clinicInfo.id);
 			for (final DaySchedule sc4 : clinicInfo.scheduleDays) {
 				Logger.info("test day" + sc4.day);
+			}
+			try{
+				final SimpleDateFormat dateFormat = new SimpleDateFormat("kk:mm");
+				final List<DoctorClinicInfo> doctorClinicInfos = clinicInfo.doctor.getActiveClinic();
+				if(doctorClinicInfos.size() > 0){
+					final Iterator<DaySchedule> dayScheduleItr = clinicInfo.scheduleDays.iterator();
+					while (dayScheduleItr.hasNext()){
+						final DaySchedule newSchedule = dayScheduleItr.next();
+						for (final DoctorClinicInfo doctorClinicInfo : doctorClinicInfos) {
+							if(doctorClinicInfo.id.longValue() != clinicInfo.id.longValue()){
+								for (final DaySchedule previousSchedule : doctorClinicInfo.scheduleDays) {
+									if(
+											((previousSchedule.day).equals(newSchedule.day))
+											&&
+											((dateFormat.parse(newSchedule.fromTime)).before(dateFormat.parse(previousSchedule.toTime))
+													||
+													(dateFormat.parse(newSchedule.fromTime)).after(dateFormat.parse(previousSchedule.fromTime))
+													||
+													(dateFormat.parse(newSchedule.fromTime)).after(dateFormat.parse(previousSchedule.fromTime))
+													||
+													(dateFormat.parse(newSchedule.toTime)).after(dateFormat.parse(previousSchedule.fromTime))
+													||
+													(dateFormat.parse(newSchedule.toTime)).before(dateFormat.parse(previousSchedule.toTime)))
+											){
+										flash().put("alert",new Alert("alert-danger", clinicInfo.clinic.name+ " created successfully but got time clashes with "+doctorClinicInfo.clinic.name+" while creating schedules.").toString());
+										return redirect(routes.DoctorController.myClinics());
+									}
+								}
+							}
+						}
+					}
+				}
+			}
+			catch (final Exception e){
+				e.printStackTrace();
 			}
 			Ebean.delete(clinicInfoPrevious.scheduleDays);
 			clinicInfoPrevious.scheduleDays = clinicInfo.scheduleDays;
@@ -1115,12 +1201,30 @@ public class DoctorController extends Controller {
 	public static Result showPrescriptionForm(final Long appointmentId) {
 		final Appointment appointment = Appointment.find.byId(appointmentId);
 		// server-side check
+		if (appointment.doctorClinicInfo.doctor.id.longValue() != LoginController.getLoggedInUser().getDoctor().id.longValue()) {
+			return redirect(routes.LoginController.processLogout());
+		}
+		return ok(views.html.doctor.doctorPrescription.render(prescriptionForm,appointment));
+	}
+	/**
+	 * Action to render the prescription form to the loggedInDoctor GET
+	 * /secure-doctor/prescription/:appointmentId
+	 */
+	@ConfirmAppUser
+	public static Result showPrescription(final Long precsriptionId) {
+		final Doctor doctor = LoginController.getLoggedInUser().getDoctor();
+		final Prescription prescription = Prescription.find.byId(precsriptionId);
+		// server-side check
+		if (prescription.doctor.id.longValue() != doctor.id.longValue()) {
+			return redirect(routes.LoginController.processLogout());
+		}
+		/*final Appointment appointment = Appointment.find.byId(appointmentId);
+		// server-side check
 		if (appointment.doctorClinicInfo.doctor.id.longValue() != LoginController
 				.getLoggedInUser().getDoctor().id.longValue()) {
 			return redirect(routes.LoginController.processLogout());
-		}
-		return ok(views.html.doctor.doctorPrescription.render(prescriptionForm,
-				appointment));
+		}*/
+		return ok(views.html.doctor.doctorSharePrescription.render(prescription));
 	}
 
 	/**
@@ -1170,8 +1274,7 @@ public class DoctorController extends Controller {
 					.ieq("name", diagLineItem.fullNameOfDiagnosticTest.trim())
 					.findRowCount() == 0) {
 				final DoctorDiagnosticTest doctorDiagnosticTest = new DoctorDiagnosticTest();
-				doctorDiagnosticTest.name = diagLineItem.fullNameOfDiagnosticTest
-						.trim();
+				doctorDiagnosticTest.name = diagLineItem.fullNameOfDiagnosticTest.trim();
 				doctorDiagnosticTestList.add(doctorDiagnosticTest);
 			}
 		}
@@ -1196,29 +1299,24 @@ public class DoctorController extends Controller {
 			}
 		});
 		// End of async
-		SMSService.sendSMS(prescription.patient.appUser.mobileNumber.toString(), "Your priscription by Dr. "
-				+doctor.appUser.name+" has been saved.");
-		flash().put("alert",
-				new Alert("alert-success", "Prescription saved!").toString());
-		return redirect(routes.DoctorController
-				.showPrescription(prescription.id));
+		SMSService.sendSMS(prescription.patient.appUser.mobileNumber.toString(), "Your priscription by Dr. "+doctor.appUser.name+" has been saved.");
+		flash().put("alert", new Alert("alert-success", "Prescription saved!").toString());
+		return redirect(routes.DoctorController.showPrescription(prescription.id));
 	}
 
 	/**
-	 * Action to show logged In doctor a page to assign a prescription to a
-	 * pharmacy / diagnostic centre GET /secure-doctor/show-prescription
+	 * Action to show logged In doctor prescription with no_navbar
+	 * GET /secure-doctor/view-prescription
 	 */
 	@ConfirmAppUser
-	public static Result showPrescription(final Long prescriptionId) {
+	public static Result viewPrescription(final Long prescriptionId) {
 		final Doctor doctor = LoginController.getLoggedInUser().getDoctor();
-		final Prescription prescription = Prescription.find
-				.byId(prescriptionId);
+		final Prescription prescription = Prescription.find.byId(prescriptionId);
 		// server-side check
 		if (prescription.doctor.id.longValue() != doctor.id.longValue()) {
 			return redirect(routes.LoginController.processLogout());
 		}
-		return ok(views.html.doctor.doctorSharePrescription
-				.render(prescription));
+		return ok(views.html.doctor.viewPrescription.render(prescription));
 	}
 
 	/**
@@ -1660,16 +1758,64 @@ public class DoctorController extends Controller {
 	 * Action to get Doctors based on specialization
 	 * @return
 	 */
-	public static List<Doctor> getDoctorsBySpecz(final Long id){
-		final MasterSpecialization masterSpecialization = MasterSpecialization.find.byId(id);
-		final List<Doctor> doctors =  new ArrayList<Doctor>();
-		for (final Doctor doctor : Doctor.find.all()) {
-			if(doctor.specializationList.contains(masterSpecialization)){
-				doctors.add(doctor);
-			}
-
-		}
-		return doctors;
+	public static Result getPatientFollowUPAppointment(final Long clinicId,final Long patientId){
+		final Doctor doctor = LoginController.getLoggedInUser().getDoctor();
+		final DoctorClinicInfo doctorClinicInfo = DoctorClinicInfo.find.where().eq("doctor", doctor).eq("clinic",Clinic.find.byId(clinicId)).findUnique();
+		return ok(views.html.doctor.patientFollwUpAppointment.render(doctorClinicInfo,Patient.find.byId(patientId)));
 	}
+	/**
+	 * @author Mitesh
+	 * Action to process requested appointments
+	 * POST		/patient/process-appointment
+	 */
+	@ConfirmAppUser
+	public static Result processPatientFollowUPAppointment(final Long appointmentId,final Long patientId) {
+		final String remark=request().body().asFormUrlEncoded().get("remark")[0];
+		Logger.warn(remark);
+		final Appointment appointment = Appointment.find.byId(appointmentId);
+		appointment.appointmentStatus = AppointmentStatus.APPROVED;
+		appointment.problemStatement = remark;
+		appointment.requestedBy = Patient.find.byId(patientId).appUser;
+		appointment.bookedOn = new Date();
+		appointment.update();
+
+
+
+		// Async Execution
+		Promise.promise(new Function0<Integer>() {
+			//@Override
+			@Override
+			public Integer apply() {
+				int result = 0;
+				if(!EmailService.sendAppointmentConformMail(appointment.requestedBy, appointment.doctorClinicInfo.doctor.appUser, appointment)){
+					result=1;
+				}
+
+				return result;
+			}
+		});
+		// End of async
+
+		final StringBuilder smsMessage = new StringBuilder();
+
+		smsMessage.append("You have an follow up appointment with Dr. "+appointment.doctorClinicInfo.doctor.appUser.name+" on ");
+		smsMessage.append( new SimpleDateFormat("dd-MMM-yyyy").format(appointment.appointmentTime));
+		smsMessage.append(" at "+ new SimpleDateFormat("HH:mm").format(appointment.appointmentTime));
+		smsMessage.append(" at "+appointment.doctorClinicInfo.clinic.name+", "+appointment.doctorClinicInfo.clinic.address.area);
+		SMSService.sendSMS(appointment.requestedBy.mobileNumber.toString(), smsMessage.toString());
+
+		/*
+		final StringBuilder smsMessage2 = new StringBuilder();
+		smsMessage2.append("An Appointment has been booked on");
+		smsMessage2.append( new SimpleDateFormat("dd-MMM-yyyy").format(appointment.appointmentTime));
+		smsMessage2.append(","+ new SimpleDateFormat("HH:mm").format(appointment.appointmentTime));
+		smsMessage2.append("at "+appointment.doctorClinicInfo.clinic.name+","+appointment.doctorClinicInfo.clinic.address.area);
+		smsMessage2.append("by patient "+appointment.requestedBy.name+".");
+		SMSService.sendSMS(appointment.doctorClinicInfo.doctor.appUser.mobileNumber.toString(), smsMessage2.toString());
+		 */
+
+		return redirect(routes.DoctorController. viewTodaysAppointments());
+	}
+
 
 }

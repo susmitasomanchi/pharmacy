@@ -13,6 +13,7 @@ import play.db.ebean.Model;
 @SuppressWarnings("serial")
 @Entity
 public class SugarTracker extends BaseEntity{
+
 	@GeneratedValue(strategy=GenerationType.AUTO)
 	@Id
 	public Long id;

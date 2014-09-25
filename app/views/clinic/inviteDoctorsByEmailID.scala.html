@@ -1,0 +1,47 @@
+@()
+@import play.i18n._
+@import helper.twitterBootstrap._
+@import helper._
+
+@main("Invite Doctors"){
+<div class="well">
+<form action="@routes.ClinicController.processSeachDoctorsByEmailId()" method="POST">
+<div class="row">
+<div class="col-md-4">
+ <label for="emailId" class="col-md-6" style="padding-top:7px">Email Id </label>
+ <div class="col-md-4">
+	<input type="email" style="box-shadow: 1px 1px 3px 3px #aaaaaa;"  name="email" id="email" placeholder="Doctor's Email Id" required>
+	</div>
+</div>
+</div>
+<br>
+<div class="row">
+<div class="col-md-4">
+<label for="confirmEmailId" class="col-md-6" style="padding-top:7px">Confirm Email Id </label>
+<div class="col-md-4">
+	<input type="email" style="box-shadow: 1px 1px 3px 3px #aaaaaa;"  name="confirmEmail" id="confirmEmail" placeholder="Re-Enter Doctor's Email Id" required>
+</div>
+</div>
+</div>
+   <br>
+<div style="padding-left:15px;padding-right:15px">
+	@*
+	<button style="box-shadow: 1px 1px 3px 3px #aaaaaa;" class="btn btn-sm btn-primary" onclick="submitSearch();"><i class="icon-search icon-large"></i> Invite</button>
+	*@
+	<input style="box-shadow: 1px 1px 3px 3px #aaaaaa;" type="submit" onclick="return validateAndSubmit();" class="btn btn-sm btn-primary" value="Invite" >
+</div>
+</form>
+<script>
+function validateAndSubmit(){
+	var email = $('#email').val().trim();
+	var confirmEmailId = $('#confirmEmail').val().trim();
+    	if(email != confirmEmailId){
+    		alert("Email Ids Do Not Match!");
+    	    return false;
+    	}
+}
+
+</script>
+</div>
+
+}

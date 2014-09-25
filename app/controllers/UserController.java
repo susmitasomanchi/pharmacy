@@ -15,8 +15,12 @@ import models.BloodGroup;
 import models.PrimaryCity;
 import models.Role;
 import models.Sex;
+import models.bloodBank.BloodBank;
+import models.bloodBank.BloodBankUser;
+import models.clinic.ClinicUser;
 import models.diagnostic.DiagnosticCentre;
 import models.diagnostic.DiagnosticRepresentative;
+import models.doctor.Clinic;
 import models.doctor.Doctor;
 import models.mr.MedicalRepresentative;
 import models.patient.Patient;
@@ -36,7 +40,6 @@ import utils.EmailService;
 import utils.SMSService;
 import utils.Util;
 import actions.BasicAuth;
-import actions.ConfirmAppUser;
 import beans.JoinUsBean;
 
 
@@ -80,6 +83,12 @@ public class UserController extends Controller {
 	public static Result joinUsPatient(){
 		return ok(views.html.patient.joinus.render());
 	}
+	public static Result joinUsClinic(){
+		return ok(views.html.clinic.joinus.render());
+	}
+	public static Result joinUsBloodBank(){
+		return ok(views.html.bloodBank.joinus.render());
+	}
 
 
 
@@ -106,6 +115,12 @@ public class UserController extends Controller {
 			}
 			if(appUser.role == Role.ADMIN_DIAGREP){
 				return redirect(routes.UserController.joinUsDiagnostic());
+			}
+			if(appUser.role == Role.CLINIC_ADMIN){
+				return redirect(routes.UserController.joinUsClinic());
+			}
+			if(appUser.role == Role.BLOOD_BANK_ADMIN){
+				return redirect(routes.UserController.joinUsBloodBank());
 			}
 		}
 
@@ -191,6 +206,32 @@ public class UserController extends Controller {
 			diagnosticCentre.save();
 			diagnosticRepresentative.diagnosticCentre = diagnosticCentre;
 			diagnosticRepresentative.update();
+		}
+		if(appUser.role.equals(Role.CLINIC_ADMIN)){
+			final ClinicUser clinicUser = new ClinicUser();
+			clinicUser.appUser = appUser;
+			clinicUser.save();
+
+			final Clinic clinic = new Clinic();
+			clinic.name = request().body().asFormUrlEncoded().get("clinicName")[0];
+			clinic.clinicAdminstrator = clinicUser;
+			clinic.primaryCity = city;
+			clinic.save();
+			clinicUser.clinic = clinic;
+			clinicUser.update();
+		}
+		if(appUser.role.equals(Role.BLOOD_BANK_ADMIN)){
+			final BloodBankUser bloodBankUser = new BloodBankUser();
+			bloodBankUser.appUser = appUser;
+			bloodBankUser.save();
+
+			final BloodBank bloodBank = new BloodBank();
+			bloodBank.name = request().body().asFormUrlEncoded().get("bloodBankName")[0];
+			bloodBank.bloodBankAdmin = bloodBankUser;
+			bloodBank.primaryCity = city;
+			bloodBank.save();
+			bloodBankUser.bloodBank = bloodBank;
+			bloodBankUser.update();
 		}
 
 		if(appUser.role.equals(Role.PATIENT)){
@@ -307,22 +348,25 @@ public class UserController extends Controller {
 				SMSService.sendConfirmationSMS(loggedInUser);
 			}
 		}
-		Logger.info(requestMap.keySet().toString());
 		if(requestMap.containsKey("isBloodDonar")){
-			Logger.info("on");
 			loggedInUser.isBloodDonor = true;
 			//TODO: make it async
-			SMSService.sendConfirmationSMS(loggedInUser);
+			//SMSService.sendConfirmationSMS(loggedInUser);
 		}else{
 			loggedInUser.isBloodDonor = false;
+		}
+		if(requestMap.containsKey("shareContactNo")){
+			loggedInUser.isMobileNumberShared = true;
+			//TODO: make it async
+			//SMSService.sendConfirmationSMS(loggedInUser);
 		}
 		if(requestMap.get("allergy")[0]!=null && requestMap.get("allergy")[0].trim()!=""){
 			loggedInUser.allergy = requestMap.get("allergy")[0].trim();
 		}
 		if(requestMap.get("dob")[0]!=null ){
 			try {
-				loggedInUser.dob =new SimpleDateFormat("dd-mm-yyyy").parse(requestMap.get("dob")[0].trim());
-				Logger.debug(new SimpleDateFormat("dd-mm-yyyy").parse(requestMap.get("dob")[0].trim()).toString());
+				loggedInUser.dob = new SimpleDateFormat("dd-MM-yyyy").parse(requestMap.get("dob")[0].trim());
+				Logger.debug(new SimpleDateFormat("dd-MM-yyyy").parse(requestMap.get("dob")[0].trim()).toString());
 				Logger.debug(""+loggedInUser.dob);
 			} catch (final Exception e) {
 				// TODO Auto-generated catch block
@@ -472,7 +516,5 @@ public class UserController extends Controller {
 
 		return redirect(routes.UserActions.dashboard());
 	}
-
-
 
 }

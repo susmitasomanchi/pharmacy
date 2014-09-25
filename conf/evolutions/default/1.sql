@@ -3,7 +3,6 @@
 
 # --- !Ups
 
-<<<<<<< HEAD
 create table address (
   id                        bigint not null,
   address_line1             varchar(255),
@@ -54,6 +53,7 @@ create table appointment (
   appointment_time          timestamp,
   appointment_status        varchar(9),
   requested_by_id           bigint,
+  
   apporoved_by_id           bigint,
   problem_statement         TEXT,
   doctor_clinic_info_id     bigint,
@@ -2511,11 +2511,9 @@ alter table tpline_item_doctor add constraint fk_tpline_item_doctor_doctor_02 fo
 alter table tpline_item_pharmaceutical_produ add constraint fk_tpline_item_pharmaceutical_01 foreign key (tpline_item_id) references tpline_item (id);
 
 alter table tpline_item_pharmaceutical_produ add constraint fk_tpline_item_pharmaceutical_02 foreign key (pharmaceutical_product_id) references pharmaceutical_product (id);
->>>>>>> branch 'master' of http://pharmacy.bz/green-software/mednetwork.git
 
 # --- !Downs
 
-<<<<<<< HEAD
 drop table if exists address cascade;
 
 drop table if exists app_user cascade;
@@ -2788,7 +2786,7 @@ drop sequence if exists tpline_item_seq;
 
 drop sequence if exists tour_plan_seq;
 
-=======
+
 drop table if exists address cascade;
 
 drop table if exists app_user cascade;
@@ -3057,4 +3055,3 @@ drop sequence if exists tpline_item_seq;
 
 drop sequence if exists tour_plan_seq;
 
->>>>>>> branch 'master' of http://pharmacy.bz/green-software/mednetwork.git

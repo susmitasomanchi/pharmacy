@@ -34,7 +34,7 @@ vertical-align: middle;
 <script src="@routes.Assets.at("javascripts/bootstrap-datepicker.js")" type="text/javascript"></script>
 <link rel="stylesheet" media="screen" href="@routes.Assets.at("stylesheets/datepicker.css")">
 <div class="row">
-<form action="@routes.TrackerController.processWeightDetails()" method="POST">
+<form action="@routes.TrackerController.processWeightTracker()" method="POST">
 <div class="col-md-12" style="padding:0px">
 <div class="col-md-4">
 <div class="form-group">
@@ -55,7 +55,19 @@ vertical-align: middle;
 <div class="form-group">
 <label for="weight" class="col-lg-5 flabel" > Weight </label>
 <div class="col-lg-4" style="padding:0px;">
-<input type="text" class="form-control" id="weight" name="weight" style="font-size:12px" placeholder="in kgs" required></div>
+<input type="text" class="form-control" onkeypress="return isNumberKey(event)" id="weight" name="weight" style="font-size:12px" placeholder="in kgs" required></div>
+<script>
+function isNumberKey(evt)
+          {
+             var charCode = (evt.which) ? evt.which : event.keyCode
+             if (charCode > 31 && (charCode < 48 || charCode > 57) && charCode != 46){
+             alert("enter numeric values only");
+                return false;
+                }
+              return true;
+          }
+
+</script>
 </div>
 <div class="form-group">
 	<input type="hidden" name="appUserId" value="@LoginController.getLoggedInUser().id">

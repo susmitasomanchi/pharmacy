@@ -48,6 +48,7 @@ public class Appointment extends BaseEntity {
 		return list;
 	}
 
+
 	public static List<Appointment> getAvailableMrAppointmentList(final Doctor doctor,final Date date) {
 		final List<Appointment> list=null;
 		/*	final Calendar calendar=Calendar.getInstance();
@@ -64,13 +65,20 @@ public class Appointment extends BaseEntity {
 	}
 
 	public Prescription getPrescription(){
-		int rows = Prescription.find.where().eq("appointment", this).findRowCount();
-			Logger.error("No Prescription found for appointment Id: "+this.id);
-			if(rows==0){
+		final int rows = Prescription.find.where().eq("appointment", this).findRowCount();
+		Logger.error("No Prescription found for appointment Id: "+this.id);
+		if(rows==0){
 			return null;
-			}
-			return Prescription.find.where().eq("appointment", this).findList().get(0);
+		}
+		return Prescription.find.where().eq("appointment", this).findList().get(0);
 	}
+	/*public static List<Day> getAvailableAppointmentTime(){
+		final List<Appointment> appointments = Appointment.find.where().eq(arg0, arg1)
+				for (final Day day : days) {
+					if()
+
+				}*/
+
 
 
 

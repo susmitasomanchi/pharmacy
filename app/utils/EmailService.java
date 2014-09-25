@@ -13,6 +13,8 @@ import javax.activation.DataSource;
 import models.AppUser;
 import models.FileEntity;
 import models.doctor.Appointment;
+import models.doctor.Clinic;
+import models.doctor.Doctor;
 
 import org.apache.commons.mail.ByteArrayDataSource;
 import org.apache.commons.mail.DefaultAuthenticator;
@@ -36,9 +38,9 @@ public class EmailService {
 			final Email email = new SimpleEmail();
 			email.setHostName("smtp.gmail.com");
 			email.setSmtpPort(587);
-			email.setAuthenticator(new DefaultAuthenticator("noreply@mednetwork.in", "we#will#win"));
+			email.setAuthenticator(new DefaultAuthenticator(Constants.EMAIL_ID, Constants.EMAIL_PASSWORD));
 			email.setSSLOnConnect(true);
-			email.setFrom("noreply@mednetwork.in","MedNetwork");
+			email.setFrom(Constants.EMAIL_ID,"MedNetwork");
 			email.setSubject(subject);
 			email.setMsg(message);
 			email.addTo(receiverEmailId);
@@ -75,9 +77,9 @@ public class EmailService {
 			final HtmlEmail email = new HtmlEmail();
 			email.setHostName("smtp.gmail.com");
 			email.setSmtpPort(587);
-			email.setAuthenticator(new DefaultAuthenticator("noreply@mednetwork.in", "we#will#win"));
+			email.setAuthenticator(new DefaultAuthenticator(Constants.EMAIL_ID, Constants.EMAIL_PASSWORD));
 			email.setSSLOnConnect(true);
-			email.setFrom("noreply@mednetwork.in","MedNetwork");
+			email.setFrom(Constants.EMAIL_ID,"MedNetwork");
 			email.setSubject("Confirm your account at MedNetwork");
 			email.setHtmlMsg(builder.toString());
 			email.addTo(appUser.email);
@@ -105,9 +107,9 @@ public class EmailService {
 		try {
 			email.setHostName("smtp.gmail.com");
 			email.setSmtpPort(587);
-			email.setAuthenticator(new DefaultAuthenticator("noreply@mednetwork.in", "we#will#win"));
+			email.setAuthenticator(new DefaultAuthenticator(Constants.EMAIL_ID, Constants.EMAIL_PASSWORD));
 			email.setSSLOnConnect(true);
-			email.setFrom("noreply@mednetwork.in","MedNetwork");
+			email.setFrom(Constants.EMAIL_ID,"MedNetwork");
 			email.setSubject("The picture");
 			email.setMsg("Here is the picture you wanted");
 			email.addTo(receiverEmailId);
@@ -148,7 +150,7 @@ public class EmailService {
 			final StringBuilder builder=new StringBuilder();
 			builder.append("<html><body>");
 			builder.append("<p>Dear "+appUser.name+",<br><br>To reset your password, please ");
-			builder.append("<a href=\"http://mednetwork.in/secure-user/forgot-reset-password/");
+			builder.append("<a href=\"http://mednetwork.in/secure-forgot-reset-password/");
 			builder.append(appUser.id);
 			builder.append("/"+randomString +"\">");
 			builder.append("<b>click here.</b>");
@@ -157,9 +159,9 @@ public class EmailService {
 			final HtmlEmail email = new HtmlEmail();
 			email.setHostName("smtp.gmail.com");
 			email.setSmtpPort(587);
-			email.setAuthenticator(new DefaultAuthenticator("noreply@mednetwork.in", "we#will#win"));
+			email.setAuthenticator(new DefaultAuthenticator(Constants.EMAIL_ID, Constants.EMAIL_PASSWORD));
 			email.setSSLOnConnect(true);
-			email.setFrom("noreply@mednetwork.in","MedNetwork");
+			email.setFrom(Constants.EMAIL_ID,"MedNetwork");
 			email.setSubject("Reset password at MedNetwork");
 			email.setHtmlMsg(builder.toString());
 			email.addTo(appUser.email);
@@ -187,9 +189,9 @@ public class EmailService {
 			final HtmlEmail email = new HtmlEmail();
 			email.setHostName("smtp.gmail.com");
 			email.setSmtpPort(587);
-			email.setAuthenticator(new DefaultAuthenticator("noreply@mednetwork.in", "we#will#win"));
+			email.setAuthenticator(new DefaultAuthenticator(Constants.EMAIL_ID, Constants.EMAIL_PASSWORD));
 			email.setSSLOnConnect(true);
-			email.setFrom("noreply@mednetwork.in","MedNetwork");
+			email.setFrom(Constants.EMAIL_ID,"MedNetwork");
 			email.setSubject("MedNetwork Account Verified");
 			email.setHtmlMsg(builder.toString());
 			email.addTo(appUser.email);
@@ -222,9 +224,9 @@ public class EmailService {
 			final HtmlEmail email = new HtmlEmail();
 			email.setHostName("smtp.gmail.com");
 			email.setSmtpPort(587);
-			email.setAuthenticator(new DefaultAuthenticator("noreply@mednetwork.in", "we#will#win"));
+			email.setAuthenticator(new DefaultAuthenticator(Constants.EMAIL_ID, Constants.EMAIL_PASSWORD));
 			email.setSSLOnConnect(true);
-			email.setFrom("noreply@mednetwork.in","MedNetwork");
+			email.setFrom(Constants.EMAIL_ID,"MedNetwork");
 			email.setSubject("An appointment has been booked at "+appointment.doctorClinicInfo.clinic.name+".");
 			email.setHtmlMsg(builder.toString());
 			email.addTo(requestBy.email);
@@ -251,9 +253,9 @@ public class EmailService {
 			final HtmlEmail email = new HtmlEmail();
 			email.setHostName("smtp.gmail.com");
 			email.setSmtpPort(587);
-			email.setAuthenticator(new DefaultAuthenticator("noreply@mednetwork.in", "we#will#win"));
+			email.setAuthenticator(new DefaultAuthenticator(Constants.EMAIL_ID, Constants.EMAIL_PASSWORD));
 			email.setSSLOnConnect(true);
-			email.setFrom("noreply@mednetwork.in","MedNetwork");
+			email.setFrom(Constants.EMAIL_ID,"MedNetwork");
 			email.setSubject("An appointment has been booked at "+appointment.doctorClinicInfo.clinic.name+".");
 			email.setHtmlMsg(builder.toString());
 			email.addTo(requestTo.email);
@@ -282,9 +284,9 @@ public class EmailService {
 			final HtmlEmail email = new HtmlEmail();
 			email.setHostName("smtp.gmail.com");
 			email.setSmtpPort(587);
-			email.setAuthenticator(new DefaultAuthenticator("noreply@mednetwork.in", "we#will#win"));
+			email.setAuthenticator(new DefaultAuthenticator(Constants.EMAIL_ID, Constants.EMAIL_PASSWORD));
 			email.setSSLOnConnect(true);
-			email.setFrom("noreply@mednetwork.in","MedNetwork");
+			email.setFrom(Constants.EMAIL_ID,"MedNetwork");
 			email.setSubject("Your Prescription has been saved at MedNetwork");
 			email.setHtmlMsg(builder.toString());
 			email.addTo(requestBy.email);
@@ -307,9 +309,9 @@ public class EmailService {
 			final HtmlEmail email = new HtmlEmail();
 			email.setHostName("smtp.gmail.com");
 			email.setSmtpPort(587);
-			email.setAuthenticator(new DefaultAuthenticator("noreply@mednetwork.in", "we#will#win"));
+			email.setAuthenticator(new DefaultAuthenticator(Constants.EMAIL_ID, Constants.EMAIL_PASSWORD));
 			email.setSSLOnConnect(true);
-			email.setFrom("noreply@mednetwork.in","MedNetwork");
+			email.setFrom(Constants.EMAIL_ID,"MedNetwork");
 			email.setSubject("Prescription saved at MedNetwork");
 			email.setHtmlMsg(builder.toString());
 			email.addTo(requestTo.email);
@@ -331,9 +333,9 @@ public class EmailService {
 			final HtmlEmail email = new HtmlEmail();
 			email.setHostName("smtp.gmail.com");
 			email.setSmtpPort(587);
-			email.setAuthenticator(new DefaultAuthenticator("noreply@mednetwork.in", "we#will#win"));
+			email.setAuthenticator(new DefaultAuthenticator(Constants.EMAIL_ID, Constants.EMAIL_PASSWORD));
 			email.setSSLOnConnect(true);
-			email.setFrom("noreply@mednetwork.in","MedNetwork");
+			email.setFrom(Constants.EMAIL_ID,"MedNetwork");
 			email.setSubject(subject);
 			email.setHtmlMsg(message);
 			email.addTo(receiverEmailId);
@@ -349,5 +351,74 @@ public class EmailService {
 		return result;
 
 	}
+
+	/**
+	 * @author lakshmi
+	 * Action to send invitation to the Doctor.
+	 * NO URL
+	 */
+	public static boolean sendClinicInvitationConfirmationEmail(final AppUser appUser,final Clinic clinic, final String verificationCode){
+		boolean result = true;
+		try{
+			final StringBuilder builder=new StringBuilder();
+			builder.append("<html><body>");
+			builder.append("<p> Dr "+appUser.name+",<br><br> You have an invitation from "+clinic.name+", <br>Please ");
+			builder.append("<a href=\"http://mednetwork.in/secure-clinic/add-doctor/"+appUser.getDoctor().id+"/"+clinic.id+"/"+verificationCode+"\"");
+			builder.append("<b>click here</b>");
+			builder.append("</a> to accept the invitation and join "+clinic.name+".<br><br>Best regards,<br>MedNetwork.in</p>");
+			builder.append("</body></html>");
+			final HtmlEmail email = new HtmlEmail();
+			email.setHostName("smtp.gmail.com");
+			email.setSmtpPort(587);
+			email.setAuthenticator(new DefaultAuthenticator(Constants.EMAIL_ID, Constants.EMAIL_PASSWORD));
+			email.setSSLOnConnect(true);
+			email.setFrom(Constants.EMAIL_ID,"MedNetwork");
+			email.setSubject("Clinic Invitation");
+			email.setHtmlMsg(builder.toString());
+			email.addTo(appUser.email);
+			email.send();
+			System.out.println("Mail Sent Successfully!");
+			Logger.info(builder.toString());
+		}
+		catch (final Exception e){
+			System.out.println("ERROR While Sending Email");
+			e.printStackTrace();
+			result=false;
+		}
+		return result;
+	}
+	/**
+	 * @author lakshmi
+	 * Action to send successfully added  to the Clinic message to the Doctor
+	 */
+	public static boolean sendClinicInvitationSuccessEmail(final Doctor doctor,final Clinic clinic){
+		boolean result = true;
+		try{
+			final StringBuilder builder=new StringBuilder();
+			builder.append("<html><body>");
+			builder.append("<p> Dr. "+doctor.appUser.name+",<br><br> You have been added to the Clinic "+clinic.name);
+			builder.append("<br><br>Best regards,<br>MedNetwork.in</p>");
+			builder.append("</body></html>");
+			final HtmlEmail email = new HtmlEmail();
+			email.setHostName("smtp.gmail.com");
+			email.setSmtpPort(587);
+			email.setAuthenticator(new DefaultAuthenticator(Constants.EMAIL_ID, Constants.EMAIL_PASSWORD));
+			email.setSSLOnConnect(true);
+			email.setFrom(Constants.EMAIL_ID,"MedNetwork");
+			email.setSubject("Clinic Invitation");
+			email.setHtmlMsg(builder.toString());
+			email.addTo(doctor.appUser.email);
+			email.send();
+			System.out.println("Mail Sent Successfully!");
+			Logger.info(builder.toString());
+		}
+		catch (final Exception e){
+			System.out.println("ERROR While Sending Email");
+			e.printStackTrace();
+			result=false;
+		}
+		return result;
+	}
+
 }
 

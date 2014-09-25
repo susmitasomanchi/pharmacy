@@ -32,6 +32,9 @@
           <b class="caret"></b></a>
           <ul class="dropdown-menu">
             <li><a href="@routes.MednetworkAdminController.getSpecializationList()">Specializations</a></li>
+            <li><a href="@routes.MednetworkAdminController.getMasterProductForm()">Add Master Product</a></li>
+             <li><a href="@routes.MednetworkAdminController.getMasterDiagnosticTestForm()">Add Master Diagnostic Test</a></li>
+             <li><a href="@routes.MednetworkAdminController.getMasterSigCodeForm()">Add Master SigCode</a></li>
           </ul>
         </li>
         
@@ -108,9 +111,10 @@
          Trackers
           <b class="caret"></b></a>
           <ul class="dropdown-menu">
-	           	<li><a href="@routes.TrackerController.appUserWeightDetails()">Weight Tracker</a></li>
-	           	<li><a href="@routes.TrackerController.appUserBpDetails()">BloodPressure Tracker</a></li>
+	           	<li><a href="@routes.TrackerController.appUserWeightTracker()">Weight Tracker</a></li>
+	           	<li><a href="@routes.TrackerController.appUserBpTracker()">BloodPressure Tracker</a></li>
 	           	<li><a href="@routes.TrackerController.sugarTracker()">Sugar Tracker</a></li>
+	           		<li><a href="@routes.PatientController.getPatientBloodDonationInfo()">Blood Donation Tracker</a></li>
 	          </ul>
 	    </li>
         @*
@@ -429,9 +433,32 @@
           <li><a href="@routes.DiagnosticController.getDiagnosticCentrePrescriptions()">All Prescriptions</a></li>
           </ul>
         </li> 
+
         }
-    
-    	
+@if(LoginController.getLoggedInUserRole().equals(Role.CLINIC_ADMIN.toString())){
+		
+		<li class="dropdown">
+          <a href="#" class="dropdown-toggle" data-toggle="dropdown">
+        	Doctors
+          <b class="caret"></b></a>
+          <ul class="dropdown-menu">
+            <li><a href="@routes.ClinicController.searchDoctorsByEmail()">Invite Doctors</a></li>
+            <li><a href="@routes.ClinicController.getDoctors()">View Doctors</a></li>
+             </ul>
+        </li>
+        }    
+    	@if(LoginController.getLoggedInUserRole().equals(Role.BLOOD_BANK_ADMIN.toString())){
+		
+		<li class="dropdown">
+          <a href="#" class="dropdown-toggle" data-toggle="dropdown">
+        	Donors
+          <b class="caret"></b></a>
+          <ul class="dropdown-menu">
+            <li><a href="@routes.BloodBankController.getBloodDonorsInCityForm()">Blood Donors</a></li>
+            <li><a href="@routes.BloodBankController.receivedBloodDonorFrom()">Received Blood</a></li>
+             </ul>
+        </li>
+        }  
     	<!--
         <li class="dropdown">
           <a href="#" class="dropdown-toggle" data-toggle="dropdown">

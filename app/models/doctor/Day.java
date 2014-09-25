@@ -31,18 +31,22 @@ public enum Day {
 
 		return vals;
 	}
+
+
 	public static Day getDay(final int number) {
 		for (final Day day : Day.values()) {
-			if(day.ordinal()==number){
+			if(day.ordinal() == number){
 				return day;
 			}
 		}
 		return null;
 	}
+
 	public static List<Day> getList() {
-		final List<Day> list=Arrays.asList(Day.values());
+		final List<Day> list = Arrays.asList(Day.values());
 		return list;
 	}
+
 
 }
 

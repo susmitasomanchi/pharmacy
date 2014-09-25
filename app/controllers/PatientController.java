@@ -7,6 +7,7 @@ import java.util.List;
 
 import models.Alert;
 import models.AppUser;
+import models.bloodBank.BloodDonation;
 import models.diagnostic.DiagnosticCentre;
 import models.diagnostic.DiagnosticCentrePrescriptionInfo;
 import models.diagnostic.DiagnosticCentrePrescritionStatus;
@@ -249,7 +250,7 @@ public class PatientController extends Controller {
 	@ConfirmAppUser
 	public static Result viewMyAppointments(){
 		final AppUser patient=LoginController.getLoggedInUser();
-		final List<Appointment> patientApppointments=Appointment.find.where().eq("requestedBy", patient).findList();
+		final List<Appointment> patientApppointments=Appointment.find.where().eq("requestedBy", patient).orderBy().desc("appointmentTime").findList();
 		return ok(views.html.patient.patientViewAppointments.render(patientApppointments));
 	}
 
@@ -499,7 +500,19 @@ public class PatientController extends Controller {
 
 	}
 
-
+	/**
+	 * @author lakshmi
+	 * Action to list out Patient BloodDonation
+	 * GET/secure-user/blood-donation-info
+	 */
+	public static Result getPatientBloodDonationInfo(){
+		final Patient patient = LoginController.getLoggedInUser().getPatient();
+		List<BloodDonation> bloodDonations = new ArrayList<BloodDonation>();
+		if((patient.appUser.isBloodDonor == true) && (patient.appUser.bloodDonationList.size() > 0) ){
+			bloodDonations = patient.appUser.bloodDonationList;
+		}
+		return ok(views.html.patient.patientBloodDonationList.render(bloodDonations));
+	}
 
 
 
