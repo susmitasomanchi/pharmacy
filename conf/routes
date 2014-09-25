@@ -393,7 +393,7 @@ GET		/secure-clinic/view-all-doctors						controllers.ClinicController.getDoctor
 GET    /secure-blood-bank/get-blood-donors      					controllers.BloodBankController.getBloodDonorsInCityForm()
 POST    /secure-blood-bank/list-blood-donors      					controllers.BloodBankController.listBloodDonorsInCity()
 GET    /secure-blood-bank/received-blood-info-form      					controllers.BloodBankController.receivedBloodDonorFrom()
-GET    /secure-blood-bank/get-received-blood-info/:emailId      					controllers.BloodBankController.getReceivedBloodDonorInfo(emailId: String)
+GET    /secure-blood-bank/get-received-blood-info/:emailId/:appUserId      					controllers.BloodBankController.getReceivedBloodDonorInfo(emailId: String,appUserId: Long)
 POST    /secure-blood-bank/save-received-blood-info/:patientId      					controllers.BloodBankController.saveReceivedBloodDonorInfo(patientId: Long)
 
 

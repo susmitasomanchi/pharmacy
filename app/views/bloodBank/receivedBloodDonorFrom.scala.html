@@ -3,7 +3,7 @@
 @import helper.twitterBootstrap._
 @import helper._
 
-@main("Invite Doctors"){
+@main("Blood Donation Form"){
 <div class="well">
 @*<form action="@routes.BloodBankController.getReceivedBloodDonorInfo()" method="POST">*@
 <div class="row">
@@ -28,10 +28,10 @@
 	@*
 	<button style="box-shadow: 1px 1px 3px 3px #aaaaaa;" class="btn btn-sm btn-primary" onclick="submitSearch();"><i class="icon-search icon-large"></i> Find</button>
 	*@
-	<button style="box-shadow: 1px 1px 3px 3px #aaaaaa;"  onclick="return validateAndSubmit();" class="btn btn-sm btn-primary">Find</button>
+	<button style="box-shadow: 1px 1px 3px 3px #aaaaaa;"  onclick="return validateAndSubmit(@LoginController.getLoggedInUser().id);" class="btn btn-sm btn-primary">Find</button>
 </div>
 <script>
-function validateAndSubmit(){
+function validateAndSubmit(appUserId){
 	var email = $('#email').val().trim();
 	var confirmEmailId = $('#confirmEmail').val().trim();
     	if(email != confirmEmailId){
@@ -42,7 +42,7 @@ function validateAndSubmit(){
     		alert("Enter Email Id");
     	    return false;
     	}
-    	window.location.href = '/secure-blood-bank/get-received-blood-info/'+email;
+    	window.location.href = '/secure-blood-bank/get-received-blood-info/'+email+'/'+appUserId;
     	
 }
 
@@ -117,6 +117,7 @@ function validateAndSubmit(){
 </div>
 </div>
 </div>
+<input type="hidden" name="appUserId" value="@LoginController.getLoggedInUser().id"/> 
    <br>
 <div style="padding-left:15px;padding-right:15px">
 		<input style="box-shadow: 1px 1px 3px 3px #aaaaaa;" onclick="return validate();" type="submit" class="btn btn-sm btn-primary" value="save" >

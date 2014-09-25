@@ -10,11 +10,14 @@ import java.util.StringTokenizer;
 import org.joda.time.DateTime;
 import org.joda.time.LocalDate;
 
+import com.avaje.ebean.ExpressionList;
+
 import models.Alert;
 import models.AppUser;
 import models.BloodGroup;
 import models.PrimaryCity;
 import models.Role;
+import models.bloodBank.BloodBankUser;
 import models.bloodBank.BloodDonation;
 import models.patient.Patient;
 import play.Logger;
@@ -41,56 +44,37 @@ public class BloodBankController extends Controller{
 	 */
 	@ConfirmAppUser
 	public static Result listBloodDonorsInCity(){
-		final Map<String, String[]> requestMap = request().body().asFormUrlEncoded();
-		List<Patient> patients = new ArrayList<Patient>();
-		if(!((requestMap.get("primaryCity")[0]).trim().isEmpty())
-				&& !((requestMap.get("bloodGroup")[0]).trim().isEmpty())
-				&& (requestMap.get("sex")[0].trim().isEmpty())
-				&& (requestMap.get("age")[0].trim().isEmpty())
-				){
-			patients = Patient.find.where().eq("appUser.isBloodDonor", true)
-					.eq("primaryCity", PrimaryCity.find.byId(Long.parseLong(requestMap.get("primaryCity")[0].trim())))
-					.eq("appUser.bloodGroup",requestMap.get("bloodGroup")[0].trim())
-					.findList();
-		}
-		if( !((requestMap.get("primaryCity")[0]).trim().isEmpty())
-				&& !((requestMap.get("bloodGroup")[0]).trim().isEmpty())
-				&&  !(requestMap.get("sex")[0].trim().isEmpty())
-				&& (requestMap.get("age")[0].trim().isEmpty())
-				){
-			patients = Patient.find.where().eq("appUser.isBloodDonor", true)
-					.eq("primaryCity", PrimaryCity.find.byId(Long.parseLong(requestMap.get("primaryCity")[0].trim())))
-					.eq("appUser.bloodGroup",requestMap.get("bloodGroup")[0].trim())
-					.eq("sex",requestMap.get("sex")[0].trim())
-					.findList();
-		}
-		if((requestMap.get("primaryCity")[0])!= null && !((requestMap.get("primaryCity")[0]).trim().isEmpty())){
-			patients = Patient.find.where().eq("appUser.isBloodDonor", true)
-					.eq("primaryCity", PrimaryCity.find.byId(Long.parseLong(requestMap.get("primaryCity")[0].trim())))
-					.findList();
-		}
-		if((requestMap.get("bloodGroup")[0])!= null && !((requestMap.get("bloodGroup")[0]).trim().isEmpty())){
-			patients = Patient.find.where().eq("appUser.isBloodDonor", true)
-					.eq("appUser.bloodGroup",requestMap.get("bloodGroup")[0].trim())
-					.findList();
-		}
 
-		if((requestMap.get("sex")[0])!= null && !(requestMap.get("sex")[0].trim().isEmpty())){
-			patients = Patient.find.where().eq("appUser.isBloodDonor", true)
-					.eq("sex",requestMap.get("sex")[0].trim())
-					.findList();
+		final Map<String, String[]> requestMap = request().body().asFormUrlEncoded();
+		/*Logger.info(""+requestMap.toString());
+		Logger.info("vgytugij"+requestMap.get("bloodBankUserId")[0]);
+		final BloodBankUser bloodBankUser = BloodBankUser.find.byId(Long.parseLong(requestMap.get("bloodBankUserId")[0]));
+		// Server side validation
+		if((LoginController.getLoggedInUser().getBloodBankAdmin().id.longValue()) != (bloodBankUser.id.longValue()) || (!LoginController.getLoggedInUser().role.equals(Role.BLOOD_BANK_ADMIN))){
+			Logger.warn("COULD NOT VALIDATE LOGGED IN USER TO PERFORM THIS TASK");
+			Logger.warn("logged in AppUser: "+LoginController.getLoggedInUser().id);
+			Logger.warn("logged in BllodBankUser: "+LoginController.getLoggedInUser().getBloodBankAdmin().id);
+			return redirect(routes.LoginController.processLogout());
+		}*/
+		final ExpressionList<Patient> patientQuery = Patient.find.where().eq("appUser.isBloodDonor", true);
+		if(((requestMap.get("primaryCity")[0])!= null) && !((requestMap.get("primaryCity")[0]).trim().equalsIgnoreCase("any"))){
+			Logger.info("inside primary city");
+			patientQuery
+			.eq("primaryCity", PrimaryCity.find.byId(Long.parseLong(requestMap.get("primaryCity")[0].trim())));
+			Logger.info("inside primary city=="+patientQuery.findRowCount());
 		}
-		if((requestMap.get("age")[0])!= null && !(requestMap.get("age")[0].trim().isEmpty())){
-			String[] age = (requestMap.get("age")[0].trim()).split("-");
-			LocalDate now = new LocalDate();
-			LocalDate startDate = now.minusYears(Integer.parseInt(age[0]));
-			Logger.info("start date="+startDate);
-			LocalDate endDate = now.minusYears(Integer.parseInt(age[1]));
-			Logger.info("start date="+endDate);
-			patients = Patient.find.where().eq("appUser.isBloodDonor", true)
-					.between("appUser.dob",startDate,endDate).findList();
+		if(((requestMap.get("bloodGroup")[0])!= null) && !((requestMap.get("bloodGroup")[0]).trim().equalsIgnoreCase("any"))){
+			Logger.info("inside blood Group");
+			patientQuery
+			.eq("appUser.bloodGroup",requestMap.get("bloodGroup")[0].trim());
+			Logger.info("inside blood group=="+patientQuery.findRowCount());
 		}
-		return ok(views.html.bloodBank.bloodDonorsInPrimaryCity.render(patients));
+		if(((requestMap.get("sex")[0])!= null) && !((requestMap.get("sex")[0]).trim().equalsIgnoreCase("any"))){
+			patientQuery
+			.eq("sex",requestMap.get("sex")[0].trim());
+		}
+		//		Logger.info("size=="+patients.size());
+		return ok(views.html.bloodBank.bloodDonorsInPrimaryCity.render(patientQuery.findList()));
 	}
 	/**
 	 * @author lakshmi
@@ -107,7 +91,14 @@ public class BloodBankController extends Controller{
 	 * GET/secure-blood-bank/get-received-blood-info/:emailId
 	 */
 	@ConfirmAppUser
-	public static Result getReceivedBloodDonorInfo(String emailId){
+	public static Result getReceivedBloodDonorInfo(final String emailId,final Long appUserId){
+		// Server side validation
+		if((LoginController.getLoggedInUser().id.longValue()) != (appUserId.longValue()) || (!LoginController.getLoggedInUser().role.equals(Role.BLOOD_BANK_ADMIN))){
+			Logger.warn("COULD NOT VALIDATE LOGGED IN USER TO PERFORM THIS TASK");
+			Logger.warn("logged in AppUser: "+LoginController.getLoggedInUser().id);
+			Logger.warn("logged in BllodBankUser: "+LoginController.getLoggedInUser().getBloodBankAdmin().id);
+			return redirect(routes.LoginController.processLogout());
+		}
 		final AppUser appUser = AppUser.find.where().eq("email", emailId.trim()).findUnique();
 		if((appUser.role.equals(Role.PATIENT))){
 			final Patient patient = appUser.getPatient();
@@ -123,10 +114,10 @@ public class BloodBankController extends Controller{
 	 * Action to save BloodDonation data of AppUser
 	 * POST/secure-blood-bank/save-received-blood-info/:patientId
 	 */
-	public static Result saveReceivedBloodDonorInfo(Long patientId){
-		AppUser appUser = Patient.find.byId(patientId).appUser;
+	public static Result saveReceivedBloodDonorInfo(final Long patientId){
+		final AppUser appUser = Patient.find.byId(patientId).appUser;
 		final Map<String, String[]> requestMap = request().body().asFormUrlEncoded();
-		BloodDonation bloodDonation = new BloodDonation();
+		final BloodDonation bloodDonation = new BloodDonation();
 		bloodDonation.bloodBank = LoginController.getLoggedInUser().getBloodBankAdmin().bloodBank;
 		if((requestMap.get("bloodGroup")[0]!= null) && !(requestMap.get("bloodGroup")[0].trim().isEmpty())){
 			bloodDonation.bloodGroup = Enum.valueOf(BloodGroup.class,requestMap.get("bloodGroup")[0]);

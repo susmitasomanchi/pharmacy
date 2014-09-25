@@ -11,8 +11,7 @@
 <div class="col-md-3">
 <lable for="age">City</lable>&nbsp;
 <select name="primaryCity">
-<option ></option>
-<option value="0">Any</option>
+<option value="any">Any</option>
 @for(primaryCity <- PrimaryCity.getAllInOrder()){
 <option value="@primaryCity.id">@primaryCity.name</option>
 }
@@ -21,7 +20,6 @@
 <div class="col-md-3">
 <lable for="bloodGroup">Blood Group</lable>&nbsp;
 <select name="bloodGroup">
-<option></option>
 <option value="any">Any</option>
 @for((k,v)<- BloodGroup.options()){
 <option value="@k">@v</option>
@@ -31,7 +29,6 @@
 <div class="col-md-2">
 <lable for="age">Age</lable>&nbsp;
 <select name="age">
-<option ></option>
 <option value="any">Any</option>
 <option value=" 18-30"> 18-30</option>
 <option value="31-40">31-40</option>
@@ -42,12 +39,14 @@
 <div class="col-md-2">
 <lable for="sex">Sex</lable>&nbsp;
 <select name="sex">
-<option ></option>
 <option value="any">Any</option>
 @for((k,v) <- Sex.options()){
 <option value="@k"> @v</option>
 }
 </select>
+</div>
+<div class="col-md-2">
+<input type="hidden" name="bloodBankUserId" value="@LoginController.getLoggedInUser().getBloodBankAdmin().id"/>
 </div>
 <div class="col-md-2">
 <input type="submit" value="find">
