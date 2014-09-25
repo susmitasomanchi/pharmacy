@@ -3,11 +3,12 @@
 @import helper.twitterBootstrap._
 @main("MedicalRepresentative form") {
 
-
-    @helper.form(action=routes.MRController.medicalRepresentativeProccess()) {
+	@if(dataForm("id").value() != null){
+		@helper.form(action=routes.MRController.editMRProccess()) {
 	
 	@helper.inputText(dataForm("name"),'_label->"Name")
 	<select class = "chzn" name="designationId" placeholder="Assigne Designation">  
+	Designation
     @for(designation <- adminMr.pharmaceuticalCompany.designationList){
       <option value = @designation.id>
         @designation.name
@@ -23,9 +24,11 @@
 	Select Manager
 	<select class = "assignedManager chzn" name="manager" placeholder="Manager Assigned">  
     @for(mr <- mrList){
+    	@if(mr.isActive == true){
       <option value = @mr.id>
         @mr.appUser.name
       </option>
+      }
     } 
     </select>	<br>
   
@@ -40,6 +43,47 @@
 	<input type="hidden" name="appid" value="@dataForm("appid").value()">
 	<input type="submit" value="Save mr">	
 	}
-
+		
+	}else{
+    @helper.form(action=routes.MRController.medicalRepresentativeProccess()) {
+	
+	@helper.inputText(dataForm("name"),'_label->"Name")
+	<select class = "chzn" name="designationId" placeholder="Assigne Designation">  
+	Designation
+    @for(designation <- adminMr.pharmaceuticalCompany.designationList){
+      <option value = @designation.id>
+        @designation.name
+      </option>
+    } 
+    </select>	<br>
+	@helper.inputText(dataForm("username"),'_label->"User Name")
+	@helper.inputText(dataForm("email"),'_label->"Email")
+	Male<input type="radio" name="sex" value="Male">
+	Female<input type="radio" name="sex" value="Female">
+	@helper.inputText(dataForm("age"),'_label->"Age")
+	@helper.inputText(dataForm("regionAlloted"),'_label->"Region")
+	Select Manager
+	<select class = "assignedManager chzn" name="manager" placeholder="Manager Assigned">  
+    @for(mr <- mrList){
+    	@if(mr.isActive ==true){
+      <option value = @mr.id>
+        @mr.appUser.name
+      </option>
+      }
+    } 
+    </select>	<br>
+  
+		<select name="status">
+        @for(e <- models.mr.EmploymentStatus.values()){
+        <option  name="@e" value="@e">@e</option>
+               }
+        </select>   <br>
+		
+		
+	<input type="hidden" name="id" value="@dataForm("id").value()">
+	<input type="hidden" name="appid" value="@dataForm("appid").value()">
+	<input type="submit" value="Save mr">	
 	}
+	}
+}
 	

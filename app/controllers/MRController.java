@@ -176,6 +176,9 @@ public class MRController extends Controller {
 					mr.manager = MedicalRepresentative.find
 							.byId(medicalRepresentativeBean.manager);
 				}
+				mr.designation = Designation.find
+						.byId(medicalRepresentativeBean.designationId);
+
 				mr.save();
 				adminMr.pharmaceuticalCompany.mrList.add(mr);
 				adminMr.pharmaceuticalCompany.update();
@@ -183,17 +186,60 @@ public class MRController extends Controller {
 			} else {
 				Logger.info("not null");
 
-				appUser.update();
+				try {
 
-				mr.pharmaceuticalCompany = company;
+					final Random random = new SecureRandom();
+					final byte[] saltArray = new byte[32];
+					random.nextBytes(saltArray);
+					final String randomSalt = Base64
+							.encodeBase64String(saltArray);
+					generatedPassword = GenerateRandomString.generatePassword();
+					final String passwordWithSalt = generatedPassword
+							+ randomSalt;
+					final MessageDigest sha256 = MessageDigest
+							.getInstance("SHA-256");
+					final byte[] passBytes = passwordWithSalt.getBytes();
+					final String hashedPasswordWithSalt = Base64
+							.encodeBase64String(sha256.digest(passBytes));
+
+					appUser.salt = randomSalt;
+					appUser.password = hashedPasswordWithSalt;
+
+				} catch (final Exception e) {
+					Logger.error("ERROR WHILE CREATING SHA2 HASH");
+					e.printStackTrace();
+				}
+
+				//appUser.update();
+				Logger.info("email : " + appUser.email
+						+ " & Generated password is : " + generatedPassword);
 				mr.appUser = appUser;
-				mr.designation = Designation.find
-						.byId(medicalRepresentativeBean.designationId);
-				mr.manager = MedicalRepresentative.find
-						.byId(medicalRepresentativeBean.manager);
+
+				Logger.info("mr designation: " + mr.designation);
 				mr.update();
-				adminMr.pharmaceuticalCompany.mrList.add(mr);
-				adminMr.pharmaceuticalCompany.update();
+				/*StringBuilder message = new StringBuilder();
+				message.append(" Dear "
+						+ appUser.name
+						+ ",<br> Your account has been modified at <a href='https://mednetwork.in'>MedNetwork.in</a> Please use the following credentials to login:<br><br> UserName :"
+						+ appUser.email + "<br> Password :" + generatedPassword
+						+ "<br><br> Thank you <br> MedNetwork");
+
+				EmailService.sendSimpleHtmlEMail(appUser.email,
+						"\n Account created on MedNetwork", message.toString());
+				Logger.info("email : " + appUser.email
+						+ " & Generated password is : " + generatedPassword);
+				mr.appUser = appUser;
+				if (medicalRepresentativeBean.manager != null) {
+					mr.manager = MedicalRepresentative.find
+							.byId(medicalRepresentativeBean.manager);
+				}
+
+				if(medicalRepresentativeBean.designationId != null){
+					mr.designation = Designation.find
+							.byId(medicalRepresentativeBean.designationId);
+				}
+				mr.update();
+				 */
 
 			}
 
@@ -311,6 +357,28 @@ public class MRController extends Controller {
 				.where().eq("appUser.role", "MR").findList();
 		return ok(views.html.mr.medicalRepresentative.render(editForm, adminMr,
 				mrList));
+	}
+
+	public static Result editMRProccess(){
+		final MedicalRepresentative adminMr = LoginController.getLoggedInUser()
+				.getMedicalRepresentative();
+		DynamicForm editableForm = DynamicForm.form().bindFromRequest();
+		String id = editableForm.get("id");
+		String appid = editableForm.get("appid");
+
+		MedicalRepresentative mr = MedicalRepresentative.find.byId(Long.parseLong(id));
+		AppUser appUser = AppUser.find.byId(Long.parseLong(appid));
+		appUser.name = editableForm.get("name");
+		appUser.username = editableForm.get("username");
+		appUser.email = editableForm.get("email");
+		appUser.update();
+		mr.appUser = appUser;
+		mr.regionAlloted = editableForm.get("regionAlloted");
+		mr.manager = MedicalRepresentative.find.byId(Long.parseLong(editableForm.get("manager")));
+		mr.status = editableForm.get("status");
+		mr.update();
+		Logger.info("MR id : "+id);
+		return redirect(routes.MRController.mrList());
 	}
 
 	/**
