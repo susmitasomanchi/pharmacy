@@ -15,8 +15,9 @@
 	
 	</thead>
 	<tbody>
-	
+
 	@for(mr <-mrList){
+		@if(mr.isActive==true){
 		<tr>
 		<td>@if(mr.appUser!=null){
 		@mr.appUser.name}</td>
@@ -40,7 +41,7 @@
 		</td>
 				
 		</tr>
-		
+		}
 	}
 	
 	</tbody>

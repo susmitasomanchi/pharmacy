@@ -431,8 +431,9 @@ GET    /assets/*file                                                      contro
 
 GET    /web-services/mr/login                                             controllers.WebServices.login(email: String ?= "email" , password: String ?= "password")
 GET    /web-services/mr/logout                                            controllers.WebServices.logout()
-GET    /web-services/mr/doctor-list.{<json|xml>format}                  controllers.WebServices.myDoctor
-GET    /web-services/mr/product-list.{<json|xml>format}                    controllers.WebServices.myProduct()
+GET    /web-services/mr/doctor-list                                       controllers.WebServices.myDoctor()
+#GET    /web-services/mr/product-list                                      controllers.WebServices.myProduct()
+#GET		/web-services/mr/dcr										   controllers.WebServices.dcrLineItem(date: String ?= "date",doctor: String ?= "String" , sampleList: List<String> ?= "sampleList" ,promotion: List<String> ?= "String" pob: String ?= pob)
 
 
 

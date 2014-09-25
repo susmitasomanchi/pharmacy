@@ -563,7 +563,7 @@ public class MRController extends Controller {
 	 * 
 	 *         url :GET /mr/approve-dcr/:dcrid
 	 * 
-	 * @description : manager can approve mr's submitted dcr
+	 * @description : manager can approve mr's submitted dcr4
 	 * 
 	 * 
 	 * */
