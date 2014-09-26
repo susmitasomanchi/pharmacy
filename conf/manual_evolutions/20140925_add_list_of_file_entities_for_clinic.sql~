@@ -1,0 +1,6 @@
+﻿--- Author: Lakhsmi
+--- Add backgroundImage and Description foe Clinic and BloodBank Entity
+
+
+ALTER TABLE clinic ADD COLUMN backgroud_image bytea ,ADD COLUMN description TEXT;
+ALTER TABLE blood_bank ADD COLUMN backgroud_image bytea ,ADD COLUMN description TEXT;
