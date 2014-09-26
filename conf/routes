@@ -466,6 +466,8 @@ GET 	/add_clinic									controllers.SampleDataController.patientTest()
 
 #GET    /appointment					controllers.SampleDataController.createAppointment()
 GET    /blood-bank					controllers.SampleDataController.addBloodBank()
+GET    /mr							controllers.SampleDataController.mrSampleData()
+
 
 
 

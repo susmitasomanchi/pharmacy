@@ -104,11 +104,10 @@ function validateSlugUrl(){
 <span data-toggle="popover" data-placement="left" title="Change Background Image" data-html="true" data-content="<form action=&quot;@routes.BloodBankController.uploadBloodBankImageProcess()&quot; enctype=&quot;multipart/form-data&quot; method=&quot;POST&quot;><input type=&quot;file&quot; name=&quot;backgroundImage&quot;> <input type=&quot;hidden&quot; name=&quot;bloodBankId&quot; value=&quot;@bloodBank.id&quot;> <br><input class=&quot;pull-right btn btn-xs btn-primary&quot; type=&quot;submit&quot; onclick=&quot;submitimagesform();&quot; value=&quot;save&quot;></form>" style="cursor:pointer; position:relative; top:-400px;left:910px; font-size:25px">
 <i style="text-shadow:1px 1px 20px white, 3px 3px 20px white;" id="spinner" class="fa fa-cog"></i>
 </span>
-</div>
 <div class="row" style="margin-top:-235px">
 <div class="col-md-1"></div>
 <div class="col-md-10" >
-<span data-toggle="modal" data-target="#myModal" style="cursor:pointer; position:relative; top:30px;left:810px; font-size:25px;">
+<span data-toggle="modal" data-target="#myModal" style="cursor:pointer; position:relative; top:25px;left:790px; font-size:25px;">
   	<i style="text-shadow:1px 1px 20px white, 3px 3px 20px white;" id="spinner2" class="fa fa-cog"></i>
 </span>
 	<div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
@@ -229,7 +228,7 @@ $('#slugpopover').on('shown.bs.popover', function () {
   <!-- Wrapper for slides -->
   <div class="carousel-inner">
     <div class="item active">
-      <img src="/assets/images/4499839083_aeda0dc687_z.jpg" alt="Diagnostic Pic" style="height:300px; width:800px;"/>
+      <img src="/assets/images/4499839083_aeda0dc687_z.jpg" alt="bloodBank Pic" style="height:300px; width:800px;"/>
     </div>
   </div>
   
@@ -251,7 +250,6 @@ $('#slugpopover').on('shown.bs.popover', function () {
 </div>
 <div class="col-md-1"></div>
 </div>
-<br>
 
 <h1 style="text-shadow:10px 10px 10px white, 3px 3px 20px white; position:relative; top:-400px; text-align:center;font-weight:bold;color:#006687">
 @bloodBank.name
@@ -268,14 +266,12 @@ data-toggle="popover" title="Edit Diagnostic centre Name" data-html="true" data-
 style="color:#006687; font-size:20px; position:relative; top:-20px; cursor:pointer;"><i id="spinner-name" class="fa fa-cog"></i></span>
 
 </h1>
-
-<br>
 <div class="alert alert-success">
 <span data-toggle="popover" title="Brief Description" data-placement="left" data-html="true" data-content="
 <form action=&quot;@routes.BloodBankController.bloodBankBasicUpdate()&quot;method=&quot;POST&quot;>
 <textarea name=&quot;description&quot; rows=&quot;10&quot; style=&quot;color:#292929; font-weight:bold;&quot; >@bloodBank.description</textarea>
 <input type=&quot;hidden&quot; name=&quot;bloodBankId&quot; value=&quot;@bloodBank.id&quot;>
-<br><input class=&quot;pull-right btn btn-xs btn-primary&quot; type=&quot;submit&quot; onclick=&quot;submitbasicform('spinner-description');&quot; value=&quot;save&quot;></form> " style="cursor:pointer; position:relative; font-size:15px; top:-13px; left:935px;"><i id="spinner-description" class="fa fa-cog"></i></span>
+<br><input class=&quot;pull-right btn btn-xs btn-primary&quot; type=&quot;submit&quot; onclick=&quot;submitbasicform('spinner-description');&quot; value=&quot;save&quot;></form> " style="cursor:pointer; position:relative; font-size:15px; top:-13px; left:900px;"><i id="spinner-description" class="fa fa-cog"></i></span>
 <p style="font-size:1.5em; align:justify; margin-top:-20px;">
 	@bloodBank.description	 
 </p>
