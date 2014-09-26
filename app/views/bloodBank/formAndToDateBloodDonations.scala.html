@@ -14,7 +14,7 @@
       <div class="col-lg-7" style="padding:0px">
 		<div class="input-append date" id="datepicker1" data-date-format="dd-mm-yyyy">
 				<input name="from" class="col-md-7" size="16" type="text" readonly="">
-				<span class="add-on col-md-5"><i class="fa fa-calendar"></i></span>
+				<span class="add-on col-md-5" style="padding:5px"><i class="fa fa-calendar"></i></span>
 			  </div>
       </div>
 </div>
@@ -28,7 +28,7 @@
       <div class="col-lg-7" style="padding:0px">
 		<div class="input-append date" id="datepicker2" data-date-format="dd-mm-yyyy">
 				<input name="to" class="col-md-7" size="16" type="text" readonly="">
-				<span class="add-on col-md-5"><i class="fa fa-calendar"></i></span>
+				<span class="add-on col-md-5" style="padding:5px"><i class="fa fa-calendar"></i></span>
 			  </div>
       </div>
 </div>
@@ -47,29 +47,30 @@
 <br><br>
 
 @if(bloodDonations.size() != 0){
-<h5>Blood Donation Summary</h5>
+
 <div class="row" style="padding:15px">
-<div class="col-md-6">
+<h5 style="color:#990000;"><B>Blood Donation Summary</b></h5>
+<div class="col-md-6" style="padding:0px;">
 <table class="table table-bordered">
-<tr>
+<tr class="danger">
 <th>Blood Group</th>
 <th>Quantity </th>
 </tr>
 
 @for((k,v) <- bgMap){
-<tr>
+<tr class="active">
 <td>@k.capitalize()</td>
 <td>@v</td>
 </tr>
 }
 
-<tr>
-<td>Total Blood Quantity Collected</td>
+<tr class="active">
+<td><b>Total Blood Quantity Collected</b></td>
 <td>@total</td>
 </tr>
 
-<tr>
-<td>Total Blood Donations</td>
+<tr class="active" >
+<td><b>Total Blood Donations</b></td>
 <td>@bloodDonations.size()</td>
 </tr>
 </table>
@@ -77,7 +78,7 @@
 </div>
 <div class="row" style="padding:15px;">
 <table class="table table-bordered">
-<tr>
+<tr class="danger">
 <th class="col-md-2">S.no</th>
 <th class="col-md-2">Donated Date</th>
 <th class="col-md-2">Blood Group</th>
@@ -85,7 +86,7 @@
 <th class="col-md-2">Donated By</th>
 </tr>
 @for((bloodDonation,index) <- bloodDonations.zipWithIndex){
-<tr>
+<tr class="active">
 <td class="col-md-2">@{index+1}</td>
 <td class="col-md-2">@bloodDonation.dateDonated.format("dd-MMM-YYYY")</td>
 <td class="col-md-2">@if(bloodDonation.bloodGroup != null ){@bloodDonation.bloodGroup.capitalize()}</td>
