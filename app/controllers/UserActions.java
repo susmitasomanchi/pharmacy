@@ -44,6 +44,7 @@ public class UserActions extends Controller {
 			return ok(views.html.clinic.clinicProfile.render());
 		}
 		if(appUser.role.equals(Role.BLOOD_BANK_ADMIN)){
+			//			Logger.info("bloodbankid="+appUser.getBloodBankAdmin().bloodBank.id);
 			return ok(views.html.bloodBank.bloodBankProfile.render(appUser.getBloodBankAdmin().bloodBank));
 		}
 
@@ -75,7 +76,7 @@ public class UserActions extends Controller {
 			return ok(views.html.mednetAdmin.adminDashboard.render(todayMap, weekMap));
 		}
 
-		//@TODO: none should render the dashboard of patient
+		//@TODO: none should render the dashboard of patient.
 		return ok("Not implemented yet");
 
 	}

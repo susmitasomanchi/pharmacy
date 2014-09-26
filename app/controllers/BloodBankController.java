@@ -2,6 +2,9 @@ package controllers;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import models.Address;
@@ -14,8 +17,10 @@ import models.Role;
 import models.State;
 import models.bloodBank.BloodBank;
 import models.bloodBank.BloodDonation;
-import models.diagnostic.DiagnosticCentre;
 import models.patient.Patient;
+
+import org.joda.time.LocalDate;
+
 import play.Logger;
 import play.mvc.Controller;
 import play.mvc.Http.MultipartFormData.FilePart;
@@ -72,6 +77,15 @@ public class BloodBankController extends Controller{
 		if(((requestMap.get("sex")[0])!= null) && !((requestMap.get("sex")[0]).trim().equalsIgnoreCase("any"))){
 			patientQuery
 			.eq("sex",requestMap.get("sex")[0].trim());
+		}
+		if((requestMap.get("age")[0])!= null && !((requestMap.get("sex")[0]).trim().equalsIgnoreCase("any"))){
+			final String[] age = (requestMap.get("age")[0].trim()).split("-");
+			final LocalDate now = new LocalDate();
+			final LocalDate startDate = now.minusYears(Integer.parseInt(age[0]));
+			Logger.info("start date="+startDate);
+			final LocalDate endDate = now.minusYears(Integer.parseInt(age[1]));
+			Logger.info("start date="+endDate);
+			patientQuery.between("appUser.dob",startDate,endDate);
 		}
 		//		Logger.info("size=="+patients.size());
 		return ok(views.html.bloodBank.bloodDonorsInPrimaryCity.render(patientQuery.findList()));
@@ -278,6 +292,14 @@ public class BloodBankController extends Controller{
 		try{
 			final Map<String, String[]> requestMap = request().body().asFormUrlEncoded();
 			final BloodBank bloodBank = BloodBank.find.byId(Long.parseLong(requestMap.get("bloodBankId")[0]));
+			// Server side validation
+			if((bloodBank.id.longValue() != LoginController.getLoggedInUser().getBloodBankAdmin().bloodBank.id.longValue()) || (!LoginController.getLoggedInUser().role.equals(Role.BLOOD_BANK_ADMIN))){
+				Logger.warn("COULD NOT VALIDATE LOGGED IN USER TO PERFORM THIS TASK");
+				Logger.warn("update attempted for BloodBank id: "+bloodBank.id);
+				Logger.warn("logged in AppUser: "+LoginController.getLoggedInUser().id);
+				Logger.warn("logged in DiagnosticRep: "+LoginController.getLoggedInUser().getBloodBankAdmin().bloodBank.id);
+				return redirect(routes.LoginController.processLogout());
+			}
 			Logger.info("map size"+requestMap.toString());
 			if(bloodBank.address == null){
 				final Address address = new Address();
@@ -320,6 +342,59 @@ public class BloodBankController extends Controller{
 			flash().put("alert", new Alert("alert-danger", "Sorry. Something went wrong. Please try again.").toString());
 		}
 		return redirect(routes.UserActions.dashboard());
+	}
+	/**
+	 * 
+	 */
+	public static Result fromToDateBloodDonationsForm(){
+		/*final ExpressionList<BloodDonation> bloodDonationQuery = BloodDonation.find.where().eq("bloodBank", LoginController.getLoggedInUser().getBloodBankAdmin().bloodBank);
+		Logger.info("1"+bloodDonationQuery.findList());*/
+		return ok(views.html.bloodBank.formAndToDateBloodDonations.render(new ArrayList<BloodDonation>(), new HashMap(), 0F));
+	}
+
+
+
+	public static Result getFromToDateBloodDonations(){
+		final List<BloodDonation> bloodDontions = new ArrayList<BloodDonation>();
+		final Map<String, String[]> requestMap = request().body().asFormUrlEncoded();
+		//final BloodBank bloodBank = BloodBank.find.byId(Long.parseLong((requestMap.get("bloodBankId")[0]).trim()));
+
+		final BloodBank bloodBank = LoginController.getLoggedInUser().getBloodBankAdmin().bloodBank;
+
+		Logger.info("bloodbank user id=="+requestMap.toString());
+		final ExpressionList<BloodDonation> bloodDonationQuery = BloodDonation.find.where().eq("bloodBank", bloodBank);
+
+		try{
+			final SimpleDateFormat sdf = new SimpleDateFormat("dd-MM-yyyy");
+			if((requestMap.get("from")[0]) != null && !(requestMap.get("from")[0]).trim().isEmpty()){
+				bloodDonationQuery.ge("dateDonated", sdf.parse(requestMap.get("from")[0]));
+			}
+			if((requestMap.get("to")[0]) != null && !(requestMap.get("to")[0]).trim().isEmpty()){
+				bloodDonationQuery.le("dateDonated", sdf.parse(requestMap.get("to")[0]));
+			}
+		}catch(final Exception e){
+			e.printStackTrace();
+		}
+
+		final List<BloodDonation> bloodDonationList = bloodDonationQuery.orderBy().desc("dateDonated").findList();
+		final Map<BloodGroup, Float> bgMap = new HashMap<BloodGroup, Float>();
+		for (final BloodGroup bg : BloodGroup.values()) {
+			bgMap.put(bg, 0F);
+		}
+
+		float total = 0F;
+		for (final BloodDonation bloodDonation : bloodDonationList) {
+			if(bloodDonation.bloodGroup != null){
+				float temp = bgMap.get(bloodDonation.bloodGroup);
+				temp+= bloodDonation.quantityDonated;
+				bgMap.put(bloodDonation.bloodGroup, temp);
+				total+= bloodDonation.quantityDonated;
+			}
+		}
+
+
+
+		return ok(views.html.bloodBank.formAndToDateBloodDonations.render(bloodDonationList, bgMap, total));
 	}
 
 

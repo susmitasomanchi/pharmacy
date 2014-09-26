@@ -155,4 +155,8 @@ public class AppUser extends BaseEntity {
 		return 0;
 	}
 
+	public String getSexAndAge(){
+		return this.sex.toString().substring(0,1)+"/"+this.getAge();
+	}
+
 }

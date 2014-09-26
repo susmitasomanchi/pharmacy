@@ -400,6 +400,8 @@ POST	/secure-blood-bank/upload-blood-bank-images										controllers.BloodBankC
 GET		/secure-blood-bank/remove-image/:bloodBankId/:fileId						controllers.BloodBankController.removeBloodBankImage(bloodBankId: Long,fileId: Long)
 POST	/secure-blood-bank/basic-update												controllers.BloodBankController.bloodBankBasicUpdate()
 POST	/secure-blood-bank/address-update 											controllers.BloodBankController.bloodBankAddressUpdate()
+GET		/secure-blood-bank/from-to-date-donations											controllers.BloodBankController.fromToDateBloodDonationsForm()
+POST		/secure-blood-bank/from-to-date-donations											controllers.BloodBankController.getFromToDateBloodDonations()
 
 
 
