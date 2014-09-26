@@ -110,7 +110,7 @@ public class BloodBankController extends Controller{
 		if((LoginController.getLoggedInUser().id.longValue()) != (appUserId.longValue()) || (!LoginController.getLoggedInUser().role.equals(Role.BLOOD_BANK_ADMIN))){
 			Logger.warn("COULD NOT VALIDATE LOGGED IN USER TO PERFORM THIS TASK");
 			Logger.warn("logged in AppUser: "+LoginController.getLoggedInUser().id);
-			Logger.warn("logged in BllodBankUser: "+LoginController.getLoggedInUser().getBloodBankAdmin().id);
+			Logger.warn("logged in BllodBankUser: "+LoginController.getLoggedInUser().getBloodBankUser().id);
 			return redirect(routes.LoginController.processLogout());
 		}
 		final AppUser appUser = AppUser.find.where().eq("email", emailId.trim()).findUnique();
@@ -132,7 +132,7 @@ public class BloodBankController extends Controller{
 		final AppUser appUser = Patient.find.byId(patientId).appUser;
 		final Map<String, String[]> requestMap = request().body().asFormUrlEncoded();
 		final BloodDonation bloodDonation = new BloodDonation();
-		bloodDonation.bloodBank = LoginController.getLoggedInUser().getBloodBankAdmin().bloodBank;
+		bloodDonation.bloodBank = LoginController.getLoggedInUser().getBloodBankUser().bloodBank;
 		if((requestMap.get("bloodGroup")[0]!= null) && !(requestMap.get("bloodGroup")[0].trim().isEmpty())){
 			bloodDonation.bloodGroup = Enum.valueOf(BloodGroup.class,requestMap.get("bloodGroup")[0]);
 		}
@@ -181,18 +181,18 @@ public class BloodBankController extends Controller{
 	/**
 	 * @author lakshmi
 	 * Action for BloodBank backgroundImage and profile
-	 * Images of of BloodBank of the loggedIn OOD_BANK_ADMIN
-	 * POST	/secure-diagnostic/upload-diagnostic-images
+	 * Images of of BloodBank of the loggedIn BLOOD_BANK_ADMIN
+	 * POST	/secure-blood-bank/upload-blood-bank-images
 	 */
 	public static Result uploadBloodBankImageProcess() {
 		try{
 			final BloodBank bloodBank = BloodBank.find.byId(Long.parseLong(request().body().asMultipartFormData().asFormUrlEncoded().get("bloodBankId")[0]));
 			// Server side validation
-			if((bloodBank.id.longValue() != LoginController.getLoggedInUser().getBloodBankAdmin().bloodBank.id.longValue()) || (!LoginController.getLoggedInUser().role.equals(Role.BLOOD_BANK_ADMIN))){
+			if((bloodBank.id.longValue() != LoginController.getLoggedInUser().getBloodBankUser().bloodBank.id.longValue()) || (!LoginController.getLoggedInUser().role.equals(Role.BLOOD_BANK_ADMIN))){
 				Logger.warn("COULD NOT VALIDATE LOGGED IN USER TO PERFORM THIS TASK");
 				Logger.warn("update attempted for BloodBank id: "+bloodBank.id);
 				Logger.warn("logged in AppUser: "+LoginController.getLoggedInUser().id);
-				Logger.warn("logged in BloodBankUser: "+LoginController.getLoggedInUser().getBloodBankAdmin().id);
+				Logger.warn("logged in BloodBankUser: "+LoginController.getLoggedInUser().getBloodBankUser().id);
 				return redirect(routes.LoginController.processLogout());
 			}
 			//final String pattern="([^\\s]+(\\.(?i)(JPEG|jpg|png|gif|bmp))$)";
@@ -260,11 +260,11 @@ public class BloodBankController extends Controller{
 			final Map<String, String[]> requestMap = request().body().asFormUrlEncoded();
 			final BloodBank bloodBank = BloodBank.find.byId(Long.parseLong(requestMap.get("bloodBankId")[0]));
 			// Server side validation
-			if((bloodBank.id.longValue() != LoginController.getLoggedInUser().getBloodBankAdmin().bloodBank.id.longValue()) || (!LoginController.getLoggedInUser().role.equals(Role.BLOOD_BANK_ADMIN))){
+			if((bloodBank.id.longValue() != LoginController.getLoggedInUser().getBloodBankUser().bloodBank.id.longValue()) || (!LoginController.getLoggedInUser().role.equals(Role.BLOOD_BANK_ADMIN))){
 				Logger.warn("COULD NOT VALIDATE LOGGED IN USER TO PERFORM THIS TASK");
 				Logger.warn("update attempted for BloodBank id: "+bloodBank.id);
 				Logger.warn("logged in AppUser: "+LoginController.getLoggedInUser().id);
-				Logger.warn("logged in DiagnosticRep: "+LoginController.getLoggedInUser().getBloodBankAdmin().bloodBank.id);
+				Logger.warn("logged in BloodBankUser: "+LoginController.getLoggedInUser().getBloodBankUser().bloodBank.id);
 				return redirect(routes.LoginController.processLogout());
 			}
 			if(requestMap.get("name") != null && (requestMap.get("name")[0].trim().compareToIgnoreCase("")!=0)){
@@ -293,11 +293,11 @@ public class BloodBankController extends Controller{
 			final Map<String, String[]> requestMap = request().body().asFormUrlEncoded();
 			final BloodBank bloodBank = BloodBank.find.byId(Long.parseLong(requestMap.get("bloodBankId")[0]));
 			// Server side validation
-			if((bloodBank.id.longValue() != LoginController.getLoggedInUser().getBloodBankAdmin().bloodBank.id.longValue()) || (!LoginController.getLoggedInUser().role.equals(Role.BLOOD_BANK_ADMIN))){
+			if((bloodBank.id.longValue() != LoginController.getLoggedInUser().getBloodBankUser().bloodBank.id.longValue()) || (!LoginController.getLoggedInUser().role.equals(Role.BLOOD_BANK_ADMIN))){
 				Logger.warn("COULD NOT VALIDATE LOGGED IN USER TO PERFORM THIS TASK");
 				Logger.warn("update attempted for BloodBank id: "+bloodBank.id);
 				Logger.warn("logged in AppUser: "+LoginController.getLoggedInUser().id);
-				Logger.warn("logged in DiagnosticRep: "+LoginController.getLoggedInUser().getBloodBankAdmin().bloodBank.id);
+				Logger.warn("logged in DiagnosticRep: "+LoginController.getLoggedInUser().getBloodBankUser().bloodBank.id);
 				return redirect(routes.LoginController.processLogout());
 			}
 			Logger.info("map size"+requestMap.toString());
@@ -359,7 +359,7 @@ public class BloodBankController extends Controller{
 		final Map<String, String[]> requestMap = request().body().asFormUrlEncoded();
 		//final BloodBank bloodBank = BloodBank.find.byId(Long.parseLong((requestMap.get("bloodBankId")[0]).trim()));
 
-		final BloodBank bloodBank = LoginController.getLoggedInUser().getBloodBankAdmin().bloodBank;
+		final BloodBank bloodBank = LoginController.getLoggedInUser().getBloodBankUser().bloodBank;
 
 		Logger.info("bloodbank user id=="+requestMap.toString());
 		final ExpressionList<BloodDonation> bloodDonationQuery = BloodDonation.find.where().eq("bloodBank", bloodBank);

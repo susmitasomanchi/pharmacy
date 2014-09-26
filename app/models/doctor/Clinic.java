@@ -4,10 +4,12 @@ import java.util.ArrayList;
 import java.util.List;
 
 import javax.persistence.CascadeType;
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.Lob;
 import javax.persistence.ManyToMany;
 import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
@@ -42,11 +44,17 @@ public class Clinic extends BaseEntity{
 	@OneToOne
 	public PrimaryCity primaryCity;
 
+	@Lob
+	public byte[] backgroudImage;
+
+	@Column(columnDefinition="TEXT")
+	public String description;
+
 	@OneToMany(cascade=CascadeType.ALL)
 	public List<ClinicUser> clinicUserList = new ArrayList<ClinicUser>();
 
 	@ManyToMany(cascade = CascadeType.ALL)
-	public List<FileEntity> clinicImagesList = new ArrayList<FileEntity>();
+	public List<FileEntity> profileImageList = new ArrayList<FileEntity>();
 
 	public static Model.Finder<Long, Clinic> find = new Finder<Long, Clinic>(Long.class, Clinic.class);
 

@@ -18,6 +18,7 @@ import models.Role;
 import models.bloodBank.BloodBank;
 import models.diagnostic.DiagnosticCentre;
 import models.doctor.Appointment;
+import models.doctor.Clinic;
 import models.doctor.Day;
 import models.doctor.DaySchedule;
 import models.doctor.Doctor;
@@ -453,6 +454,27 @@ public class PublicController extends Controller{
 		}
 		else{
 			for (final FileEntity file : BloodBank.find.byId(bloodBankId).profileImageList) {
+				if(file.id == imageId){
+					byteContent = file.byteContent;
+				}
+			}
+		}
+
+		return ok(byteContent).as("image/jpeg");
+
+	}
+	/**
+	 * @author lakshmi
+	 *  Action to get byteData as image of Clinic
+	 * GET/bloodBank/get-image/:bloodBankId/:fileId
+	 */
+	public static Result getClinicImages(final Long bloodBankId,final Long imageId){
+		byte[] byteContent = null;
+		if(imageId == 0){
+			byteContent=Clinic.find.byId(bloodBankId).backgroudImage;
+		}
+		else{
+			for (final FileEntity file : Clinic.find.byId(bloodBankId).profileImageList) {
 				if(file.id == imageId){
 					byteContent = file.byteContent;
 				}

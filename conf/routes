@@ -82,6 +82,7 @@ GET		/diagnostic/get-image/:diagnosticId/:imageId	controllers.PublicController.g
 GET		/diagnostic/remove-diagnostic/:diagnosticId					controllers.PublicController.removeFavoriteDiagnosticCentre(diagnosticId: Long)
 GET		/doctor/remove-pharmacy/:pharmacyId							controllers.PublicController.removeFavoritePharmacy(pharmacyId:Long)
 GET		/bloodBank/get-image/:bloodBankId/:imageId					controllers.PublicController.getBloodBankImages(bloodBankId: Long,imageId: Long)
+GET		/clinic/get-image/:clinicId/:imageId					controllers.PublicController.getClinicImages(clinicId: Long,imageId: Long)
 GET 	/sendTestmail									controllers.DiagnosticController.sendSampleAttchEmail() 
 # Sign up page
 GET    /secure-doctor/join                              			controllers.UserController.joinUsDoctor()
@@ -389,6 +390,9 @@ GET    /secure-clinic/invite-doctor      					controllers.ClinicController.searc
 POST    /secure-clinic/invite-doctor      					controllers.ClinicController.processSeachDoctorsByEmailId()
 GET		/secure-clinic/add-doctor/:docId/:clinicId/:verCode			controllers.ClinicController.addDoctorToTheClinic(docId: Long, clinicId : Long, verCode:String)
 GET		/secure-clinic/view-all-doctors						controllers.ClinicController.getDoctors()
+POST	/secure-clinic/upload-clinic-images										controllers.ClinicController.uploadClinicImageProcess()
+GET		/secure-clinic/remove-image/:clinicId/:fileId						controllers.ClinicController.removeClinicImage(clinicId: Long,fileId: Long)
+POST	/secure-clinic/basic-update												controllers.ClinicController.clinicBasicUpdate()
 
 #BloodBank
 GET    /secure-blood-bank/get-blood-donors      					controllers.BloodBankController.getBloodDonorsInCityForm()

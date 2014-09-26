@@ -121,10 +121,10 @@ public class AppUser extends BaseEntity {
 		return DiagnosticRepresentative.find.where().eq("appUser.id", this.id).findUnique();
 	}
 
-	public ClinicUser getClinicAdminstrator() {
+	public ClinicUser getClinicUser() {
 		return ClinicUser.find.where().eq("appUser.id", this.id).findUnique();
 	}
-	public BloodBankUser getBloodBankAdmin() {
+	public BloodBankUser getBloodBankUser() {
 		return BloodBankUser.find.where().eq("appUser.id", this.id).findUnique();
 	}
 
