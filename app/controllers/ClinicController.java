@@ -13,10 +13,12 @@ import com.google.common.io.Files;
 
 import actions.BasicAuth;
 import actions.ConfirmAppUser;
+import models.Address;
 import models.Alert;
 import models.AppUser;
 import models.FileEntity;
 import models.Role;
+import models.State;
 import models.bloodBank.BloodBank;
 import models.clinic.ClinicInvite;
 import models.doctor.Clinic;
@@ -255,6 +257,69 @@ public class ClinicController extends Controller{
 			}
 
 			clinic.update();
+		}
+		catch (final Exception e){
+			e.printStackTrace();
+			flash().put("alert", new Alert("alert-danger", "Sorry. Something went wrong. Please try again.").toString());
+		}
+		return redirect(routes.UserActions.dashboard());
+	}
+
+	/**
+	 * @author : lakshmi
+	 * POST	/secure-clinic/address-update
+	 * Action to update the address details of Clinic
+	 */
+
+	public static Result clinicAddressUpdate() {
+
+		try{
+			final Map<String, String[]> requestMap = request().body().asFormUrlEncoded();
+			final Clinic clinic = Clinic.find.byId(Long.parseLong(requestMap.get("clinicId")[0]));
+			// Server side validation
+			if((clinic.id.longValue() != LoginController.getLoggedInUser().getClinicUser().clinic.id.longValue()) || (!LoginController.getLoggedInUser().role.equals(Role.CLINIC_ADMIN))){
+				Logger.warn("COULD NOT VALIDATE LOGGED IN USER TO PERFORM THIS TASK");
+				Logger.warn("update attempted for Clinic id: "+clinic.id);
+				Logger.warn("logged in AppUser: "+LoginController.getLoggedInUser().id);
+				Logger.warn("logged in ClinicUser: "+LoginController.getLoggedInUser().getClinicUser().clinic.id);
+				return redirect(routes.LoginController.processLogout());
+			}
+			Logger.info("map size"+requestMap.toString());
+			if(clinic.address == null){
+				final Address address = new Address();
+				address.save();
+				clinic.address = address;
+			}
+			if(requestMap.get("contactPerson") != null && (requestMap.get("contactPerson")[0].trim().compareToIgnoreCase("")!=0)){
+				clinic.contactPersonName = requestMap.get("contactPerson")[0];
+			}
+			if(requestMap.get("addressLine1") != null && (requestMap.get("addressLine1")[0].trim().compareToIgnoreCase("")!=0)){
+				clinic.address.addressLine1 = requestMap.get("addressLine1")[0];
+			}
+			if(requestMap.get("city") != null && (requestMap.get("city")[0].trim().compareToIgnoreCase("")!=0)){
+				clinic.address.city = requestMap.get("city")[0];
+			}
+			if(requestMap.get("area") != null && (requestMap.get("area")[0].trim().compareToIgnoreCase("")!=0)){
+				clinic.address.area = requestMap.get("area")[0];
+			}
+			if(requestMap.get("pincode") != null && (requestMap.get("pincode")[0].trim().compareToIgnoreCase("")!=0)){
+				clinic.address.pinCode = requestMap.get("pincode")[0];
+			}
+			if(requestMap.get("state") != null && (requestMap.get("state")[0].trim().compareToIgnoreCase("")!=0)){
+				clinic.address.state = Enum.valueOf(State.class,requestMap.get("state")[0]);
+			}
+			if(requestMap.get("latitude") != null && (requestMap.get("latitude")[0].trim().compareToIgnoreCase("")!=0)){
+				clinic.address.latitude = requestMap.get("latitude")[0];
+			}
+			if(requestMap.get("longitude") != null && (requestMap.get("longitude")[0].trim().compareToIgnoreCase("")!=0)){
+				clinic.address.longitude = requestMap.get("longitude")[0];
+			}
+			if(requestMap.get("contactNo") != null && (requestMap.get("contactNo")[0].trim().compareToIgnoreCase("")!=0)){
+				clinic.contactNo = requestMap.get("contactNo")[0];
+			}
+			clinic.address.update();
+			clinic.update();
+
 		}
 		catch (final Exception e){
 			e.printStackTrace();

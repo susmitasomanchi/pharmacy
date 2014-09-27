@@ -78,7 +78,7 @@ public class AppUser extends BaseEntity {
 	public Role role;
 
 	@OneToOne
-	Address address;
+	public Address address;
 
 	public boolean emailConfirmed = false;
 

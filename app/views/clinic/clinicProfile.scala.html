@@ -276,21 +276,21 @@ style="color:#006687; font-size:20px; position:relative; top:-20px; cursor:point
 	@clinic.description	 
 </p>
 </div>
-@*
+
 <br>
 <div class="row">
 <div class="col-md-10">
 <div class="col-md-5">
-@if(bloodBank.address != null){
-<h5>@bloodBank.contactPersonName<span data-toggle="modal" data-target="#myaddrModal" style="cursor:pointer; position:relative; left: 20px; font-size:20px;"><i id="spinner2" class="fa fa-cog"></i></span></h5>
-<h5>@bloodBank.address.addressLine1</h5>
-<h5>@bloodBank.address.area</h5>
-<h5>@bloodBank.address.city</h5>
-@if(bloodBank.address.state != null){
-<h5>@models.State.options().get(bloodBank.address.state.toString())</h5>	
+@if(clinic.address != null){
+<h5>@clinic.contactPersonName<span data-toggle="modal" data-target="#myaddrModal" style="cursor:pointer; position:relative; left: 20px; font-size:20px;"><i id="spinner2" class="fa fa-cog"></i></span></h5>
+<h5>@clinic.address.addressLine1</h5>
+<h5>@clinic.address.area</h5>
+<h5>@clinic.address.city</h5>
+@if(clinic.address.state != null){
+<h5>@models.State.options().get(clinic.address.state.toString())</h5>	
 }
-<h5>@bloodBank.address.pinCode</h5>
-<h5>Phones: @bloodBank.contactNo </h5>
+<h5>@clinic.address.pinCode</h5>
+<h5>Phones: @clinic.contactNo </h5>
 }else{
 <h4>
 Edit Contact Details
@@ -301,7 +301,7 @@ Edit Contact Details
 
 <div class="col-md-7">
 	<div id="profile_map_canvas" style="width:600px;height:400px">
-	@if(bloodBank.address == null || bloodBank.address.latitude== null || bloodBank.address.longitude == null || bloodBank.address.latitude.trim().compareToIgnoreCase("") == 0 || bloodBank.address.longitude.trim().compareToIgnoreCase("") == 0){
+	@if(clinic.address == null || clinic.address.latitude== null || clinic.address.longitude == null || clinic.address.latitude.trim().compareToIgnoreCase("") == 0 || clinic.address.longitude.trim().compareToIgnoreCase("") == 0){
 		<img src="/assets/images/googlemap1.png" width="600" height="400" style="position:relative" />
 		<div class="maptext" style="text-align:center">
 		<p style="position:relative; top:-200px; color:#008cba;"><b>Kindly Edit Contact Details & Mark Your BloodBank</span></b></p>
@@ -421,11 +421,11 @@ $("#city").blur(function() {
 
 
 
-@if(bloodBank.address != null && bloodBank.address.latitude!= null && bloodBank.address.longitude != null && bloodBank.address.latitude.trim().compareToIgnoreCase("") != 0 && bloodBank.address.longitude.trim().compareToIgnoreCase("") != 0){
+@if(clinic.address != null && clinic.address.latitude!= null && clinic.address.longitude != null && clinic.address.latitude.trim().compareToIgnoreCase("") != 0 && clinic.address.longitude.trim().compareToIgnoreCase("") != 0){
 <script>
 		window.onload=function(){
-			lat = @bloodBank.address.latitude
-			lng = @bloodBank.address.longitude
+			lat = @clinic.address.latitude
+			lng = @clinic.address.longitude
 			myLatLng= new google.maps.LatLng(lat, lng),
 			google.maps.event.addDomListener(window, 'load', initialize('profile_map_canvas'));
 			$('#myaddrModal').on('shown.bs.modal', function (e) {
@@ -449,35 +449,35 @@ $("#city").blur(function() {
       <div class="modal-body well">
      	<div class="row">
 			<div class="col-md-4">
-			<form action=@routes.BloodBankController.bloodBankAddressUpdate() role="form" method="POST">
+			<form action=@routes.ClinicController.clinicAddressUpdate() role="form" method="POST">
 			<div ><input type="hidden" name="latitude" id="lat1"></div>
 			<div ><input type="hidden" name="longitude" id="lng1"></div>
   			<div class="form-group">
    				 <label for="addressLine1">Contact Person</label>
-   				 <input type="text" class="form-control" name="contactPerson" @if(bloodBank.contactPersonName!=null){value="@bloodBank.contactPersonName"} id="contactPerson" placeholder="Contact Person's Name">
+   				 <input type="text" class="form-control" name="contactPerson" @if(clinic.contactPersonName!=null){value="@clinic.contactPersonName"} id="contactPerson" placeholder="Contact Person's Name">
  			</div>
   			<div class="form-group">
     			<label for="streetName">Street Address</label>
-    			<input type="text" class="form-control" name="addressLine1" @if(bloodBank.address!=null){value="@bloodBank.address.addressLine1"} id="streetName" placeholder="Enter Street Address">
+    			<input type="text" class="form-control" name="addressLine1" @if(clinic.address!=null){value="@clinic.address.addressLine1"} id="streetName" placeholder="Enter Street Address">
   			</div>
   			<div class="form-group">
     			<label for="city">Area</label>
-    			<input type="text" class="form-control" name="area" @if(bloodBank.address!=null){value="@bloodBank.address.area"} id="area" placeholder="Enter Area">
+    			<input type="text" class="form-control" name="area" @if(clinic.address!=null){value="@clinic.address.area"} id="area" placeholder="Enter Area">
   			</div>
   			<div class="form-group">
     			<label for="city">City</label>
-    			<input type="text" class="form-control" name="city" @if(bloodBank.address!=null){value="@bloodBank.address.city"} id="city" placeholder="Enter City">
+    			<input type="text" class="form-control" name="city" @if(clinic.address!=null){value="@clinic.address.city"} id="city" placeholder="Enter City">
   			</div>
   			<div class="form-group">
     			<label for="pincode">Pincode</label>
-    			<input type="text" class="form-control" name="pincode" @if(bloodBank.address!=null){value="@bloodBank.address.pinCode"} id="pincode" placeholder="Enter Pincode">
+    			<input type="text" class="form-control" name="pincode" @if(clinic.address!=null){value="@clinic.address.pinCode"} id="pincode" placeholder="Enter Pincode">
   			</div>
   			<div class="form-group">
     			<label for="state">State</label><br>
 				<select id="statesel" style="width:100%;" data-placeholder="Select State" name="state">
     				<option value=""></option>	
      				@for((k,v) <- models.State.options()){
-     					@if(bloodBank.address!=null && bloodBank.address.state != null && bloodBank.address.state.equals(bloodBank.address.state)){
+     					@if(clinic.address!=null && clinic.address.state != null && clinic.address.state.equals(clinic.address.state)){
 							<option  name="state" value="@k" selected>@v</option>
 						}else{
         					<option  name="state" value="@k">@v</option>
@@ -488,18 +488,18 @@ $("#city").blur(function() {
   			
   			<div class="form-group">
     			<label for="phone">Phone Number</label>
-    			<input type="text" name="contactNo" value="@bloodBank.contactNo" id="phone" class="form-control" placeholder="Enter phone number">
+    			<input type="text" name="contactNo" value="@clinic.contactNo" id="phone" class="form-control" placeholder="Enter phone number">
   			</div>
   			
   			<br>
-  			<input type="hidden" name="bloodBankId" value='@bloodBank.id' >
+  			<input type="hidden" name="clinicId" value='@clinic.id' >
 			<button type="submit" class="btn btn-primary btn-sm">Submit</button>
 		</form>
 	</div>	
 <div class="col-md-8">
 
 <div id="map_canvas" style="width:520px;height:400px">
-	@if(bloodBank.address == null || bloodBank.address.latitude== null || bloodBank.address.longitude == null || bloodBank.address.latitude.trim().compareToIgnoreCase("") == 0 || bloodBank.address.longitude.trim().compareToIgnoreCase("") == 0){
+	@if(clinic.address == null || clinic.address.latitude== null || clinic.address.longitude == null || clinic.address.latitude.trim().compareToIgnoreCase("") == 0 || clinic.address.longitude.trim().compareToIgnoreCase("") == 0){
 		<img src="/assets/images/googlemap1.png" width="520" height="400" style="position:relative" />
 		<div class="maptext" style="text-align:center">
 		<p style="position:relative; top:-200px; color:#008cba;"><b>Please provide Area and City to generate the map</span></b></p>
@@ -528,6 +528,6 @@ $("#city").blur(function() {
 <div id="map_canvas" style="width:500px;height:300px"> </div>
 </div>
 </div>
-*@
+
 <br><br>
 }

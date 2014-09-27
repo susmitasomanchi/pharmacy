@@ -83,6 +83,8 @@ GET		/diagnostic/remove-diagnostic/:diagnosticId					controllers.PublicControlle
 GET		/doctor/remove-pharmacy/:pharmacyId							controllers.PublicController.removeFavoritePharmacy(pharmacyId:Long)
 GET		/bloodBank/get-image/:bloodBankId/:imageId					controllers.PublicController.getBloodBankImages(bloodBankId: Long,imageId: Long)
 GET		/clinic/get-image/:clinicId/:imageId					controllers.PublicController.getClinicImages(clinicId: Long,imageId: Long)
+GET		/user/get-image/:appUserId					controllers.PublicController.getAppUserImage(appUserId: Long)
+
 GET 	/sendTestmail									controllers.DiagnosticController.sendSampleAttchEmail() 
 # Sign up page
 GET    /secure-doctor/join                              			controllers.UserController.joinUsDoctor()
@@ -393,6 +395,7 @@ GET		/secure-clinic/view-all-doctors						controllers.ClinicController.getDoctor
 POST	/secure-clinic/upload-clinic-images										controllers.ClinicController.uploadClinicImageProcess()
 GET		/secure-clinic/remove-image/:clinicId/:fileId						controllers.ClinicController.removeClinicImage(clinicId: Long,fileId: Long)
 POST	/secure-clinic/basic-update												controllers.ClinicController.clinicBasicUpdate()
+POST	/secure-clinic/address-update 											controllers.ClinicController.clinicAddressUpdate()
 
 #BloodBank
 GET    /secure-blood-bank/get-blood-donors      					controllers.BloodBankController.getBloodDonorsInCityForm()
@@ -406,6 +409,12 @@ POST	/secure-blood-bank/basic-update												controllers.BloodBankController.
 POST	/secure-blood-bank/address-update 											controllers.BloodBankController.bloodBankAddressUpdate()
 GET		/secure-blood-bank/from-to-date-donations											controllers.BloodBankController.fromToDateBloodDonationsForm()
 POST		/secure-blood-bank/from-to-date-donations											controllers.BloodBankController.getFromToDateBloodDonations()
+GET		/secure-blood-bank/get-blood-donor-form											controllers.BloodBankController.getBloodDonorByEmailForm()
+GET		/secure-blood-bank/find-blood-donor/:emailId											controllers.BloodBankController.findBloodDonorByEmail(emailId : String)
+GET		/secure-blood-bank/add-blood-donor/:appUserId											controllers.BloodBankController.addBloodDonorToBloodBank(appUserId : Long)
+GET		/secure-blood-bank/view-blood-donors													controllers.BloodBankController.listBloodBankBloodDonors()
+GET		/secure-blood-bank/remove-blood-donor/:appUserId													controllers.BloodBankController.removeBloodBankBloodDonor(appUserId : Long)
+
 
 
 

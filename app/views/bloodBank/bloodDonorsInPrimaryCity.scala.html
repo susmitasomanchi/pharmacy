@@ -1,4 +1,4 @@
-@(patients : List[models.patient.Patient])
+@(patients : List[models.patient.Patient],city : String,bloodGoup: String,sex : models.Sex,age : String)
 
 @import play.i18n._
 @import helper.twitterBootstrap._
@@ -11,6 +11,9 @@
 <div class="col-md-3">
 <lable for="age">City</lable>&nbsp;
 <select name="primaryCity">
+@if(city != null){
+<option>@city</option>
+}
 <option value="any">Any</option>
 @for(primaryCity <- PrimaryCity.getAllInOrder()){
 <option value="@primaryCity.id">@primaryCity.name</option>
@@ -20,6 +23,9 @@
 <div class="col-md-3">
 <lable for="bloodGroup">Blood Group</lable>&nbsp;
 <select name="bloodGroup">
+@if(bloodGoup != null){
+<option>@bloodGoup</option>
+}
 <option value="any">Any</option>
 @for((k,v)<- BloodGroup.options()){
 <option value="@k">@v</option>
@@ -29,16 +35,22 @@
 <div class="col-md-2">
 <lable for="age">Age</lable>&nbsp;
 <select name="age">
-<option value="any">Any</option>
-<option value=" 18-30"> 18-30</option>
-<option value="31-40">31-40</option>
-<option value="41-50">41-50</option>
-<option value="50-70">50-70</option>
+@if(age != null){
+<option>@age</option>
+}
+<option value="0">Any</option>
+<option value="1">18-30</option>
+<option value="2">30-40</option>
+<option value="3">40-50</option>
+<option value="4">&gt; 50</option>
 </select>
 </div>
 <div class="col-md-2">
 <lable for="sex">Sex</lable>&nbsp;
 <select name="sex">
+@if(sex != null){
+<option>@sex</option>
+}
 <option value="any">Any</option>
 @for((k,v) <- Sex.options()){
 <option value="@k"> @v</option>

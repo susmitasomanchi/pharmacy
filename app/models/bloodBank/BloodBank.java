@@ -15,6 +15,7 @@ import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 
 import models.Address;
+import models.AppUser;
 import models.BaseEntity;
 import models.FileEntity;
 import models.PrimaryCity;
@@ -53,6 +54,10 @@ public class BloodBank extends BaseEntity{
 
 	@ManyToMany(cascade = CascadeType.ALL)
 	public List<FileEntity> profileImageList = new ArrayList<FileEntity>();
+
+	@ManyToMany(cascade = CascadeType.ALL)
+	public List<AppUser> bloodDonorsList = new ArrayList<AppUser>();
+
 
 	public static Finder<Long, BloodBank> find = new Finder<Long, BloodBank>(Long.class, BloodBank.class);
 

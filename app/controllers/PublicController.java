@@ -484,6 +484,15 @@ public class PublicController extends Controller{
 		return ok(byteContent).as("image/jpeg");
 
 	}
+	/*
+	 * @author lakshmi
+	 *  Action to get byteData as image of Clinic
+	 * GET/bloodBank/get-image/:bloodBankId/:fileId
+	 */
+	public static Result getAppUserImage(final Long appUserId){
+		final AppUser appUser = AppUser.find.byId(appUserId);
+		return ok(appUser.image).as("image/jpeg");
+	}
 
 	/**
 	 * @author Lakshmi

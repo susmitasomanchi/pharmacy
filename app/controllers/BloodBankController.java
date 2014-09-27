@@ -3,6 +3,8 @@ package controllers;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -14,13 +16,11 @@ import models.BloodGroup;
 import models.FileEntity;
 import models.PrimaryCity;
 import models.Role;
+import models.Sex;
 import models.State;
 import models.bloodBank.BloodBank;
 import models.bloodBank.BloodDonation;
 import models.patient.Patient;
-
-import org.joda.time.LocalDate;
-
 import play.Logger;
 import play.mvc.Controller;
 import play.mvc.Http.MultipartFormData.FilePart;
@@ -40,7 +40,7 @@ public class BloodBankController extends Controller{
 	 */
 	@ConfirmAppUser
 	public static Result getBloodDonorsInCityForm(){
-		return ok(views.html.bloodBank.bloodDonorsInPrimaryCity.render(null));
+		return ok(views.html.bloodBank.bloodDonorsInPrimaryCity.render(new ArrayList<Patient>(),null,null,null,null));
 	}
 	/**
 	 * @author lakshmi
@@ -49,36 +49,32 @@ public class BloodBankController extends Controller{
 	 */
 	@ConfirmAppUser
 	public static Result listBloodDonorsInCity(){
-
+		String city = null ,bloodGroup = null;
 		final Map<String, String[]> requestMap = request().body().asFormUrlEncoded();
-		/*Logger.info(""+requestMap.toString());
-		Logger.info("vgytugij"+requestMap.get("bloodBankUserId")[0]);
-		final BloodBankUser bloodBankUser = BloodBankUser.find.byId(Long.parseLong(requestMap.get("bloodBankUserId")[0]));
-		// Server side validation
-		if((LoginController.getLoggedInUser().getBloodBankAdmin().id.longValue()) != (bloodBankUser.id.longValue()) || (!LoginController.getLoggedInUser().role.equals(Role.BLOOD_BANK_ADMIN))){
-			Logger.warn("COULD NOT VALIDATE LOGGED IN USER TO PERFORM THIS TASK");
-			Logger.warn("logged in AppUser: "+LoginController.getLoggedInUser().id);
-			Logger.warn("logged in BllodBankUser: "+LoginController.getLoggedInUser().getBloodBankAdmin().id);
-			return redirect(routes.LoginController.processLogout());
-		}*/
 		final ExpressionList<Patient> patientQuery = Patient.find.where().eq("appUser.isBloodDonor", true);
 		if(((requestMap.get("primaryCity")[0])!= null) && !((requestMap.get("primaryCity")[0]).trim().equalsIgnoreCase("any"))){
 			Logger.info("inside primary city");
+			city = PrimaryCity.find.byId(Long.parseLong((requestMap.get("primaryCity")[0]))).name;
 			patientQuery
 			.eq("primaryCity", PrimaryCity.find.byId(Long.parseLong(requestMap.get("primaryCity")[0].trim())));
 			Logger.info("inside primary city=="+patientQuery.findRowCount());
 		}
 		if(((requestMap.get("bloodGroup")[0])!= null) && !((requestMap.get("bloodGroup")[0]).trim().equalsIgnoreCase("any"))){
 			Logger.info("inside blood Group");
+			bloodGroup = Enum.valueOf(BloodGroup.class,requestMap.get("bloodGroup")[0]).capitalize();
 			patientQuery
 			.eq("appUser.bloodGroup",requestMap.get("bloodGroup")[0].trim());
 			Logger.info("inside blood group=="+patientQuery.findRowCount());
 		}
+		Sex sex = null;
 		if(((requestMap.get("sex")[0])!= null) && !((requestMap.get("sex")[0]).trim().equalsIgnoreCase("any"))){
+			sex = Enum.valueOf(Sex.class,requestMap.get("sex")[0]);
 			patientQuery
-			.eq("sex",requestMap.get("sex")[0].trim());
+			.eq("appUser.sex",requestMap.get("appUser.sex")[0].trim());
 		}
-		if((requestMap.get("age")[0])!= null && !((requestMap.get("sex")[0]).trim().equalsIgnoreCase("any"))){
+		String age = "Any";
+		if((requestMap.get("age")[0])!= null && !((requestMap.get("age")[0]).trim().equalsIgnoreCase("0"))){
+			/*
 			final String[] age = (requestMap.get("age")[0].trim()).split("-");
 			final LocalDate now = new LocalDate();
 			final LocalDate startDate = now.minusYears(Integer.parseInt(age[0]));
@@ -86,10 +82,67 @@ public class BloodBankController extends Controller{
 			final LocalDate endDate = now.minusYears(Integer.parseInt(age[1]));
 			Logger.info("start date="+endDate);
 			patientQuery.between("appUser.dob",startDate,endDate);
+			 */
+
+			final int slab = Integer.parseInt(requestMap.get("age")[0]);
+			final Calendar cal = Calendar.getInstance();
+
+			if(slab == 1){
+				age = "18-30";
+				cal.add(Calendar.YEAR, -30);
+				final Date fromDate = cal.getTime();
+				Logger.info("fromDate: "+fromDate);
+				cal.add(Calendar.YEAR, 12);
+				final Date toDate = cal.getTime();
+				Logger.info("toDate: "+toDate);
+				patientQuery.ge("appUser.dob",fromDate).le("appUser.dob",toDate);
+			}
+
+			if(slab == 2){
+				age = "30-40";
+				cal.add(Calendar.YEAR, -40);
+				final Date fromDate = cal.getTime();
+				Logger.info("fromDate: "+fromDate);
+				cal.add(Calendar.YEAR, 10);
+				final Date toDate = cal.getTime();
+				Logger.info("toDate: "+toDate);
+				patientQuery.ge("appUser.dob",fromDate).le("appUser.dob",toDate);
+			}
+
+			if(slab == 3){
+				age = "40-50";
+				cal.add(Calendar.YEAR, -50);
+				final Date fromDate = cal.getTime();
+				Logger.info("fromDate: "+fromDate);
+				cal.add(Calendar.YEAR, 10);
+				final Date toDate = cal.getTime();
+				Logger.info("toDate: "+toDate);
+				patientQuery.ge("appUser.dob",fromDate).le("appUser.dob",toDate);
+			}
+
+			if(slab == 4){
+				age = "&gt; 50";
+				cal.add(Calendar.YEAR, -50);
+				final Date toDate = cal.getTime();
+				Logger.info("toDate: "+toDate);
+				patientQuery.le("appUser.dob",toDate);
+			}
+
+
+
+
+
 		}
 		//		Logger.info("size=="+patients.size());
-		return ok(views.html.bloodBank.bloodDonorsInPrimaryCity.render(patientQuery.findList()));
+		return ok(views.html.bloodBank.bloodDonorsInPrimaryCity.render(patientQuery.findList(),city,bloodGroup,sex,age));
 	}
+
+
+
+
+
+
+
 	/**
 	 * @author lakshmi
 	 * Action to render receivedBloodDonorFrom
@@ -391,10 +444,56 @@ public class BloodBankController extends Controller{
 				total+= bloodDonation.quantityDonated;
 			}
 		}
-
-
-
 		return ok(views.html.bloodBank.formAndToDateBloodDonations.render(bloodDonationList, bgMap, total));
+	}
+
+	public static Result getBloodDonorByEmailForm(){
+		return ok(views.html.bloodBank.addBloodDonorsToBloodBank.render(null));
+	}
+	public static Result findBloodDonorByEmail(final String email){
+		if(!(email.trim().isEmpty())){
+			final AppUser appUser = AppUser.find.where().eq("isBloodDonor", true).eq("email", email).findUnique();
+			if((appUser != null) && (appUser.role.equals(Role.PATIENT))){
+				Logger.info("inside patient");
+				return ok(views.html.bloodBank.addBloodDonorsToBloodBank.render(appUser.getPatient()));
+			}
+			else{
+				Logger.info("inside not patient");
+				flash().put("alert", new Alert("alert-info", "Sorry. with "+email+"No Blood Donor Found.").toString());
+				return ok(views.html.bloodBank.addBloodDonorsToBloodBank.render(null));
+			}
+		}
+		Logger.info("inside empty email");
+		flash().put("alert", new Alert("alert-danger", "Email Id Is Mandatory..").toString());
+		return ok(views.html.bloodBank.addBloodDonorsToBloodBank.render(null));
+	}
+	public static Result addBloodDonorToBloodBank(final Long appUserId){
+		final BloodBank bloodBank = LoginController.getLoggedInUser().getBloodBankUser().bloodBank;
+		final AppUser appUser = AppUser.find.byId(appUserId);
+		Logger.info("before=="+bloodBank.bloodDonorsList.size());
+		if(!(bloodBank.bloodDonorsList.contains(appUser))){
+			bloodBank.bloodDonorsList.add(appUser);
+			bloodBank.update();
+			Logger.info("after=="+bloodBank.bloodDonorsList.size());
+			flash().put("alert", new Alert("alert-success", appUser.name+" Added To The "+bloodBank.name+".").toString());
+		}
+		else{
+			flash().put("alert", new Alert("alert-danger", appUser.name+" Already Existed In "+bloodBank.name+".").toString());
+		}
+		return redirect(routes.BloodBankController.listBloodBankBloodDonors());
+	}
+
+	public static Result listBloodBankBloodDonors(){
+		final BloodBank bloodBank = LoginController.getLoggedInUser().getBloodBankUser().bloodBank;
+		return ok(views.html.bloodBank.viewBloodBankBloodDonors.render(bloodBank.bloodDonorsList));
+	}
+	public static Result removeBloodBankBloodDonor(final Long appUserId){
+		final BloodBank bloodBank = LoginController.getLoggedInUser().getBloodBankUser().bloodBank;
+		final AppUser appUser = AppUser.find.byId(appUserId);
+		bloodBank.bloodDonorsList.remove(appUser);
+		bloodBank.update();
+		flash().put("alert", new Alert("alert-danger", appUser.name+" Removed From The "+bloodBank.name+".").toString());
+		return redirect(routes.BloodBankController.listBloodDonorsInCity());
 	}
 
 
