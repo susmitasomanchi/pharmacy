@@ -1,19 +1,16 @@
-@(patients : List[models.patient.Patient],city : String,bloodGoup: String,sex : models.Sex,age : String)
+@(patients : List[models.patient.Patient])
 
 @import play.i18n._
 @import helper.twitterBootstrap._
 @import helper._
 
 @main("Blood Donors"){
-<form action="@routes.BloodBankController.listBloodDonorsInCity()" method="POST">
+<form id="donarsForm"  method="POST">
 <div class="row">
 <div class="col-md-12">
 <div class="col-md-3">
 <lable for="age">City</lable>&nbsp;
 <select name="primaryCity">
-@if(city != null){
-<option>@city</option>
-}
 <option value="any">Any</option>
 @for(primaryCity <- PrimaryCity.getAllInOrder()){
 <option value="@primaryCity.id">@primaryCity.name</option>
@@ -23,9 +20,6 @@
 <div class="col-md-3">
 <lable for="bloodGroup">Blood Group</lable>&nbsp;
 <select name="bloodGroup">
-@if(bloodGoup != null){
-<option>@bloodGoup</option>
-}
 <option value="any">Any</option>
 @for((k,v)<- BloodGroup.options()){
 <option value="@k">@v</option>
@@ -35,9 +29,6 @@
 <div class="col-md-2">
 <lable for="age">Age</lable>&nbsp;
 <select name="age">
-@if(age != null){
-<option>@age</option>
-}
 <option value="0">Any</option>
 <option value="1">18-30</option>
 <option value="2">30-40</option>
@@ -48,9 +39,6 @@
 <div class="col-md-2">
 <lable for="sex">Sex</lable>&nbsp;
 <select name="sex">
-@if(sex != null){
-<option>@sex</option>
-}
 <option value="any">Any</option>
 @for((k,v) <- Sex.options()){
 <option value="@k"> @v</option>
@@ -58,15 +46,18 @@
 </select>
 </div>
 <div class="col-md-2">
-<input type="submit" value="find">
+@*<input type="submit" id="click" value="find">*@
+<a  id ="find" name="find" onclick="getData();" class="btn btn-primary btn-xs">find</a>
+
 </div>
 </div>
 </div>
 </form>
 <br><br>
-@if(patients != null){
+
+<div class="row" style="padding:15px;" id="table">
+
 @if(patients.size() != 0){
-<div class="row" style="padding:15px;">
 <table class="table table-bordered">
 <tr>
 <th class="col-md-2">S.no</th>
@@ -89,8 +80,16 @@
 </tr>
 }
 </table>
-</div>
 }else{<h5> No Blood Donor Found</h5>}
+</div>
+ <script>
+function getData(){
+$("#table").html('Fetching Data. Please Wait...');
+ 	$.post( "/secure-blood-bank/list-blood-donors",$("#donarsForm").serialize(),function( data ) {
+ 	  			$("#table").html(data);	
+	});
+		
 }
+</script>
 }
 

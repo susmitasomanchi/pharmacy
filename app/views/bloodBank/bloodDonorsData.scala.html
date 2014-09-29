@@ -1,0 +1,23 @@
+@(patients : List[models.patient.Patient])
+<table class="table table-bordered">
+<tr>
+<th class="col-md-2">S.no</th>
+<th class="col-md-2">Name</th>
+<th class="col-md-2">Age</th>
+<th class="col-md-2">Sex</th>
+<th class="col-md-2">Contact No</th>
+<th class="col-md-2">Last Blood Donated Date</th>
+<th class="col-md-2">Blood Group</th>
+</tr>
+@for((patient,index) <- patients.zipWithIndex){
+<tr>
+<td class="col-md-2">@{index+1}</td>
+<td class="col-md-2">@patient.appUser.name</td>
+<td class="col-md-2">@patient.appUser.getAge()</td>
+<td class="col-md-2">@patient.appUser.sex</td>
+<td class="col-md-2">@patient.appUser.mobileNumber</td>
+<td class="col-md-2">@if(patient.appUser.lastBloodDonatedDate != null){@patient.appUser.lastBloodDonatedDate.format("dd-MM-YYY HH:mm")}else{----}</td>
+<td class="col-md-2">@patient.appUser.bloodGroup.capitalize()</td>
+</tr>
+}
+</table>

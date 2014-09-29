@@ -40,7 +40,7 @@ public class BloodBankController extends Controller{
 	 */
 	@ConfirmAppUser
 	public static Result getBloodDonorsInCityForm(){
-		return ok(views.html.bloodBank.bloodDonorsInPrimaryCity.render(new ArrayList<Patient>(),null,null,null,null));
+		return ok(views.html.bloodBank.bloodDonorsInPrimaryCity.render(new ArrayList<Patient>()));
 	}
 	/**
 	 * @author lakshmi
@@ -49,30 +49,34 @@ public class BloodBankController extends Controller{
 	 */
 	@ConfirmAppUser
 	public static Result listBloodDonorsInCity(){
-		String city = null ,bloodGroup = null;
+
+		BloodGroup bloodGroup = null;
+		PrimaryCity primaryCity = null;
+		Logger.info("inside controller");
 		final Map<String, String[]> requestMap = request().body().asFormUrlEncoded();
 		final ExpressionList<Patient> patientQuery = Patient.find.where().eq("appUser.isBloodDonor", true);
 		if(((requestMap.get("primaryCity")[0])!= null) && !((requestMap.get("primaryCity")[0]).trim().equalsIgnoreCase("any"))){
 			Logger.info("inside primary city");
-			city = PrimaryCity.find.byId(Long.parseLong((requestMap.get("primaryCity")[0]))).name;
+			primaryCity = PrimaryCity.find.byId(Long.parseLong((requestMap.get("primaryCity")[0])));
 			patientQuery
 			.eq("primaryCity", PrimaryCity.find.byId(Long.parseLong(requestMap.get("primaryCity")[0].trim())));
 			Logger.info("inside primary city=="+patientQuery.findRowCount());
 		}
 		if(((requestMap.get("bloodGroup")[0])!= null) && !((requestMap.get("bloodGroup")[0]).trim().equalsIgnoreCase("any"))){
 			Logger.info("inside blood Group");
-			bloodGroup = Enum.valueOf(BloodGroup.class,requestMap.get("bloodGroup")[0]).capitalize();
+			bloodGroup = Enum.valueOf(BloodGroup.class,requestMap.get("bloodGroup")[0]);
 			patientQuery
 			.eq("appUser.bloodGroup",requestMap.get("bloodGroup")[0].trim());
 			Logger.info("inside blood group=="+patientQuery.findRowCount());
 		}
-		Sex sex = null;
+		String sex = null;
 		if(((requestMap.get("sex")[0])!= null) && !((requestMap.get("sex")[0]).trim().equalsIgnoreCase("any"))){
-			sex = Enum.valueOf(Sex.class,requestMap.get("sex")[0]);
+			sex = requestMap.get("sex")[0];
 			patientQuery
 			.eq("appUser.sex",requestMap.get("appUser.sex")[0].trim());
 		}
 		String age = "Any";
+		int slab = 0;
 		if((requestMap.get("age")[0])!= null && !((requestMap.get("age")[0]).trim().equalsIgnoreCase("0"))){
 			/*
 			final String[] age = (requestMap.get("age")[0].trim()).split("-");
@@ -84,7 +88,7 @@ public class BloodBankController extends Controller{
 			patientQuery.between("appUser.dob",startDate,endDate);
 			 */
 
-			final int slab = Integer.parseInt(requestMap.get("age")[0]);
+			slab = Integer.parseInt(requestMap.get("age")[0]);
 			final Calendar cal = Calendar.getInstance();
 
 			if(slab == 1){
@@ -128,13 +132,9 @@ public class BloodBankController extends Controller{
 				patientQuery.le("appUser.dob",toDate);
 			}
 
-
-
-
-
 		}
 		//		Logger.info("size=="+patients.size());
-		return ok(views.html.bloodBank.bloodDonorsInPrimaryCity.render(patientQuery.findList(),city,bloodGroup,sex,age));
+		return ok(views.html.bloodBank.bloodDonorsData.render(patientQuery.findList()));
 	}
 
 
