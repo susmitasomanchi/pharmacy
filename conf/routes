@@ -438,15 +438,14 @@ GET    /mr/del                                                            contro
 GET    /mr/edit/:id                                                       controllers.MRController.editMR(id: Long)
 GET    /mr/add-designation                                                controllers.MRController.addDesignation()
 POST   /mr/add-designation                                                controllers.MRController.addDesignationProccess()
-
-
-
-
+GET    /mr/sample-data                                                    controllers.SampleDataController.mrSampleData()
 #common module
 GET    /new-product                                                       controllers.ProductController.productForm()
 POST   /new-product                                                       controllers.ProductController.saveProduct()
 GET    /mr/new-product                                                    controllers.ProductController.pharmaceuticalProductForm()
 POST   /mr/new-product                                                    controllers.ProductController.savePharmceuticalProduct()
+GET   /mr/edit-pharmaceutical-product/:id                                controllers.ProductController.editPharmceuticalProduct(id: Long)
+GET    /mr/remove-pharmaceutical-product/:id                              controllers.ProductController.removePharmceuticalProduct(id: Long)
 GET    /view-products                                                     controllers.ProductController.displayProduct()
 #GET    /edit-product/:id                           controllers.ProductController.editProduct(id: Long)
 
@@ -459,7 +458,6 @@ GET    /add-primary-city                                                  contro
 GET    /default-primarycity                                               controllers.SampleDataController.addDefaultPrimaryCity()
 GET    /specz                                                             controllers.SampleDataController.createDocSpez()
 GET    /add_clinic                                                        controllers.SampleDataController.patientTest()
-
 #GET    /appointment					controllers.SampleDataController.createAppointment()
 GET    /blood-bank                                                        controllers.SampleDataController.addBloodBank()
 

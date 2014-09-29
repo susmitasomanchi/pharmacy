@@ -77,8 +77,14 @@ public class MRController extends Controller {
 	public static Result addMR() {
 		final MedicalRepresentative adminMr = LoginController.getLoggedInUser()
 				.getMedicalRepresentative();
-		final List<MedicalRepresentative> mrList = MedicalRepresentative.find
-				.where().eq("appUser.role", "MR").findList();
+		List<MedicalRepresentative> mrList = MedicalRepresentative.find
+				.where()
+				.eq("pharmaceutical_company_id",
+						LoginController.getLoggedInUser()
+						.getMedicalRepresentative().pharmaceuticalCompany.id).ne("app_user_id", adminMr.appUser.id)
+						.findList();
+		/*final List<MedicalRepresentative> mrList = MedicalRepresentative.find
+				.where().eq("appUser.role", "MR").findList();*/
 		return ok(views.html.mr.medicalRepresentative.render(mrForm, adminMr,
 				mrList));
 	}
@@ -134,6 +140,13 @@ public class MRController extends Controller {
 						return ok("User already exist");
 					}
 				}
+				/*if(medicalRepresentativeBean.designationId == null){
+					flash().put(
+							"alert",
+							new Alert("alert-danger",
+									"Please Add the Designation First, Thank You !").toString());
+					return ok("Please Add the Designation First, Thank You !");
+				}*/
 				try {
 
 					final Random random = new SecureRandom();
@@ -186,98 +199,13 @@ public class MRController extends Controller {
 			} else {
 				Logger.info("not null");
 
-				try {
-
-					final Random random = new SecureRandom();
-					final byte[] saltArray = new byte[32];
-					random.nextBytes(saltArray);
-					final String randomSalt = Base64
-							.encodeBase64String(saltArray);
-					generatedPassword = GenerateRandomString.generatePassword();
-					final String passwordWithSalt = generatedPassword
-							+ randomSalt;
-					final MessageDigest sha256 = MessageDigest
-							.getInstance("SHA-256");
-					final byte[] passBytes = passwordWithSalt.getBytes();
-					final String hashedPasswordWithSalt = Base64
-							.encodeBase64String(sha256.digest(passBytes));
-
-					appUser.salt = randomSalt;
-					appUser.password = hashedPasswordWithSalt;
-
-				} catch (final Exception e) {
-					Logger.error("ERROR WHILE CREATING SHA2 HASH");
-					e.printStackTrace();
-				}
-
-				//appUser.update();
-				Logger.info("email : " + appUser.email
-						+ " & Generated password is : " + generatedPassword);
-				mr.appUser = appUser;
-
-				Logger.info("mr designation: " + mr.designation);
-				mr.update();
-				/*StringBuilder message = new StringBuilder();
-				message.append(" Dear "
-						+ appUser.name
-						+ ",<br> Your account has been modified at <a href='https://mednetwork.in'>MedNetwork.in</a> Please use the following credentials to login:<br><br> UserName :"
-						+ appUser.email + "<br> Password :" + generatedPassword
-						+ "<br><br> Thank you <br> MedNetwork");
-
-				EmailService.sendSimpleHtmlEMail(appUser.email,
-						"\n Account created on MedNetwork", message.toString());
-				Logger.info("email : " + appUser.email
-						+ " & Generated password is : " + generatedPassword);
-				mr.appUser = appUser;
-				if (medicalRepresentativeBean.manager != null) {
-					mr.manager = MedicalRepresentative.find
-							.byId(medicalRepresentativeBean.manager);
-				}
-
-				if(medicalRepresentativeBean.designationId != null){
-					mr.designation = Designation.find
-							.byId(medicalRepresentativeBean.designationId);
-				}
-				mr.update();
-				 */
-
 			}
 
 		}
-		return ok("mr is created");
-		// return redirect(routes.MRController.mrList());
+		//return ok("mr is created");
+		return redirect(routes.MRController.mrList());
 	}
 
-	public static Result headQuarter() {
-		return ok(views.html.mr.headQuarter.render(headquarter));
-	}
-
-	/**
-	 * @author anand
-	 * @discription : this method is saving the headQuarter
-	 * 
-	 *              url : POST POST /mr/add-head-quarter
-	 * 
-	 * 
-	 *              url : POST POST /mr/add-head-quarter
-	 * */
-	public static Result addHeadQuarter() {
-		final MedicalRepresentative loggedInMr = LoginController
-				.getLoggedInUser().getMedicalRepresentative();
-
-		final Form<HeadQuarter> filledHeadQuarterForm = headquarter
-				.bindFromRequest();
-
-		if (filledHeadQuarterForm.hasErrors()) {
-			return ok(views.html.mr.headQuarter.render(filledHeadQuarterForm));
-		} else {
-			final HeadQuarter headQuarter = filledHeadQuarterForm.get();
-			loggedInMr.headQuarterList.add(headQuarter);
-			loggedInMr.update();
-
-		}
-		return ok();
-	}
 
 	/**
 	 * 
@@ -300,9 +228,9 @@ public class MRController extends Controller {
 				.where()
 				.eq("pharmaceutical_company_id",
 						LoginController.getLoggedInUser()
-						.getMedicalRepresentative().pharmaceuticalCompany.id)
+						.getMedicalRepresentative().pharmaceuticalCompany.id).ne("app_user_id", loggedInMR.appUser.id)
 						.findList();
-		Logger.info("mr list : " + mrList.get(0).appUser.name);
+		//Logger.info("mr list : " + mrList.get(0).appUser.name);
 		return ok(views.html.mr.mrList.render(mrList));
 	}
 
@@ -326,7 +254,7 @@ public class MRController extends Controller {
 						.where()
 						.eq("pharmaceutical_company_id",
 								LoginController.getLoggedInUser()
-								.getMedicalRepresentative().pharmaceuticalCompany.id)
+								.getMedicalRepresentative().pharmaceuticalCompany.id).ne("app_user_id", loggedInMR.appUser.id)
 								.findList()));
 
 	}
@@ -368,6 +296,37 @@ public class MRController extends Controller {
 
 		MedicalRepresentative mr = MedicalRepresentative.find.byId(Long.parseLong(id));
 		AppUser appUser = AppUser.find.byId(Long.parseLong(appid));
+
+		String generatedPassword = "";
+
+
+		try {
+
+			final Random random = new SecureRandom();
+			final byte[] saltArray = new byte[32];
+			random.nextBytes(saltArray);
+			final String randomSalt = Base64
+					.encodeBase64String(saltArray);
+			generatedPassword = GenerateRandomString.generatePassword();
+			final String passwordWithSalt = generatedPassword
+					+ randomSalt;
+			final MessageDigest sha256 = MessageDigest
+					.getInstance("SHA-256");
+			final byte[] passBytes = passwordWithSalt.getBytes();
+			final String hashedPasswordWithSalt = Base64
+					.encodeBase64String(sha256.digest(passBytes));
+
+			appUser.salt = randomSalt;
+			appUser.password = hashedPasswordWithSalt;
+
+		} catch (final Exception e) {
+			Logger.error("ERROR WHILE CREATING SHA2 HASH");
+			e.printStackTrace();
+		}
+
+		Logger.info("email : " + appUser.email
+				+ " & Generated password is : " + generatedPassword);
+
 		appUser.name = editableForm.get("name");
 		appUser.username = editableForm.get("username");
 		appUser.email = editableForm.get("email");
@@ -380,6 +339,38 @@ public class MRController extends Controller {
 		Logger.info("MR id : "+id);
 		return redirect(routes.MRController.mrList());
 	}
+
+	public static Result headQuarter() {
+		return ok(views.html.mr.headQuarter.render(headquarter));
+	}
+
+	/**
+	 * @author anand
+	 * @discription : this method is saving the headQuarter
+	 * 
+	 *              url : POST POST /mr/add-head-quarter
+	 * 
+	 * 
+	 *              url : POST POST /mr/add-head-quarter
+	 * */
+	public static Result addHeadQuarter() {
+		final MedicalRepresentative loggedInMr = LoginController
+				.getLoggedInUser().getMedicalRepresentative();
+
+		final Form<HeadQuarter> filledHeadQuarterForm = headquarter
+				.bindFromRequest();
+
+		if (filledHeadQuarterForm.hasErrors()) {
+			return ok(views.html.mr.headQuarter.render(filledHeadQuarterForm));
+		} else {
+			final HeadQuarter headQuarter = filledHeadQuarterForm.get();
+			loggedInMr.headQuarterList.add(headQuarter);
+			loggedInMr.update();
+
+		}
+		return ok();
+	}
+
 
 	/**
 	 * @author anand
@@ -811,9 +802,10 @@ public class MRController extends Controller {
 	public static Result removeDCRLineItem(final Long dcrId,
 			final Long lineItemId) {
 		final DailyCallReport dcr = DailyCallReport.find.byId(dcrId);
-		final DCRLineItem lineItem = DCRLineItem.find.byId(lineItemId);
-		dcr.dcrLineItemList.remove(lineItem);
-		lineItem.delete();
+		final DCRLineItem dcrLineItem = DCRLineItem.find.byId(lineItemId);
+		Logger.info("line item : "+lineItemId);
+		dcr.dcrLineItemList.remove(dcrLineItem);
+		dcrLineItem.delete();
 		dcr.update();
 		return ok(views.html.mr.filledDCRLineItem.render(dcr.dcrLineItemList));
 	}

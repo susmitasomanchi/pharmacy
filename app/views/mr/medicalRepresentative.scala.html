@@ -7,12 +7,14 @@
 		@helper.form(action=routes.MRController.editMRProccess()) {
 	
 	@helper.inputText(dataForm("name"),'_label->"Name")
-	<select class = "chzn" name="designationId" placeholder="Assigne Designation">  
 	Designation
+	<select class = "chzn" name="designationId" placeholder="Assigne Designation">  
     @for(designation <- adminMr.pharmaceuticalCompany.designationList){
+    	@if(designation.name != "administrator"){
       <option value = @designation.id>
         @designation.name
       </option>
+      }
     } 
     </select>	<br>
 	@helper.inputText(dataForm("username"),'_label->"User Name")
@@ -25,9 +27,11 @@
 	<select class = "assignedManager chzn" name="manager" placeholder="Manager Assigned">  
     @for(mr <- mrList){
     	@if(mr.isActive == true){
+    		@if(mr.designation.name == "manager"){
       <option value = @mr.id>
         @mr.appUser.name
       </option>
+      }
       }
     } 
     </select>	<br>
@@ -48,12 +52,14 @@
     @helper.form(action=routes.MRController.medicalRepresentativeProccess()) {
 	
 	@helper.inputText(dataForm("name"),'_label->"Name")
-	<select class = "chzn" name="designationId" placeholder="Assigne Designation">  
 	Designation
+	<select class = "chzn" name="designationId" placeholder="Assigne Designation">  
     @for(designation <- adminMr.pharmaceuticalCompany.designationList){
+    	@if(designation.name != "administrator"){
       <option value = @designation.id>
         @designation.name
       </option>
+      }
     } 
     </select>	<br>
 	@helper.inputText(dataForm("username"),'_label->"User Name")
@@ -66,9 +72,11 @@
 	<select class = "assignedManager chzn" name="manager" placeholder="Manager Assigned">  
     @for(mr <- mrList){
     	@if(mr.isActive ==true){
+    		@if(mr.designation.name == "manager"){
       <option value = @mr.id>
         @mr.appUser.name
       </option>
+      }
       }
     } 
     </select>	<br>
