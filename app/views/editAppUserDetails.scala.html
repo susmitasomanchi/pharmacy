@@ -27,13 +27,13 @@
 	<div class="form-group">
 	 <label for="bloodGroup">Blood Group</label><br>
         <select id="bloodgroup" name="bloodgroup">
-        <option></option>
+        <option value="@appUser.bloodGroup">@appUser.bloodGroup.capitalize()</option>
 			@for((k,v) <- BloodGroup.options()){
 				<option value="@k">@v</option>
 			}
         </select>
 	</div>
-	}
+	
 	
 	<div class="row">
 	@if(appUser.isBloodDonor == true){
@@ -46,43 +46,62 @@
     
     
      <script>
-    $("#isBloodDonar").click(function() {
-    if($(this).is(":checked")) 
+     $(document).ready(function(){
+     if($("#isBloodDonar").is(":checked")) 
     {
-    	$("#shareContactNo").show();
+    	$("#contact").toggle();
+    }
+    $("#isBloodDonar").click(function() {
+    if($("#isBloodDonar").is(":checked")) 
+    {
+    	$("#contact").show();
     }else{
-    	$("#shareContactNo").hide();
+    	$("#contact").hide();
     }
 });
+});
 </script>
- <div id="shareContactNo" class="row">
-	<input type="checkbox" id="shareContactNo" name="shareContactNo" />would you like to share your mobile number?
+ <div class="row" id="contact" style="display:none;">
+ @if(appUser.isMobileNumberShared == true){
+	<input type="checkbox" id="shareContactNo" name="shareContactNo" checked="checked" />
+	}else{
+	<input type="checkbox" id="shareContactNo" name="shareContactNo" />
+	}would you like to share your mobile number?
 	</div>
      <br>
      
  <div class="row">
-    <input type="checkbox" id="anyAllergy" name="anyAllergy"  /> Any Allergy ?
+ @if(appUser.allergy != null){
+	<input type="checkbox" id="anyAllergy" name="anyAllergy" checked="checked" />
+	}else{
+    <input type="checkbox" id="anyAllergy" name="anyAllergy"  /> }Any Allergy ?
     </div>
     <br>
 
     <script>
+     $(document).ready(function(){
+     if($("#anyAllergy").is(":checked")) 
+    {
+    	$("#allergies").toggle();
+    }
     $("#anyAllergy").click(function() {
     if($(this).is(":checked")) 
     {
-    	$("#allergy").show();
+    	$("#allergies").show();
     }else{
-    	$("#allergy").hide();
+    	$("#allergies").hide();
     }
-});
+	});
+	});
 </script>
 
-	<div id="allergy" class="row">
+	<div id="allergies" class="row" style="display:none;">
 	<label for="Allergy">Allergy</label>
 	<input type="text"  class="allergy" name="allergy" @if(appUser.allergy != null){value=@appUser.allergy} />
 	</div>
 	
 	
-	
+	}
 	
 	<div class="form-group">
 	<input type="hidden" name="appUserId" value="@LoginController.getLoggedInUser().id">

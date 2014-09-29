@@ -947,16 +947,14 @@ public class DoctorController extends Controller {
 									if(
 											((previousSchedule.day).equals(newSchedule.day))
 											&&
-											((dateFormat.parse(newSchedule.fromTime)).before(dateFormat.parse(previousSchedule.toTime))
+											(((dateFormat.parse(newSchedule.fromTime)).before(dateFormat.parse(previousSchedule.toTime))
+													&&
+													(dateFormat.parse(newSchedule.fromTime)).after(dateFormat.parse(previousSchedule.fromTime)))
 													||
-													(dateFormat.parse(newSchedule.fromTime)).after(dateFormat.parse(previousSchedule.fromTime))
-													||
-													(dateFormat.parse(newSchedule.fromTime)).after(dateFormat.parse(previousSchedule.fromTime))
-													||
-													(dateFormat.parse(newSchedule.toTime)).after(dateFormat.parse(previousSchedule.fromTime))
-													||
-													(dateFormat.parse(newSchedule.toTime)).before(dateFormat.parse(previousSchedule.toTime)))
-											){
+													((dateFormat.parse(newSchedule.toTime)).after(dateFormat.parse(previousSchedule.fromTime))
+															&&
+															(dateFormat.parse(newSchedule.toTime)).before(dateFormat.parse(previousSchedule.toTime)))
+													)){
 										flash().put("alert",new Alert("alert-danger", clinicInfo.clinic.name+ " created successfully but got time clashes with "+doctorClinicInfo.clinic.name+" while creating schedules.").toString());
 										return redirect(routes.DoctorController.myClinics());
 									}
@@ -1770,15 +1768,17 @@ public class DoctorController extends Controller {
 	 */
 	@ConfirmAppUser
 	public static Result processPatientFollowUPAppointment(final Long appointmentId,final Long patientId) {
+		final Doctor doctor = LoginController.getLoggedInUser().getDoctor();
+		final Patient patient = Patient.find.byId(patientId);
 		final String remark=request().body().asFormUrlEncoded().get("remark")[0];
 		Logger.warn(remark);
 		final Appointment appointment = Appointment.find.byId(appointmentId);
 		appointment.appointmentStatus = AppointmentStatus.APPROVED;
 		appointment.problemStatement = remark;
-		appointment.requestedBy = Patient.find.byId(patientId).appUser;
+		appointment.requestedBy = patient.appUser;
 		appointment.bookedOn = new Date();
 		appointment.update();
-
+		flash().put("alert", new Alert("alert-success", "Follow Up Appointment Created By Dr."+ doctor.appUser.name+" For The Patient "+patient.appUser.name+" Successfully.").toString());
 
 
 		// Async Execution

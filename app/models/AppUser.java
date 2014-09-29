@@ -69,7 +69,7 @@ public class AppUser extends BaseEntity {
 
 	public Boolean isBloodDonor = false;
 
-	public Boolean isMobileNumberShared;
+	public Boolean isMobileNumberShared ;
 
 	public Date lastBloodDonatedDate;
 
