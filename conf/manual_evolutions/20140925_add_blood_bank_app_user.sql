@@ -1,4 +1,4 @@
-﻿--- Author: Lakhsmi
+﻿--- Author: Lakshmi
 --- create a table blood_bank_app_user
 
 create table blood_bank_app_user (
