@@ -27,7 +27,7 @@
 	<select class = "assignedManager chzn" name="manager" placeholder="Manager Assigned">  
     @for(mr <- mrList){
     	@if(mr.isActive == true){
-    		@if(mr.designation.name == "manager"){
+    		@if(mr.designation.name == "Manager"){
       <option value = @mr.id>
         @mr.appUser.name
       </option>
@@ -72,7 +72,7 @@
 	<select class = "assignedManager chzn" name="manager" placeholder="Manager Assigned">  
     @for(mr <- mrList){
     	@if(mr.isActive ==true){
-    		@if(mr.designation.name == "manager"){
+    		@if(mr.designation.name == "Manager"){
       <option value = @mr.id>
         @mr.appUser.name
       </option>

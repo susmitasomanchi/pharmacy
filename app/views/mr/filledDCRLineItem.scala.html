@@ -22,15 +22,14 @@
 	@for(dcrLineItem <- dcrLineItemList){
 	<tr>
 		<td>@dcrLineItem.doctor.appUser.name</td>
-		@*<td>
+		<td>
 			@for(sample <- dcrLineItem.sampleList){
 				@if(sample != null){
 				@sample.pharmaceuticalProduct.medicineName (@sample.quantity)
 				<br>
 				}
 			}
-	   	</td>*@
-	   	<td>&nbsp;</td>
+	   	</td>
 	   	<td valign="top">
 			<div id="samplesdiv">
 			      <table> 	

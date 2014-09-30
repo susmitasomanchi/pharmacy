@@ -140,13 +140,13 @@ public class MRController extends Controller {
 						return ok("User already exist");
 					}
 				}
-				/*if(medicalRepresentativeBean.designationId == null){
+				if(medicalRepresentativeBean.designationId == null){
 					flash().put(
 							"alert",
 							new Alert("alert-danger",
 									"Please Add the Designation First, Thank You !").toString());
 					return ok("Please Add the Designation First, Thank You !");
-				}*/
+				}
 				try {
 
 					final Random random = new SecureRandom();
@@ -675,6 +675,10 @@ public class MRController extends Controller {
 	public static Result deleteDCR(final Long dcrid) {
 		final MedicalRepresentative loggedInMr = LoginController
 				.getLoggedInUser().getMedicalRepresentative();
+		List<DCRLineItem> dcrLineItemList = DCRLineItem.find.where().eq("daily_call_report_id", dcrid).findList();
+		for (DCRLineItem dcrLineItem : dcrLineItemList) {
+			dcrLineItem.delete();
+		}
 		final DailyCallReport dcr = DailyCallReport.find.byId(dcrid);
 		Logger.info(dcr.submitter.appUser.name);
 		loggedInMr.dcrList.remove(dcr);
@@ -801,6 +805,7 @@ public class MRController extends Controller {
 	 */
 	public static Result removeDCRLineItem(final Long dcrId,
 			final Long lineItemId) {
+		Logger.info("In side server");
 		final DailyCallReport dcr = DailyCallReport.find.byId(dcrId);
 		final DCRLineItem dcrLineItem = DCRLineItem.find.byId(lineItemId);
 		Logger.info("line item : "+lineItemId);
@@ -1118,8 +1123,8 @@ public class MRController extends Controller {
 		final TourPlan tourPlan = TourPlan.find.byId(tourPlanid);
 		final Calendar calender = Calendar.getInstance();
 		calender.setTime(tourPlan.forMonth);
-		final int maxDaysInMonth = calender
-				.getActualMaximum(Calendar.DAY_OF_MONTH);
+		/*final int maxDaysInMonth = calender
+				.getActualMaximum(Calendar.DAY_OF_MONTH);*/
 		final Map<Integer, TPLineItem> tourPlanLineItemMap = new LinkedHashMap<Integer, TPLineItem>();
 		final List<TPLineItem> tpLineItemList = TPLineItem.find.where()
 				.eq("tour_plan_id", tourPlanid).orderBy("date asc").findList();
@@ -1185,6 +1190,7 @@ public class MRController extends Controller {
 						} else {
 							sample.quantity = Integer.parseInt(quantities[i]);
 						}
+						//sample.save();
 						tpLineItem.sampleList.add(sample);
 					}
 				}

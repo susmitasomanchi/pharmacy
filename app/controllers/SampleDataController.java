@@ -228,8 +228,8 @@ public class SampleDataController extends Controller {
 	}*/
 	public static Result mrSampleData(){
 		final AppUser appUser = new AppUser();
-		appUser.name = "anand2";
-		appUser.email = "anand2@gmail.com";
+		appUser.name = "anand";
+		appUser.email = "anand@gmail.com";
 		final String password = "123";
 		appUser.role = Role.ADMIN_MR;
 		if(AppUser.find.where().eq("email", appUser.email).findRowCount()>0){
