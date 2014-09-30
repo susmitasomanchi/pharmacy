@@ -1,4 +1,4 @@
-﻿--- Author: Lakhsmi
+﻿--- Author: Lakshmi
 --- Add app_user_id for BloodDonation,backgroundImage and Description foe Clinic and BloodBank Entity 
 
 

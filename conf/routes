@@ -71,6 +71,9 @@ GET		/pharmacy/search/:searchString                  controllers.PublicControlle
 GET		/pharmacy/search									controllers.PublicController.searchPharmaciesPage()
 GET   	/diagnostic/search/:searchString                  				controllers.PublicController.processSearchDiagnosticCentres(searchString: String)
 GET    /diagnostic/search												controllers.PublicController.searchDiagnosticPage()
+GET   	/clinic/search/:searchString                  				controllers.PublicController.searchFavoriteClinics(searchString: String)
+GET    /clinic/search												controllers.PublicController.searchClinics()
+
 
 GET    /feedback											controllers.PublicController.feedBack()
 POST    /secure-feedback									controllers.PublicController.saveFeedBack()
@@ -161,6 +164,10 @@ GET		/secure-user/appointments									controllers.PatientController.viewMyAppoi
 GET		/secure-user/share-prescription							controllers.PatientController.sharePrescription(prId: Long, pharmacyId: String, diagnosticId: String)
 GET    /secure-user/diagnostic-reports							 	controllers.PatientController.viewDiagnosticReports()
 GET    /secure-user/blood-donation-info							 	controllers.PatientController.getPatientBloodDonationInfo()
+GET    /secure-user/add-fav-clinic/:clinicId							 	controllers.PatientController.addClinicToLoggedInUser(clinicId : Long)
+GET	   /secure-user/get-favorite-clinics								controllers.PatientController.getFavoriteClinics()
+GET	   /secure-user/remove-favorite-clinic/:clinicId								controllers.PatientController.removeFavoriteClinic(clinicId : Long)
+
 
 
 

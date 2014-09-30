@@ -25,6 +25,7 @@ import models.doctor.Doctor;
 import models.doctor.DoctorClinicInfo;
 import models.doctor.MasterSpecialization;
 import models.patient.Patient;
+import models.patient.PatientClinicInfo;
 import models.patient.PatientDoctorInfo;
 import models.pharmacist.Pharmacy;
 import play.Logger;
@@ -778,4 +779,36 @@ public class PublicController extends Controller{
 		final BloodBank bloodBank = BloodBank.find.where().eq("slugUrl",cleanSlug).findUnique();
 		return ok(views.html.bloodBank.publicBloodBankProfile.render(bloodBank));
 	}
+
+	/**
+	 * @author lakshmi
+	 * Action to  to render search Clinic page
+	 *  GET /clinic/search
+	 */
+	public static Result searchClinics() {
+		return ok(views.html.clinic.searchClinics.render("",new ArrayList<Clinic>(),false));
+	}
+	/**
+	 * @author lakshmi
+	 * Action to perform search operation for finding Diagnostic based on the searchKey
+	 * GET	/clinic/search/:searchKey
+	 */
+	public static Result searchFavoriteClinics(final String searchKey) {
+		final String searchStr = searchKey.toLowerCase().trim();
+		if(searchStr.length() < 4){
+			flash().put("alert", new Alert("alert-danger", "The searck key should contain atleast four charecters").toString());
+			return ok(views.html.clinic.searchClinics.render(searchKey,new ArrayList<Clinic>(),false));
+		}
+		else{
+			final PrimaryCity city = PrimaryCity.find.byId(Long.parseLong(session(Constants.CITY_ID)));
+			final List<Clinic> clinicList =  Clinic.find.where()
+					.eq("primaryCity", city)
+					.like("searchIndex","%"+searchStr+"%")
+					.findList();
+			return ok(views.html.clinic.searchClinics.render(searchKey,clinicList,true));
+		}
+	}
+
+
+
 }
