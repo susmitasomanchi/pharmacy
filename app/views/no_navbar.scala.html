@@ -52,13 +52,15 @@
       @*
       <a class="navbar-brand" href="@routes.UserActions.dashboard()">@Messages.get("MedNetwork")</a>
       *@
-      <a class="navbar-brand" href="/">
       	@if(LoginController.isLoggedIn()){
+      		<a class="navbar-brand" href="@routes.UserActions.dashboard()">
       		<img style="height:45px; margin-top:-12px;" src="/assets/images/medlogotrans.png" alt="MedNetwork">
+      		</a>
       	}else{
+      		<a class="navbar-brand" href="/">
       		<img style="height:56px; margin-top:-12px;" src="/assets/images/medlogotrans.png" alt="MedNetwork">
+      		</a>
       	}
-      </a>
     </div> 
      <!-- Collect the nav links, forms, and other content for toggling -->
     <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">

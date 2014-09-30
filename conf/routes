@@ -126,8 +126,8 @@ GET    /secure-doctor/delete-clinic/:id                        controllers.Docto
 
 
 GET		/secure-doctor/sig-codes									controllers.DoctorController.showSigCodes()
-POST	/secure-doctor/add-sig-code								controllers.DoctorController.addSigCode()
-GET		/secure-doctor/all-appointments							controllers.DoctorController.viewAllAppointments()
+POST	/secure-doctor/add-sig-code									controllers.DoctorController.addSigCode()
+GET		/secure-doctor/all-appointments								controllers.DoctorController.viewAllAppointments()
 GET		/secure-doctor/todays-appointments							controllers.DoctorController.viewTodaysAppointments()
 GET		/secure-doctor/prescription/:appointmentId					controllers.DoctorController.showPrescriptionForm(appointmentId: Long)
 POST	/secure-doctor/save-prescription							controllers.DoctorController.savePrescription()
@@ -453,6 +453,10 @@ GET    /appointment					controllers.SampleDataController.addBloodBank()
 
 #Cron
 GET		/cron/start						controllers.CronController.startCron()
+
+#test
+GET		/secure-doctor/weekly-appointments				controllers.DoctorController.viewWeeklyAppointments()
+GET		/secure-doctor/calendar-appointments-json		controllers.DoctorController.getCalendarEventsJson()
 
 # Map static resources from the /public folder to the /assets URL path
 GET    /assets/*file                                    controllers.Assets.at(path="/public", file)

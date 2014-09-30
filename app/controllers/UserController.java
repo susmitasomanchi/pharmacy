@@ -38,7 +38,6 @@ import utils.EmailService;
 import utils.SMSService;
 import utils.Util;
 import actions.BasicAuth;
-import actions.ConfirmAppUser;
 import beans.JoinUsBean;
 
 
@@ -207,7 +206,7 @@ public class UserController extends Controller {
 
 			final Clinic clinic = new Clinic();
 			clinic.name = request().body().asFormUrlEncoded().get("clinicName")[0];
-			clinic.clinicUser = clinicUser;
+			clinic.clinicAdminstrator = clinicUser;
 			clinic.primaryCity = city;
 			clinic.save();
 			clinicUser.clinic = clinic;
@@ -319,20 +318,16 @@ public class UserController extends Controller {
 				SMSService.sendConfirmationSMS(loggedInUser);
 			}
 		}
+
 		if(requestMap.get("bloodgroup")[0]!=null && requestMap.get("bloodgroup")[0].trim()!=""){
-			final BloodGroup oldGroup = loggedInUser.bloodGroup;
 			final String newGroup = requestMap.get("bloodgroup")[0].trim();
-			if (oldGroup == null || (oldGroup.toString() != newGroup)) {
-				loggedInUser.bloodGroup = BloodGroup.valueOf(newGroup);
-				//TODO: make it async
-				SMSService.sendConfirmationSMS(loggedInUser);
-			}
+			loggedInUser.bloodGroup = BloodGroup.valueOf(newGroup);
 		}
+
 		if(requestMap.containsKey("isBloodDonar")){
 			loggedInUser.isBloodDonor = true;
-			//TODO: make it async
-			//SMSService.sendConfirmationSMS(loggedInUser);
-		}else{
+		}
+		else{
 			loggedInUser.isBloodDonor = false;
 		}
 		if(requestMap.get("allergy")[0]!=null && requestMap.get("allergy")[0].trim()!=""){

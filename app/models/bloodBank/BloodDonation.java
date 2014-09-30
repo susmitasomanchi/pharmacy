@@ -8,7 +8,7 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.OneToOne;
 
-import play.db.ebean.Model.Finder;
+import models.AppUser;
 import models.BaseEntity;
 import models.BloodGroup;
 @SuppressWarnings("serial")
@@ -34,11 +34,9 @@ public class BloodDonation extends BaseEntity{
 
 	public static Finder<Long, BloodDonation> find = new Finder<Long, BloodDonation>(Long.class, BloodDonation.class);
 
-	/*public static getLastDonatedDate(final AppUser appUser){
-
+	public static Date getLastDonatedDate(final AppUser appUser){
+		return BloodDonation.find.where().eq("app_user_id", appUser.id).orderBy("dateDonated DESC").findList().get(0).dateDonated;
 	}
 
-	public static getTotalBloodDonated(final AppUser appUser){
 
-	}*/
 }

@@ -6,6 +6,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
@@ -1096,10 +1097,8 @@ public class DoctorController extends Controller {
 		 * calendar.set(Calendar.MINUTE, 0); calendar.set(Calendar.SECOND,0);
 		 * calendar.set(Calendar.MILLISECOND,0);
 		 */
-		final Doctor loggedIndoctor = LoginController.getLoggedInUser()
-				.getDoctor();
-		final List<DoctorClinicInfo> docclinicInfo = DoctorClinicInfo.find
-				.where().eq("doctor", loggedIndoctor).findList();
+		final Doctor loggedIndoctor = LoginController.getLoggedInUser().getDoctor();
+		final List<DoctorClinicInfo> docclinicInfo = DoctorClinicInfo.find.where().eq("doctor", loggedIndoctor).findList();
 		// final List<Appointment> appointments =
 		// Appointment.find.where().in("doctorClinicInfo",
 		// docclinicInfo).eq("appointmentStatus",
@@ -1818,4 +1817,119 @@ public class DoctorController extends Controller {
 	}
 
 
+
+	@ConfirmAppUser
+	public static Result viewWeeklyAppointments() {
+		/*
+		final Date now = new Date();
+		final Calendar calendarFrom = Calendar.getInstance();
+		calendarFrom.setTime(now);
+		calendarFrom.set(Calendar.HOUR_OF_DAY, 0);
+		calendarFrom.set(Calendar.MINUTE, 0);
+		calendarFrom.set(Calendar.SECOND, 0);
+		calendarFrom.set(Calendar.MILLISECOND, 0);
+
+		final Calendar calendarTo = Calendar.getInstance();
+		calendarTo.setTime(now);
+		calendarTo.set(Calendar.HOUR_OF_DAY, 23);
+		calendarTo.set(Calendar.MINUTE, 59);
+		calendarTo.set(Calendar.SECOND, 59);
+		calendarTo.set(Calendar.MILLISECOND, 999);
+
+		final Doctor loggedIndoctor = LoginController.getLoggedInUser()
+				.getDoctor();
+		final List<DoctorClinicInfo> docclinicInfo = DoctorClinicInfo.find
+				.where().eq("doctor", loggedIndoctor).findList();
+		final List<AppointmentStatus> statusList = new ArrayList<AppointmentStatus>();
+		statusList.add(AppointmentStatus.APPROVED);
+		statusList.add(AppointmentStatus.SERVED);
+		final List<Appointment> appointments = Appointment.find.where()
+				.in("doctorClinicInfo", docclinicInfo)
+				.in("appointmentStatus", statusList)
+				.ge("appointmentTime", calendarFrom.getTime())
+				.le("appointmentTime", calendarTo.getTime())
+				.orderBy("appointmentTime").findList();
+		return ok(views.html.doctor.doctorTodaysAppointments.render(appointments, docclinicInfo));
+		 */
+
+		final Doctor loggedIndoctor = LoginController.getLoggedInUser().getDoctor();
+		final List<DoctorClinicInfo> docClinicInfoList = DoctorClinicInfo.find.where().eq("doctor", loggedIndoctor).findList();
+		int shortestSlot = 15;
+		for (final DoctorClinicInfo clinicInfo : docClinicInfoList) {
+			if(clinicInfo.slot < shortestSlot){
+				shortestSlot = clinicInfo.slot;
+			}
+		}
+
+		return ok(views.html.doctor.doctorWeeklyAppointments.render(shortestSlot));
+	}
+
+
+
+	@ConfirmAppUser
+	@BodyParser.Of(BodyParser.Json.class)
+	public static Result getCalendarEventsJson() {
+
+		/*try{
+			for(int i=0; i<=4; i++){
+				Logger.info("Waiting: "+i);
+				Thread.sleep(1000);
+			}
+		}
+		catch(final InterruptedException e){
+
+		}*/
+
+		final String start = request().getQueryString("start");
+		final String end = request().getQueryString("end");
+		Logger.info("start: "+start);
+		Logger.info("end: "+end);
+		final SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+		final List<Appointment> appointments = new ArrayList<Appointment>();
+		try{
+			final Date startDate = sdf.parse(start);
+			final Date endDate = sdf.parse(end);
+			final Doctor loggedIndoctor = LoginController.getLoggedInUser().getDoctor();
+			final List<DoctorClinicInfo> docclinicInfo = DoctorClinicInfo.find.where().eq("doctor", loggedIndoctor).findList();
+			final List<AppointmentStatus> statusList = new ArrayList<AppointmentStatus>();
+			statusList.add(AppointmentStatus.APPROVED);
+			statusList.add(AppointmentStatus.SERVED);
+			appointments.addAll(
+					Appointment.find.where()
+					.in("doctorClinicInfo", docclinicInfo)
+					.in("appointmentStatus", statusList)
+					.ge("appointmentTime", startDate)
+					.le("appointmentTime", endDate).findList()
+					);
+			//.orderBy("appointmentTime").findList();
+
+		}
+		catch(final Exception e){
+			Logger.error("somethings wrong with start/end date");
+		}
+		Logger.info("appointmentList size: "+appointments.size());
+
+		final List<HashMap<String,String>> result = new ArrayList<HashMap<String,String>>();
+		final Calendar cal = Calendar.getInstance();
+		for (final Appointment appointment : appointments) {
+			final HashMap<String,String> map = new HashMap<String,String>();
+			map.put("id", appointment.id+"");
+			map.put("title", appointment.requestedBy.name+" ("+appointment.requestedBy.getPatient().getSexAndAge()+") - "+appointment.problemStatement);
+			map.put("start", new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ssZ").format(appointment.appointmentTime));
+			cal.setTime(appointment.appointmentTime);
+			cal.add(Calendar.MINUTE, appointment.doctorClinicInfo.slot);
+			map.put("end", new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ssZ").format(cal.getTime()));
+			if(appointment.appointmentStatus.equals(AppointmentStatus.APPROVED)){
+				map.put("url", routes.DoctorController.showPrescriptionForm(appointment.id).url());
+				map.put("color", "#001F7A");
+			}
+			if(appointment.appointmentStatus.equals(AppointmentStatus.SERVED)){
+				map.put("url", routes.DoctorController.showPrescription(appointment.getPrescription().id).url());
+			}
+			result.add(map);
+		}
+		final JSONArray jsonArray = new JSONArray(result);
+		return ok(jsonArray.toString());
+
+	}
 }

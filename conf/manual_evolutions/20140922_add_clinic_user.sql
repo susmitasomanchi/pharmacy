@@ -4,7 +4,7 @@
 
 
 ---ClinicUser
-ALTER TABLE clinic Drop clinic_administrator_id;
+ALTER TABLE clinic drop clinic_administrator_id;
 DROP TABLE clinic_administrator;
 DROP SEQUENCE clinic_administrator_seq;
 
@@ -31,14 +31,14 @@ ALTER TABLE clinic ADD clinic_adminstrator_id bigint;
 alter table clinic add constraint fk_clinic_clinic_user_1 foreign key (clinic_adminstrator_id) references clinic_user (id);
 create index ix_clinic_clinic_user_1 on clinic (clinic_adminstrator_id);
 
-create table clinic_file_entity (
-  clinic_id           bigint not null,
-  file_entity_id                 bigint not null,
-  constraint pk_diagnostic_centre_file_entity primary key (clinic_id, file_entity_id))
-;
-alter table clinic_file_entity add constraint fk_clinic_file_entity_01 foreign key (clinic_id) references clinic (id);
-
-alter table clinic_file_entity add constraint fk_clinic_file_entity_02 foreign key (file_entity_id) references file_entity (id);
+--create table clinic_file_entity (
+--  clinic_id           bigint not null,
+--  file_entity_id                 bigint not null,
+--  constraint pk_diagnostic_centre_file_entity primary key (clinic_id, file_entity_id))
+--;
+--alter table clinic_file_entity add constraint fk_clinic_file_entity_01 foreign key (clinic_id) references clinic (id);
+--
+--alter table clinic_file_entity add constraint fk_clinic_file_entity_02 foreign key (file_entity_id) references file_entity (id);
 
 
 

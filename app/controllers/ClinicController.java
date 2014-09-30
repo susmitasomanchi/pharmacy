@@ -56,7 +56,20 @@ public class ClinicController extends Controller{
 				final Doctor doctor = appUser.getDoctor();
 				final List<ClinicInvite> pastInvites = ClinicInvite.getInvites(doctor, clinic);
 				if(pastInvites.size() > 0){
-					flash().put("alert", new Alert("alert-info","An Invitation to "+email+" has already been sent on "+new SimpleDateFormat("dd-MMM-yyyy (hh:mm)").format(pastInvites.get(0).dateInvited)+".").toString());
+					final ClinicInvite invite = pastInvites.get(0);
+					invite.dateInvited = new Date();
+					invite.invitedBy = LoginController.getLoggedInUser();
+					invite.update();
+					Promise.promise(new Function0<Integer>() {
+						@Override
+						public Integer apply() {
+							final boolean result = EmailService.sendClinicInvitationConfirmationEmail(appUser, clinic, pastInvites.get(0).verificationCode);
+							return 0;
+						}
+					});
+					//flash().put("alert", new Alert("alert-info","An Invitation to "+email+" has already been sent on "+
+					//		new SimpleDateFormat("dd-MMM-yyyy (hh:mm)").format(pastInvites.get(0).dateInvited)+".").toString());
+					flash().put("alert",new Alert("alert-success","An Invitation has been sent to the Dr."+appUser.name).toString());
 					return ClinicController.searchDoctorsByEmail();
 				}
 				final Random random = new SecureRandom();
@@ -113,6 +126,11 @@ public class ClinicController extends Controller{
 		}
 		if(invites.get(0).verificationCode.compareTo(verCode) != 0){
 			flash().put("alert",new Alert("alert-danger","Unauthorized Operation.").toString());
+			return Application.index();
+		}
+
+		if(invites.get(0).accepted){
+			flash().put("alert",new Alert("alert-danger","Already Accpted Invitation on "+new SimpleDateFormat("").format(invites.get(0).dateAccepted)+".").toString());
 			return Application.index();
 		}
 
