@@ -52,6 +52,13 @@ public class BloodBank extends BaseEntity{
 	@Column(columnDefinition="TEXT")
 	public String description;
 
+	@Column(columnDefinition="TEXT")
+	public String searchIndex;
+
+	@Column(columnDefinition="TEXT")
+	public String slugUrl;
+
+
 	@ManyToMany(cascade = CascadeType.ALL)
 	public List<FileEntity> profileImageList = new ArrayList<FileEntity>();
 
@@ -60,6 +67,67 @@ public class BloodBank extends BaseEntity{
 
 
 	public static Finder<Long, BloodBank> find = new Finder<Long, BloodBank>(Long.class, BloodBank.class);
+
+
+	@Override
+	public void save(){
+		final StringBuilder stringBuilder = new StringBuilder();
+		stringBuilder.append(this.name.trim().toLowerCase());
+		if(this.address != null){
+			if(this.address.addressLine1 != null){
+				stringBuilder.append(this.address.addressLine1.trim().toLowerCase());
+			}
+			if(this.address.area != null){
+				stringBuilder.append(this.address.area.trim().toLowerCase());
+			}
+			if(this.address.city != null){
+				stringBuilder.append(this.address.city.trim().toLowerCase());
+			}
+			if(this.address.pinCode != null){
+				stringBuilder.append(this.address.pinCode.trim().toLowerCase());
+			}
+			if(this.address.fetchedPinCode != null){
+				stringBuilder.append(this.address.fetchedPinCode.trim().toLowerCase());
+			}
+		}
+		if(this.contactNo!= null){
+			stringBuilder.append(this.contactNo.trim().toLowerCase());
+		}
+		stringBuilder.append(this.slugUrl.toLowerCase());
+		this.searchIndex = stringBuilder.toString();
+		super.save();
+	}
+
+	@Override
+	public void update() {
+		final StringBuilder stringBuilder = new StringBuilder();
+		stringBuilder.append(this.name.trim().toLowerCase());
+		if(this.address != null){
+			if(this.address.addressLine1 != null){
+				stringBuilder.append(this.address.addressLine1.trim().toLowerCase());
+			}
+			if(this.address.area != null){
+				stringBuilder.append(this.address.area.trim().toLowerCase());
+			}
+			if(this.address.city != null){
+				stringBuilder.append(this.address.city.trim().toLowerCase());
+			}
+			if(this.address.pinCode != null){
+				stringBuilder.append(this.address.pinCode.trim().toLowerCase());
+			}
+			if(this.address.fetchedPinCode != null){
+				stringBuilder.append(this.address.fetchedPinCode.trim().toLowerCase());
+			}
+		}
+		if(this.contactNo!= null){
+			stringBuilder.append(this.contactNo.trim().toLowerCase());
+		}
+		stringBuilder.append(this.slugUrl.toLowerCase());
+		this.searchIndex = stringBuilder.toString();
+		super.update();
+
+	}
+
 
 
 }

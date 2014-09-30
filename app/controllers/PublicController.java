@@ -758,7 +758,24 @@ public class PublicController extends Controller{
 		return ok(PrimaryCity.find.byId(cityId).name);
 	}
 
-
-
-
+	/**
+	 * @author lakshmi
+	 * Action to search Clinic and display his profile page
+	 * GET /clinic/:slugUrl
+	 */
+	public static Result getClinicWithSlug(final String slug) {
+		final String cleanSlug = slug.trim().toLowerCase();
+		final Clinic clinic = Clinic.find.where().eq("slugUrl",cleanSlug).findUnique();
+		return ok(views.html.clinic.publicClinicProfile.render(clinic));
+	}
+	/**
+	 * @author lakshmi
+	 * Action to search BloodBank and display his profile page
+	 * GET /blood-bank/:slugUrl
+	 */
+	public static Result getBloodBankWithSlug(final String slug) {
+		final String cleanSlug = slug.trim().toLowerCase();
+		final BloodBank bloodBank = BloodBank.find.where().eq("slugUrl",cleanSlug).findUnique();
+		return ok(views.html.bloodBank.publicBloodBankProfile.render(bloodBank));
+	}
 }

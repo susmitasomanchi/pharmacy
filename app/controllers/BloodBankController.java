@@ -21,6 +21,7 @@ import models.State;
 import models.bloodBank.BloodBank;
 import models.bloodBank.BloodDonation;
 import models.patient.Patient;
+import models.pharmacist.Pharmacy;
 import play.Logger;
 import play.mvc.Controller;
 import play.mvc.Http.MultipartFormData.FilePart;
@@ -302,6 +303,22 @@ public class BloodBankController extends Controller{
 			}
 			if(requestMap.get("description") != null && (requestMap.get("description")[0].trim().compareToIgnoreCase("")!=0)){
 				bloodBank.description = requestMap.get("description")[0].trim();
+			}
+			if(requestMap.get("slugUrl") != null && !(requestMap.get("slugUrl")[0].trim().isEmpty())){
+				final String newSlug = requestMap.get("slugUrl")[0].trim();
+				if(!newSlug.matches("^[a-z0-9\\-]+$")){
+					flash().put("alert", new Alert("alert-danger", "Invalid charactrer provided in Url.").toString());
+					return redirect(routes.UserActions.dashboard());
+				}
+				if(requestMap.get("slugUrl")[0].trim().compareToIgnoreCase(bloodBank.slugUrl) != 0){
+					final int availableSlug = Pharmacy.find.where().eq("slugUrl", requestMap.get("slugUrl")[0].trim()).findRowCount();
+					if(availableSlug == 0){
+						bloodBank.slugUrl = requestMap.get("slugUrl")[0].trim();
+					}else{
+						flash().put("alert", new Alert("alert-danger", "Sorry, Requested URL is not available.").toString());
+						return redirect(routes.UserActions.dashboard());
+					}
+				}
 			}
 
 			bloodBank.update();

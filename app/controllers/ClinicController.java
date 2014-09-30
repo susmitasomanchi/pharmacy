@@ -24,6 +24,7 @@ import models.clinic.ClinicInvite;
 import models.doctor.Clinic;
 import models.doctor.Doctor;
 import models.doctor.DoctorClinicInfo;
+import models.pharmacist.Pharmacy;
 import play.Logger;
 import play.libs.F.Function0;
 import play.libs.F.Promise;
@@ -255,6 +256,22 @@ public class ClinicController extends Controller{
 			if(requestMap.get("description") != null && (requestMap.get("description")[0].trim().compareToIgnoreCase("")!=0)){
 				clinic.description = requestMap.get("description")[0].trim();
 			}
+			if(requestMap.get("slugUrl") != null && !(requestMap.get("slugUrl")[0].trim().isEmpty())){
+				final String newSlug = requestMap.get("slugUrl")[0].trim();
+				if(!newSlug.matches("^[a-z0-9\\-]+$")){
+					flash().put("alert", new Alert("alert-danger", "Invalid charactrer provided in Url.").toString());
+					return redirect(routes.UserActions.dashboard());
+				}
+				if(requestMap.get("slugUrl")[0].trim().compareToIgnoreCase(clinic.slugUrl) != 0){
+					final int availableSlug = Pharmacy.find.where().eq("slugUrl", requestMap.get("slugUrl")[0].trim()).findRowCount();
+					if(availableSlug == 0){
+						clinic.slugUrl = requestMap.get("slugUrl")[0].trim();
+					}else{
+						flash().put("alert", new Alert("alert-danger", "Sorry, Requested URL is not available.").toString());
+						return redirect(routes.UserActions.dashboard());
+					}
+				}
+			}
 
 			clinic.update();
 		}
@@ -327,6 +344,7 @@ public class ClinicController extends Controller{
 		}
 		return redirect(routes.UserActions.dashboard());
 	}
+
 }
 
 

@@ -44,7 +44,7 @@ color:black;
 }
 
 
-.slugUrlP .popover{
+.slugUrlC .popover{
   max-width: none;
   width:450px;
 }
@@ -141,21 +141,19 @@ function validateSlugUrl(){
 </div>
 
 
-@*
 
-
-<p class="slugUrlP" style="font-size:20px; position:absolute; margin-top:-240px; margin-left:-40px;">
+<p class="slugUrlC" style="font-size:20px; position:absolute; margin-top:-230px; margin-left:-40px;">
 <span style="text-shadow:1px 1px 20px white, 3px 3px 20px white;">
 Your profile is live at 
-<a href="@routes.PublicController.getDiagnosticCentreWithSlug(diagnosticCentre.slugUrl)" style="color:black;">mednetwork.in/diagnostic/@diagnosticCentre.slugUrl</a>
+<a href="@routes.PublicController.getClinicWithSlug(clinic.slugUrl)" style="color:black;">mednetwork.in/clinic/@clinic.slugUrl</a>
 </span>
 <span id="slugpopover" data-toggle="popover" title="Edit Your URL" data-html="true" data-placement="bottom" data-content=
 
 "
-<form onsubmit=&quot;return validateSlugUrl();&quot; action=&quot;@routes.DiagnosticController.diagnosticBasicUpdate()&quot; method=&quot;POST&quot;>
-<div style=&quot;text-shadow:none;&quot;><span style=&quot;font-size:16px;&quot;>mednetwork.in/diagnostic/</span>
-<input type=&quot;hidden&quot; name=&quot;diagnosticId&quot; value=&quot;@diagnosticCentre.id&quot;>
-<input id=&quot;slugUrl&quot; name=&quot;slugUrl&quot; style=&quot;color:#292929; font-weight:bold; height: 22px; position:relative; top:0px; padding-left:0px; font-size:16px; width:200px;&quot; type=&quot;text&quot; value=&quot;@diagnosticCentre.slugUrl&quot;>
+<form onsubmit=&quot;return validateSlugUrl();&quot; action=&quot;@routes.ClinicController.clinicBasicUpdate()&quot; method=&quot;POST&quot;>
+<div style=&quot;text-shadow:none;&quot;><span style=&quot;font-size:16px;&quot;>mednetwork.in/clinic/</span>
+<input type=&quot;hidden&quot; name=&quot;clinicId&quot; value=&quot;@clinic.id&quot;>
+<input id=&quot;slugUrl&quot; name=&quot;slugUrl&quot; style=&quot;color:#292929; font-weight:bold; height: 22px; position:relative; top:0px; padding-left:0px; font-size:16px; width:200px;&quot; type=&quot;text&quot; value=&quot;@clinic.slugUrl&quot;>
 <br><br>
 <ul style=&quot;padding-left:20px; margin:0px;&quot;>
 <li>Lower case alphabets (a-z) can be used.</li>
@@ -170,7 +168,7 @@ Your profile is live at
 </div>
 </form>
 "
-style="cursor:pointer; position:relative; font-size:16px; top:-13px; text-shadow:1px 1px 20px white, 3px 3px 20px white;"><i id="spinner-slugUrl" class="fa fa-cog"></i></span>
+style="cursor:pointer; position:relative; font-size:16px; top:-10px; text-shadow:1px 1px 20px white, 3px 3px 20px white;"><i id="spinner-slugUrl" class="fa fa-cog"></i></span>
 
 </p>
 
@@ -195,7 +193,6 @@ $('#slugpopover').on('shown.bs.popover', function () {
 });
 
 </script>
-*@
 
 
 
@@ -287,10 +284,10 @@ style="color:#006687; font-size:20px; position:relative; top:-20px; cursor:point
 <h5>@clinic.address.area</h5>
 <h5>@clinic.address.city</h5>
 @if(clinic.address.state != null){
-<h5>@models.State.options().get(clinic.address.state.toString())</h5>	
+<h5>@clinic.address.state.capitalize()</h5>	
 }
 <h5>@clinic.address.pinCode</h5>
-<h5>Phones: @clinic.contactNo </h5>
+<h5><i class="fa fa-phone-square"></i>@clinic.contactNo </h5>
 }else{
 <h4>
 Edit Contact Details

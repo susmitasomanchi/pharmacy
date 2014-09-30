@@ -397,6 +397,13 @@ GET		/secure-clinic/remove-image/:clinicId/:fileId						controllers.ClinicContro
 POST	/secure-clinic/basic-update												controllers.ClinicController.clinicBasicUpdate()
 POST	/secure-clinic/address-update 											controllers.ClinicController.clinicAddressUpdate()
 
+
+
+#slug url (must be the last route in /clinic/)
+GET 	/clinic/:slugUrl								controllers.PublicController.getClinicWithSlug(slugUrl:String)
+
+
+
 #BloodBank
 GET    /secure-blood-bank/get-blood-donors      					controllers.BloodBankController.getBloodDonorsInCityForm()
 POST    /secure-blood-bank/list-blood-donors      					controllers.BloodBankController.listBloodDonorsInCity()
@@ -416,6 +423,10 @@ GET		/secure-blood-bank/view-blood-donors													controllers.BloodBankContr
 GET		/secure-blood-bank/remove-blood-donor/:appUserId													controllers.BloodBankController.removeBloodBankBloodDonor(appUserId : Long)
 
 
+
+
+#slug url (must be the last route in /blood-bank/)
+GET 	/blood-bank/:slugUrl								controllers.PublicController.getBloodBankWithSlug(slugUrl:String)
 
 
 

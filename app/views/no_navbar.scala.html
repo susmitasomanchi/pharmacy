@@ -52,7 +52,7 @@
       @*
       <a class="navbar-brand" href="@routes.UserActions.dashboard()">@Messages.get("MedNetwork")</a>
       *@
-      <a class="navbar-brand" href="/">
+      <a class="navbar-brand" href="@routes.UserActions.dashboard()">
       	@if(LoginController.isLoggedIn()){
       		<img style="height:45px; margin-top:-12px;" src="/assets/images/medlogotrans.png" alt="MedNetwork">
       	}else{
