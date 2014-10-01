@@ -263,7 +263,7 @@ public class SampleDataController extends Controller {
 		mr.appUser = appUser;
 		final PharmaceuticalCompany company = new PharmaceuticalCompany();
 		final Designation designation = new Designation();
-		designation.name = "manager";
+		designation.name = "administrator";
 		//designation.save();
 
 		company.name="green pharma";

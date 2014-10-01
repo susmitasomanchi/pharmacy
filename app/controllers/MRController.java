@@ -77,8 +77,14 @@ public class MRController extends Controller {
 	public static Result addMR() {
 		final MedicalRepresentative adminMr = LoginController.getLoggedInUser()
 				.getMedicalRepresentative();
-		final List<MedicalRepresentative> mrList = MedicalRepresentative.find
-				.where().eq("appUser.role", "MR").findList();
+		List<MedicalRepresentative> mrList = MedicalRepresentative.find
+				.where()
+				.eq("pharmaceutical_company_id",
+						LoginController.getLoggedInUser()
+						.getMedicalRepresentative().pharmaceuticalCompany.id).ne("app_user_id", adminMr.appUser.id)
+						.findList();
+		/*final List<MedicalRepresentative> mrList = MedicalRepresentative.find
+				.where().eq("appUser.role", "MR").findList();*/
 		return ok(views.html.mr.medicalRepresentative.render(mrForm, adminMr,
 				mrList));
 	}
@@ -134,6 +140,13 @@ public class MRController extends Controller {
 						return ok("User already exist");
 					}
 				}
+				if(medicalRepresentativeBean.designationId == null){
+					flash().put(
+							"alert",
+							new Alert("alert-danger",
+									"Please Add the Designation First, Thank You !").toString());
+					return ok("Please Add the Designation First, Thank You !");
+				}
 				try {
 
 					final Random random = new SecureRandom();
@@ -176,6 +189,9 @@ public class MRController extends Controller {
 					mr.manager = MedicalRepresentative.find
 							.byId(medicalRepresentativeBean.manager);
 				}
+				mr.designation = Designation.find
+						.byId(medicalRepresentativeBean.designationId);
+
 				mr.save();
 				adminMr.pharmaceuticalCompany.mrList.add(mr);
 				adminMr.pharmaceuticalCompany.update();
@@ -183,23 +199,145 @@ public class MRController extends Controller {
 			} else {
 				Logger.info("not null");
 
-				appUser.update();
-
-				mr.pharmaceuticalCompany = company;
-				mr.appUser = appUser;
-				mr.designation = Designation.find
-						.byId(medicalRepresentativeBean.designationId);
-				mr.manager = MedicalRepresentative.find
-						.byId(medicalRepresentativeBean.manager);
-				mr.update();
-				adminMr.pharmaceuticalCompany.mrList.add(mr);
-				adminMr.pharmaceuticalCompany.update();
-
 			}
 
 		}
-		return ok("mr is created");
-		// return redirect(routes.MRController.mrList());
+		//return ok("mr is created");
+		return redirect(routes.MRController.mrList());
+	}
+
+
+	/**
+	 * 
+	 * @author Dibesh
+	 * 
+	 *         This method displays the all the mr present under the logged in
+	 *         mr
+	 * 
+	 *         GET /mr/list-mr controllers.MRController.mrList()
+	 */
+
+	public static Result mrList() {
+		final MedicalRepresentative loggedInMR = LoginController
+				.getLoggedInUser().getMedicalRepresentative();
+		// Logger.info(mrList.);
+		// final List<MedicalRepresentative> mrList =
+		// MedicalRepresentative.find.where().eq("companyName",
+		// loggedInMR.companyName).findList();
+		List<MedicalRepresentative> mrList = MedicalRepresentative.find
+				.where()
+				.eq("pharmaceutical_company_id",
+						LoginController.getLoggedInUser()
+						.getMedicalRepresentative().pharmaceuticalCompany.id).ne("app_user_id", loggedInMR.appUser.id)
+						.findList();
+		//Logger.info("mr list : " + mrList.get(0).appUser.name);
+		return ok(views.html.mr.mrList.render(mrList));
+	}
+
+	/**
+	 * 
+	 * @author Dibesh
+	 * 
+	 *         This method changes the status of mr
+	 * 
+	 *         GET /mr/del controllers.MRController.removeMR(id: Long)
+	 */
+
+	public static Result removeMR(final Long id) {
+		final MedicalRepresentative loggedInMR = LoginController
+				.getLoggedInUser().getMedicalRepresentative();
+		final MedicalRepresentative mr = MedicalRepresentative.find.byId(id);
+		mr.isActive = false;
+		mr.update();
+		return ok(views.html.mr.mrList
+				.render(MedicalRepresentative.find
+						.where()
+						.eq("pharmaceutical_company_id",
+								LoginController.getLoggedInUser()
+								.getMedicalRepresentative().pharmaceuticalCompany.id).ne("app_user_id", loggedInMR.appUser.id)
+								.findList()));
+
+	}
+
+	/**
+	 * 
+	 * @author Dibesh
+	 * 
+	 *         This method includes functionality to edit mr
+	 * 
+	 *         GET /mr/edit/:id controllers.MRController.editMR(id: Long)
+	 */
+
+	public static Result editMR(final Long id) {
+		final MedicalRepresentative adminMr = LoginController.getLoggedInUser()
+				.getMedicalRepresentative();
+
+		final MedicalRepresentative filledMr = MedicalRepresentative.find
+				.byId(id);
+
+		Logger.info("filled mr id is : " + filledMr.id);
+
+		final Form<MedicalRepresentativeBean> editForm = mrForm.fill(filledMr
+				.toBean());
+		// final List<AppUser> mrList
+		// =AppUser.find.where().eq("role","MR").findList();
+		final List<MedicalRepresentative> mrList = MedicalRepresentative.find
+				.where().eq("appUser.role", "MR").findList();
+		return ok(views.html.mr.medicalRepresentative.render(editForm, adminMr,
+				mrList));
+	}
+
+	public static Result editMRProccess(){
+		final MedicalRepresentative adminMr = LoginController.getLoggedInUser()
+				.getMedicalRepresentative();
+		DynamicForm editableForm = DynamicForm.form().bindFromRequest();
+		String id = editableForm.get("id");
+		String appid = editableForm.get("appid");
+
+		MedicalRepresentative mr = MedicalRepresentative.find.byId(Long.parseLong(id));
+		AppUser appUser = AppUser.find.byId(Long.parseLong(appid));
+
+		String generatedPassword = "";
+
+
+		try {
+
+			final Random random = new SecureRandom();
+			final byte[] saltArray = new byte[32];
+			random.nextBytes(saltArray);
+			final String randomSalt = Base64
+					.encodeBase64String(saltArray);
+			generatedPassword = GenerateRandomString.generatePassword();
+			final String passwordWithSalt = generatedPassword
+					+ randomSalt;
+			final MessageDigest sha256 = MessageDigest
+					.getInstance("SHA-256");
+			final byte[] passBytes = passwordWithSalt.getBytes();
+			final String hashedPasswordWithSalt = Base64
+					.encodeBase64String(sha256.digest(passBytes));
+
+			appUser.salt = randomSalt;
+			appUser.password = hashedPasswordWithSalt;
+
+		} catch (final Exception e) {
+			Logger.error("ERROR WHILE CREATING SHA2 HASH");
+			e.printStackTrace();
+		}
+
+		Logger.info("email : " + appUser.email
+				+ " & Generated password is : " + generatedPassword);
+
+		appUser.name = editableForm.get("name");
+		appUser.username = editableForm.get("username");
+		appUser.email = editableForm.get("email");
+		appUser.update();
+		mr.appUser = appUser;
+		mr.regionAlloted = editableForm.get("regionAlloted");
+		mr.manager = MedicalRepresentative.find.byId(Long.parseLong(editableForm.get("manager")));
+		mr.status = editableForm.get("status");
+		mr.update();
+		Logger.info("MR id : "+id);
+		return redirect(routes.MRController.mrList());
 	}
 
 	public static Result headQuarter() {
@@ -233,85 +371,6 @@ public class MRController extends Controller {
 		return ok();
 	}
 
-	/**
-	 * 
-	 * @author Dibesh
-	 * 
-	 *         This method displays the all the mr present under the logged in
-	 *         mr
-	 * 
-	 *         GET /mr/list-mr controllers.MRController.mrList()
-	 */
-
-	public static Result mrList() {
-		final MedicalRepresentative loggedInMR = LoginController
-				.getLoggedInUser().getMedicalRepresentative();
-		// Logger.info(mrList.);
-		// final List<MedicalRepresentative> mrList =
-		// MedicalRepresentative.find.where().eq("companyName",
-		// loggedInMR.companyName).findList();
-		List<MedicalRepresentative> mrList = MedicalRepresentative.find
-				.where()
-				.eq("pharmaceutical_company_id",
-						LoginController.getLoggedInUser()
-						.getMedicalRepresentative().pharmaceuticalCompany.id)
-						.findList();
-		Logger.info("mr list : " + mrList.get(0).appUser.name);
-		return ok(views.html.mr.mrList.render(mrList));
-	}
-
-	/**
-	 * 
-	 * @author Dibesh
-	 * 
-	 *         This method changes the status of mr
-	 * 
-	 *         GET /mr/del controllers.MRController.removeMR(id: Long)
-	 */
-
-	public static Result removeMR(final Long id) {
-		final MedicalRepresentative loggedInMR = LoginController
-				.getLoggedInUser().getMedicalRepresentative();
-		final MedicalRepresentative mr = MedicalRepresentative.find.byId(id);
-		mr.isActive = false;
-		mr.update();
-		return ok(views.html.mr.mrList
-				.render(MedicalRepresentative.find
-						.where()
-						.eq("pharmaceutical_company_id",
-								LoginController.getLoggedInUser()
-								.getMedicalRepresentative().pharmaceuticalCompany.id)
-								.findList()));
-
-	}
-
-	/**
-	 * 
-	 * @author Dibesh
-	 * 
-	 *         This method includes functionality to edit mr
-	 * 
-	 *         GET /mr/edit/:id controllers.MRController.editMR(id: Long)
-	 */
-
-	public static Result editMR(final Long id) {
-		final MedicalRepresentative adminMr = LoginController.getLoggedInUser()
-				.getMedicalRepresentative();
-
-		final MedicalRepresentative filledMr = MedicalRepresentative.find
-				.byId(id);
-
-		Logger.info("filled mr id is : " + filledMr.id);
-
-		final Form<MedicalRepresentativeBean> editForm = mrForm.fill(filledMr
-				.toBean());
-		// final List<AppUser> mrList
-		// =AppUser.find.where().eq("role","MR").findList();
-		final List<MedicalRepresentative> mrList = MedicalRepresentative.find
-				.where().eq("appUser.role", "MR").findList();
-		return ok(views.html.mr.medicalRepresentative.render(editForm, adminMr,
-				mrList));
-	}
 
 	/**
 	 * @author anand
@@ -616,6 +675,10 @@ public class MRController extends Controller {
 	public static Result deleteDCR(final Long dcrid) {
 		final MedicalRepresentative loggedInMr = LoginController
 				.getLoggedInUser().getMedicalRepresentative();
+		List<DCRLineItem> dcrLineItemList = DCRLineItem.find.where().eq("daily_call_report_id", dcrid).findList();
+		for (DCRLineItem dcrLineItem : dcrLineItemList) {
+			dcrLineItem.delete();
+		}
 		final DailyCallReport dcr = DailyCallReport.find.byId(dcrid);
 		Logger.info(dcr.submitter.appUser.name);
 		loggedInMr.dcrList.remove(dcr);
@@ -721,9 +784,7 @@ public class MRController extends Controller {
 		}
 
 		dcrLineItem.remarks = remarks;
-
 		dcr.dcrLineItemList.add(dcrLineItem);
-
 		dcr.update();
 
 		return ok(views.html.mr.filledDCRLineItem.render(dcr.dcrLineItemList));
@@ -742,10 +803,12 @@ public class MRController extends Controller {
 	 */
 	public static Result removeDCRLineItem(final Long dcrId,
 			final Long lineItemId) {
+		Logger.info("In side server");
 		final DailyCallReport dcr = DailyCallReport.find.byId(dcrId);
-		final DCRLineItem lineItem = DCRLineItem.find.byId(lineItemId);
-		dcr.dcrLineItemList.remove(lineItem);
-		lineItem.delete();
+		final DCRLineItem dcrLineItem = DCRLineItem.find.byId(lineItemId);
+		Logger.info("line item : "+lineItemId);
+		dcr.dcrLineItemList.remove(dcrLineItem);
+		dcrLineItem.delete();
 		dcr.update();
 		return ok(views.html.mr.filledDCRLineItem.render(dcr.dcrLineItemList));
 	}
@@ -1058,8 +1121,8 @@ public class MRController extends Controller {
 		final TourPlan tourPlan = TourPlan.find.byId(tourPlanid);
 		final Calendar calender = Calendar.getInstance();
 		calender.setTime(tourPlan.forMonth);
-		final int maxDaysInMonth = calender
-				.getActualMaximum(Calendar.DAY_OF_MONTH);
+		/*final int maxDaysInMonth = calender
+				.getActualMaximum(Calendar.DAY_OF_MONTH);*/
 		final Map<Integer, TPLineItem> tourPlanLineItemMap = new LinkedHashMap<Integer, TPLineItem>();
 		final List<TPLineItem> tpLineItemList = TPLineItem.find.where()
 				.eq("tour_plan_id", tourPlanid).orderBy("date asc").findList();
@@ -1076,11 +1139,8 @@ public class MRController extends Controller {
 
 	/**
 	 * @author anand
-	 * 
 	 * @description : this method is used to add lineitem for particular date
-	 * 
-	 *              url : POST /mr/tourplan/add-line-item
-	 * 
+	 *	url : POST /mr/tourplan/add-line-item
 	 * */
 	public static Result addTourPlanLineItem(final Long tourPlanid,
 			final Long tpLineid, final Long index) {
@@ -1116,8 +1176,7 @@ public class MRController extends Controller {
 				for (int i = 0; i < samples.length; i++) {
 					final Sample sample = new Sample();
 
-					if ((samples[i].compareToIgnoreCase("") == 0)) {
-					} else {
+					if ((samples[i].compareToIgnoreCase("") != 0)) {
 						sample.pharmaceuticalProduct = PharmaceuticalProduct.find
 								.byId(Long.parseLong(samples[i]));
 						if (quantities[i] == "") {
@@ -1130,6 +1189,8 @@ public class MRController extends Controller {
 				}
 			}
 		}
+
+		Logger.info("Added Sample. Sampele Size: "+tpLineItem.sampleList.size());
 
 		if (mapForm.containsKey("promotion" + index)) {
 			final String promotions[] = mapForm.get("promotion" + index);
@@ -1154,9 +1215,8 @@ public class MRController extends Controller {
 			final String remarks = mapForm.get("remarks" + index)[0];
 			tpLineItem.remarks = remarks;
 		}
-
 		tpLineItem.isAddedtoTourplan = true;
-
+		//tpLineItem.update();
 		final TourPlan tourPlan = TourPlan.find.byId(tourPlanid);
 		tourPlan.tpLineItemList.add(tpLineItem);
 		tourPlan.update();

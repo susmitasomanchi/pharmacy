@@ -135,13 +135,13 @@
 						<input id="qty" class="qty-class numeric-textbox" name="qtyList@{index+1}" placeholder="quantity" style="width:70px;height:24px"/>
 					</td>
 					<td>
-						&nbsp;
+						<button  type="button" class="btn btn-primary btn-xs" onclick="addSamples(@{index+1});">+</button>
 					</td>
 				</tr>
 				</tbody>
 			</table>
 			</div>   
-			<button  type="button" class="btn btn-primary btn-xs" onclick="addSamples(@{index+1});">+</button>
+			@*<button  type="button" class="btn btn-primary btn-xs" onclick="addSamples(@{index+1});">+</button>*@
 	   	</td>
 	   	}
 	   	@if(mr.tourPlanConfiguration.isPromotionVisible == false){

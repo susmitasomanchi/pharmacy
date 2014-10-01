@@ -58,19 +58,37 @@ public class ProductController extends Controller{
 					loggedInMr.pharmaceuticalCompany.pharmaceuticalProductList.add(filledProduct);
 					loggedInMr.pharmaceuticalCompany.update();
 				}else{
-					final MasterProduct product = MasterProduct.find.byId(filledProduct.id);
-					product.update();
+					/*final MasterProduct product = MasterProduct.find.byId(filledProduct.id);
+					product.update();*/
+					filledProduct.update();
 				}
 				return redirect(routes.ProductController.displayProduct());
 			}
 			return TODO;
-
 		}
-
 	}
 
-	public static Result productForm() {
+	public static Result editPharmceuticalProduct(final Long id){
+		Logger.info("pharmaceutical product id : "+ id);
+		PharmaceuticalProduct pharmaceuticalProduct = PharmaceuticalProduct.find.byId(id);
+		Form<PharmaceuticalProduct> filledForm = pharmaceuticalProductForm.fill(pharmaceuticalProduct);
+		return ok(views.html.common.createPharmaceuticalProduct.render(filledForm));
+	}
+	public static Result removePharmceuticalProduct(final Long id){
+		Logger.info("id : "+id);
+		final MedicalRepresentative loggedInMr = LoginController.getLoggedInUser().getMedicalRepresentative();
 
+		PharmaceuticalProduct pharmaceuticalProduct = PharmaceuticalProduct.find.byId(id);
+		loggedInMr.pharmaceuticalCompany.pharmaceuticalProductList.remove(pharmaceuticalProduct);
+		loggedInMr.pharmaceuticalCompany.update();
+		/**
+		 * Here u can not delete product because this product is refrenced to dcr line item,
+		 * so first remove derefrenced from dcrlineItem then u are able to remove.
+		 * */
+		//pharmaceuticalProduct.delete();
+		return redirect(routes.ProductController.displayProduct());
+	}
+	public static Result productForm() {
 		return ok(views.html.common.createProduct.render(productForm));
 	}
 
