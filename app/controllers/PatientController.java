@@ -16,6 +16,7 @@ import models.doctor.Appointment;
 import models.doctor.AppointmentStatus;
 import models.doctor.Clinic;
 import models.doctor.Doctor;
+import models.doctor.DoctorClinicInfo;
 import models.doctor.Prescription;
 import models.doctor.QuestionAndAnswer;
 import models.patient.Patient;

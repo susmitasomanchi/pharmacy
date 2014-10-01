@@ -82,6 +82,9 @@ public class DoctorClinicInfo extends BaseEntity {
 			bean.name= this.clinic.name;
 			bean.contactPersonName=this.clinic.contactPersonName;
 			bean.contactNo=this.clinic.contactNo;
+			if(this.clinic.clinicAdminstrator != null){
+				bean.clinicAdminstrator = this.clinic.clinicAdminstrator;
+			}
 		}
 		final List<String> fromHrs = new ArrayList<String>();
 
@@ -164,6 +167,5 @@ public class DoctorClinicInfo extends BaseEntity {
 	public int getPrescriptionCount(){
 		return Prescription.find.where().eq("doctor", this.doctor).eq("clinic", this.clinic).findRowCount();
 	}
-
 
 }

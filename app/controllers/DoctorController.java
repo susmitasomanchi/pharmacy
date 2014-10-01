@@ -1815,7 +1815,15 @@ public class DoctorController extends Controller {
 
 		return redirect(routes.DoctorController. viewTodaysAppointments());
 	}
-
+	/**
+	 * @author lakshmi
+	 * Action To Get All Doctors Of a Clinic
+	 */
+	public static Result getDoctorClinicInfoList(final Long clinicId){
+		final List<DoctorClinicInfo> doctorClinicInfos = DoctorClinicInfo.find.where().eq("clinic", Clinic.find.byId(clinicId)).findList();
+		Logger.info("size===="+doctorClinicInfos.size());
+		return ok(views.html.patient.doctorClinicList.render(doctorClinicInfos));
+	}
 
 
 	@ConfirmAppUser

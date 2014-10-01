@@ -1,0 +1,23 @@
+@(doctorClinicInfos : List[models.doctor.DoctorClinicInfo])
+@if(doctorClinicInfos.size() > 0){
+<table class="row table table-hover">
+@for((doctorClinicInfo,index) <- doctorClinicInfos.zipWithIndex){
+<tr>
+<td class="col-md-6">
+<div class="col-lg-5">
+<img src="@routes.PublicController.getImage(doctorClinicInfo.doctor.id,"profileImage")" class="thumbnail" width="100" height="150" style="float:left;cursor:pointer" data-toggle="modal" data-target="#myModal1" />
+</div>
+<div class="col-lg-7">
+<br<<br><br>
+Dr. @doctorClinicInfo.doctor.appUser.name<br>
+@doctorClinicInfo.doctor.getSpecializations()<br>
+Experience :@doctorClinicInfo.doctor.getYearsOfExperience() Years<br>
+</div>
+</td>
+<td class="col-md-2"><a href="@routes.PublicController.scheduleAppointment(doctorClinicInfo.id)" class="btn btn-success btn-sm">Book Appointment</a></td>
+</tr>
+}
+}else{
+<h5>No Doctors Available for This Clinic</h5>
+}
+</table>
