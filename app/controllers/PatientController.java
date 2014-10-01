@@ -7,16 +7,19 @@ import java.util.List;
 
 import models.Alert;
 import models.AppUser;
+import models.Role;
 import models.bloodBank.BloodDonation;
 import models.diagnostic.DiagnosticCentre;
 import models.diagnostic.DiagnosticCentrePrescriptionInfo;
 import models.diagnostic.DiagnosticCentrePrescritionStatus;
 import models.doctor.Appointment;
 import models.doctor.AppointmentStatus;
+import models.doctor.Clinic;
 import models.doctor.Doctor;
 import models.doctor.Prescription;
 import models.doctor.QuestionAndAnswer;
 import models.patient.Patient;
+import models.patient.PatientClinicInfo;
 import models.patient.PatientDoctorInfo;
 import models.pharmacist.Pharmacy;
 import models.pharmacist.PharmacyPrescriptionInfo;
@@ -513,7 +516,65 @@ public class PatientController extends Controller {
 		}
 		return ok(views.html.patient.patientBloodDonationList.render(bloodDonations));
 	}
+	/**
+	 * @author lakshmi
+	 * Action to add Clinic to loggedInUser
+	 * GET/secure-user/add-fav-clinic/:clinicIds
+	 */
+	public static Result addClinicToLoggedInUser(final Long clinicId) {
+		if(!LoginController.isLoggedIn()){
+			flash().put("alert", new Alert("alert-info","Please Login To Add Clinic.").toString());
+			return redirect(routes.Application.index());
+		}
+		else{
+			final Patient patient = LoginController.getLoggedInUser().getPatient();
+			final Clinic clinic = Clinic.find.byId(clinicId);
+			final int count = PatientClinicInfo.find.where()
+					.eq("patient", patient)
+					.eq("clinic", clinic)
+					.findRowCount();
+			if(count > 0){
+				flash().put("alert", new Alert("alert-info",clinic.name+" is already in your Clinic list.").toString());
+			}
+			else{
+				final PatientClinicInfo patientClinicInfo = new PatientClinicInfo();
+				patientClinicInfo.patient = patient;
+				patientClinicInfo.clinic = clinic;
+				patientClinicInfo.save();
+				flash().put("alert", new Alert("alert-success",clinic.name+" added to your Clinic list.").toString());
+			}
+		}
 
+		return redirect(routes.PublicController.searchClinics());
+	}
+	/**
+	 * @author lakshmi
+	 * Action to add Clinic to loggedInUser
+	 * GET /secure-user/get-favorite-clinics
+	 */
+	public static Result getFavoriteClinics() {
+		final Patient patient = LoginController.getLoggedInUser().getPatient();
+		final List<PatientClinicInfo> patientClinicInfos = PatientClinicInfo.find.where()
+				.eq("patient", patient)
+				.findList();
+		return ok(views.html.patient.patientFavoriteClinics.render(patientClinicInfos));
+	}
 
+	/**
+	 * @author lakshmi
+	 * Action to remove Clinic to loggedInUser
+	 * GET /secure-user/remove-favorite-clinic/:clinicId
+	 */
+	public static Result removeFavoriteClinic(final Long clinicId) {
+		final Patient patient = LoginController.getLoggedInUser().getPatient();
+		final Clinic clinic = Clinic.find.byId(clinicId);
+		final PatientClinicInfo patientClinicInfo = PatientClinicInfo.find.where()
+				.eq("patient", patient)
+				.eq("clinic", clinic)
+				.findUnique();
+		patientClinicInfo.delete();
+		flash().put("alert", new Alert("alert-danger",clinic.name+" Removed From your Clinic list.").toString());
+		return redirect(routes.PatientController.getFavoriteClinics());
+	}
 
 }

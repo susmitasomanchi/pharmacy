@@ -2,13 +2,15 @@ package models.bloodBank;
 
 import java.util.Date;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.ManyToOne;
 import javax.persistence.OneToOne;
 
-import play.db.ebean.Model.Finder;
+import models.AppUser;
 import models.BaseEntity;
 import models.BloodGroup;
 @SuppressWarnings("serial")
@@ -22,6 +24,9 @@ public class BloodDonation extends BaseEntity{
 	@OneToOne
 	public BloodBank bloodBank;
 
+	@ManyToOne(cascade=CascadeType.ALL)
+	public AppUser appUser;
+
 	public Date dateDonated;
 
 	public float quantityDonated;
@@ -34,11 +39,4 @@ public class BloodDonation extends BaseEntity{
 
 	public static Finder<Long, BloodDonation> find = new Finder<Long, BloodDonation>(Long.class, BloodDonation.class);
 
-	/*public static getLastDonatedDate(final AppUser appUser){
-
-	}
-
-	public static getTotalBloodDonated(final AppUser appUser){
-
-	}*/
 }

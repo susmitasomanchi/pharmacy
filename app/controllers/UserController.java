@@ -215,6 +215,7 @@ public class UserController extends Controller {
 			final Clinic clinic = new Clinic();
 			clinic.name = request().body().asFormUrlEncoded().get("clinicName")[0];
 			clinic.clinicAdminstrator = clinicUser;
+			clinic.slugUrl = Util.simpleSlugify(clinic.name)+clinicUser.id;
 			clinic.primaryCity = city;
 			clinic.save();
 			clinicUser.clinic = clinic;
@@ -228,6 +229,7 @@ public class UserController extends Controller {
 			final BloodBank bloodBank = new BloodBank();
 			bloodBank.name = request().body().asFormUrlEncoded().get("bloodBankName")[0];
 			bloodBank.bloodBankAdmin = bloodBankUser;
+			bloodBank.slugUrl = Util.simpleSlugify(bloodBank.name)+bloodBankUser.id;
 			bloodBank.primaryCity = city;
 			bloodBank.save();
 			bloodBankUser.bloodBank = bloodBank;
@@ -290,7 +292,8 @@ public class UserController extends Controller {
 	 * GET	   /edit-contact-details
 	 */
 	public static Result editAppUserProfile(){
-		return ok(views.html.editAppUserDetails.render(LoginController.getLoggedInUser()));
+		final AppUser appUser = LoginController.getLoggedInUser();
+		return ok(views.html.editAppUserDetails.render(appUser));
 	}
 
 
@@ -355,10 +358,12 @@ public class UserController extends Controller {
 		}else{
 			loggedInUser.isBloodDonor = false;
 		}
-		if(requestMap.containsKey("shareContactNo")){
+		if(requestMap.containsKey("shareContactNo") && loggedInUser.isBloodDonor == true){
 			loggedInUser.isMobileNumberShared = true;
 			//TODO: make it async
 			//SMSService.sendConfirmationSMS(loggedInUser);
+		}else{
+			loggedInUser.isMobileNumberShared = false;
 		}
 		if(requestMap.get("allergy")[0]!=null && requestMap.get("allergy")[0].trim()!=""){
 			loggedInUser.allergy = requestMap.get("allergy")[0].trim();

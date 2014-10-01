@@ -1,0 +1,41 @@
+@(appUsers : List[models.AppUser])
+@import play.i18n._
+@import helper.twitterBootstrap._
+@import helper._
+
+@main("Blood Bank Donors"){
+@if(appUsers.size() > 0){
+<div class="row" style="padding:15px">
+<table class="table table-bordered">
+<tr class="active">
+<th>S.No</th>
+<th>Name (Age/Sex)</th>
+<th>Address</th>
+<th>Contact No</th>
+<th>Last Blood Donated</th>
+<th>Blood Group</th>
+<th>Action</th>
+</tr>
+@for((appUser,index) <- appUsers.zipWithIndex){
+<tr class="info">
+<td>@{index+1}</td>
+<td>@appUser.name&nbsp;(@appUser.getSexAndAge)</td>
+<td>@if(appUser.address != null){@appUser.address.area&nbsp;,@appUser.address.city }else{----}</td>
+<td>@if(appUser.isMobileNumberShared == true){@appUser.mobileNumber}</td>
+<td>@appUser.lastBloodDonatedDate</td>
+<td>@appUser.bloodGroup.capitalize()</td>
+<td> <a href="@routes.BloodBankController.removeBloodBankBloodDonor(appUser.id)" class="btn btn-danger btn-sm">Remove</a></td>
+</tr>
+}
+</table>
+</div>
+}else{
+<h5>No Blood Donors Yet For </h5> @LoginController.getLoggedInUser().getBloodBankUser().bloodBank.name</h5>
+}
+<script>
+function hideAndShow(){
+$("#panel").toggle();
+}
+</script>
+
+}

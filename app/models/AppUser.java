@@ -69,7 +69,7 @@ public class AppUser extends BaseEntity {
 
 	public Boolean isBloodDonor = false;
 
-	public Boolean isMobileNumberShared;
+	public Boolean isMobileNumberShared ;
 
 	public Date lastBloodDonatedDate;
 
@@ -78,7 +78,7 @@ public class AppUser extends BaseEntity {
 	public Role role;
 
 	@OneToOne
-	Address address;
+	public Address address;
 
 	public boolean emailConfirmed = false;
 
@@ -121,10 +121,10 @@ public class AppUser extends BaseEntity {
 		return DiagnosticRepresentative.find.where().eq("appUser.id", this.id).findUnique();
 	}
 
-	public ClinicUser getClinicAdminstrator() {
+	public ClinicUser getClinicUser() {
 		return ClinicUser.find.where().eq("appUser.id", this.id).findUnique();
 	}
-	public BloodBankUser getBloodBankAdmin() {
+	public BloodBankUser getBloodBankUser() {
 		return BloodBankUser.find.where().eq("appUser.id", this.id).findUnique();
 	}
 
@@ -153,6 +153,10 @@ public class AppUser extends BaseEntity {
 			return Years.yearsBetween(birthdate, now).getYears();
 		}
 		return 0;
+	}
+
+	public String getSexAndAge(){
+		return this.sex.toString().substring(0,1)+"/"+this.getAge();
 	}
 
 }

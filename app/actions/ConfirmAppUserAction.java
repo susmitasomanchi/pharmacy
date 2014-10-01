@@ -25,7 +25,7 @@ public class ConfirmAppUserAction extends Action<Result>{
 			return F.Promise.pure((SimpleResult) Application.index());
 		}
 		final AppUser loggedInAppUser = LoginController.getLoggedInUser();
-		if (!loggedInAppUser.emailConfirmed || !loggedInAppUser.mobileNumberConfirmed) {
+		if (!(loggedInAppUser.emailConfirmed) || !(loggedInAppUser.mobileNumberConfirmed)) {
 			return F.Promise.pure((SimpleResult) UserController.confirmAppUserPage());
 		}
 		return this.delegate.call(ctx);

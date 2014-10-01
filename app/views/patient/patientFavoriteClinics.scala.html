@@ -1,0 +1,37 @@
+@(patientClinicInfos : List[models.patient.PatientClinicInfo])
+@import play.i18n._
+@import helper.twitterBootstrap._
+@import helper._
+
+@main("My Clinics"){
+
+<div class="row" style="padding:15px;">
+@if(patientClinicInfos.size > 0){
+<table class="table table-hover">
+	<tr class="active">
+		<th> S.No</th>
+		<th>Clinic Name</th>
+		<th>Address</th>
+		<th>Action</th>
+	</tr>
+	@for((patientClinicInfo,index) <- patientClinicInfos.zipWithIndex){
+	<tr class="info">
+	<td><h5>@{index+1}<h5></td>
+	<td><h5>@patientClinicInfo.clinic.name</h5></td>
+	<td>@if(patientClinicInfo.clinic.address != null){
+	<h5>@patientClinicInfo.clinic.address.addressLine1</h5>
+	<h5>@patientClinicInfo.clinic.address.area</h5>
+	<h5>@patientClinicInfo.clinic.address.city</h5>}else{
+	<h5>Address not available.</h5>
+	}
+	</td>
+	<td><a href="@routes.PatientController.addClinicToLoggedInUser(patientClinicInfo.clinic.id)" class="btn btn-success btn-sm">Book Appointment</a>
+	<a href="@routes.PatientController.removeFavoriteClinic(patientClinicInfo.clinic.id)" class="btn btn-danger btn-sm">Remove</a></td>
+</tr>
+}
+</table>
+}else{
+<h5>No Favorite Clinics Yet.</h5>
+}
+</div>
+}

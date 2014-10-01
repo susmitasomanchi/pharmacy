@@ -5,7 +5,7 @@
 @import helper._
 
 @main("Blood Donors"){
-<form action="@routes.BloodBankController.listBloodDonorsInCity()" method="POST">
+<form id="donarsForm"  method="POST">
 <div class="row">
 <div class="col-md-12">
 <div class="col-md-3">
@@ -29,11 +29,11 @@
 <div class="col-md-2">
 <lable for="age">Age</lable>&nbsp;
 <select name="age">
-<option value="any">Any</option>
-<option value=" 18-30"> 18-30</option>
-<option value="31-40">31-40</option>
-<option value="41-50">41-50</option>
-<option value="50-70">50-70</option>
+<option value="0">Any</option>
+<option value="1">18-30</option>
+<option value="2">30-40</option>
+<option value="3">40-50</option>
+<option value="4">&gt; 50</option>
 </select>
 </div>
 <div class="col-md-2">
@@ -46,18 +46,18 @@
 </select>
 </div>
 <div class="col-md-2">
-<input type="hidden" name="bloodBankUserId" value="@LoginController.getLoggedInUser().getBloodBankAdmin().id"/>
-</div>
-<div class="col-md-2">
-<input type="submit" value="find">
+@*<input type="submit" id="click" value="find">*@
+<a  id ="find" name="find" onclick="getData();" class="btn btn-primary btn-xs">find</a>
+
 </div>
 </div>
 </div>
 </form>
 <br><br>
-@if(patients != null){
+
+<div class="row" style="padding:15px;" id="table">
+
 @if(patients.size() != 0){
-<div class="row" style="padding:15px;">
 <table class="table table-bordered">
 <tr>
 <th class="col-md-2">S.no</th>
@@ -80,8 +80,16 @@
 </tr>
 }
 </table>
-</div>
 }else{<h5> No Blood Donor Found</h5>}
+</div>
+ <script>
+function getData(){
+$("#table").html('Fetching Data. Please Wait...');
+ 	$.post( "/secure-blood-bank/list-blood-donors",$("#donarsForm").serialize(),function( data ) {
+ 	  			$("#table").html(data);	
+	});
+		
 }
+</script>
 }
 

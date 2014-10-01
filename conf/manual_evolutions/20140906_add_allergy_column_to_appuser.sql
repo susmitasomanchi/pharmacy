@@ -1,4 +1,4 @@
-﻿--- Author: Lakhsmi
+﻿--- Author: Lakshmi
 --- Add allergy and is_blood_donor column to appuser
 
 alter table app_user add column allergy text;

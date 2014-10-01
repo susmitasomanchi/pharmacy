@@ -1,12 +1,530 @@
-@()
-
-@import play.i18n._
-@import helper.twitterBootstrap._
-@import helper._
-
-@main("Clinic"){
+@(clinic: models.doctor.Clinic)
 
 
-<h1>Clinic DashBoard</h1>
+@main(clinic.name) {
+
+<script src="https://maps.googleapis.com/maps/api/js?sensor=false"></script>
+
+<script>
+	var i = 0;
+	function addfiles() {
+		i++;
+		$("#files")
+				.append(
+						'<div class="row" id="file'+i+'"><br><div class="col-md-5"><input type="file" name="file'+i+'" id="inputfile'+i+'" onchange="checkfile('+i+');"/></div><div class="col-md-7"><a class="btn btn-xs btn-danger" onclick="removebut(\'file'
+								+i+'\');">x</a></div></div>');
+		$("#inputfile"+i).trigger('click');
+	}
+
+	function checkfile(id){
+		$('#insertfn-'+id).html($("#inputfile"+id).val().trim());
+	}
+
+	function removebut(id) {
+		$('#'+id).remove();
+	}
+
+</script>
+
+<style>
+.container{
+	padding-left: 30px;
+	padding-right: 30px;
+	width:1032px;
+}
+.chosen-container .chosen-container-single{
+width:250px;
+.alert-success{
+background-image: linear-gradient(to bottom,#dff0d8 0,#c8e5bc 100%);
+background-repeat: repeat-x;
+border-color: #b2dba1;
+color:black;
 }
 
+}
+
+
+.slugUrlC .popover{
+  max-width: none;
+  width:450px;
+}
+
+.dottedU{    
+    border-bottom: 1px dotted #fff;
+    text-decoration: none;
+}
+
+</style>
+
+<script>
+$('[data-toggle="popover"]').popover();
+$('body').on('click', function (e) {
+    $('[data-toggle="popover"]').each(function () {
+        if (!$(this).is(e.target) && $(this).has(e.target).length === 0 && $('.popover').has(e.target).length === 0) {
+            $(this).popover('hide');
+        }
+    });
+});
+    
+function submitimagesform(){
+	$("[data-toggle=popover]").popover('hide');
+	$('#spinner').addClass("fa-spin");
+}
+
+function submitbasicform(id){
+	if(id.localeCompare('spinner-slugUrl') != 0){
+		$("[data-toggle=popover]").popover('hide');
+		$('#'+id).addClass("fa-spin");
+	}
+}
+
+function validateSlugUrl(){
+	var s = $('#slugUrl').val().trim();
+	if(!s.match("^[a-z0-9\-]+$")){
+		alert('Invalid characters have been provided.');
+		return false;
+	}
+	else{	
+		$("[data-toggle=popover]").popover('hide');
+		$('#spinner-slugUrl').addClass("fa-spin");
+		return true;
+	}
+}
+</script>
+
+
+
+
+@if(clinic.backgroudImage != null){
+	<div style="background-image:url('@routes.PublicController.getClinicImages(clinic.id,0)');background-size:940px 400px; background-repeat:no-repeat; height:400px;"></div>
+}else{
+	<div style="background-image:url('/assets/images/diagnosticBackgroundImage.jpg');background-size:940px 400px; background-repeat:no-repeat; height:400px;"></div>
+}
+
+<span data-toggle="popover" data-placement="left" title="Change Background Image" data-html="true" data-content="<form action=&quot;@routes.ClinicController.uploadClinicImageProcess()&quot; enctype=&quot;multipart/form-data&quot; method=&quot;POST&quot;><input type=&quot;file&quot; name=&quot;backgroundImage&quot;> <input type=&quot;hidden&quot; name=&quot;clinicId&quot; value=&quot;@clinic.id&quot;> <br><input class=&quot;pull-right btn btn-xs btn-primary&quot; type=&quot;submit&quot; onclick=&quot;submitimagesform();&quot; value=&quot;save&quot;></form>" style="cursor:pointer; position:relative; top:-400px;left:910px; font-size:25px">
+<i style="text-shadow:1px 1px 20px white, 3px 3px 20px white;" id="spinner" class="fa fa-cog"></i>
+</span>
+<div class="row" style="margin-top:-235px">
+<div class="col-md-1"></div>
+<div class="col-md-10" >
+<span data-toggle="modal" data-target="#myModal" style="cursor:pointer; position:relative; top:25px;left:790px; font-size:25px;">
+  	<i style="text-shadow:1px 1px 20px white, 3px 3px 20px white;" id="spinner2" class="fa fa-cog"></i>
+</span>
+	<div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+  <div class="modal-dialog" style="padding-left:100px">
+    <div class="modal-content" style="width:400px">
+      <div class="modal-header" style="color: #ffffff;background-color: #008cba;border-color: #008cba;">
+        <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button></form></form>
+        <h4 class="modal-title" id="myModalLabel">Profile Images</h4>
+      </div>
+      <div class="modal-body well">
+      <table class="table table-striped">     
+      @for(profileImages <- clinic.profileImageList){
+      <tr>
+      <td style="width:200px"> <img src="@routes.PublicController.getClinicImages(clinic.id,profileImages.id)" width="150" height="75" /> </td>
+      <td> <button class="btn btn-danger btn-xs"><a href="@routes.ClinicController.removeClinicImage(clinic.id,profileImages.id)" style="color:white">Delete</a></button> </td>
+      </tr>
+      }      
+     </table>
+      @helper.form(action = routes.ClinicController.uploadClinicImageProcess(), 'enctype -> "multipart/form-data",'method -> "post") {
+      	<div class="form-group">
+    	<label for="exampleInputFile" class="badge"><b>Add Image</b></label>
+    	<input type="hidden" name="clinicId" value="@clinic.id">
+    	<input type="file" name="profileImage" />
+    	<input class="pull-right btn btn-primary btn-xs" type="submit" name="submit" value="Save Image" />
+  		</div> 
+      }
+      
+      </div>
+    </div>
+  </div>
+</div>
+
+
+
+<p class="slugUrlC" style="font-size:20px; position:absolute; margin-top:-230px; margin-left:-40px;">
+<span style="text-shadow:1px 1px 20px white, 3px 3px 20px white;">
+Your profile is live at 
+<a href="@routes.PublicController.getClinicWithSlug(clinic.slugUrl)" style="color:black;">mednetwork.in/clinic/@clinic.slugUrl</a>
+</span>
+<span id="slugpopover" data-toggle="popover" title="Edit Your URL" data-html="true" data-placement="bottom" data-content=
+
+"
+<form onsubmit=&quot;return validateSlugUrl();&quot; action=&quot;@routes.ClinicController.clinicBasicUpdate()&quot; method=&quot;POST&quot;>
+<div style=&quot;text-shadow:none;&quot;><span style=&quot;font-size:16px;&quot;>mednetwork.in/clinic/</span>
+<input type=&quot;hidden&quot; name=&quot;clinicId&quot; value=&quot;@clinic.id&quot;>
+<input id=&quot;slugUrl&quot; name=&quot;slugUrl&quot; style=&quot;color:#292929; font-weight:bold; height: 22px; position:relative; top:0px; padding-left:0px; font-size:16px; width:200px;&quot; type=&quot;text&quot; value=&quot;@clinic.slugUrl&quot;>
+<br><br>
+<ul style=&quot;padding-left:20px; margin:0px;&quot;>
+<li>Lower case alphabets (a-z) can be used.</li>
+  <li>Numerals (0-9) can be used.</li>
+  <li>Hyphens (-) can be used.</li>
+  <li>Spaces, upper case alphabets &amp; other characters 
+  <span class=&quot;dottedU&quot;>cannot</span>
+   be used.</li>
+</ul>
+<br>
+<input type=&quot;submit&quot; class=&quot;pull-right btn btn-xs btn-primary&quot; onclick=&quot;submitbasicform('spinner-slugUrl');&quot value=&quot;save&quot;>
+</div>
+</form>
+"
+style="cursor:pointer; position:relative; font-size:16px; top:-10px; text-shadow:1px 1px 20px white, 3px 3px 20px white;"><i id="spinner-slugUrl" class="fa fa-cog"></i></span>
+
+</p>
+
+
+<script>
+	
+$('#slugpopover').on('shown.bs.popover', function () {
+	$('#slugUrl').keypress(function(e) {
+	    e = e || event;
+    	var s = String.fromCharCode(e.charCode);
+    	if(
+    		(s.match(/[a-z]/))
+    		||
+    		(s.match(/[0-9]/))
+    		||
+    		(s.match(/[-]/))
+    		){
+    			return true;
+    		}
+			return false;
+	});
+});
+
+</script>
+
+
+
+<div id="carousel-example-generic" class="carousel slide" data-ride="carousel">
+  <!-- Indicators -->
+  
+  
+  
+  @if(clinic.profileImageList.size()>0){
+  <ol class="carousel-indicators">
+  @for((profileImages,index) <- clinic.profileImageList.zipWithIndex){
+    <li data-target="#carousel-example-generic" data-slide-to="0" class="@if(index == 0){active}"></li>
+    }
+  </ol>
+    
+  <!-- Wrapper for slides -->
+  <div class="carousel-inner">
+  @for((profileImages,index) <- clinic.profileImageList.zipWithIndex){
+    <div class="item @if(index == 0){active}">
+      <img src="@routes.PublicController.getClinicImages(clinic.id,profileImages.id)" alt="clinic1" style="height:300px; width:800px;"/>
+    </div>
+	}
+  </div>
+  }else{
+  
+  <ol class="carousel-indicators">
+    <li data-target="#carousel-example-generic" data-slide-to="0" class="active"></li>
+   </ol>
+
+  <!-- Wrapper for slides -->
+  <div class="carousel-inner">
+    <div class="item active">
+      <img src="/assets/images/4499839083_aeda0dc687_z.jpg" alt="bloodBank Pic" style="height:300px; width:800px;"/>
+    </div>
+  </div>
+  
+  }
+  
+  
+  
+  
+  <!-- Controls -->
+  <a class="left carousel-control" href="#carousel-example-generic" role="button" data-slide="prev" style="width:0px">
+    <span class="glyphicon glyphicon-chevron-left" style="margin-left:-40px;color:#006687"></span>
+  </a>
+  <a class="right carousel-control" href="#carousel-example-generic" role="button" data-slide="next" style="width:0px">
+    <span class="glyphicon glyphicon-chevron-right" style="left:20px;color:#006687"></span>
+  </a>
+</div>
+
+
+</div>
+<div class="col-md-1"></div>
+</div>
+
+<h1 style="text-shadow:10px 10px 10px white, 3px 3px 20px white; position:relative; top:-400px; text-align:center;font-weight:bold;color:#006687">
+@clinic.name
+<span 
+
+data-toggle="popover" title="Edit Clinic Name" data-html="true" data-content="
+<form style=&quot;color:#000000; font-weight:bold;&quot; action=&quot;@routes.ClinicController.clinicBasicUpdate()&quot; method=&quot;POST&quot;>
+<input type=&quot;text&quot; name=&quot;name&quot; value=&quot;@clinic.name&quot;>
+<input type=&quot;hidden&quot; name=&quot;clinicId&quot; value=&quot;@clinic.id&quot;>
+<br>
+<input class=&quot;pull-right btn btn-xs btn-primary&quot; type=&quot;submit&quot; onclick=&quot;submitbasicform('spinner-name');&quot; value=&quot;save&quot;>
+</form>"
+
+style="color:#006687; font-size:20px; position:relative; top:-20px; cursor:pointer;"><i id="spinner-name" class="fa fa-cog"></i></span>
+
+</h1>
+<div class="alert alert-success">
+<span data-toggle="popover" title="Brief Description" data-placement="left" data-html="true" data-content="
+<form action=&quot;@routes.ClinicController.clinicBasicUpdate()&quot;method=&quot;POST&quot;>
+<textarea name=&quot;description&quot; rows=&quot;10&quot; style=&quot;color:#292929; font-weight:bold;&quot; >@clinic.description</textarea>
+<input type=&quot;hidden&quot; name=&quot;clinicId&quot; value=&quot;@clinic.id&quot;>
+<br><input class=&quot;pull-right btn btn-xs btn-primary&quot; type=&quot;submit&quot; onclick=&quot;submitbasicform('spinner-description');&quot; value=&quot;save&quot;></form> " style="cursor:pointer; position:relative; font-size:15px; top:-13px; left:900px;"><i id="spinner-description" class="fa fa-cog"></i></span>
+<p style="font-size:1.5em; align:justify; margin-top:-20px;">
+	@clinic.description	 
+</p>
+</div>
+
+<br>
+<div class="row">
+<div class="col-md-10">
+<div class="col-md-5">
+@if(clinic.address != null){
+<h5>@clinic.contactPersonName<span data-toggle="modal" data-target="#myaddrModal" style="cursor:pointer; position:relative; left: 20px; font-size:20px;"><i id="spinner2" class="fa fa-cog"></i></span></h5>
+<h5>@clinic.address.addressLine1</h5>
+<h5>@clinic.address.area</h5>
+<h5>@clinic.address.city</h5>
+@if(clinic.address.state != null){
+<h5>@clinic.address.state.capitalize()</h5>	
+}
+<h5>@clinic.address.pinCode</h5>
+<h5><i class="fa fa-phone-square"></i>@clinic.contactNo </h5>
+}else{
+<h4>
+Edit Contact Details
+<span data-toggle="modal" data-target="#myaddrModal" style="cursor:pointer; position:relative; left:10px; font-size:20px;"><i id="spinner2" class="fa fa-cog"></i></span>
+</h4>
+}
+</div>
+
+<div class="col-md-7">
+	<div id="profile_map_canvas" style="width:600px;height:400px">
+	@if(clinic.address == null || clinic.address.latitude== null || clinic.address.longitude == null || clinic.address.latitude.trim().compareToIgnoreCase("") == 0 || clinic.address.longitude.trim().compareToIgnoreCase("") == 0){
+		<img src="/assets/images/googlemap1.png" width="600" height="400" style="position:relative" />
+		<div class="maptext" style="text-align:center">
+		<p style="position:relative; top:-200px; color:#008cba;"><b>Kindly Edit Contact Details & Mark Your BloodBank</span></b></p>
+	}else{
+	
+	}
+	</div>
+</div>
+
+
+</div>
+
+</div>
+
+<br><br><br>
+
+</div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<script>
+
+var lng, lat, marker;
+var dbclk = false;
+var map, myLatLng;
+function initialize(mapdiv) {
+	var mapOptions = {
+		center : new google.maps.LatLng(lat, lng),
+		zoom : 15
+	};
+	map = new google.maps.Map(document
+			.getElementById(mapdiv), mapOptions);
+
+	//  map.set("disableDoubleClickZoom", false);
+
+
+	if(mapdiv == 'map_canvas'){
+		marker = new google.maps.Marker({
+			position : myLatLng,
+			draggable : true,
+			animation : google.maps.Animation.DROP,
+			map : map
+		});
+
+		$("#lat1").val(lat);
+		$("#lng1").val(lng);
+
+		//On click event of map marker should get relocated
+		google.maps.event.addListener(map, 'click', function(
+				event) {
+			marker.setPosition(event.latLng);
+			$("#lat1").val(event.latLng.lat());
+			$("#lng1").val(event.latLng.lng());
+		});
+		// After dragging the marker
+		google.maps.event.addListener(marker, 'dragend',
+				function(event) {
+					$("#lat1").val(event.latLng.lat());
+					$("#lng1").val(event.latLng.lng());
+		});
+	}
+
+	if(mapdiv == 'profile_map_canvas'){
+		marker = new google.maps.Marker({
+			position : myLatLng,
+			draggable : false,
+			animation : google.maps.Animation.DROP,
+			map : map
+		});
+	}
+
+
+}
+
+
+$( document ).ready(function() {
+$("#city").blur(function() {
+	$("#map_canvas").html('');
+	var geocoder = new google.maps.Geocoder();
+	//var streetname=$("#streetName").val();
+	var area=$("#area").val();
+	geocoder.geocode({
+		'address' : area+this.value
+	}, function(results, status) {
+		if (status == google.maps.GeocoderStatus.OK) {
+			//alert("location : " + results[0].geometry.location.lat() + " " +results[0].geometry.location.lng()); 
+			myLatLng = results[0].geometry.location;
+			lat = results[0].geometry.location.lat();
+			lng = results[0].geometry.location.lng();
+			initialize('map_canvas');
+		} else {
+			alert("Something got wrong " + status);
+		}
+	});
+	// google.maps.event.addDomListener(window, 'load', initialize);
+});
+});
+
+</script>
+
+
+
+
+@if(clinic.address != null && clinic.address.latitude!= null && clinic.address.longitude != null && clinic.address.latitude.trim().compareToIgnoreCase("") != 0 && clinic.address.longitude.trim().compareToIgnoreCase("") != 0){
+<script>
+		window.onload=function(){
+			lat = @clinic.address.latitude
+			lng = @clinic.address.longitude
+			myLatLng= new google.maps.LatLng(lat, lng),
+			google.maps.event.addDomListener(window, 'load', initialize('profile_map_canvas'));
+			$('#myaddrModal').on('shown.bs.modal', function (e) {
+				initialize('map_canvas');
+			});
+		};
+		
+</script>
+}
+
+
+
+
+<div class="modal fade" id="myaddrModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+  <div class="modal-dialog" style="width:820px">
+    <div class="modal-content" >
+      <div class="modal-header" style="color: #ffffff;background-color: #008cba;border-color: #008cba;">
+        <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+        <h4 class="modal-title" id="myModalLabel">Change Address Details</h4>
+      </div>
+      <div class="modal-body well">
+     	<div class="row">
+			<div class="col-md-4">
+			<form action=@routes.ClinicController.clinicAddressUpdate() role="form" method="POST">
+			<div ><input type="hidden" name="latitude" id="lat1"></div>
+			<div ><input type="hidden" name="longitude" id="lng1"></div>
+  			<div class="form-group">
+   				 <label for="addressLine1">Contact Person</label>
+   				 <input type="text" class="form-control" name="contactPerson" @if(clinic.contactPersonName!=null){value="@clinic.contactPersonName"} id="contactPerson" placeholder="Contact Person's Name">
+ 			</div>
+  			<div class="form-group">
+    			<label for="streetName">Street Address</label>
+    			<input type="text" class="form-control" name="addressLine1" @if(clinic.address!=null){value="@clinic.address.addressLine1"} id="streetName" placeholder="Enter Street Address">
+  			</div>
+  			<div class="form-group">
+    			<label for="city">Area</label>
+    			<input type="text" class="form-control" name="area" @if(clinic.address!=null){value="@clinic.address.area"} id="area" placeholder="Enter Area">
+  			</div>
+  			<div class="form-group">
+    			<label for="city">City</label>
+    			<input type="text" class="form-control" name="city" @if(clinic.address!=null){value="@clinic.address.city"} id="city" placeholder="Enter City">
+  			</div>
+  			<div class="form-group">
+    			<label for="pincode">Pincode</label>
+    			<input type="text" class="form-control" name="pincode" @if(clinic.address!=null){value="@clinic.address.pinCode"} id="pincode" placeholder="Enter Pincode">
+  			</div>
+  			<div class="form-group">
+    			<label for="state">State</label><br>
+				<select id="statesel" style="width:100%;" data-placeholder="Select State" name="state">
+    				<option value=""></option>	
+     				@for((k,v) <- models.State.options()){
+     					@if(clinic.address!=null && clinic.address.state != null && clinic.address.state.equals(clinic.address.state)){
+							<option  name="state" value="@k" selected>@v</option>
+						}else{
+        					<option  name="state" value="@k">@v</option>
+        				}
+					}
+    			</select>
+  			</div>
+  			
+  			<div class="form-group">
+    			<label for="phone">Phone Number</label>
+    			<input type="text" name="contactNo" value="@clinic.contactNo" id="phone" class="form-control" placeholder="Enter phone number">
+  			</div>
+  			
+  			<br>
+  			<input type="hidden" name="clinicId" value='@clinic.id' >
+			<button type="submit" class="btn btn-primary btn-sm">Submit</button>
+		</form>
+	</div>	
+<div class="col-md-8">
+
+<div id="map_canvas" style="width:520px;height:400px">
+	@if(clinic.address == null || clinic.address.latitude== null || clinic.address.longitude == null || clinic.address.latitude.trim().compareToIgnoreCase("") == 0 || clinic.address.longitude.trim().compareToIgnoreCase("") == 0){
+		<img src="/assets/images/googlemap1.png" width="520" height="400" style="position:relative" />
+		<div class="maptext" style="text-align:center">
+		<p style="position:relative; top:-200px; color:#008cba;"><b>Please provide Area and City to generate the map</span></b></p>
+	}
+</div>
+
+</div>
+</div>
+</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+<script>
+	$('#myaddrModal').on('shown.bs.modal', function (e) {
+		$('#statesel').chosen();
+	});
+</script>
+
+
+
+	
+<div class="col-md-8">
+<div id="map_canvas" style="width:500px;height:300px"> </div>
+</div>
+</div>
+
+<br><br>
+}
