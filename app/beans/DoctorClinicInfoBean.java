@@ -7,6 +7,7 @@ import java.util.List;
 import models.Address;
 import models.Role;
 import models.State;
+import models.clinic.ClinicUser;
 import models.doctor.Clinic;
 import models.doctor.Day;
 import models.doctor.DaySchedule;
@@ -22,6 +23,8 @@ public class DoctorClinicInfoBean implements Serializable {
 	public Long doctorId;
 
 	public Long clinicId;
+
+	public Long clinicUserId;
 
 	public String name;
 
@@ -63,11 +66,41 @@ public class DoctorClinicInfoBean implements Serializable {
 
 	public Integer slotMR;
 
+	public ClinicUser clinicAdminstrator;
+
 	public DoctorClinicInfo toDoctorClinicInfo() {
-		final DoctorClinicInfo doctorClinicInfo = new DoctorClinicInfo();
+
+		DoctorClinicInfo doctorClinicInfo;
 		if (this.id != null) {
-			doctorClinicInfo.id = this.id;
+			Logger.info(this.id+"idssssssssss");
+			doctorClinicInfo = DoctorClinicInfo.find.byId(this.id);
 		}
+		else{
+			doctorClinicInfo = new DoctorClinicInfo();
+		}
+
+		Clinic clinic;
+		if(this.clinicId != null){
+			Logger.info("clinic idsssssssss"+this.clinicId);
+			clinic = Clinic.find.byId(this.clinicId);
+		}
+		else{
+			clinic = new Clinic();
+		}
+		if(this.name != null){
+			clinic.name = this.name;
+		}
+		if(this.contactNo != null){
+			clinic.contactNo = this.contactNo;
+		}
+		if(this.contactPersonName != null){
+			clinic.contactPersonName = this.contactPersonName;
+		}
+		if(this.clinicUserId != null){
+			clinic.clinicAdminstrator = ClinicUser.find.byId(this.clinicUserId);
+			Logger.info(clinic.clinicAdminstrator.appUser.name);
+		}
+
 		if(this.doctorId != null){
 			doctorClinicInfo.doctor = Doctor.find.byId(this.doctorId);
 		}
@@ -75,13 +108,8 @@ public class DoctorClinicInfoBean implements Serializable {
 		//Logger.info("" + this.id);
 		//Logger.info("name null");
 
-		final Clinic clinic = new Clinic();
-		clinic.name = this.name;
-		clinic.contactNo = this.contactNo;
-		clinic.contactPersonName = this.contactPersonName;
-		if(this.clinicId != null){
-			clinic.id = this.clinicId;
-		}
+
+
 		doctorClinicInfo.clinic = clinic;
 
 		//Logger.info(doctorClinicInfo.clinic.name);

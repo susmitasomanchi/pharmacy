@@ -109,10 +109,13 @@ public class Clinic extends BaseEntity{
 		super.save();
 	}
 
-	@Override
+	/*@Override
 	public void update() {
 		final StringBuilder stringBuilder = new StringBuilder();
-		stringBuilder.append(this.name.trim().toLowerCase());
+		if(this.name != null){
+			stringBuilder.append(this.name.trim().toLowerCase());
+		}
+
 		if(this.address != null){
 			if(this.address.addressLine1 != null){
 				stringBuilder.append(this.address.addressLine1.trim().toLowerCase());
@@ -133,12 +136,15 @@ public class Clinic extends BaseEntity{
 		if(this.contactNo!= null){
 			stringBuilder.append(this.contactNo.trim().toLowerCase());
 		}
-		stringBuilder.append(this.slugUrl.toLowerCase());
-		this.searchIndex = stringBuilder.toString();
-		super.update();
-		Logger.info(this.slugUrl);
+		if(this.slugUrl != null){
+			stringBuilder.append(this.slugUrl.toLowerCase());
+			this.searchIndex = stringBuilder.toString();
+			super.update();
+			Logger.info(this.slugUrl);
+		}
 
-	}
+
+	}*/
 
 
 }

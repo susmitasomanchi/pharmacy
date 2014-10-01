@@ -148,6 +148,8 @@ GET		/secure-doctor/products/get-json							controllers.DoctorController.getAllP
 GET		/secure-doctor/diagnostic-tests/get-json					controllers.DoctorController.getAllDiagnosticJson()
 GET		/secure-doctor/follow-up-appointment/:clinicId/:patientId					controllers.DoctorController.getPatientFollowUPAppointment(clinicId : Long,patientId: Long)
 POST		/secure-doctor/follow-up-appointment/:prescriptionId/:patientId					controllers.DoctorController.processPatientFollowUPAppointment(prescriptionId : Long,patientId: Long)
+GET		/secure-doctor/get-doctors-list/:clinicId											controllers.DoctorController.getDoctorClinicInfoList(clinicId : Long)
+
 
 
 #slug url (must be the last route in /doctor/)
