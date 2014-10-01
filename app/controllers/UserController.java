@@ -15,6 +15,8 @@ import models.BloodGroup;
 import models.PrimaryCity;
 import models.Role;
 import models.Sex;
+import models.bloodBank.BloodBank;
+import models.bloodBank.BloodBankUser;
 import models.clinic.ClinicUser;
 import models.diagnostic.DiagnosticCentre;
 import models.diagnostic.DiagnosticRepresentative;
@@ -84,6 +86,9 @@ public class UserController extends Controller {
 	public static Result joinUsClinic(){
 		return ok(views.html.clinic.joinus.render());
 	}
+	public static Result joinUsBloodBank(){
+		return ok(views.html.bloodBank.joinus.render());
+	}
 
 
 
@@ -113,6 +118,9 @@ public class UserController extends Controller {
 			}
 			if(appUser.role == Role.CLINIC_ADMIN){
 				return redirect(routes.UserController.joinUsClinic());
+			}
+			if(appUser.role == Role.BLOOD_BANK_ADMIN){
+				return redirect(routes.UserController.joinUsBloodBank());
 			}
 		}
 
@@ -207,10 +215,25 @@ public class UserController extends Controller {
 			final Clinic clinic = new Clinic();
 			clinic.name = request().body().asFormUrlEncoded().get("clinicName")[0];
 			clinic.clinicAdminstrator = clinicUser;
+			clinic.slugUrl = Util.simpleSlugify(clinic.name)+clinicUser.id;
 			clinic.primaryCity = city;
 			clinic.save();
 			clinicUser.clinic = clinic;
 			clinicUser.update();
+		}
+		if(appUser.role.equals(Role.BLOOD_BANK_ADMIN)){
+			final BloodBankUser bloodBankUser = new BloodBankUser();
+			bloodBankUser.appUser = appUser;
+			bloodBankUser.save();
+
+			final BloodBank bloodBank = new BloodBank();
+			bloodBank.name = request().body().asFormUrlEncoded().get("bloodBankName")[0];
+			bloodBank.bloodBankAdmin = bloodBankUser;
+			bloodBank.slugUrl = Util.simpleSlugify(bloodBank.name)+bloodBankUser.id;
+			bloodBank.primaryCity = city;
+			bloodBank.save();
+			bloodBankUser.bloodBank = bloodBank;
+			bloodBankUser.update();
 		}
 
 		if(appUser.role.equals(Role.PATIENT)){
@@ -260,6 +283,7 @@ public class UserController extends Controller {
 		}
 		return ok(views.html.confirmAppUser.render(appUser));
 	}
+
 
 
 
@@ -320,16 +344,25 @@ public class UserController extends Controller {
 		}
 
 		if(requestMap.get("bloodgroup")[0]!=null && requestMap.get("bloodgroup")[0].trim()!=""){
-			final String newGroup = requestMap.get("bloodgroup")[0].trim();
-			loggedInUser.bloodGroup = BloodGroup.valueOf(newGroup);
+			loggedInUser.bloodGroup = BloodGroup.valueOf(requestMap.get("bloodgroup")[0].trim());
 		}
 
 		if(requestMap.containsKey("isBloodDonar")){
 			loggedInUser.isBloodDonor = true;
-		}
-		else{
+			//TODO: make it async
+			//SMSService.sendConfirmationSMS(loggedInUser);
+		}else{
 			loggedInUser.isBloodDonor = false;
 		}
+		if(requestMap.containsKey("shareContactNo") && loggedInUser.isBloodDonor == true){
+			loggedInUser.isMobileNumberShared = true;
+			//TODO: make it async
+			//SMSService.sendConfirmationSMS(loggedInUser);
+		}else{
+			loggedInUser.isMobileNumberShared = false;
+		}
+
+
 		if(requestMap.get("allergy")[0]!=null && requestMap.get("allergy")[0].trim()!=""){
 			loggedInUser.allergy = requestMap.get("allergy")[0].trim();
 		}

@@ -2,10 +2,12 @@ package models.bloodBank;
 
 import java.util.Date;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.ManyToOne;
 import javax.persistence.OneToOne;
 
 import models.AppUser;
@@ -21,6 +23,9 @@ public class BloodDonation extends BaseEntity{
 
 	@OneToOne
 	public BloodBank bloodBank;
+
+	@ManyToOne(cascade=CascadeType.ALL)
+	public AppUser appUser;
 
 	public Date dateDonated;
 

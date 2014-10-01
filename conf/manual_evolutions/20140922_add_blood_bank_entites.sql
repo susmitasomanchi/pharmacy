@@ -6,8 +6,8 @@
 create table blood_bank (
   id                        bigint not null,
   name			               varchar(255),
-  contactPersonName				varchar(255),
-  contactNo						varchar(255),
+  contact_person_name				varchar(255),
+  contact_no						varchar(255),
   address_id					bigint,					
   primary_city_id				bigint,
   blood_bank_admin_id			bigint,	
@@ -50,7 +50,7 @@ create index ix_blood_bank_admin_1 on blood_bank (blood_bank_admin_id);
 
 ----BloodBankDonation
 
-create table blood_bank_donation (
+create table blood_donation (
   id                        bigint not null,
   blood_bank_id					bigint,
   date_donated               	timestamp,
@@ -61,13 +61,14 @@ create table blood_bank_donation (
   created_on                timestamp not null,
   last_update               timestamp not null,
   constraint ck_blood_bank_blood_group check (blood_group in ('OPLUS','OMINUS','APLUS','AMINUS','BPLUS','BMINUS','ABPLUS','ABMINUS')),
-  constraint pk_blood_bank_donation primary key (id)
+  constraint pk_blood_donation primary key (id)
 );
 
-create sequence blood_bank_donation_seq;
+create sequence blood_donation_seq;
 
-alter table blood_bank_donation add constraint fk_donation_bank_1 foreign key ( blood_bank_id) references  blood_bank (id);
-create index ix_donation_bank_1 on blood_bank_donation (blood_bank_id);
+alter table blood_donation add constraint fk_blood_donation_bank_1 foreign key ( blood_bank_id) references  blood_bank (id);
+create index ix_blood_donation_bank_1 on blood_donation (blood_bank_id);
+
 
 ---AppUser
 

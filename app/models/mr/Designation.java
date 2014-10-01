@@ -22,8 +22,8 @@ public class Designation extends BaseEntity{
 	@Column(columnDefinition="TEXT")
 	public String description;
 	
-	@OneToOne
-	public MedicalRepresentative mr;
+	/*@OneToOne
+	public MedicalRepresentative mr;*/
 	
 	//public String test;
 	

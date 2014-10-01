@@ -1,0 +1,102 @@
+@(bloodDonations : List[models.bloodBank.BloodDonation], bgMap: Map[models.BloodGroup, Float], total: Float)
+
+@import play.i18n._
+@import helper.twitterBootstrap._
+@import helper._
+
+@main("Blood Donations"){
+<form action="@routes.BloodBankController.getFromToDateBloodDonations()" method="POST">
+<div class="row">
+<div class="col-md-12">
+<div class="col-md-4">
+<div class="form-group">
+      <label for="inputDOB" class="col-lg-5 control-label">From <br><span style="font-size:10px;"><b>(DD-MM-YYYY)</b></span></label>
+      <div class="col-lg-7" style="padding:0px">
+		<div class="input-append date" id="datepicker1" data-date-format="dd-mm-yyyy">
+				<input name="from" class="col-md-7" size="16" type="text" readonly="">
+				<span class="add-on col-md-5" style="padding:5px"><i class="fa fa-calendar"></i></span>
+			  </div>
+      </div>
+</div>
+</div>
+<script>
+    $("#datepicker1").datepicker('setValue', new Date());
+    </script>
+<div class="col-md-4">
+<div class="form-group">
+      <label for="inputDOB" class="col-lg-5 control-label">To<br><span style="font-size:10px;"><b>(DD-MM-YYYY)</b></span></label>
+      <div class="col-lg-7" style="padding:0px">
+		<div class="input-append date" id="datepicker2" data-date-format="dd-mm-yyyy">
+				<input name="to" class="col-md-7" size="16" type="text" readonly="">
+				<span class="add-on col-md-5" style="padding:5px"><i class="fa fa-calendar"></i></span>
+			  </div>
+      </div>
+</div>
+</div>
+ <script>
+    $("#datepicker2").datepicker('setValue', new Date());
+    </script>
+
+<div class="col-md-2">
+<input type="submit" value="find">
+</div>
+</div>
+</div>
+</form>
+<br><br>
+
+@if(bloodDonations.size() != 0){
+
+<div class="row" style="padding:15px">
+<h5 style="color:#990000;"><B>Blood Donation Summary</b></h5>
+<div class="col-md-6" style="padding:0px;">
+<table class="table table-bordered">
+<tr class="danger">
+<th>Blood Group</th>
+<th>Quantity </th>
+</tr>
+
+@for((k,v) <- bgMap){
+<tr class="active">
+<td>@k.capitalize()</td>
+<td>@v</td>
+</tr>
+}
+
+<tr class="active">
+<td><b>Total Blood Quantity Collected</b></td>
+<td>@total</td>
+</tr>
+
+<tr class="active" >
+<td><b>Total Blood Donations</b></td>
+<td>@bloodDonations.size()</td>
+</tr>
+</table>
+</div>
+</div>
+<div class="row" style="padding:15px;">
+<table class="table table-bordered">
+<tr class="danger">
+<th class="col-md-2">S.no</th>
+<th class="col-md-2">Donated Date</th>
+<th class="col-md-2">Blood Group</th>
+<th class="col-md-2">Quantity</th>
+<th class="col-md-2">Donated By</th>
+</tr>
+@for((bloodDonation,index) <- bloodDonations.zipWithIndex){
+<tr class="active">
+<td class="col-md-2">@{index+1}</td>
+<td class="col-md-2">@bloodDonation.dateDonated.format("dd-MMM-YYYY")</td>
+<td class="col-md-2">@if(bloodDonation.bloodGroup != null ){@bloodDonation.bloodGroup.capitalize()}</td>
+<td class="col-md-2">@bloodDonation.quantityDonated</td>
+<td class="col-md-2">@bloodDonation.appUser.name (@bloodDonation.appUser.getSexAndAge())</td>
+</tr>
+}
+</table>
+</div>
+}else{<h5> No Blood Donor Found</h5>}
+
+}
+
+

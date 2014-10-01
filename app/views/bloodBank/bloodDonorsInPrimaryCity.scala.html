@@ -1,0 +1,95 @@
+@(patients : List[models.patient.Patient])
+
+@import play.i18n._
+@import helper.twitterBootstrap._
+@import helper._
+
+@main("Blood Donors"){
+<form id="donarsForm"  method="POST">
+<div class="row">
+<div class="col-md-12">
+<div class="col-md-3">
+<lable for="age">City</lable>&nbsp;
+<select name="primaryCity">
+<option value="any">Any</option>
+@for(primaryCity <- PrimaryCity.getAllInOrder()){
+<option value="@primaryCity.id">@primaryCity.name</option>
+}
+</select>
+</div>
+<div class="col-md-3">
+<lable for="bloodGroup">Blood Group</lable>&nbsp;
+<select name="bloodGroup">
+<option value="any">Any</option>
+@for((k,v)<- BloodGroup.options()){
+<option value="@k">@v</option>
+}
+</select>
+</div>
+<div class="col-md-2">
+<lable for="age">Age</lable>&nbsp;
+<select name="age">
+<option value="0">Any</option>
+<option value="1">18-30</option>
+<option value="2">30-40</option>
+<option value="3">40-50</option>
+<option value="4">&gt; 50</option>
+</select>
+</div>
+<div class="col-md-2">
+<lable for="sex">Sex</lable>&nbsp;
+<select name="sex">
+<option value="any">Any</option>
+@for((k,v) <- Sex.options()){
+<option value="@k"> @v</option>
+}
+</select>
+</div>
+<div class="col-md-2">
+@*<input type="submit" id="click" value="find">*@
+<a  id ="find" name="find" onclick="getData();" class="btn btn-primary btn-xs">find</a>
+
+</div>
+</div>
+</div>
+</form>
+<br><br>
+
+<div class="row" style="padding:15px;" id="table">
+
+@if(patients.size() != 0){
+<table class="table table-bordered">
+<tr>
+<th class="col-md-2">S.no</th>
+<th class="col-md-2">Name</th>
+<th class="col-md-2">Age</th>
+<th class="col-md-2">Sex</th>
+<th class="col-md-2">Contact No</th>
+<th class="col-md-2">Last Blood Donated Date</th>
+<th class="col-md-2">Blood Group</th>
+</tr>
+@for((patient,index) <- patients.zipWithIndex){
+<tr>
+<td class="col-md-2">@{index+1}</td>
+<td class="col-md-2">@patient.appUser.name</td>
+<td class="col-md-2">@patient.appUser.getAge()</td>
+<td class="col-md-2">@patient.appUser.sex</td>
+<td class="col-md-2">@patient.appUser.mobileNumber</td>
+<td class="col-md-2">@if(patient.appUser.lastBloodDonatedDate != null){@patient.appUser.lastBloodDonatedDate.format("dd-MM-YYY HH:mm")}else{----}</td>
+<td class="col-md-2">@patient.appUser.bloodGroup.capitalize()</td>
+</tr>
+}
+</table>
+}else{<h5> No Blood Donor Found</h5>}
+</div>
+ <script>
+function getData(){
+$("#table").html('Fetching Data. Please Wait...');
+ 	$.post( "/secure-blood-bank/list-blood-donors",$("#donarsForm").serialize(),function( data ) {
+ 	  			$("#table").html(data);	
+	});
+		
+}
+</script>
+}
+

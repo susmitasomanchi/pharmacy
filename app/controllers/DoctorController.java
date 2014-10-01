@@ -948,16 +948,14 @@ public class DoctorController extends Controller {
 									if(
 											((previousSchedule.day).equals(newSchedule.day))
 											&&
-											((dateFormat.parse(newSchedule.fromTime)).before(dateFormat.parse(previousSchedule.toTime))
+											(((dateFormat.parse(newSchedule.fromTime)).before(dateFormat.parse(previousSchedule.toTime))
+													&&
+													(dateFormat.parse(newSchedule.fromTime)).after(dateFormat.parse(previousSchedule.fromTime)))
 													||
-													(dateFormat.parse(newSchedule.fromTime)).after(dateFormat.parse(previousSchedule.fromTime))
-													||
-													(dateFormat.parse(newSchedule.fromTime)).after(dateFormat.parse(previousSchedule.fromTime))
-													||
-													(dateFormat.parse(newSchedule.toTime)).after(dateFormat.parse(previousSchedule.fromTime))
-													||
-													(dateFormat.parse(newSchedule.toTime)).before(dateFormat.parse(previousSchedule.toTime)))
-											){
+													((dateFormat.parse(newSchedule.toTime)).after(dateFormat.parse(previousSchedule.fromTime))
+															&&
+															(dateFormat.parse(newSchedule.toTime)).before(dateFormat.parse(previousSchedule.toTime)))
+													)){
 										flash().put("alert",new Alert("alert-danger", clinicInfo.clinic.name+ " created successfully but got time clashes with "+doctorClinicInfo.clinic.name+" while creating schedules.").toString());
 										return redirect(routes.DoctorController.myClinics());
 									}
@@ -1769,15 +1767,17 @@ public class DoctorController extends Controller {
 	 */
 	@ConfirmAppUser
 	public static Result processPatientFollowUPAppointment(final Long appointmentId,final Long patientId) {
+		final Doctor doctor = LoginController.getLoggedInUser().getDoctor();
+		final Patient patient = Patient.find.byId(patientId);
 		final String remark=request().body().asFormUrlEncoded().get("remark")[0];
 		Logger.warn(remark);
 		final Appointment appointment = Appointment.find.byId(appointmentId);
 		appointment.appointmentStatus = AppointmentStatus.APPROVED;
 		appointment.problemStatement = remark;
-		appointment.requestedBy = Patient.find.byId(patientId).appUser;
+		appointment.requestedBy = patient.appUser;
 		appointment.bookedOn = new Date();
 		appointment.update();
-
+		flash().put("alert", new Alert("alert-success", "Follow Up Appointment Created By Dr."+ doctor.appUser.name+" For The Patient "+patient.appUser.name+" Successfully.").toString());
 
 
 		// Async Execution
@@ -1820,38 +1820,6 @@ public class DoctorController extends Controller {
 
 	@ConfirmAppUser
 	public static Result viewWeeklyAppointments() {
-		/*
-		final Date now = new Date();
-		final Calendar calendarFrom = Calendar.getInstance();
-		calendarFrom.setTime(now);
-		calendarFrom.set(Calendar.HOUR_OF_DAY, 0);
-		calendarFrom.set(Calendar.MINUTE, 0);
-		calendarFrom.set(Calendar.SECOND, 0);
-		calendarFrom.set(Calendar.MILLISECOND, 0);
-
-		final Calendar calendarTo = Calendar.getInstance();
-		calendarTo.setTime(now);
-		calendarTo.set(Calendar.HOUR_OF_DAY, 23);
-		calendarTo.set(Calendar.MINUTE, 59);
-		calendarTo.set(Calendar.SECOND, 59);
-		calendarTo.set(Calendar.MILLISECOND, 999);
-
-		final Doctor loggedIndoctor = LoginController.getLoggedInUser()
-				.getDoctor();
-		final List<DoctorClinicInfo> docclinicInfo = DoctorClinicInfo.find
-				.where().eq("doctor", loggedIndoctor).findList();
-		final List<AppointmentStatus> statusList = new ArrayList<AppointmentStatus>();
-		statusList.add(AppointmentStatus.APPROVED);
-		statusList.add(AppointmentStatus.SERVED);
-		final List<Appointment> appointments = Appointment.find.where()
-				.in("doctorClinicInfo", docclinicInfo)
-				.in("appointmentStatus", statusList)
-				.ge("appointmentTime", calendarFrom.getTime())
-				.le("appointmentTime", calendarTo.getTime())
-				.orderBy("appointmentTime").findList();
-		return ok(views.html.doctor.doctorTodaysAppointments.render(appointments, docclinicInfo));
-		 */
-
 		final Doctor loggedIndoctor = LoginController.getLoggedInUser().getDoctor();
 		final List<DoctorClinicInfo> docClinicInfoList = DoctorClinicInfo.find.where().eq("doctor", loggedIndoctor).findList();
 		int shortestSlot = 15;
@@ -1860,7 +1828,6 @@ public class DoctorController extends Controller {
 				shortestSlot = clinicInfo.slot;
 			}
 		}
-
 		return ok(views.html.doctor.doctorWeeklyAppointments.render(shortestSlot));
 	}
 
@@ -1901,8 +1868,6 @@ public class DoctorController extends Controller {
 					.ge("appointmentTime", startDate)
 					.le("appointmentTime", endDate).findList()
 					);
-			//.orderBy("appointmentTime").findList();
-
 		}
 		catch(final Exception e){
 			Logger.error("somethings wrong with start/end date");

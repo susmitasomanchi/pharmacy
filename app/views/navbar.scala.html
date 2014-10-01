@@ -78,7 +78,15 @@
             <li><a href="@routes.PatientController.viewAllPatientPrescriptions()">Prescriptions</a></li>
           </ul>
         </li>
-        
+        <li class="dropdown">
+          <a href="#" class="dropdown-toggle" data-toggle="dropdown">
+         	Clinics
+          <b class="caret"></b></a>
+          <ul class="dropdown-menu">
+	            <li><a href="@routes.PublicController.searchClinics()">Search Clinics</a></li>
+	            <li><a href="@routes.PatientController.getFavoriteClinics()">My Clinics</a></li>
+          </ul>
+        </li>
         @*<li class="dropdown">
           <a href="#" class="dropdown-toggle" data-toggle="dropdown">
           Prescriptions
@@ -114,6 +122,7 @@
 	           	<li><a href="@routes.TrackerController.appUserWeightTracker()">Weight Tracker</a></li>
 	           	<li><a href="@routes.TrackerController.appUserBpTracker()">BloodPressure Tracker</a></li>
 	           	<li><a href="@routes.TrackerController.sugarTracker()">Sugar Tracker</a></li>
+	           		<li><a href="@routes.PatientController.getPatientBloodDonationInfo()">Blood Donation Tracker</a></li>
 	          </ul>
 	    </li>
         @*
@@ -205,6 +214,7 @@
           Appointments
           <b class="caret"></b></a>
           <ul class="dropdown-menu">
+	            <li><a href="@routes.DoctorController.viewWeeklyAppointments()">Calendar</a></li>
 	            <li><a href="@routes.DoctorController.viewTodaysAppointments()">Today's Appointments</a></li>
 	            <li><a href="@routes.DoctorController.viewAllAppointments()">All Appointments</a></li>
           </ul>
@@ -278,7 +288,8 @@
           <b class="caret"></b></a>
           <ul class="dropdown-menu">
             <li><a href="@routes.MRController.addMR()">Add Medical Representative</a></li> 
-            <li><a href="@routes.MRController.mrList()">View Medical Representative</a></li>            
+            <li><a href="@routes.MRController.mrList()">View Medical Representative</a></li> 
+            <li><a href="@routes.MRController.viewHierarchy()">Medical Representative Hierarchy</a></li>           
           </ul>
         </li> 
        
@@ -445,7 +456,28 @@
              </ul>
         </li>
         }    
-    	
+    	@if(LoginController.getLoggedInUserRole().equals(Role.BLOOD_BANK_ADMIN.toString())){
+		
+		<li class="dropdown">
+          <a href="#" class="dropdown-toggle" data-toggle="dropdown">
+        	Donors
+          <b class="caret"></b></a>
+          <ul class="dropdown-menu">
+          <li><a href="@routes.BloodBankController.getBloodDonorByEmailForm()">Save Blood Donor</a></li>
+          <li><a href="@routes.BloodBankController.listBloodBankBloodDonors()">My Blood Donors</a></li>
+            <li><a href="@routes.BloodBankController.getBloodDonorsInCityForm()">All Blood Donors</a></li>
+            </ul>
+        </li>
+        <li class="dropdown">
+          <a href="#" class="dropdown-toggle" data-toggle="dropdown">
+        	Blood Donation
+          <b class="caret"></b></a>
+          <ul class="dropdown-menu">
+           <li><a href="@routes.BloodBankController.fromToDateBloodDonationsForm()">View Blood Donations</a></li>
+            <li><a href="@routes.BloodBankController.receivedBloodDonorFrom()">Received Blood</a></li>
+             </ul>
+        </li>
+        }  
     	<!--
         <li class="dropdown">
           <a href="#" class="dropdown-toggle" data-toggle="dropdown">

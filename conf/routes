@@ -71,6 +71,9 @@ GET		/pharmacy/search/:searchString                  controllers.PublicControlle
 GET		/pharmacy/search									controllers.PublicController.searchPharmaciesPage()
 GET   	/diagnostic/search/:searchString                  				controllers.PublicController.processSearchDiagnosticCentres(searchString: String)
 GET    /diagnostic/search												controllers.PublicController.searchDiagnosticPage()
+GET   	/clinic/search/:searchString                  				controllers.PublicController.searchFavoriteClinics(searchString: String)
+GET    /clinic/search												controllers.PublicController.searchClinics()
+
 
 GET    /feedback											controllers.PublicController.feedBack()
 POST    /secure-feedback									controllers.PublicController.saveFeedBack()
@@ -81,6 +84,10 @@ GET		/doctor/add-to-favorite/:docId					controllers.PublicController.addToFavDoc
 GET		/diagnostic/get-image/:diagnosticId/:imageId	controllers.PublicController.getDiagnosticImages(diagnosticId: Long,imageId: Long)
 GET		/diagnostic/remove-diagnostic/:diagnosticId					controllers.PublicController.removeFavoriteDiagnosticCentre(diagnosticId: Long)
 GET		/doctor/remove-pharmacy/:pharmacyId							controllers.PublicController.removeFavoritePharmacy(pharmacyId:Long)
+GET		/bloodBank/get-image/:bloodBankId/:imageId					controllers.PublicController.getBloodBankImages(bloodBankId: Long,imageId: Long)
+GET		/clinic/get-image/:clinicId/:imageId					controllers.PublicController.getClinicImages(clinicId: Long,imageId: Long)
+GET		/user/get-image/:appUserId					controllers.PublicController.getAppUserImage(appUserId: Long)
+
 GET 	/sendTestmail									controllers.DiagnosticController.sendSampleAttchEmail() 
 # Sign up page
 GET    /secure-doctor/join                              			controllers.UserController.joinUsDoctor()
@@ -88,6 +95,7 @@ GET    /secure-pharmacy/join                              			controllers.UserCon
 GET    /secure-diagnostic/join                              		controllers.UserController.joinUsDiagnostic()
 GET    /secure-user/join											controllers.UserController.joinUsPatient()
 GET    /secure-clinic/join											controllers.UserController.joinUsClinic()
+GET    /secure-blood-bank/join											controllers.UserController.joinUsBloodBank()
 
 POST   /secure-join		                              			controllers.UserController.processJoinUs()
 
@@ -155,6 +163,12 @@ GET		/secure-user/my-pharmacies						controllers.PatientController.patientFavori
 GET		/secure-user/appointments									controllers.PatientController.viewMyAppointments()
 GET		/secure-user/share-prescription							controllers.PatientController.sharePrescription(prId: Long, pharmacyId: String, diagnosticId: String)
 GET    /secure-user/diagnostic-reports							 	controllers.PatientController.viewDiagnosticReports()
+GET    /secure-user/blood-donation-info							 	controllers.PatientController.getPatientBloodDonationInfo()
+GET    /secure-user/add-fav-clinic/:clinicId							 	controllers.PatientController.addClinicToLoggedInUser(clinicId : Long)
+GET	   /secure-user/get-favorite-clinics								controllers.PatientController.getFavoriteClinics()
+GET	   /secure-user/remove-favorite-clinic/:clinicId								controllers.PatientController.removeFavoriteClinic(clinicId : Long)
+
+
 
 
 POST	/secure-pharmacy/upload-pharmacy-images					controllers.PharmacistController.uploadPharmacyImageProcess()
@@ -385,6 +399,43 @@ GET    /secure-clinic/invite-doctor      					controllers.ClinicController.searc
 POST    /secure-clinic/invite-doctor      					controllers.ClinicController.processSeachDoctorsByEmailId()
 GET		/secure-clinic/add-doctor/:docId/:clinicId/:verCode			controllers.ClinicController.addDoctorToTheClinic(docId: Long, clinicId : Long, verCode:String)
 GET		/secure-clinic/view-all-doctors						controllers.ClinicController.getDoctors()
+POST	/secure-clinic/upload-clinic-images										controllers.ClinicController.uploadClinicImageProcess()
+GET		/secure-clinic/remove-image/:clinicId/:fileId						controllers.ClinicController.removeClinicImage(clinicId: Long,fileId: Long)
+POST	/secure-clinic/basic-update												controllers.ClinicController.clinicBasicUpdate()
+POST	/secure-clinic/address-update 											controllers.ClinicController.clinicAddressUpdate()
+
+
+
+#slug url (must be the last route in /clinic/)
+GET 	/clinic/:slugUrl								controllers.PublicController.getClinicWithSlug(slugUrl:String)
+
+
+
+#BloodBank
+GET    /secure-blood-bank/get-blood-donors      					controllers.BloodBankController.getBloodDonorsInCityForm()
+POST    /secure-blood-bank/list-blood-donors      					controllers.BloodBankController.listBloodDonorsInCity()
+GET    /secure-blood-bank/received-blood-info-form      					controllers.BloodBankController.receivedBloodDonorFrom()
+GET    /secure-blood-bank/get-received-blood-info/:emailId/:appUserId      					controllers.BloodBankController.getReceivedBloodDonorInfo(emailId: String,appUserId: Long)
+POST    /secure-blood-bank/save-received-blood-info/:patientId      					controllers.BloodBankController.saveReceivedBloodDonorInfo(patientId: Long)
+POST	/secure-blood-bank/upload-blood-bank-images										controllers.BloodBankController.uploadBloodBankImageProcess()
+GET		/secure-blood-bank/remove-image/:bloodBankId/:fileId						controllers.BloodBankController.removeBloodBankImage(bloodBankId: Long,fileId: Long)
+POST	/secure-blood-bank/basic-update												controllers.BloodBankController.bloodBankBasicUpdate()
+POST	/secure-blood-bank/address-update 											controllers.BloodBankController.bloodBankAddressUpdate()
+GET		/secure-blood-bank/from-to-date-donations											controllers.BloodBankController.fromToDateBloodDonationsForm()
+POST		/secure-blood-bank/from-to-date-donations											controllers.BloodBankController.getFromToDateBloodDonations()
+GET		/secure-blood-bank/get-blood-donor-form											controllers.BloodBankController.getBloodDonorByEmailForm()
+GET		/secure-blood-bank/find-blood-donor/:emailId											controllers.BloodBankController.findBloodDonorByEmail(emailId : String)
+GET		/secure-blood-bank/add-blood-donor/:appUserId											controllers.BloodBankController.addBloodDonorToBloodBank(appUserId : Long)
+GET		/secure-blood-bank/view-blood-donors													controllers.BloodBankController.listBloodBankBloodDonors()
+GET		/secure-blood-bank/remove-blood-donor/:appUserId													controllers.BloodBankController.removeBloodBankBloodDonor(appUserId : Long)
+
+
+
+
+#slug url (must be the last route in /blood-bank/)
+GET 	/blood-bank/:slugUrl								controllers.PublicController.getBloodBankWithSlug(slugUrl:String)
+
+
 
 																										
 #MR Module
@@ -447,7 +498,9 @@ GET 	/specz									controllers.SampleDataController.createDocSpez()
 GET 	/add_clinic									controllers.SampleDataController.patientTest()
 
 #GET    /appointment					controllers.SampleDataController.createAppointment()
-GET    /appointment					controllers.SampleDataController.addBloodBank()
+GET    /blood-bank					controllers.SampleDataController.addBloodBank()
+GET    /mr							controllers.SampleDataController.mrSampleData()
+
 
 
 
@@ -460,4 +513,17 @@ GET		/secure-doctor/calendar-appointments-json		controllers.DoctorController.get
 
 # Map static resources from the /public folder to the /assets URL path
 GET    /assets/*file                                    controllers.Assets.at(path="/public", file)
+
+
+########################## MedNetwork Android App ###############################################
+
+#MR Module
+
+GET    /web-services/mr/login                                             controllers.WebServices.login(email: String ?= "email" , password: String ?= "password")
+GET    /web-services/mr/logout                                            controllers.WebServices.logout()
+GET    /web-services/mr/doctor-list                                       controllers.WebServices.myDoctor()
+#GET    /web-services/mr/product-list                                      controllers.WebServices.myProduct()
+#GET		/web-services/mr/dcr										   controllers.WebServices.dcrLineItem(date: String ?= "date",doctor: String ?= "String" , sampleList: List<String> ?= "sampleList" ,promotion: List<String> ?= "String" pob: String ?= pob)
+
+
 

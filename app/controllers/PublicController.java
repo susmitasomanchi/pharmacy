@@ -15,14 +15,17 @@ import models.Feedback;
 import models.FileEntity;
 import models.PrimaryCity;
 import models.Role;
+import models.bloodBank.BloodBank;
 import models.diagnostic.DiagnosticCentre;
 import models.doctor.Appointment;
+import models.doctor.Clinic;
 import models.doctor.Day;
 import models.doctor.DaySchedule;
 import models.doctor.Doctor;
 import models.doctor.DoctorClinicInfo;
 import models.doctor.MasterSpecialization;
 import models.patient.Patient;
+import models.patient.PatientClinicInfo;
 import models.patient.PatientDoctorInfo;
 import models.pharmacist.Pharmacy;
 import play.Logger;
@@ -440,6 +443,57 @@ public class PublicController extends Controller{
 		return ok(byteContent).as("image/jpeg");
 
 	}
+	/**
+	 * @author lakshmi
+	 *  Action to get byteData as image of BloodBank
+	 * GET/bloodBank/get-image/:bloodBankId/:fileId
+	 */
+	public static Result getBloodBankImages(final Long bloodBankId,final Long imageId){
+		byte[] byteContent = null;
+		if(imageId == 0){
+			byteContent=BloodBank.find.byId(bloodBankId).backgroudImage;
+		}
+		else{
+			for (final FileEntity file : BloodBank.find.byId(bloodBankId).profileImageList) {
+				if(file.id == imageId){
+					byteContent = file.byteContent;
+				}
+			}
+		}
+
+		return ok(byteContent).as("image/jpeg");
+
+	}
+	/**
+	 * @author lakshmi
+	 *  Action to get byteData as image of Clinic
+	 * GET/bloodBank/get-image/:bloodBankId/:fileId
+	 */
+	public static Result getClinicImages(final Long bloodBankId,final Long imageId){
+		byte[] byteContent = null;
+		if(imageId == 0){
+			byteContent=Clinic.find.byId(bloodBankId).backgroudImage;
+		}
+		else{
+			for (final FileEntity file : Clinic.find.byId(bloodBankId).profileImageList) {
+				if(file.id == imageId){
+					byteContent = file.byteContent;
+				}
+			}
+		}
+
+		return ok(byteContent).as("image/jpeg");
+
+	}
+	/*
+	 * @author lakshmi
+	 *  Action to get byteData as image of Clinic
+	 * GET/bloodBank/get-image/:bloodBankId/:fileId
+	 */
+	public static Result getAppUserImage(final Long appUserId){
+		final AppUser appUser = AppUser.find.byId(appUserId);
+		return ok(appUser.image).as("image/jpeg");
+	}
 
 	/**
 	 * @author Lakshmi
@@ -705,6 +759,55 @@ public class PublicController extends Controller{
 		return ok(PrimaryCity.find.byId(cityId).name);
 	}
 
+	/**
+	 * @author lakshmi
+	 * Action to search Clinic and display his profile page
+	 * GET /clinic/:slugUrl
+	 */
+	public static Result getClinicWithSlug(final String slug) {
+		final String cleanSlug = slug.trim().toLowerCase();
+		final Clinic clinic = Clinic.find.where().eq("slugUrl",cleanSlug).findUnique();
+		return ok(views.html.clinic.publicClinicProfile.render(clinic));
+	}
+	/**
+	 * @author lakshmi
+	 * Action to search BloodBank and display his profile page
+	 * GET /blood-bank/:slugUrl
+	 */
+	public static Result getBloodBankWithSlug(final String slug) {
+		final String cleanSlug = slug.trim().toLowerCase();
+		final BloodBank bloodBank = BloodBank.find.where().eq("slugUrl",cleanSlug).findUnique();
+		return ok(views.html.bloodBank.publicBloodBankProfile.render(bloodBank));
+	}
+
+	/**
+	 * @author lakshmi
+	 * Action to  to render search Clinic page
+	 *  GET /clinic/search
+	 */
+	public static Result searchClinics() {
+		return ok(views.html.clinic.searchClinics.render("",new ArrayList<Clinic>(),false));
+	}
+	/**
+	 * @author lakshmi
+	 * Action to perform search operation for finding Diagnostic based on the searchKey
+	 * GET	/clinic/search/:searchKey
+	 */
+	public static Result searchFavoriteClinics(final String searchKey) {
+		final String searchStr = searchKey.toLowerCase().trim();
+		if(searchStr.length() < 4){
+			flash().put("alert", new Alert("alert-danger", "The searck key should contain atleast four charecters").toString());
+			return ok(views.html.clinic.searchClinics.render(searchKey,new ArrayList<Clinic>(),false));
+		}
+		else{
+			final PrimaryCity city = PrimaryCity.find.byId(Long.parseLong(session(Constants.CITY_ID)));
+			final List<Clinic> clinicList =  Clinic.find.where()
+					.eq("primaryCity", city)
+					.like("searchIndex","%"+searchStr+"%")
+					.findList();
+			return ok(views.html.clinic.searchClinics.render(searchKey,clinicList,true));
+		}
+	}
 
 
 

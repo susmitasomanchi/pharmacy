@@ -1,0 +1,66 @@
+@(patient : models.patient.Patient)
+@import play.i18n._
+@import helper.twitterBootstrap._
+@import helper._
+
+@main("Add Blood Donor Form"){
+<div class="well">
+<div class="row">
+<div class="col-md-4">
+ <label for="emailId" class="col-md-6" style="padding-top:7px">Email Id </label>
+ <div class="col-md-4">
+	<input type="email" style="box-shadow: 1px 1px 3px 3px #aaaaaa;"  name="email" id="email" placeholder=" Email Id" required>
+	</div>
+</div>
+</div>
+<br>
+
+<div class="row">
+<div class="col-md-4">
+<label for="confirmEmailId" class="col-md-6" style="padding-top:7px">Confirm Email Id </label>
+<div class="col-md-4">
+	<input type="email" style="box-shadow: 1px 1px 3px 3px #aaaaaa;"  name="confirmEmail" id="confirmEmail" placeholder="Re-Enter Email Id" required>
+</div>
+</div>
+</div>
+   <br>
+<div style="padding-left:15px;padding-right:15px">
+	@*
+	<button style="box-shadow: 1px 1px 3px 3px #aaaaaa;" class="btn btn-sm btn-primary" onclick="submitSearch();"><i class="icon-search icon-large"></i> Find</button>
+	*@
+	<button style="box-shadow: 1px 1px 3px 3px #aaaaaa;"  onclick="return validateAndSubmit(@LoginController.getLoggedInUser().id);" class="btn btn-sm btn-primary">Find</button>
+</div>
+</div>
+@if(patient != null){
+<div class="row" style="padding:15px;">
+<hr>
+<div class="col-md-6">
+<h5><b>Name (Age/Sex)</b> :@patient.appUser.name&nbsp;(@patient.appUser.getSexAndAge)</h5>
+<h5><b>Address </b> :@if(patient.appUser.address != null){@patient.appUser.address.area&nbsp;,@patient.appUser.address.city }else{----}</h5>
+<h5><b>Contact No </b>:@if(patient.appUser.isMobileNumberShared == true){@patient.appUser.mobileNumber}</h5>
+<h5><b>Last Blood Donated </b>:@patient.appUser.lastBloodDonatedDate</h5>
+<h5><b>Blood Group </b>:@patient.appUser.bloodGroup.capitalize()</h5>
+
+</div>
+<a href="@routes.BloodBankController.addBloodDonorToBloodBank(patient.appUser.id)" class="btn btn-primary btn-sm pull-right">Add To Blood Bank</a>
+</div>
+}
+<script>
+function validateAndSubmit(appUserId){
+	var email = $('#email').val().trim();
+	var confirmEmailId = $('#confirmEmail').val().trim();
+    	if(email != confirmEmailId){
+    		alert("Email Ids Do Not Match!");
+    	    return false;
+    	}
+    	if(email == ""){
+    		alert("Enter Email Id");
+    	    return false;
+    	}
+    	window.location.href = '/secure-blood-bank/find-blood-donor/'+email;
+    	
+}
+
+</script>
+
+}

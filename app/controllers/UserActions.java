@@ -41,7 +41,12 @@ public class UserActions extends Controller {
 			return ok(views.html.patient.fav_doctors.render(patient.patientDoctorInfoList));
 		}
 		if(appUser.role.equals(Role.CLINIC_ADMIN)){
-			return ok(views.html.clinic.clinicProfile.render());
+			Logger.info("appUserid="+appUser.id);
+			return ok(views.html.clinic.clinicProfile.render(appUser.getClinicUser().clinic));
+		}
+		if(appUser.role.equals(Role.BLOOD_BANK_ADMIN)){
+			//			Logger.info("bloodbankid="+appUser.getBloodBankAdmin().bloodBank.id);
+			return ok(views.html.bloodBank.bloodBankProfile.render(appUser.getBloodBankUser().bloodBank));
 		}
 
 
@@ -72,7 +77,7 @@ public class UserActions extends Controller {
 			return ok(views.html.mednetAdmin.adminDashboard.render(todayMap, weekMap));
 		}
 
-		//@TODO: none should render the dashboard of patient
+		//@TODO: none should render the dashboard of patient.
 		return ok("Not implemented yet");
 
 	}
