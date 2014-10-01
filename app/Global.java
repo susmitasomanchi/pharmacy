@@ -4,10 +4,12 @@ import static play.mvc.Results.notFound;
 import java.util.concurrent.TimeUnit;
 
 import org.joda.time.DateTime;
+import org.joda.time.Minutes;
 import org.joda.time.Seconds;
 
 import play.Application;
 import play.GlobalSettings;
+import play.Logger;
 import play.libs.Akka;
 import play.libs.F.Function0;
 import play.libs.F.Promise;
@@ -131,6 +133,12 @@ public class Global extends GlobalSettings {
 	}
 
 	public static int nextExecutionInSeconds(final int hour, final int minute){
+
+		Logger.info("Next Execution in: "+Minutes.minutesBetween(
+				new DateTime(),
+				nextExecution(hour, minute)
+				).getMinutes()+" minutes");
+
 		return Seconds.secondsBetween(
 				new DateTime(),
 				nextExecution(hour, minute)
