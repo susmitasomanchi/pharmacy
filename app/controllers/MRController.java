@@ -784,9 +784,7 @@ public class MRController extends Controller {
 		}
 
 		dcrLineItem.remarks = remarks;
-
 		dcr.dcrLineItemList.add(dcrLineItem);
-
 		dcr.update();
 
 		return ok(views.html.mr.filledDCRLineItem.render(dcr.dcrLineItemList));
@@ -1141,11 +1139,8 @@ public class MRController extends Controller {
 
 	/**
 	 * @author anand
-	 * 
 	 * @description : this method is used to add lineitem for particular date
-	 * 
-	 *              url : POST /mr/tourplan/add-line-item
-	 * 
+	 *	url : POST /mr/tourplan/add-line-item
 	 * */
 	public static Result addTourPlanLineItem(final Long tourPlanid,
 			final Long tpLineid, final Long index) {
@@ -1181,8 +1176,7 @@ public class MRController extends Controller {
 				for (int i = 0; i < samples.length; i++) {
 					final Sample sample = new Sample();
 
-					if ((samples[i].compareToIgnoreCase("") == 0)) {
-					} else {
+					if ((samples[i].compareToIgnoreCase("") != 0)) {
 						sample.pharmaceuticalProduct = PharmaceuticalProduct.find
 								.byId(Long.parseLong(samples[i]));
 						if (quantities[i] == "") {
@@ -1190,12 +1184,13 @@ public class MRController extends Controller {
 						} else {
 							sample.quantity = Integer.parseInt(quantities[i]);
 						}
-						//sample.save();
 						tpLineItem.sampleList.add(sample);
 					}
 				}
 			}
 		}
+
+		Logger.info("Added Sample. Sampele Size: "+tpLineItem.sampleList.size());
 
 		if (mapForm.containsKey("promotion" + index)) {
 			final String promotions[] = mapForm.get("promotion" + index);
@@ -1220,9 +1215,8 @@ public class MRController extends Controller {
 			final String remarks = mapForm.get("remarks" + index)[0];
 			tpLineItem.remarks = remarks;
 		}
-
 		tpLineItem.isAddedtoTourplan = true;
-
+		//tpLineItem.update();
 		final TourPlan tourPlan = TourPlan.find.byId(tourPlanid);
 		tourPlan.tpLineItemList.add(tpLineItem);
 		tourPlan.update();
