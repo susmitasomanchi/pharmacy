@@ -470,7 +470,7 @@ POST   /mr/submit-tourplan                                             controlle
 GET    /mr/tourplan-lineitem-visibity                                  controllers.MRController.tpLineItemVisibility()
 POST   /mr/tourplan-lineitem-visibity-proccess/:mrid/:index                         controllers.MRController.tpLineItemVisibilityProccess(mrid: Long,index: Long)
 POST    /mr/add                                    controllers.MRController.medicalRepresentativeProccess()
-#POST    /mr/editmr                                 controllers.MRController.medicalRepresentativeProccessUpdate()
+GET	    /mr/editmr                                 controllers.MRController.editMRProccess()
 GET     /mr/del	                                   controllers.MRController.removeMR(id: Long)
 GET     /mr/edit/:id	                           controllers.MRController.editMR(id: Long)
 GET		/mr/add-designation							controllers.MRController.addDesignation()

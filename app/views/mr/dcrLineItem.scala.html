@@ -170,13 +170,13 @@
 						<input id="qty" class="qty-class numeric-textbox" name="qtyList" placeholder="quantity" style="width:100px;height:24px"/>
 					</td>
 					<td>
-						&nbsp;
+						<button  type="button" class="btn btn-primary btn-xs" onclick="addSamples();">+</button>
 					</td>
 				</tr>
 				</tbody>
 			</table>
 			</div>   
-			<button  type="button" class="btn btn-primary btn-xs" onclick="addSamples();">+</button>
+			@*<button  type="button" class="btn btn-primary btn-xs" onclick="addSamples();">+</button>*@
 	   	</td>
 	   
 	   
@@ -238,7 +238,8 @@
 	@for(dcrLineItem <- dcr.dcrLineItemList){
 	<tr>
 		<td>@dcrLineItem.doctor.appUser.name</td>
-		<td>
+		
+			<td>
 			@for(sample <- dcrLineItem.sampleList){
 				@if(sample.pharmaceuticalProduct != null){
 				@sample.pharmaceuticalProduct.medicineName (@sample.quantity)
@@ -246,6 +247,8 @@
 				}
 			}
 	   	</td>
+		
+		
 	   	<td valign="top">
 			<div id="samplesdiv">
 			      <table> 	
@@ -376,6 +379,7 @@
 		}
 		
 	    function removeLineItem(id, docId){
+	    alert("hiii"+id);
 		   $.post('/mr/dcr/delete-line-item/@dcr.id/'+id,function(htmldata){
 			     $('#dcrLineItemTable').html(htmldata);
 			     $('#docid-'+docId).removeAttr('disabled');

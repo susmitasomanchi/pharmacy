@@ -48,14 +48,16 @@ public class MedicalRepresentativeBean implements Serializable {
 
 
 	public MedicalRepresentative toMedicalRepresentative(){
-		final  MedicalRepresentative mr = new MedicalRepresentative();
+		final MedicalRepresentative mr =new MedicalRepresentative();
 
 		if(this.id != null){
 			mr.id=this.id;
 		}
 
-		if(this.designationId != 0) {
+		if(this.designationId != null) {
 			mr.designation= Designation.find.byId(this.designationId);
+		}else{
+			mr.designation = new Designation();
 		}
 		/*if(this.age != 0) {
 			mr.age= this.age;
