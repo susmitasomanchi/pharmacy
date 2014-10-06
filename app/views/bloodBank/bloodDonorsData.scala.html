@@ -16,7 +16,7 @@
 <td class="col-md-2">@patient.appUser.getAge()</td>
 <td class="col-md-2">@patient.appUser.sex</td>
 <td class="col-md-2">@patient.appUser.mobileNumber</td>
-<td class="col-md-2">@if(patient.appUser.lastBloodDonatedDate != null){@patient.appUser.lastBloodDonatedDate.format("dd-MM-YYY HH:mm")}else{----}</td>
+<td class="col-md-2">@if(patient.appUser.lastBloodDonatedDate != null){@patient.appUser.lastBloodDonatedDate.format("dd-MMM-YYYY")}else{----}</td>
 <td class="col-md-2">@patient.appUser.bloodGroup.capitalize()</td>
 </tr>
 }

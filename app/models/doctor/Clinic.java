@@ -80,7 +80,7 @@ public class Clinic extends BaseEntity{
 
 		return super.equals(arg0);
 	}
-	@Override
+	/*@Override
 	public void save(){
 		final StringBuilder stringBuilder = new StringBuilder();
 		stringBuilder.append(this.name.trim().toLowerCase());
@@ -109,7 +109,7 @@ public class Clinic extends BaseEntity{
 		super.save();
 	}
 
-	/*@Override
+	@Override
 	public void update() {
 		final StringBuilder stringBuilder = new StringBuilder();
 		if(this.name != null){

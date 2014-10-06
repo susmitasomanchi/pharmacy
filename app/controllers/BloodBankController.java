@@ -179,7 +179,7 @@ public class BloodBankController extends Controller{
 		}
 		if((requestMap.get("date")[0]!= null) && !(requestMap.get("date")[0].trim().isEmpty())){
 			final String date = requestMap.get("date")[0].replaceAll(" ","").trim();
-			final SimpleDateFormat sdf = new SimpleDateFormat("dd-MMM-yyyy");
+			final SimpleDateFormat sdf = new SimpleDateFormat("dd-MM-yyyy");
 			try {
 				bloodDonation.dateDonated =  sdf.parse(date);
 			} catch (final ParseException e) {
@@ -203,7 +203,10 @@ public class BloodBankController extends Controller{
 		}
 		appUser.bloodDonationList.add(bloodDonation);
 		appUser.update();
-		appUser.lastBloodDonatedDate = BloodDonation.find.where().eq("app_user_id", appUser.id).orderBy("dateDonated DESC").findList().get(0).dateDonated;
+		appUser.lastBloodDonatedDate = BloodDonation.find.where().eq("app_user_id", appUser.id).orderBy().desc("dateDonated").findList().get(0).dateDonated;
+		for (final BloodDonation bloodDonations : BloodDonation.find.where().eq("app_user_id", appUser.id).orderBy().desc("dateDonated").findList()) {
+			Logger.info("my date...."+bloodDonations.dateDonated);
+		}
 		appUser.update();
 		flash().put("alert", new Alert("alert-success", "Successfully Stored Blood Donation Information of "+appUser.email).toString());
 		return redirect(routes.BloodBankController.receivedBloodDonorFrom());

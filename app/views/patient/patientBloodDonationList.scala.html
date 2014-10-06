@@ -26,7 +26,7 @@
 			<tr>
 			<div class="row clearfix">
 				<td>@{index+1}</td>
-				<td>@bloodDonation.dateDonated.format("dd-MMM-YYYY")</td>
+				<td>@if(bloodDonation.dateDonated != null){@bloodDonation.dateDonated.format("dd-MMM-YYYY")}</td>
 				<td>@bloodDonation.bloodBank.name</td>
 				<td>@bloodDonation.quantityDonated</td>
 				<td>@if(bloodDonation.bloodGroup != null){@bloodDonation.bloodGroup.capitalize()}</td>
