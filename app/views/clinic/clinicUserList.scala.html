@@ -1,0 +1,74 @@
+@(clinicUsers : List[models.clinic.ClinicUser])
+@import play.i18n._
+@import helper.twitterBootstrap._
+@import helper._
+
+@main("Clinic Users"){
+<div class="row" style="padding:15px;">
+<table class="table table-striped">
+<tr>
+<th>S.No</th>
+<th>Name</th>
+<th>Doctors</th>
+<th>Action</th>
+</tr>
+	@for((clinicUser,index) <- clinicUsers.zipWithIndex){
+	<tr>
+		<td>@{index+1}</td>
+		<td>@clinicUser.appUser.name</td>
+		@if(clinicUser.doctorsList.size() > 0){
+		<td>
+		@for((doctor,index) <- clinicUser.doctorsList.zipWithIndex){
+		<a href="@routes.PublicController.getDoctorWithSlug(doctor.slugUrl)">@{index+1}. @doctor.appUser.name<a><br>
+		}</td>
+		}else{
+		<td>No Doctors Assigned Yet.</td>
+		}
+		<td>
+		<a href="@routes.ClinicController.editClinicUser(clinicUser.id)" class="btn btn-info btn-sm">Edit</a>
+		<button onclick="showDoctors(@clinicUser.id);" class="btn btn-sm btn-success" >Assign Doctors</button>
+		<a href="#" class="btn btn-danger btn-sm" data-toggle="modal" data-target="#basicModal@clinicUser.id">Remove</a>
+		
+		</td>
+	</tr>
+<div class="modal fade" id="basicModal@clinicUser.id" tabindex="-1" role="dialog" aria-labelledby="basicModal" aria-hidden="true">
+    	<div class="modal-dialog">
+        <div class="modal-content">
+             <div class="modal-body">
+                <h5>do you want to continue?</h5>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default btn-sm" data-dismiss="modal">Close</button>
+                <a href="@routes.ClinicController.removeClinicUser(clinicUser.id)" type="button" class="btn btn-danger btn-sm">Save changes</a>
+        </div>
+    </div>
+  </div>
+</div>
+	}
+</table>
+</div>
+<div class="modal fade" id="doctorList" tabindex="-1" role="dialog" aria-labelledby="basicModal" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+            <a class="close" data-dismiss="modal" aria-hidden="true">X</a>
+            <h4 class="modal-title" id="myModalLabel">Clinc Doctors</h4>
+            </div>
+            <div class="modal-body" id = "modal-content">
+             </div>
+            </div>
+  </div>
+</div>
+
+
+
+<script>
+	function showDoctors(clinicUserId){
+			$('#doctorList').modal('show');
+			$.get('/secure-clinic/get-clinic-doctors/'+clinicUserId, function(htmldata) {
+				$('#modal-content').html(htmldata);
+			});
+	}	
+</script>
+
+}

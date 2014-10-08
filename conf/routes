@@ -147,7 +147,7 @@ GET		/secure-doctor/todays-prescriptions						controllers.DoctorController.viewT
 GET		/secure-doctor/products/get-json							controllers.DoctorController.getAllProductsJson()
 GET		/secure-doctor/diagnostic-tests/get-json					controllers.DoctorController.getAllDiagnosticJson()
 GET		/secure-doctor/follow-up-appointment/:clinicId/:patientId					controllers.DoctorController.getPatientFollowUPAppointment(clinicId : Long,patientId: Long)
-POST		/secure-doctor/follow-up-appointment/:prescriptionId/:patientId					controllers.DoctorController.processPatientFollowUPAppointment(prescriptionId : Long,patientId: Long)
+POST		/secure-doctor/follow-up-appointment/:appointmentId/:patientId					controllers.DoctorController.processPatientFollowUPAppointment(appointmentId : Long,patientId: Long)
 GET		/secure-doctor/get-doctors-list/:clinicId											controllers.DoctorController.getDoctorClinicInfoList(clinicId : Long)
 
 
@@ -405,6 +405,17 @@ POST	/secure-clinic/upload-clinic-images										controllers.ClinicController.u
 GET		/secure-clinic/remove-image/:clinicId/:fileId						controllers.ClinicController.removeClinicImage(clinicId: Long,fileId: Long)
 POST	/secure-clinic/basic-update												controllers.ClinicController.clinicBasicUpdate()
 POST	/secure-clinic/address-update 											controllers.ClinicController.clinicAddressUpdate()
+GET		/secure-clinic/add-clinic-user											controllers.ClinicController.addClinicUserForm()
+POST	/secure-clinic/save-clinic-user											controllers.ClinicController.saveClinicUser()	
+GET		/secure-clinic/all-clinic-users											controllers.ClinicController.listClinicUsers()
+GET		/secure-clinic/edit-clinic-user/:clinicUserId							controllers.ClinicController.editClinicUser(clinicUserId : Long)
+POST	/secure-clinic/update-clinic-user										controllers.ClinicController.updateClinicUser()
+GET		/secure-clinic/get-clinic-doctors/:clinicUserId							controllers.ClinicController.getDoctorClinicInfos(clinicUserId : Long)
+POST	/secure-clinic/assign-clinic-doctors/:clinicUserId				controllers.ClinicController.assaignDoctorsToClinicUser(clinicUserId : Long)
+GET		/secure-clinic/remove-clinic-user/:clinicUserId							controllers.ClinicController.removeClinicUser(clinicUserId : Long)
+
+
+	
 
 
 

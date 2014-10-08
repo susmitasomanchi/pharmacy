@@ -20,7 +20,7 @@ margin-bottom:0px;
 
 </style>
 @if(clinicDoctors.size()==0){
-		No List Created Yet
+		No List Created Yet.
 	}else{	
 		<table class="table table-bordered">
 		@for((docClinic,index) <- clinicDoctors.zipWithIndex){
@@ -56,7 +56,7 @@ margin-bottom:0px;
 				</div>
 				<div class="well" style="padding-left:20px;padding-right:0px;padding-top:0px;padding-bottom:20px">
 				
-				<div class="row">
+				<div class="row" style="padding:15px;">
 									<div class="col-md-8">
 									<h5 style="color:#006687">
 									<b><a href="#" >@docClinic.clinic.name</a></b><br>
@@ -95,7 +95,7 @@ margin-bottom:0px;
 										
 								</table>
 								*@
-								<div class="row" style="padding-left:15px">
+								<div class="row" style="padding:15px">
 
 @if(docClinic.getScheduleMap().get("MONDAY") != null){
 	<span class="badge col-md-2" style="font-size:12px;width:14%">Mon</span>

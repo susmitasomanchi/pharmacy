@@ -1,0 +1,21 @@
+@(doctorClinicInfos : List[models.doctor.DoctorClinicInfo],clinicUser : models.clinic.ClinicUser)
+<div class="row">
+<form action="@routes.ClinicController.assaignDoctorsToClinicUser(clinicUser.id)" method="POST">
+<div class="col-md-4">
+<select name="doctors" multiple>
+<option></option>
+@for(doctorClinicInfo <- doctorClinicInfos){
+	@if(clinicUser.doctorsList.contains(doctorClinicInfo.doctor)){
+		<option value="@doctorClinicInfo.doctor.id" selected>@doctorClinicInfo.doctor.appUser.name</option>
+	}else{
+		<option value="@doctorClinicInfo.doctor.id">@doctorClinicInfo.doctor.appUser.name</option>
+	}
+}
+</select>
+</div>
+<div class="col-md-2">
+<input type="submit" class="btn btn-primary btn-sm" value="Assign">
+</div>
+</form>
+</div>
+

@@ -7,34 +7,41 @@ import java.util.List;
 import java.util.Map;
 import java.util.Random;
 
-import org.apache.commons.codec.binary.Base64;
-
-import com.google.common.io.Files;
-
-import actions.BasicAuth;
-import actions.ConfirmAppUser;
 import models.Address;
 import models.Alert;
 import models.AppUser;
 import models.FileEntity;
 import models.Role;
+import models.Sex;
 import models.State;
-import models.bloodBank.BloodBank;
 import models.clinic.ClinicInvite;
+import models.clinic.ClinicUser;
 import models.doctor.Clinic;
 import models.doctor.Doctor;
 import models.doctor.DoctorClinicInfo;
 import models.pharmacist.Pharmacy;
+
+import org.apache.commons.codec.binary.Base64;
+
 import play.Logger;
+import play.data.Form;
 import play.libs.F.Function0;
 import play.libs.F.Promise;
 import play.mvc.Controller;
-import play.mvc.Result;
 import play.mvc.Http.MultipartFormData.FilePart;
+import play.mvc.Result;
 import utils.EmailService;
+import utils.SMSService;
+import actions.BasicAuth;
+import actions.ConfirmAppUser;
+
+import com.google.common.io.Files;
 
 @BasicAuth
 public class ClinicController extends Controller{
+
+	public static Form<AppUser> registrationForm = Form.form(AppUser.class);
+	public static Form<ClinicUser> clinicUserForm = Form.form(ClinicUser.class);
 
 	public static Result searchDoctorsByEmail(){
 		return ok(views.html.clinic.inviteDoctorsByEmailID.render());
@@ -361,6 +368,208 @@ public class ClinicController extends Controller{
 			flash().put("alert", new Alert("alert-danger", "Sorry. Something went wrong. Please try again.").toString());
 		}
 		return redirect(routes.UserActions.dashboard());
+	}
+	/**
+	 * @author lakshmi
+	 * Action to render addClinicUserForm
+	 * GET/secure-clinic/add-clinic-user
+	 */
+
+	public static Result addClinicUserForm(){
+		if(LoginController.getLoggedInUserRole().equals(Role.CLINIC_ADMIN.toString())){
+			return ok(views.html.clinic.addClinicUser.render());
+		}else{
+			flash().put("alert", new Alert("alert-info", "Sorry. Clinic Admin only can access this.").toString());
+			return redirect(routes.UserActions.dashboard());
+		}
+	}
+	/**
+	 * @author lakshmi
+	 * Action to save clinic user
+	 * POST/secure-clinic/save-clinic-user
+	 */
+	public static Result saveClinicUser(){
+		if(LoginController.getLoggedInUserRole().equals(Role.CLINIC_ADMIN.toString())){
+			final ClinicUser clinicAdmin = LoginController.getLoggedInUser().getClinicUser();
+			final Map<String, String[]> requestMap = request().body().asFormUrlEncoded();
+			final AppUser appUser = new AppUser();
+			final ClinicUser clinicUser = new ClinicUser();
+			if((requestMap.get("name") != null) && !(requestMap.get("name")[0].trim().isEmpty())){
+				Logger.info(requestMap.get("name")[0]+"");
+				appUser.name = requestMap.get("name")[0];
+			}
+			if((requestMap.get("email") != null) && !(requestMap.get("email")[0].trim().isEmpty())){
+				appUser.email = requestMap.get("email")[0];
+			}
+			if((requestMap.get("password") != null) && !(requestMap.get("password")[0].trim().isEmpty())){
+				appUser.password = requestMap.get("password")[0];
+			}
+			if((requestMap.get("mobileNumber") != null) && !(requestMap.get("mobileNumber")[0].trim().isEmpty())){
+				appUser.mobileNumber = Long.parseLong(requestMap.get("mobileNumber")[0]);
+			}
+			if((requestMap.get("sex") != null) && !(requestMap.get("sex")[0].trim().isEmpty())){
+				appUser.sex = Enum.valueOf(Sex.class,requestMap.get("sex")[0]);
+			}
+			if(requestMap.get("dob")[0]!=null ){
+				try {
+					appUser.dob = new SimpleDateFormat("dd-MM-yyyy").parse(requestMap.get("dob")[0].trim());
+					Logger.debug(new SimpleDateFormat("dd-MM-yyyy").parse(requestMap.get("dob")[0].trim()).toString());
+					Logger.debug(""+appUser.dob);
+				} catch (final Exception e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+			}
+			appUser.role = Role.CLINIC_USER;
+			appUser.save();
+			clinicUser.appUser = appUser;
+			clinicUser.clinic = clinicAdmin.clinic;
+			clinicUser.save();
+			// Async Execution
+			Promise.promise(new Function0<Integer>() {
+				//@Override
+				@Override
+				public Integer apply() {
+					int result = 0;
+					if(!EmailService.sendClinicUserConfirmationMail(clinicUser, LoginController.getLoggedInUser().getClinicUser())){
+						result=1;
+					}
+
+					return result;
+				}
+			});
+			// End of async
+
+			final StringBuilder smsMessage = new StringBuilder();
+
+			smsMessage.append(" Hi "+clinicUser.appUser.name+" You have been added as a Clinic User in. "+clinicAdmin.clinic.name+" By "+clinicAdmin.appUser.name);
+			smsMessage.append(" your email id is <b>"+ clinicUser.appUser.email+" </b> and");
+			smsMessage.append(" your password is <b>"+ clinicUser.appUser.password+" </b> .");
+			SMSService.sendSMS(clinicUser.appUser.mobileNumber.toString(), smsMessage.toString());
+			flash().put("alert", new Alert("alert-success", clinicUser.appUser.name+" Added as Clinic User at "+clinicAdmin.clinic.name+".").toString());
+			return redirect(routes.ClinicController.addClinicUserForm());
+
+		}else{
+			flash().put("alert", new Alert("alert-info", "Sorry. Clinic Admin only can access this.").toString());
+			return redirect(routes.UserActions.dashboard());
+		}
+	}
+	/**
+	 * @author lakshmi
+	 * Action to List out all ClinicUsers
+	 * GET/secure-clinic/all-clinic-users
+	 */
+	public static Result listClinicUsers(){
+		final ClinicUser clinicUser = LoginController.getLoggedInUser().getClinicUser();
+		if(LoginController.getLoggedInUserRole().equals(Role.CLINIC_ADMIN.toString())){
+			final List<ClinicUser> clinicUsers = ClinicUser.find.where().eq("clinic", clinicUser.clinic)
+					.eq("appUser.role", Role.CLINIC_USER)
+					.findList();
+			Logger.info("size of List = "+clinicUsers.size());
+			return ok(views.html.clinic.clinicUserList.render(clinicUsers));
+		}else{
+			flash().put("alert", new Alert("alert-info", "Sorry. Clinic Admin only can access this.").toString());
+			return redirect(routes.UserActions.dashboard());
+		}
+	}
+	/**
+	 * @author lakshmi
+	 * Action to render editClinicUser
+	 * GET/secure-clinic/edit-clinic-user/:clinicUserId
+	 */
+	public static Result editClinicUser(final Long clinicUserId){
+		final ClinicUser clinicUser = ClinicUser.find.byId(clinicUserId);
+		return ok(views.html.clinic.editClinicUser.render(clinicUser));
+	}
+	/**
+	 * @author lakshmi
+	 * Action to Update ClinicUser Info
+	 * POST/secure-clinic/update-clinic-user
+	 */
+	public static Result updateClinicUser(){
+		if(LoginController.getLoggedInUserRole().equals(Role.CLINIC_ADMIN.toString())){
+			final Map<String, String[]> requestMap = request().body().asFormUrlEncoded();
+			final AppUser appUser = ClinicUser.find.byId(Long.parseLong(requestMap.get("clinicUserId")[0])).appUser;
+			Logger.info(appUser.id+"appUser id");
+			if((requestMap.get("name") != null) && !(requestMap.get("name")[0].trim().isEmpty())){
+				Logger.info(requestMap.get("name")[0]+"");
+				appUser.name = requestMap.get("name")[0];
+			}
+			if((requestMap.get("email") != null) && !(requestMap.get("email")[0].trim().isEmpty())){
+				appUser.email = requestMap.get("email")[0];
+			}
+			if((requestMap.get("password") != null) && !(requestMap.get("password")[0].trim().isEmpty())){
+				appUser.password = requestMap.get("password")[0];
+			}
+			if((requestMap.get("mobileNumber") != null) && !(requestMap.get("mobileNumber")[0].trim().isEmpty())){
+				appUser.mobileNumber = Long.parseLong(requestMap.get("mobileNumber")[0]);
+			}
+			if((requestMap.get("role") != null) && !(requestMap.get("role")[0].trim().isEmpty())){
+				appUser.role = Enum.valueOf(Role.class,requestMap.get("role")[0]);
+			}
+			if((requestMap.get("sex") != null) && !(requestMap.get("sex")[0].trim().isEmpty())){
+				appUser.sex = Enum.valueOf(Sex.class,requestMap.get("sex")[0]);
+			}
+			appUser.update();
+			flash().put("alert", new Alert("alert-success",appUser.name+" Updated Successfully. ").toString());
+			return redirect(routes.ClinicController.listClinicUsers());
+		}else{
+			flash().put("alert", new Alert("alert-info", "Sorry. Clinic Admin only can access this.").toString());
+			return redirect(routes.UserActions.dashboard());
+		}
+	}
+	/**
+	 * @author lakshmi
+	 * Action to get list of DoctorClinicInfos
+	 * GET/secure-clinic/get-clinic-doctors/:clinicUserId
+	 */
+	public static Result getDoctorClinicInfos(final Long clinicUserId){
+		if(LoginController.getLoggedInUserRole().equals(Role.CLINIC_ADMIN.toString())){
+			final ClinicUser clinicUser = ClinicUser.find.byId(clinicUserId);
+			return ok(views.html.clinic.doctorClinicInfos.render(DoctorClinicInfo.find.where().eq("clinic", clinicUser.clinic).findList(),clinicUser));
+		}else{
+			flash().put("alert", new Alert("alert-info", "Sorry. Clinic Admin only can access this.").toString());
+			return redirect(routes.UserActions.dashboard());
+		}
+	}
+	/**
+	 * @author lakshmi
+	 * Action to assign doctors to the clinicUser
+	 * POST	/secure-clinic/assign-clinic-doctors/:clinicUserId
+	 */
+	public static Result assaignDoctorsToClinicUser(final Long clinicUserId){
+		if(LoginController.getLoggedInUserRole().equals(Role.CLINIC_ADMIN.toString())){
+			final ClinicUser clinicUser = ClinicUser.find.byId(clinicUserId);
+			final String[] docIds = request().body().asFormUrlEncoded().get("doctors");
+			Logger.info("size of array=="+docIds.length);
+			for (final String docId : docIds) {
+				final Doctor doctor = Doctor.find.byId(Long.parseLong(docId));
+				if(!(clinicUser.doctorsList.contains(doctor))){
+					clinicUser.doctorsList.add(doctor);
+				}
+			}
+
+			clinicUser.update();
+			return redirect(routes.ClinicController.listClinicUsers());
+		}else{
+			flash().put("alert", new Alert("alert-info", "Sorry. Clinic Admin only can access this.").toString());
+			return redirect(routes.UserActions.dashboard());
+		}
+	}
+	/**
+	 * @author lakshmi
+	 * Action to remove ClinicUser
+	 */
+	public static Result removeClinicUser(final Long clinicUserId){
+		if(LoginController.getLoggedInUserRole().equals(Role.CLINIC_ADMIN.toString())){
+			Logger.info(""+clinicUserId);
+			ClinicUser.find.byId(clinicUserId).delete();
+			return redirect(routes.ClinicController.listClinicUsers());
+		}else{
+			flash().put("alert", new Alert("alert-info", "Sorry. Clinic Admin only can access this.").toString());
+			return redirect(routes.UserActions.dashboard());
+		}
+
 	}
 
 }

@@ -12,6 +12,7 @@ import javax.activation.DataSource;
 
 import models.AppUser;
 import models.FileEntity;
+import models.clinic.ClinicUser;
 import models.doctor.Appointment;
 import models.doctor.Clinic;
 import models.doctor.Doctor;
@@ -408,6 +409,40 @@ public class EmailService {
 			email.setSubject("Clinic Invitation");
 			email.setHtmlMsg(builder.toString());
 			email.addTo(doctor.appUser.email);
+			email.send();
+			System.out.println("Mail Sent Successfully!");
+			Logger.info(builder.toString());
+		}
+		catch (final Exception e){
+			System.out.println("ERROR While Sending Email");
+			e.printStackTrace();
+			result=false;
+		}
+		return result;
+	}
+
+	/**
+	 * @author lakshmi
+	 * Action to send email and password to the Clinic User.
+	 * NO URL
+	 */
+	public static boolean sendClinicUserConfirmationMail(final ClinicUser clinicUser,final ClinicUser clinicAdmin){
+		boolean result = true;
+		try{
+			final StringBuilder builder=new StringBuilder();
+			builder.append("<html><body>");
+			builder.append("<p> Dear "+clinicUser.appUser.name+",<br><br> You have been added as the Clinic User in "+clinicAdmin.clinic.name+"by "+clinicAdmin.appUser.name+" , <br>");
+			builder.append(" Your Email Id <b>"+clinicUser.appUser.email+"</b><br> Password <b>"+clinicUser.appUser.password+"</b><br><br>Best regards,<br>MedNetwork.in</p>");
+			builder.append("</body></html>");
+			final HtmlEmail email = new HtmlEmail();
+			email.setHostName("smtp.gmail.com");
+			email.setSmtpPort(587);
+			email.setAuthenticator(new DefaultAuthenticator(Constants.EMAIL_ID, Constants.EMAIL_PASSWORD));
+			email.setSSLOnConnect(true);
+			email.setFrom(Constants.EMAIL_ID,"MedNetwork");
+			email.setSubject("Clinic User Confirmation");
+			email.setHtmlMsg(builder.toString());
+			email.addTo(clinicUser.appUser.email);
 			email.send();
 			System.out.println("Mail Sent Successfully!");
 			Logger.info(builder.toString());

@@ -132,7 +132,6 @@ public class LoginController extends Controller {
 	@BasicAuth
 	public static Result updatePassword(){
 		final Map<String, String[]> requestMap = request().body().asFormUrlEncoded();
-		Logger.info("map elements = = "+requestMap.toString());
 		final String oldPassword = requestMap.get("oldPassword")[0].trim();
 		final String newPassword = requestMap.get("newPassword")[0].trim();
 		final String confirmNewPassword = requestMap.get("confirmNewPassword")[0].trim();
@@ -286,11 +285,6 @@ public class LoginController extends Controller {
 		}
 
 	}
-
-
-
-
-
 
 
 	public static AppUser getLoggedInUser() {

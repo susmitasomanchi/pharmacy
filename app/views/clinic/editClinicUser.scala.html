@@ -1,0 +1,62 @@
+@(clinicUser : models.clinic.ClinicUser)
+@import play.i18n._
+@import helper.twitterBootstrap._
+@import helper._
+
+@main(clinicUser.appUser.name){
+<div class="container">
+	<form id="form" action="@routes.ClinicController.updateClinicUser()" method="POST">
+  	<div class="col-md-4">
+  	
+  	<div class="form-group">
+	<label for="Email Id">Name</label>
+	<input type="text"  class="form-control" name="name" value="@clinicUser.appUser.name">
+	</div>
+
+	<div class="form-group">
+	<label for="Email Id">Email Id</label>
+	<input type="text"  class="form-control" name="email" value="@clinicUser.appUser.email">
+	</div>
+
+	<div class="form-group">
+	<label for="Password">Password</label>
+	<input type="text"  class="form-control" name="password" value="@clinicUser.appUser.password">
+	</div>
+
+	<div class="form-group">
+	<label for="Contact No">Contact No</label>
+	<input type="text"  class="form-control" name="mobileNumber" value="@clinicUser.appUser.mobileNumber">
+	</div>
+
+	<div class="form-group">
+	<label for="Role">Role</label>
+	<select id="role" name="role">
+	<option value="@clinicUser.appUser.role">@clinicUser.appUser.role</option>
+			@for((k,v) <- Role.options()){
+				<option value="@k">@v</option>
+			}
+        </select>
+	</div>
+
+	<div class="form-group">
+	<label for="Sex">Sex</label>
+	<select id="sex" name="sex">
+	<option value="@clinicUser.appUser.sex">@clinicUser.appUser.sex</option>
+			@for((k,v) <- Sex.options()){
+				<option value="@k">@v</option>
+			}
+        </select>
+	</div>
+
+	<div class="form-group">
+	<input type="hidden" name="clinicUserId" value="@clinicUser.id">
+	</div>
+
+	<button type="submit" class="btn btn-primary btn-sm">Update</button>
+
+
+</div>
+</form>
+</div>
+
+}

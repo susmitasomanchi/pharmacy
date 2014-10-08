@@ -65,6 +65,9 @@ public class Clinic extends BaseEntity{
 
 	public static Model.Finder<Long, Clinic> find = new Finder<Long, Clinic>(Long.class, Clinic.class);
 
+	public List<DoctorClinicInfo> getDoctorsOfClinic(){
+		return DoctorClinicInfo.find.where().eq("clinic", this).findList();
+	}
 	@Override
 	public boolean equals(final Object arg0) {
 		if(!this.name.equals(((Clinic)arg0).name)){
@@ -80,7 +83,7 @@ public class Clinic extends BaseEntity{
 
 		return super.equals(arg0);
 	}
-	/*@Override
+	@Override
 	public void save(){
 		final StringBuilder stringBuilder = new StringBuilder();
 		stringBuilder.append(this.name.trim().toLowerCase());
@@ -144,7 +147,7 @@ public class Clinic extends BaseEntity{
 		}
 
 
-	}*/
+	}
 
 
 }

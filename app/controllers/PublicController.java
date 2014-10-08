@@ -445,7 +445,7 @@ public class PublicController extends Controller{
 	}
 	/**
 	 * @author lakshmi
-	 *  Action to get byteData as image of BloodBank
+	 * Action to get byteData as image of BloodBank
 	 * GET/bloodBank/get-image/:bloodBankId/:fileId
 	 */
 	public static Result getBloodBankImages(final Long bloodBankId,final Long imageId){
@@ -485,9 +485,9 @@ public class PublicController extends Controller{
 		return ok(byteContent).as("image/jpeg");
 
 	}
-	/*
+	/**
 	 * @author lakshmi
-	 *  Action to get byteData as image of Clinic
+	 * Action to get byteData as image of Clinic
 	 * GET/bloodBank/get-image/:bloodBankId/:fileId
 	 */
 	public static Result getAppUserImage(final Long appUserId){

@@ -1752,8 +1752,8 @@ public class DoctorController extends Controller {
 	}
 	/**
 	 * @author lakshmi
-	 * Action to get Doctors based on specialization
-	 * @return
+	 * Action to get create followUpAppointment for the Patient
+	 * GET/secure-doctor/follow-up-appointment/:clinicId/:patientId
 	 */
 	public static Result getPatientFollowUPAppointment(final Long clinicId,final Long patientId){
 		final Doctor doctor = LoginController.getLoggedInUser().getDoctor();
@@ -1761,9 +1761,9 @@ public class DoctorController extends Controller {
 		return ok(views.html.doctor.patientFollwUpAppointment.render(doctorClinicInfo,Patient.find.byId(patientId)));
 	}
 	/**
-	 * @author Mitesh
-	 * Action to process requested appointments
-	 * POST		/patient/process-appointment
+	 * @author lakshmi
+	 * Action to process followUpAppointment for the Patient
+	 * POST/secure-doctor/follow-up-appointment/:appointmentId/:patientId
 	 */
 	@ConfirmAppUser
 	public static Result processPatientFollowUPAppointment(final Long appointmentId,final Long patientId) {
@@ -1778,7 +1778,6 @@ public class DoctorController extends Controller {
 		appointment.bookedOn = new Date();
 		appointment.update();
 		flash().put("alert", new Alert("alert-success", "Follow Up Appointment Created By Dr."+ doctor.appUser.name+" For The Patient "+patient.appUser.name+" Successfully.").toString());
-
 
 		// Async Execution
 		Promise.promise(new Function0<Integer>() {
@@ -1821,7 +1820,6 @@ public class DoctorController extends Controller {
 	 */
 	public static Result getDoctorClinicInfoList(final Long clinicId){
 		final List<DoctorClinicInfo> doctorClinicInfos = DoctorClinicInfo.find.where().eq("clinic", Clinic.find.byId(clinicId)).findList();
-		Logger.info("size===="+doctorClinicInfos.size());
 		return ok(views.html.patient.doctorClinicList.render(doctorClinicInfos));
 	}
 
@@ -1854,7 +1852,6 @@ public class DoctorController extends Controller {
 		catch(final InterruptedException e){
 
 		}*/
-
 		final String start = request().getQueryString("start");
 		final String end = request().getQueryString("end");
 		Logger.info("start: "+start);
