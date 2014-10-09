@@ -28,7 +28,7 @@ public class ClinicUser extends BaseEntity{
 	@OneToOne
 	public AppUser appUser;
 
-	@ManyToOne(cascade=CascadeType.ALL)
+	@ManyToOne
 	public Clinic clinic;
 
 	@ManyToMany(cascade = CascadeType.ALL)

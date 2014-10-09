@@ -1,0 +1,63 @@
+@(patient : models.patient.Patient,docClinicInfo : models.doctor.DoctorClinicInfo)
+@import play.i18n._
+@import helper.twitterBootstrap._
+@import helper._
+
+@main("Blood Donation Form"){
+<div class="well">
+@*<form action="@routes.BloodBankController.getReceivedBloodDonorInfo()" method="POST">*@
+<div class="row">
+<div class="col-md-4">
+ <label for="emailId" class="col-md-6" style="padding-top:7px">Email Id </label>
+ <div class="col-md-4">
+	<input type="email" style="box-shadow: 1px 1px 3px 3px #aaaaaa;"  name="email" id="email" placeholder=" Email Id" @if(patient != null){value="@patient.appUser.email"}>
+	</div>
+</div>
+</div>
+<br>
+
+<div class="row">
+<div class="col-md-4">
+<label for="confirmEmailId" class="col-md-6" style="padding-top:7px">Confirm Email Id </label>
+<div class="col-md-4">
+	<input type="email" style="box-shadow: 1px 1px 3px 3px #aaaaaa;"  name="confirmEmail" id="confirmEmail" placeholder="Re-Enter Email Id" @if(patient != null){value="@patient.appUser.email"}>
+</div>
+</div>
+</div>
+@if(patient != null){
+<div class="row">
+<div class="col-md-4">
+<label for="confirmEmailId" class="col-md-6" style="padding-top:7px">Enter Verification Code</label>
+<div class="col-md-4">
+	<input type="text" style="box-shadow: 1px 1px 3px 3px #aaaaaa;"  name="code" id="code" placeholder="Verification Code" >
+</div>
+</div>
+</div>
+<br>
+<div style="padding-left:15px;padding-right:15px">
+	<a href="" style="box-shadow: 1px 1px 3px 3px #aaaaaa;"  class="btn btn-sm btn-success">Confirm</a>
+</div>
+}else{
+   <br>
+<div style="padding-left:15px;padding-right:15px">
+	<button style="box-shadow: 1px 1px 3px 3px #aaaaaa;"  onclick="return validateAndSubmit();" class="btn btn-sm btn-success">Verify</button>
+</div>
+}
+<script type="text/javascript">
+	function validateAndSubmit(){
+		alert("hello");
+	var email = $('#email').val().trim();
+	alert(email);
+	var confirmEmailId = $('#confirmEmail').val().trim();
+	alert(confirmEmailId);
+    	if(email != confirmEmailId){
+    		alert("Email Ids Do Not Match!");
+    	    return false;
+    	}
+    	alert("hi"+docClinicInfo.id);
+    	window.location.href = '/secure-clinic/verify-appUser/'+email+'/'+docClinicInfo.id;
+    }
+
+</script>
+
+}

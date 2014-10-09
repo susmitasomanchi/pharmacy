@@ -1,8 +1,12 @@
 package controllers;
 
+import java.security.MessageDigest;
 import java.security.SecureRandom;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Random;
@@ -16,17 +20,21 @@ import models.Sex;
 import models.State;
 import models.clinic.ClinicInvite;
 import models.clinic.ClinicUser;
+import models.doctor.Appointment;
+import models.doctor.AppointmentStatus;
 import models.doctor.Clinic;
 import models.doctor.Doctor;
 import models.doctor.DoctorClinicInfo;
 import models.pharmacist.Pharmacy;
 
 import org.apache.commons.codec.binary.Base64;
+import org.json.JSONArray;
 
 import play.Logger;
 import play.data.Form;
 import play.libs.F.Function0;
 import play.libs.F.Promise;
+import play.mvc.BodyParser;
 import play.mvc.Controller;
 import play.mvc.Http.MultipartFormData.FilePart;
 import play.mvc.Result;
@@ -394,15 +402,36 @@ public class ClinicController extends Controller{
 			final Map<String, String[]> requestMap = request().body().asFormUrlEncoded();
 			final AppUser appUser = new AppUser();
 			final ClinicUser clinicUser = new ClinicUser();
+			String password = "";
 			if((requestMap.get("name") != null) && !(requestMap.get("name")[0].trim().isEmpty())){
 				Logger.info(requestMap.get("name")[0]+"");
 				appUser.name = requestMap.get("name")[0];
 			}
 			if((requestMap.get("email") != null) && !(requestMap.get("email")[0].trim().isEmpty())){
-				appUser.email = requestMap.get("email")[0];
+				appUser.email = requestMap.get("email")[0].toLowerCase().trim();
 			}
 			if((requestMap.get("password") != null) && !(requestMap.get("password")[0].trim().isEmpty())){
-				appUser.password = requestMap.get("password")[0];
+				password = requestMap.get("password")[0];
+				try {
+
+					final Random random = new SecureRandom();
+					final byte[] saltArray = new byte[32];
+					random.nextBytes(saltArray);
+					final String randomSalt = Base64.encodeBase64String(saltArray);
+
+					final String passwordWithSalt = password+randomSalt;
+					final MessageDigest sha256 = MessageDigest.getInstance("SHA-256");
+					final byte[] passBytes = passwordWithSalt.getBytes();
+					final String hashedPasswordWithSalt = Base64.encodeBase64String(sha256.digest(passBytes));
+
+					appUser.salt = randomSalt;
+					appUser.password = hashedPasswordWithSalt;
+
+				} catch (final Exception e) {
+					Logger.error("ERROR WHILE CREATING SHA2 HASH");
+					e.printStackTrace();
+				}
+
 			}
 			if((requestMap.get("mobileNumber") != null) && !(requestMap.get("mobileNumber")[0].trim().isEmpty())){
 				appUser.mobileNumber = Long.parseLong(requestMap.get("mobileNumber")[0]);
@@ -442,9 +471,9 @@ public class ClinicController extends Controller{
 
 			final StringBuilder smsMessage = new StringBuilder();
 
-			smsMessage.append(" Hi "+clinicUser.appUser.name+" You have been added as a Clinic User in. "+clinicAdmin.clinic.name+" By "+clinicAdmin.appUser.name);
-			smsMessage.append(" your email id is <b>"+ clinicUser.appUser.email+" </b> and");
-			smsMessage.append(" your password is <b>"+ clinicUser.appUser.password+" </b> .");
+			smsMessage.append(" Hi "+clinicUser.appUser.name+" You have been added as a Clinic User at "+clinicAdmin.clinic.name+" By "+clinicAdmin.appUser.name);
+			smsMessage.append(" your email id is "+ clinicUser.appUser.email+" and");
+			smsMessage.append(" your password is "+password+" .");
 			SMSService.sendSMS(clinicUser.appUser.mobileNumber.toString(), smsMessage.toString());
 			flash().put("alert", new Alert("alert-success", clinicUser.appUser.name+" Added as Clinic User at "+clinicAdmin.clinic.name+".").toString());
 			return redirect(routes.ClinicController.addClinicUserForm());
@@ -563,7 +592,14 @@ public class ClinicController extends Controller{
 	public static Result removeClinicUser(final Long clinicUserId){
 		if(LoginController.getLoggedInUserRole().equals(Role.CLINIC_ADMIN.toString())){
 			Logger.info(""+clinicUserId);
-			ClinicUser.find.byId(clinicUserId).delete();
+			final ClinicUser clinicUser = ClinicUser.find.byId(clinicUserId);
+			final Clinic clinic = clinicUser.clinic;
+			if(clinic.clinicUserList.contains(clinicUser)){
+				clinic.clinicUserList.remove(clinicUser);
+				clinic.update();
+			}
+			clinicUser.delete();
+			flash().put("alert", new Alert("alert-success", clinicUser.appUser.name+" Deleted Successfully.").toString());
 			return redirect(routes.ClinicController.listClinicUsers());
 		}else{
 			flash().put("alert", new Alert("alert-info", "Sorry. Clinic Admin only can access this.").toString());
@@ -572,7 +608,93 @@ public class ClinicController extends Controller{
 
 	}
 
+	/**
+	 * @author lakshmi
+	 * Action to remove ClinicUser
+	 */
+	public static Result viewClinicWeeklyAppointments(final Long docClincInfoId){
+		final DoctorClinicInfo clinicInfo = DoctorClinicInfo.find.byId(docClincInfoId);
+		int shortestSlot = 15;
+		if(clinicInfo.slot < shortestSlot){
+			shortestSlot = clinicInfo.slot;
+		}
+		return ok(views.html.clinic.viewClinicWeeklyAppointments.render(shortestSlot,clinicInfo));
+	}
+
+	/**
+	 * 
+	 */
+	@BodyParser.Of(BodyParser.Json.class)
+	public static Result getClinicCalendarEventsJson(final Long docClinicId) {
+
+		final String start = request().getQueryString("start");
+		final String end = request().getQueryString("end");
+		Logger.info("start: "+start);
+		Logger.info("end: "+end);
+		final SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+		final List<Appointment> appointments = new ArrayList<Appointment>();
+		try{
+			final Date startDate = sdf.parse(start);
+			final Date endDate = sdf.parse(end);
+			final DoctorClinicInfo docclinicInfo = DoctorClinicInfo.find.byId(docClinicId);
+			final List<AppointmentStatus> statusList = new ArrayList<AppointmentStatus>();
+			statusList.add(AppointmentStatus.APPROVED);
+			statusList.add(AppointmentStatus.SERVED);
+			appointments.addAll(
+					Appointment.find.where()
+					.eq("doctorClinicInfo", docclinicInfo)
+					.in("appointmentStatus", statusList)
+					.ge("appointmentTime", startDate)
+					.le("appointmentTime", endDate).findList()
+					);
+		}
+		catch(final Exception e){
+			Logger.error("somethings wrong with start/end date");
+		}
+		Logger.info("appointmentList size: "+appointments.size());
+
+		final List<HashMap<String,String>> result = new ArrayList<HashMap<String,String>>();
+		final Calendar cal = Calendar.getInstance();
+		for (final Appointment appointment : appointments) {
+			final HashMap<String,String> map = new HashMap<String,String>();
+			map.put("id", appointment.id+"");
+			map.put("title", appointment.requestedBy.name+" ("+appointment.requestedBy.getPatient().getSexAndAge()+") - "+appointment.problemStatement);
+			map.put("start", new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ssZ").format(appointment.appointmentTime));
+			cal.setTime(appointment.appointmentTime);
+			cal.add(Calendar.MINUTE, appointment.doctorClinicInfo.slot);
+			map.put("end", new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ssZ").format(cal.getTime()));
+			if(appointment.appointmentStatus.equals(AppointmentStatus.APPROVED)){
+				//map.put("url", routes.DoctorController.showPrescriptionForm(appointment.id).url());
+				map.put("color", "#001F7A");
+			}
+			if(appointment.appointmentStatus.equals(AppointmentStatus.SERVED)){
+				//map.put("url", routes.DoctorController.showPrescription(appointment.getPrescription().id).url());
+			}
+			result.add(map);
+		}
+		final JSONArray jsonArray = new JSONArray(result);
+		return ok(jsonArray.toString());
+
+	}
+
+	public static Result bookAppointmentForm(final Long docClinicInfoId){
+		final DoctorClinicInfo doctorClinicInfo = DoctorClinicInfo.find.byId(docClinicInfoId);
+		return ok(views.html.clinic.bookPatientAppointment.render(null,doctorClinicInfo));
+	}
+	public static Result verifyAppUser(final String emailId,final Long docClinicInfoId){
+		final DoctorClinicInfo doctorClinicInfo = DoctorClinicInfo.find.byId(docClinicInfoId);
+		final AppUser appUser = AppUser.find.where().eq("email", emailId.toLowerCase().trim()).findUnique();
+		if(appUser.role.equals(Role.PATIENT)){
+			SMSService.sendConfirmationSMS(appUser);
+			return ok(views.html.clinic.bookPatientAppointment.render(appUser.getPatient(),doctorClinicInfo));
+		}else{
+			return redirect(routes.ClinicController.bookAppointmentForm(doctorClinicInfo.id));
+		}
+
+	}
 }
+
+
 
 
 

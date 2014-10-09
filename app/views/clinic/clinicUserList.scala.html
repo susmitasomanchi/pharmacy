@@ -35,11 +35,11 @@
     	<div class="modal-dialog">
         <div class="modal-content">
              <div class="modal-body">
-                <h5>do you want to continue?</h5>
+                <h5>do you want to delete <span style="cursor:pointer;color:#008bca">@clinicUser.appUser.name</span> ?</h5>
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-default btn-sm" data-dismiss="modal">Close</button>
-                <a href="@routes.ClinicController.removeClinicUser(clinicUser.id)" type="button" class="btn btn-danger btn-sm">Save changes</a>
+                <a href="@routes.ClinicController.removeClinicUser(clinicUser.id)" type="button" class="btn btn-danger btn-sm">Delete</a>
         </div>
     </div>
   </div>

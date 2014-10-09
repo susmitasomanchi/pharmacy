@@ -70,6 +70,7 @@ public class LoginController extends Controller {
 		}
 		else {
 			final LoginBean loginBean = filledForm.get();
+			Logger.info(""+loginBean.email);
 			final List<AppUser> appUsers = AppUser.find.where().eq("email", loginBean.email.trim().toLowerCase()).findList();
 			Logger.info("found appUsers: " + appUsers.size());
 			if(appUsers.size() < 1) {

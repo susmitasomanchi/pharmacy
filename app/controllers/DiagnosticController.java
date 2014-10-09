@@ -232,7 +232,7 @@ public class DiagnosticController extends Controller {
 
 	/**
 	 * @author lakshmi
-	 * Action to Display Todays Prescriptions requested by logged-in ADMIN_PHARMACIST
+	 * Action to Display Todays Prescriptions requested by logged-in ADMIN_DIAGREP
 	 * Get /secure-diagnostic/prescriptions
 	 */
 	@ConfirmAppUser
