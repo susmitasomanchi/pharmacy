@@ -591,6 +591,7 @@ public class ClinicController extends Controller{
 	/**
 	 * @author lakshmi
 	 * Action to remove ClinicUser
+	 * GET/secure-clinic/remove-clinic-user/:clinicUserId
 	 */
 	public static Result removeClinicUser(final Long clinicUserId){
 		if(LoginController.getLoggedInUserRole().equals(Role.CLINIC_ADMIN.toString())){
@@ -613,7 +614,8 @@ public class ClinicController extends Controller{
 
 	/**
 	 * @author lakshmi
-	 * Action to remove ClinicUser
+	 * Action to add Calender to the Clinic.
+	 * GET/secure-clinic/weekly-appointments/:docClinicInfoId
 	 */
 	public static Result viewClinicWeeklyAppointments(final Long docClincInfoId){
 		final DoctorClinicInfo clinicInfo = DoctorClinicInfo.find.byId(docClincInfoId);
@@ -625,7 +627,9 @@ public class ClinicController extends Controller{
 	}
 
 	/**
-	 * 
+	 * @author lakshmi
+	 * Action to get CalendarEventsJson
+	 * GET/secure-clinic/weekly-appointments-json/:docClinicInfoId
 	 */
 	@BodyParser.Of(BodyParser.Json.class)
 	public static Result getClinicCalendarEventsJson(final Long docClinicId) {
@@ -679,11 +683,21 @@ public class ClinicController extends Controller{
 		return ok(jsonArray.toString());
 
 	}
-
+	/**
+	 * @author lakshmi
+	 * Action to render verifyAppuserForAppointment
+	 * GET/secure-clinic/book-appointment-form/:docClinicId
+	 */
 	public static Result bookAppointmentForm(final Long docClinicInfoId){
 		final DoctorClinicInfo doctorClinicInfo = DoctorClinicInfo.find.byId(docClinicInfoId);
 		return ok(views.html.clinic.verifyAppuserForAppointment.render(doctorClinicInfo));
 	}
+	/**
+	 * @author lakshmi
+	 * Action to send verification code to the Patient
+	 * GET/secure-clinic/verify-appUser/:emailId/:docClinicId
+	 */
+	@SuppressWarnings("unchecked")
 	public static Result sendVerificationToAppUser(final String emailId,final Long docClinicInfoId){
 		final AppUser appUser = AppUser.find.where().eq("email", emailId.toLowerCase().trim()).findUnique();
 		if((appUser != null) && (appUser.role.equals(Role.PATIENT))){
@@ -691,6 +705,7 @@ public class ClinicController extends Controller{
 			final Long patientId = appUser.getPatient().id;
 			SMSService.sendSMS(Long.toString(appUser.mobileNumber),"Your mobile confirmation code is "+verifivcationCode);
 			Logger.info("Confirmation code sent to: "+appUser.mobileNumber+" code:"+verifivcationCode);
+			@SuppressWarnings("rawtypes")
 			final List list = new ArrayList();
 			list.add(verifivcationCode);
 			list.add(patientId);
@@ -702,18 +717,17 @@ public class ClinicController extends Controller{
 	}
 	/**
 	 * @author lakshmi
-	 * Action to get create followUpAppointment for the Patient
-	 * GET/secure-doctor/follow-up-appointment/:clinicId/:patientId
+	 * Action to get clinicPatientAppointment Form
+	 * GET/secure-clinic/book-appUser-appointment/:docClinicId/:patientId
 	 */
 	public static Result getClinicPatientAppointmentForm(final Long docClinicId,final Long patientId){
-		final Patient patient = Patient.find.byId(patientId);
 		final DoctorClinicInfo doctorClinicInfo = DoctorClinicInfo.find.byId(docClinicId);
 		return ok(views.html.clinic.clinicPatientAppointment.render(doctorClinicInfo,Patient.find.byId(patientId)));
 	}
 	/**
 	 * @author lakshmi
-	 * Action to process followUpAppointment for the Patient
-	 * POST/secure-doctor/follow-up-appointment/:appointmentId/:patientId
+	 * Action to process ClinicPatientAppointment
+	 * POST	/secure-clinic/save-appointment/:appointmentId/:patientId
 	 */
 	@ConfirmAppUser
 	public static Result processClinicPatientAppointment(final Long appointmentId,final Long patientId) {
@@ -747,13 +761,11 @@ public class ClinicController extends Controller{
 		// End of async
 
 		final StringBuilder smsMessage = new StringBuilder();
-
 		smsMessage.append("You have an appointment with Dr. "+appointment.doctorClinicInfo.doctor.appUser.name+" on ");
 		smsMessage.append( new SimpleDateFormat("dd-MMM-yyyy").format(appointment.appointmentTime));
 		smsMessage.append(" at "+ new SimpleDateFormat("HH:mm").format(appointment.appointmentTime));
 		smsMessage.append(" at "+appointment.doctorClinicInfo.clinic.name+", "+appointment.doctorClinicInfo.clinic.address.area);
 		SMSService.sendSMS(appointment.requestedBy.mobileNumber.toString(), smsMessage.toString());
-
 		return redirect(routes.ClinicController.getDoctors());
 	}
 }
