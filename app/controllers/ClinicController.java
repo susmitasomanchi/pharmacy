@@ -25,15 +25,18 @@ import models.doctor.AppointmentStatus;
 import models.doctor.Clinic;
 import models.doctor.Doctor;
 import models.doctor.DoctorClinicInfo;
+import models.patient.Patient;
 import models.pharmacist.Pharmacy;
 
 import org.apache.commons.codec.binary.Base64;
+import org.apache.commons.lang3.RandomStringUtils;
 import org.json.JSONArray;
 
 import play.Logger;
 import play.data.Form;
 import play.libs.F.Function0;
 import play.libs.F.Promise;
+import play.libs.Json;
 import play.mvc.BodyParser;
 import play.mvc.Controller;
 import play.mvc.Http.MultipartFormData.FilePart;
@@ -679,18 +682,79 @@ public class ClinicController extends Controller{
 
 	public static Result bookAppointmentForm(final Long docClinicInfoId){
 		final DoctorClinicInfo doctorClinicInfo = DoctorClinicInfo.find.byId(docClinicInfoId);
-		return ok(views.html.clinic.bookPatientAppointment.render(null,doctorClinicInfo));
+		return ok(views.html.clinic.verifyAppuserForAppointment.render(doctorClinicInfo));
 	}
-	public static Result verifyAppUser(final String emailId,final Long docClinicInfoId){
-		final DoctorClinicInfo doctorClinicInfo = DoctorClinicInfo.find.byId(docClinicInfoId);
+	public static Result sendVerificationToAppUser(final String emailId,final Long docClinicInfoId){
 		final AppUser appUser = AppUser.find.where().eq("email", emailId.toLowerCase().trim()).findUnique();
-		if(appUser.role.equals(Role.PATIENT)){
-			SMSService.sendConfirmationSMS(appUser);
-			return ok(views.html.clinic.bookPatientAppointment.render(appUser.getPatient(),doctorClinicInfo));
+		if((appUser != null) && (appUser.role.equals(Role.PATIENT))){
+			final String verifivcationCode = RandomStringUtils.randomAlphanumeric(5).toLowerCase();
+			final Long patientId = appUser.getPatient().id;
+			SMSService.sendSMS(Long.toString(appUser.mobileNumber),"Your mobile confirmation code is "+verifivcationCode);
+			Logger.info("Confirmation code sent to: "+appUser.mobileNumber+" code:"+verifivcationCode);
+			final List list = new ArrayList();
+			list.add(verifivcationCode);
+			list.add(patientId);
+			return ok(Json.toJson(list));
 		}else{
-			return redirect(routes.ClinicController.bookAppointmentForm(doctorClinicInfo.id));
+			return ok("0");
 		}
 
+	}
+	/**
+	 * @author lakshmi
+	 * Action to get create followUpAppointment for the Patient
+	 * GET/secure-doctor/follow-up-appointment/:clinicId/:patientId
+	 */
+	public static Result getClinicPatientAppointmentForm(final Long docClinicId,final Long patientId){
+		final Patient patient = Patient.find.byId(patientId);
+		final DoctorClinicInfo doctorClinicInfo = DoctorClinicInfo.find.byId(docClinicId);
+		return ok(views.html.clinic.clinicPatientAppointment.render(doctorClinicInfo,Patient.find.byId(patientId)));
+	}
+	/**
+	 * @author lakshmi
+	 * Action to process followUpAppointment for the Patient
+	 * POST/secure-doctor/follow-up-appointment/:appointmentId/:patientId
+	 */
+	@ConfirmAppUser
+	public static Result processClinicPatientAppointment(final Long appointmentId,final Long patientId) {
+		final Patient patient = Patient.find.byId(patientId);
+		final ClinicUser clinicUser = LoginController.getLoggedInUser().getClinicUser();
+		//		final DoctorClinicInfo doctorClinicInfo = DoctorClinicInfo.find.byId(doctorClinicId);
+		final String remark=request().body().asFormUrlEncoded().get("remark")[0];
+		Logger.warn(remark);
+		final Appointment appointment = Appointment.find.byId(appointmentId);
+		appointment.appointmentStatus = AppointmentStatus.APPROVED;
+		appointment.problemStatement = remark;
+		appointment.requestedBy = patient.appUser;
+		//		appointment.doctorClinicInfo = doctorClinicInfo;
+		appointment.bookedOn = new Date();
+		appointment.update();
+		flash().put("alert", new Alert("alert-success", "An Appointment Created By ."+ clinicUser.appUser.name+" For The Patient "+patient.appUser.name+"  at "+appointment.doctorClinicInfo.clinic.name+" Clinic with Dr "+appointment.doctorClinicInfo.doctor.appUser.name+" Successfully.").toString());
+
+		// Async Execution
+		Promise.promise(new Function0<Integer>() {
+			//@Override
+			@Override
+			public Integer apply() {
+				int result = 0;
+				if(!EmailService.sendAppointmentConformMail(appointment.requestedBy, appointment.doctorClinicInfo.doctor.appUser, appointment)){
+					result=1;
+				}
+
+				return result;
+			}
+		});
+		// End of async
+
+		final StringBuilder smsMessage = new StringBuilder();
+
+		smsMessage.append("You have an appointment with Dr. "+appointment.doctorClinicInfo.doctor.appUser.name+" on ");
+		smsMessage.append( new SimpleDateFormat("dd-MMM-yyyy").format(appointment.appointmentTime));
+		smsMessage.append(" at "+ new SimpleDateFormat("HH:mm").format(appointment.appointmentTime));
+		smsMessage.append(" at "+appointment.doctorClinicInfo.clinic.name+", "+appointment.doctorClinicInfo.clinic.address.area);
+		SMSService.sendSMS(appointment.requestedBy.mobileNumber.toString(), smsMessage.toString());
+
+		return redirect(routes.ClinicController.getDoctors());
 	}
 }
 

@@ -1,0 +1,74 @@
+@(docClinicInfo : models.doctor.DoctorClinicInfo)
+@import play.i18n._
+@import helper.twitterBootstrap._
+@import helper._
+
+@main("Verify Patient Form"){
+<div class="well">
+@*<form action="@routes.BloodBankController.getReceivedBloodDonorInfo()" method="POST">*@
+<div class="row">
+<div class="col-md-4">
+ <label for="emailId" class="col-md-6" style="padding-top:7px">Email Id </label>
+ <div class="col-md-4">
+	<input type="email" style="box-shadow: 1px 1px 3px 3px #aaaaaa;"  name="email" id="email" placeholder=" Email Id" >
+	</div>
+</div>
+</div>
+<br>
+
+<div class="row">
+<div class="col-md-4">
+<label for="confirmEmailId" class="col-md-6" style="padding-top:7px">Confirm Email Id </label>
+<div class="col-md-4">
+	<input type="email" style="box-shadow: 1px 1px 3px 3px #aaaaaa;"  name="confirmEmail" id="confirmEmail" placeholder="Re-Enter Email Id">
+</div>
+</div>
+</div>
+<div id="verify-code">
+</div>
+   <br>
+<div style="padding-left:15px;padding-right:15px">
+	<button style="box-shadow: 1px 1px 3px 3px #aaaaaa;" id="button1" onclick="validateAndSubmit(@docClinicInfo.id);" class="btn btn-sm btn-success">Verify</button>
+</div>
+
+
+}
+<script type="text/javascript">
+var code;
+var doctorClinicId;
+var patId;
+	function validateAndSubmit(docClinicId){
+	$('#button1').hide();
+	doctorClinicId = docClinicId;
+	var email = $('#email').val().trim();
+	alert(email);
+	var confirmEmailId = $('#confirmEmail').val().trim();
+	alert(confirmEmailId);
+    	if(email != confirmEmailId){
+    		alert("Email Ids Do Not Match!");
+    	    return false;
+    		}
+    	$.get('/secure-clinic/verify-appUser/'+email+'/'+docClinicId, function(data) {
+    		if(data == 0){
+    			alert("No AppUser Found With "+email);
+    			return false;
+    		}else{
+    		code = data[0];
+    		patId = data[1];
+			$('#verify-code').append('<br><div class="col-md-4" style="padding:0px;"> <label for="code" class="col-md-6" style="padding-top:7px">Enter Vefication Code </label> <div class="col-md-4"><input type="text" style="box-shadow: 1px 1px 3px 3px #aaaaaa;"  name="code" id="code" placeholder="Enter Verifivation Code"></div></div><br><br><div><button style="box-shadow: 1px 1px 3px 3px #aaaaaa;"  onclick="verifyCode(code);" class="btn btn-sm btn-success">Verify</button></div>');
+		}
+			});
+    	    }
+
+    	    function verifyCode(data){
+    	    	var code = $('#code').val().trim();
+    	    	if(code == data){
+    	    		window.location.href = '/secure-clinic/book-appUser-appointment/'+doctorClinicId+'/'+patId;
+    	    	}else{
+    	    		alert("Enter Correct Verification Code");
+    	    		return false;
+    	    	}
+    	    }
+
+</script>
+

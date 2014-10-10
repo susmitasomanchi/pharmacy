@@ -411,12 +411,15 @@ GET		/secure-clinic/all-clinic-users											controllers.ClinicController.list
 GET		/secure-clinic/edit-clinic-user/:clinicUserId							controllers.ClinicController.editClinicUser(clinicUserId : Long)
 POST	/secure-clinic/update-clinic-user										controllers.ClinicController.updateClinicUser()
 GET		/secure-clinic/get-clinic-doctors/:clinicUserId							controllers.ClinicController.getDoctorClinicInfos(clinicUserId : Long)
-POST	/secure-clinic/assign-clinic-doctors/:clinicUserId				controllers.ClinicController.assaignDoctorsToClinicUser(clinicUserId : Long)
+POST	/secure-clinic/assign-clinic-doctors/:clinicUserId						controllers.ClinicController.assaignDoctorsToClinicUser(clinicUserId : Long)
 GET		/secure-clinic/remove-clinic-user/:clinicUserId							controllers.ClinicController.removeClinicUser(clinicUserId : Long)
-GET		/secure-clinic/weekly-appointments/:docClinicInfoId								controllers.ClinicController.viewClinicWeeklyAppointments(docClinicInfoId: Long)
-GET		/secure-clinic/weekly-appointments-json/:docClinicInfoId								controllers.ClinicController.getClinicCalendarEventsJson(docClinicInfoId: Long)
-GET		/secure-clinic/book-appointment-form/:docClinicId													controllers.ClinicController.bookAppointmentForm(docClinicId: Long)
-GET		/secure-clinic/verify-appUser/:emailId/:docClinicId													controllers.ClinicController.verifyAppUser(emailId : String,docClinicId: Long)
+GET		/secure-clinic/weekly-appointments/:docClinicInfoId						controllers.ClinicController.viewClinicWeeklyAppointments(docClinicInfoId: Long)
+GET		/secure-clinic/weekly-appointments-json/:docClinicInfoId				controllers.ClinicController.getClinicCalendarEventsJson(docClinicInfoId: Long)
+GET		/secure-clinic/book-appointment-form/:docClinicId						controllers.ClinicController.bookAppointmentForm(docClinicId: Long)
+GET		/secure-clinic/verify-appUser/:emailId/:docClinicId						controllers.ClinicController.sendVerificationToAppUser(emailId : String,docClinicId: Long)
+#POST	/secure-clinic/get-appointmet-form/::docClinicId/:patientId				controllers.ClinicController.verifyAppUser(docClinicId : Long,patientId : Long)
+GET	/secure-clinic/book-appUser-appointment/:docClinicId/:patientId			controllers.ClinicController.getClinicPatientAppointmentForm(docClinicId : Long,patientId : Long)
+POST	/secure-clinic/save-appointment/:appointmentId/:patientId	    		controllers.ClinicController.processClinicPatientAppointment(appointmentId:Long,patientId : Long) 
 
 	
 
