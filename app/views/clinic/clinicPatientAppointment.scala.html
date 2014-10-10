@@ -32,17 +32,10 @@
 </div>
 
 <div class="btn-group" data-toggle="buttons" style="padding-left:20px; font-size:12px;">
-@for(clinicinfo <- doctorClinic.doctor.getActiveClinic()){
-	@if(clinicinfo.id==doctorClinic.id){
-	<label class="btn btn-primary btn-sm active" onclick="window.location.href = '@routes.DoctorController.getPatientFollowUPAppointment(clinicinfo.clinic.id,patient.id)'">
-    	<input type="checkbox"  checked> @clinicinfo.clinic.name<br>@clinicinfo.clinic.address.area
-	 </label>	
-	}else{
-	<label class="btn btn-primary btn-sm "onclick="window.location.href ='@routes.DoctorController.getPatientFollowUPAppointment(clinicinfo.clinic.id,patient.id)'">
-   	 <input type="checkbox" > @clinicinfo.clinic.name<br>@clinicinfo.clinic.address.area
+
+	<label class="btn btn-primary btn-sm "onclick="window.location.href ='@routes.ClinicController.getClinicPatientAppointmentForm(doctorClinic.clinic.id,patient.id)'">
+   	 <input type="checkbox" > @doctorClinic.clinic.name<br>@doctorClinic.clinic.address.area
 	</label>	
-	}
-}
 </div>
 
 <div style="padding-left:20px">
