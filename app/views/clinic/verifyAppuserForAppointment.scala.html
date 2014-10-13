@@ -24,6 +24,17 @@
 </div>
 </div>
 </div>
+<br>
+
+<div class="row">
+<div class="col-md-4">
+<label for="confirmEmailId" class="col-md-6" style="padding-top:7px">Mobile Number </label>
+<div class="col-md-4">
+	<input type="text" style="box-shadow: 1px 1px 3px 3px #aaaaaa;"  name="mobileNum" id="mobileNum" placeholder="Enter Mobile Num">
+</div>
+</div>
+</div>
+<br>
 <div id="verify-code">
 </div>
    <br>
@@ -48,7 +59,7 @@ var patId;
     		alert("Email Ids Do Not Match!");
     	    return false;
     		}
-    	$.get('/secure-clinic/verify-appUser/'+email+'/'+docClinicId, function(data) {
+    	$.get('/secure-clinic/verify-appUser/'+email+'/'+$('#mobileNum').val().trim()+'/'+docClinicId, function(data) {
     		if(data == 0){
     			alert("No AppUser Found With "+email);
     			return false;

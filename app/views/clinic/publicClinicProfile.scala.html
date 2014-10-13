@@ -137,22 +137,24 @@ $('body').on('click', function (e) {
 </div>
 
 
-
 </div>
 <div class="col-md-1"></div>
-</div>
-<br>
+
+
 <h1 style="text-shadow:10px 10px 10px white, 3px 3px 20px white; position:relative; top:-400px; text-align:center;font-weight:bold;color:#006687">
 @clinic.name
 
    
 </h1>
-<br>
+</div>
+</div>
+
 <div class="alert alert-success" >
-<p style="font-size:1.5em; align:justify; margin-top:0px;">
+<p style="align:justify; margin-top:0px;">
 	@clinic.description	 
 </p>
 </div>
+
 <div class="row" style="padding:15px;">
 
 <div class="col-md-10">
@@ -160,7 +162,7 @@ $('body').on('click', function (e) {
 <div class="col-md-5">
 
 
-@clinic.contactPersonName<br>
+
 @if(clinic.address != null){
 <h5>@clinic.contactPersonName<span data-toggle="modal" data-target="#myaddrModal" style="cursor:pointer; position:relative; left: 20px; font-size:20px;"><i id="spinner2" class="fa fa-cog"></i></span></h5>
 <h5>@clinic.address.addressLine1</h5>

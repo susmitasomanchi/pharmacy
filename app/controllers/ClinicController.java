@@ -531,7 +531,26 @@ public class ClinicController extends Controller{
 				appUser.email = requestMap.get("email")[0];
 			}
 			if((requestMap.get("password") != null) && !(requestMap.get("password")[0].trim().isEmpty())){
-				appUser.password = requestMap.get("password")[0];
+				final String password = requestMap.get("password")[0];
+				try {
+
+					final Random random = new SecureRandom();
+					final byte[] saltArray = new byte[32];
+					random.nextBytes(saltArray);
+					final String randomSalt = Base64.encodeBase64String(saltArray);
+
+					final String passwordWithSalt = password+randomSalt;
+					final MessageDigest sha256 = MessageDigest.getInstance("SHA-256");
+					final byte[] passBytes = passwordWithSalt.getBytes();
+					final String hashedPasswordWithSalt = Base64.encodeBase64String(sha256.digest(passBytes));
+
+					appUser.salt = randomSalt;
+					appUser.password = hashedPasswordWithSalt;
+
+				} catch (final Exception e) {
+					Logger.error("ERROR WHILE CREATING SHA2 HASH");
+					e.printStackTrace();
+				}
 			}
 			if((requestMap.get("mobileNumber") != null) && !(requestMap.get("mobileNumber")[0].trim().isEmpty())){
 				appUser.mobileNumber = Long.parseLong(requestMap.get("mobileNumber")[0]);
@@ -541,6 +560,16 @@ public class ClinicController extends Controller{
 			}
 			if((requestMap.get("sex") != null) && !(requestMap.get("sex")[0].trim().isEmpty())){
 				appUser.sex = Enum.valueOf(Sex.class,requestMap.get("sex")[0]);
+			}
+			if(requestMap.get("dob")[0]!=null ){
+				try {
+					appUser.dob = new SimpleDateFormat("dd-MM-yyyy").parse(requestMap.get("dob")[0].trim());
+					Logger.debug(new SimpleDateFormat("dd-MM-yyyy").parse(requestMap.get("dob")[0].trim()).toString());
+					Logger.debug(""+appUser.dob);
+				} catch (final Exception e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
 			}
 			appUser.update();
 			flash().put("alert", new Alert("alert-success",appUser.name+" Updated Successfully. ").toString());
@@ -698,9 +727,47 @@ public class ClinicController extends Controller{
 	 * GET/secure-clinic/verify-appUser/:emailId/:docClinicId
 	 */
 	@SuppressWarnings("unchecked")
-	public static Result sendVerificationToAppUser(final String emailId,final Long docClinicInfoId){
+	public static Result sendVerificationToAppUser(final String emailId,final String mobileNum,final Long docClinicInfoId){
+		final DoctorClinicInfo doctorClinicInfo = DoctorClinicInfo.find.byId(docClinicInfoId);
 		final AppUser appUser = AppUser.find.where().eq("email", emailId.toLowerCase().trim()).findUnique();
-		if((appUser != null) && (appUser.role.equals(Role.PATIENT))){
+		if((appUser == null)){
+			final AppUser appUserPatient = new AppUser();
+			appUserPatient.email = emailId.toLowerCase().trim();
+			final String pwd = RandomStringUtils.randomAlphanumeric(4).toLowerCase();
+			try {
+				final Random random = new SecureRandom();
+				final byte[] saltArray = new byte[32];
+				random.nextBytes(saltArray);
+				final String randomSalt = Base64.encodeBase64String(saltArray);
+				final String passwordWithSalt = pwd+randomSalt;
+				final MessageDigest sha256 = MessageDigest.getInstance("SHA-256");
+				final byte[] passBytes = passwordWithSalt.getBytes();
+				final String hashedPasswordWithSalt = Base64.encodeBase64String(sha256.digest(passBytes));
+
+				appUserPatient.salt = randomSalt;
+				appUserPatient.password = hashedPasswordWithSalt;
+
+			} catch (final Exception e) {
+				Logger.error("ERROR WHILE CREATING SHA2 HASH");
+				e.printStackTrace();
+			}
+			appUserPatient.mobileNumber = Long.valueOf(mobileNum);
+			appUserPatient.role = Role.PATIENT;
+			appUserPatient.save();
+			final Patient patient = new Patient();
+			patient.appUser = appUserPatient;
+			patient.save();
+			final String verifivcationCode = RandomStringUtils.randomAlphanumeric(5).toLowerCase();
+			SMSService.sendSMS(Long.toString(appUserPatient.mobileNumber),doctorClinicInfo.clinic.name+" Has created an account at Mednetwork.in  Your UserId is "+emailId+
+					" Password is:"+pwd+" and Your mobile confirmation code is "+verifivcationCode);
+			Logger.info("Confirmation code sent to: "+appUserPatient.mobileNumber+" code:"+verifivcationCode);
+			@SuppressWarnings("rawtypes")
+			final List list = new ArrayList();
+			list.add(verifivcationCode);
+			list.add(patient.id);
+			return ok(Json.toJson(list));
+		}
+		else if((appUser != null) && (appUser.role.equals(Role.PATIENT))){
 			final String verifivcationCode = RandomStringUtils.randomAlphanumeric(5).toLowerCase();
 			final Long patientId = appUser.getPatient().id;
 			SMSService.sendSMS(Long.toString(appUser.mobileNumber),"Your mobile confirmation code is "+verifivcationCode);
@@ -710,7 +777,8 @@ public class ClinicController extends Controller{
 			list.add(verifivcationCode);
 			list.add(patientId);
 			return ok(Json.toJson(list));
-		}else{
+		}
+		else{
 			return ok("0");
 		}
 
@@ -733,17 +801,15 @@ public class ClinicController extends Controller{
 	public static Result processClinicPatientAppointment(final Long appointmentId,final Long patientId) {
 		final Patient patient = Patient.find.byId(patientId);
 		final ClinicUser clinicUser = LoginController.getLoggedInUser().getClinicUser();
-		//		final DoctorClinicInfo doctorClinicInfo = DoctorClinicInfo.find.byId(doctorClinicId);
 		final String remark=request().body().asFormUrlEncoded().get("remark")[0];
 		Logger.warn(remark);
 		final Appointment appointment = Appointment.find.byId(appointmentId);
 		appointment.appointmentStatus = AppointmentStatus.APPROVED;
 		appointment.problemStatement = remark;
 		appointment.requestedBy = patient.appUser;
-		//		appointment.doctorClinicInfo = doctorClinicInfo;
 		appointment.bookedOn = new Date();
 		appointment.update();
-		flash().put("alert", new Alert("alert-success", "An Appointment Created By ."+ clinicUser.appUser.name+" For The Patient "+patient.appUser.name+"  at "+appointment.doctorClinicInfo.clinic.name+" Clinic with Dr "+appointment.doctorClinicInfo.doctor.appUser.name+" Successfully.").toString());
+		flash().put("alert", new Alert("alert-success", "An Appointment Created By ."+ clinicUser.appUser.name+" For The Patient "+patient.appUser.name+"  at "+appointment.doctorClinicInfo.clinic.name+" with Dr "+appointment.doctorClinicInfo.doctor.appUser.name+" Successfully.").toString());
 
 		// Async Execution
 		Promise.promise(new Function0<Integer>() {

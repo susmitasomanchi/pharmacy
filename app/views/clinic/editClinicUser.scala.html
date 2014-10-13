@@ -20,7 +20,7 @@
 
 	<div class="form-group">
 	<label for="Password">Password</label>
-	<input type="text"  class="form-control" name="password" value="@clinicUser.appUser.password">
+	<input type="text"  class="form-control" name="password">
 	</div>
 
 	<div class="form-group">
@@ -48,6 +48,14 @@
         </select>
 	</div>
 
+<div class="form-group">
+      <label for="inputDOB">Birth Date<br><span style="font-size:10px;"><b>(DD-MM-YYYY)</b></span></label>
+		<div class="input-append date myDatepicker" data-date="01-01-1990" data-date-format="dd-mm-yyyy">
+			<input id="dob-datepicker" class="span2" size="16" type="text" name="dob" @if(clinicUser.appUser.dob != null){value="@clinicUser.appUser.dob.format("dd-MM-yyyy")"}>
+			<span class="add-on"><i class="icon-th"></i></span>
+      </div>
+    </div>
+	
 	<div class="form-group">
 	<input type="hidden" name="clinicUserId" value="@clinicUser.id">
 	</div>
@@ -58,5 +66,17 @@
 </div>
 </form>
 </div>
+<script>
+$('.myDatepicker').each(function() {
+var nowTemp = new Date();
+var now = new Date(nowTemp.getFullYear(), nowTemp.getMonth(), nowTemp.getDate(), 0, 0, 0, 0);
+var checkin =$('#dob-datepicker').datepicker({
+	  format: 'dd-mm-yyyy',
+	  onRender: function(date) {
+		    return date.valueOf() > now.valueOf() ? 'disabled' : '';
+	  },
+})
+});
+</script>
 
 }
