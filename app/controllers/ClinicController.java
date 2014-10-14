@@ -640,7 +640,6 @@ public class ClinicController extends Controller{
 		}
 
 	}
-
 	/**
 	 * @author lakshmi
 	 * Action to add Calender to the Clinic.
@@ -727,45 +726,11 @@ public class ClinicController extends Controller{
 	 * GET/secure-clinic/verify-appUser/:emailId/:docClinicId
 	 */
 	@SuppressWarnings("unchecked")
-	public static Result sendVerificationToAppUser(final String emailId,final String mobileNum,final Long docClinicInfoId){
+	public static Result sendVerificationToAppUser(final String emailId,final Long docClinicInfoId){
 		final DoctorClinicInfo doctorClinicInfo = DoctorClinicInfo.find.byId(docClinicInfoId);
 		final AppUser appUser = AppUser.find.where().eq("email", emailId.toLowerCase().trim()).findUnique();
 		if((appUser == null)){
-			final AppUser appUserPatient = new AppUser();
-			appUserPatient.email = emailId.toLowerCase().trim();
-			final String pwd = RandomStringUtils.randomAlphanumeric(4).toLowerCase();
-			try {
-				final Random random = new SecureRandom();
-				final byte[] saltArray = new byte[32];
-				random.nextBytes(saltArray);
-				final String randomSalt = Base64.encodeBase64String(saltArray);
-				final String passwordWithSalt = pwd+randomSalt;
-				final MessageDigest sha256 = MessageDigest.getInstance("SHA-256");
-				final byte[] passBytes = passwordWithSalt.getBytes();
-				final String hashedPasswordWithSalt = Base64.encodeBase64String(sha256.digest(passBytes));
-
-				appUserPatient.salt = randomSalt;
-				appUserPatient.password = hashedPasswordWithSalt;
-
-			} catch (final Exception e) {
-				Logger.error("ERROR WHILE CREATING SHA2 HASH");
-				e.printStackTrace();
-			}
-			appUserPatient.mobileNumber = Long.valueOf(mobileNum);
-			appUserPatient.role = Role.PATIENT;
-			appUserPatient.save();
-			final Patient patient = new Patient();
-			patient.appUser = appUserPatient;
-			patient.save();
-			final String verifivcationCode = RandomStringUtils.randomAlphanumeric(5).toLowerCase();
-			SMSService.sendSMS(Long.toString(appUserPatient.mobileNumber),doctorClinicInfo.clinic.name+" Has created an account at Mednetwork.in  Your UserId is "+emailId+
-					" Password is:"+pwd+" and Your mobile confirmation code is "+verifivcationCode);
-			Logger.info("Confirmation code sent to: "+appUserPatient.mobileNumber+" code:"+verifivcationCode);
-			@SuppressWarnings("rawtypes")
-			final List list = new ArrayList();
-			list.add(verifivcationCode);
-			list.add(patient.id);
-			return ok(Json.toJson(list));
+			return ok("1");
 		}
 		else if((appUser != null) && (appUser.role.equals(Role.PATIENT))){
 			final String verifivcationCode = RandomStringUtils.randomAlphanumeric(5).toLowerCase();
@@ -783,6 +748,91 @@ public class ClinicController extends Controller{
 		}
 
 	}
+	/**
+	 * @author lakshmi
+	 * Action to render addNewPatientFromClinic
+	 * GET/secure-clinic/new-patient-form/:docClinicId
+	 */
+	public static Result getNewPatientForm(final Long docClinicId){
+		return ok(views.html.clinic.addNewPatientFromClinic.render(null,DoctorClinicInfo.find.byId(docClinicId)));
+	}
+	/**
+	 * @author lakshmi
+	 * Action to create new Patient from the Clinic by CLINIC_USER
+	 * POST/secure-clinic/save-patient/:docClinicId
+	 */
+	public static Result savePatientProfile(final Long docClinicId){
+		final Map<String,String[]> requestMap = request().body().asFormUrlEncoded();
+		final AppUser appUser = new AppUser();
+		if((requestMap.get("name")[0]!= null) && !(requestMap.get("name")[0].trim().isEmpty())){
+			appUser.name = requestMap.get("name")[0];
+		}
+		if((requestMap.get("email")[0]!= null) && !(requestMap.get("email")[0].trim().isEmpty())){
+			appUser.email = requestMap.get("email")[0].trim().toLowerCase();
+		}
+		if((requestMap.get("contactNo")[0]!= null) && !(requestMap.get("contactNo")[0].trim().isEmpty())){
+			appUser.mobileNumber = Long.parseLong(requestMap.get("contactNo")[0]);
+		}
+		if(requestMap.get("dob")[0]!=null ){
+			try {
+				appUser.dob = new SimpleDateFormat("dd-MM-yyyy").parse(requestMap.get("dob")[0].trim());
+				Logger.debug(new SimpleDateFormat("dd-MM-yyyy").parse(requestMap.get("dob")[0].trim()).toString());
+				Logger.debug(""+appUser.dob);
+			} catch (final Exception e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		}
+		final String pwd = RandomStringUtils.randomAlphanumeric(4).toLowerCase();
+		try {
+			final Random random = new SecureRandom();
+			final byte[] saltArray = new byte[32];
+			random.nextBytes(saltArray);
+			final String randomSalt = Base64.encodeBase64String(saltArray);
+			final String passwordWithSalt = pwd+randomSalt;
+			final MessageDigest sha256 = MessageDigest.getInstance("SHA-256");
+			final byte[] passBytes = passwordWithSalt.getBytes();
+			final String hashedPasswordWithSalt = Base64.encodeBase64String(sha256.digest(passBytes));
+
+			appUser.salt = randomSalt;
+			appUser.password = hashedPasswordWithSalt;
+
+		} catch (final Exception e) {
+			Logger.error("ERROR WHILE CREATING SHA2 HASH");
+			e.printStackTrace();
+		}
+
+		appUser.role = Role.PATIENT;
+		appUser.save();
+
+		SMSService.sendSMS(Long.toString(appUser.mobileNumber), " An Account Has Been Created at mednetwork.in. Your Login Email ID Is "+appUser.email+" ,Password Is "+pwd);
+		EmailService.sendConfirmationEmail(appUser);
+		SMSService.sendConfirmationSMS(appUser);
+		final Patient patient = new Patient();
+		patient.appUser = appUser;
+		patient.save();
+		return ok(views.html.clinic.addNewPatientFromClinic.render(appUser,DoctorClinicInfo.find.byId(docClinicId)));
+	}
+	/**
+	 * @author lakshmi
+	 * Action to verify mobile confirmation code of patient
+	 * POST/secure-clinic/verify-confirmation-code/:appUserId/:docClinicId
+	 */
+	public static Result verifyMobileConfirmationCode(final Long appUserId,final Long docClinicId){
+		final AppUser appUser = AppUser.find.byId(appUserId);
+		if((request().body().asFormUrlEncoded().get("code")[0]) != null && !(request().body().asFormUrlEncoded().get("code")[0].trim().isEmpty())){
+			if(appUser.mobileNumberConfirmationKey.equals(request().body().asFormUrlEncoded().get("code")[0])){
+				return redirect(routes.ClinicController.getClinicPatientAppointmentForm(docClinicId, appUser.getPatient().id));
+			}else{
+				flash().put("alert", new Alert("alert-info", "Mobile Confirmation Code is not matched. Please enter correct Code.").toString());
+				return ok(views.html.clinic.addNewPatientFromClinic.render(appUser,DoctorClinicInfo.find.byId(docClinicId)));
+			}
+		}else{
+			flash().put("alert", new Alert("alert-info", "Enter Correct Confirmation Code.").toString());
+			return ok(views.html.clinic.addNewPatientFromClinic.render(appUser,DoctorClinicInfo.find.byId(docClinicId)));
+		}
+	}
+
 	/**
 	 * @author lakshmi
 	 * Action to get clinicPatientAppointment Form

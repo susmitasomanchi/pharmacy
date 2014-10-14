@@ -26,15 +26,7 @@
 </div>
 <br>
 
-<div class="row">
-<div class="col-md-4">
-<label for="confirmEmailId" class="col-md-6" style="padding-top:7px">Mobile Number </label>
-<div class="col-md-4">
-	<input type="text" style="box-shadow: 1px 1px 3px 3px #aaaaaa;"  name="mobileNum" id="mobileNum" placeholder="Enter Mobile Num">
-</div>
-</div>
-</div>
-<br>
+
 <div id="verify-code">
 </div>
    <br>
@@ -52,17 +44,18 @@ var patId;
 	$('#button1').hide();
 	doctorClinicId = docClinicId;
 	var email = $('#email').val().trim();
-	alert(email);
 	var confirmEmailId = $('#confirmEmail').val().trim();
-	alert(confirmEmailId);
     	if(email != confirmEmailId){
     		alert("Email Ids Do Not Match!");
     	    return false;
     		}
-    	$.get('/secure-clinic/verify-appUser/'+email+'/'+$('#mobileNum').val().trim()+'/'+docClinicId, function(data) {
+    	$.get('/secure-clinic/verify-appUser/'+email+'/'+docClinicId, function(data) {
     		if(data == 0){
     			alert("No AppUser Found With "+email);
     			return false;
+    		}else if(data == 1){
+    		alert(email+" is not existed in the system.create an account???");
+    		$('#verify-code').append('<div class="col-md-2"><input type="checkbox" id="check" />Is Patient Agrred?</div><div class="col-md-5"><li style="cursor:pointer;" onclick="createNewPatient();">Click Here To Create An Account For Patient</li></div>');
     		}else{
     		code = data[0];
     		patId = data[1];
@@ -70,7 +63,15 @@ var patId;
 		}
 			});
     	    }
-
+		function createNewPatient(){
+		alert("hello");
+		 if($('#check').is(':checked')){
+			window.location.href='/secure-clinic/new-patient-form/'+doctorClinicId;
+			}else{
+			alert("patient Confirmation Is Compulsory To Create An Account");
+			return false; 
+			}
+			}
     	    function verifyCode(data){
     	    	var code = $('#code').val().trim();
     	    	if(code == data){
