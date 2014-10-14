@@ -753,8 +753,8 @@ public class ClinicController extends Controller{
 	 * Action to render addNewPatientFromClinic
 	 * GET/secure-clinic/new-patient-form/:docClinicId
 	 */
-	public static Result getNewPatientForm(final Long docClinicId){
-		return ok(views.html.clinic.addNewPatientFromClinic.render(null,DoctorClinicInfo.find.byId(docClinicId)));
+	public static Result getNewPatientForm(final Long docClinicId,final String email){
+		return ok(views.html.clinic.addNewPatientFromClinic.render(null,DoctorClinicInfo.find.byId(docClinicId),email));
 	}
 	/**
 	 * @author lakshmi
@@ -811,7 +811,7 @@ public class ClinicController extends Controller{
 		final Patient patient = new Patient();
 		patient.appUser = appUser;
 		patient.save();
-		return ok(views.html.clinic.addNewPatientFromClinic.render(appUser,DoctorClinicInfo.find.byId(docClinicId)));
+		return ok(views.html.clinic.addNewPatientFromClinic.render(appUser,DoctorClinicInfo.find.byId(docClinicId),""));
 	}
 	/**
 	 * @author lakshmi
@@ -825,11 +825,11 @@ public class ClinicController extends Controller{
 				return redirect(routes.ClinicController.getClinicPatientAppointmentForm(docClinicId, appUser.getPatient().id));
 			}else{
 				flash().put("alert", new Alert("alert-info", "Mobile Confirmation Code is not matched. Please enter correct Code.").toString());
-				return ok(views.html.clinic.addNewPatientFromClinic.render(appUser,DoctorClinicInfo.find.byId(docClinicId)));
+				return ok(views.html.clinic.addNewPatientFromClinic.render(appUser,DoctorClinicInfo.find.byId(docClinicId),""));
 			}
 		}else{
 			flash().put("alert", new Alert("alert-info", "Enter Correct Confirmation Code.").toString());
-			return ok(views.html.clinic.addNewPatientFromClinic.render(appUser,DoctorClinicInfo.find.byId(docClinicId)));
+			return ok(views.html.clinic.addNewPatientFromClinic.render(appUser,DoctorClinicInfo.find.byId(docClinicId),""));
 		}
 	}
 

@@ -1,5 +1,7 @@
 package controllers;
 
+import java.security.MessageDigest;
+import java.security.SecureRandom;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -8,6 +10,10 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Random;
+
+import org.apache.commons.codec.binary.Base64;
+import org.apache.commons.lang3.RandomStringUtils;
 
 import models.Address;
 import models.Alert;
@@ -20,12 +26,16 @@ import models.Sex;
 import models.State;
 import models.bloodBank.BloodBank;
 import models.bloodBank.BloodDonation;
+import models.doctor.DoctorClinicInfo;
 import models.patient.Patient;
 import models.pharmacist.Pharmacy;
 import play.Logger;
+import play.libs.Json;
 import play.mvc.Controller;
 import play.mvc.Http.MultipartFormData.FilePart;
 import play.mvc.Result;
+import utils.EmailService;
+import utils.SMSService;
 import actions.BasicAuth;
 import actions.ConfirmAppUser;
 
@@ -460,19 +470,29 @@ public class BloodBankController extends Controller{
 	 * Action to find blood donors by Email Id
 	 * GET/secure-blood-bank/find-blood-donor/:emailId
 	 */
+	@SuppressWarnings("unchecked")
 	public static Result findBloodDonorByEmail(final String email){
-		if(!(email.trim().isEmpty())){
-			final AppUser appUser = AppUser.find.where().eq("isBloodDonor", true).eq("email", email).findUnique();
-			if((appUser != null) && (appUser.role.equals(Role.PATIENT))){
-				return ok(views.html.bloodBank.addBloodDonorsToBloodBank.render(appUser.getPatient()));
-			}
-			else{
-				flash().put("alert", new Alert("alert-info", "Sorry. with "+email+"No Blood Donor Found.").toString());
-				return ok(views.html.bloodBank.addBloodDonorsToBloodBank.render(null));
-			}
+		final AppUser appUser = AppUser.find.where().eq("email", email).findUnique();
+		if((appUser != null) && (appUser.role.equals(Role.PATIENT)) && appUser.isBloodDonor == true){
+			final String verifivcationCode = RandomStringUtils.randomAlphanumeric(5).toLowerCase();
+			final Long patientId = appUser.getPatient().id;
+			SMSService.sendSMS(Long.toString(appUser.mobileNumber),"Your mobile confirmation code is "+verifivcationCode);
+			Logger.info("Confirmation code sent to: "+appUser.mobileNumber+" code:"+verifivcationCode);
+			@SuppressWarnings("rawtypes")
+			final List list = new ArrayList();
+			list.add(verifivcationCode);
+			list.add(patientId);
+			return ok(Json.toJson(list));
 		}
-		flash().put("alert", new Alert("alert-danger", "Email Id Is Mandatory..").toString());
-		return ok(views.html.bloodBank.addBloodDonorsToBloodBank.render(null));
+		else if(appUser == null){
+			return ok("1");
+		}
+		return ok("0");
+
+	}
+	public static Result getBloodDonorInfo(final Long patientId){
+		final Patient patient = Patient.find.byId(patientId);
+		return ok(views.html.bloodBank.receivedBloodDonorFrom.render(patient));
 	}
 	/**
 	 * @author lakshmi
@@ -514,6 +534,93 @@ public class BloodBankController extends Controller{
 		flash().put("alert", new Alert("alert-danger", appUser.name+" Removed From The "+bloodBank.name+".").toString());
 		return redirect(routes.BloodBankController.listBloodBankBloodDonors());
 	}
+	/**
+	 * @author lakshmi
+	 * Action to render addNewPatientFromBloodBank
+	 * GET/secure-clinic/new-patient-form/:docClinicId
+	 */
+	public static Result getBloodBankNewPatientForm(final String email){
+		return ok(views.html.bloodBank.addNewPatientFromBloodBank.render(null,email));
+	}
+	/**
+	 * @author lakshmi
+	 * Action to create new Patient from the Clinic by CLINIC_USER
+	 * POST/secure-clinic/save-patient/:docClinicId
+	 */
+	public static Result saveBloodBankPatientProfile(){
+		final Map<String,String[]> requestMap = request().body().asFormUrlEncoded();
+		final AppUser appUser = new AppUser();
+		if((requestMap.get("name")[0]!= null) && !(requestMap.get("name")[0].trim().isEmpty())){
+			appUser.name = requestMap.get("name")[0];
+		}
+		if((requestMap.get("email")[0]!= null) && !(requestMap.get("email")[0].trim().isEmpty())){
+			appUser.email = requestMap.get("email")[0].trim().toLowerCase();
+		}
+		if((requestMap.get("contactNo")[0]!= null) && !(requestMap.get("contactNo")[0].trim().isEmpty())){
+			appUser.mobileNumber = Long.parseLong(requestMap.get("contactNo")[0]);
+		}
+		if((requestMap.get("sex")[0]!= null) && !(requestMap.get("sex")[0].trim().isEmpty())){
+			appUser.sex = Enum.valueOf(Sex.class,requestMap.get("sex")[0]);
+		}
+		if(requestMap.get("dob")[0]!=null ){
+			try {
+				appUser.dob = new SimpleDateFormat("dd-MM-yyyy").parse(requestMap.get("dob")[0].trim());
+				Logger.debug(new SimpleDateFormat("dd-MM-yyyy").parse(requestMap.get("dob")[0].trim()).toString());
+				Logger.debug(""+appUser.dob);
+			} catch (final Exception e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		}
+		final String pwd = RandomStringUtils.randomAlphanumeric(4).toLowerCase();
+		try {
+			final Random random = new SecureRandom();
+			final byte[] saltArray = new byte[32];
+			random.nextBytes(saltArray);
+			final String randomSalt = Base64.encodeBase64String(saltArray);
+			final String passwordWithSalt = pwd+randomSalt;
+			final MessageDigest sha256 = MessageDigest.getInstance("SHA-256");
+			final byte[] passBytes = passwordWithSalt.getBytes();
+			final String hashedPasswordWithSalt = Base64.encodeBase64String(sha256.digest(passBytes));
 
+			appUser.salt = randomSalt;
+			appUser.password = hashedPasswordWithSalt;
 
+		} catch (final Exception e) {
+			Logger.error("ERROR WHILE CREATING SHA2 HASH");
+			e.printStackTrace();
+		}
+
+		appUser.role = Role.PATIENT;
+		appUser.save();
+
+		SMSService.sendSMS(Long.toString(appUser.mobileNumber), " An Account Has Been Created at mednetwork.in. Your Login Email ID Is "+appUser.email+" ,Password Is "+pwd);
+		EmailService.sendConfirmationEmail(appUser);
+		SMSService.sendConfirmationSMS(appUser);
+		final Patient patient = new Patient();
+		patient.appUser = appUser;
+		patient.primaryCity = LoginController.getLoggedInUser().getBloodBankUser().bloodBank.primaryCity;
+		patient.save();
+		return ok(views.html.bloodBank.addNewPatientFromBloodBank.render(appUser,""));
+	}
+	/**
+	 * @author lakshmi
+	 * Action to verify mobile confirmation code of patient
+	 * POST/secure-clinic/verify-confirmation-code/:appUserId/:docClinicId
+	 */
+	public static Result verifyConfirmationCode(final Long appUserId){
+		final AppUser appUser = AppUser.find.byId(appUserId);
+
+		if((request().body().asFormUrlEncoded().get("code")[0]) != null && !(request().body().asFormUrlEncoded().get("code")[0].trim().isEmpty())){
+			if(appUser.mobileNumberConfirmationKey.equals(request().body().asFormUrlEncoded().get("code")[0])){
+				return redirect(routes.BloodBankController.getBloodDonorInfo(appUser.getPatient().id));
+			}else{
+				flash().put("alert", new Alert("alert-info", "Mobile Confirmation Code is not matched. Please enter correct Code.").toString());
+				return ok(views.html.bloodBank.addNewPatientFromBloodBank.render(appUser,""));
+			}
+		}else{
+			flash().put("alert", new Alert("alert-info", "Enter Correct Confirmation Code.").toString());
+			return ok(views.html.bloodBank.addNewPatientFromBloodBank.render(appUser,""));
+		}
+	}
 }

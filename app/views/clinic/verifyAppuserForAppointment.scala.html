@@ -40,10 +40,11 @@
 var code;
 var doctorClinicId;
 var patId;
+var email;
 	function validateAndSubmit(docClinicId){
 	$('#button1').hide();
 	doctorClinicId = docClinicId;
-	var email = $('#email').val().trim();
+	 email = $('#email').val().trim();
 	var confirmEmailId = $('#confirmEmail').val().trim();
     	if(email != confirmEmailId){
     		alert("Email Ids Do Not Match!");
@@ -55,7 +56,7 @@ var patId;
     			return false;
     		}else if(data == 1){
     		alert(email+" is not existed in the system.create an account???");
-    		$('#verify-code').append('<div class="col-md-2"><input type="checkbox" id="check" />Is Patient Agrred?</div><div class="col-md-5"><li style="cursor:pointer;" onclick="createNewPatient();">Click Here To Create An Account For Patient</li></div>');
+    		$('#verify-code').append('<div class="col-md-2"><input type="checkbox" id="check" />Is Patient Agrred?</div><div class="col-md-5"><span style="cursor:pointer;color:#008bca" onclick="createNewPatient();">Click Here To Create An Account For Patient</span></div>');
     		}else{
     		code = data[0];
     		patId = data[1];
@@ -66,7 +67,7 @@ var patId;
 		function createNewPatient(){
 		alert("hello");
 		 if($('#check').is(':checked')){
-			window.location.href='/secure-clinic/new-patient-form/'+doctorClinicId;
+			window.location.href='/secure-clinic/new-patient-form/'+doctorClinicId+'/'+email;
 			}else{
 			alert("patient Confirmation Is Compulsory To Create An Account");
 			return false; 

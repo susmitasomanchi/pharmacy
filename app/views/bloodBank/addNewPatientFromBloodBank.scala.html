@@ -1,10 +1,10 @@
-@(appUser : models.AppUser,docClinicInfo : models.doctor.DoctorClinicInfo,email : String)
+@(appUser : models.AppUser, email : String)
 @main("New Patient Form"){
 	<div class="container">
 	   @if(appUser == null){
-	<form id="form" class="form-horizontal" action="@routes.ClinicController.savePatientProfile(docClinicInfo.id)" method="POST" data-toggle="validator">
+	<form id="form" class="form-horizontal" action="@routes.BloodBankController.saveBloodBankPatientProfile()" method="POST" data-toggle="validator">
 	}else{
-	<form id="form1" class="form-horizontal" action="@routes.ClinicController.verifyMobileConfirmationCode(appUser.id,docClinicInfo.id)" method="POST" data-toggle="validator">
+	<form id="form1" class="form-horizontal" action="@routes.BloodBankController.verifyConfirmationCode(appUser.id)" method="POST" data-toggle="validator">
 	}
   	<div class="col-md-4">
   	
@@ -21,6 +21,18 @@
 	<div class="form-group">
 	<label for="Contact Number">Contact Number</label>
 	<input type="text"  class="form-control" name="contactNo" required @if(appUser != null){value="@appUser.mobileNumber"} placeholder="Enter Mobile No">
+	</div>
+	
+	<div class="form-group">
+	<label for="Sex">Contact Number</label>
+	<select id="sex" name="sex">
+	@if(appUser != null){
+        <option value="@appUser.sex">@appUser.sex</option>
+        }
+			@for((k,v) <- Sex.options()){
+				<option value="@k">@v</option>
+			}
+        </select>
 	</div>
 		
 	<div class="form-group">
