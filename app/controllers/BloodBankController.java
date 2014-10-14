@@ -490,6 +490,12 @@ public class BloodBankController extends Controller{
 		return ok("0");
 
 	}
+	/**
+	 * @author lakshmi
+	 * Action to reteive BloodDonor Info
+	 * GET/secure-blood-bank/get-blood-donor-info/:patientId
+	 * @return
+	 */
 	public static Result getBloodDonorInfo(final Long patientId){
 		final Patient patient = Patient.find.byId(patientId);
 		return ok(views.html.bloodBank.receivedBloodDonorFrom.render(patient));
@@ -537,15 +543,15 @@ public class BloodBankController extends Controller{
 	/**
 	 * @author lakshmi
 	 * Action to render addNewPatientFromBloodBank
-	 * GET/secure-clinic/new-patient-form/:docClinicId
+	 * GET/secure-blood-bank/new-patient-form/:email
 	 */
 	public static Result getBloodBankNewPatientForm(final String email){
 		return ok(views.html.bloodBank.addNewPatientFromBloodBank.render(null,email));
 	}
 	/**
 	 * @author lakshmi
-	 * Action to create new Patient from the Clinic by CLINIC_USER
-	 * POST/secure-clinic/save-patient/:docClinicId
+	 * Action to create new Patient from the BloodBank by BLOOD_BANK_USER
+	 * POST/secure-blood-bank/save-patient
 	 */
 	public static Result saveBloodBankPatientProfile(){
 		final Map<String,String[]> requestMap = request().body().asFormUrlEncoded();
@@ -606,7 +612,7 @@ public class BloodBankController extends Controller{
 	/**
 	 * @author lakshmi
 	 * Action to verify mobile confirmation code of patient
-	 * POST/secure-clinic/verify-confirmation-code/:appUserId/:docClinicId
+	 * POST/secure-blood-bank/verify-confirmation-code/:appUserId
 	 */
 	public static Result verifyConfirmationCode(final Long appUserId){
 		final AppUser appUser = AppUser.find.byId(appUserId);
