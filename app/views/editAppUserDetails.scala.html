@@ -27,7 +27,11 @@
 	<div class="form-group">
 	 <label for="bloodGroup">Blood Group</label><br>
         <select id="bloodgroup" name="bloodgroup">
+        @if(appUser.bloodGroup != null){
         <option value="@appUser.bloodGroup">@appUser.bloodGroup.capitalize()</option>
+        }else{
+        <option></option>
+        }
 			@for((k,v) <- BloodGroup.options()){
 				<option value="@k">@v</option>
 			}

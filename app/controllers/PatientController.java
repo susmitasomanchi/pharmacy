@@ -494,13 +494,27 @@ public class PatientController extends Controller {
 	/**
 	 * @author lakshmi
 	 * Action to display diagnostic reports
+	 *//*
+	@ConfirmAppUser
+	public static Result viewDiagnosticReports(){
+		final Patient patient = LoginController.getLoggedInUser().getPatient();
+		DiagnosticCentrePrescriptionInfo info = DiagnosticCentrePrescriptionInfo.find.byId(diagnosticInfoId);
+		final List<DiagnosticCentrePrescriptionInfo> diagnosticCentrePrescriptionInfos = new ArrayList<DiagnosticCentrePrescriptionInfo>();
+		return ok(views.html.patient.patientDiagnosticReports.render(diagnosticCentrePrescriptionInfos));
+
+	}
+	  */
+	/**
+	 * @author lakshmi
+	 * Action to display diagnostic reports
 	 */
 	@ConfirmAppUser
 	public static Result viewDiagnosticReports(){
 		final Patient patient = LoginController.getLoggedInUser().getPatient();
-		/*DiagnosticCentrePrescriptionInfo info = DiagnosticCentrePrescriptionInfo.find.byId(diagnosticInfoId);*/
-		final List<DiagnosticCentrePrescriptionInfo> diagnosticCentrePrescriptionInfos = DiagnosticCentrePrescriptionInfo.find.where().eq("prescription.patient", patient).findList();
-		return ok(views.html.patient.patientDiagnosticReports.render(diagnosticCentrePrescriptionInfos));
+		final List<Prescription> prescriptions = Prescription.find.where().eq("patient", patient).findList();
+		/*final DiagnosticCentrePrescriptionInfo info = DiagnosticCentrePrescriptionInfo.find.byId(diagnosticInfoId);
+		final List<DiagnosticCentrePrescriptionInfo> diagnosticCentrePrescriptionInfos = new ArrayList<DiagnosticCentrePrescriptionInfo>();*/
+		return ok(views.html.patient.patientDiagnosticReports.render(prescriptions));
 
 	}
 
