@@ -21,6 +21,7 @@ import models.diagnostic.DiagnosticReport;
 import models.diagnostic.DiagnosticReportStatus;
 import models.diagnostic.DiagnosticTest;
 import models.diagnostic.ShowCasedService;
+import models.doctor.Prescription;
 import models.patient.Patient;
 
 import org.joda.time.DateTime;
@@ -395,41 +396,46 @@ public class DiagnosticController extends Controller {
 	 * GET/secure-diagnostic/download
 	 * downloading the Diagnostic report
 	 */
-	public static Result downloadDiagnosticReport(final Long reportId,final Long diagnosticInfoId){
-		final DiagnosticCentrePrescriptionInfo diagnosticCentrePrescriptionInfo = DiagnosticCentrePrescriptionInfo.find.byId(diagnosticInfoId);
+	public static Result downloadDiagnosticReport(final Long reportId,final Long prescriptionId){
+		final Prescription prescription = Prescription.find.byId(prescriptionId);
 		// Server side validation
-		if(!(LoginController.getLoggedInUser().role.equals(Role.ADMIN_DIAGREP)
+		if((LoginController.getLoggedInUser().role.equals(Role.ADMIN_DIAGREP))
 				||
-				LoginController.getLoggedInUser().role.equals(Role.PATIENT))){
-			//session().clear();
+				(LoginController.getLoggedInUser().role.equals(Role.PATIENT))
+				||
+				(LoginController.getLoggedInUser().role.equals(Role.DOCTOR))){
+
+			if(LoginController.getLoggedInUser().role.equals(Role.PATIENT)){
+				if((prescription.patient.id.longValue() != LoginController.getLoggedInUser().getPatient().id.longValue()) ){
+					//session().clear();
+					session().remove(Constants.LOGGED_IN_USER_ID);
+					session().remove(Constants.LOGGED_IN_USER_ROLE);
+
+					return redirect(routes.LoginController.processLogout());
+				}
+			}
+			if(LoginController.getLoggedInUser().role.equals(Role.DOCTOR)){
+				if((prescription.doctor.id.longValue() != LoginController.getLoggedInUser().getDoctor().id.longValue()) ){
+					//session().clear();
+					session().remove(Constants.LOGGED_IN_USER_ID);
+					session().remove(Constants.LOGGED_IN_USER_ROLE);
+
+					return redirect(routes.LoginController.processLogout());
+				}
+			}
+			final FileEntity fileEntity = FileEntity.find.byId(reportId);
+			response().setContentType("application/x-download");
+			response().setHeader("Content-disposition","attachment; filename="+fileEntity.fileName);
+			return ok(fileEntity.byteContent).as("application/pdf");
+		}
+		else{//session().clear();
 			session().remove(Constants.LOGGED_IN_USER_ID);
 			session().remove(Constants.LOGGED_IN_USER_ROLE);
 
 			return redirect(routes.LoginController.processLogout());
 		}
-		if(LoginController.getLoggedInUser().role.equals(Role.ADMIN_DIAGREP)){
-			if((diagnosticCentrePrescriptionInfo.diagnosticCentre.id.longValue() != LoginController.getLoggedInUser().getDiagnosticRepresentative().diagnosticCentre.id.longValue())){
-				//session().clear();
-				session().remove(Constants.LOGGED_IN_USER_ID);
-				session().remove(Constants.LOGGED_IN_USER_ROLE);
-
-				return redirect(routes.LoginController.processLogout());
-			}
-		}
-		if(LoginController.getLoggedInUser().role.equals(Role.PATIENT)){
-			if((diagnosticCentrePrescriptionInfo.prescription.patient.id.longValue() != LoginController.getLoggedInUser().getPatient().id.longValue()) ){
-				//session().clear();
-				session().remove(Constants.LOGGED_IN_USER_ID);
-				session().remove(Constants.LOGGED_IN_USER_ROLE);
-
-				return redirect(routes.LoginController.processLogout());
-			}
-		}
-		final FileEntity fileEntity = FileEntity.find.byId(reportId);
-		response().setContentType("application/x-download");
-		response().setHeader("Content-disposition","attachment; filename="+fileEntity.fileName);
-		return ok(fileEntity.byteContent).as("application/pdf");
 	}
+
 
 
 	/**
@@ -545,7 +551,7 @@ public class DiagnosticController extends Controller {
 			return redirect(routes.LoginController.processLogout());
 		}
 
-		return ok(views.html.diagnostic.diagnosticCentrePrescription.render(dpInfo));
+		return ok(views.html.diagnostic.viewPrescriptionDetails.render(dpInfo));
 
 	}
 

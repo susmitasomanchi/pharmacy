@@ -107,7 +107,9 @@ public class Clinic extends BaseEntity{
 		if(this.contactNo!= null){
 			stringBuilder.append(this.contactNo.trim().toLowerCase());
 		}
-		stringBuilder.append(this.slugUrl.toLowerCase());
+		if(this.slugUrl != null){
+			stringBuilder.append(this.slugUrl.toLowerCase());
+		}
 		this.searchIndex = stringBuilder.toString();
 		super.save();
 	}
@@ -141,11 +143,10 @@ public class Clinic extends BaseEntity{
 		}
 		if(this.slugUrl != null){
 			stringBuilder.append(this.slugUrl.toLowerCase());
-			this.searchIndex = stringBuilder.toString();
-			super.update();
-			Logger.info(this.slugUrl);
 		}
-
+		this.searchIndex = stringBuilder.toString();
+		super.update();
+		Logger.info(this.slugUrl);
 
 	}
 

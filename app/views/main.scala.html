@@ -68,9 +68,13 @@
     		</div>
     	</div>
     	
-    	<span style="width:100%; margin-left:500px; font-size:12px"> &copy; <a href="http://www.greensoftware.in/">Green Software</a> 2014. All rights reserved | Share your <a href="/feedback"><b> feedback </b></a> |  <a href="/help"><b>Help</b></a></span>
+    	<span id="div1" style="position: absolute;margin-left:500px; font-size:12px"> &copy; <a href="http://www.greensoftware.in/">Green Software</a> 2014. All rights reserved | Share your <a href="/feedback"><b> feedback </b></a> |  <a href="/help"><b>Help</b></a></span>
 		<br><br>
-		
+		<script>
+		$(window).resize(function(){
+    $("#div1").width($(window).width());
+});
+		</script>
 		
 </body>
 </html>

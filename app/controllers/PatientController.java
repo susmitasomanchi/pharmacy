@@ -578,4 +578,14 @@ public class PatientController extends Controller {
 		return redirect(routes.PatientController.getFavoriteClinics());
 	}
 
+	/**
+	 * @author lakshmi
+	 * Action to show a forms which have Doctor and it will show the available and booked appointment
+	 *  GET	/secure-patient/schedule-appointment/:docclinicid
+	 */
+	@ConfirmAppUser
+	public static Result scheduleAppointment(final Long docclinicid) {
+		final DoctorClinicInfo clinicInfo=DoctorClinicInfo.find.byId(docclinicid);
+		return ok(views.html.patient.patientClinicNewAppointment.render(clinicInfo));
+	}
 }

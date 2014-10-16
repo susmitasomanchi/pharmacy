@@ -63,7 +63,7 @@
 </td>
 <td style="vertical-align:middle;font-size:12px">
 	@for((report,index) <- diagnosticInfo.prescription.patient.diagnosticReportList.zipWithIndex){
-	@{index+1}.<a href="@routes.DiagnosticController.downloadDiagnosticReport(report.id,diagnosticInfo.id)">@report.fileName</a><br>
+	@{index+1}.<a href="@routes.DiagnosticController.downloadDiagnosticReport(report.id,diagnosticInfo.prescription.id)">@report.fileName</a><br>
 }
 
 </td>

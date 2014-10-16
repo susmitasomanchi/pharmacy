@@ -99,6 +99,10 @@ public class AppUser extends BaseEntity {
 	@OneToMany(cascade=CascadeType.ALL)
 	public List<BloodDonation> bloodDonationList = new ArrayList<BloodDonation>();
 
+	public Boolean isSearchable = true;
+
+	public Boolean isSuspended = false;
+
 	public static Model.Finder<Long, AppUser> find = new Finder<Long, AppUser>(Long.class, AppUser.class);
 
 	public Patient getPatient() {

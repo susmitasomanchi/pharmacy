@@ -67,6 +67,7 @@ public class Prescription extends BaseEntity{
 		return DiagnosticCentrePrescriptionInfo.find.where().eq("prescription", this).findList();
 	}
 
+
 	/**
 	 * Not required in this format. Gotta come up with a better way to
 	 * edit existing prescriptions (if that is desired in the first place)

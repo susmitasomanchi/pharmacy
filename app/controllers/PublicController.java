@@ -271,6 +271,7 @@ public class PublicController extends Controller{
 	 * Action to show a forms which have Doctor and it will show the available and booked appointment
 	 *  GET	/doctor/schedule-appointment/:docclinicid
 	 */
+	@ConfirmAppUser
 	public static Result scheduleAppointment(final Long docclinicid) {
 		final DoctorClinicInfo clinicInfo=DoctorClinicInfo.find.byId(docclinicid);
 		return ok(views.html.patient.patientNewAppointment.render(clinicInfo));
@@ -281,6 +282,7 @@ public class PublicController extends Controller{
 	 * Action to display a form which has lists of appointment as per date is provided
 	 *  GET/patient/display-appointment/:docClinicId/:timeMillis
 	 */
+	@ConfirmAppUser
 	public static Result displayAppointment(final Long docClinId,final Long timeMillis) {
 
 		int slots=0;

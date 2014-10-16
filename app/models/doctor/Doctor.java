@@ -167,6 +167,7 @@ public class Doctor extends BaseEntity{
 				.eq("doctorClinicInfo.clinic", Clinic.find.byId(clinicId))
 				.ge("bookedOn", calendarFrom.getTime())
 				.le("bookedOn", calendarTo.getTime())
+				.orderBy("appointmentTime")
 				.findRowCount();
 		return appointments;
 
@@ -194,6 +195,7 @@ public class Doctor extends BaseEntity{
 				.eq("appointmentStatus", AppointmentStatus.SERVED)
 				.ge("bookedOn", calendarFrom.getTime())
 				.le("bookedOn", calendarTo.getTime())
+				.orderBy("appointmentTime")
 				.findRowCount();
 		return appointments;
 
@@ -221,6 +223,7 @@ public class Doctor extends BaseEntity{
 				.eq("appointmentStatus", AppointmentStatus.APPROVED)
 				.ge("bookedOn", calendarFrom.getTime())
 				.le("bookedOn", calendarTo.getTime())
+				.orderBy("appointmentTime")
 				.findRowCount();
 		return appointments;
 

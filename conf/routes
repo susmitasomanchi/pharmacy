@@ -169,6 +169,7 @@ GET    /secure-user/blood-donation-info							 	controllers.PatientController.ge
 GET    /secure-user/add-fav-clinic/:clinicId							 	controllers.PatientController.addClinicToLoggedInUser(clinicId : Long)
 GET	   /secure-user/get-favorite-clinics								controllers.PatientController.getFavoriteClinics()
 GET	   /secure-user/remove-favorite-clinic/:clinicId								controllers.PatientController.removeFavoriteClinic(clinicId : Long)
+GET		/secure-user/schedule-appointment/:docclinicid								controllers.PatientController.scheduleAppointment(docclinicid:Long)
 
 
 
