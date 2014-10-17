@@ -238,6 +238,9 @@ public class Doctor extends BaseEntity{
 			if(clinicInfo.clinic != null){
 				stringBuilder.append(clinicInfo.clinic.name.toLowerCase());
 			}
+			if(clinicInfo.clinic.address != null){
+				stringBuilder.append(clinicInfo.clinic.address.area.toLowerCase());
+			}
 		}
 		if(this.appUser.name != null){
 			stringBuilder.append(this.appUser.name.toLowerCase());
