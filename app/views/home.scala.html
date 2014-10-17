@@ -136,7 +136,13 @@ $('#role').on('change', function(){
    
 function searchKey(){
     var searchString = $('#searchKey').val();
+    var spez = $('#spez').find("option:selected").text();
+	if(spez.trim() == ''){
+	alert("Select Specialization.");
+    	return false;
+	}
     if(searchString.trim() == ''){
+    alert("Search With Name Or Locality.");
     	return false;
     }
     var setValue = $('#role').val();

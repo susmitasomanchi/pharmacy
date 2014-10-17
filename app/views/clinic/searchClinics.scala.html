@@ -18,7 +18,7 @@
 
 />
 
-<a onclick="window.location.href='/clinic/search/'+$('#searchInput').val().trim();" class="btn btn-xs btn-primary">Search</a>
+<a onclick="validateSubmit();" class="btn btn-xs btn-primary">Search</a>
 
 </div>
 </div>
@@ -31,6 +31,14 @@ $("#searchInput").keyup(function (e) {
     	window.location.href='/clinic/search/'+$('#searchInput').val().trim();
     }
 });
+function validateSubmit(){
+var searchKey = $('#searchInput').val().trim();
+if(searchKey == ''){
+alert("Enter Clinic Name Or Locality.");
+return false;
+}
+window.location.href='/clinic/search/'+$('#searchInput').val().trim();
+}
 </script>
 
 <br><br>
@@ -39,7 +47,7 @@ $("#searchInput").keyup(function (e) {
 @if(clinics.size() > 0){
 <table class="table table-hover">
 	<tr class="active">
-		<th> S.No</th>
+		<th>S.No</th>
 		<th>Clinic Name</th>
 		<th>Address</th>
 		<th>Action</th>

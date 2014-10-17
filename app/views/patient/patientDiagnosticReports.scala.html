@@ -43,7 +43,7 @@
 <td style="vertical-align:middle;text-align:center;font-size:12px">
 @if(prescription.getDiagnoticInfoList().size() > 0){
 	@for(dpinfo <- prescription.getDiagnoticInfoList()){
-		@dpinfo.diagnosticCentre.name<br>
+		<a href="@routes.PublicController.getDiagnosticCentreWithSlug(dpinfo.diagnosticCentre.slugUrl)">@dpinfo.diagnosticCentre.name</a><br>
 		}
 		}
 		</td> 
@@ -52,9 +52,9 @@
 	@for(dpinfo <- prescription.getDiagnoticInfoList()){
 		<li>@dpinfo.diagnosticCentre.name</li>
 		@if(dpinfo.servedDate != null){
-		@dpinfo.servedDate.format("dd-MMM-yyyy")<br>@dpinfo.servedDate.format("EE")<br>@dpinfo.servedDate.format("hh:mm")
+		<span style="color:#008bca;">(@dpinfo.servedDate.format("dd-MMM-yyyy") at @dpinfo.servedDate.format("hh:mm"))</span>
 		}else{
-		<h5>Not Served Yet</h5>
+		<span style="color:#008bca;">Not Served Yet</span>
 		}
 		}
 		}
@@ -62,14 +62,14 @@
 <td style="vertical-align:middle;font-size:12px">
 @if(prescription.getDiagnoticInfoList().size() > 0){
 	@for(dpinfo <- prescription.getDiagnoticInfoList()){
-		<li><a href="@routes.PublicController.getDiagnosticCentreWithSlug(dpinfo.diagnosticCentre.slugUrl)">@dpinfo.diagnosticCentre.name</a> </li>
+		<li>@dpinfo.diagnosticCentre.name </li>
 		@if(dpinfo.fileEntities.size > 0){
 	@for((report,index) <- dpinfo.fileEntities.zipWithIndex){
 	&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;@{index+1}.<a href="@routes.DiagnosticController.downloadDiagnosticReport(report.id,prescription.id)">@report.fileName</a><br>
 }
 }else{
-No Reports Received Yet.
-}
+&nbsp;&nbsp;<span style="color:#008bca;">&nbsp;&nbsp;No Reports Received Yet</span>.
+}&nbsp;
 }
 }
 </td>

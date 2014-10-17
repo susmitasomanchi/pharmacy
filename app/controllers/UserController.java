@@ -377,6 +377,7 @@ public class UserController extends Controller {
 			}
 		}
 		loggedInUser.update();
+		flash().put("alert",new Alert("alert-success", loggedInUser.name+" Profile Updated Successfully.").toString());
 		return redirect(routes.UserActions.dashboard());
 	}
 
