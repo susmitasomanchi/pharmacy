@@ -1,0 +1,287 @@
+@(doctorClinic :models.doctor.DoctorClinicInfo,patient: models.patient.Patient)
+@import play.i18n._
+@import helper.twitterBootstrap._
+@import helper._
+
+@main(patient.appUser.name){
+
+<script src="http://maps.googleapis.com/maps/api/js?sensor=false"></script>
+<script src="http://localhost:9000/assets/javascripts/jquery.carouFredSel-6.2.1-packed.js" type="text/javascript"></script>
+
+<style>
+#carousel {             
+    width: 870px;       
+    height: 175px;      
+    //overflow: hidden;
+}
+</style>
+<div class="row">
+<div class="col-md-6">
+<div class="col-md-5">
+@if(doctorClinic.doctor.profileImage != null){
+	<img src="@routes.PublicController.getImage(doctorClinic.doctor.id,"profileImage")" width="120" height="110" class="thumbnail"/>
+}else{
+<img src="/assets/images/doctor.png" class="thumbnail" width="120" height="110" />
+}
+</div>
+<div class="col-md-7" style="padding-left:10px">
+<h4><b>@doctorClinic.doctor.appUser.name</b></h4>
+<h4>@doctorClinic.doctor.getSpecializations()</h4>
+<h6>@doctorClinic.doctor.degree</h6>
+<h6>Ex: @doctorClinic.doctor.getYearsOfExperience() years</h6><br>
+</div>
+
+<div class="btn-group" data-toggle="buttons" style="padding-left:20px; font-size:12px;">
+
+	<label class="btn btn-primary btn-sm "onclick="window.location.href ='@routes.ClinicController.getClinicPatientAppointmentForm(doctorClinic.clinic.id,patient.id)'">
+   	 <input type="checkbox" > @doctorClinic.clinic.name<br>@doctorClinic.clinic.address.area
+	</label>	
+</div>
+
+<div style="padding-left:20px">
+<h5 style="line-height:20px;">@doctorClinic.clinic.address.addressLine1<br>
+@doctorClinic.clinic.address.area<br>
+@doctorClinic.clinic.address.city<br>
+@*doctorClinic.clinic.address.state.capitalize()<br>*@
+<i class="fa fa-phone-square"></i> @doctorClinic.clinic.contactNo</h5>
+</div>
+</div>
+
+
+	<div class="col-md-6" style="padding-left:0px">
+	<p style="color:#008bca;font-size:22px"><b>Location Map</b></p>
+	<div id="clinic_map" style="width:360px;height:250px"></div>
+	</div>
+
+</div>
+<br>
+
+
+<div id="carousel-example-generic" class="carousel slide" data-ride="carousel" style="box-shadow: 1px 1px 10px 5px #bbbbbb;padding-bottom:0px">
+  <!-- Wrapper for slides -->
+  <script>
+$('#carousel-example-generic').carousel({
+	  interval: false,
+	  wrap: false
+	});
+</script> 
+  <div class="carousel-inner"  id="inner" >
+    <div id="active" class="item active nextAppt" style="padding:10px;">
+	</div>  
+	
+	<!-- 
+    <div class="item" style="padding:40px">
+     <table class="table table-hover table-bordered" style="text-align:center">
+    <tr class="danger">
+    <th style="text-align:center">25-Jul-14<br> (Friday)</th>
+    <th style="text-align:center">26-Jul-14<br> (Saturday)</th>
+    <th style="text-align:center">27-Jul-14<br> (Sunday)</th>
+    <th style="text-align:center">28-Jul-14<br> (Monday)</th>
+    <th style="text-align:center">29-Jul-14<br> (Tuesday)</th>
+    <th style="text-align:center">30-Jul-14<br> (Wednesday)</th>
+    <th style="text-align:center">31-Jul-14<br> (Thursday)</th>
+    </tr>
+    <tr>
+    <td class="active">16:00</td>
+    <td class="success" style="cursor:pointer">16:00</td>
+    <td class="active">16:00</td>
+    <td class="success"style="cursor:pointer" >16:00</td>
+    <td class="active">16:00</td>
+    <td class="active">16:00</td>
+    <td class="success" style="cursor:pointer">16:00</td>
+    </tr>
+    <tr>
+    <td class="active">16:15</td>
+    <td class="success" style="cursor:pointer">16:15</td>
+    <td class="active">16:15</td>
+    <td class="active">16:15</td>
+    <td class="active">16:15</td>
+    <td class="active">16:15</td>
+    <td class="active">16:15</td>
+    </tr>
+    <tr>
+    <td class="success" style="cursor:pointer">16:30</td>
+    <td class="success" style="cursor:pointer">16:30</td>
+    <td class="success" style="cursor:pointer">16:30</td>
+    <td class="active">16:30</td>
+    <td class="active">16:30</td>
+    <td class="success" style="cursor:pointer">16:30</td>
+    <td class="active">16:30</td>
+    </tr>
+    <tr>
+    <td class="active">16:45</td>
+    <td class="success" style="cursor:pointer">16:45</td>
+    <td class="success" style="cursor:pointer">16:45</td>
+    <td class="active">16:45</td>
+    <td class="active">16:45</td>
+    <td class="success" style="cursor:pointer">16:45</td>
+    <td class="active">16:45</td>
+    </tr>
+    <tr>
+    <td class="success" style="cursor:pointer">17:00</td>
+    <td class="active">17:00</td>
+    <td class="success" style="cursor:pointer">17:00</td>
+    <td class="active">17:00</td>
+    <td class="success" style="cursor:pointer">17:00</td>
+    <td class="active">17:00</td>
+    <td class="success" style="cursor:pointer">17:00</td>
+    </tr>
+    <tr>
+    <td class="success" style="cursor:pointer">17:15</td>
+    <td class="success" style="cursor:pointer">17:15</td>
+    <td class="success" style="cursor:pointer">17:15</td>
+    <td class="success" style="cursor:pointer">17:15</td>
+    <td class="success" style="cursor:pointer">17:15</td>
+    <td class="success" style="cursor:pointer">17:15</td>
+    <td class="success" style="cursor:pointer">17:15</td>
+    </tr>
+    <tr>
+    <td class="active">17:30</td>
+    <td class="active">17:30</td>
+    <td class="success" style="cursor:pointer">17:30</td>
+    <td class="active">17:30</td>
+    <td class="success" style="cursor:pointer">17:30</td>
+    <td class="active">17:30</td>
+    <td class="success" style="cursor:pointer">17:30</td>
+    </tr>
+    <tr>
+    <td class="active">17:45</td>
+    <td class="active">17:45</td>
+    <td class="success" style="cursor:pointer">17:45</td>
+    <td class="active">17:45</td>
+    <td class="success" style="cursor:pointer">17:45</td>
+    <td class="success" style="cursor:pointer">17:45</td>
+    <td class="active">17:45</td>
+    </tr>
+    <tr>
+    <td class="success" style="cursor:pointer">18:00</td>
+    <td class="active">18:00</td>
+    <td class="success" style="cursor:pointer">18:00</td>
+    <td class="success" style="cursor:pointer">18:00</td>
+    <td class="active">18:00</td>
+    <td class="success" style="cursor:pointer">18:00</td>
+    <td class="active">18:00</td>
+    </tr>
+    </table> -->
+    </div> 
+ 
+
+  <!-- Controls -->
+  <a class="left carousel-control" href="#carousel-example-generic" role="button" data-slide="prev" style="width:20px">
+    <span style="color:#008bca" class="glyphicon glyphicon-chevron-left"></span>
+  </a>
+  <a class="right carousel-control" href="#carousel-example-generic" role="button" data-slide="next" style="width:20px">
+    <span style="color:#008bca" class="glyphicon glyphicon-chevron-right"></span>
+  </a>
+  
+</div>
+
+@*
+<img alt="Previcon" class="carousel-sliders navigators" src="@routes.Assets.at("blog/images/previcon.png")" />
+
+</a>
+
+<a class="next-t">
+
+<img alt="Nexticon" class="carousel-sliders navigators" src="@routes.Assets.at("blog/images/nexticon.png")" />
+
+</a>*@
+<!-- finish carousel  -->
+<div id="temp">
+</div>
+ <script>
+		var lng, lat, marker;
+		var dbclk = false;
+		var map, myLatLng;
+		function initialize() {
+			var mapOptions = {
+			center : new google.maps.LatLng(lat, lng),
+			zoom : 15
+			};
+			map = new google.maps.Map(document.getElementById("clinic_map"), mapOptions);
+
+						//  map.set("disableDoubleClickZoom", false);
+
+			marker = new google.maps.Marker({
+					position : new google.maps.LatLng(lat, lng),
+					animation : google.maps.Animation.DROP,
+					map : map
+					});
+
+		}
+
+					
+</script>
+
+<script type="text/javascript"> 
+var avbl;
+var date=new Date();
+$( document ).ready(function() {
+@if(doctorClinic != null ){
+	lat=@doctorClinic.clinic.address.latitude
+	lng=@doctorClinic.clinic.address.longitude
+	myLatLng= new google.maps.LatLng(lat, lng),
+	initialize();
+}
+console.log('localhost:9000/patient/display-appointment/@doctorClinic.id/'+date.getTime());
+ $.get('/patient/display-appointment/@doctorClinic.id/'+date.getTime(),function(htmldata){
+			     $('#active').html(htmldata);
+	    });
+	    
+ console.log("pass");
+ 
+    
+});
+
+
+  		$(".right").click(function(){
+  		if($( ".active" ).hasClass( "nextAppt" ) && avbl>0){
+  			$( ".active" ).removeClass( "nextAppt" );
+  		
+  		console.log('localhost:9000/patient/display-appointment/@doctorClinic.id'+date.getTime());
+		$.get('/patient/display-appointment/@doctorClinic.id/'+date.getTime(),function(htmldata){
+			  $('#inner').append('<div class="item nextAppt" style="padding-left:10;padding-right:10;padding-bottom:10;padding-top:10px;">'+htmldata+'</div>');
+   				 console.log("test courosel");
+   				$('.carousel').carousel('next');
+		});
+  	}
+  		
+});
+  		
+
+</script>
+ <div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+     
+     
+     <div class="modal-header alert-info">
+        <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+        <h4 class="modal-title">Book An Appointment for @patient.appUser.name</h4>
+      </div>
+      <div class="modal-body" id="model-content">
+      </div>
+     	 <div class="modal-footer">
+        <a class="btn btn-default" data-dismiss="modal">Close</a>
+        <a class="btn btn-info" onclick="$('#datetimeform').submit();" id="confirm">Confirm</a>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+$("#myModal").on('shown.bs.modal',function(evt){
+$("#model-content").html(
+'<form action="/secure-clinic/save-appointment/'+$(evt.relatedTarget).attr("id")+'/'+@patient.id+'" method="post" id="datetimeform">'
++'<p> Are you sure to book an appointment on'
++$(evt.relatedTarget).attr("detail")
++$(evt.relatedTarget).attr("date")
++' at '
++$(evt.relatedTarget).attr("clinic")
++' ?</p><br><textarea name="remark" placeholder="Complaint (I am suffering from...)" style="width:100%;" rows="4"></textarea></form>'
+);
+
+});
+</script>
+}
+

@@ -70,6 +70,7 @@ public class LoginController extends Controller {
 		}
 		else {
 			final LoginBean loginBean = filledForm.get();
+			Logger.info(""+loginBean.email);
 			final List<AppUser> appUsers = AppUser.find.where().eq("email", loginBean.email.trim().toLowerCase()).findList();
 			Logger.info("found appUsers: " + appUsers.size());
 			if(appUsers.size() < 1) {
@@ -287,14 +288,10 @@ public class LoginController extends Controller {
 	}
 
 
-
-
-
-
-
 	public static AppUser getLoggedInUser() {
 		final String idStr = session(Constants.LOGGED_IN_USER_ID);
 		final Long id = Long.parseLong(idStr);
+		Logger.info("logged in user id = "+ id);
 		return AppUser.find.byId(id);
 	}
 

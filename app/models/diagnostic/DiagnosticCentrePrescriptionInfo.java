@@ -47,4 +47,5 @@ public class DiagnosticCentrePrescriptionInfo extends BaseEntity{
 	public List<FileEntity> fileEntities = new ArrayList<FileEntity>();
 
 	public static Model.Finder<Long, DiagnosticCentrePrescriptionInfo> find = new Finder<Long, DiagnosticCentrePrescriptionInfo>(Long.class, DiagnosticCentrePrescriptionInfo.class);
-}
+	
+	}

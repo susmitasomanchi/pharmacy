@@ -65,6 +65,9 @@ public class Clinic extends BaseEntity{
 
 	public static Model.Finder<Long, Clinic> find = new Finder<Long, Clinic>(Long.class, Clinic.class);
 
+	public List<DoctorClinicInfo> getDoctorsOfClinic(){
+		return DoctorClinicInfo.find.where().eq("clinic", this).findList();
+	}
 	@Override
 	public boolean equals(final Object arg0) {
 		if(!this.name.equals(((Clinic)arg0).name)){
@@ -104,12 +107,14 @@ public class Clinic extends BaseEntity{
 		if(this.contactNo!= null){
 			stringBuilder.append(this.contactNo.trim().toLowerCase());
 		}
-		stringBuilder.append(this.slugUrl.toLowerCase());
+		if(this.slugUrl != null){
+			stringBuilder.append(this.slugUrl.toLowerCase());
+		}
 		this.searchIndex = stringBuilder.toString();
 		super.save();
 	}
 
-	/*@Override
+	@Override
 	public void update() {
 		final StringBuilder stringBuilder = new StringBuilder();
 		if(this.name != null){
@@ -138,13 +143,12 @@ public class Clinic extends BaseEntity{
 		}
 		if(this.slugUrl != null){
 			stringBuilder.append(this.slugUrl.toLowerCase());
-			this.searchIndex = stringBuilder.toString();
-			super.update();
-			Logger.info(this.slugUrl);
 		}
+		this.searchIndex = stringBuilder.toString();
+		super.update();
+		Logger.info(this.slugUrl);
 
-
-	}*/
+	}
 
 
 }

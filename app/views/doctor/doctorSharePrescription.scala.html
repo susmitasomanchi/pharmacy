@@ -87,6 +87,24 @@ input[type=checkbox]{
 		<td>@test.remarks</td>
 	</tr>
 	}
+	@if((prescription.getDiagnoticInfoList()!= null) && (prescription.getDiagnoticInfoList().size() > 0)){
+	<tr>
+	<td colspan="3"><h4><u>Diagnostic Reports:</u></h4>
+	@for(dpinfo <- prescription.getDiagnoticInfoList()){
+	@if(dpinfo.sharedBy.id == LoginController.getLoggedInUser().id){
+		<li><a href="@routes.PublicController.getDiagnosticCentreWithSlug(dpinfo.diagnosticCentre.slugUrl)">@dpinfo.diagnosticCentre.name</a> </li>
+		@if(dpinfo.fileEntities.size > 0){
+	@for((report,index) <- dpinfo.fileEntities.zipWithIndex){
+	&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;@{index+1}.<a href="@routes.DiagnosticController.downloadDiagnosticReport(report.id,prescription.id)">@report.fileName</a><br>
+}
+}else{
+  &nbsp;&nbsp;No Reports Received Yet.
+}
+}
+}
+</td>
+	</tr>
+	}
 </tbody>
 </table>
 </div>

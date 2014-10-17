@@ -343,7 +343,7 @@ public class UserController extends Controller {
 			}
 		}
 
-		if(requestMap.get("bloodgroup")[0]!=null && requestMap.get("bloodgroup")[0].trim()!=""){
+		if(requestMap.containsKey("bloodgroup") && requestMap.get("bloodgroup")[0]!=null && requestMap.get("bloodgroup")[0].trim()!=""){
 			loggedInUser.bloodGroup = BloodGroup.valueOf(requestMap.get("bloodgroup")[0].trim());
 		}
 
@@ -363,7 +363,7 @@ public class UserController extends Controller {
 		}
 
 
-		if(requestMap.get("allergy")[0]!=null && requestMap.get("allergy")[0].trim()!=""){
+		if(requestMap.containsKey("allergy") && requestMap.get("allergy")[0]!=null && requestMap.get("allergy")[0].trim()!=""){
 			loggedInUser.allergy = requestMap.get("allergy")[0].trim();
 		}
 		if(requestMap.get("dob")[0]!=null ){
@@ -377,6 +377,7 @@ public class UserController extends Controller {
 			}
 		}
 		loggedInUser.update();
+		flash().put("alert",new Alert("alert-success", loggedInUser.name+" Profile Updated Successfully.").toString());
 		return redirect(routes.UserActions.dashboard());
 	}
 

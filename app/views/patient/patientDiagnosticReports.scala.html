@@ -1,4 +1,4 @@
-@(diagnosticInfoList:List[models.diagnostic.DiagnosticCentrePrescriptionInfo])
+@(prescriptionList:List[models.doctor.Prescription])
 @import play.i18n._
 @import helper.twitterBootstrap._
 @import helper._
@@ -15,61 +15,68 @@
 <th style="text-align:center">Diagnostic Reports</th>
 
 </tr>
-@for((diagnosticInfo,index) <- diagnosticInfoList.zipWithIndex){
+@for((prescription,index) <- prescriptionList.zipWithIndex){
 <tr>
 <td style="vertical-align:middle;text-align:center;font-size:16px">@{index+1}</td>
 <td>
 <div class="row" style="cursor:pointer" onclick="location.href='/secure-dashboard';">
 <div class="col-md-4">
-@if(diagnosticInfo.prescription.doctor.profileImage != null){
-		<img src="@routes.PublicController.getImage(diagnosticInfo.prescription.doctor.id,"profileImage")" class="thumbnail" width="100" height="100"  />
+@if(prescription.doctor.profileImage != null){
+		<img src="@routes.PublicController.getImage(prescription.doctor.id,"profileImage")" class="thumbnail" width="100" height="100"  />
 	}else{
 		<img src="/assets/images/doctor.png" class="thumbnail" width="100" height="100"  />
 	}</div>
 <div class="col-md-8" style="padding-left:35px">
-<h4>@diagnosticInfo.prescription.doctor.appUser.name</h4>
-<h6>@diagnosticInfo.prescription.doctor.getSpecializations()</h6>
-<h6>@diagnosticInfo.prescription.doctor.degree</h6>
+<h4>@prescription.doctor.appUser.name</h4>
+<h6>@prescription.doctor.getSpecializations()</h6>
+<h6>@prescription.doctor.degree</h6>
 </div>
 </div>
 </td>
 <td style="vertical-align:middle;text-align:center;font-size:12px">
-@if(diagnosticInfo.prescription != null){
-<a href="@routes.PatientController.viewPrescription(diagnosticInfo.prescription.id)" class="btn btn-success btn-sm" >View Prescription</a>
+@if(prescription != null){
+<a href="@routes.PatientController.viewPrescription(prescription.id)" class="btn btn-success btn-sm" >View Prescription</a>
 }else{
 <button class="btn btn-disabled btn-sm" disabled>No Prescription Yet</button>
 }
 </td>
-@*<td>
-<div class="row" style="cursor:pointer" onclick="location.href='/secure-dashboard';">
-<div class="col-md-4">
-@if(diagnosticInfo.diagnosticCentre.backgroudImage != null){
-		<img src="@routes.PublicController.getDiagnosticImages(diagnosticInfo.diagnosticCentre.id,diagnosticInfo.diagnosticCentre.backgroudImage.id){" class="thumbnail" width="100" height="100"  />
-	}else{
-		<img src="/assets/images/pharmacy-default-bg-image.jpg" class="thumbnail" width="100" height="100"  />
-	}
-	</div>
-<div class="col-md-8" style="padding-left:35px">
-<h4>@diagnosticInfo.diagnosticCentre.name</h4>
-</div>
-</div>
-</td>
-*@
-<td style="vertical-align:middle;text-align:center;font-size:12px">@diagnosticInfo.diagnosticCentre.name </td> 
 <td style="vertical-align:middle;text-align:center;font-size:12px">
-@if(diagnosticInfo.servedDate != null){
-	@diagnosticInfo.servedDate.format("dd-MMM-yyyy")<br>@diagnosticInfo.servedDate.format("EE")<br>@diagnosticInfo.servedDate.format("hh:mm")
-}
+@if(prescription.getDiagnoticInfoList().size() > 0){
+	@for(dpinfo <- prescription.getDiagnoticInfoList()){
+		<a href="@routes.PublicController.getDiagnosticCentreWithSlug(dpinfo.diagnosticCentre.slugUrl)">@dpinfo.diagnosticCentre.name</a><br>
+		}
+		}
+		</td> 
+<td style="vertical-align:middle;text-align:center;font-size:12px">
+@if(prescription.getDiagnoticInfoList().size() > 0){
+	@for(dpinfo <- prescription.getDiagnoticInfoList()){
+		<li>@dpinfo.diagnosticCentre.name</li>
+		@if(dpinfo.servedDate != null){
+		<span style="color:#008bca;">(@dpinfo.servedDate.format("dd-MMM-yyyy") at @dpinfo.servedDate.format("hh:mm"))</span>
+		}else{
+		<span style="color:#008bca;">Not Served Yet</span>
+		}
+		}
+		}
 </td>
 <td style="vertical-align:middle;font-size:12px">
-	@for((report,index) <- diagnosticInfo.prescription.patient.diagnosticReportList.zipWithIndex){
-	@{index+1}.<a href="@routes.DiagnosticController.downloadDiagnosticReport(report.id,diagnosticInfo.id)">@report.fileName</a><br>
+@if(prescription.getDiagnoticInfoList().size() > 0){
+	@for(dpinfo <- prescription.getDiagnoticInfoList()){
+		<li>@dpinfo.diagnosticCentre.name </li>
+		@if(dpinfo.fileEntities.size > 0){
+	@for((report,index) <- dpinfo.fileEntities.zipWithIndex){
+	&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;@{index+1}.<a href="@routes.DiagnosticController.downloadDiagnosticReport(report.id,prescription.id)">@report.fileName</a><br>
 }
-
+}else{
+&nbsp;&nbsp;<span style="color:#008bca;">&nbsp;&nbsp;No Reports Received Yet</span>.
+}&nbsp;
+}
+}
 </td>
-
+	
 </tr>
 }
+
 </table>
 
 }

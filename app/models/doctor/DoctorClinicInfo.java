@@ -18,6 +18,7 @@ import models.BaseEntity;
 import models.Role;
 import play.Logger;
 import play.db.ebean.Model;
+import utils.Util;
 import beans.DoctorClinicInfoBean;
 
 @SuppressWarnings("serial")
@@ -149,6 +150,7 @@ public class DoctorClinicInfo extends BaseEntity {
 			if(this.clinic.address.pinCode!=null){
 				bean.pinCode=this.clinic.address.pinCode;
 			}
+
 			bean.lat = this.clinic.address.latitude;
 
 			bean.lng = this.clinic.address.longitude;
@@ -167,5 +169,8 @@ public class DoctorClinicInfo extends BaseEntity {
 	public int getPrescriptionCount(){
 		return Prescription.find.where().eq("doctor", this.doctor).eq("clinic", this.clinic).findRowCount();
 	}
-
+	public List<Prescription> getDoctorClinicPrescriptionsList(){
+		return Prescription.find.where().eq("clinic", this.clinic).eq("doctor", this.doctor)
+				.orderBy().desc("prescriptionDate").findList();
+	}
 }

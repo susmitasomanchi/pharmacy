@@ -271,6 +271,7 @@ public class PublicController extends Controller{
 	 * Action to show a forms which have Doctor and it will show the available and booked appointment
 	 *  GET	/doctor/schedule-appointment/:docclinicid
 	 */
+	@ConfirmAppUser
 	public static Result scheduleAppointment(final Long docclinicid) {
 		final DoctorClinicInfo clinicInfo=DoctorClinicInfo.find.byId(docclinicid);
 		return ok(views.html.patient.patientNewAppointment.render(clinicInfo));
@@ -281,6 +282,7 @@ public class PublicController extends Controller{
 	 * Action to display a form which has lists of appointment as per date is provided
 	 *  GET/patient/display-appointment/:docClinicId/:timeMillis
 	 */
+	@ConfirmAppUser
 	public static Result displayAppointment(final Long docClinId,final Long timeMillis) {
 
 		int slots=0;
@@ -445,7 +447,7 @@ public class PublicController extends Controller{
 	}
 	/**
 	 * @author lakshmi
-	 *  Action to get byteData as image of BloodBank
+	 * Action to get byteData as image of BloodBank
 	 * GET/bloodBank/get-image/:bloodBankId/:fileId
 	 */
 	public static Result getBloodBankImages(final Long bloodBankId,final Long imageId){
@@ -485,9 +487,9 @@ public class PublicController extends Controller{
 		return ok(byteContent).as("image/jpeg");
 
 	}
-	/*
+	/**
 	 * @author lakshmi
-	 *  Action to get byteData as image of Clinic
+	 * Action to get byteData as image of Clinic
 	 * GET/bloodBank/get-image/:bloodBankId/:fileId
 	 */
 	public static Result getAppUserImage(final Long appUserId){

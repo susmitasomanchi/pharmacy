@@ -409,6 +409,10 @@ public class PatientController extends Controller {
 				// End of async
 				sharedWith.append(phprInfo.pharmacy.name);
 			}
+			else{
+				flash().put("alert",new Alert("alert-info", "Your Prescription Already shared with "+ ppInfo.pharmacy.name).toString());
+				return redirect(routes.DoctorController.viewTodaysAppointments());
+			}
 		}
 
 		if(diagnosticId != null && !diagnosticId.trim().isEmpty()){
@@ -448,6 +452,10 @@ public class PatientController extends Controller {
 					sharedWith.append(" and ");
 				}
 				sharedWith.append(diagnosticCentre.name);
+			}
+			else{
+				flash().put("alert",new Alert("alert-info", "Your Prescription Already shared with "+ dcpInfo.diagnosticCentre.name).toString());
+				return redirect(routes.DoctorController.viewTodaysAppointments());
 			}
 		}
 
@@ -494,13 +502,27 @@ public class PatientController extends Controller {
 	/**
 	 * @author lakshmi
 	 * Action to display diagnostic reports
+	 *//*
+	@ConfirmAppUser
+	public static Result viewDiagnosticReports(){
+		final Patient patient = LoginController.getLoggedInUser().getPatient();
+		DiagnosticCentrePrescriptionInfo info = DiagnosticCentrePrescriptionInfo.find.byId(diagnosticInfoId);
+		final List<DiagnosticCentrePrescriptionInfo> diagnosticCentrePrescriptionInfos = new ArrayList<DiagnosticCentrePrescriptionInfo>();
+		return ok(views.html.patient.patientDiagnosticReports.render(diagnosticCentrePrescriptionInfos));
+
+	}
+	  */
+	/**
+	 * @author lakshmi
+	 * Action to display diagnostic reports
 	 */
 	@ConfirmAppUser
 	public static Result viewDiagnosticReports(){
 		final Patient patient = LoginController.getLoggedInUser().getPatient();
-		/*DiagnosticCentrePrescriptionInfo info = DiagnosticCentrePrescriptionInfo.find.byId(diagnosticInfoId);*/
-		final List<DiagnosticCentrePrescriptionInfo> diagnosticCentrePrescriptionInfos = DiagnosticCentrePrescriptionInfo.find.where().eq("prescription.patient", patient).findList();
-		return ok(views.html.patient.patientDiagnosticReports.render(diagnosticCentrePrescriptionInfos));
+		final List<Prescription> prescriptions = Prescription.find.where().eq("patient", patient).findList();
+		/*final DiagnosticCentrePrescriptionInfo info = DiagnosticCentrePrescriptionInfo.find.byId(diagnosticInfoId);
+		final List<DiagnosticCentrePrescriptionInfo> diagnosticCentrePrescriptionInfos = new ArrayList<DiagnosticCentrePrescriptionInfo>();*/
+		return ok(views.html.patient.patientDiagnosticReports.render(prescriptions));
 
 	}
 
@@ -578,4 +600,14 @@ public class PatientController extends Controller {
 		return redirect(routes.PatientController.getFavoriteClinics());
 	}
 
+	/**
+	 * @author lakshmi
+	 * Action to show a forms which have Doctor and it will show the available and booked appointment
+	 *  GET	/secure-patient/schedule-appointment/:docclinicid
+	 */
+	@ConfirmAppUser
+	public static Result scheduleAppointment(final Long docclinicid) {
+		final DoctorClinicInfo clinicInfo=DoctorClinicInfo.find.byId(docclinicid);
+		return ok(views.html.patient.patientClinicNewAppointment.render(clinicInfo));
+	}
 }

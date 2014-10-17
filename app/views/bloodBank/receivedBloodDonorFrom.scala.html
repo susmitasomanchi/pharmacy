@@ -24,17 +24,25 @@
 </div>
 </div>
 </div>
+<div class="row" id="verify-code">
+</div>
    <br>
 <div style="padding-left:15px;padding-right:15px">
 	@*
 	<button style="box-shadow: 1px 1px 3px 3px #aaaaaa;" class="btn btn-sm btn-primary" onclick="submitSearch();"><i class="icon-search icon-large"></i> Find</button>
 	*@
-	<button style="box-shadow: 1px 1px 3px 3px #aaaaaa;"  onclick="return validateAndSubmit(@LoginController.getLoggedInUser().id);" class="btn btn-sm btn-primary">Find</button>
+	<button style="box-shadow: 1px 1px 3px 3px #aaaaaa;" id="find" onclick="return validateAndSubmit();" class="btn btn-sm btn-primary">Find</button>
 </div>
 <script>
-function validateAndSubmit(appUserId){
-	var email = $('#email').val().trim();
+var code;
+	var patId;
+	var email;
+function validateAndSubmit(){
+alert("1");
+$('#find').hide();
+	email = $('#email').val().trim();
 	var confirmEmailId = $('#confirmEmail').val().trim();
+	
     	if(email != confirmEmailId){
     		alert("Email Ids Do Not Match!");
     	    return false;
@@ -43,9 +51,46 @@ function validateAndSubmit(appUserId){
     		alert("Enter Email Id");
     	    return false;
     	}
-    	window.location.href = '/secure-blood-bank/get-received-blood-info/'+email+'/'+appUserId;
-    	
+    	$.get('/secure-blood-bank/find-blood-donor/'+email, function(data) {
+    	alert("2");
+    		if(data == 0){
+    			alert(email+" already existed in db");
+    			return false;
+    		}else if(data == 1){
+    		$('#verify-code').append('<br><div class="col-md-2"><input type="checkbox" id="check" />Is Patient Agreed?</div><div class="col-md-5"><span style="cursor:pointer;color:#008bca" onclick="createNewPatient();">Click Here To Create An Account For Patient</span></div>');
+    		}else{
+    		code = data[0];
+    		patId = data[1];
+			$('#verify-code').append('<div class="col-md-4" style="padding:15px;"> <label for="code" class="col-md-6" style="padding-top:7px">Vefication Code </label> <div class="col-md-4"><input type="text" style="box-shadow: 1px 1px 3px 3px #aaaaaa;"  name="code" id="code" placeholder="Enter Verifivation Code"></div></div><br><br><button style="box-shadow: 1px 1px 3px 3px #aaaaaa;"  onclick="verifyCode(code);" class="btn btn-sm btn-success">Verify</button>');
+    		}
+    		});
+    	  	
 }
+
+
+		 function verifyCode(data){
+		 alert(data);
+    	    	var code = $('#code').val().trim();
+    	    	alert(code);
+    	    	if(code == data){
+    	    		window.location.href = '/secure-blood-bank/get-blood-donor-info/'+patId;
+    	    	}else{
+    	    		alert("Enter Correct Verification Code");
+    	    		return false;
+    	    	}
+    	    }
+    	    
+    	    function createNewPatient(){
+		alert("hello");
+		alert(email);
+		 if($('#check').is(':checked')){
+			window.location.href='/secure-blood-bank/new-patient-form/'+email;
+			}else{
+			alert("patient Confirmation Is Compulsory To Create An Account");
+			return false; 
+			}
+			}
+
 
 </script>
 </div>
@@ -55,7 +100,7 @@ function validateAndSubmit(appUserId){
 <div class="well">
 <div class="row" style="padding:15px;">
 <div class="col-md-4">
-<h5>@patient.appUser.name&nbsp;(@{patient.getSexAndAge()})</h5>
+<h5>@patient.appUser.name&nbsp;(@{patient.appUser.getSexAndAge()})</h5>
 <h5>@patient.appUser.email</h5>
 <h5>@if(patient.appUser.isMobileNumberShared == true){@patient.appUser.mobileNumber}</h5>
 </div>
@@ -87,9 +132,9 @@ function validateAndSubmit(appUserId){
 </div>
 <div class="col-md-6">
 <div class="form-group">
-      <label for="inputDOB" class="col-lg-5 control-label">Date <span style="color:red;">*</span><br><span style="font-size:10px;"><b>(DD-MM-YYYY)</b></span></label>
+      <label for="inputDOB" class="col-lg-5 control-label">Date <span style="color:red;">*</span><br><span style="font-size:10px;"><b>(DD-MMM-YYYY)</b></span></label>
       <div class="col-lg-7" style="padding:0px">
-		<div class="input-append date" id="datepicker" data-date-format="dd-mm -yyyy">
+		<div class="input-append date" id="datepicker" data-date-format="dd-mm-yyyy">
 				<input name="date" class="col-md-7" size="16" type="text" readonly="">
 				<span class="add-on col-md-5"><i class="fa fa-calendar"></i></span>
 			  </div>

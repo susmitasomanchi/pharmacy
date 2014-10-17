@@ -1,0 +1,54 @@
+@(dpInfo:models.diagnostic.DiagnosticCentrePrescriptionInfo)
+@import play.i18n._
+@import helper.twitterBootstrap._
+@import helper._
+
+@main("Prescription"){
+
+<div class="row" style="padding-left:20px; padding-right:100px;">
+
+<h3><a href="@routes.PublicController.getDoctorWithSlug(dpInfo.prescription.doctor.slugUrl)">Dr. @dpInfo.prescription.doctor.appUser.name</a>
+<span class="pull-right">Order Status: <span class="badge" style="font-size:24px;"><b>@dpInfo.diagnosticCentrePrescritionStatus</b></span></span>
+</h3>
+<h4>@dpInfo.prescription.doctor.degree</h4>
+<h4>@dpInfo.prescription.doctor.getSpecializations()</h4>
+
+<hr>
+
+<h4 style="margin:0px; padding:0px;">@dpInfo.prescription.patient.appUser.name</h4>
+<p style="margin:0px; padding:0px;">@dpInfo.prescription.patient.appUser.mobileNumber</p>
+
+<br>
+
+<div class="row">
+<h4><u>Diagnostic Tests:</u></h4>
+<table class="table table-bordered table-condensed">
+<thead>
+	<tr>
+		<th>S No</th>
+		<th>Test</th>
+		<th>Remarks</th>
+	</tr>
+</thead>
+<tbody>
+	@for((test, index) <- dpInfo.prescription.diagnosticTestLineItemList.zipWithIndex){
+	<tr>
+		<td>@(index+1)</td>
+		<td>@test.fullNameOfDiagnosticTest</td>
+		<td>@test.remarks</td>
+	</tr>
+	}
+</tbody>
+</table>
+
+</div>
+</div>
+
+
+
+
+
+
+
+
+}

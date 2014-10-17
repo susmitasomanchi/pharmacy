@@ -147,7 +147,7 @@ GET		/secure-doctor/todays-prescriptions						controllers.DoctorController.viewT
 GET		/secure-doctor/products/get-json							controllers.DoctorController.getAllProductsJson()
 GET		/secure-doctor/diagnostic-tests/get-json					controllers.DoctorController.getAllDiagnosticJson()
 GET		/secure-doctor/follow-up-appointment/:clinicId/:patientId					controllers.DoctorController.getPatientFollowUPAppointment(clinicId : Long,patientId: Long)
-POST		/secure-doctor/follow-up-appointment/:prescriptionId/:patientId					controllers.DoctorController.processPatientFollowUPAppointment(prescriptionId : Long,patientId: Long)
+POST		/secure-doctor/follow-up-appointment/:appointmentId/:patientId					controllers.DoctorController.processPatientFollowUPAppointment(appointmentId : Long,patientId: Long)
 GET		/secure-doctor/get-doctors-list/:clinicId											controllers.DoctorController.getDoctorClinicInfoList(clinicId : Long)
 
 
@@ -169,6 +169,7 @@ GET    /secure-user/blood-donation-info							 	controllers.PatientController.ge
 GET    /secure-user/add-fav-clinic/:clinicId							 	controllers.PatientController.addClinicToLoggedInUser(clinicId : Long)
 GET	   /secure-user/get-favorite-clinics								controllers.PatientController.getFavoriteClinics()
 GET	   /secure-user/remove-favorite-clinic/:clinicId								controllers.PatientController.removeFavoriteClinic(clinicId : Long)
+GET		/secure-user/schedule-appointment/:docclinicid								controllers.PatientController.scheduleAppointment(docclinicid:Long)
 
 
 
@@ -356,7 +357,6 @@ GET    /diagnostic-centre/all-doctors      		controllers.DRController.displayDia
 
 #Diagnostic Profile
 
-
 #GET		/diagnostic/add-order-from-doctor/:diagnosticId/:prescriptionId									controllers.DiagnosticController.addOrderFromDoctor(diagnosticId: Long,prescriptionId: Long)
 #GET		/diagnostic/display-orders							controllers.DiagnosticController.viewDiagnosticOrders()
 
@@ -405,6 +405,25 @@ POST	/secure-clinic/upload-clinic-images										controllers.ClinicController.u
 GET		/secure-clinic/remove-image/:clinicId/:fileId						controllers.ClinicController.removeClinicImage(clinicId: Long,fileId: Long)
 POST	/secure-clinic/basic-update												controllers.ClinicController.clinicBasicUpdate()
 POST	/secure-clinic/address-update 											controllers.ClinicController.clinicAddressUpdate()
+GET		/secure-clinic/add-clinic-user											controllers.ClinicController.addClinicUserForm()
+POST	/secure-clinic/save-clinic-user											controllers.ClinicController.saveClinicUser()	
+GET		/secure-clinic/all-clinic-users											controllers.ClinicController.listClinicUsers()
+GET		/secure-clinic/edit-clinic-user/:clinicUserId							controllers.ClinicController.editClinicUser(clinicUserId : Long)
+POST	/secure-clinic/update-clinic-user										controllers.ClinicController.updateClinicUser()
+GET		/secure-clinic/get-clinic-doctors/:clinicUserId							controllers.ClinicController.getDoctorClinicInfos(clinicUserId : Long)
+POST	/secure-clinic/assign-clinic-doctors/:clinicUserId						controllers.ClinicController.assaignDoctorsToClinicUser(clinicUserId : Long)
+GET		/secure-clinic/remove-clinic-user/:clinicUserId							controllers.ClinicController.removeClinicUser(clinicUserId : Long)
+GET		/secure-clinic/weekly-appointments/:docClinicInfoId						controllers.ClinicController.viewClinicWeeklyAppointments(docClinicInfoId: Long)
+GET		/secure-clinic/weekly-appointments-json/:docClinicInfoId				controllers.ClinicController.getClinicCalendarEventsJson(docClinicInfoId: Long)
+GET		/secure-clinic/book-appointment-form/:docClinicId						controllers.ClinicController.bookAppointmentForm(docClinicId: Long)
+GET		/secure-clinic/verify-appUser/:emailId/:docClinicId						controllers.ClinicController.sendVerificationToAppUser(emailId : String,docClinicId: Long)
+GET		/secure-clinic/book-appUser-appointment/:docClinicId/:patientId			controllers.ClinicController.getClinicPatientAppointmentForm(docClinicId : Long,patientId : Long)
+POST	/secure-clinic/save-appointment/:appointmentId/:patientId	    		controllers.ClinicController.processClinicPatientAppointment(appointmentId:Long,patientId : Long) 
+GET		/secure-clinic/new-patient-form/:docClinicId/:email											controllers.ClinicController.getNewPatientForm(docClinicId : Long,email:String)
+POST	/secure-clinic/save-patient/:docClinicId												controllers.ClinicController.savePatientProfile(docClinicId : Long)
+POST	/secure-clinic/verify-confirmation-code/:appUserId/:docClinicId							controllers.ClinicController.verifyMobileConfirmationCode(appUserId: Long,docClinicId : Long)
+
+	
 
 
 
@@ -424,12 +443,16 @@ GET		/secure-blood-bank/remove-image/:bloodBankId/:fileId						controllers.Blood
 POST	/secure-blood-bank/basic-update												controllers.BloodBankController.bloodBankBasicUpdate()
 POST	/secure-blood-bank/address-update 											controllers.BloodBankController.bloodBankAddressUpdate()
 GET		/secure-blood-bank/from-to-date-donations											controllers.BloodBankController.fromToDateBloodDonationsForm()
-POST		/secure-blood-bank/from-to-date-donations											controllers.BloodBankController.getFromToDateBloodDonations()
+POST	/secure-blood-bank/from-to-date-donations											controllers.BloodBankController.getFromToDateBloodDonations()
 GET		/secure-blood-bank/get-blood-donor-form											controllers.BloodBankController.getBloodDonorByEmailForm()
 GET		/secure-blood-bank/find-blood-donor/:emailId											controllers.BloodBankController.findBloodDonorByEmail(emailId : String)
 GET		/secure-blood-bank/add-blood-donor/:appUserId											controllers.BloodBankController.addBloodDonorToBloodBank(appUserId : Long)
 GET		/secure-blood-bank/view-blood-donors													controllers.BloodBankController.listBloodBankBloodDonors()
 GET		/secure-blood-bank/remove-blood-donor/:appUserId													controllers.BloodBankController.removeBloodBankBloodDonor(appUserId : Long)
+GET		/secure-blood-bank/get-blood-donor-info/:patientId											controllers.BloodBankController.getBloodDonorInfo(patientId : Long)
+GET		/secure-blood-bank/new-patient-form/:email										controllers.BloodBankController.getBloodBankNewPatientForm(email : String)
+POST	/secure-blood-bank/save-patient												controllers.BloodBankController.saveBloodBankPatientProfile()
+POST		/secure-blood-bank/verify-confirmation-code/:appUserId								controllers.BloodBankController.verifyConfirmationCode(appUserId : Long)
 
 
 

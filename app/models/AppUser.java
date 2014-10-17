@@ -70,7 +70,7 @@ public class AppUser extends BaseEntity {
 
 	public Boolean isBloodDonor = false;
 
-	public Boolean isMobileNumberShared ;
+	public Boolean isMobileNumberShared = false;
 
 	public Date lastBloodDonatedDate;
 
@@ -99,6 +99,10 @@ public class AppUser extends BaseEntity {
 
 	@OneToMany(cascade=CascadeType.ALL)
 	public List<BloodDonation> bloodDonationList = new ArrayList<BloodDonation>();
+
+	public Boolean isSearchable = true;
+
+	public Boolean isSuspended = false;
 
 	public static Model.Finder<Long, AppUser> find = new Finder<Long, AppUser>(Long.class, AppUser.class);
 

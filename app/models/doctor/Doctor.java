@@ -23,6 +23,7 @@ import models.AppUser;
 import models.BaseEntity;
 import models.PrimaryCity;
 import models.diagnostic.DiagnosticCentre;
+import models.diagnostic.DiagnosticCentrePrescriptionInfo;
 import models.patient.Patient;
 import models.patient.PatientDoctorInfo;
 import models.pharmacist.Pharmacy;
@@ -144,7 +145,89 @@ public class Doctor extends BaseEntity{
 	public List<PatientDoctorInfo> getPatientDoctorInfo(){
 		return PatientDoctorInfo.find.where().eq("doctor", this).findList();
 	}
+	public int getDoctorClinicAppointmentCount(final Long clinicId){
+		final Date now = new Date();
+		final Calendar calendarFrom = Calendar.getInstance();
+		calendarFrom.setTime(now);
+		calendarFrom.set(Calendar.HOUR_OF_DAY, 0);
+		calendarFrom.set(Calendar.MINUTE, 0);
+		calendarFrom.set(Calendar.SECOND,0);
+		calendarFrom.set(Calendar.MILLISECOND,0);
 
+		final Calendar calendarTo = Calendar.getInstance();
+		calendarTo.setTime(now);
+		calendarTo.set(Calendar.HOUR_OF_DAY, 23);
+		calendarTo.set(Calendar.MINUTE, 59);
+		calendarTo.set(Calendar.SECOND,59);
+		calendarTo.set(Calendar.MILLISECOND,999);
+
+		final int appointments =
+				Appointment.find.where()
+				.eq("doctorClinicInfo.doctor", this)
+				.eq("doctorClinicInfo.clinic", Clinic.find.byId(clinicId))
+				.ge("bookedOn", calendarFrom.getTime())
+				.le("bookedOn", calendarTo.getTime())
+				.orderBy("appointmentTime")
+				.findRowCount();
+		return appointments;
+
+	}
+	public int getDoctorClinicPrescriptionCount(final Long clinicId){
+		final Date now = new Date();
+		final Calendar calendarFrom = Calendar.getInstance();
+		calendarFrom.setTime(now);
+		calendarFrom.set(Calendar.HOUR_OF_DAY, 0);
+		calendarFrom.set(Calendar.MINUTE, 0);
+		calendarFrom.set(Calendar.SECOND,0);
+		calendarFrom.set(Calendar.MILLISECOND,0);
+
+		final Calendar calendarTo = Calendar.getInstance();
+		calendarTo.setTime(now);
+		calendarTo.set(Calendar.HOUR_OF_DAY, 23);
+		calendarTo.set(Calendar.MINUTE, 59);
+		calendarTo.set(Calendar.SECOND,59);
+		calendarTo.set(Calendar.MILLISECOND,999);
+
+		final int appointments =
+				Appointment.find.where()
+				.eq("doctorClinicInfo.doctor", this)
+				.eq("doctorClinicInfo.clinic", Clinic.find.byId(clinicId))
+				.eq("appointmentStatus", AppointmentStatus.SERVED)
+				.ge("bookedOn", calendarFrom.getTime())
+				.le("bookedOn", calendarTo.getTime())
+				.orderBy("appointmentTime")
+				.findRowCount();
+		return appointments;
+
+	}
+	public int getDoctorClinicPendingAppointmentCount(final Long clinicId){
+		final Date now = new Date();
+		final Calendar calendarFrom = Calendar.getInstance();
+		calendarFrom.setTime(now);
+		calendarFrom.set(Calendar.HOUR_OF_DAY, 0);
+		calendarFrom.set(Calendar.MINUTE, 0);
+		calendarFrom.set(Calendar.SECOND,0);
+		calendarFrom.set(Calendar.MILLISECOND,0);
+
+		final Calendar calendarTo = Calendar.getInstance();
+		calendarTo.setTime(now);
+		calendarTo.set(Calendar.HOUR_OF_DAY, 23);
+		calendarTo.set(Calendar.MINUTE, 59);
+		calendarTo.set(Calendar.SECOND,59);
+		calendarTo.set(Calendar.MILLISECOND,999);
+
+		final int appointments =
+				Appointment.find.where()
+				.eq("doctorClinicInfo.doctor", this)
+				.eq("doctorClinicInfo.clinic", Clinic.find.byId(clinicId))
+				.eq("appointmentStatus", AppointmentStatus.APPROVED)
+				.ge("bookedOn", calendarFrom.getTime())
+				.le("bookedOn", calendarTo.getTime())
+				.orderBy("appointmentTime")
+				.findRowCount();
+		return appointments;
+
+	}
 	@OneToMany(cascade = CascadeType.ALL)
 	public List<SigCode> sigCodeList = new ArrayList<SigCode>();
 
@@ -154,6 +237,9 @@ public class Doctor extends BaseEntity{
 		for (final DoctorClinicInfo clinicInfo : this.doctorClinicInfoList) {
 			if(clinicInfo.clinic != null){
 				stringBuilder.append(clinicInfo.clinic.name.toLowerCase());
+			}
+			if(clinicInfo.clinic.address != null){
+				stringBuilder.append(clinicInfo.clinic.address.area.toLowerCase());
 			}
 		}
 		if(this.appUser.name != null){

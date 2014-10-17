@@ -14,6 +14,7 @@ import models.doctor.DaySchedule;
 import models.doctor.Doctor;
 import models.doctor.DoctorClinicInfo;
 import play.Logger;
+import utils.Util;
 
 @SuppressWarnings("serial")
 public class DoctorClinicInfoBean implements Serializable {
@@ -89,6 +90,7 @@ public class DoctorClinicInfoBean implements Serializable {
 		}
 		if(this.name != null){
 			clinic.name = this.name;
+
 		}
 		if(this.contactNo != null){
 			clinic.contactNo = this.contactNo;
@@ -100,7 +102,6 @@ public class DoctorClinicInfoBean implements Serializable {
 			clinic.clinicAdminstrator = ClinicUser.find.byId(this.clinicUserId);
 			Logger.info(clinic.clinicAdminstrator.appUser.name);
 		}
-
 		if(this.doctorId != null){
 			doctorClinicInfo.doctor = Doctor.find.byId(this.doctorId);
 		}
@@ -183,7 +184,6 @@ public class DoctorClinicInfoBean implements Serializable {
 		if(this.pinCode != null){
 			address.pinCode = this.pinCode;
 		}
-
 
 		doctorClinicInfo.clinic.address = address;
 		if(doctorClinicInfo.clinic.address.id == null){
