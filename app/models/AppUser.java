@@ -32,6 +32,7 @@ import org.apache.commons.codec.binary.Base64;
 import org.joda.time.LocalDate;
 import org.joda.time.Years;
 
+import play.Logger;
 import play.data.validation.Constraints.Email;
 import play.db.ebean.Model;
 
