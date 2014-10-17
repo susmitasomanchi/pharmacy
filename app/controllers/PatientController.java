@@ -409,6 +409,10 @@ public class PatientController extends Controller {
 				// End of async
 				sharedWith.append(phprInfo.pharmacy.name);
 			}
+			else{
+				flash().put("alert",new Alert("alert-info", "Your Prescription Already shared with "+ ppInfo.pharmacy.name).toString());
+				return redirect(routes.DoctorController.viewTodaysAppointments());
+			}
 		}
 
 		if(diagnosticId != null && !diagnosticId.trim().isEmpty()){
@@ -448,6 +452,10 @@ public class PatientController extends Controller {
 					sharedWith.append(" and ");
 				}
 				sharedWith.append(diagnosticCentre.name);
+			}
+			else{
+				flash().put("alert",new Alert("alert-info", "Your Prescription Already shared with "+ dcpInfo.diagnosticCentre.name).toString());
+				return redirect(routes.DoctorController.viewTodaysAppointments());
 			}
 		}
 
