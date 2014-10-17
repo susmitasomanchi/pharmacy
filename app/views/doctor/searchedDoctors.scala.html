@@ -53,7 +53,7 @@ $("#searchInput").keyup(function (e) {
 </div>
 
 <div id="searchDiv" class="col-md-4" style="width:40%">
-	<input type="search" style="width:100%;box-shadow: 1px 1px 3px 3px #aaaaaa;"  name="searchKey" id="searchKey" 
+	<input type="search" style="width:100%;box-shadow: 1px 1px 3px 3px #aaaaaa;"  name="searchKey" id="searchKey" required
 	@if(session().get(utils.Constants.CITY_ID) != null){
 		placeholder="Doctor's Name or Locality in @models.PrimaryCity.find.byId(Long.parseLong(session().get(utils.Constants.CITY_ID))).name"
 	}else{
@@ -75,7 +75,7 @@ $("#searchInput").keyup(function (e) {
 $("#searchKey").keyup(function (e) {
     if (e.keyCode == 13) {
     	if($('#searchInput').val() == ''){
-        	return false;
+    	       	return false;
         }
     	var spez = $('#spez').find("option:selected").text();
     	window.location.href='/doctor/search/'+spez.toLowerCase()+'/'+$('#searchKey').val();
@@ -83,7 +83,17 @@ $("#searchKey").keyup(function (e) {
 });
 
 function submitSearch(){
-	var spez = $('#spez').find("option:selected").text();
+var searchString = $('#searchKey').val();
+var spez = $('#spez').find("option:selected").text();
+	if(spez.trim() == ''){
+	alert("Select Spaecialization");
+    	return false;
+	}
+    if(searchString.trim() == ''){
+    alert("enter search key");
+    	return false;
+    }
+	
 	window.location.href='/doctor/search/'+spez+'/'+$('#searchKey').val().trim();
 }
 </script>

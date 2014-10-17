@@ -18,11 +18,20 @@
 	
 />
 
-<a onclick="window.location.href='/pharmacy/search/'+$('#searchInput').val().trim();" class="btn btn-xs btn-primary">Search</a>
+<a onclick="submitSearch();" class="btn btn-xs btn-primary">Search</a>
 
 </div>
 </div>
 <script>
+function submitSearch(){
+var searchString = $('#searchInput').val();
+    if(searchString.trim() == ''){
+    alert("Enter Search Key");
+    	return false;
+    }
+	
+	window.location.href='/pharmacy/search/'+$('#searchInput').val().trim();
+}
 $("#searchInput").keyup(function (e) {
     if (e.keyCode == 13) {
     	if($('#searchInput').val().trim() == ''){
