@@ -108,7 +108,7 @@
 <div id="searchDiv" class="col-md-3" style="width:30%">
 	<input type="search" style="width:100%;box-shadow: 1px 1px 3px 3px #aaaaaa;"  name="searchKey" id="searchKey" 
 	@if(session().get(utils.Constants.CITY_ID) != null){
-		placeholder="Doctor's Name or Locality in @models.PrimaryCity.find.byId(Long.parseLong(session().get(utils.Constants.CITY_ID))).name"
+		placeholder="Doctor's Name in @models.PrimaryCity.find.byId(Long.parseLong(session().get(utils.Constants.CITY_ID))).name"
 	}else{
 		placeholder="Doctor's Name or Locality"
 	}
@@ -128,7 +128,7 @@
    
 $('#role').on('change', function(){
 	var selectedText = $(this).find("option:selected").text();
-	$('#searchKey').attr('placeholder',selectedText+'\'s Name or Locality '+inCity);
+	$('#searchKey').attr('placeholder',selectedText+'\'s Name '+inCity);
 	if(selectedText.localeCompare('Doctor') != 0){
 		$('#spezDiv').hide();
 		$('#searchDiv').attr('class','col-md-4');
