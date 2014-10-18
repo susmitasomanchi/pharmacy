@@ -5,28 +5,6 @@
 
 @main("Search Doctors"){
 
-<div class="well">
-
-@*
-<div class="row">
-<label for="searchInput">Search For</label>
-<input id="searchInput"  value="@searchedKey"/>
-
-<a onclick="window.location.href='/doctor/search/'+$('#searchInput').val().trim();" class="btn btn-xs btn-primary">Search</a>
-
-<script>
-$("#searchInput").keyup(function (e) {
-    if (e.keyCode == 13) {
-    	if($('#searchInput').val().trim() == ''){
-        	return false;
-        }
-    	window.location.href='/doctor/search/'+$('#searchInput').val().trim();
-    }
-});
-</script>
-</div>
-*@
-
 
 <style>
 .chosen-container .chosen-single{
@@ -39,21 +17,28 @@ $("#searchInput").keyup(function (e) {
 	margin-top:7px;
 }
 </style>
-
+<div class="well">
 
 <div class="row">
 
 <div id="spezDiv" class="col-md-2" style="width:20%">
-	<select required class="form-control chzn-no-deselect" data-placeholder="Specialization" name="spez" id="spez" style="width:100%;box-shadow: 1px 1px 1px 1px #aaaaaa; height:120%;">
-		<option></option>
+	<select class="form-control chzn-no-deselect" data-placeholder="Specialization" name="spez" id="spez" style="width:100%;box-shadow: 1px 1px 1px 1px #aaaaaa; height:120%;">
+		<option value="any"></option>
 		@for(spez <- models.doctor.MasterSpecialization.getAll()){
 			<option value="@spez.name">@spez.name</option>
 		}
 	</select>
 </div>
-
+<div id="locDiv" class="col-md-2" style="width:20%">
+	<select class="form-control chzn-no-deselect" data-placeholder="Locality" name="location" id="location" style="width:100%;box-shadow: 1px 1px 1px 1px #aaaaaa; height:120%;">
+		<option value="0"></option>
+		@for(locality <- PublicController.getPrimaryCityLocations()){
+			<option value="@locality.id">@locality.name</option>
+		}
+	</select>
+</div>
 <div id="searchDiv" class="col-md-4" style="width:40%">
-	<input type="search" style="width:100%;box-shadow: 1px 1px 3px 3px #aaaaaa;"  name="searchKey" id="searchKey" required
+	<input type="search" style="width:100%;box-shadow: 1px 1px 3px 3px #aaaaaa;"  name="searchKey" id="searchKey" 
 	@if(session().get(utils.Constants.CITY_ID) != null){
 		placeholder="Doctor's Name or Locality in @models.PrimaryCity.find.byId(Long.parseLong(session().get(utils.Constants.CITY_ID))).name"
 	}else{
@@ -69,6 +54,9 @@ $("#searchInput").keyup(function (e) {
 </div>
 
 </div>
+<br><br>
+<div id="doctorData">
+</div>
 
 <script>
 
@@ -77,236 +65,32 @@ $("#searchKey").keyup(function (e) {
     	if($('#searchInput').val() == ''){
     	       	return false;
         }
-    	var spez = $('#spez').find("option:selected").text();
-    	window.location.href='/doctor/search/'+spez.toLowerCase()+'/'+$('#searchKey').val();
-    }
+    	 }
 });
 
 function submitSearch(){
 var searchString = $('#searchKey').val();
-var spez = $('#spez').find("option:selected").text();
-	if(spez.trim() == ''){
-	alert("Select Spaecialization.");
-    	return false;
-	}
-    if(searchString.trim() == ''){
-    alert("Search With Doctor Name Or Location.");
-    	return false;
-    }
-	
-	window.location.href='/doctor/search/'+spez+'/'+$('#searchKey').val().trim();
+if(searchString.trim() == ""){
+searchString = 'any';
 }
+var spez = $('#spez').find("option:selected").val();
+var loc = $('#location').find("option:selected").val();
+    alert(loc+" location");
+    alert(spez+" spez");
+    alert(searchString+" search");
+	$.get( '/doctor/search/'+spez+'/'+loc+'/'+searchString.trim(),function( data ) {
+				alert(data);
+ 	  			$("#doctorData").html(data);	
+	})
+	}
 </script>
 
-
-<br>
-
-@if(searched){
-
-	@if(doctorList.size()==0){
-		No Doctors Available With <b>@searchedKey</b>.
-	}else{
-<style>
-.badge{
-color:#000000;
-background-color:#cccccc;
-}
-#coverborder {
-    opacity: 0.4;
-    filter: alpha(opacity=40); /* For IE8 and earlier */
-}
-.well{
-margin-bottom:0px;
-}
-
-</style>	
-		<table class="table table-bordered">
-		@for((doctor,index) <- doctorList.zipWithIndex){
-			@if(index%2==0){
- <tr class="row"> 
-}
-				
-				<td class="col-md-6">
-				<div class="row" style="padding-left:20px;padding-right:20px">
-				<div style="cursor:pointer" onclick="window.location.href='@routes.PublicController.getDoctorWithSlug(doctor.slugUrl)';">
-				@if(doctor.backgroundImage != null){
-				<img src="@routes.PublicController.getImage(doctor.id,"backgroundImage")"  width="530" width="530" height="170"/>
-				}else{
-				<img src="/assets/images/sunrise.png" width="530" height="170" />
-				}
-				<img id="coverborder" src="/assets/images/bordercover.png" width="530" style="position:relative;top:-65px"/>
-				</div>
-				<div class="row" style="margin-top:-120px;padding-left:15px">
-				<div style="cursor:pointer;width:23%" onclick="window.location.href='@routes.PublicController.getDoctorWithSlug(doctor.slugUrl)';" class="col-md-3">
-				@if(doctor.profileImage != null){
-				<img src="@routes.PublicController.getImage(doctor.id,"profileImage")" class="thumbnail" width="100" height="100"  />
-				}else{
-				<img src="/assets/images/doctor.png" class="thumbnail" width="100" height="100"  />
-				}
-				</div>
-				<div style="cursor:pointer" onclick="window.location.href='@routes.PublicController.getDoctorWithSlug(doctor.slugUrl)';" class="col-md-4">
-				<p style="font-size:18px"><b>@doctor.appUser.name</b></p>
-				<p style="font-size:14px"><b>@doctor.getSpecializations()</b></p>
-				<h6>@doctor.degree</h6>
-				<h6>Ex: @doctor.getYearsOfExperience() years</h6>
-				<br>
-				</div>
-				<div class="col-md-4 pull-right" style="width:30%;padding-left:3px;padding-top:60px">
-				<a id="@doctor.id" class="btn btn-success btn-xs pull-right" href="@routes.PublicController.addToFavDoctor(doctor.id)" class="pull-right">Fav&nbsp<i class="fa fa-plus"></i></a>
-       			</div>
-				</div>
-				
-				
-				<div class="well" style="padding-left:20px;padding-right:0px;padding-top:0px;padding-bottom:20px">
-				<h4 style="color:#006687;font-weight:bold">Clinics</h4>
-				<ul class="nav nav-tabs">			
-				@if(doctor.doctorActiveClinicInfoList().size()==0){
-					Clinic information hasn't been provided yet.
-				}
-				<ul class="nav nav-tabs">				
-				@for((docclinic,index) <- doctor.doctorActiveClinicInfoList().zipWithIndex){
-					@if( index==0){
-					  <li  class="active"><a href="#clinic@docclinic.id" data-toggle="tab">@docclinic.clinic.name</a></li>
-					}else{
-					 <li><a href="##clinic@docclinic.id" data-toggle="tab">@docclinic.clinic.name</a></li>
-					}
-				}
-				</ul>
-				
-				<div class="tab-content" style="padding:10px">
-					@for((docclinic,index) <- doctor.doctorActiveClinicInfoList().zipWithIndex){
-						@if(index == 0){
-						<div class="tab-pane active" id="clinic@docclinic.id">
-						}else{
-						<div class="tab-pane" id="clinic@docclinic.id">
-						}
-								<div class="row">
-									<div class="col-md-8">
-									<h5 style="color:#006687">
-									<b><a href="#" >@docclinic.clinic.name</a></b><br>
-										<span style="font-size:12px;color:black">@docclinic.clinic.address.addressLine1
-										@docclinic.clinic.address.area<br>
-										@docclinic.clinic.address.city<br>
-										@docclinic.clinic.address.state<br>
-									<i class="fa fa-phone-square"></i> @docclinic.clinic.contactNo<br><br>
-									</div>
-									<div class="col-md-4">
-										<a class="btn btn-success btn-xs" style="float:right" href="@routes.PublicController.scheduleAppointment(docclinic.id)">Book Appointment</a>
-									</div>
-								</div>
-								
-								<div class="row" style="padding-left:15px">
-
-@if(docclinic.getScheduleMap().get("MONDAY") != null){
-	<span class="badge col-md-2" style="font-size:12px;width:14%">Mon</span>
-}else{
-	<span class="col-md-2" style="font-size:12px;width:14%">Mon</span>
-}
-
-@if(docclinic.getScheduleMap().get("TUESDAY") != null){
-	<span class="badge col-md-2" style="font-size:12px;width:14%">Tue</span>
-}else{
-	<span class="col-md-2" style="font-size:12px;width:14%">Tue</span>
-}
-
-@if(docclinic.getScheduleMap().get("WEDNESDAY") != null){
-	<span class="badge col-md-2" style="font-size:12px;width:14%">Wed</span>
-}else{
-	<span class="col-md-2" style="font-size:12px;width:14%">Wed</span>
-}
-
-@if(docclinic.getScheduleMap().get("THURSDAY") != null){
-	<span class="badge col-md-2" style="font-size:12px;width:14%">Thu</span>
-}else{
-	<span class="col-md-2" style="font-size:12px;width:14%">Thu</span>
-}
-
-@if(docclinic.getScheduleMap().get("FRIDAY") != null){
-	<span class="badge col-md-2" style="font-size:12px;width:14%">Fri</span>
-}else{
-	<span class="col-md-2" style="font-size:12px;width:14%">Fri</span>
-}
-@if(docclinic.getScheduleMap().get("SATURDAY") != null){
-	<span class="badge col-md-2" style="font-size:12px;width:14%">Sat</span>
-}else{
-	<span class="col-md-2" style="font-size:12px;width:14%">Sat</span>
-}
-
-@if(docclinic.getScheduleMap().get("SUNDAY") != null){
-	<span class="badge col-md-2" style="font-size:12px;width:14%">Sun</span>
-}else{
-	<span class="col-md-2" style="font-size:12px;width:14%">Sun</span>
-}
-
-</div>
-<div class="row" style="padding-left:15px;font-size:10px">
-
-
-@if(docclinic.getScheduleMap().get("MONDAY") != null){
-	<span class="col-md-2" style="padding-right:0px;padding-left:8px;margin:0px;width:14%">@docclinic.getScheduleMap().get("MONDAY")</span>
-}else{
-	<span class="col-md-2" style="padding-right:0px;padding-left:8px; margin:0px;width:14%"></span>
-}
-
-@if(docclinic.getScheduleMap().get("TUESDAY") != null){
-	<span class="col-md-2" style="padding-right:0px;padding-left:8px; margin:0px;width:14%">@docclinic.getScheduleMap().get("TUESDAY")</span>
-}else{
-	<span class="col-md-2" style="padding-right:0px;padding-left:8px; margin:0px;width:14%"></span>
-}
-
-@if(docclinic.getScheduleMap().get("WEDNESDAY") != null){
-	<span class="col-md-2" style="padding-right:0px; margin:0px; padding-left:8px;width:14%">@docclinic.getScheduleMap().get("WEDNESDAY")</span>
-}else{
-	<span class="col-md-2" style="padding-right:0px; margin:0px; padding-left:8px;width:14%"></span>
-}
-
-@if(docclinic.getScheduleMap().get("THURSDAY") != null){
-	<span class="col-md-2" style="padding-right:0px; margin:0px;padding-left:8px;width:14%">@docclinic.getScheduleMap().get("THURSDAY")</span>
-}else{
-	<span class="col-md-2" style="padding-right:0px; margin:0px; padding-left:8px;width:14%"></span>
-}
-
-@if(docclinic.getScheduleMap().get("FRIDAY") != null){ 
-	<span class="col-md-2" style="padding-right:0px; margin:0px;padding-left:8px;width:14%">@docclinic.getScheduleMap().get("FRIDAY")</span>
-}else{
-	<span class="col-md-2" style="padding-right:0px; margin:0px;width:14%;padding-left:8px"></span>
-}
-@if(docclinic.getScheduleMap().get("SATURDAY") != null){ 
-	<span class="col-md-2" style="padding-right:0px; margin:0px;width:14%;padding-left:8px">@docclinic.getScheduleMap().get("SATURDAY")</span>
-}else{
-	<span class="col-md-2" style="padding-right:0px; margin:0px;width:14%;padding-left:8px"></span>
-}
-@if(docclinic.getScheduleMap().get("SUNDAY") != null){ 
-	<span class="col-md-2" style="padding-right:0px; margin:0px;padding-left:8px;width:14%">@docclinic.getScheduleMap().get("SUNDAY")</span>
-}else{
-	<span class="col-md-2" style="padding-right:0px;padding-left:8px; margin:0px;width:14%"></span>
-}
-</div>
-								
-							</div>
-						
-					} 
-				</div>
-			</div>
-		</div>
-	<br>
-</td>
-				@if(index == doctorList.size()-1){
-            </tr>
-          }
-          }
-
-</table>	
-}
-	
 <script>
 var docid;
 $('#myModal1').on('show.bs.modal', function (e) {
 	  docid= $(e.relatedTarget).attr("id");
 	});
 </script>	
-}
-
 
 }
 	

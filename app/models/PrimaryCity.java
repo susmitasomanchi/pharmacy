@@ -8,6 +8,7 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 
 import play.db.ebean.Model;
+import utils.Constants;
 
 
 @SuppressWarnings("serial")
@@ -31,5 +32,7 @@ public class PrimaryCity extends BaseEntity{
 	public static List<PrimaryCity> getAllInOrder(){
 		return find.where().orderBy("name").findList();
 	}
+
+
 
 }

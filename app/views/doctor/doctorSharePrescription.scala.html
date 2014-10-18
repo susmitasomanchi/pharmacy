@@ -92,7 +92,7 @@ input[type=checkbox]{
 	<td colspan="3"><h4><u>Diagnostic Reports:</u></h4>
 	@for(dpinfo <- prescription.getDiagnoticInfoList()){
 	@if(dpinfo.sharedBy.id == LoginController.getLoggedInUser().id){
-		<li><a href="@routes.PublicController.getDiagnosticCentreWithSlug(dpinfo.diagnosticCentre.slugUrl)">@dpinfo.diagnosticCentre.name</a> </li>
+		<li>@dpinfo.diagnosticCentre.name</li>
 		@if(dpinfo.fileEntities.size > 0){
 	@for((report,index) <- dpinfo.fileEntities.zipWithIndex){
 	&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;@{index+1}.<a href="@routes.DiagnosticController.downloadDiagnosticReport(report.id,prescription.id)">@report.fileName</a><br>

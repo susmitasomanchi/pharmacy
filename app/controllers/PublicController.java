@@ -3,16 +3,23 @@ package controllers;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
+import org.json.JSONArray;
+
+import com.avaje.ebean.ExpressionList;
+
 import models.Alert;
 import models.AppUser;
 import models.Feedback;
 import models.FileEntity;
+import models.Locality;
+import models.MasterDiagnosticTest;
 import models.PrimaryCity;
 import models.Role;
 import models.bloodBank.BloodBank;
@@ -23,6 +30,7 @@ import models.doctor.Day;
 import models.doctor.DaySchedule;
 import models.doctor.Doctor;
 import models.doctor.DoctorClinicInfo;
+import models.doctor.DoctorDiagnosticTest;
 import models.doctor.MasterSpecialization;
 import models.patient.Patient;
 import models.patient.PatientClinicInfo;
@@ -32,6 +40,7 @@ import play.Logger;
 import play.data.Form;
 import play.libs.F.Function0;
 import play.libs.F.Promise;
+import play.mvc.BodyParser;
 import play.mvc.Controller;
 import play.mvc.Result;
 import utils.Constants;
@@ -54,21 +63,35 @@ public class PublicController extends Controller{
 	 * Action to search Doctor and display it
 	 * GET /doctor/search/:key
 	 */
-	public static Result processSearchDoctors(final String spez, final String key) {
-		final String cleanKey = key.trim().toLowerCase();
-		if(cleanKey.length() < 4){
+	public static Result processSearchDoctors(final String spez,final String locality, final String key) {
+		Logger.info(" details.."+spez+" "+key);
+		Logger.info(" "+Long.parseLong(locality));
+
+		/*if(cleanKey.length() < 4){
 			flash().put("alert", new Alert("alert-info", "Searched word should be atleast 4 characters long.").toString());
 			return ok(views.html.doctor.searchedDoctors.render(false,key, new ArrayList<Doctor>()));
-		}
-		else{
-			final PrimaryCity city = PrimaryCity.find.byId(Long.parseLong(session(Constants.CITY_ID)));
+		}*/
+
+		final PrimaryCity city = PrimaryCity.find.byId(Long.parseLong(session(Constants.CITY_ID)));
+		final ExpressionList<Doctor> query =Doctor.find.where().eq("primaryCity", city);
+		if((spez!= null) && !(spez.trim().isEmpty()) && !(spez.equalsIgnoreCase("any"))){
 			final MasterSpecialization specialization = MasterSpecialization.find.where().ieq("name", spez).findUnique();
-			final List<Doctor> doctors = Doctor.find.where()
-					.eq("primaryCity", city)
-					.in("specializationList", specialization)
-					.like("searchIndex","%"+cleanKey+"%").findList();
-			return ok(views.html.doctor.searchedDoctors.render(true, key, doctors));
+			query.in("specializationList", specialization);
 		}
+		if((locality!= null) && !(locality.equalsIgnoreCase("0")) && !(locality.trim().isEmpty())){
+			query.eq("locality", Locality.find.byId(Long.parseLong(locality)));
+		}
+		if((key!= null)&& !(key.equalsIgnoreCase("any")) && !(key.trim().isEmpty())){
+			query.like("searchIndex","%"+key+"%");
+		}
+
+		/*final List<Doctor> doctors = Doctor.find.where()
+				.eq("primaryCity", city)
+				.in("specializationList", specialization)
+				.like("searchIndex","%"+cleanKey+"%").findList();*/
+		Logger.info("size=="+query.findList().size());
+		return ok(views.html.doctor.searchedDoctorspage.render(query.findList()));
+
 	}
 	/**
 	 * @author Lakshmi
@@ -810,7 +833,36 @@ public class PublicController extends Controller{
 			return ok(views.html.clinic.searchClinics.render(searchKey,clinicList,true));
 		}
 	}
-
-
+	@SuppressWarnings("unused")
+	public static List<Locality> getPrimaryCityLocations(){
+		final PrimaryCity primaryCity = PrimaryCity.find.byId(Long.parseLong(session(Constants.CITY_ID)));
+		Logger.info("city id..."+primaryCity.id);
+		if(primaryCity == null){
+			return new ArrayList<Locality>();
+		}
+		return Locality.find.where().eq("primaryCity", primaryCity).findList();
+	}
+	/**
+	 * Action to get all Products' names GET /secure-doctor/diagnostic-tests/get-json
+	 */
+	@BodyParser.Of(BodyParser.Json.class)
+	public static Result getAllDoctorsInCity() {
+		final List<Doctor> doctorList = Doctor.find.where().eq("primaryCity", PrimaryCity.find.byId(Long.parseLong(session(Constants.CITY_ID)))).findList();
+		final int arrayLength = Doctor.find.findRowCount()+doctorList.size();
+		final String[] result = new String[arrayLength];
+		int i = 0;
+		for (final Doctor doctor : doctorList) {
+			result[i] = doctor.appUser.name;
+			i++;
+		}
+		final List<MasterDiagnosticTest> masterDiagnosticTestList = MasterDiagnosticTest.find
+				.all();
+		for (final MasterDiagnosticTest diagTest : masterDiagnosticTestList) {
+			result[i] = diagTest.name;
+			i++;
+		}
+		final JSONArray jsonArray = new JSONArray(Arrays.asList(result));
+		return ok(jsonArray.toString());
+	}
 
 }

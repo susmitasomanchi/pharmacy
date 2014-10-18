@@ -88,17 +88,24 @@
 		<option value="ADMIN_DIAGREP">Diagnostic Centre</option>
 	</select>
 </div>
-
+<div id="locDiv" class="col-md-2" style="width:20%">
+	<select class="form-control chzn-no-deselect" data-placeholder="Locality" name="location" id="location" style="width:100%;box-shadow: 1px 1px 1px 1px #aaaaaa; height:120%;">
+		<option value="0"></option>
+		@for(locality <- PublicController.getPrimaryCityLocations()){
+			<option value="@locality.id">@locality.name</option>
+		}
+	</select>
+</div>
 <div id="spezDiv" class="col-md-2" style="width:20%">
 	<select class="form-control chzn-no-deselect" data-placeholder="Specialization" name="spez" id="spez" style="width:100%;box-shadow: 1px 1px 1px 1px #aaaaaa; height:120%;">
-		<option></option>
+		<option value="any"></option>
 		@for(spez <- models.doctor.MasterSpecialization.getAll()){
 			<option value="@spez.name">@spez.name</option>
 		}
 	</select>
 </div>
 
-<div id="searchDiv" class="col-md-4" style="width:40%">
+<div id="searchDiv" class="col-md-3" style="width:30%">
 	<input type="search" style="width:100%;box-shadow: 1px 1px 3px 3px #aaaaaa;"  name="searchKey" id="searchKey" 
 	@if(session().get(utils.Constants.CITY_ID) != null){
 		placeholder="Doctor's Name or Locality in @models.PrimaryCity.find.byId(Long.parseLong(session().get(utils.Constants.CITY_ID))).name"
@@ -109,7 +116,7 @@
 	
 </div>
    
-<div class="col-md-2" style="width:20%">
+<div class="col-md-2" style="width:10%">
 	<button style="width:100%;box-shadow: 1px 1px 3px 3px #aaaaaa;" class="btn btn-sm btn-primary pull-right" onclick="searchKey();"><i class="icon-search icon-large"></i> Search</button>
 </div>
 
@@ -124,32 +131,32 @@ $('#role').on('change', function(){
 	$('#searchKey').attr('placeholder',selectedText+'\'s Name or Locality '+inCity);
 	if(selectedText.localeCompare('Doctor') != 0){
 		$('#spezDiv').hide();
-		$('#searchDiv').attr('class','col-md-6');
-		$('#searchDiv').attr('style','width:60%;');
+		$('#searchDiv').attr('class','col-md-4');
+		$('#searchDiv').attr('style','width:50%;');
 	}
 	else{
-		$('#searchDiv').attr('class','col-md-4');
-		$('#searchDiv').attr('style','width:40%;');
+		$('#searchDiv').attr('class','col-md-2');
+		$('#searchDiv').attr('style','width:30%;');
 		$('#spezDiv').show();
 	}
 });
    
 function searchKey(){
     var searchString = $('#searchKey').val();
-    var spez = $('#spez').find("option:selected").text();
-	if(spez.trim() == ''){
-	alert("Select Specialization.");
-    	return false;
-	}
-    if(searchString.trim() == ''){
-    alert("Search With Name Or Locality.");
-    	return false;
-    }
+    var loc = $('#location').find("option:selected").val();
     var setValue = $('#role').val();
     if(setValue == "DOCTOR"){
-  	var spez = $('#spez').find("option:selected").text();
-  	window.location.href='/doctor/search/'+spez.toLowerCase()+'/'+searchString; 
-  } 
+    var searchString = $('#searchKey').val();
+if(searchString.trim() == ""){
+searchString = 'any';
+}
+var spez = $('#spez').find("option:selected").val();
+    alert(loc+" location");
+    alert(spez+" spez");
+    alert(searchString+" search");
+	 window.location.href='/doctor/search/'+spez+'/'+loc+'/'+searchString.trim();
+  	}
+  
   if(setValue == "ADMIN_PHARMACIST"){
   window.location.href='@routes.PublicController.processSearchPharmacies("")'+searchString; 
   } 

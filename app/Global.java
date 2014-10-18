@@ -77,13 +77,13 @@ public class Global extends GlobalSettings {
 	/**
 	 *	Rendering 404 page on not found
 	 */
-	@Override
+	/*@Override
 	public Promise<SimpleResult> onHandlerNotFound(final RequestHeader request) {
 		return Promise.<SimpleResult>pure(notFound(
 				views.html.page404.render()
 				));
 	}
-
+	 */
 
 	/**
 	 *	Rendering 500 on bad request too

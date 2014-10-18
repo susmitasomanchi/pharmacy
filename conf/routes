@@ -65,7 +65,7 @@ POST 	/secure-user/verify-mobile-number					controllers.UserController.verifyMob
 # Public Pages
 
 GET		/doctor/search									controllers.PublicController.searchDoctorsPage()
-GET		/doctor/search/:spez/:key								controllers.PublicController.processSearchDoctors(spez: String, key: String)
+GET		/doctor/search/:spez/:loc/:key								controllers.PublicController.processSearchDoctors(spez: String,loc :String, key: String)
 GET		/pharmacy/search/:searchString                  controllers.PublicController.processSearchPharmacies(searchString: String)
 #GET   	/pharmacy/add-favourite-pharmacy/:pharmacyId/:str   controllers.PublicController.myFavoritePharmacy(pharmacyId : Long,str: String)
 GET		/pharmacy/search									controllers.PublicController.searchPharmaciesPage()
@@ -73,6 +73,8 @@ GET   	/diagnostic/search/:searchString                  				controllers.PublicC
 GET    /diagnostic/search												controllers.PublicController.searchDiagnosticPage()
 GET   	/clinic/search/:searchString                  				controllers.PublicController.searchFavoriteClinics(searchString: String)
 GET    /clinic/search												controllers.PublicController.searchClinics()
+GET		/doctor/get-localities												controllers.PublicController.getAllDoctorsInCity()
+
 
 
 GET    /feedback											controllers.PublicController.feedBack()
