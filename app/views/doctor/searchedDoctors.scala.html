@@ -17,6 +17,7 @@
 	margin-top:7px;
 }
 </style>
+<form id="form>
 <div class="well">
 
 <div class="row">
@@ -54,6 +55,7 @@
 </div>
 
 </div>
+</form>
 <br><br>
 <div id="doctorData">
 </div>
@@ -78,7 +80,7 @@ var loc = $('#location').find("option:selected").val();
     alert(loc+" location");
     alert(spez+" spez");
     alert(searchString+" search");
-	$.get( '/doctor/search/'+spez+'/'+loc+'/'+searchString.trim(),function( data ) {
+	$.get( '/doctor/search/'+spez+'/'+loc+'/'+searchString.trim(),$('form').serialize(),function( data ) {
 				alert(data);
  	  			$("#doctorData").html(data);	
 	})
