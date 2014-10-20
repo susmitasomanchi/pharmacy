@@ -66,14 +66,14 @@ POST 	/secure-user/verify-mobile-number					controllers.UserController.verifyMob
 
 GET		/doctor/search									controllers.PublicController.searchDoctorsPage()
 GET		/doctor/search/:spez/:loc/:key								controllers.PublicController.processSearchDoctors(spez: String,loc :String, key: String)
-GET		/pharmacy/search/:searchString                  controllers.PublicController.processSearchPharmacies(searchString: String)
+GET		/pharmacy/search/:searchString/:loc                  controllers.PublicController.processSearchPharmacies(searchString: String,loc : String)
 #GET   	/pharmacy/add-favourite-pharmacy/:pharmacyId/:str   controllers.PublicController.myFavoritePharmacy(pharmacyId : Long,str: String)
 GET		/pharmacy/search									controllers.PublicController.searchPharmaciesPage()
-GET   	/diagnostic/search/:searchString                  				controllers.PublicController.processSearchDiagnosticCentres(searchString: String)
+GET   	/diagnostic/search/:searchString/:loc                  				controllers.PublicController.processSearchDiagnosticCentres(searchString: String,loc : String)
 GET    /diagnostic/search												controllers.PublicController.searchDiagnosticPage()
 GET   	/clinic/search/:searchString                  				controllers.PublicController.searchFavoriteClinics(searchString: String)
 GET    /clinic/search												controllers.PublicController.searchClinics()
-GET		/doctor/get-localities												controllers.PublicController.getAllDoctorsInCity()
+GET		/doctor/get-localities/:loc												controllers.PublicController.getAllDoctorsInCity(loc : String)
 
 
 

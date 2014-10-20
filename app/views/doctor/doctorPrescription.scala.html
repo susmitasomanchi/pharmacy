@@ -145,6 +145,7 @@ window.onload=function(){
 	
 	var states;
 	$.get('@routes.DoctorController.getAllProductsJson()', function(data){
+		alert(data);
 		states = JSON.parse(data);
 		medicinesMaster = JSON.parse(data);
 

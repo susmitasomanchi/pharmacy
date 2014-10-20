@@ -1,4 +1,4 @@
-@(flag: Boolean,searchKey: String,diagnosticCentreList  : List[models.diagnostic.DiagnosticCentre])
+@(flag: Boolean,searchKey: String,loc : models.Locality,diagnosticCentreList  : List[models.diagnostic.DiagnosticCentre])
 
 @import play.i18n._
 @import helper.twitterBootstrap._
@@ -8,17 +8,35 @@
 <div class="well">
 <div class="row">
 
-<input id="searchInput" value="@searchKey" style="width:40%;"
+<div id="locDiv" class="col-md-2" style="width:20%">
+	<select class="form-control chzn-no-deselect" data-placeholder="Locality" name="location" id="location" style="width:100%;box-shadow: 1px 1px 1px 1px #aaaaaa; height:120%;">
+	@if(loc == null){
+		<option value="0"></option>
+		}else{
+		<option value="@loc.id">@loc.name</option>
+		}
+		@for(locality <- PublicController.getPrimaryCityLocations()){
+			<option value="@locality.id">@locality.name</option>
+		}
+	</select>
+</div>
+<div id="searchKey" class="col-md-3" style="width:50%">
+<input id="searchInput" style="width:100%;"
 
 	@if(session().get(utils.Constants.CITY_ID) != null){
-		placeholder="Diagnostic Centre's Name or Locality in @models.PrimaryCity.find.byId(Long.parseLong(session().get(utils.Constants.CITY_ID))).name"
+		placeholder="Diagnostic Centre's Name in @models.PrimaryCity.find.byId(Long.parseLong(session().get(utils.Constants.CITY_ID))).name"
 	}else{
-		placeholder="Diagnostic Centre's Name or Locality"
+		placeholder="Diagnostic Centre's Name"
+	}
+	@if(!(searchKey.equalsIgnoreCase("any"))){
+	value="@searchKey"
 	}
 
 />
-
+</div>
+<div class="col-md-2" style="width:30%">
 <a onclick="submitSearch();" class="btn btn-xs btn-primary">Search</a>
+</div>
 
 </div>
 </div>
@@ -26,18 +44,14 @@
 function submitSearch(){
 var searchString = $('#searchInput').val();
     if(searchString.trim() == ''){
-    alert("Enter Diagnostic Centre Name Or Locality.");
-    	return false;
+    searchString = 'any';
     }
-	
-	window.location.href='/diagnostic/search/'+$('#searchInput').val().trim();
+	var loc = $('#location').find("option:selected").val();
+	 window.location.href='/diagnostic/search/'+searchString+'/'+loc;
 }
 $("#searchInput").keyup(function (e) {
     if (e.keyCode == 13) {
-    	if($('#searchInput').val().trim() == ''){
-        	return false;
-        }
-    	window.location.href='/diagnostic/search/'+$('#searchInput').val().trim();
+    	submitSearch();
     }
 });
 </script>

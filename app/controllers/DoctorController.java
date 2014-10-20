@@ -1688,11 +1688,12 @@ public class DoctorController extends Controller {
 			}
 		}
 		return ok(views.html.pharmacist.searched_pharmacies.render(true,
-				searchStr, pharmacyList));
+				searchStr,null, pharmacyList));
 	}
 
 	/**
-	 * @author lakshmi Action to list out favorite Pharmacies of Doctor of
+	 * @author lakshmi
+	 * Action to list out favorite Pharmacies of Doctor of
 	 *         loggedin DOCTOR GET/secure-doctor/my-favorite-pharmacies
 	 */
 	@ConfirmAppUser
@@ -1726,7 +1727,7 @@ public class DoctorController extends Controller {
 					.toString());
 		}
 		return ok(views.html.diagnostic.searched_diagnostic_Centres.render(
-				true, searchStr, doctor.diagnosticCentreList));
+				true, searchStr,null, doctor.diagnosticCentreList));
 		// return redirect(routes.UserActions.dashboard());
 	}
 

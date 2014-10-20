@@ -32,8 +32,8 @@
   	<input id="uname" type="email" name="email" placeholder="Email" style="width:100%" required>
   	</div>
   	<div class="col-md-5">
-  	<label><b>Password</b> <a href="@routes.LoginController.forgotPassword()" style="padding-right:5px; font-size:12px">(Forgot password ?)</a></label>
-  	<input type="password" id="pwd" name="password" placeholder="Password" style="width:100%" required>
+  	<label><b>Password</b> <a href="@routes.LoginController.forgotPassword()" style="padding-right:0px; font-size:12px">(Forgot password ?)</a></label>
+  	<input type="password" id="pwd" name="password" placeholder="Password" style="width:100%;padding:0px" required>
       </div>
      <div class="col-md-2" style="padding-right:0px">
      <br>
@@ -81,14 +81,14 @@
  <p style="padding-top:7px">Search For</p>
 </div>
 
-<div class="col-md-2" style="width:12%" >
+<div class="col-md-2" style="width:14%" >
 	<select class="form-control" name="role" id="role" style="width:100%;box-shadow: 1px 1px 1px 1px #aaaaaa;">
 		<option value="DOCTOR">Doctor</option>
 		<option value="ADMIN_PHARMACIST">Pharmacy</option>
 		<option value="ADMIN_DIAGREP">Diagnostic Centre</option>
 	</select>
 </div>
-<div id="locDiv" class="col-md-2" style="width:20%">
+<div id="locDiv" class="col-md-2" style="width:15%">
 	<select class="form-control chzn-no-deselect" data-placeholder="Locality" name="location" id="location" style="width:100%;box-shadow: 1px 1px 1px 1px #aaaaaa; height:120%;">
 		<option value="0"></option>
 		@for(locality <- PublicController.getPrimaryCityLocations()){
@@ -96,7 +96,7 @@
 		}
 	</select>
 </div>
-<div id="spezDiv" class="col-md-2" style="width:20%">
+<div id="spezDiv" class="col-md-2" style="width:15%">
 	<select class="form-control chzn-no-deselect" data-placeholder="Specialization" name="spez" id="spez" style="width:100%;box-shadow: 1px 1px 1px 1px #aaaaaa; height:120%;">
 		<option value="any"></option>
 		@for(spez <- models.doctor.MasterSpecialization.getAll()){
@@ -143,25 +143,24 @@ $('#role').on('change', function(){
    
 function searchKey(){
     var searchString = $('#searchKey').val();
-    var loc = $('#location').find("option:selected").val();
+    if(searchString.trim() == ""){
+	searchString = 'any';
+	}
+	var loc = $('#location').find("option:selected").val();
     var setValue = $('#role').val();
     if(setValue == "DOCTOR"){
-    var searchString = $('#searchKey').val();
-if(searchString.trim() == ""){
-searchString = 'any';
-}
-var spez = $('#spez').find("option:selected").val();
+	var spez = $('#spez').find("option:selected").val();
     alert(loc+" location");
     alert(spez+" spez");
     alert(searchString+" search");
-	 window.location.href='/doctor/search/'+spez+'/'+loc+'/'+searchString.trim();
+	 window.location.href='/doctor/search/'+spez+'/'+loc+'/'+searchString;
   	}
   
   if(setValue == "ADMIN_PHARMACIST"){
-  window.location.href='@routes.PublicController.processSearchPharmacies("")'+searchString; 
+  window.location.href='/pharmacy/search/'+searchString+'/'+loc; 
   } 
   if(setValue == "ADMIN_DIAGREP"){
-  window.location.href='@routes.PublicController.processSearchDiagnosticCentres("")'+searchString; 
+    window.location.href='/diagnostic/search/'+searchString+'/'+loc; 
   } 
 }
 

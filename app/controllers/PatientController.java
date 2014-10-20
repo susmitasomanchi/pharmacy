@@ -75,7 +75,8 @@ public class PatientController extends Controller {
 		final List<Doctor> doctors = Doctor.find
 				.where().like("searchIndex","%"+search+"%").findList();
 
-		return ok(views.html.doctor.searchedDoctors.render(true, search, doctors));
+		return ok(views.html.doctor.searchedDoctors.render(true, search,null,null, doctors));
+
 	}
 
 
@@ -217,7 +218,7 @@ public class PatientController extends Controller {
 				pharmacyList.add(pharmacy2);
 			}
 		}
-		return ok(views.html.pharmacist.searched_pharmacies.render(true,searchStr,pharmacyList));
+		return ok(views.html.pharmacist.searched_pharmacies.render(true,searchStr,null,pharmacyList));
 		//		return redirect(routes.UserActions.dashboard());
 	}
 
