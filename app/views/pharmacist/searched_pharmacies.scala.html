@@ -11,7 +11,7 @@
 <div id="locDiv" class="col-md-2" style="width:20%">
 	<select class="form-control chzn-no-deselect" data-placeholder="Locality" name="location" id="location" style="width:100%;box-shadow: 1px 1px 1px 1px #aaaaaa; height:120%;">
 	@if(loc == null){
-		<option value="0"></option>
+		<option value="0">Select Locality</option>
 		}else{
 		<option value="@loc.id">@loc.name</option>
 		}
@@ -21,7 +21,7 @@
 	</select>
 </div>
 <div id="searchKey" class="col-md-3" style="width:50%">
-<input id="searchInput" style="width:100%;"
+<input id="searchInput" class="typeahead" style="width:100%;"
 
 	@if(session().get(utils.Constants.CITY_ID) != null){
 		placeholder="Diagnostic Centre's Name in @models.PrimaryCity.find.byId(Long.parseLong(session().get(utils.Constants.CITY_ID))).name"
@@ -40,25 +40,7 @@
 
 </div>
 </div>
-<script>
-function submitSearch(){
-var searchString = $('#searchInput').val();
-    if(searchString.trim() == ''){
-    searchString = 'any';
-    }
-	var loc = $('#location').find("option:selected").val();
-	window.location.href='/pharmacy/search/'+searchString+'/'+loc;
-}
-$("#searchInput").keyup(function (e) {
-    if (e.keyCode == 13) {
-    	if($('#searchInput').val().trim() == ''){
-        	return false;
-        }
-    	window.location.href='/pharmacy/search/'+$('#searchInput').val().trim();
-    }
-});
-</script>
-	
+
 <style>
 .badge{
 color:#000000;
@@ -75,7 +57,7 @@ margin-bottom:0px;
 </style>	
 	@if(pharmacyList.size() == 0){
     @if(searchKey != "" && searchKey!= null){   
-    <h5> No Pharmacies available with <b>@searchKey</b></h5>
+    
     }
 }
 <table class="table table-bordered">
@@ -137,5 +119,123 @@ margin-bottom:0px;
 
 
 }
+<script>
+var loc = $('#location').find("option:selected").val();
+function submitSearch(){
+var searchString = $('#searchInput').val();
+    if(searchString.trim() == ''){
+    searchString = 'any';
+    }
+  loc = $('#location').find("option:selected").val();
+	window.location.href='/pharmacy/search/'+searchString+'/'+loc;
+}
+$("#searchInput").keyup(function (e) {
+    if (e.keyCode == 13) {
+    	submitSearch();
+    }
+});
+
+window.onload= start();
+
+$('#location').change(function() {
+	loc = $('#location').find("option:selected").val();
+	//on each reload destroy previous typeahed else it'll create new div every time
+	  $('#searchKey .typeahead').typeahead('destroy');
+   start();
+});
+
+function start(){
+	var states;
+	$.get('/pharmacy/get-names-json/'+loc, function(data){
+		states = JSON.parse(data);
+		  // constructs the suggestion engine
+		var states = new Bloodhound({
+		  datumTokenizer: Bloodhound.tokenizers.obj.whitespace('value'),
+		  queryTokenizer: Bloodhound.tokenizers.whitespace,
+		  limit: 10,
+		  // `states` is an array of state names defined in "The Basics"
+		  local: $.map(states, function(state) { return { value: state }; })
+		});
+
+		// kicks off the loading/processing of `local` and `prefetch`
+
+		states.initialize();
+
+	$('#searchKey .typeahead').typeahead({
+  hint: true,
+  highlight: true,
+  minLength: 1
+},
+{
+  name: 'states',
+  displayKey: 'value',
+  source: states.ttAdapter()
+});
+});
+
+}
+
+</script>
+<style type="text/css">
+	.twitter-typeahead {
+     width: 100%;
+}
+
+.twitter-typeahead .tt-hint {
+    display: block !important;
+    height: 34px;
+    padding: 6px 12px;
+    font-size: 12px;
+    color: red;
+    line-height: 1.428571429;
+    border: 1px solid transparent;
+    border-radius:4px;
+}
+.tt-query,
+.tt-hint {
+    height: 30px;
+    padding: 8px 12px;
+    font-size: 24px;
+    line-height: 30px;
+    width: 100%;
+    color: #999
+    border: 2px solid #ccc;
+    border-radius: 8px;
+    outline: none;
+}
+
+.tt-query {
+    box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.075);
+}
+
+.tt-dropdown-menu {
+    width: 100%;
+    margin-top: 12px;
+    padding: 8px 0;
+    background-color: #fff;
+    border: 1px solid #ccc;
+    border: 1px solid rgba(0, 0, 0, 0.2);
+    border-radius: 8px;
+    box-shadow: 0 5px 10px rgba(0,0,0,.2);
+}
+
+.tt-suggestion {
+    padding: 3px 20px;
+    font-size: 18px;
+    line-height: 24px;
+}
+
+.tt-suggestion.tt-cursor { /* UPDATE: newer versions use .tt-suggestion.tt-cursor */
+    color: #fff;
+    background-color: #0097cf;
+
+}
+
+.tt-suggestion p {
+    margin: 0;
+}
+
+</style>
+	
 
 

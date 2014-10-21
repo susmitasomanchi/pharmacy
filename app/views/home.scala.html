@@ -32,7 +32,7 @@
   	<input id="uname" type="email" name="email" placeholder="Email" style="width:100%" required>
   	</div>
   	<div class="col-md-5">
-  	<label><b>Password</b> <a href="@routes.LoginController.forgotPassword()" style="padding-right:0px; font-size:12px">(Forgot password ?)</a></label>
+  	<label><b>Password</b> <a href="@routes.LoginController.forgotPassword()" style="padding-right:0px; font-size:12px;color:#008bca">(Forgot password ?)</a></label>
   	<input type="password" id="pwd" name="password" placeholder="Password" style="width:100%;padding:0px" required>
       </div>
      <div class="col-md-2" style="padding-right:0px">
@@ -88,17 +88,17 @@
 		<option value="ADMIN_DIAGREP">Diagnostic Centre</option>
 	</select>
 </div>
-<div id="locDiv" class="col-md-2" style="width:15%">
+<div id="locDiv" class="col-md-2" style="width:18%">
 	<select class="form-control chzn-no-deselect" data-placeholder="Locality" name="location" id="location" style="width:100%;box-shadow: 1px 1px 1px 1px #aaaaaa; height:120%;">
-		<option value="0"></option>
+		<option value="0">Select Locality</option>
 		@for(locality <- PublicController.getPrimaryCityLocations()){
 			<option value="@locality.id">@locality.name</option>
 		}
 	</select>
 </div>
-<div id="spezDiv" class="col-md-2" style="width:15%">
+<div id="spezDiv" class="col-md-2" style="width:18%">
 	<select class="form-control chzn-no-deselect" data-placeholder="Specialization" name="spez" id="spez" style="width:100%;box-shadow: 1px 1px 1px 1px #aaaaaa; height:120%;">
-		<option value="any"></option>
+		<option value="any">Select Specialization</option>
 		@for(spez <- models.doctor.MasterSpecialization.getAll()){
 			<option value="@spez.name">@spez.name</option>
 		}
@@ -125,7 +125,9 @@
 
 
 <script>
-   
+   var loc = $('#location').find("option:selected").val();
+   var spez = $('#spez').find("option:selected").val();
+    var setValue = $('#role').val();
 $('#role').on('change', function(){
 	var selectedText = $(this).find("option:selected").text();
 	$('#searchKey').attr('placeholder',selectedText+'\'s Name '+inCity);
@@ -142,18 +144,15 @@ $('#role').on('change', function(){
 });
    
 function searchKey(){
+	setValue = $('#role').val();
     var searchString = $('#searchKey').val();
     if(searchString.trim() == ""){
 	searchString = 'any';
 	}
-	var loc = $('#location').find("option:selected").val();
-    var setValue = $('#role').val();
+	loc = $('#location').find("option:selected").val();
     if(setValue == "DOCTOR"){
-	var spez = $('#spez').find("option:selected").val();
-    alert(loc+" location");
-    alert(spez+" spez");
-    alert(searchString+" search");
-	 window.location.href='/doctor/search/'+spez+'/'+loc+'/'+searchString;
+	spez = $('#spez').find("option:selected").val();
+  	 window.location.href='/doctor/search/'+spez+'/'+loc+'/'+searchString;
   	}
   
   if(setValue == "ADMIN_PHARMACIST"){
@@ -291,7 +290,7 @@ $("#searchKey").keyup(function (e) {
   <div class="col-md-12">
   <input type="password" name="password" placeholder="Password" style="width:100%">
       </div>
-      <a href="@routes.LoginController.forgotPassword()" style="padding-left:15px;font-size:12px">Forgot your password ?</a>
+      <a href="@routes.LoginController.forgotPassword()" style="padding-left:15px;font-size:12px;color:red;">Forgot your password ?</a>
      <div class="col-md-12">
      <br>
           <input type="submit" class="btn btn-sm btn-primary pull-right" value="Sign in" style="width:100%">
@@ -354,3 +353,145 @@ $("#searchKey").keyup(function (e) {
   </div> 
 
 }
+<script>
+var loc = $('#location').find("option:selected").val();
+var spez = $('#spez').find("option:selected").val();
+var url;
+$("#searchKey").keyup(function (e) {
+    if (e.keyCode == 13) {
+    	if($('#searchInput').val() == ''){
+    	       	return false;
+        }
+    	 }
+});
+
+function submitSearch(){
+var searchString = $('#searchKey').val();
+if(searchString.trim() == ""){
+searchString = 'any';
+}
+window.location.href='/doctor/search/'+spez+'/'+loc+'/'+searchString;
+}
+
+window.onload= start();
+
+$('#location').change(function() {
+	loc = $('#location').find("option:selected").val();
+	//on each reload destroy previous typeahed else it'll create new div every time
+	  $('#searchDiv .typeahead').typeahead('destroy');
+   start();
+});
+
+$('#spez').change(function() {
+	spez = $('#spez').find("option:selected").val();
+	 $('#searchDiv .typeahead').typeahead('destroy');
+   start();
+});
+
+$('#role').on('change', function(){
+     if($('#role').val() == "ADMIN_PHARMACIST"){
+	url = ''/pharmacy/get-names-json/'+loc';
+	start();
+   } 
+  if($('#role').val() == "ADMIN_DIAGREP"){
+  url = ''/diagnostic/get-names-json/'+loc';
+  start();
+    }
+  if($('#role').val() == "DOCTOR"){
+  alert("inside doctor");
+  url = ''/doctor/get-names-json/'+loc+'/'+spez';
+  start()
+	}   
+	});
+   
+function start(){
+	var states;
+	$.get(url, function(data){
+		states = JSON.parse(data);
+		  // constructs the suggestion engine
+		var states = new Bloodhound({
+		  datumTokenizer: Bloodhound.tokenizers.obj.whitespace('value'),
+		  queryTokenizer: Bloodhound.tokenizers.whitespace,
+		  limit: 10,
+		  // `states` is an array of state names defined in "The Basics"
+		  local: $.map(states, function(state) { return { value: state }; })
+		});
+
+		// kicks off the loading/processing of `local` and `prefetch`
+
+		states.initialize();
+
+	$('#searchDiv .typeahead').typeahead({
+  hint: true,
+  highlight: true,
+  minLength: 1
+},
+{
+  name: 'states',
+  displayKey: 'value',
+  source: states.ttAdapter()
+});
+});
+}
+
+</script>
+<style type="text/css">
+	.twitter-typeahead {
+     width: 100%;
+}
+
+.twitter-typeahead .tt-hint {
+    display: block !important;
+    height: 34px;
+    padding: 6px 12px;
+    font-size: 12px;
+    color: red;
+    line-height: 1.428571429;
+    border: 1px solid transparent;
+    border-radius:4px;
+}
+.tt-query,
+.tt-hint {
+    height: 30px;
+    padding: 8px 12px;
+    font-size: 24px;
+    line-height: 30px;
+    width: 100%;
+    color: #999
+    border: 2px solid #ccc;
+    border-radius: 8px;
+    outline: none;
+}
+
+.tt-query {
+    box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.075);
+}
+
+.tt-dropdown-menu {
+    width: 100%;
+    margin-top: 12px;
+    padding: 8px 0;
+    background-color: #fff;
+    border: 1px solid #ccc;
+    border: 1px solid rgba(0, 0, 0, 0.2);
+    border-radius: 8px;
+    box-shadow: 0 5px 10px rgba(0,0,0,.2);
+}
+
+.tt-suggestion {
+    padding: 3px 20px;
+    font-size: 18px;
+    line-height: 24px;
+}
+
+.tt-suggestion.tt-cursor { /* UPDATE: newer versions use .tt-suggestion.tt-cursor */
+    color: #fff;
+    background-color: #0097cf;
+
+}
+
+.tt-suggestion p {
+    margin: 0;
+}
+
+</style>

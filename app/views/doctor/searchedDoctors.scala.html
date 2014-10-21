@@ -25,7 +25,7 @@
 <div id="spezDiv" class="col-md-2" style="width:20%">
 	<select class="form-control chzn-no-deselect" data-placeholder="Specialization" name="spez" id="spez" style="width:100%;box-shadow: 1px 1px 1px 1px #aaaaaa; height:120%;">
 	@if(spz == null){
-		<option value="any"></option>
+		<option value="any">Select Specialization</option>
 		}else{
 		<option value="@spz.name">@spz.name</option>
 		}
@@ -37,7 +37,7 @@
 <div id="locDiv" class="col-md-2" style="width:20%">
 	<select class="form-control chzn-no-deselect" data-placeholder="Locality" name="location" id="location" style="width:100%;box-shadow: 1px 1px 1px 1px #aaaaaa; height:120%;">
 	@if(loc == null){
-		<option value="0"></option>
+		<option value="0">Select Locality</option>
 		}else{
 		<option value="@loc.id">@loc.name</option>
 		}
@@ -71,34 +71,6 @@
 <br><br>
 <div id="doctorData">
 </div>
-
-<script>
-var loc = $('#location').find("option:selected").val();
-$("#searchKey").keyup(function (e) {
-    if (e.keyCode == 13) {
-    	if($('#searchInput').val() == ''){
-    	       	return false;
-        }
-    	 }
-});
-
-function submitSearch(){
-var searchString = $('#searchKey').val();
-if(searchString.trim() == ""){
-searchString = 'any';
-}
-var spez = $('#spez').find("option:selected").val();
-
-    /*alert(loc+" location");
-    alert(spez+" spez");
-    alert(searchString+" search");
-	$.get( '/doctor/search/'+spez+'/'+loc+'/'+searchString.trim(),function( data ) {
-				alert(data);
- 	  			$("#doctorData").html(data);	
-	})*/
-	window.location.href='/doctor/search/'+spez+'/'+loc+'/'+searchString;
-	}
-</script>
 
 <script>
 var docid;
@@ -280,16 +252,44 @@ margin-bottom:0px;
 }
 }
 <script>
+var loc = $('#location').find("option:selected").val();
+var spez = $('#spez').find("option:selected").val();
 
-        $('#location').change(function() {
-            start();
-        });
-    
-window.onload=function start(){
-	alert('inside');
+$("#searchKey").keyup(function (e) {
+    if (e.keyCode == 13) {
+    	if($('#searchInput').val() == ''){
+    	       	return false;
+        }
+    	 }
+});
+
+function submitSearch(){
+var searchString = $('#searchKey').val();
+if(searchString.trim() == ""){
+searchString = 'any';
+}
+window.location.href='/doctor/search/'+spez+'/'+loc+'/'+searchString;
+}
+
+window.onload= start();
+
+$('#location').change(function() {
+	loc = $('#location').find("option:selected").val();
+	//on each reload destroy previous typeahed else it'll create new div every time
+	  $('#searchDiv .typeahead').typeahead('destroy');
+   start();
+});
+
+$('#spez').change(function() {
+	spez = $('#spez').find("option:selected").val();
+	 $('#searchDiv .typeahead').typeahead('destroy');
+   start();
+});
+        
+   
+function start(){
 	var states;
-	$.get('/doctor/get-localities/'+loc, function(data){
-		alert(data);
+	$.get('/doctor/get-names-json/'+loc+'/'+spez, function(data){
 		states = JSON.parse(data);
 		  // constructs the suggestion engine
 		var states = new Bloodhound({
@@ -301,24 +301,84 @@ window.onload=function start(){
 		});
 
 		// kicks off the loading/processing of `local` and `prefetch`
-		  	alert(states);
 
 		states.initialize();
 
 	$('#searchDiv .typeahead').typeahead({
   hint: true,
   highlight: true,
-  minLength: 2
+  minLength: 1
 },
 {
   name: 'states',
   displayKey: 'value',
   source: states.ttAdapter()
 });
-	
 });
+
 }
+
 </script>
+<style type="text/css">
+	.twitter-typeahead {
+     width: 100%;
+}
+
+.twitter-typeahead .tt-hint {
+    display: block !important;
+    height: 34px;
+    padding: 6px 12px;
+    font-size: 12px;
+    color: red;
+    line-height: 1.428571429;
+    border: 1px solid transparent;
+    border-radius:4px;
+}
+.tt-query,
+.tt-hint {
+    height: 30px;
+    padding: 8px 12px;
+    font-size: 24px;
+    line-height: 30px;
+    width: 100%;
+    color: #999
+    border: 2px solid #ccc;
+    border-radius: 8px;
+    outline: none;
+}
+
+.tt-query {
+    box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.075);
+}
+
+.tt-dropdown-menu {
+    width: 100%;
+    margin-top: 12px;
+    padding: 8px 0;
+    background-color: #fff;
+    border: 1px solid #ccc;
+    border: 1px solid rgba(0, 0, 0, 0.2);
+    border-radius: 8px;
+    box-shadow: 0 5px 10px rgba(0,0,0,.2);
+}
+
+.tt-suggestion {
+    padding: 3px 20px;
+    font-size: 18px;
+    line-height: 24px;
+}
+
+.tt-suggestion.tt-cursor { /* UPDATE: newer versions use .tt-suggestion.tt-cursor */
+    color: #fff;
+    background-color: #0097cf;
+
+}
+
+.tt-suggestion p {
+    margin: 0;
+}
+
+</style>
 	
 
 	

@@ -883,18 +883,90 @@ public class PublicController extends Controller{
 	 * Action to get all Products' names GET /secure-doctor/diagnostic-tests/get-json
 	 */
 	@BodyParser.Of(BodyParser.Json.class)
-	public static Result getAllDoctorsInCity(final String locality) {
-		final ExpressionList<Doctor> doctorList = Doctor.find.where().eq("primaryCity", PrimaryCity.find.byId(Long.parseLong(session(Constants.CITY_ID))));
-		if(locality != null && !(locality.equalsIgnoreCase("0"))){
-			doctorList.eq("locality", Locality.find.byId(Long.parseLong(locality)));
+	public static Result getAllDoctorsInCity(final String locality,final String spez) {
+		String[] result = null;
+		if(session(Constants.CITY_ID) != null){
+			final ExpressionList<Doctor> doctorList = Doctor.find.where().eq("primaryCity", PrimaryCity.find.byId(Long.parseLong(session(Constants.CITY_ID))));
+			Logger.info("loca=="+locality);
+			Logger.info("speci=="+spez);
+			if(locality != null && !(locality.equalsIgnoreCase("0"))){
+				Logger.info("inside Loc=="+locality);
+				doctorList.eq("locality", Locality.find.byId(Long.parseLong(locality)));
 
+			}
+			if((spez != null) && !(spez.equalsIgnoreCase("any")) && !(spez.trim().isEmpty())){
+				Logger.info("inside spez=="+spez);
+				final MasterSpecialization	specialization = MasterSpecialization.find.where().ieq("name", spez).findUnique();
+				doctorList.in("specializationList", specialization);
+			}
+			final int arrayLength = Doctor.find.findRowCount()+doctorList.findList().size();
+			Logger.info(doctorList.findList().size()+"  size");
+			result = new String[arrayLength];
+			int i = 0;
+			for (final Doctor doctor : doctorList.findList()) {
+				result[i] = doctor.appUser.name;
+				i++;
+			}
+		}else{
+			result = new String[1];
 		}
-		final int arrayLength = Doctor.find.findRowCount()+doctorList.findList().size();
-		final String[] result = new String[arrayLength];
-		int i = 0;
-		for (final Doctor doctor : doctorList.findList()) {
-			result[i] = doctor.appUser.name;
-			i++;
+		final JSONArray jsonArray = new JSONArray(Arrays.asList(result));
+		return ok(jsonArray.toString());
+
+	}
+	/**
+	 * Action to get all Products' names GET /secure-doctor/diagnostic-tests/get-json
+	 */
+	@BodyParser.Of(BodyParser.Json.class)
+	public static Result getAllPharmaciesInCity(final String locality) {
+		String[] result = null;
+		if(session(Constants.CITY_ID) != null){
+			final ExpressionList<Pharmacy> pharmacyList = Pharmacy.find.where().eq("primaryCity", PrimaryCity.find.byId(Long.parseLong(session(Constants.CITY_ID))));
+			Logger.info("loca=="+locality);
+			if(locality != null && !(locality.equalsIgnoreCase("0"))){
+				Logger.info("inside Loc=="+locality);
+				pharmacyList.eq("locality", Locality.find.byId(Long.parseLong(locality)));
+
+			}
+			final int arrayLength = Doctor.find.findRowCount()+pharmacyList.findList().size();
+			Logger.info(pharmacyList.findList().size()+"  size");
+			result = new String[arrayLength];
+			int i = 0;
+			for (final Pharmacy pharmacy : pharmacyList.findList()) {
+				result[i] = pharmacy.name;
+				i++;
+			}
+		}else{
+			result = new String[1];
+		}
+		final JSONArray jsonArray = new JSONArray(Arrays.asList(result));
+		return ok(jsonArray.toString());
+	}
+	/**
+	 * Action to get all Products' names GET /secure-doctor/diagnostic-tests/get-json
+	 */
+	@BodyParser.Of(BodyParser.Json.class)
+	public static Result getAllDiagnosticsInCity(final String locality) {
+		String[] result = null;
+		if(session(Constants.CITY_ID) != null){
+			final ExpressionList<DiagnosticCentre> diagnosticList = DiagnosticCentre.find.where().eq("primaryCity", PrimaryCity.find.byId(Long.parseLong(session(Constants.CITY_ID))));
+			Logger.info("loca=="+locality);
+			if(locality != null && !(locality.equalsIgnoreCase("0"))){
+				Logger.info("inside Loc=="+locality);
+				diagnosticList.eq("locality", Locality.find.byId(Long.parseLong(locality)));
+
+			}
+			final int arrayLength = Doctor.find.findRowCount()+diagnosticList.findList().size();
+			Logger.info(diagnosticList.findList().size()+"  size");
+			result = new String[arrayLength];
+			int i = 0;
+			for (final DiagnosticCentre diagnosticCentre : diagnosticList.findList()) {
+				result[i] = diagnosticCentre.name;
+				i++;
+			}
+		}else{
+			result = new String[1];
+
 		}
 		final JSONArray jsonArray = new JSONArray(Arrays.asList(result));
 		return ok(jsonArray.toString());
