@@ -1,17 +1,14 @@
 package models;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.OneToOne;
 
-import utils.Constants;
-import controllers.LoginController;
-import controllers.PublicController;
+import play.data.validation.Constraints.Required;
+import play.db.ebean.Model;
+import beans.LocalityBean;
 
 @SuppressWarnings("serial")
 @Entity
@@ -21,33 +18,38 @@ public class Locality extends BaseEntity {
 	@GeneratedValue(strategy = GenerationType.AUTO)
 	public  Long id;
 
+
 	@OneToOne
 	public PrimaryCity primaryCity;
 
+	@Required
 	public String name;
 
 	public String pinCode;
 
-	public static Finder<Long, Locality> find = new Finder<Long, Locality>(Long.class, Locality.class);
-	/*public static List<Locality> getLocalitiesInCity(){
+	public static Model.Finder<Long, Locality> find = new Model.Finder<Long, Locality>(Long.class, Locality.class);
 
-		final PrimaryCity primaryCity = PrimaryCity.find.byId( PublicController.getPrimatyCity());
-		final AppUser appUser = LoginController.getLoggedInUser();
-		PrimaryCity primaryCity = null;
-		if(appUser.role.equals(Role.DOCTOR)){
-			primaryCity = appUser.getDoctor().primaryCity;
+	public LocalityBean toBean(){
+		final LocalityBean bean = new LocalityBean();
+
+		if(this.id != null) {
+			bean.id = this.id;
 		}
-		if(appUser.role.equals(Role.ADMIN_DIAGREP)){
-			primaryCity = appUser.getDiagnosticRepresentative().diagnosticCentre.primaryCity;
+
+		if(this.name != null) {
+			bean.name = this.name;
 		}
-		if(appUser.role.equals(Role.ADMIN_PHARMACIST)){
-			primaryCity = appUser.getPharmacist().pharmacy.primaryCity;
+
+		if(this.primaryCity != null) {
+			bean.primaryCityId = this.primaryCity.id;
 		}
-		if(primaryCity != null){
-			return Locality.find.where().eq("primaryCity", primaryCity).findList();
-		}else{
-			return new ArrayList<Locality>();
+
+		if(this.pinCode != null) {
+			bean.pinCode = this.pinCode;
 		}
-	}*/
+
+		return bean;
+	}
+
 
 }

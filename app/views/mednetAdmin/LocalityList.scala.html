@@ -1,0 +1,53 @@
+@(dataForm: play.data.Form[beans.LocalityBean])
+@import helper._
+@import helper.twitterBootstrap._
+@main("Locality Form") {
+
+@helper.form(action=routes.MednetworkAdminController.saveLocality()) {
+	
+	@helper.inputText(dataForm("name"),'_label->"Name")
+	@helper.select(dataForm("primaryCityId"),options=helper.options(models.PrimaryCity.getAllPrimaryCities()),'_label->"Primary City")
+	@helper.inputText(dataForm("pinCode"),'_label->"PinCode")
+	<input type="hidden" name="id" value='@dataForm("id").value' >
+	<input type="submit" class="btn btn-primary btn-xs" value="Add Locality">
+	
+	}
+	<br><br>
+	<div class="row">
+	<div class="col-md-10">
+	<table class="table table-hover">
+	<tr>
+	<th>Locality</th>
+	<th>City</th>
+	<th>Pin Code</th>
+	<th>Action</th>
+	</tr>
+	@for((locality,index) <- models.Locality.find.all().zipWithIndex){
+	<tr>
+		<td>@{index+1}</td>
+		<td>@locality.name</td>
+		<td>@locality.primaryCity.name</td>
+		<td>
+			<a href="@routes.MednetworkAdminController.editLocality(locality.id)" class="btn btn-primary btn-xs">Edit</a>
+			<a class="btn btn-danger btn-xs" href="#myModal" style="color:white" data-toggle="modal" data-target="#myModal@locality.id">Remove</a>
+			<div class="modal fade" id="myModal@locality.id" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+       <div class="modal-body">
+        <h4>Do you want to Delete @locality.name ?</h4>
+        </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-info btn-xs"" data-dismiss="modal">Cancel</button>
+        <a href="@routes.MednetworkAdminController.removeLocality(locality.id)" id="del" type="button" class="btn btn-danger btn-xs">Delete</a>
+      </div>
+    </div>
+  </div>
+</div>
+		</td>
+	</tr>
+	}
+	</table>
+	</div>
+	</div>
+}	
+	

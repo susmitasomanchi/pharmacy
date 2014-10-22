@@ -157,7 +157,7 @@ public class ClinicController extends Controller{
 		}
 
 		if(invites.get(0).accepted){
-			flash().put("alert",new Alert("alert-danger","Already Accpted Invitation on "+new SimpleDateFormat("").format(invites.get(0).dateAccepted)+".").toString());
+			flash().put("alert",new Alert("alert-danger","Already Accepted Invitation on "+new SimpleDateFormat("").format(invites.get(0).dateAccepted)+".").toString());
 			return Application.index();
 		}
 
@@ -198,7 +198,7 @@ public class ClinicController extends Controller{
 
 	/**
 	 * @author lakshmi
-	 * Action for BloodBank backgroundImage and profile
+	 * Action for Clinic backgroundImage and profile
 	 * Images of Clinic of loggedIn CLINIC_ADMIN
 	 * POST	/secure-clinic/upload-clinic-images
 	 */
@@ -253,8 +253,8 @@ public class ClinicController extends Controller{
 
 	/**
 	 * @author lakshmi
-	 * Action to remove profileImage of BloodBank
-	 * GET/secure-blood-bank/remove-image/:bloodBankId/:fileId
+	 * Action to remove profileImage of Clinic
+	 * GET/secure-clinic/remove-image/:clinicId/:fileId
 	 */
 	public static Result removeClinicImage(final Long clinicId,final Long imageId){
 		final Clinic clinic = Clinic.find.byId(clinicId);
@@ -647,11 +647,7 @@ public class ClinicController extends Controller{
 	 */
 	public static Result viewClinicWeeklyAppointments(final Long docClincInfoId){
 		final DoctorClinicInfo clinicInfo = DoctorClinicInfo.find.byId(docClincInfoId);
-		int shortestSlot = 15;
-		if(clinicInfo.slot < shortestSlot){
-			shortestSlot = clinicInfo.slot;
-		}
-		return ok(views.html.clinic.viewClinicWeeklyAppointments.render(shortestSlot,clinicInfo));
+		return ok(views.html.clinic.viewClinicWeeklyAppointments.render(clinicInfo.slot,clinicInfo));
 	}
 
 	/**

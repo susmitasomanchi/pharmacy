@@ -33,8 +33,6 @@
 <div style="padding-left:15px;padding-right:15px">
 	<button style="box-shadow: 1px 1px 3px 3px #aaaaaa;" id="button1" onclick="validateAndSubmit(@docClinicInfo.id);" class="btn btn-sm btn-success">Verify</button>
 </div>
-
-
 }
 <script type="text/javascript">
 var code;
@@ -56,7 +54,7 @@ var email;
     			return false;
     		}else if(data == 1){
     		alert(email+" is not existed in the system.create an account???");
-    		$('#verify-code').append('<div class="col-md-2"><input type="checkbox" id="check" />Is Patient Agrred?</div><div class="col-md-5"><span style="cursor:pointer;color:#008bca" onclick="createNewPatient();">Click Here To Create An Account For Patient</span></div>');
+    		$('#verify-code').append('<div class="col-md-2"><input type="checkbox" id="check" />&nbsp;Patients Consent?</div><div class="col-md-5"><span style="cursor:pointer;color:#008bca" onclick="createNewPatient();">Click Here To Create An Account For Patient</span></div>');
     		}else{
     		code = data[0];
     		patId = data[1];
@@ -65,11 +63,10 @@ var email;
 			});
     	    }
 		function createNewPatient(){
-		alert("hello");
 		 if($('#check').is(':checked')){
 			window.location.href='/secure-clinic/new-patient-form/'+doctorClinicId+'/'+email;
 			}else{
-			alert("patient Confirmation Is Compulsory To Create An Account");
+			alert("patient's Consent Compulsory To Create An Account");
 			return false; 
 			}
 			}

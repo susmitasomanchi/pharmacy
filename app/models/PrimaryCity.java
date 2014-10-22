@@ -1,6 +1,9 @@
 package models;
 
+import java.util.HashMap;
+
 import java.util.List;
+import java.util.Map;
 
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -33,6 +36,13 @@ public class PrimaryCity extends BaseEntity{
 		return find.where().orderBy("name").findList();
 	}
 
+	public static Map<String,String> getAllPrimaryCities(){
+		final Map<String,String> primatyCityMap = new HashMap<String,String>();
+		for (final PrimaryCity primaryCity :  models.PrimaryCity.find.all()) {
+			primatyCityMap.put(primaryCity.id.toString(), primaryCity.name);
+		}
+		return primatyCityMap;
+	}
 
 
 }

@@ -268,6 +268,13 @@ POST	/secure-admin/add-master-sig-code							controllers.MednetworkAdminControll
 GET		/secure-admin/edit-master-sig-code/:id							controllers.MednetworkAdminController.editMasterSigCode(id: Long)
 POST	/secure-admin/update-master-sig-code							controllers.MednetworkAdminController.updateMasterSigCode()
 GET		/secure-admin/remove-master-sig-code/:id							controllers.MednetworkAdminController.removeMasterSigCode(id: Long)
+GET		/secure-admin/add-locality							controllers.MednetworkAdminController.addLocality()
+POST	/secure-admin/save-locality							controllers.MednetworkAdminController.saveLocality()
+GET		/secure-admin/edit-locality/:localityId							controllers.MednetworkAdminController.editLocality(localityId : Long)
+GET		/secure-admin/remove-locality/:localityId							controllers.MednetworkAdminController.removeLocality(localityId : Long)
+
+
+
 
 
 #############################	PRODUCTION	#################################################################################

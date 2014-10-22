@@ -73,29 +73,34 @@ public class PublicController extends Controller{
 			flash().put("alert", new Alert("alert-info", "Searched word should be atleast 4 characters long.").toString());
 			return ok(views.html.doctor.searchedDoctors.render(false,key, new ArrayList<Doctor>()));
 		}*/
-
-		final PrimaryCity city = PrimaryCity.find.byId(Long.parseLong(session(Constants.CITY_ID)));
 		MasterSpecialization specialization = null;
 		Locality loc = null;
-		final ExpressionList<Doctor> query =Doctor.find.where().eq("primaryCity", city);
-		if((spez!= null) && !(spez.trim().isEmpty()) && !(spez.equalsIgnoreCase("any"))){
-			specialization = MasterSpecialization.find.where().ieq("name", spez).findUnique();
-			query.in("specializationList", specialization);
-		}
-		if((locality!= null) && !(locality.equalsIgnoreCase("0")) && !(locality.trim().isEmpty())){
-			loc = Locality.find.byId(Long.parseLong(locality));
-			query.eq("locality", loc);
-		}
-		if((key!= null)&& !(key.equalsIgnoreCase("any")) && !(key.trim().isEmpty())){
-			query.like("searchIndex","%"+key+"%");
+		if(session(Constants.CITY_ID) != null){
+			final PrimaryCity city = PrimaryCity.find.byId(Long.parseLong(session(Constants.CITY_ID)));
+			final ExpressionList<Doctor> query =Doctor.find.where().eq("primaryCity", city);
+			if((spez!= null) && !(spez.trim().isEmpty()) && !(spez.equalsIgnoreCase("any"))){
+				specialization = MasterSpecialization.find.where().ieq("name", spez).findUnique();
+				query.in("specializationList", specialization);
+			}
+			if((locality!= null) && !(locality.equalsIgnoreCase("0")) && !(locality.trim().isEmpty())){
+				loc = Locality.find.byId(Long.parseLong(locality));
+				query.eq("locality", loc);
+			}
+			if((key!= null)&& !(key.equalsIgnoreCase("any")) && !(key.trim().isEmpty())){
+				query.like("searchIndex","%"+key.trim().toLowerCase()+"%");
+			}
+			Logger.info("size=="+query.findList().size());
+			return ok(views.html.doctor.searchedDoctors.render(true,key,loc,specialization, query.findList()));
+		}else{
+			flash().put("alert", new Alert("alert-info","Please Select City.").toString());
+			return ok(views.html.doctor.searchedDoctors.render(false,key,loc,specialization, new ArrayList<Doctor>()));
 		}
 
 		/*final List<Doctor> doctors = Doctor.find.where()
 				.eq("primaryCity", city)
 				.in("specializationList", specialization)
 				.like("searchIndex","%"+cleanKey+"%").findList();*/
-		Logger.info("size=="+query.findList().size());
-		return ok(views.html.doctor.searchedDoctors.render(true,key,loc,specialization, query.findList()));
+
 		/*return ok(views.html.doctor.searchedDoctorspage.render(query.findList()));*/
 
 	}
@@ -214,19 +219,22 @@ public class PublicController extends Controller{
 	 * GET	/pharmacy/search/:searchKey
 	 */
 	public static Result processSearchPharmacies(final String searchKey,final String locality) {
-
-		final PrimaryCity city = PrimaryCity.find.byId(Long.parseLong(session(Constants.CITY_ID)));
 		Locality loc = null;
-		final ExpressionList<Pharmacy> query =Pharmacy.find.where().eq("primaryCity", city);
-		if((locality!= null) && !(locality.equalsIgnoreCase("0")) && !(locality.trim().isEmpty())){
-			loc = Locality.find.byId(Long.parseLong(locality));
-			query.eq("locality", loc);
+		if(session(Constants.CITY_ID) != null){
+			final PrimaryCity city = PrimaryCity.find.byId(Long.parseLong(session(Constants.CITY_ID)));
+			final ExpressionList<Pharmacy> query =Pharmacy.find.where().eq("primaryCity", city);
+			if((locality!= null) && !(locality.equalsIgnoreCase("0")) && !(locality.trim().isEmpty())){
+				loc = Locality.find.byId(Long.parseLong(locality));
+				query.eq("locality", loc);
+			}
+			if((searchKey!= null)&& !(searchKey.equalsIgnoreCase("any")) && !(searchKey.trim().isEmpty())){
+				query.like("searchIndex","%"+searchKey.trim().toLowerCase()+"%");
+			}
+			return ok(views.html.pharmacist.searched_pharmacies.render(true,searchKey.trim(),loc,query.findList()));
+		}else{
+			flash().put("alert", new Alert("alert-info","Please Select City.").toString());
+			return ok(views.html.pharmacist.searched_pharmacies.render(false,searchKey.trim(),loc,new ArrayList<Pharmacy>()));
 		}
-		if((searchKey!= null)&& !(searchKey.equalsIgnoreCase("any")) && !(searchKey.trim().isEmpty())){
-			query.like("searchIndex","%"+searchKey+"%");
-		}
-		return ok(views.html.pharmacist.searched_pharmacies.render(true,searchKey.trim(),loc,query.findList()));
-
 		/*final String searchStr = searchKey.toLowerCase().trim();
 		if(searchStr.length() < 4){
 			flash().put("alert", new Alert("alert-danger", "The searck key should contain atleast four charecters").toString());
@@ -569,18 +577,23 @@ public class PublicController extends Controller{
 	 * GET	/diagnostic/search/:searchKey
 	 */
 	public static Result processSearchDiagnosticCentres(final String searchKey,final String localityId) {
-
-		final PrimaryCity city = PrimaryCity.find.byId(Long.parseLong(session(Constants.CITY_ID)));
 		Locality loc = null;
-		final ExpressionList<DiagnosticCentre> query =DiagnosticCentre.find.where().eq("primaryCity", city);
-		if((localityId!= null) && !(localityId.equalsIgnoreCase("0")) && !(localityId.trim().isEmpty())){
-			loc = Locality.find.byId(Long.parseLong(localityId));
-			query.eq("locality", loc);
+		if(session(Constants.CITY_ID) != null){
+			final PrimaryCity city = PrimaryCity.find.byId(Long.parseLong(session(Constants.CITY_ID)));
+
+			final ExpressionList<DiagnosticCentre> query =DiagnosticCentre.find.where().eq("primaryCity", city);
+			if((localityId!= null) && !(localityId.equalsIgnoreCase("0")) && !(localityId.trim().isEmpty())){
+				loc = Locality.find.byId(Long.parseLong(localityId));
+				query.eq("locality", loc);
+			}
+			if((searchKey!= null)&& !(searchKey.equalsIgnoreCase("any")) && !(searchKey.trim().isEmpty())){
+				query.like("searchIndex","%"+searchKey.trim().toLowerCase()+"%");
+			}
+			return ok(views.html.diagnostic.searched_diagnostic_Centres.render(true,searchKey,loc,query.findList()));
+		}else{
+			flash().put("alert", new Alert("alert-info","Please Select City.").toString());
+			return ok(views.html.diagnostic.searched_diagnostic_Centres.render(false,searchKey,loc,new ArrayList<DiagnosticCentre>()));
 		}
-		if((searchKey!= null)&& !(searchKey.equalsIgnoreCase("any")) && !(searchKey.trim().isEmpty())){
-			query.like("searchIndex","%"+searchKey+"%");
-		}
-		return ok(views.html.diagnostic.searched_diagnostic_Centres.render(true,searchKey,loc,query.findList()));
 
 		/*final String searchStr = searchKey.toLowerCase().trim();
 		if(searchStr.length() < 4){

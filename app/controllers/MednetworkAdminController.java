@@ -11,6 +11,7 @@ import java.util.Map;
 import models.Alert;
 import models.AppUser;
 import models.Feedback;
+import models.Locality;
 import models.MasterDiagnosticTest;
 import models.MasterProduct;
 import models.PrimaryCity;
@@ -35,16 +36,21 @@ import models.pharmacist.PharmacyPrescriptionInfo;
 import org.json.JSONObject;
 
 import play.Logger;
+import play.data.Form;
 import play.mvc.Controller;
 import play.mvc.Result;
 import actions.BasicAuth;
 import actions.MedNetworkAdmin;
+import beans.DiagnosticBean;
+import beans.LocalityBean;
 
 import com.avaje.ebean.Ebean;
 
 @BasicAuth
 @MedNetworkAdmin
 public class MednetworkAdminController extends Controller {
+
+	public static Form<LocalityBean> localityForm = Form.form(LocalityBean.class);
 
 	/**
 	 * @author Lakshmi
@@ -631,5 +637,37 @@ public class MednetworkAdminController extends Controller {
 		masterSigCode.delete();
 		flash().put("alert", new Alert("alert-danger","Master SigCode deleted successfully.").toString());
 		return redirect(routes.MednetworkAdminController.getMasterSigCodeForm());
+	}
+	/**
+	 * 
+	 */
+	public static Result addLocality(){
+		return ok(views.html.mednetAdmin.LocalityList.render(localityForm));
+	}
+	public static Result saveLocality(){
+		final Form<LocalityBean> filledForm = localityForm.bindFromRequest();
+		Logger.info("   bdgyus"+filledForm.data());
+		if (filledForm.hasErrors()) {
+			return badRequest(views.html.mednetAdmin.LocalityList.render(filledForm));
+		} else {
+			final Locality locality = filledForm.get().toLocality();
+			if(locality.id == null){
+				locality.save();
+			}else{
+				locality.update();
+			}
+			return redirect(routes.MednetworkAdminController.addLocality());
+		}
+	}
+	public static Result editLocality(final Long id) {
+		final Locality locality = Locality.find.byId(id);
+		Logger.info("name"+locality.name);
+		final Form<LocalityBean> filledForm = localityForm.fill(locality.toBean());
+		return ok(views.html.mednetAdmin.LocalityList.render(filledForm));
+	}
+	public static Result removeLocality(final Long id) {
+		final Locality locality = Locality.find.byId(id);
+		locality.delete();
+		return redirect(routes.MednetworkAdminController.addLocality());
 	}
 }

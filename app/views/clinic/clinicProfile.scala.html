@@ -313,7 +313,6 @@ Edit Contact Details
 
 </div>
 
-<br><br><br>
 
 </div>
 
@@ -493,19 +492,9 @@ $("#city").blur(function() {
 			<button type="submit" class="btn btn-primary btn-sm">Submit</button>
 		</form>
 	</div>	
-<div class="col-md-8">
-
-<div id="map_canvas" style="width:520px;height:400px">
-	@if(clinic.address == null || clinic.address.latitude== null || clinic.address.longitude == null || clinic.address.latitude.trim().compareToIgnoreCase("") == 0 || clinic.address.longitude.trim().compareToIgnoreCase("") == 0){
-		<img src="/assets/images/googlemap1.png" width="520" height="400" style="position:relative" />
-		<div class="maptext" style="text-align:center">
-		<p style="position:relative; top:-200px; color:#008cba;"><b>Please provide Area and City to generate the map</span></b></p>
-	}
+</div>
 </div>
 
-</div>
-</div>
-</div>
       </div>
     </div>
   </div>
@@ -518,13 +507,4 @@ $("#city").blur(function() {
 	});
 </script>
 
-
-
-	
-<div class="col-md-8">
-<div id="map_canvas" style="width:500px;height:300px"> </div>
-</div>
-</div>
-
-<br><br>
 }

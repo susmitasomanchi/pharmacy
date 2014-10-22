@@ -4,6 +4,7 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.OneToOne;
 
 import play.data.validation.Constraints.Required;
 
@@ -38,6 +39,9 @@ public class Address extends BaseEntity {
 	public String fetchedPinCode;
 
 	public Country country;
+
+	@OneToOne
+	public Locality locality;
 
 	public static Finder<Long, Address> find = new Finder<Long, Address>(Long.class, Address.class);
 
