@@ -3,7 +3,10 @@ package controllers;
 
 import java.security.MessageDigest;
 import java.security.SecureRandom;
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Random;
 
@@ -148,61 +151,45 @@ public class SampleDataController extends Controller {
 		return ok();
 	}
 
-	/**
-	 * 
-	 * @author Dibesh
-	 * 
-	 *         Dummy data
-	 * 
-	 *         GET /mr/add-value controllers.MRController.values()
-	 */
 
-	public static Result values() {
-		for (int i=1;i<=15;i++)
+
+	public static Result mrSample() {
+		final PharmaceuticalCompany pc = new PharmaceuticalCompany();
+		pc.name = "Acme Pharma Pvt Ltd";
+		pc.save();
+		for (int i=1;i<=16;i++)
 		{
 			if(i==1)
 			{
 				final MedicalRepresentative mr = new MedicalRepresentative();
 				final AppUser appUser = new AppUser();
-
-				appUser.name = "admin";
-				appUser.username = "admin";
-				appUser.email="admin@gmail.com";
-				appUser.password="admin";
+				appUser.name = "MR Admin";
+				appUser.email="mradmin@gmail.com";
+				appUser.password="vvCEZl0vYX8iwftcTBhF7rEIM+oaK1kww2ZVX0bihEM=";
+				appUser.salt="jdekZFmcw2oSU1RmpX/ekNcTSm49Z6sMwNBMvYjmefM=";
 				appUser.role = Role.ADMIN_MR;
 				appUser.save();
 				mr.appUser = appUser;
-				mr.companyName = "hello";
-				final PharmaceuticalCompany pc = new PharmaceuticalCompany();
-				pc.name = mr.companyName;
-				pc.mrList.add(mr);
-				pc.adminMR = LoginController.getLoggedInUser().getMedicalRepresentative();
-				pc.save();
 				mr.pharmaceuticalCompany = pc;
 				mr.save();
-
+				pc.mrList.add(mr);
+				pc.adminMR = mr;
+				pc.update();
 			}
 			final MedicalRepresentative mr = new MedicalRepresentative();
 			final AppUser appUser = new AppUser();
-			appUser.name = "sam"+i;
-			appUser.username = "sam"+i;
-			appUser.email="sam@gmail.com";
-			appUser.password="sam";
+			appUser.name = "MR-"+i;
+			appUser.email = "mr"+i+"@gmail.com";
+			appUser.password="vvCEZl0vYX8iwftcTBhF7rEIM+oaK1kww2ZVX0bihEM=";
+			appUser.salt="jdekZFmcw2oSU1RmpX/ekNcTSm49Z6sMwNBMvYjmefM=";
 			appUser.role = Role.MR;
 			appUser.save();
 			mr.appUser = appUser;
-			mr.companyName = "hello";
-			final PharmaceuticalCompany pc = new PharmaceuticalCompany();
-			pc.name = mr.companyName;
-			pc.mrList.add(mr);
-			pc.adminMR = LoginController.getLoggedInUser().getMedicalRepresentative();
-			pc.save();
-			mr.pharmaceuticalCompany = LoginController
-					.getLoggedInUser().getMedicalRepresentative().pharmaceuticalCompany;
-			//mr.manager = MedicalRepresentative.find.where().eq("companyName", mr.companyName).findUnique();
+			mr.pharmaceuticalCompany = pc;
 			mr.save();
+			pc.mrList.add(mr);
+			pc.update();
 		}
-
 		return ok();
 	}
 
@@ -456,6 +443,16 @@ public class SampleDataController extends Controller {
 	}
 
 	public static Result addBloodBank(){
+
+		final String dt = "22-10-2014";
+		final SimpleDateFormat sdf = new SimpleDateFormat("dd-MM-yyyy");
+		try{
+			final Date date = sdf.parse(dt);
+		}
+		catch(final Exception e){
+
+		}
+
 		final BloodBankUser bloodBankUser = new BloodBankUser();
 		final AppUser appUser = new AppUser();
 		appUser.name = "BlooBankAppUser";
