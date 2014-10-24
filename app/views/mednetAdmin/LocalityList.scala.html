@@ -9,13 +9,17 @@
 	@helper.select(dataForm("primaryCityId"),options=helper.options(models.PrimaryCity.getAllPrimaryCities()),'_label->"Primary City")
 	@helper.inputText(dataForm("pinCode"),'_label->"PinCode")
 	<input type="hidden" name="id" value='@dataForm("id").value' >
-	<input type="submit" class="btn btn-primary btn-xs" value="Add Locality">
+	@if(dataForm("id").value  != null){
+	<input type="submit" class="btn btn-primary btn-xs" value="Update Locality">
+	}else{
+	<input type="submit" class="btn btn-primary btn-xs" value="Save Locality">
+	}
 	
 	}
 	<br><br>
 	<div class="row">
 	<div class="col-md-10">
-	<table class="table table-hover">
+	<table class="table table-striped">
 	<tr>
 	<th>Locality</th>
 	<th>City</th>
@@ -29,7 +33,7 @@
 		<td>@locality.primaryCity.name</td>
 		<td>
 			<a href="@routes.MednetworkAdminController.editLocality(locality.id)" class="btn btn-primary btn-xs">Edit</a>
-			<a class="btn btn-danger btn-xs" href="#myModal" style="color:white" data-toggle="modal" data-target="#myModal@locality.id">Remove</a>
+			@*<a class="btn btn-danger btn-xs" href="#myModal" style="color:white" data-toggle="modal" data-target="#myModal@locality.id">Remove</a>
 			<div class="modal fade" id="myModal@locality.id" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
   <div class="modal-dialog">
     <div class="modal-content">
@@ -42,7 +46,7 @@
       </div>
     </div>
   </div>
-</div>
+</div>*@
 		</td>
 	</tr>
 	}

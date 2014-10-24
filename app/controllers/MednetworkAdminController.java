@@ -639,11 +639,18 @@ public class MednetworkAdminController extends Controller {
 		return redirect(routes.MednetworkAdminController.getMasterSigCodeForm());
 	}
 	/**
-	 * 
+	 * @author lakshmi
+	 * Action to render LocalityList to Add Locality
+	 * GET/secure-admin/add-locality
 	 */
 	public static Result addLocality(){
 		return ok(views.html.mednetAdmin.LocalityList.render(localityForm));
 	}
+	/**
+	 * @author lakshmi
+	 * Action to save Locality
+	 * POST/secure-admin/save-locality
+	 */
 	public static Result saveLocality(){
 		final Form<LocalityBean> filledForm = localityForm.bindFromRequest();
 		Logger.info("   bdgyus"+filledForm.data());
@@ -659,9 +666,13 @@ public class MednetworkAdminController extends Controller {
 			return redirect(routes.MednetworkAdminController.addLocality());
 		}
 	}
+	/**
+	 * @author lakshmi
+	 * Action to edit Locality
+	 * GET/secure-admin/edit-locality/:localityId
+	 */
 	public static Result editLocality(final Long id) {
 		final Locality locality = Locality.find.byId(id);
-		Logger.info("name"+locality.name);
 		final Form<LocalityBean> filledForm = localityForm.fill(locality.toBean());
 		return ok(views.html.mednetAdmin.LocalityList.render(filledForm));
 	}
