@@ -48,7 +48,7 @@
 	</select>
 </div>
 <div id="searchDiv" class="col-md-4" style="width:40%">
-	<input type="search" class="typeahead" style="width:100%;box-shadow: 1px 1px 3px 3px #aaaaaa;"  name="searchKey" id="searchKey" 
+	<input type="search" class="typeahead" style="width:100%;box-shadow: 1px 1px 3px 3px #aaaaaa;" name="searchKey" id="searchKey" 
 	@if(session().get(utils.Constants.CITY_ID) != null){
 		placeholder="Doctor's Name in @models.PrimaryCity.find.byId(Long.parseLong(session().get(utils.Constants.CITY_ID))).name"
 	}else{
@@ -57,7 +57,7 @@
 	@if(!(searchedKey.equalsIgnoreCase("any"))){
 	value="@searchedKey"
 	}
-	>
+	autocomplete="off">
 </div>
    
 <div class="col-md-2" style="width:20%">
