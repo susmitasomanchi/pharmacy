@@ -63,12 +63,9 @@ public class PublicController extends Controller{
 	/**
 	 * @author Mitesh
 	 * Action to search Doctor and display it
-	 * GET /doctor/search/:key
+	 * GET /doctor/search/:spez/:loc/:key
 	 */
 	public static Result processSearchDoctors(final String spez,final String locality, final String key) {
-		Logger.info(" details.."+spez+" "+key);
-		Logger.info(" "+Long.parseLong(locality));
-
 		/*if(cleanKey.length() < 4){
 			flash().put("alert", new Alert("alert-info", "Searched word should be atleast 4 characters long.").toString());
 			return ok(views.html.doctor.searchedDoctors.render(false,key, new ArrayList<Doctor>()));
@@ -89,7 +86,6 @@ public class PublicController extends Controller{
 			if((key!= null)&& !(key.equalsIgnoreCase("any")) && !(key.trim().isEmpty())){
 				query.like("searchIndex","%"+key.trim().toLowerCase()+"%");
 			}
-			Logger.info("size=="+query.findList().size());
 			return ok(views.html.doctor.searchedDoctors.render(true,key,loc,specialization, query.findList()));
 		}else{
 			flash().put("alert", new Alert("alert-info","Please Select City.").toString());
@@ -216,7 +212,7 @@ public class PublicController extends Controller{
 	/**
 	 * @author lakshmi
 	 * Action to perform search operation for finding pharmacies based on the searchKey
-	 * GET	/pharmacy/search/:searchKey
+	 * GET	/pharmacy/search/:searchKey/:loc
 	 */
 	public static Result processSearchPharmacies(final String searchKey,final String locality) {
 		Locality loc = null;
@@ -574,7 +570,7 @@ public class PublicController extends Controller{
 	/**
 	 * @author lakshmi
 	 * Action to perform search operation for finding Diagnostic based on the searchKey
-	 * GET	/diagnostic/search/:searchKey
+	 * GET	/diagnostic/search/:searchKey/:loc
 	 */
 	public static Result processSearchDiagnosticCentres(final String searchKey,final String localityId) {
 		Locality loc = null;
@@ -878,11 +874,14 @@ public class PublicController extends Controller{
 			return ok(views.html.clinic.searchClinics.render(searchKey,clinicList,true));
 		}
 	}
-	@SuppressWarnings("unused")
+	/**
+	 * @author lakshmi
+	 * Action to get All Localities of primaryCity.
+	 * @return
+	 */
 	public static List<Locality> getPrimaryCityLocations(){
 		if(session(Constants.CITY_ID) != null){
 			final PrimaryCity primaryCity = PrimaryCity.find.byId(Long.parseLong(session(Constants.CITY_ID)));
-			Logger.info("city id..."+primaryCity.id);
 			if(primaryCity == null){
 				return new ArrayList<Locality>();
 			}
@@ -893,27 +892,24 @@ public class PublicController extends Controller{
 		}
 	}
 	/**
-	 * Action to get all Products' names GET /secure-doctor/diagnostic-tests/get-json
+	 * @author lakshmi
+	 * Action to get all Doctor's names
+	 * GET/doctor/get-names-json/:loc/:spez
 	 */
 	@BodyParser.Of(BodyParser.Json.class)
 	public static Result getAllDoctorsInCity(final String locality,final String spez) {
 		String[] result = null;
 		if(session(Constants.CITY_ID) != null){
 			final ExpressionList<Doctor> doctorList = Doctor.find.where().eq("primaryCity", PrimaryCity.find.byId(Long.parseLong(session(Constants.CITY_ID))));
-			Logger.info("loca=="+locality);
-			Logger.info("speci=="+spez);
 			if(locality != null && !(locality.equalsIgnoreCase("0"))){
-				Logger.info("inside Loc=="+locality);
 				doctorList.eq("locality", Locality.find.byId(Long.parseLong(locality)));
 
 			}
 			if((spez != null) && !(spez.equalsIgnoreCase("any")) && !(spez.trim().isEmpty())){
-				Logger.info("inside spez=="+spez);
 				final MasterSpecialization	specialization = MasterSpecialization.find.where().ieq("name", spez).findUnique();
 				doctorList.in("specializationList", specialization);
 			}
 			final int arrayLength = Doctor.find.findRowCount()+doctorList.findList().size();
-			Logger.info(doctorList.findList().size()+"  size");
 			result = new String[arrayLength];
 			int i = 0;
 			for (final Doctor doctor : doctorList.findList()) {
@@ -928,21 +924,19 @@ public class PublicController extends Controller{
 
 	}
 	/**
-	 * Action to get all Products' names GET /secure-doctor/diagnostic-tests/get-json
+	 * @author lakshmi
+	 * Action to get all Pharmacy names
+	 * GET/pharmacy/get-names-json/:loc
 	 */
 	@BodyParser.Of(BodyParser.Json.class)
 	public static Result getAllPharmaciesInCity(final String locality) {
 		String[] result = null;
 		if(session(Constants.CITY_ID) != null){
 			final ExpressionList<Pharmacy> pharmacyList = Pharmacy.find.where().eq("primaryCity", PrimaryCity.find.byId(Long.parseLong(session(Constants.CITY_ID))));
-			Logger.info("loca=="+locality);
 			if(locality != null && !(locality.equalsIgnoreCase("0"))){
-				Logger.info("inside Loc=="+locality);
 				pharmacyList.eq("locality", Locality.find.byId(Long.parseLong(locality)));
-
 			}
 			final int arrayLength = Doctor.find.findRowCount()+pharmacyList.findList().size();
-			Logger.info(pharmacyList.findList().size()+"  size");
 			result = new String[arrayLength];
 			int i = 0;
 			for (final Pharmacy pharmacy : pharmacyList.findList()) {
@@ -956,21 +950,20 @@ public class PublicController extends Controller{
 		return ok(jsonArray.toString());
 	}
 	/**
-	 * Action to get all Products' names GET /secure-doctor/diagnostic-tests/get-json
+	 * @author lakshmi
+	 * Action to get all Diagnostic Centre names
+	 * GET/diagnostic/get-names-json/:loc
 	 */
 	@BodyParser.Of(BodyParser.Json.class)
 	public static Result getAllDiagnosticsInCity(final String locality) {
 		String[] result = null;
 		if(session(Constants.CITY_ID) != null){
 			final ExpressionList<DiagnosticCentre> diagnosticList = DiagnosticCentre.find.where().eq("primaryCity", PrimaryCity.find.byId(Long.parseLong(session(Constants.CITY_ID))));
-			Logger.info("loca=="+locality);
 			if(locality != null && !(locality.equalsIgnoreCase("0"))){
-				Logger.info("inside Loc=="+locality);
 				diagnosticList.eq("locality", Locality.find.byId(Long.parseLong(locality)));
 
 			}
 			final int arrayLength = Doctor.find.findRowCount()+diagnosticList.findList().size();
-			Logger.info(diagnosticList.findList().size()+"  size");
 			result = new String[arrayLength];
 			int i = 0;
 			for (final DiagnosticCentre diagnosticCentre : diagnosticList.findList()) {

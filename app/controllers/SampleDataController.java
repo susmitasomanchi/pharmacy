@@ -472,5 +472,9 @@ public class SampleDataController extends Controller {
 		return ok("added blood bank");
 	}
 
+	public static Result joinUsClinic(){
+		return ok(views.html.clinic.joinus.render());
+	}
+
 }
 

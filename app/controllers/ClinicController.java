@@ -729,7 +729,7 @@ public class ClinicController extends Controller{
 			return ok("1");
 		}
 		else if((appUser != null) && (appUser.role.equals(Role.PATIENT))){
-			final String verifivcationCode = RandomStringUtils.randomAlphanumeric(5).toLowerCase();
+			final String verifivcationCode = RandomStringUtils.randomNumeric(5).toLowerCase();
 			final Long patientId = appUser.getPatient().id;
 			SMSService.sendSMS(Long.toString(appUser.mobileNumber),"Your mobile confirmation code is "+verifivcationCode);
 			Logger.info("Confirmation code sent to: "+appUser.mobileNumber+" code:"+verifivcationCode);

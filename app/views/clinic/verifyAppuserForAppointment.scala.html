@@ -10,7 +10,7 @@
 <div class="col-md-4">
  <label for="emailId" class="col-md-6" style="padding-top:7px">Email Id </label>
  <div class="col-md-4">
-	<input type="email" style="box-shadow: 1px 1px 3px 3px #aaaaaa;"  name="email" id="email" placeholder=" Email Id" >
+	<input type="email" style="box-shadow: 1px 1px 3px 3px #aaaaaa;"  name="email" id="email" placeholder=" Email Id" required>
 	</div>
 </div>
 </div>
@@ -20,7 +20,7 @@
 <div class="col-md-4">
 <label for="confirmEmailId" class="col-md-6" style="padding-top:7px">Confirm Email Id </label>
 <div class="col-md-4">
-	<input type="email" style="box-shadow: 1px 1px 3px 3px #aaaaaa;"  name="confirmEmail" id="confirmEmail" placeholder="Re-Enter Email Id">
+	<input type="email" style="box-shadow: 1px 1px 3px 3px #aaaaaa;"  name="confirmEmail" id="confirmEmail" placeholder="Re-Enter Email Id" required>
 </div>
 </div>
 </div>
@@ -44,23 +44,40 @@ var email;
 	doctorClinicId = docClinicId;
 	 email = $('#email').val().trim();
 	var confirmEmailId = $('#confirmEmail').val().trim();
-    	if(email != confirmEmailId){
+			if(email == ""){
+			$('#button1').show();
+    		alert("Enter Email Id.");
+    	    return false;
+    		}
+    		if(confirmEmailId == ""){
+    		$('#button1').show();
+    		alert("Enter Confirm Email Id.");
+    	    return false;
+    		}
+	    	if(email != confirmEmailId){
+	    	$('#button1').show();
     		alert("Email Ids Do Not Match!");
     	    return false;
     		}
+    		if((email != "") && (confirmEmailId != "") && (email == confirmEmailId)){
     	$.get('/secure-clinic/verify-appUser/'+email+'/'+docClinicId, function(data) {
     		if(data == 0){
     			alert("No AppUser Found With "+email);
     			return false;
-    		}else if(data == 1){
+    		}else if(data == 1){ 
     		alert(email+" is not existed in the system.create an account???");
     		$('#verify-code').append('<div class="col-md-2"><input type="checkbox" id="check" />&nbsp;Patients Consent?</div><div class="col-md-5"><span style="cursor:pointer;color:#008bca" onclick="createNewPatient();">Click Here To Create An Account For Patient</span></div>');
     		}else{
     		code = data[0];
     		patId = data[1];
-			$('#verify-code').append('<br><div class="col-md-4" style="padding:0px;"> <label for="code" class="col-md-6" style="padding-top:7px">Enter Vefication Code </label> <div class="col-md-4"><input type="text" style="box-shadow: 1px 1px 3px 3px #aaaaaa;"  name="code" id="code" placeholder="Enter Verifivation Code"></div></div><br><br><div><button style="box-shadow: 1px 1px 3px 3px #aaaaaa;"  onclick="verifyCode(code);" class="btn btn-sm btn-success">Verify</button></div>');
+    		alert("Verification Code Sended.");
+			$('#verify-code').append('<div class="col-md-4" style="padding:0px;"> <label for="code" class="col-md-6" style="padding-top:7px">Enter Vefication Code </label> <div class="col-md-4"><input type="text" style="box-shadow: 1px 1px 3px 3px #aaaaaa;padding-left:0px;"  name="code" id="code" placeholder="Enter Verifivation Code"></div></div><br><br><div><button style="box-shadow: 1px 1px 3px 3px #aaaaaa;"  onclick="verifyCode(code);" class="btn btn-sm btn-success">Verify</button></div>');
 		}
 			});
+			}else{
+			$('#button1').show();
+			return false;
+			}
     	    }
 		function createNewPatient(){
 		 if($('#check').is(':checked')){

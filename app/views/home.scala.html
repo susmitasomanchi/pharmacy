@@ -390,16 +390,16 @@ $('#spez').change(function() {
 
 $('#role').on('change', function(){
      if($('#role').val() == "ADMIN_PHARMACIST"){
-	url = ''/pharmacy/get-names-json/'+loc';
+	url = '/pharmacy/get-names-json/'+loc;
 	start();
    } 
   if($('#role').val() == "ADMIN_DIAGREP"){
-  url = ''/diagnostic/get-names-json/'+loc';
+  url = '/diagnostic/get-names-json/'+loc;
   start();
     }
   if($('#role').val() == "DOCTOR"){
   alert("inside doctor");
-  url = ''/doctor/get-names-json/'+loc+'/'+spez';
+  url = '/doctor/get-names-json/'+loc+'/'+spez;
   start()
 	}   
 	});
@@ -407,7 +407,7 @@ $('#role').on('change', function(){
 function start(){
 	var states;
 	$.get(url, function(data){
-		states = JSON.parse(data);
+			states = JSON.parse(data);
 		  // constructs the suggestion engine
 		var states = new Bloodhound({
 		  datumTokenizer: Bloodhound.tokenizers.obj.whitespace('value'),

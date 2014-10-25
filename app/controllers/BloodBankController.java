@@ -474,7 +474,7 @@ public class BloodBankController extends Controller{
 	public static Result findBloodDonorByEmail(final String email){
 		final AppUser appUser = AppUser.find.where().eq("email", email).findUnique();
 		if((appUser != null) && (appUser.role.equals(Role.PATIENT)) && appUser.isBloodDonor == true){
-			final String verifivcationCode = RandomStringUtils.randomAlphanumeric(5).toLowerCase();
+			final String verifivcationCode = RandomStringUtils.randomNumeric(5).toLowerCase();
 			final Long patientId = appUser.getPatient().id;
 			SMSService.sendSMS(Long.toString(appUser.mobileNumber),"Your mobile confirmation code is "+verifivcationCode);
 			Logger.info("Confirmation code sent to: "+appUser.mobileNumber+" code:"+verifivcationCode);

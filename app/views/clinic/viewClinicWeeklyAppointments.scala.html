@@ -50,6 +50,19 @@ $(document).ready(function() {
 		eventLimit: true,
 		fixedWeekCount: false,
 		events: '/secure-clinic/weekly-appointments-json/'+@docClinicInfo.id,
+	  dayClick: function(date, allDay, jsEvent) {
+		allDay:false,
+        alert('Event: ' + date.format("HH:mm"));
+        $('#myModal').modal('show');
+      /* alert('Coordinates: ' + jsEvent.pageX + ',' + jsEvent.pageY);
+       alert('View: ' + view.name);
+
+        // change the border color just for fun
+        $(this).css('border-color', 'red');
+        $(this).tooltip('show');
+        */
+
+    },
 		eventMouseover: function(event, jsEvent, view) {
         	//alert('Clicked on: ' + event.title);
         	// change the day's background color just for fun
@@ -71,4 +84,39 @@ $(document).ready(function() {
 
 
 </script>	
+<div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+     <div class="modal-header alert-info">
+        <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+        <h4 class="modal-title">Book Appointment</h4>
+      </div>
+      	<div class="modal-body" id="modal-content">
+      	<form action = "" method="POST">
+      	<div class="well">
+      	<div class="row">
+      	<div class="col-md-4">
+      	<input type="text" name="email" placeholder="Enter Patient'sEmail Id" />
+      	</div>
+      	</div>
+      	<br>
+      	<div class="row">
+      	<div class="col-md-8">
+      	<textarea placeholder = "Enter Problem Statement" name="stmt"></textarea>
+      	</div>
+      	</div>
+      	<br>
+      	<div class="row">
+      	<div class="col-md-2">
+      	<input type="submit" class="btn btn-success btn-xs" value="Book Appointment" />
+       	</div>
+       	</div>
+      	</div>
+      	</div>
+      	</form>
+      	</div>
+     	</div>
+  </div>
+</div>
+
 }

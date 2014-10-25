@@ -88,7 +88,7 @@ $('#myModal1').on('show.bs.modal', function (e) {
 				<img src="/assets/images/doctor.png" class="thumbnail" width="100" height="100"  />
 				}<br>
 
-<a id="@doctor.id" class="btn btn-success btn-xs pull-right" href="@routes.PublicController.addToFavDoctor(doctor.id)" class="pull-right">Fav&nbsp<i class="fa fa-plus"></i></a>
+<a id="@doctor.id" class="btn btn-success btn-xs pull-right" href="@routes.PublicController.addToFavDoctor(doctor.id)">Fav&nbsp<i class="fa fa-plus"></i></a>
 
 				</div>
 				<div style="cursor:pointer;width:30%" onclick="window.location.href='@routes.PublicController.getDoctorWithSlug(doctor.slugUrl)';" class="col-md-3">
@@ -114,7 +114,6 @@ margin-bottom:0px;
 
 </style>	
 				<div class="col-md-6">
-				<h4 style="color:#006687;font-weight:bold">Clinics</h4>
 				@if(doctor.doctorActiveClinicInfoList().size()==0){
 					Clinic information hasn't been provided yet.
 				}

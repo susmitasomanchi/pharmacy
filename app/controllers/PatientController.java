@@ -321,7 +321,7 @@ public class PatientController extends Controller {
 	public static Result viewAllPatientPrescriptions() {
 		final Patient patient = LoginController.getLoggedInUser().getPatient();
 		final List<Prescription> prescriptionList = Prescription.find.where()
-				.eq("patient", patient).orderBy("prescriptionDate").findList();
+				.eq("patient", patient).orderBy().desc("prescriptionDate").findList();
 		return ok(views.html.patient.patientPrescriptionList.render(prescriptionList));
 	}
 	/**
