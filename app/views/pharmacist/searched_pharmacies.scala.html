@@ -10,9 +10,7 @@
 <div class="row">
 <div id="locDiv" class="col-md-2" style="width:20%">
 	<select class="form-control chzn-no-deselect" data-placeholder="Locality" name="location" id="location" style="width:100%;box-shadow: 1px 1px 1px 1px #aaaaaa; height:120%;">
-	@if(loc == null){
-		<option value="0">Select Locality</option>
-		}else{
+	@if(loc != null){
 		<option value="@loc.id">@loc.name</option>
 		}
 		@for(locality <- PublicController.getPrimaryCityLocations()){
@@ -21,8 +19,7 @@
 	</select>
 </div>
 <div id="searchKey" class="col-md-3" style="width:50%">
-<input id="searchInput" class="typeahead" style="width:100%;"
-
+	<input id="searchInput" class="typeahead" style="width:100%;"
 	@if(session().get(utils.Constants.CITY_ID) != null){
 		placeholder="Diagnostic Centre's Name in @models.PrimaryCity.find.byId(Long.parseLong(session().get(utils.Constants.CITY_ID))).name"
 	}else{
@@ -32,7 +29,7 @@
 	value="@searchKey"
 	}
 
-/>
+	/>
 </div>
 <div class="col-md-2" style="width:30%">
 <a onclick="submitSearch();" class="btn btn-xs btn-primary">Search</a>
@@ -41,158 +38,23 @@
 </div>
 </div>
 
-<style>
-.badge{
-color:#000000;
-background-color:#cccccc;
-}
-#coverborder {
-    opacity: 0.4;
-    filter: alpha(opacity=40); /* For IE8 and earlier */
-}
-.well{
-margin-bottom:0px;
-}
-
-</style>	
-	@if(pharmacyList.size() == 0){
-    @if(searchKey != "" && searchKey!= null){   
-    
-    }
-}
-<table class="table table-bordered">
-@for((pharmacy,index) <- pharmacyList.zipWithIndex){
-@if(index%2==0){
- <tr class="row"> 
-}
-<td class="col-md-6">
-<div class="row" style="padding-left:20px;padding-right:20px">
-<div style="cursor:pointer" onclick="location.href='@routes.PublicController.getPharmacyWithSlug(pharmacy.slugUrl)';">@if(pharmacy.backgroundImage != null){<img src="@routes.PublicController.getPharmacyImages(pharmacy.id,0)" width="530" height="170" />}else{<img src="/assets/images/pharmacy-default-bg-image.jpg" width="530" height="170" />}
-        
-        </div>
-
-<div class="row" style="margin-top:-55px;padding-left:15px">
-<div style="cursor:pointer;width:23%" onclick="location.href='@routes.PublicController.getPharmacyWithSlug(pharmacy.slugUrl)';" class="col-md-3">
-@if(pharmacy.profileImageList.size() >0){
-<img src="@routes.PublicController.getPharmacyImages(pharmacy.id,pharmacy.profileImageList.get(0).id)" class="thumbnail" width="100" height="100"  />
- }else{
- <img src="/assets/images/pharmacy-default-profile-image.jpg" class="thumbnail" width="100" height="100"  />
- }
-</div>
-<div style="cursor:pointer;padding-left:0px;padding-top:50px;padding-right:0px;width:46%" onclick="location.href='@routes.PublicController.getPharmacyWithSlug(pharmacy.slugUrl)';" class="col-md-6">
-<h5><b>@pharmacy.name</b></h5>
-<br>
-</div>
-<div class="col-md-3" style="width:31%;padding-left:0px;padding-top:60px">
-<a class="btn btn-primary btn-xs pull-right" href="@routes.PublicController.addPharmacyToLoggedInUser(pharmacy.id)">Add to Fav</a>
-@*
-	<a class="btn btn-danger btn-xs pull-right" href="@routes.PublicController.removeFavoritePharmacy(pharmacy.id)">Remove</a>
-*@
-</div>
-</div>
-<div class="row well">
-<div class="col-md-5" style="padding:0px">
-<h5 ><b>@pharmacy.name</b></h5>
-        @if(pharmacy.address != null){  
-        <h5>@pharmacy.address.addressLine1<br>     
-        @pharmacy.address.area<br>
-        @pharmacy.address.city<br>
-        @pharmacy.address.state.capitalize()</h5>
-        }
-        <h5><i class="fa fa-phone-square"></i> @pharmacy.contactNumber</h5>
-</div>
-
-<br>
-</div>
-</td>
-@if(index == pharmacyList.size()-1){
-            </tr>
-          }
-
-}
-
-
-
-
-
-</table>
-
-
-}
-<script>
-var loc = $('#location').find("option:selected").val();
-function submitSearch(){
-var searchString = $('#searchInput').val();
-    if(searchString.trim() == ''){
-    searchString = 'any';
-    }
-  loc = $('#location').find("option:selected").val();
-	window.location.href='/pharmacy/search/'+searchString+'/'+loc;
-}
-$("#searchInput").keyup(function (e) {
-    if (e.keyCode == 13) {
-    	submitSearch();
-    }
-});
-
-window.onload= start();
-
-$('#location').change(function() {
-	loc = $('#location').find("option:selected").val();
-	//on each reload destroy previous typeahed else it'll create new div every time
-	  $('#searchKey .typeahead').typeahead('destroy');
-   start();
-});
-
-function start(){
-	var states;
-	$.get('/pharmacy/get-names-json/'+loc, function(data){
-		states = JSON.parse(data);
-		  // constructs the suggestion engine
-		var states = new Bloodhound({
-		  datumTokenizer: Bloodhound.tokenizers.obj.whitespace('value'),
-		  queryTokenizer: Bloodhound.tokenizers.whitespace,
-		  limit: 10,
-		  // `states` is an array of state names defined in "The Basics"
-		  local: $.map(states, function(state) { return { value: state }; })
-		});
-
-		// kicks off the loading/processing of `local` and `prefetch`
-
-		states.initialize();
-
-	$('#searchKey .typeahead').typeahead({
-  hint: true,
-  highlight: true,
-  minLength: 1
-},
-{
-  name: 'states',
-  displayKey: 'value',
-  source: states.ttAdapter()
-});
-});
-
-}
-
-</script>
 <style type="text/css">
 	.twitter-typeahead {
      width: 100%;
-}
+	}
 
-.twitter-typeahead .tt-hint {
+	.twitter-typeahead .tt-hint {
     display: block !important;
     height: 34px;
     padding: 6px 12px;
     font-size: 12px;
-    color: red;
+    color: white;
     line-height: 1.428571429;
     border: 1px solid transparent;
     border-radius:4px;
-}
-.tt-query,
-.tt-hint {
+	}
+	.tt-query,
+	.tt-hint {
     height: 30px;
     padding: 8px 12px;
     font-size: 24px;
@@ -202,13 +64,13 @@ function start(){
     border: 2px solid #ccc;
     border-radius: 8px;
     outline: none;
-}
+	}
 
-.tt-query {
+	.tt-query {
     box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.075);
-}
+	}
 
-.tt-dropdown-menu {
+	.tt-dropdown-menu {
     width: 100%;
     margin-top: 12px;
     padding: 8px 0;
@@ -217,25 +79,150 @@ function start(){
     border: 1px solid rgba(0, 0, 0, 0.2);
     border-radius: 8px;
     box-shadow: 0 5px 10px rgba(0,0,0,.2);
-}
+	}
 
-.tt-suggestion {
+	.tt-suggestion {
     padding: 3px 20px;
     font-size: 18px;
-    line-height: 24px;
-}
+    line-height: 24@*
+	<a class="btn btn-danger btn-xs pull-right" href="@routes.PublicController.removeFavoritePharmacy(pharmacy.id)">Remove</a>
+*@px;
+	}
 
-.tt-suggestion.tt-cursor { /* UPDATE: newer versions use .tt-suggestion.tt-cursor */
+	.tt-suggestion.tt-cursor { 
+	/* UPDATE: newer versions use .tt-suggestion.tt-cursor */
     color: #fff;
     background-color: #0097cf;
+	}
 
-}
-
-.tt-suggestion p {
+	.tt-suggestion p {
     margin: 0;
-}
+	}
 
 </style>
 	
+<style>
+	.badge{
+		color:#000000;
+		background-color:#cccccc;
+	}
+	#coverborder {
+    	opacity: 0.4;
+    	filter: alpha(opacity=40); /* For IE8 and earlier */
+	}
+	.well{
+		margin-bottom:0px;
+	}
+</style>	
+	<table class="table table-bordered">
+		@for((pharmacy,index) <- pharmacyList.zipWithIndex){
+			@if(index%2==0){
+ 				<tr class="row"> 
+			}
+			<td class="col-md-6">
+			<div class="row" style="padding-left:20px;padding-right:20px">
+				<div style="cursor:pointer" onclick="location.href='@routes.PublicController.getPharmacyWithSlug(pharmacy.slugUrl)';">@if(pharmacy.backgroundImage != null){<img src="@routes.PublicController.getPharmacyImages(pharmacy.id,0)" width="530" height="170" />}else{<img src="/assets/images/pharmacy-default-bg-image.jpg" width="530" height="170" />}
+                </div>
+				<div class="row" style="margin-top:-55px;padding-left:15px">
+					<div style="cursor:pointer;width:23%" onclick="location.href='@routes.PublicController.getPharmacyWithSlug(pharmacy.slugUrl)';" class="col-md-3">
+						@if(pharmacy.profileImageList.size() >0){
+								<img src="@routes.PublicController.getPharmacyImages(pharmacy.id,pharmacy.profileImageList.get(0).id)" class="thumbnail" width="100" height="100"  />
+ 						}else{
+ 								<img src="/assets/images/pharmacy-default-profile-image.jpg" class="thumbnail" width="100" height="100"  />
+ 							}
+					</div>
+					<div style="cursor:pointer;padding-left:0px;padding-top:50px;padding-right:0px;width:46%" onclick="location.href='@routes.PublicController.getPharmacyWithSlug(pharmacy.slugUrl)';" class="col-md-6">
+						<h5><b>@pharmacy.name</b></h5>
+						<br>
+					</div>
+					<div class="col-md-3" style="width:31%;padding-left:0px;padding-top:60px">
+						<a class="btn btn-primary btn-xs pull-right" href="@routes.PublicController.addPharmacyToLoggedInUser(pharmacy.id)">Add to Fav</a>
+					</div>
+			     </div>
+				 <div class="row well">
+					<div class="col-md-5" style="padding:0px">
+						<h5 ><b>@pharmacy.name</b></h5>
+       						@if(pharmacy.address != null){  
+        						<h5>@pharmacy.address.addressLine1<br>     
+        						@pharmacy.address.area<br>
+        						@pharmacy.address.city<br>
+        						@pharmacy.address.state.capitalize()</h5>
+        					}
+        				<h5><i class="fa fa-phone-square"></i> @pharmacy.contactNumber</h5>
+					</div>
+					<br>
+			</div>
+			</td>
+			@if(index == pharmacyList.size()-1){
+           		 </tr>
+         	 }
+		}
+	</table>
+}
+<script>
+	var loc = $('#location').val();
+	if(loc == null || loc == ""){
+		loc = "0";
+	}
+	function submitSearch(){
+		var searchString = $('#searchInput').val();
+    	if(searchString.trim() == ''){
+    		searchString = 'any';
+    	}
+		window.location.href='/pharmacy/search/'+searchString+'/'+loc;
+	}
+	$("#searchInput").keyup(function (e) {
+  	 	if (e.keyCode == 13) {
+    		submitSearch();
+   		}
+	});
+
+	window.onload= start();
+
+	$('#location').change(function() {
+	//on each reload destroy previous typeahed else it'll create new div every time
+	 	$('#searchKey .typeahead').typeahead('destroy');
+		loc = $('#location').val();
+		if(loc == null || loc == ""){
+		loc = "0";
+		}
+		start();
+	});
+
+	function start(){
+			if(loc == null || loc == ""){
+				loc = "0";
+			}
+			var states;
+			$.get('/pharmacy/get-names-json/'+loc, function(data){
+					states = JSON.parse(data);
+		  			// constructs the suggestion engine
+					var states = new Bloodhound({
+		 				 datumTokenizer: Bloodhound.tokenizers.obj.whitespace('value'),
+		  				 queryTokenizer: Bloodhound.tokenizers.whitespace,
+		  				 limit: 10,
+		 				 // `states` is an array of state names defined in "The Basics"
+		  				local: $.map(states, function(state) { return { value: state }; })
+					});
+
+				// kicks off the loading/processing of `local` and `prefetch`
+	
+				states.initialize();
+
+					$('#searchKey .typeahead').typeahead({
+ 								 hint: true,
+ 								 highlight: true,
+ 								 minLength: 1
+						},
+						{
+ 								 name: 'states',
+ 								 displayKey: 'value',
+  								 source: states.ttAdapter()
+					});
+			});
+	}
+
+	</script>
+
 
 

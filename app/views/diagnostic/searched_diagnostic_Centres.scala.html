@@ -6,115 +6,92 @@
 
 @main("Search Diagnostic Centres"){
 <div class="well">
-<div class="row">
-
-<div id="locDiv" class="col-md-2" style="width:20%">
-	<select class="form-control chzn-no-deselect" data-placeholder="Locality" name="location" id="location" style="width:100%;box-shadow: 1px 1px 1px 1px #aaaaaa; height:120%;">
-	@if(loc == null){
-		<option value="0">Select Locality</option>
-		}else{
-		<option value="@loc.id">@loc.name</option>
-		}
-		@for(locality <- PublicController.getPrimaryCityLocations()){
-			<option value="@locality.id">@locality.name</option>
-		}
-	</select>
-</div>
-<div id="searchKey" class="col-md-3" style="width:50%">
-<input id="searchInput" class="typeahead" style="width:100%;"
-
-	@if(session().get(utils.Constants.CITY_ID) != null){
-		placeholder="Diagnostic Centre's Name in @models.PrimaryCity.find.byId(Long.parseLong(session().get(utils.Constants.CITY_ID))).name"
-	}else{
-		placeholder="Diagnostic Centre's Name"
-	}
-	@if(!(searchKey.equalsIgnoreCase("any"))){
-	value="@searchKey"
-	}
-
-/>
-</div>
-<div class="col-md-2" style="width:30%">
-<a onclick="submitSearch();" class="btn btn-xs btn-primary">Search</a>
-</div>
-
-</div>
+	<div class="row">
+		<div id="locDiv" class="col-md-2" style="width:20%">
+			<select class="form-control chzn-no-deselect" data-placeholder="Locality" name="location" id="location" style="width:100%;box-shadow: 1px 1px 1px 1px #aaaaaa; height:120%;">
+			@if(loc != null){
+				<option value="@loc.id">@loc.name</option>
+			}
+			@for(locality <- PublicController.getPrimaryCityLocations()){
+				<option value="@locality.id">@locality.name</option>
+			}
+			</select>
+		</div>
+		<div id="searchKey" class="col-md-3" style="width:50%">
+			<input id="searchInput" class="typeahead" style="width:100%;"
+				@if(session().get(utils.Constants.CITY_ID) != null){
+				placeholder="Diagnostic Centre's Name in @models.PrimaryCity.find.byId(Long.parseLong(session().get(utils.Constants.CITY_ID))).name"
+				}else{
+				placeholder="Diagnostic Centre's Name"
+				}
+				@if(!(searchKey.equalsIgnoreCase("any"))){
+					value="@searchKey"
+				}
+			/>
+		</div>
+		<div class="col-md-2" style="width:30%">
+			<a onclick="submitSearch();" class="btn btn-xs btn-primary">Search</a>
+		</div>
+	</div>
 </div>
 
 <style>
-.badge{
-color:#000000;
-background-color:#cccccc;
-}
-#coverborder {
-    opacity: 0.4;
-    filter: alpha(opacity=40); /* For IE8 and earlier */
-}
-.well{
-margin-bottom:0px;
-}
-
+	.badge{
+		color:#000000;
+		background-color:#cccccc;
+	}
+	#coverborder {
+    	opacity: 0.4;
+    	filter: alpha(opacity=40); /* For IE8 and earlier */
+	}
+	.well{
+		margin-bottom:0px;
+	}
 </style>
-	@if(diagnosticCentreList.size() == 0){
-    @if(searchKey != "" && searchKey!= null){   
-    }
-}
-<table class="table table-bordered">
-
-@for((diagnosticCentre,index) <- diagnosticCentreList.zipWithIndex){
-@if(index%2==0){
- <tr class="row"> 
-}
-<td class="col-md-6">
-<div class="row" style="padding-left:20px;padding-right:20px">
-<div style="cursor:pointer" onclick="location.href='@routes.PublicController.getDiagnosticCentreWithSlug(diagnosticCentre.slugUrl)';">@if(diagnosticCentre.backgroudImage != null){<img src="@routes.PublicController.getDiagnosticImages(diagnosticCentre.id,0)" width="530" height="170" />}else{<img src="/assets/images/pharmacy-default-bg-image.jpg" width="530" height="170" />}
-        
-        </div>
-
-<div class="row" style="margin-top:-55px;padding-left:15px">
-<div style="cursor:pointer;width:23%" onclick="location.href='@routes.PublicController.getDiagnosticCentreWithSlug(diagnosticCentre.slugUrl)';" class="col-md-3">
-@if(diagnosticCentre.profileImageList.size() >0){
-<img src="@routes.PublicController.getDiagnosticImages(diagnosticCentre.id,diagnosticCentre.profileImageList.get(0).id)" class="thumbnail" width="100" height="100"  />
- }else{
- <img src="/assets/images/pharmacy-default-profile-image.jpg" class="thumbnail" width="100" height="100"  />
- }
-</div>
-<div style="cursor:pointer;padding-left:0px;padding-top:50px;padding-right:0px;width:46%" onclick="location.href='@routes.PublicController.getDiagnosticCentreWithSlug(diagnosticCentre.slugUrl)';" class="col-md-6">
-<h5><b>@diagnosticCentre.name</b></h5>
-<br>
-</div>
-<div class="col-md-3" style="width:31%;padding-left:0px;padding-top:60px">
-<a class="btn btn-primary btn-xs pull-right" href="@routes.PublicController.addDiagnosticCentreToLoggedInUser(diagnosticCentre.id)">Add to Fav</a>
-</div>
-</div>
-<div class="row well">
-<div class="col-md-5" style="padding:0px">
-<h5 ><b>@diagnosticCentre.name</b></h5>
-        @if(diagnosticCentre.address != null){  
-        @diagnosticCentre.address.addressLine1<br>     
-        @diagnosticCentre.address.area<br>
-        @diagnosticCentre.address.city<br>
-        @diagnosticCentre.address.state</h5>
-        }
-        <h5><i class="fa fa-phone-square"></i> @diagnosticCentre.mobileNo</h5>
-</div>
-
-<br>
-</div>
-</td>
-@if(index == diagnosticCentreList.size()-1){
+	<table class="table table-bordered">
+		@for((diagnosticCentre,index) <- diagnosticCentreList.zipWithIndex){
+		@if(index%2==0){
+		 	<tr class="row"> 
+		}
+		<td class="col-md-6">
+			<div class="row" style="padding-left:20px;padding-right:20px">
+				<div style="cursor:pointer" onclick="location.href='@routes.PublicController.getDiagnosticCentreWithSlug(diagnosticCentre.slugUrl)';">@if(diagnosticCentre.backgroudImage != null){<img src="@routes.PublicController.getDiagnosticImages(diagnosticCentre.id,0)" width="530" height="170" />}else{<img src="/assets/images/pharmacy-default-bg-image.jpg" width="530" height="170" />}
+                </div>
+				<div class="row" style="margin-top:-55px;padding-left:15px">
+					<div style="cursor:pointer;width:23%" onclick="location.href='@routes.PublicController.getDiagnosticCentreWithSlug(diagnosticCentre.slugUrl)';" class="col-md-3">
+						@if(diagnosticCentre.profileImageList.size() >0){
+							<img src="@routes.PublicController.getDiagnosticImages(diagnosticCentre.id,diagnosticCentre.profileImageList.get(0).id)" class="thumbnail" width="100" height="100"  />
+ 						}else{
+ 							<img src="/assets/images/pharmacy-default-profile-image.jpg" class="thumbnail" width="100" height="100"  />
+ 						}
+					</div>
+					<div style="cursor:pointer;padding-left:0px;padding-top:50px;padding-right:0px;width:46%" onclick="location.href='@routes.PublicController.getDiagnosticCentreWithSlug(diagnosticCentre.slugUrl)';" class="col-md-6">
+						<h5><b>@diagnosticCentre.name</b></h5>
+						<br>
+					</div>
+					<div class="col-md-3" style="width:31%;padding-left:0px;padding-top:60px">
+						<a class="btn btn-primary btn-xs pull-right" href="@routes.PublicController.addDiagnosticCentreToLoggedInUser(diagnosticCentre.id)">Add to Fav</a>
+					</div>
+				</div>
+				<div class="row well">
+					<div class="col-md-5" style="padding:0px">
+						<h5 ><b>@diagnosticCentre.name</b></h5>
+       						 @if(diagnosticCentre.address != null){  
+        					 	@diagnosticCentre.address.addressLine1<br>     
+       						 	@diagnosticCentre.address.area<br>
+       							@diagnosticCentre.address.city<br>
+        						@diagnosticCentre.address.state</h5>
+        					}
+        				<h5><i class="fa fa-phone-square"></i> @diagnosticCentre.mobileNo</h5>
+					</div>
+					<br>
+				</div>
+		</td>
+		@if(index == diagnosticCentreList.size()-1){
             </tr>
-          }
-
+         }
 }
-
-
-
-
-
 </table>
-
-
 }
 <script>
 var loc = $('#location').find("option:selected").val();

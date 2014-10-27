@@ -17,16 +17,74 @@
 	margin-top:7px;
 }
 </style>
+<style type="text/css">
+	.twitter-typeahead {
+     width: 100%;
+}
+
+.twitter-typeahead .tt-hint {
+    display: block !important;
+    height: 30px;
+    padding: 6px 12px;
+    font-size: 12px;
+    color: white;
+    line-height: 1.428571429;
+    border: 1px solid transparent;
+    border-radius:4px;
+}
+.tt-query,
+.tt-hint {
+    height: 50px;
+    padding: 8px 12px;
+    font-size: 24px;
+    line-height: 30px;
+    width: 100%;
+    color: #999
+    border: 2px solid #ccc;
+    border-radius: 8px;
+    outline: none;
+}
+
+.tt-query {
+    box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.075);
+}
+
+.tt-dropdown-menu {
+    width: 100%;
+    margin-top: 12px;
+    padding: 8px 0;
+    background-color: #fff;
+    border: 1px solid #ccc;
+    border: 1px solid rgba(0, 0, 0, 0.2);
+    border-radius: 8px;
+    box-shadow: 0 5px 10px rgba(0,0,0,.2);
+}
+
+.tt-suggestion {
+    padding: 3px 20px;
+    font-size: 18px;
+    line-height: 24px;
+}
+
+.tt-suggestion.tt-cursor { /* UPDATE: newer versions use .tt-suggestion.tt-cursor */
+    color: #fff;
+    background-color: #0097cf;
+
+}
+
+.tt-suggestion p {
+    margin: 0;
+}
+
+</style>
 
 <div class="well">
 
 <div class="row">
 
 <div id="spezDiv" class="col-md-2" style="width:20%">
-	<select class="form-control chzn-no-deselect" data-placeholder="Specialization" name="spez" id="spez" style="width:100%;box-shadow: 1px 1px 1px 1px #aaaaaa; height:120%;">
-	@if(spz == null){
-		<option value="any">Select Specialization</option>
-		}else{
+	<select class="form-control chzn" data-placeholder="Specialization" name="spez" id="spez" style="width:100%;box-shadow: 1px 1px 1px 1px #aaaaaa; height:120%;">
+	@if(spz != null){
 		<option value="@spz.name">@spz.name</option>
 		}
 		@for(spez <- models.doctor.MasterSpecialization.getAll()){
@@ -35,13 +93,10 @@
 	</select>
 </div>
 <div id="locDiv" class="col-md-2" style="width:20%">
-	<select class="form-control chzn-no-deselect" data-placeholder="Locality" name="location" id="location" style="width:200px;box-shadow: 1px 1px 1px 1px #aaaaaa; height:120%;">
-	@if(loc == null){
-		<option value="0">Select Locality</option>
-		}else{
+	<select class="form-control chzn" data-placeholder="Locality" name="location" id="location" style="width:200px;box-shadow: 1px 1px 1px 1px #aaaaaa; height:120%;">
+	@if(loc != null){
 		<option value="@loc.id">@loc.name</option>
 		}
-		
 		@for(locality <- PublicController.getPrimaryCityLocations()){
 			<option value="@locality.id">@locality.name</option>
 		}
@@ -251,9 +306,9 @@ margin-bottom:0px;
 }
 }
 <script>
-var loc = $('#location').find("option:selected").val();
-var spez = $('#spez').find("option:selected").val();
-
+$(".chzn").chosen({allow_single_deselect: true});
+var loc = $('#location').val();
+var spez = $('#spez').val();
 $("#searchKey").keyup(function (e) {
     if (e.keyCode == 13) {
     	if($('#searchInput').val() == ''){
@@ -263,6 +318,12 @@ $("#searchKey").keyup(function (e) {
 });
 
 function submitSearch(){
+if(loc == null || loc == ""){
+	loc = "0";
+	}
+	if(spez == null || spez == ""){
+	spez = "any";
+	}
 var searchString = $('#searchKey').val();
 if(searchString.trim() == ""){
 searchString = 'any';
@@ -287,6 +348,12 @@ $('#spez').change(function() {
         
    
 function start(){
+if(loc == null || loc == ""){
+	loc = "0";
+	}
+	if(spez == null || spez == ""){
+	spez = "any";
+	}
 	var states;
 	$.get('/doctor/get-names-json/'+loc+'/'+spez, function(data){
 		states = JSON.parse(data);
@@ -318,66 +385,7 @@ function start(){
 }
 
 </script>
-<style type="text/css">
-	.twitter-typeahead {
-     width: 100%;
-}
 
-.twitter-typeahead .tt-hint {
-    display: block !important;
-    height: 30px;
-    padding: 6px 12px;
-    font-size: 12px;
-    color: red;
-    line-height: 1.428571429;
-    border: 1px solid transparent;
-    border-radius:4px;
-}
-.tt-query,
-.tt-hint {
-    height: 50px;
-    padding: 8px 12px;
-    font-size: 24px;
-    line-height: 30px;
-    width: 100%;
-    color: #999
-    border: 2px solid #ccc;
-    border-radius: 8px;
-    outline: none;
-}
-
-.tt-query {
-    box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.075);
-}
-
-.tt-dropdown-menu {
-    width: 100%;
-    margin-top: 12px;
-    padding: 8px 0;
-    background-color: #fff;
-    border: 1px solid #ccc;
-    border: 1px solid rgba(0, 0, 0, 0.2);
-    border-radius: 8px;
-    box-shadow: 0 5px 10px rgba(0,0,0,.2);
-}
-
-.tt-suggestion {
-    padding: 3px 20px;
-    font-size: 18px;
-    line-height: 24px;
-}
-
-.tt-suggestion.tt-cursor { /* UPDATE: newer versions use .tt-suggestion.tt-cursor */
-    color: #fff;
-    background-color: #0097cf;
-
-}
-
-.tt-suggestion p {
-    margin: 0;
-}
-
-</style>
 	
 
 	
