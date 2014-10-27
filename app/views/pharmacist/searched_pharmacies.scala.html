@@ -5,12 +5,11 @@
 @import helper._
 
 @main("Search Pharmacies"){
-
 <div class="well">
 <div class="row">
 <div id="locDiv" class="col-md-2" style="width:20%">
-	<select class="form-control chzn-no-deselect" data-placeholder="Locality" name="location" id="location" style="width:100%;box-shadow: 1px 1px 1px 1px #aaaaaa; height:120%;">
-	@if(loc != null){
+	<select class="form-control chzn" data-placeholder="Locality" name="location" id="location" style="width:100%;box-shadow: 1px 1px 1px 1px #aaaaaa; height:120%;">
+		@if(loc != null){
 		<option value="@loc.id">@loc.name</option>
 		}
 		@for(locality <- PublicController.getPrimaryCityLocations()){
@@ -37,25 +36,26 @@
 
 </div>
 </div>
-
+<br><br>
 <style type="text/css">
-	.twitter-typeahead {
+		.twitter-typeahead {
      width: 100%;
-	}
+}
 
-	.twitter-typeahead .tt-hint {
+.twitter-typeahead .tt-hint {
     display: block !important;
-    height: 34px;
+    height: 30px;
     padding: 6px 12px;
+			</select>
     font-size: 12px;
     color: white;
     line-height: 1.428571429;
     border: 1px solid transparent;
     border-radius:4px;
-	}
-	.tt-query,
-	.tt-hint {
-    height: 30px;
+}
+.tt-query,
+.tt-hint {
+    height: 50px;
     padding: 8px 12px;
     font-size: 24px;
     line-height: 30px;
@@ -64,13 +64,14 @@
     border: 2px solid #ccc;
     border-radius: 8px;
     outline: none;
-	}
+}
 
-	.tt-query {
+.tt-query {
     box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.075);
-	}
+}
+			</select>
 
-	.tt-dropdown-menu {
+.tt-dropdown-menu {
     width: 100%;
     margin-top: 12px;
     padding: 8px 0;
@@ -79,29 +80,24 @@
     border: 1px solid rgba(0, 0, 0, 0.2);
     border-radius: 8px;
     box-shadow: 0 5px 10px rgba(0,0,0,.2);
-	}
+}
 
-	.tt-suggestion {
+.tt-suggestion {
     padding: 3px 20px;
     font-size: 18px;
-    line-height: 24@*
-	<a class="btn btn-danger btn-xs pull-right" href="@routes.PublicController.removeFavoritePharmacy(pharmacy.id)">Remove</a>
-*@px;
-	}
+    line-height: 24px;
+}
 
-	.tt-suggestion.tt-cursor { 
-	/* UPDATE: newer versions use .tt-suggestion.tt-cursor */
+.tt-suggestion.tt-cursor { /* UPDATE: newer versions use .tt-suggestion.tt-cursor */
     color: #fff;
     background-color: #0097cf;
-	}
 
-	.tt-suggestion p {
+}
+
+.tt-suggestion p {
     margin: 0;
-	}
-
-</style>
-	
-<style>
+}
+			</select>
 	.badge{
 		color:#000000;
 		background-color:#cccccc;
@@ -139,7 +135,7 @@
 						<a class="btn btn-primary btn-xs pull-right" href="@routes.PublicController.addPharmacyToLoggedInUser(pharmacy.id)">Add to Fav</a>
 					</div>
 			     </div>
-				 <div class="row well">
+				 <div class="row well" style="padding-left:15px">
 					<div class="col-md-5" style="padding:0px">
 						<h5 ><b>@pharmacy.name</b></h5>
        						@if(pharmacy.address != null){  
@@ -151,6 +147,7 @@
         				<h5><i class="fa fa-phone-square"></i> @pharmacy.contactNumber</h5>
 					</div>
 					<br>
+				</div>
 			</div>
 			</td>
 			@if(index == pharmacyList.size()-1){
@@ -158,8 +155,10 @@
          	 }
 		}
 	</table>
-}
+	}
+
 <script>
+	$(".chzn").chosen({allow_single_deselect: true});
 	var loc = $('#location').val();
 	if(loc == null || loc == ""){
 		loc = "0";

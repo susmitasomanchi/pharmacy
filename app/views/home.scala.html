@@ -512,9 +512,7 @@ $("#searchKey").keyup(function (e) {
 		function start(){
 				var states;
 				console.log('0 done');
-				alert(url);
 				$.get(url, function(data){
-						alert(data);
 						console.log('1 done');
 						states = JSON.parse(data);
 						console.log('2 done');
