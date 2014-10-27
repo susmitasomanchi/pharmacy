@@ -100,7 +100,7 @@ GET    /secure-pharmacy/join                              			controllers.UserCon
 GET    /secure-diagnostic/join                              		controllers.UserController.joinUsDiagnostic()
 GET    /secure-user/join											controllers.UserController.joinUsPatient()
 GET    /secure-clinic/join											controllers.UserController.joinUsClinic()
-GET    /secure-blood-bank/join											controllers.UserController.joinUsBloodBank()
+GET    /secure-blood-bank/join										controllers.UserController.joinUsBloodBank()
 
 POST   /secure-join		                              			controllers.UserController.processJoinUs()
 
@@ -409,7 +409,7 @@ GET    /patient-search/list 					controllers.DiagnosticController.patientSearchP
 
 #Clinics
 
-GET    /secure-clinic/invite-doctor      					controllers.ClinicController.searchDoctorsByEmail()
+GET    	/secure-clinic/invite-doctor      					controllers.ClinicController.searchDoctorsByEmail()
 POST    /secure-clinic/invite-doctor      					controllers.ClinicController.processSeachDoctorsByEmailId()
 GET		/secure-clinic/add-doctor/:docId/:clinicId/:verCode			controllers.ClinicController.addDoctorToTheClinic(docId: Long, clinicId : Long, verCode:String)
 GET		/secure-clinic/view-all-doctors						controllers.ClinicController.getDoctors()
