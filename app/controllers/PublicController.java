@@ -919,9 +919,10 @@ public class PublicController extends Controller{
 		}else{
 			result = new String[1];
 		}
-		final JSONArray jsonArray = new JSONArray(Arrays.asList(result));
-		return ok(jsonArray.toString());
 
+		final JSONArray jsonArray = new JSONArray(Arrays.asList(result));
+		Logger.info("JSON: "+jsonArray.toString());
+		return ok(jsonArray.toString());
 	}
 	/**
 	 * @author lakshmi

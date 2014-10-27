@@ -12,6 +12,68 @@
 
 
 <body style="zoom: 1;">
+
+<style type="text/css">
+	.twitter-typeahead {
+     width: 100%;
+}
+
+.twitter-typeahead .tt-hint {
+    display: block !important;
+    height: 34px;
+    padding: 6px 12px;
+    font-size: 12px;
+    color: white;
+    line-height: 1.428571429;
+    border: 1px solid transparent;
+    border-radius:4px;
+}
+.tt-query,
+.tt-hint {
+    height: 30px;
+    padding: 8px 12px;
+    font-size: 24px;
+    line-height: 30px;
+    width: 100%;
+    color: #999
+    border: 2px solid #ccc;
+    border-radius: 8px;
+    outline: none;
+}
+
+.tt-query {
+    box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.075);
+}
+
+.tt-dropdown-menu {
+    width: 100%;
+    margin-top: 12px;
+    padding: 8px 0;
+    background-color: #fff;
+    border: 1px solid #ccc;
+    border: 1px solid rgba(0, 0, 0, 0.2);
+    border-radius: 8px;
+    box-shadow: 0 5px 10px rgba(0,0,0,.2);
+}
+
+.tt-suggestion {
+    padding: 3px 20px;
+    font-size: 18px;
+    line-height: 24px;
+}
+
+.tt-suggestion.tt-cursor { /* UPDATE: newer versions use .tt-suggestion.tt-cursor */
+    color: #fff;
+    background-color: #0097cf;
+
+}
+
+.tt-suggestion p {
+    margin: 0;
+}
+
+</style>
+
 <div class="row">
 <div class="col-md-10 col-md-offset-1">
 	<br>
@@ -89,16 +151,16 @@
 	</select>
 </div>
 <div id="locDiv" class="col-md-2" style="width:18%">
-	<select class="form-control chzn-no-deselect" data-placeholder="Locality" name="location" id="location" style="width:100%;box-shadow: 1px 1px 1px 1px #aaaaaa; height:120%;">
-		<option value="0">Select Locality</option>
+	<select class="form-control chzn" data-placeholder="Locality" name="location" id="location" style="width:100%;box-shadow: 1px 1px 1px 1px #aaaaaa; height:120%;">
+		<option></option>
 		@for(locality <- PublicController.getPrimaryCityLocations()){
 			<option value="@locality.id">@locality.name</option>
 		}
 	</select>
 </div>
 <div id="spezDiv" class="col-md-2" style="width:18%">
-	<select class="form-control chzn-no-deselect" data-placeholder="Specialization" name="spez" id="spez" style="width:100%;box-shadow: 1px 1px 1px 1px #aaaaaa; height:120%;">
-		<option value="any">Select Specialization</option>
+	<select class="form-control chzn"  data-placeholder="Specialization" name="spez" id="spez" style="width:100%;box-shadow: 1px 1px 1px 1px #aaaaaa; height:120%;">
+		<option></option>
 		@for(spez <- models.doctor.MasterSpecialization.getAll()){
 			<option value="@spez.name">@spez.name</option>
 		}
@@ -106,7 +168,7 @@
 </div>
 
 <div id="searchDiv" class="col-md-3" style="width:30%">
-	<input type="search" style="width:100%;box-shadow: 1px 1px 3px 3px #aaaaaa;"  name="searchKey" id="searchKey" 
+	<input class="typeahead" type="search" style="width:100%;box-shadow: 1px 1px 3px 3px #aaaaaa;" name="searchKey" id="searchKey" 
 	@if(session().get(utils.Constants.CITY_ID) != null){
 		placeholder="Doctor's Name in @models.PrimaryCity.find.byId(Long.parseLong(session().get(utils.Constants.CITY_ID))).name"
 	}else{
@@ -125,8 +187,8 @@
 
 
 <script>
-   var loc = $('#location').find("option:selected").val();
-   var spez = $('#spez').find("option:selected").val();
+
+$(".chzn").chosen({allow_single_deselect: true});
     var setValue = $('#role').val();
 $('#role').on('change', function(){
 	var selectedText = $(this).find("option:selected").text();
@@ -144,23 +206,28 @@ $('#role').on('change', function(){
 });
    
 function searchKey(){
+	var loc = $('#location').val();
+    var spez = $('#spez').val();
+	if(loc == null || loc == ""){
+	loc = "0";
+	}
+	if(spez == null || spez == ""){
+	spez = "any";
+	}
 	setValue = $('#role').val();
     var searchString = $('#searchKey').val();
     if(searchString.trim() == ""){
 	searchString = 'any';
-	}
-	loc = $('#location').find("option:selected").val();
+	}	
     if(setValue == "DOCTOR"){
-	spez = $('#spez').find("option:selected").val();
-  	 window.location.href='/doctor/search/'+spez+'/'+loc+'/'+searchString;
+	  	 window.location.href='/doctor/search/'+spez+'/'+loc+'/'+searchString;
   	}
-  
-  if(setValue == "ADMIN_PHARMACIST"){
-  window.location.href='/pharmacy/search/'+searchString+'/'+loc; 
-  } 
-  if(setValue == "ADMIN_DIAGREP"){
+  	if(setValue == "ADMIN_PHARMACIST"){
+  	window.location.href='/pharmacy/search/'+searchString+'/'+loc; 
+  	} 
+  	if(setValue == "ADMIN_DIAGREP"){
     window.location.href='/diagnostic/search/'+searchString+'/'+loc; 
-  } 
+ 	} 
 }
 
 
@@ -353,145 +420,121 @@ $("#searchKey").keyup(function (e) {
   </div> 
 
 }
+
+
 <script>
-var loc = $('#location').find("option:selected").val();
-var spez = $('#spez').find("option:selected").val();
-var url;
-$("#searchKey").keyup(function (e) {
+
+	var loc = $('#location').val();
+	if(loc == null || loc == ""){
+	         loc = "0";
+	}
+    var spez = $('#spez').val();
+   	if(spez == null || spez == ""){
+	   spez = "any";
+	}
+    $("#searchKey").keyup(function (e) {
     if (e.keyCode == 13) {
     	if($('#searchInput').val() == ''){
     	       	return false;
-        }
+        	}
     	 }
-});
+     });
 
-function submitSearch(){
-var searchString = $('#searchKey').val();
-if(searchString.trim() == ""){
-searchString = 'any';
-}
-window.location.href='/doctor/search/'+spez+'/'+loc+'/'+searchString;
-}
-
-window.onload= start();
-
-$('#location').change(function() {
-	loc = $('#location').find("option:selected").val();
-	//on each reload destroy previous typeahed else it'll create new div every time
-	  $('#searchDiv .typeahead').typeahead('destroy');
-   start();
-});
-
-$('#spez').change(function() {
-	spez = $('#spez').find("option:selected").val();
-	 $('#searchDiv .typeahead').typeahead('destroy');
-   start();
-});
-
-$('#role').on('change', function(){
-     if($('#role').val() == "ADMIN_PHARMACIST"){
-	url = '/pharmacy/get-names-json/'+loc;
-	start();
-   } 
-  if($('#role').val() == "ADMIN_DIAGREP"){
-  url = '/diagnostic/get-names-json/'+loc;
-  start();
-    }
-  if($('#role').val() == "DOCTOR"){
-  alert("inside doctor");
-  url = '/doctor/get-names-json/'+loc+'/'+spez;
-  start()
-	}   
-	});
-   
-function start(){
-	var states;
-	$.get(url, function(data){
-			states = JSON.parse(data);
-		  // constructs the suggestion engine
-		var states = new Bloodhound({
-		  datumTokenizer: Bloodhound.tokenizers.obj.whitespace('value'),
-		  queryTokenizer: Bloodhound.tokenizers.whitespace,
-		  limit: 10,
-		  // `states` is an array of state names defined in "The Basics"
-		  local: $.map(states, function(state) { return { value: state }; })
+		function submitSearch(){
+			var searchString = $('#searchKey').val();
+				if(searchString.trim() == ""){
+								searchString = 'any';
+				}
+				window.location.href='/doctor/search/'+spez+'/'+loc+'/'+searchString;
+		}
+		
+		var url = '/doctor/get-names-json/'+loc+'/'+spez;
+		
+		$('#location').chosen().change(function() {
+  			//on each reload destroy previous typeahed else it'll create new div every time
+			$('#searchDiv .typeahead').typeahead('destroy');
+				loc = $('#location').val();
+					if(loc == null || loc == ""){
+ 						loc ="0";
+ 					}
+					if($('#role').val() == "DOCTOR"){
+						spez = $('#spez').val();
+						if(spez == null || spez == ""){
+		 					spez ="any";
+ 						}
+						url = '/doctor/get-names-json/'+loc+'/'+spez;
+					}
+					if($('#role').val() == "ADMIN_PHARMACIST"){
+						url = '/pharmacy/get-names-json/'+loc;
+					}
+					if($('#role').val() == "ADMIN_DIAGREP"){
+						url = '/diagnostic/get-names-json/'+loc;
+					}
+					start();
+	
 		});
 
-		// kicks off the loading/processing of `local` and `prefetch`
+		$('#spez').chosen().change(function() {
+		 			$('#searchDiv .typeahead').typeahead('destroy');
+					spez = $('#spez').val();
+					if(spez == null || spez == ""){
+		 				spez ="any";
+ 					}
+					url = '/doctor/get-names-json/'+loc+'/'+spez;
+					start();
+		});
 
-		states.initialize();
 
-	$('#searchDiv .typeahead').typeahead({
-  hint: true,
-  highlight: true,
-  minLength: 1
-},
-{
-  name: 'states',
-  displayKey: 'value',
-  source: states.ttAdapter()
-});
-});
-}
 
-</script>
-<style type="text/css">
-	.twitter-typeahead {
-     width: 100%;
-}
+		window.onload= start();
+		$('#role').on('change', function(){
+ 					loc = $('#location').val();
+ 					if(loc == null || loc == ""){
+ 						loc ="0";
+ 					}
+ 					$('#searchDiv .typeahead').typeahead('destroy');
+   					if($('#role').val() == "ADMIN_PHARMACIST"){
+							url = '/pharmacy/get-names-json/'+loc;
+  					} 
+  					if($('#role').val() == "ADMIN_DIAGREP"){
+  							url = '/diagnostic/get-names-json/'+loc;
+  					}
+  					if($('#role').val() == "DOCTOR"){
+  							spez = $('#spez').val();
+  							if(spez == null || spez == ""){
+		 						spez ="any";
+ 							}
+  							url = '/doctor/get-names-json/'+loc+'/'+spez;
+  					}  
+					start(); 
+			});
+   
+		function start(){
+				var states;
+				console.log('0 done');
+				$.get(url, function(data){
+						console.log('1 done');
+						states = JSON.parse(data);
+						console.log('2 done');
+						var states = new Bloodhound({
+								datumTokenizer: Bloodhound.tokenizers.obj.whitespace('value'),
+		  							queryTokenizer: Bloodhound.tokenizers.whitespace,
+		  							limit: 10,
+		  							local: $.map(states, function(state) { return { value: state }; })
+						});
+						console.log('4 done');
+						states.initialize();
+							$('#searchDiv .typeahead').typeahead({
+  									hint: true,
+  									highlight: true,
+  									minLength: 1
+								},
+								{
+  									name: 'states',
+  									displayKey: 'value',
+  									source: states.ttAdapter()
+							});
+				 });
+		   }
 
-.twitter-typeahead .tt-hint {
-    display: block !important;
-    height: 34px;
-    padding: 6px 12px;
-    font-size: 12px;
-    color: red;
-    line-height: 1.428571429;
-    border: 1px solid transparent;
-    border-radius:4px;
-}
-.tt-query,
-.tt-hint {
-    height: 30px;
-    padding: 8px 12px;
-    font-size: 24px;
-    line-height: 30px;
-    width: 100%;
-    color: #999
-    border: 2px solid #ccc;
-    border-radius: 8px;
-    outline: none;
-}
-
-.tt-query {
-    box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.075);
-}
-
-.tt-dropdown-menu {
-    width: 100%;
-    margin-top: 12px;
-    padding: 8px 0;
-    background-color: #fff;
-    border: 1px solid #ccc;
-    border: 1px solid rgba(0, 0, 0, 0.2);
-    border-radius: 8px;
-    box-shadow: 0 5px 10px rgba(0,0,0,.2);
-}
-
-.tt-suggestion {
-    padding: 3px 20px;
-    font-size: 18px;
-    line-height: 24px;
-}
-
-.tt-suggestion.tt-cursor { /* UPDATE: newer versions use .tt-suggestion.tt-cursor */
-    color: #fff;
-    background-color: #0097cf;
-
-}
-
-.tt-suggestion p {
-    margin: 0;
-}
-
-</style>
+	</script>
