@@ -26,10 +26,11 @@
 		this.format = DPGlobal.parseFormat(options.format||this.element.data('date-format')||'mm/dd/yyyy');
 		this.picker = $(DPGlobal.template)
 							.appendTo('body')
-							.on({
+.on({
 								click: $.proxy(this.click, this)//,
 								//mousedown: $.proxy(this.mousedown, this)
 							});
+							
 		this.isInput = this.element.is('input');
 		this.component = this.element.is('.date') ? this.element.find('.add-on') : false;
 		
@@ -39,13 +40,11 @@
 				//blur: $.proxy(this.hide, this),
 				keyup: $.proxy(this.update, this)
 			});
-		} else {
+		}else{
 			if (this.component){
 				this.component.on('click', $.proxy(this.show, this));
-			} else {
-				this.element.on('click', $.proxy(this.show, this));
-			}
-		}
+			} 
+}
 	
 		this.minViewMode = options.minViewMode||this.element.data('date-minviewmode')||0;
 		if (typeof this.minViewMode === 'string') {

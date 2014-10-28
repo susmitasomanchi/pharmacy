@@ -474,12 +474,7 @@ public class UserController extends Controller {
 			}
 		});
 		// End of async
-		flash().put(
-				"alert",
-				new Alert("alert-success",
-						"A confirmation email has been sent to you at "
-								+ loggedInUser.email
-								+ ". Kindly verify the same.").toString());
+		flash().put("alert",new Alert("alert-success","A confirmation email has been sent to you at "+ loggedInUser.email+ ". Kindly verify the same.").toString());
 		return redirect(routes.UserController.confirmAppUserPage());
 
 	}

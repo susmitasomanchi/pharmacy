@@ -102,7 +102,6 @@
 			@if(!LoginController.getLoggedInUser().emailConfirmed || !LoginController.getLoggedInUser().mobileNumberConfirmed){
 				<li><a href="@routes.UserController.confirmAppUserPage()"><i class="fa fa-check-square-o"></i>&nbsp;&nbsp;Confirm Details</a></li>
 			}
-			
 			@if(!LoginController.getLoggedInUserRole().equals(Role.DOCTOR.toString())){			
 			<li><a href="@routes.UserController.editAppUserProfile()"><i class="fa fa-user"></i>&nbsp;&nbsp;My Profile</a></li>
 			}
