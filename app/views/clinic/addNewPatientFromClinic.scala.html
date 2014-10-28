@@ -22,6 +22,17 @@
 	<label for="Contact Number">Contact Number</label>
 	<input type="text"  class="form-control" name="contactNo" required @if(appUser != null){value="@appUser.mobileNumber"} placeholder="Enter Mobile No">
 	</div>
+	
+	 <div class="form-group">
+      <label for="inputSex" class="col-lg-2 control-label">Sex*</label>
+      <div class="col-lg-10">
+        <select id="inputSex" name="sex">
+			@for((k,v) <- Sex.options()){
+				<option value="@k">@v</option>
+			}
+        </select>
+      </div>
+    </div>
 		
 	<div class="form-group">
       <label for="inputDOB">Birth Date*<br><span style="font-size:10px;"><b>(DD-MM-YYYY)</b></span></label>
@@ -52,12 +63,23 @@
 $('.myDatepicker').each(function() {
 var nowTemp = new Date();
 var now = new Date(nowTemp.getFullYear(), nowTemp.getMonth(), nowTemp.getDate(), 0, 0, 0, 0);
-var checkin =$('#dob-datepicker').datepicker({
+/*var checkin =$('#dob-datepicker').datepicker({
+	  format: 'dd-mm-yyyy',
+	  onRender: function(date) {
+		    return date.valueOf() > now.valueOf() ? 'disabled' : '';
+	  },
+})*/
+var datePicker = $('#dob-datepicker').val();
+if($('#dob-datepicker').val() != ""){
+$('#dob-datepicker').datepicker({
 	  format: 'dd-mm-yyyy',
 	  onRender: function(date) {
 		    return date.valueOf() > now.valueOf() ? 'disabled' : '';
 	  },
 })
+}else{
+$('#dob-datepicker').datepicker('hide');
+}
 });
 
 </script>

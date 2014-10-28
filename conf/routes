@@ -371,7 +371,6 @@ GET    /diagnostic-centre/all-doctors      		controllers.DRController.displayDia
 
 #GET		/diagnostic/add-order-from-doctor/:diagnosticId/:prescriptionId									controllers.DiagnosticController.addOrderFromDoctor(diagnosticId: Long,prescriptionId: Long)
 #GET		/diagnostic/display-orders							controllers.DiagnosticController.viewDiagnosticOrders()
-
 #GET		/diagnostic/order-confirmed/:diagnosticId/:orderId							controllers.DiagnosticController.orderConfirmed(diagnosticId: Long,orderId: Long)
 #GET		/diagnostic/order-cancelled/:diagnosticId/:orderId							controllers.DiagnosticController.orderCancelled(diagnosticId: Long,orderId: Long)
 #GET		/diagnostic/remove-order/:diagnosticId/:orderId						controllers.DiagnosticController.removeDiagnosticOrder(diagnosticId: Long,orderId: Long)

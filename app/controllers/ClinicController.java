@@ -769,6 +769,9 @@ public class ClinicController extends Controller{
 		if((requestMap.get("contactNo")[0]!= null) && !(requestMap.get("contactNo")[0].trim().isEmpty())){
 			appUser.mobileNumber = Long.parseLong(requestMap.get("contactNo")[0]);
 		}
+		if((requestMap.get("sex")[0]!= null) && !(requestMap.get("sex")[0].trim().isEmpty())){
+			appUser.sex = Enum.valueOf(Sex.class,(requestMap.get("sex")[0]));
+		}
 		if(requestMap.get("dob")[0]!=null ){
 			try {
 				appUser.dob = new SimpleDateFormat("dd-MM-yyyy").parse(requestMap.get("dob")[0].trim());
