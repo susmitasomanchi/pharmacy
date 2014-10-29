@@ -144,14 +144,19 @@ public class DoctorController extends Controller {
 				if (oldNumber == null || (oldNumber.longValue() != newNumber.longValue())) {
 					doctor.appUser.mobileNumber = Long.parseLong(requestMap.get("mobileNumber")[0].trim());
 					doctor.appUser.mobileNumberConfirmed = false;
+					doctor.appUser.update();
+					//TODO: make it async
+					SMSService.sendConfirmationSMS(LoginController.getLoggedInUser());
 				}
 			}
 
-			if (requestMap.get("registrationNumber") != null
-					&& !(requestMap.get("registrationNumber")[0].trim()
-							.isEmpty())) {
-				doctor.registrationNumber = requestMap
-						.get("registrationNumber")[0].trim();
+			if (requestMap.get("registrationNumber") != null && !(requestMap.get("registrationNumber")[0].trim().isEmpty())) {
+				final String oldRegNumber = doctor.registrationNumber;
+				final String newRegNumber = requestMap.get("registrationNumber")[0].trim();
+				if(oldRegNumber.compareToIgnoreCase(newRegNumber) != 0){
+					doctor.registrationNumber = newRegNumber;
+					doctor.isRegVerified = false;
+				}
 			}
 
 			if (requestMap.get("slugUrl") != null
