@@ -117,9 +117,9 @@ public class Doctor extends BaseEntity{
 	@OneToOne
 	public PrimaryCity primaryCity;
 
-	@OneToOne
+	/*@OneToOne
 	public Locality locality;
-
+	 */
 	public boolean isRegVerified = false;
 
 

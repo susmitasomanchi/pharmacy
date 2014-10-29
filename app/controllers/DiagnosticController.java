@@ -12,6 +12,8 @@ import java.util.Map;
 import models.Address;
 import models.Alert;
 import models.FileEntity;
+import models.Locality;
+import models.PrimaryCity;
 import models.Role;
 import models.State;
 import models.diagnostic.DiagnosticCentre;
@@ -183,7 +185,10 @@ public class DiagnosticController extends Controller {
 				diagnosticCentre.address.addressLine1 = requestMap.get("addressLine1")[0];
 			}
 			if(requestMap.get("city") != null && (requestMap.get("city")[0].trim().compareToIgnoreCase("")!=0)){
-				diagnosticCentre.address.city = requestMap.get("city")[0];
+				diagnosticCentre.address.city = PrimaryCity.find.byId(Long.parseLong(requestMap.get("city")[0])).name;
+			}
+			if(requestMap.get("locality") != null && (requestMap.get("locality")[0].trim().compareToIgnoreCase("")!=0)){
+				diagnosticCentre.address.locality = Locality.find.byId(Long.parseLong(requestMap.get("locality")[0]));
 			}
 			if(requestMap.get("area") != null && (requestMap.get("area")[0].trim().compareToIgnoreCase("")!=0)){
 				diagnosticCentre.address.area = requestMap.get("area")[0];

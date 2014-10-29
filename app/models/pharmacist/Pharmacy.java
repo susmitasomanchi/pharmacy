@@ -17,7 +17,6 @@ import javax.persistence.OneToOne;
 import models.Address;
 import models.BaseEntity;
 import models.FileEntity;
-import models.Locality;
 import models.PrimaryCity;
 import models.doctor.Doctor;
 import models.patient.Patient;
@@ -79,9 +78,9 @@ public class Pharmacy extends BaseEntity {
 	@OneToOne
 	public PrimaryCity primaryCity;
 
-	@OneToOne
+	/*@OneToOne
 	public Locality locality;
-
+	 */
 
 	public static Model.Finder<Long, Pharmacy> find = new Model.Finder<Long, Pharmacy>(Long.class, Pharmacy.class);
 

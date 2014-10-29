@@ -74,6 +74,7 @@ public class DoctorClinicInfo extends BaseEntity {
 			bean.doctorId = this.doctor.id;
 		}
 
+
 		if(this.id != null) {
 			bean.id = this.id;
 		}
@@ -144,13 +145,15 @@ public class DoctorClinicInfo extends BaseEntity {
 			if(this.clinic.address.state!=null){
 				bean.state=this.clinic.address.state.toString();
 			}
-			if(this.clinic.address.city!=null){
-				bean.city=this.clinic.address.city;
-			}
 			if(this.clinic.address.pinCode!=null){
 				bean.pinCode=this.clinic.address.pinCode;
 			}
-
+			if(this.clinic.address.locality != null){
+				bean.localityId = this.clinic.address.locality.id;
+			}
+			if(this.clinic.primaryCity != null){
+				bean.cityId= this.clinic.primaryCity.id;
+			}
 			bean.lat = this.clinic.address.latitude;
 
 			bean.lng = this.clinic.address.longitude;

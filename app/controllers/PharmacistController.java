@@ -11,7 +11,9 @@ import models.Address;
 import models.Alert;
 import models.Country;
 import models.FileEntity;
+import models.Locality;
 import models.MasterProduct;
+import models.PrimaryCity;
 import models.Role;
 import models.State;
 import models.pharmacist.Batch;
@@ -191,7 +193,7 @@ public class PharmacistController extends Controller {
 				pharmacy.address.addressLine1 = requestMap.get("addressLine1")[0];
 			}
 			if(requestMap.get("city") != null && (requestMap.get("city")[0].trim().compareToIgnoreCase("")!=0)){
-				pharmacy.address.city = requestMap.get("city")[0];
+				pharmacy.address.city = PrimaryCity.find.byId(Long.parseLong(requestMap.get("city")[0])).name;
 			}
 			if(requestMap.get("area") != null && (requestMap.get("area")[0].trim().compareToIgnoreCase("")!=0)){
 				pharmacy.address.area = requestMap.get("area")[0];
@@ -204,6 +206,9 @@ public class PharmacistController extends Controller {
 			}
 			if(requestMap.get("country") != null && (requestMap.get("country")[0].trim().compareToIgnoreCase("")!=0)){
 				pharmacy.address.country = Enum.valueOf(Country.class,requestMap.get("country")[0]);
+			}
+			if(requestMap.get("locality") != null && (requestMap.get("locality")[0].trim().compareToIgnoreCase("")!=0)){
+				pharmacy.address.locality = Locality.find.byId(Long.parseLong(requestMap.get("locality")[0]));
 			}
 			if(requestMap.get("latitude") != null && (requestMap.get("latitude")[0].trim().compareToIgnoreCase("")!=0)){
 				pharmacy.address.latitude = requestMap.get("latitude")[0];

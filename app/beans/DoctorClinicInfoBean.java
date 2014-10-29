@@ -5,6 +5,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 import models.Address;
+import models.Locality;
+import models.PrimaryCity;
 import models.Role;
 import models.State;
 import models.clinic.ClinicUser;
@@ -14,7 +16,6 @@ import models.doctor.DaySchedule;
 import models.doctor.Doctor;
 import models.doctor.DoctorClinicInfo;
 import play.Logger;
-import utils.Util;
 
 @SuppressWarnings("serial")
 public class DoctorClinicInfoBean implements Serializable {
@@ -26,6 +27,8 @@ public class DoctorClinicInfoBean implements Serializable {
 	public Long clinicId;
 
 	public Long clinicUserId;
+
+	public Long localityId;
 
 	public String name;
 
@@ -39,7 +42,7 @@ public class DoctorClinicInfoBean implements Serializable {
 
 	public String area;
 
-	public String city;
+	public Long cityId;
 
 	public String state;
 
@@ -70,7 +73,7 @@ public class DoctorClinicInfoBean implements Serializable {
 	public ClinicUser clinicAdminstrator;
 
 	public DoctorClinicInfo toDoctorClinicInfo() {
-
+		Logger.info("hello entering");
 		DoctorClinicInfo doctorClinicInfo;
 		if (this.id != null) {
 			Logger.info(this.id+"idssssssssss");
@@ -104,6 +107,9 @@ public class DoctorClinicInfoBean implements Serializable {
 		}
 		if(this.doctorId != null){
 			doctorClinicInfo.doctor = Doctor.find.byId(this.doctorId);
+		}
+		if (this.cityId != null) {
+			clinic.primaryCity = PrimaryCity.find.byId(this.cityId);
 		}
 
 		//Logger.info("" + this.id);
@@ -164,9 +170,6 @@ public class DoctorClinicInfoBean implements Serializable {
 		if (this.area != null) {
 			address.area = this.area;
 		}
-		if (this.city != null) {
-			address.city = this.city;
-		}
 		if (this.state != null && !this.state.trim().isEmpty()) {
 			address.state = State.valueOf(this.state);
 		}
@@ -184,6 +187,9 @@ public class DoctorClinicInfoBean implements Serializable {
 		if(this.pinCode != null){
 			address.pinCode = this.pinCode;
 		}
+		if(this.localityId != null){
+			address.locality = Locality.find.byId(this.localityId);
+		}
 
 		doctorClinicInfo.clinic.address = address;
 		if(doctorClinicInfo.clinic.address.id == null){
@@ -198,7 +204,7 @@ public class DoctorClinicInfoBean implements Serializable {
 		else{
 			clinic.update();
 		}
-
+		Logger.info("hello exiting");
 		return doctorClinicInfo;
 	}
 }

@@ -637,7 +637,7 @@ public class DoctorController extends Controller {
 		final Form<DoctorClinicInfoBean> filledForm = clinicForm
 				.bindFromRequest();
 		if (filledForm.hasErrors()) {
-			return ok(views.html.doctor.newClinic.render(clinicForm));
+			return ok(views.html.doctor.newClinic.render(filledForm));
 		} else {
 			final DoctorClinicInfo clinicInfo = filledForm.get().toDoctorClinicInfo();
 			clinicInfo.doctor = LoginController.getLoggedInUser().getDoctor();
