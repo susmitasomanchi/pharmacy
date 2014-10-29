@@ -120,7 +120,7 @@ public class Doctor extends BaseEntity{
 	@OneToOne
 	public Locality locality;
 
-	public boolean isRegVerified = true;
+	public boolean isRegVerified = false;
 
 
 	public static Model.Finder<Long,Doctor> find = new Model.Finder<Long, Doctor>(Long.class, Doctor.class);
