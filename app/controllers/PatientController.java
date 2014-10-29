@@ -72,10 +72,10 @@ public class PatientController extends Controller {
 		// "mitesh@greensoftware.in").findList();
 
 
-		final List<Doctor> doctors = Doctor.find
-				.where().like("searchIndex","%"+search+"%").findList();
+		final List<DoctorClinicInfo> doctorClinicInfos = DoctorClinicInfo.find
+				.where().like("doctor.searchIndex","%"+search+"%").findList();
 
-		return ok(views.html.doctor.searchedDoctors.render(true, search,null,null, doctors));
+		return ok(views.html.doctor.searchedDoctors.render(true, search,null,null, doctorClinicInfos));
 
 	}
 

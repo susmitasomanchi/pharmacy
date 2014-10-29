@@ -48,3 +48,11 @@ create index ix_pharmacy_locality_1 on pharmacy (locality_id);
 Alter table address add locality_id bigint;
 alter table address add constraint fk_address_locality_1 foreign key (locality_id) references locality(id);
 create index ix_address_locality_1 on address (locality_id);
+
+
+---Adding Locality to Clinic Entity
+
+Alter table clinic add locality_id bigint;
+
+alter table address add constraint fk_clinic_locality_1 foreign key (locality_id) references locality(id);
+create index ix_clinic_locality_1 on clinic (locality_id);

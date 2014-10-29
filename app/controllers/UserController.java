@@ -366,6 +366,9 @@ public class UserController extends Controller {
 		if(requestMap.containsKey("allergy") && requestMap.get("allergy")[0]!=null && requestMap.get("allergy")[0].trim()!=""){
 			loggedInUser.allergy = requestMap.get("allergy")[0].trim();
 		}
+		else{
+			loggedInUser.allergy = null;
+		}
 		if(requestMap.get("dob")[0]!=null ){
 			try {
 				loggedInUser.dob = new SimpleDateFormat("dd-MM-yyyy").parse(requestMap.get("dob")[0].trim());

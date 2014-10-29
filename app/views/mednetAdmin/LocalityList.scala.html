@@ -21,6 +21,7 @@
 	<div class="col-md-10">
 	<table class="table table-striped">
 	<tr>
+	<th>S.NO</th>
 	<th>Locality</th>
 	<th>City</th>
 	<th>Pin Code</th>
@@ -31,6 +32,7 @@
 		<td>@{index+1}</td>
 		<td>@locality.name</td>
 		<td>@locality.primaryCity.name</td>
+		<td>@locality.pinCode</td>
 		<td>
 			<a href="@routes.MednetworkAdminController.editLocality(locality.id)" class="btn btn-primary btn-xs">Edit</a>
 			@*<a class="btn btn-danger btn-xs" href="#myModal" style="color:white" data-toggle="modal" data-target="#myModal@locality.id">Remove</a>
