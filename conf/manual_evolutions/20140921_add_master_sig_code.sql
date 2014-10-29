@@ -3,9 +3,6 @@
 --- master_sig_code entity is added to models.doctor package.
 
 
-DROP table if exists sig_code;
-DROP sequence if exists sig_code_seq;
-
 create table sig_code (
   id						bigint not null,
   doctor_id                 bigint not null,

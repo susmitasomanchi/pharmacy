@@ -8,4 +8,4 @@
 alter table app_user ADD Column is_searchable Boolean default 'true',ADD Column is_suspended Boolean default 'false';
 
 
-alter table doctor ADD is_reg_verified Boolean default 'true';
+alter table doctor ADD is_reg_verified Boolean default 'false';
