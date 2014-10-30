@@ -51,7 +51,23 @@
     			<label for="streetName">Street Name</label>
     			<input type="text" class="form-control" id="streetName" name="street" value="@clinicForm("street").value"  placeholder="Enter name of the street">
   			</div>
+  		  			
   			<div class="form-group">
+    			<label for="city">City*</label>
+    			<select data-placeholder="Select City" name="cityId" id="city" class="form-control chosen-select" value="@clinicForm("cityId").value">
+    			@for((k,v) <- PrimaryCity.getAllPrimaryCities()){
+    			@if(k.equals((clinicForm("cityId").value).toString())){
+					<option value="@k" selected>@v</option>
+    			}else{
+    			 	<option value="@k">@v</option>
+    			 	}
+					}
+				</select>
+   			</div>
+   			
+   			<div class="form-group" id="loc2">
+  			</div>
+  			<div class="form-group" id= "loc1">
     			<label for="area">Location*</label>
     			 <select data-placeholder="Select Locality" name="localityId" value="@clinicForm("localityId").value" class="form-control chosen-select">
   				 	<option></option>
@@ -64,21 +80,11 @@
 					}
 				</select>
    			</div>
+   			
   			
+  			<span style="cursor:pointer;color:#008bca" data-toggle="modal" data-target="#myFormModal">Locality Not Found?</span>
   			
-  			<div class="form-group">
-    			<label for="city">City*</label>
-    			<select data-placeholder="Select City" name="cityId" class="form-control chosen-select" value="@clinicForm("cityId").value">
-    			@for((k,v) <- PrimaryCity.getAllPrimaryCities()){
-    			@if(k.equals((clinicForm("cityId").value).toString())){
-					<option value="@k" selected>@v</option>
-    			}else{
-    			 	<option value="@k">@v</option>
-    			 	}
-					}
-					
-				</select>
-   			</div>
+   			
 			<div class="form-group">
     			<label for="pinCode">Pin code</label>
    				 <input type="text" id=pinCode class="form-control" name="pinCode" value="@clinicForm("pinCode").value" placeholder="Enter pin code">
@@ -161,7 +167,7 @@
 						$("#map_canvas").html('');
 						var geocoder = new google.maps.Geocoder();
 						var streetname=$("#streetName").val();
-						var area=$("#area").val();
+						var area = $("#locality").find("option:selected").text();
 						geocoder.geocode({
 							'address' :	area+this.value
 						}, function(results, status) {
@@ -224,5 +230,57 @@
 
 });
 </script>
+
+<div class="modal fade" id="myFormModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+    <div class="modal-header alert-info">
+        <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+        <h5 class="modal-title">Suggest Locality in @models.PrimaryCity.find.byId(Long.parseLong(session().get(utils.Constants.CITY_ID))).name</h5>
+      </div>
+       <div class="modal-body">
+       <div class="row">
+       <div class="col-md-4">
+       <div class="form-group">
+       <label for="locality">Locality* </label>
+        <input type="text" name="locality" id="locality" placeholder="Enter Locality">
+        </div>
+        <div class="form-group">
+    			<label for="city">City*</label>
+    			<select data-placeholder="Select City" name="cityId" class="form-control chosen-select" value="@clinicForm("cityId").value">
+    			@for((k,v) <- PrimaryCity.getAllPrimaryCities()){
+    			@if(k.equals((clinicForm("cityId").value).toString())){
+					<option value="@k" selected>@v</option>
+    			}else{
+    			 	<option value="@k">@v</option>
+    			 	}
+					}
+					
+				</select>
+   			</div>
+        </div>
+        </div>
+        </div>
+      <div class="modal-footer">
+        <a href="#" type="button" class="btn btn-primary btn-xs">Send</a>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+window.onload = function(){
+	$('#loc2').hide();
+}
+$('#city').on('change', function(){
+	$("#loc1").hide();
+	alert("city changed to "+$('#city').val());
+	$.get('/doctor/get-localities/'+$('#city').val(), function(data){
+		alert(data);
+		$("#loc2").html(data).show();	
+});
+});
+</script>
+
    	}
    		

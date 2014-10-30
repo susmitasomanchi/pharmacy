@@ -868,16 +868,33 @@ public class PublicController extends Controller{
 	 * @return
 	 */
 	public static List<Locality> getPrimaryCityLocations(){
-		if(session(Constants.CITY_ID) != null){
+		if((session(Constants.CITY_ID) != null)){
 			final PrimaryCity primaryCity = PrimaryCity.find.byId(Long.parseLong(session(Constants.CITY_ID)));
-			if(primaryCity == null){
-				return new ArrayList<Locality>();
-			}
-			return Locality.find.where().eq("primaryCity", primaryCity).findList();
+			return  Locality.find.where().eq("primaryCity", primaryCity).findList();
+
 		}
 		else{
 			return new ArrayList<Locality>();
 		}
+	}
+	/**
+	 * @author lakshmi
+	 * Action to get All Localities of primaryCity.
+	 * @return
+	 */
+	public static Result getPrimaryCityLocations(final String cityId){
+		List<Locality> localities = new ArrayList<Locality>();
+		if((cityId.isEmpty()) && (session(Constants.CITY_ID) != null)){
+			final PrimaryCity primaryCity = PrimaryCity.find.byId(Long.parseLong(session(Constants.CITY_ID)));
+			localities =  Locality.find.where().eq("primaryCity", primaryCity).findList();
+
+		}
+		else if(!(cityId.isEmpty())){
+			final PrimaryCity primaryCity = PrimaryCity.find.byId(Long.parseLong(cityId));
+			localities = Locality.find.where().eq("primaryCity", primaryCity).findList();
+
+		}
+		return ok(views.html.localities.render(localities));
 	}
 	/**
 	 * @author lakshmi

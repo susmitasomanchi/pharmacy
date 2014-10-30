@@ -73,6 +73,7 @@ GET   	/diagnostic/search/:searchString/:loc                  				controllers.Pu
 GET    /diagnostic/search												controllers.PublicController.searchDiagnosticPage()
 GET   	/clinic/search/:searchString                  				controllers.PublicController.searchFavoriteClinics(searchString: String)
 GET    /clinic/search												controllers.PublicController.searchClinics()
+GET		/doctor/get-localities/:cityId									controllers.PublicController.getPrimaryCityLocations(cityId : String)
 GET		/doctor/get-names-json/:loc/:spez										controllers.PublicController.getAllDoctorsInCity(loc : String,spez : String)
 GET		/pharmacy/get-names-json/:loc											controllers.PublicController.getAllPharmaciesInCity(loc : String)
 GET		/diagnostic/get-names-json/:loc											controllers.PublicController.getAllDiagnosticsInCity(loc : String)
