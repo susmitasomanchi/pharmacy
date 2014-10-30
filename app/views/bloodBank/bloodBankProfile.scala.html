@@ -337,7 +337,6 @@ Edit Contact Details
 
 
 
-
 <script>
 
 var lng, lat, marker;
@@ -398,7 +397,7 @@ $("#city").blur(function() {
 	$("#map_canvas").html('');
 	var geocoder = new google.maps.Geocoder();
 	//var streetname=$("#streetName").val();
-	var area=$("#area").val();
+	var area = $("#locality").find("option:selected").text();
 	geocoder.geocode({
 		'address' : area+this.value
 	}, function(results, status) {
@@ -460,23 +459,6 @@ $("#city").blur(function() {
     			<label for="streetName">Street Address</label>
     			<input type="text" class="form-control" name="addressLine1" @if(bloodBank.address!=null){value="@bloodBank.address.addressLine1"} id="streetName" placeholder="Enter Street Address">
   			</div>
-  			<div class="form-group">
-    			<label for="city">Area</label>
-    			<input type="text" class="form-control" name="area" @if(bloodBank.address!=null){value="@bloodBank.address.area"} id="area" placeholder="Enter Area">
-  			</div>
-  			<div class="form-group">
-    			<label for="area">Location*</label>
-    			 <select data-placeholder="Select Locality" id="locality" name="locality" class="form-control chosen-select">
-  				  	@for(locality <- PublicController.getPrimaryCityLocations()){
-  				  	@if((bloodBank.address!=null) &&(bloodBank.address.locality != null) && (bloodBank.address.locality == locality)){
-  				  	  	<option value="@locality.id" selected>@locality.name</option>
-  				  	}else{
-  				 	 	<option value="@locality.id">@locality.name</option>
-  				 	 	}
-  				 		}
-				</select>
-   			</div>
-  			
   			
   			<div class="form-group">
     			<label for="city">City*</label>
@@ -491,12 +473,32 @@ $("#city").blur(function() {
 					
 				</select>
    			</div>
+   			
+   			<div class="form-group" id="loc2">
+  			</div>
+  			<div class="form-group" id= "loc1">
+    			<label for="area">Location*</label>
+    			 <select data-placeholder="Select Locality" id="locality" name="locality" class="form-control chosen-select">
+  				  	@for(locality <- PublicController.getPrimaryCityLocations()){
+  				  	@if((bloodBank.address!=null) &&(bloodBank.address.locality != null) && (bloodBank.address.locality == locality)){
+  				  	  	<option value="@locality.id" selected>@locality.name</option>
+  				  	}else{
+  				 	 	<option value="@locality.id">@locality.name</option>
+  				 	 	}
+  				 		}
+				</select>
+   			</div>
+
+  			
+  			<span style="cursor:pointer;color:#008bca" data-toggle="modal" data-target="#myFormModal">Locality Not Found?</span>
+  			
+   			
   			<div class="form-group">
     			<label for="pincode">Pincode</label>
     			<input type="text" class="form-control" name="pincode" @if(bloodBank.address!=null){value="@bloodBank.address.pinCode"} id="pincode" placeholder="Enter Pincode">
   			</div>
   			<div class="form-group">
-    			<label for="state">State</label><br>
+    			<label for="state">State</label>
 				<select id="statesel" style="width:100%;" data-placeholder="Select State" name="state">
     				<option value=""></option>	
      				@for((k,v) <- models.State.options()){
@@ -543,4 +545,52 @@ $("#city").blur(function() {
 		$('#statesel').chosen();
 	});
 </script>
+
+<div class="modal fade" id="myFormModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+    <div class="modal-header alert-info">
+        <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+        <h5 class="modal-title">Suggest Locality in @models.PrimaryCity.find.byId(Long.parseLong(session().get(utils.Constants.CITY_ID))).name</h5>
+      </div>
+       <div class="modal-body">
+       <div class="row">
+       <div class="col-md-4">
+       <div class="form-group">
+       <label for="locality">Locality* </label>
+        <input type="text" name="locality" id="locality" placeholder="Enter Locality">
+        </div>
+         <div class="form-group">
+       <label for="city">City*</label>
+    			<select data-placeholder="Select City" name="city"  class="form-control chosen-select" required>
+    			@for((k,v) <- PrimaryCity.getAllPrimaryCities()){
+    				<option value="@k">@v</option>
+    			 	}
+		</select>
+        </div>
+        </div>
+        </div>
+        </div>
+      <div class="modal-footer">
+        <a href="#" type="button" class="btn btn-primary btn-xs">Send</a>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+<script>
+window.onload = function(){
+	$('#loc2').hide();
+}
+$('#city').on('change', function(){
+	$("#loc1").hide();
+	alert("city changed to "+$('#city').val());
+	$.get('/doctor/get-localities/'+$('#city').val(), function(data){
+		alert(data);
+		$("#loc2").html(data).show();	
+});
+});
+</script>
+
 }

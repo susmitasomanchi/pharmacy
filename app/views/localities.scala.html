@@ -1,0 +1,9 @@
+@(localityList: List[models.Locality])
+
+
+<label for="area">Location*</label>
+<select name="locality" id="locality" class="form-control chosen-select">
+@for(locality <- localityList){
+<option value="@locality.id">@locality.name</option>
+}
+</select>
