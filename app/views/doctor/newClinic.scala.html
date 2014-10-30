@@ -27,7 +27,7 @@
     	.maptext {
     position:absolute;
     top:200px;
-    height:30px;
+    height:30px;newClinic
     font-size:16px;
     font-weight:bolder;
     font-family: 'Dosis', sans-serif;
@@ -72,15 +72,29 @@
   			</div>
   			
  			 <div class="form-group">
-    			<label for="area">Area*</label>
-   				 <input type="text" class="form-control" id="area" name="area" value="@clinicForm("area").value" placeholder="Enter area" required>
-  			</div>
+    			<label for="area">Location*</label>
+    			 <select data-placeholder="Select Locality" name="localityId" value="@clinicForm("localityId").value" class="form-control chosen-select">
+  				 	<option></option>
+  				 	@for(locality <- PublicController.getPrimaryCityLocations()){
+  				 	<option value="@locality.id">@locality.name</option>
+					}
+				</select>
+   			</div>
   			
   			
   			<div class="form-group">
     			<label for="city">City*</label>
-   				 <input type="text" id="city" class="form-control" name="city" value="@clinicForm("city").value" placeholder="Enter city name" required>
- 		     </div>
+    			<select data-placeholder="Select City" name="cityId" class="form-control chosen-select" value="@clinicForm("cityId").value">
+    			@for((k,v) <- PrimaryCity.getAllPrimaryCities()){
+    			@if(k.equals((LoginController.getLoggedInUser().getDoctor().primaryCity.id).toString())){
+					<option value="@k" selected>@v</option>
+    			}else{
+    			 	<option value="@k">@v</option>
+    			 	}
+					}
+					
+				</select>
+   			</div>
 		
 			<div class="form-group">
     			<label for="pinCode">Pin code</label>

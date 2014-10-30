@@ -58,8 +58,8 @@ public class Clinic extends BaseEntity{
 	@Column(columnDefinition="TEXT")
 	public String slugUrl;
 
-	@OneToOne
-	public Locality locality;
+	/*@OneToOne
+	public Locality locality;*/
 
 	@OneToMany(cascade=CascadeType.ALL)
 	public List<ClinicUser> clinicUserList = new ArrayList<ClinicUser>();

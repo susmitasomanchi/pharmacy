@@ -43,6 +43,9 @@ public class Address extends BaseEntity {
 	@OneToOne
 	public Locality locality;
 
+	@OneToOne
+	public PrimaryCity primaryCity;
+
 	public static Finder<Long, Address> find = new Finder<Long, Address>(Long.class, Address.class);
 
 

@@ -4,13 +4,7 @@
 @main(pharmacy.name) {
 
 <script src="https://maps.googleapis.com/maps/api/js?sensor=false"></script>
-<script>
-var u = $("#au").uploader({
-    id: 'Uploader1',
-    restrictions: {fileMask: '*.jpg;*.jpeg;*.png;*.gif;*.bmp'},
-    messages: {fileNameNotAllowed: 'You can add only images.'}
-});
-</script>
+
 <script>
 	var i = 0;
 	function addfiles() {
@@ -58,7 +52,13 @@ color:black;
 .dottedU{    
     border-bottom: 1px dotted #fff;
     text-decoration: none;
-}
+}<script>
+var u = $("#au").uploader({
+    id: 'Uploader1',
+    restrictions: {fileMask: '*.jpg;*.jpeg;*.png;*.gif;*.bmp'},
+    messages: {fileNameNotAllowed: 'You can add only images.'}
+});
+</script>
 
 </style>
 
@@ -158,8 +158,7 @@ Your profile is live at
 </span>
 <span id="slugpopover" data-toggle="popover" title="Edit Your URL" data-html="true" data-placement="bottom" data-content=
 
-"
-<form onsubmit=&quot;return validateSlugUrl();&quot; action=&quot;@routes.PharmacistController.pharmacyBasicUpdate()&quot; method=&quot;POST&quot;>
+"<form onsubmit=&quot;return validateSlugUrl();&quot; action=&quot;@routes.PharmacistController.pharmacyBasicUpdate()&quot; method=&quot;POST&quot;>
 <div style=&quot;text-shadow:none;&quot;><span style=&quot;font-size:16px;&quot;>mednetwork.in/pharmacy/</span>
 <input type=&quot;hidden&quot; name=&quot;pharmacyId&quot; value=&quot;@pharmacy.id&quot;>
 <input id=&quot;slugUrl&quot; name=&quot;slugUrl&quot; style=&quot;color:#292929; font-weight:bold; height: 22px; position:relative; top:0px; padding-left:0px; font-size:16px; width:200px;&quot; type=&quot;text&quot; value=&quot;@pharmacy.slugUrl&quot;>
@@ -401,11 +400,11 @@ function initialize(mapdiv) {
 
 
 $( document ).ready(function() {
-$("#city").blur(function() {
+$("#city").onchange(function() {
 	$("#map_canvas").html('');
 	var geocoder = new google.maps.Geocoder();
 	//var streetname=$("#streetName").val();
-	var area=$("#area").val();
+	var area=$("#locality").val();
 	geocoder.geocode({
 		'address' : area+this.value
 	}, function(results, status) {
@@ -472,9 +471,33 @@ $("#city").blur(function() {
     			<input type="text" class="form-control" name="area" @if(pharmacy.address!=null){value="@pharmacy.address.area"} id="area" placeholder="Enter Area">
   			</div>
   			<div class="form-group">
-    			<label for="city">City</label>
-    			<input type="text" class="form-control" name="city" @if(pharmacy.address!=null){value="@pharmacy.address.city"} id="city" placeholder="Enter City">
-  			</div>
+    			<label for="area">Location*</label>
+    			 <select data-placeholder="Select Locality" id="locality" name="locality" class="form-control chosen-select" required>
+  				  	@for(locality <- PublicController.getPrimaryCityLocations()){
+  				  	@if((pharmacy.address!=null) &&(pharmacy.address.locality != null) && (pharmacy.address.locality == locality)){
+  				  	  	<option value="@locality.id" selected>@locality.name</option>
+  				  	}else{
+  				 	 	<option value="@locality.id">@locality.name</option>
+  				 	 	}
+  				 		}
+				</select>
+   			</div>
+  			
+  			
+  			<div class="form-group">
+    			<label for="city">City*</label>
+    			<select data-placeholder="Select City" name="city" id="city" class="form-control chosen-select" required>
+    			@for((k,v) <- PrimaryCity.getAllPrimaryCities()){
+    			@if((pharmacy.address!=null) &&(pharmacy.address.city != null) && (pharmacy.address.city.equals("@v"))){
+  				  	  	<option value="@k" selected>@v</option>
+  				  	}else{
+    			 			 
+    			 			 	<option value="@k">@v</option>
+    			 			 	}
+					}
+					
+				</select>
+   			</div>
   			<div class="form-group">
     			<label for="pincode">Pincode</label>
     			<input type="text" class="form-control" name="pincode" @if(pharmacy.address!=null){value="@pharmacy.address.pinCode"} id="pincode" placeholder="Enter Pincode">

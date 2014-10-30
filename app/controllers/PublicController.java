@@ -67,13 +67,12 @@ public class PublicController extends Controller{
 	 */
 	public static Result processSearchDoctors(final String spez,final String locality, final String key) {
 		MasterSpecialization specialization = null;
-		final Locality loc = null;
+		Locality loc = null;
 		if(session(Constants.CITY_ID) != null){
-			//final ExpressionList<DoctorClinicInfo> doctorClinicList = DoctorClinicInfo.find.where().eq("clinic.primaryCity", PrimaryCity.find.byId(Long.parseLong(session(Constants.CITY_ID))));
-			final ExpressionList<DoctorClinicInfo> doctorClinicList = DoctorClinicInfo.find.where().eq("doctor.primaryCity", PrimaryCity.find.byId(Long.parseLong(session(Constants.CITY_ID))));
+			final ExpressionList<DoctorClinicInfo> doctorClinicList = DoctorClinicInfo.find.where().eq("clinic.primaryCity", PrimaryCity.find.byId(Long.parseLong(session(Constants.CITY_ID))));
 			if(locality != null && !(locality.equalsIgnoreCase("0"))){
-				//	loc = Locality.find.byId(Long.parseLong(locality));
-				//	doctorClinicList.eq("clinic.locality", loc);
+				loc = Locality.find.byId(Long.parseLong(locality));
+				doctorClinicList.eq("clinic.address.locality", loc);
 
 			}
 			if((spez != null) && !(spez.equalsIgnoreCase("any")) && !(spez.trim().isEmpty())){
@@ -83,20 +82,11 @@ public class PublicController extends Controller{
 			if((key!= null)&& !(key.equalsIgnoreCase("any")) && !(key.trim().isEmpty())){
 				doctorClinicList.like("doctor.searchIndex","%"+key.trim().toLowerCase()+"%");
 			}
-
 			return ok(views.html.doctor.searchedDoctors.render(true,key,loc,specialization, doctorClinicList.findList()));
 		}else{
 			flash().put("alert", new Alert("alert-info","Please Select City.").toString());
 			return ok(views.html.doctor.searchedDoctors.render(false,key,loc,specialization, new ArrayList<DoctorClinicInfo>()));
 		}
-
-		/*final List<Doctor> doctors = Doctor.find.where()
-				.eq("primaryCity", city)
-				.in("specializationList", specialization)
-				.like("searchIndex","%"+cleanKey+"%").findList();*/
-
-		/*return ok(views.html.doctor.searchedDoctorspage.render(query.findList()));*/
-
 	}
 	/**
 	 * @author Lakshmi
@@ -219,7 +209,7 @@ public class PublicController extends Controller{
 			final ExpressionList<Pharmacy> query =Pharmacy.find.where().eq("primaryCity", city);
 			if((locality!= null) && !(locality.equalsIgnoreCase("0")) && !(locality.trim().isEmpty())){
 				loc = Locality.find.byId(Long.parseLong(locality));
-				query.eq("locality", loc);
+				query.eq("address.locality", loc);
 			}
 			if((searchKey!= null)&& !(searchKey.equalsIgnoreCase("any")) && !(searchKey.trim().isEmpty())){
 				query.like("searchIndex","%"+searchKey.trim().toLowerCase()+"%");
@@ -578,7 +568,7 @@ public class PublicController extends Controller{
 			final ExpressionList<DiagnosticCentre> query =DiagnosticCentre.find.where().eq("primaryCity", city);
 			if((localityId!= null) && !(localityId.equalsIgnoreCase("0")) && !(localityId.trim().isEmpty())){
 				loc = Locality.find.byId(Long.parseLong(localityId));
-				query.eq("locality", loc);
+				query.eq("address.locality", loc);
 			}
 			if((searchKey!= null)&& !(searchKey.equalsIgnoreCase("any")) && !(searchKey.trim().isEmpty())){
 				query.like("searchIndex","%"+searchKey.trim().toLowerCase()+"%");
@@ -898,17 +888,15 @@ public class PublicController extends Controller{
 	public static Result getAllDoctorsInCity(final String locality,final String spez) {
 		String[] result = null;
 		if(session(Constants.CITY_ID) != null){
-			//final ExpressionList<DoctorClinicInfo> doctorClinicList = DoctorClinicInfo.find.where().eq("clinic.primaryCity", PrimaryCity.find.byId(Long.parseLong(session(Constants.CITY_ID))));
-			final ExpressionList<DoctorClinicInfo> doctorClinicList = DoctorClinicInfo.find.where().eq("doctor.primaryCity", PrimaryCity.find.byId(Long.parseLong(session(Constants.CITY_ID))));
+			final ExpressionList<DoctorClinicInfo> doctorClinicList = DoctorClinicInfo.find.where().eq("clinic.primaryCity", PrimaryCity.find.byId(Long.parseLong(session(Constants.CITY_ID))));
 			if(locality != null && !(locality.equalsIgnoreCase("0"))){
-				//	doctorClinicList.eq("clinic.locality", Locality.find.byId(Long.parseLong(locality)));
+				doctorClinicList.eq("clinic.address.locality", Locality.find.byId(Long.parseLong(locality)));
 			}
 			if((spez != null) && !(spez.equalsIgnoreCase("any")) && !(spez.trim().isEmpty())){
 				final MasterSpecialization	specialization = MasterSpecialization.find.where().ieq("name", spez).findUnique();
 				doctorClinicList.in("doctor.specializationList", specialization);
 			}
 			final int arrayLength = Doctor.find.findRowCount()+doctorClinicList.findList().size();
-			Logger.info("size of list=="+doctorClinicList.findList().size());
 			result = new String[arrayLength];
 			int i = 0;
 			for (final DoctorClinicInfo doctorClinicInfo : doctorClinicList.findList()) {
@@ -920,7 +908,6 @@ public class PublicController extends Controller{
 		}
 
 		final JSONArray jsonArray = new JSONArray(Arrays.asList(result));
-		Logger.info("JSON: "+jsonArray.toString());
 		return ok(jsonArray.toString());
 	}
 	/**
@@ -934,7 +921,7 @@ public class PublicController extends Controller{
 		if(session(Constants.CITY_ID) != null){
 			final ExpressionList<Pharmacy> pharmacyList = Pharmacy.find.where().eq("primaryCity", PrimaryCity.find.byId(Long.parseLong(session(Constants.CITY_ID))));
 			if(locality != null && !(locality.equalsIgnoreCase("0"))){
-				pharmacyList.eq("locality", Locality.find.byId(Long.parseLong(locality)));
+				pharmacyList.eq("address.locality", Locality.find.byId(Long.parseLong(locality)));
 			}
 			final int arrayLength = Doctor.find.findRowCount()+pharmacyList.findList().size();
 			result = new String[arrayLength];
@@ -960,7 +947,7 @@ public class PublicController extends Controller{
 		if(session(Constants.CITY_ID) != null){
 			final ExpressionList<DiagnosticCentre> diagnosticList = DiagnosticCentre.find.where().eq("primaryCity", PrimaryCity.find.byId(Long.parseLong(session(Constants.CITY_ID))));
 			if(locality != null && !(locality.equalsIgnoreCase("0"))){
-				diagnosticList.eq("locality", Locality.find.byId(Long.parseLong(locality)));
+				diagnosticList.eq("address.locality", Locality.find.byId(Long.parseLong(locality)));
 
 			}
 			final int arrayLength = Doctor.find.findRowCount()+diagnosticList.findList().size();

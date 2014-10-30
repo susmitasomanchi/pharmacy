@@ -465,9 +465,32 @@ $("#city").blur(function() {
     			<input type="text" class="form-control" name="area" @if(bloodBank.address!=null){value="@bloodBank.address.area"} id="area" placeholder="Enter Area">
   			</div>
   			<div class="form-group">
-    			<label for="city">City</label>
-    			<input type="text" class="form-control" name="city" @if(bloodBank.address!=null){value="@bloodBank.address.city"} id="city" placeholder="Enter City">
-  			</div>
+    			<label for="area">Location*</label>
+    			 <select data-placeholder="Select Locality" id="locality" name="locality" class="form-control chosen-select">
+  				  	@for(locality <- PublicController.getPrimaryCityLocations()){
+  				  	@if((bloodBank.address!=null) &&(bloodBank.address.locality != null) && (bloodBank.address.locality == locality)){
+  				  	  	<option value="@locality.id" selected>@locality.name</option>
+  				  	}else{
+  				 	 	<option value="@locality.id">@locality.name</option>
+  				 	 	}
+  				 		}
+				</select>
+   			</div>
+  			
+  			
+  			<div class="form-group">
+    			<label for="city">City*</label>
+    			<select data-placeholder="Select City" name="city" id="city" class="form-control chosen-select" required>
+    			@for((k,v) <- PrimaryCity.getAllPrimaryCities()){
+    			@if((bloodBank.address!=null) &&(bloodBank.address.primaryCity != null) && (k.equals((bloodBank.address.primaryCity.id).toString()))){
+  				  	  	<option value="@k" selected>@v</option>
+  				  	}else{
+    			 			 	<option value="@k">@v</option>
+    			 			 	}
+					}
+					
+				</select>
+   			</div>
   			<div class="form-group">
     			<label for="pincode">Pincode</label>
     			<input type="text" class="form-control" name="pincode" @if(bloodBank.address!=null){value="@bloodBank.address.pinCode"} id="pincode" placeholder="Enter Pincode">

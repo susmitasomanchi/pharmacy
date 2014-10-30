@@ -466,16 +466,39 @@ $("#city").blur(function() {
     			<input type="text" class="form-control" name="area" @if(diagnosticCentre.address!=null){value="@diagnosticCentre.address.area"} id="area" placeholder="Enter Area">
   			</div>
   			<div class="form-group">
-    			<label for="city">City</label>
-    			<input type="text" class="form-control" name="city" @if(diagnosticCentre.address!=null){value="@diagnosticCentre.address.city"} id="city" placeholder="Enter City">
-  			</div>
+    			<label for="area">Location*</label>
+    			 <select data-placeholder="Select Locality" id="locality" name="locality" class="form-control chosen-select">
+  				  	@for(locality <- PublicController.getPrimaryCityLocations()){
+  				  	@if((diagnosticCentre.address!=null) &&(diagnosticCentre.address.locality != null) && (diagnosticCentre.address.locality == locality)){
+  				  	  	<option value="@locality.id" selected>@locality.name</option>
+  				  	}else{
+  				 	 	<option value="@locality.id">@locality.name</option>
+  				 	 	}
+  				 		}
+				</select>
+   			</div>
+  			
+  			
+  			<div class="form-group">
+    			<label for="city">City*</label>
+    			<select data-placeholder="Select City" name="city" id="city" class="form-control chosen-select" required>
+    			@for((k,v) <- PrimaryCity.getAllPrimaryCities()){
+    			@if((diagnosticCentre.address!=null) &&(diagnosticCentre.address.city != null) && (diagnosticCentre.address.city.equals("@v"))){
+  				  	  	<option value="@k" selected>@v</option>
+  				  	}else{
+    			 			 	<option value="@k">@v</option>
+    			 			 	}
+					}
+					
+				</select>
+   			</div>
   			<div class="form-group">
     			<label for="pincode">Pincode</label>
     			<input type="text" class="form-control" name="pincode" @if(diagnosticCentre.address!=null){value="@diagnosticCentre.address.pinCode"} id="pincode" placeholder="Enter Pincode">
   			</div>
   			<div class="form-group">
     			<label for="state">State</label><br>
-				<select id="statesel" style="width:100%;" data-placeholder="Select State" name="state">
+				<select id="statesel" style="width:100%;" data-placeholder="Select State" name="state" required>
     				<option value=""></option>	
      				@for((k,v) <- models.State.options()){
      					@if(diagnosticCentre.address!=null && diagnosticCentre.address.state != null && diagnosticCentre.address.state.equals(diagnosticCentre.address.state)){

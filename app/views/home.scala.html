@@ -511,18 +511,14 @@ $("#searchKey").keyup(function (e) {
    
 		function start(){
 				var states;
-				console.log('0 done');
 				$.get(url, function(data){
-						console.log('1 done');
 						states = JSON.parse(data);
-						console.log('2 done');
 						var states = new Bloodhound({
 								datumTokenizer: Bloodhound.tokenizers.obj.whitespace('value'),
 		  							queryTokenizer: Bloodhound.tokenizers.whitespace,
 		  							limit: 10,
 		  							local: $.map(states, function(state) { return { value: state }; })
 						});
-						console.log('4 done');
 						states.initialize();
 							$('#searchDiv .typeahead').typeahead({
   									hint: true,
