@@ -193,7 +193,7 @@ public class PharmacistController extends Controller {
 				pharmacy.address.addressLine1 = requestMap.get("addressLine1")[0];
 			}
 			if(requestMap.get("city") != null && (requestMap.get("city")[0].trim().compareToIgnoreCase("")!=0)){
-				pharmacy.address.city = PrimaryCity.find.byId(Long.parseLong(requestMap.get("city")[0])).name;
+				pharmacy.address.primaryCity = PrimaryCity.find.byId(Long.parseLong(requestMap.get("city")[0]));
 			}
 			if(requestMap.get("area") != null && (requestMap.get("area")[0].trim().compareToIgnoreCase("")!=0)){
 				pharmacy.address.area = requestMap.get("area")[0];

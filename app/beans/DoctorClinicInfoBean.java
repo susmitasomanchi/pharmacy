@@ -190,6 +190,9 @@ public class DoctorClinicInfoBean implements Serializable {
 		if(this.localityId != null){
 			address.locality = Locality.find.byId(this.localityId);
 		}
+		if (this.cityId != null) {
+			address.primaryCity = PrimaryCity.find.byId(this.cityId);
+		}
 
 		doctorClinicInfo.clinic.address = address;
 		if(doctorClinicInfo.clinic.address.id == null){

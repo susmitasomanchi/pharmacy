@@ -20,6 +20,7 @@ import models.Alert;
 import models.AppUser;
 import models.BloodGroup;
 import models.FileEntity;
+import models.Locality;
 import models.PrimaryCity;
 import models.Role;
 import models.Sex;
@@ -372,9 +373,6 @@ public class BloodBankController extends Controller{
 			if(requestMap.get("addressLine1") != null && (requestMap.get("addressLine1")[0].trim().compareToIgnoreCase("")!=0)){
 				bloodBank.address.addressLine1 = requestMap.get("addressLine1")[0];
 			}
-			if(requestMap.get("city") != null && (requestMap.get("city")[0].trim().compareToIgnoreCase("")!=0)){
-				bloodBank.address.city = requestMap.get("city")[0];
-			}
 			if(requestMap.get("area") != null && (requestMap.get("area")[0].trim().compareToIgnoreCase("")!=0)){
 				bloodBank.address.area = requestMap.get("area")[0];
 			}
@@ -383,6 +381,12 @@ public class BloodBankController extends Controller{
 			}
 			if(requestMap.get("state") != null && (requestMap.get("state")[0].trim().compareToIgnoreCase("")!=0)){
 				bloodBank.address.state = Enum.valueOf(State.class,requestMap.get("state")[0]);
+			}
+			if(requestMap.get("locality") != null && (requestMap.get("locality")[0].trim().compareToIgnoreCase("")!=0)){
+				bloodBank.address.locality = Locality.find.byId(Long.parseLong(requestMap.get("locality")[0]));
+			}
+			if(requestMap.get("city") != null && (requestMap.get("city")[0].trim().compareToIgnoreCase("")!=0)){
+				bloodBank.address.primaryCity = PrimaryCity.find.byId(Long.parseLong(requestMap.get("city")[0]));
 			}
 			if(requestMap.get("latitude") != null && (requestMap.get("latitude")[0].trim().compareToIgnoreCase("")!=0)){
 				bloodBank.address.latitude = requestMap.get("latitude")[0];

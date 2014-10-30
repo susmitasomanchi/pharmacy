@@ -185,7 +185,7 @@ public class DiagnosticController extends Controller {
 				diagnosticCentre.address.addressLine1 = requestMap.get("addressLine1")[0];
 			}
 			if(requestMap.get("city") != null && (requestMap.get("city")[0].trim().compareToIgnoreCase("")!=0)){
-				diagnosticCentre.address.city = PrimaryCity.find.byId(Long.parseLong(requestMap.get("city")[0])).name;
+				diagnosticCentre.address.primaryCity = PrimaryCity.find.byId(Long.parseLong(requestMap.get("city")[0]));
 			}
 			if(requestMap.get("locality") != null && (requestMap.get("locality")[0].trim().compareToIgnoreCase("")!=0)){
 				diagnosticCentre.address.locality = Locality.find.byId(Long.parseLong(requestMap.get("locality")[0]));
