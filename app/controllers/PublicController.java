@@ -67,12 +67,13 @@ public class PublicController extends Controller{
 	 */
 	public static Result processSearchDoctors(final String spez,final String locality, final String key) {
 		MasterSpecialization specialization = null;
-		Locality loc = null;
+		final Locality loc = null;
 		if(session(Constants.CITY_ID) != null){
-			final ExpressionList<DoctorClinicInfo> doctorClinicList = DoctorClinicInfo.find.where().eq("clinic.primaryCity", PrimaryCity.find.byId(Long.parseLong(session(Constants.CITY_ID))));
+			//final ExpressionList<DoctorClinicInfo> doctorClinicList = DoctorClinicInfo.find.where().eq("clinic.primaryCity", PrimaryCity.find.byId(Long.parseLong(session(Constants.CITY_ID))));
+			final ExpressionList<DoctorClinicInfo> doctorClinicList = DoctorClinicInfo.find.where().eq("doctor.primaryCity", PrimaryCity.find.byId(Long.parseLong(session(Constants.CITY_ID))));
 			if(locality != null && !(locality.equalsIgnoreCase("0"))){
-				loc = Locality.find.byId(Long.parseLong(locality));
-				doctorClinicList.eq("clinic.locality", loc);
+				//	loc = Locality.find.byId(Long.parseLong(locality));
+				//	doctorClinicList.eq("clinic.locality", loc);
 
 			}
 			if((spez != null) && !(spez.equalsIgnoreCase("any")) && !(spez.trim().isEmpty())){
@@ -82,6 +83,7 @@ public class PublicController extends Controller{
 			if((key!= null)&& !(key.equalsIgnoreCase("any")) && !(key.trim().isEmpty())){
 				doctorClinicList.like("doctor.searchIndex","%"+key.trim().toLowerCase()+"%");
 			}
+
 			return ok(views.html.doctor.searchedDoctors.render(true,key,loc,specialization, doctorClinicList.findList()));
 		}else{
 			flash().put("alert", new Alert("alert-info","Please Select City.").toString());
@@ -896,9 +898,10 @@ public class PublicController extends Controller{
 	public static Result getAllDoctorsInCity(final String locality,final String spez) {
 		String[] result = null;
 		if(session(Constants.CITY_ID) != null){
-			final ExpressionList<DoctorClinicInfo> doctorClinicList = DoctorClinicInfo.find.where().eq("clinic.primaryCity", PrimaryCity.find.byId(Long.parseLong(session(Constants.CITY_ID))));
+			//final ExpressionList<DoctorClinicInfo> doctorClinicList = DoctorClinicInfo.find.where().eq("clinic.primaryCity", PrimaryCity.find.byId(Long.parseLong(session(Constants.CITY_ID))));
+			final ExpressionList<DoctorClinicInfo> doctorClinicList = DoctorClinicInfo.find.where().eq("doctor.primaryCity", PrimaryCity.find.byId(Long.parseLong(session(Constants.CITY_ID))));
 			if(locality != null && !(locality.equalsIgnoreCase("0"))){
-				doctorClinicList.eq("clinic.locality", Locality.find.byId(Long.parseLong(locality)));
+				//	doctorClinicList.eq("clinic.locality", Locality.find.byId(Long.parseLong(locality)));
 			}
 			if((spez != null) && !(spez.equalsIgnoreCase("any")) && !(spez.trim().isEmpty())){
 				final MasterSpecialization	specialization = MasterSpecialization.find.where().ieq("name", spez).findUnique();
