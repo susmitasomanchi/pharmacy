@@ -579,24 +579,6 @@ public class PublicController extends Controller{
 			return ok(views.html.diagnostic.searched_diagnostic_Centres.render(false,searchKey,loc,new ArrayList<DiagnosticCentre>()));
 		}
 
-		/*final String searchStr = searchKey.toLowerCase().trim();
-		if(searchStr.length() < 4){
-			flash().put("alert", new Alert("alert-danger", "The search key should contain atleast four charecters").toString());
-			return ok(views.html.diagnostic.searched_diagnostic_Centres.render(false,searchKey,new ArrayList<DiagnosticCentre>()));
-		}
-		else{
-			Logger.info("search string=="+searchStr);
-			Logger.info
-			("City id..."+session(Constants.CITY_ID).toString());
-			final PrimaryCity city = PrimaryCity.find.byId(Long.parseLong(session(Constants.CITY_ID)));
-			final List<DiagnosticCentre> diagnosticCentreList =  DiagnosticCentre.find.where()
-					.eq("primaryCity", city)
-					.like("searchIndex","%"+searchStr+"%")
-					.findList();
-			Logger.info
-			("City id..."+diagnosticCentreList.size());
-			return ok(views.html.diagnostic.searched_diagnostic_Centres.render(true,searchKey,diagnosticCentreList));
-		}*/
 	}
 
 
@@ -791,6 +773,57 @@ public class PublicController extends Controller{
 		}
 		return redirect(routes.Application.index());
 	}
+
+
+	/**
+	 * @author lakshmi
+	 * Action to save the feedback from the user
+	 * POST/feedback
+	 */
+	public static Result saveLocalityFeedBack(final String locality,final String city){
+		final Feedback feedback = new Feedback();
+		feedback.appUser = LoginController.getLoggedInUser();
+		feedback.remarks = "Suggested "+locality +"(Locality) at "+ city +"(city)";
+		feedback.date = new Date();
+		feedback.ipAddress = request().remoteAddress();
+		feedback.save();
+		final StringBuilder message = new StringBuilder();
+		message.append("<html><body>");
+		message.append("<p>Dear "+"Admin"+",<br><br>A feedback with following detail has been saved.");
+		if(feedback.appUser !=null){
+			message.append("<br><p>****** USER*******</p>");
+			message.append("<br><p>Name:"+feedback.appUser.name+"</p>");
+			message.append("<br><p>Email:"+feedback.appUser.email+"</p>");
+			message.append("<br><p>Role:"+feedback.appUser.role+"</p>");
+
+		}
+		message.append("<br><p>IP address:"+feedback.ipAddress+"</p>");
+		message.append("<br><p>Remark:"+feedback.remarks+"</p>");
+		message.append("<br><br>Best regards,<br>MedNetwork.in</p>");
+		message.append("</body></html>");
+		// Async Execution
+		Promise.promise(new Function0<Integer>() {
+			//@Override
+			@Override
+			public Integer apply() {
+				int result = 0;
+				if(!EmailService.sendSimpleHtmlEMail("admin@mednetwork.in", "A feedback saved", message.toString())){
+					result=1;
+				}
+
+				return result;
+			}
+		});
+		// End of async
+		flash().put("alert", new Alert("alert-success", "Thank you for your suggetion.").toString());
+		if(LoginController.isLoggedIn()){
+			return redirect(routes.UserActions.dashboard());
+		}
+		return redirect(routes.Application.index());
+	}
+
+
+
 
 	/**
 	 * @author Prathyusha

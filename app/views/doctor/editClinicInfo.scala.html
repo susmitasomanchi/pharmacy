@@ -56,7 +56,7 @@
     			<label for="city">City*</label>
     			<select data-placeholder="Select City" name="cityId" id="city" class="form-control chosen-select" value="@clinicForm("cityId").value">
     			@for((k,v) <- PrimaryCity.getAllPrimaryCities()){
-    			@if(k.equals((clinicForm("cityId").value).toString())){
+    			@if((clinicForm("cityId").value != null) && k.equals((clinicForm("cityId").value).toString())){
 					<option value="@k" selected>@v</option>
     			}else{
     			 	<option value="@k">@v</option>
@@ -72,7 +72,7 @@
     			 <select data-placeholder="Select Locality" name="localityId" value="@clinicForm("localityId").value" class="form-control chosen-select">
   				 	<option></option>
   				 	@for(locality <- PublicController.getPrimaryCityLocations()){
-  				 	@if(locality == (models.Locality.find.byId(Long.parseLong(clinicForm("localityId").value)))){
+  				 	@if(clinicForm("localityId").value != null && locality == (models.Locality.find.byId(Long.parseLong(clinicForm("localityId").value)))){
 					<option value="@locality.id" selected>@locality.name</option>
     			}else{
   				 	<option value="@locality.id">@locality.name</option>
@@ -243,13 +243,13 @@
        <div class="col-md-4">
        <div class="form-group">
        <label for="locality">Locality* </label>
-        <input type="text" name="locality" id="locality" placeholder="Enter Locality">
+        <input type="text" name="locality" id="loc" placeholder="Enter Locality">
         </div>
         <div class="form-group">
     			<label for="city">City*</label>
-    			<select data-placeholder="Select City" name="cityId" class="form-control chosen-select" value="@clinicForm("cityId").value">
+    			<select data-placeholder="Select City" name="cityId" id="city1" class="form-control chosen-select" value="@clinicForm("cityId").value">
     			@for((k,v) <- PrimaryCity.getAllPrimaryCities()){
-    			@if(k.equals((clinicForm("cityId").value).toString())){
+    			@if((clinicForm("cityId").value != null) && k.equals((clinicForm("cityId").value).toString())){
 					<option value="@k" selected>@v</option>
     			}else{
     			 	<option value="@k">@v</option>
@@ -258,13 +258,11 @@
 					
 				</select>
    			</div>
+   			<button onclick="sendRequest()" class="btn btn-primary btn-xs">Send</button>
         </div>
         </div>
         </div>
-      <div class="modal-footer">
-        <a href="#" type="button" class="btn btn-primary btn-xs">Send</a>
-      </div>
-    </div>
+     </div>
   </div>
 </div>
 
@@ -274,12 +272,19 @@ window.onload = function(){
 }
 $('#city').on('change', function(){
 	$("#loc1").hide();
-	alert("city changed to "+$('#city').val());
 	$.get('/doctor/get-localities/'+$('#city').val(), function(data){
-		alert(data);
 		$("#loc2").html(data).show();	
 });
 });
+function sendRequest(){
+var loc = $('#loc').val();
+var city = $("#city1").find("option:selected").text();
+if(loc.trim() == ""){
+alert("Provide Locality.");
+return false;
+}
+window.location.href = '/secure-feedback/'+$('#loc').val()+'/'+$("#city1").find("option:selected").text();
+}
 </script>
 
    	}

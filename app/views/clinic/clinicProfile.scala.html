@@ -281,8 +281,8 @@ style="color:#006687; font-size:20px; position:relative; top:-20px; cursor:point
 @if(clinic.address != null){
 <h5>@clinic.contactPersonName<span data-toggle="modal" data-target="#myaddrModal" style="cursor:pointer; position:relative; left: 20px; font-size:20px;"><i id="spinner2" class="fa fa-cog"></i></span></h5>
 <h5>@clinic.address.addressLine1</h5>
-<h5>@clinic.address.area</h5>
-<h5>@clinic.address.city</h5>
+<h5>@clinic.address.locality.name</h5>
+<h5>@clinic.address.primaryCity.name</h5>
 @if(clinic.address.state != null){
 <h5>@clinic.address.state.capitalize()</h5>	
 }
@@ -419,6 +419,7 @@ $("#city").blur(function() {
 @if(clinic.address != null && clinic.address.latitude!= null && clinic.address.longitude != null && clinic.address.latitude.trim().compareToIgnoreCase("") != 0 && clinic.address.longitude.trim().compareToIgnoreCase("") != 0){
 <script>
 		window.onload=function(){
+		$('#loc2').hide();
 			lat = @clinic.address.latitude
 			lng = @clinic.address.longitude
 			myLatLng= new google.maps.LatLng(lat, lng),
@@ -540,6 +541,7 @@ $("#city").blur(function() {
 	$('#myaddrModal').on('shown.bs.modal', function (e) {
 		$('#statesel').chosen();
 	});
+	
 </script>
 
 
@@ -555,11 +557,11 @@ $("#city").blur(function() {
        <div class="col-md-4">
        <div class="form-group">
        <label for="locality">Locality* </label>
-        <input type="text" name="locality" id="locality" placeholder="Enter Locality">
+        <input type="text" name="locality" id="loc" placeholder="Enter Locality">
         </div>
          <div class="form-group">
        <label for="city">City*</label>
-    			<select data-placeholder="Select City" name="city" id="city" class="form-control chosen-select" required>
+    			<select data-placeholder="Select City" name="city" id="city1" class="form-control chosen-select" required>
     			@for((k,v) <- PrimaryCity.getAllPrimaryCities()){
     			@if((clinic.address!=null) &&(clinic.address.primaryCity != null) && (k.equals((clinic.address.primaryCity.id).toString()))){
   				  	  	<option value="@k" selected>@v</option>
@@ -569,24 +571,28 @@ $("#city").blur(function() {
 					}
 		</select>
         </div>
+        <button onclick="sendRequest()" class="btn btn-primary btn-xs">Send</button>
         </div>
         </div>
         </div>
-      <div class="modal-footer">
-        <a href="#" type="button" class="btn btn-primary btn-xs">Send</a>
       </div>
-    </div>
   </div>
 </div>
 <script>
-window.onload = function(){
-	$('#loc2').hide();
-}
 $('#city').on('change', function(){
 	$("#loc1").hide();
 	$.get('/doctor/get-localities/'+$('#city').val(), function(data){
 		$("#loc2").html(data).show();	
 });
 });
+function sendRequest(){
+var loc = $('#loc').val();
+var city = $("#city1").find("option:selected").text();
+if(loc.trim() == ""){
+alert("Provide Locality.");
+return false;
+}
+window.location.href = '/secure-feedback/'+$('#loc').val()+'/'+$("#city1").find("option:selected").text();
+}
 </script>
 }

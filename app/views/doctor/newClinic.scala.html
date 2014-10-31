@@ -1,3 +1,4 @@
+
 @(clinicForm : play.data.Form[beans.DoctorClinicInfoBean])
 
 @import play.i18n._
@@ -27,7 +28,7 @@
     	.maptext {
     position:absolute;
     top:200px;
-    height:30px;newClinic
+    height:30px;
     font-size:16px;
     font-weight:bolder;
     font-family: 'Dosis', sans-serif;
@@ -312,7 +313,7 @@
  
     <script>
     $( document ).ready(function() {
-    
+    $('#loc2').hide();
 					var lng, lat, marker,state;
 					var dbclk = false;
 					var map, myLatLng;
@@ -444,11 +445,11 @@ $('body').on('click', function (e) {
        <div class="col-md-4">
        <div class="form-group">
        <label for="locality">Locality* </label>
-        <input type="text" name="locality" id="locality" placeholder="Enter Locality">
+        <input type="text" name="locality" id="loc" placeholder="Enter Locality">
         </div>
          <div class="form-group">
     			<label for="city">City*</label>
-    			<select data-placeholder="Select City" name="cityId" class="form-control chosen-select" value="@clinicForm("cityId").value">
+    			<select data-placeholder="Select City" name="cityId" id="city1" class="form-control chosen-select" value="@clinicForm("cityId").value">
     			@for((k,v) <- PrimaryCity.getAllPrimaryCities()){
     			@if(k.equals((LoginController.getLoggedInUser().getDoctor().primaryCity.id).toString())){
 					<option value="@k" selected>@v</option>
@@ -459,27 +460,30 @@ $('body').on('click', function (e) {
 					
 				</select>
         </div>
+        <button onclick="sendRequest()" class="btn btn-primary btn-xs">Send</button>
         </div>
         </div>
         </div>
-      <div class="modal-footer">
-        <a href="#" type="button" class="btn btn-primary btn-xs">Send</a>
       </div>
-    </div>
   </div>
 </div>
 
 <script>
-window.onload = function(){
-	$('#loc2').hide();
-}
+
 $('#city').on('change', function(){
 	$("#loc1").hide();
-	alert("city changed to "+$('#city').val());
 	$.get('/doctor/get-localities/'+$('#city').val(), function(data){
-		alert(data);
 		$("#loc2").html(data).show();	
 });
 });
+function sendRequest(){
+var loc = $('#loc').val();
+var city = $("#city1").find("option:selected").text();
+if(loc.trim() == ""){
+alert("Provide Locality.");
+return false;
+}
+window.location.href = '/secure-feedback/'+$('#loc').val()+'/'+$("#city1").find("option:selected").text();
+}
 </script>
 }
