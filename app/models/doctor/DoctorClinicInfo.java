@@ -13,12 +13,9 @@ import javax.persistence.Id;
 import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 
-import controllers.LoginController;
 import models.BaseEntity;
 import models.Role;
-import play.Logger;
 import play.db.ebean.Model;
-import utils.Util;
 import beans.DoctorClinicInfoBean;
 
 @SuppressWarnings("serial")
@@ -131,7 +128,6 @@ public class DoctorClinicInfo extends BaseEntity {
 		if(this.slot!=null){
 			bean.slotMR=this.slotMR;
 		}
-		Logger.info(this.clinic.address+"****");
 		if(this.clinic.address != null){
 			bean.addressId = this.clinic.address.id;
 		}

@@ -41,7 +41,6 @@ import play.mvc.Controller;
 import play.mvc.Result;
 import actions.BasicAuth;
 import actions.MedNetworkAdmin;
-import beans.DiagnosticBean;
 import beans.LocalityBean;
 
 import com.avaje.ebean.Ebean;
@@ -174,12 +173,10 @@ public class MednetworkAdminController extends Controller {
 	 * POST    /secure-admin/purge-doctor-details
 	 */
 	public static Result getAppUserDetails(final String role){
-		Logger.info("test1");
 		if(request().body().asFormUrlEncoded().get("appUserId")[0] != null && !(request().body().asFormUrlEncoded().get("appUserId")[0].trim().isEmpty())){
 			if(AppUser.find.byId(Long.parseLong(request().body().asFormUrlEncoded().get("appUserId")[0])) != null){
 				final AppUser appUser = AppUser.find.byId(Long.parseLong(request().body().asFormUrlEncoded().get("appUserId")[0]));
 				if(role.equalsIgnoreCase("doctor")) {
-					Logger.info("test2");
 					return ok(views.html.mednetAdmin.purgeDoctorDetails.render(appUser,true));
 				}
 				if(role.equalsIgnoreCase("Pharmacy")) {
@@ -210,7 +207,6 @@ public class MednetworkAdminController extends Controller {
 
 		final AppUser appUser = AppUser.find.byId(id);
 		final Doctor doctor = Doctor.find.where().eq("appUser", appUser).findUnique();
-		Logger.info(""+doctor.id);
 		final List<DoctorClinicInfo> doctorClinicInfos = DoctorClinicInfo.find.where().eq("doctor", doctor).findList();
 		final List<Appointment> appointments= Appointment.find.where().eq("doctorClinicInfo.doctor", doctor).findList();;
 		final List<Prescription> prescriptions = Prescription.find.where().eq("doctor", doctor).findList();
@@ -407,7 +403,6 @@ public class MednetworkAdminController extends Controller {
 			return redirect(routes.LoginController.processLogout());
 		}
 		final MasterProduct masterProduct = new MasterProduct();
-		Logger.info("map size"+requestMap.toString());
 		if(requestMap.get("medicineName") != null && !(requestMap.get("medicineName")[0].trim().isEmpty())){
 			masterProduct.medicineName = requestMap.get("medicineName")[0];
 		}
@@ -447,7 +442,6 @@ public class MednetworkAdminController extends Controller {
 	public static Result updateMasterProduct(){
 		final Map<String, String[]> requestMap = request().body().asFormUrlEncoded();
 		final MasterProduct masterProduct = MasterProduct.find.byId(Long.parseLong(requestMap.get("masterProductId")[0]));
-		Logger.info("map size"+requestMap.toString());
 		if(requestMap.get("medicineName") != null && !(requestMap.get("medicineName")[0].trim().isEmpty())){
 			masterProduct.medicineName = requestMap.get("medicineName")[0];
 		}
@@ -509,7 +503,6 @@ public class MednetworkAdminController extends Controller {
 			return redirect(routes.LoginController.processLogout());
 		}
 		final MasterDiagnosticTest masterDiagnosticTest = new MasterDiagnosticTest();
-		Logger.info("map size"+requestMap.toString());
 		if(requestMap.get("name") != null && !(requestMap.get("name")[0].trim().isEmpty())){
 			masterDiagnosticTest.name = requestMap.get("name")[0];
 		}
@@ -537,7 +530,6 @@ public class MednetworkAdminController extends Controller {
 	public static Result updateMasterDiagnosticTest(){
 		final Map<String, String[]> requestMap = request().body().asFormUrlEncoded();
 		final MasterDiagnosticTest masterDiagnosticTest = MasterDiagnosticTest.find.byId(Long.parseLong(requestMap.get("masterDiagnosticTestId")[0]));
-		Logger.info("map size"+requestMap.toString());
 		if(requestMap.get("name") != null && !(requestMap.get("name")[0].trim().isEmpty())){
 			masterDiagnosticTest.name = requestMap.get("name")[0];
 		}
@@ -588,7 +580,6 @@ public class MednetworkAdminController extends Controller {
 			return redirect(routes.LoginController.processLogout());
 		}
 		final MasterSigCode masterSigCode = new MasterSigCode();
-		Logger.info("map size"+requestMap.toString());
 		if(requestMap.get("code") != null && !(requestMap.get("code")[0].trim().isEmpty())){
 			masterSigCode.code = requestMap.get("code")[0];
 		}
@@ -616,7 +607,6 @@ public class MednetworkAdminController extends Controller {
 	public static Result updateMasterSigCode(){
 		final Map<String, String[]> requestMap = request().body().asFormUrlEncoded();
 		final MasterSigCode masterSigCode = MasterSigCode.find.byId(Long.parseLong(requestMap.get("masterSigCodeId")[0]));
-		Logger.info("map size"+requestMap.toString());
 		if(requestMap.get("code") != null && !(requestMap.get("code")[0].trim().isEmpty())){
 			masterSigCode.code = requestMap.get("code")[0];
 		}
@@ -653,7 +643,6 @@ public class MednetworkAdminController extends Controller {
 	 */
 	public static Result saveLocality(){
 		final Form<LocalityBean> filledForm = localityForm.bindFromRequest();
-		Logger.info("   bdgyus"+filledForm.data());
 		if (filledForm.hasErrors()) {
 			return badRequest(views.html.mednetAdmin.LocalityList.render(filledForm));
 		} else {

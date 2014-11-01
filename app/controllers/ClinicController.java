@@ -345,34 +345,34 @@ public class ClinicController extends Controller{
 				address.save();
 				clinic.address = address;
 			}
-			if(requestMap.get("contactPerson") != null && (requestMap.get("contactPerson")[0].trim().compareToIgnoreCase("")!=0)){
+			if(requestMap.get("contactPerson") != null && !(requestMap.get("contactPerson")[0].trim().isEmpty())){
 				clinic.contactPersonName = requestMap.get("contactPerson")[0];
 			}
-			if(requestMap.get("addressLine1") != null && (requestMap.get("addressLine1")[0].trim().compareToIgnoreCase("")!=0)){
+			if(requestMap.get("addressLine1") != null && !(requestMap.get("addressLine1")[0].trim().isEmpty())){
 				clinic.address.addressLine1 = requestMap.get("addressLine1")[0];
 			}
-			if(requestMap.get("area") != null && (requestMap.get("area")[0].trim().compareToIgnoreCase("")!=0)){
+			if(requestMap.get("area") != null && !(requestMap.get("area")[0].trim().isEmpty())){
 				clinic.address.area = requestMap.get("area")[0];
 			}
-			if(requestMap.get("pincode") != null && (requestMap.get("pincode")[0].trim().compareToIgnoreCase("")!=0)){
+			if(requestMap.get("pincode") != null && !(requestMap.get("pincode")[0].trim().isEmpty())){
 				clinic.address.pinCode = requestMap.get("pincode")[0];
 			}
-			if(requestMap.get("state") != null && (requestMap.get("state")[0].trim().compareToIgnoreCase("")!=0)){
+			if(requestMap.get("state") != null && !(requestMap.get("state")[0].trim().isEmpty())){
 				clinic.address.state = Enum.valueOf(State.class,requestMap.get("state")[0]);
 			}
-			if(requestMap.get("locality") != null && (requestMap.get("locality")[0].trim().compareToIgnoreCase("")!=0)){
+			if(requestMap.get("locality") != null && !(requestMap.get("locality")[0].trim().isEmpty())){
 				clinic.address.locality = Locality.find.byId(Long.parseLong(requestMap.get("locality")[0]));
 			}
-			if(requestMap.get("city") != null && (requestMap.get("city")[0].trim().compareToIgnoreCase("")!=0)){
+			if(requestMap.get("city") != null && !(requestMap.get("city")[0].trim().isEmpty())){
 				clinic.address.primaryCity = PrimaryCity.find.byId(Long.parseLong(requestMap.get("city")[0]));
 			}
-			if(requestMap.get("latitude") != null && (requestMap.get("latitude")[0].trim().compareToIgnoreCase("")!=0)){
+			if(requestMap.get("latitude") != null && !(requestMap.get("latitude")[0].trim().isEmpty())){
 				clinic.address.latitude = requestMap.get("latitude")[0];
 			}
-			if(requestMap.get("longitude") != null && (requestMap.get("longitude")[0].trim().compareToIgnoreCase("")!=0)){
+			if(requestMap.get("longitude") != null && !(requestMap.get("longitude")[0].trim().isEmpty())){
 				clinic.address.longitude = requestMap.get("longitude")[0];
 			}
-			if(requestMap.get("contactNo") != null && (requestMap.get("contactNo")[0].trim().compareToIgnoreCase("")!=0)){
+			if(requestMap.get("contactNo") != null && !(requestMap.get("contactNo")[0].trim().isEmpty())){
 				clinic.contactNo = requestMap.get("contactNo")[0];
 			}
 			clinic.address.update();
@@ -412,7 +412,6 @@ public class ClinicController extends Controller{
 			final ClinicUser clinicUser = new ClinicUser();
 			String password = "";
 			if((requestMap.get("name") != null) && !(requestMap.get("name")[0].trim().isEmpty())){
-				Logger.info(requestMap.get("name")[0]+"");
 				appUser.name = requestMap.get("name")[0];
 			}
 			if((requestMap.get("email") != null) && !(requestMap.get("email")[0].trim().isEmpty())){
@@ -502,7 +501,6 @@ public class ClinicController extends Controller{
 			final List<ClinicUser> clinicUsers = ClinicUser.find.where().eq("clinic", clinicUser.clinic)
 					.eq("appUser.role", Role.CLINIC_USER)
 					.findList();
-			Logger.info("size of List = "+clinicUsers.size());
 			return ok(views.html.clinic.clinicUserList.render(clinicUsers));
 		}else{
 			flash().put("alert", new Alert("alert-info", "Sorry. Clinic Admin only can access this.").toString());
@@ -527,9 +525,7 @@ public class ClinicController extends Controller{
 		if(LoginController.getLoggedInUserRole().equals(Role.CLINIC_ADMIN.toString())){
 			final Map<String, String[]> requestMap = request().body().asFormUrlEncoded();
 			final AppUser appUser = ClinicUser.find.byId(Long.parseLong(requestMap.get("clinicUserId")[0])).appUser;
-			Logger.info(appUser.id+"appUser id");
 			if((requestMap.get("name") != null) && !(requestMap.get("name")[0].trim().isEmpty())){
-				Logger.info(requestMap.get("name")[0]+"");
 				appUser.name = requestMap.get("name")[0];
 			}
 			if((requestMap.get("email") != null) && !(requestMap.get("email")[0].trim().isEmpty())){
@@ -607,7 +603,6 @@ public class ClinicController extends Controller{
 		if(LoginController.getLoggedInUserRole().equals(Role.CLINIC_ADMIN.toString())){
 			final ClinicUser clinicUser = ClinicUser.find.byId(clinicUserId);
 			final String[] docIds = request().body().asFormUrlEncoded().get("doctors");
-			Logger.info("size of array=="+docIds.length);
 			for (final String docId : docIds) {
 				final Doctor doctor = Doctor.find.byId(Long.parseLong(docId));
 				if(!(clinicUser.doctorsList.contains(doctor))){
@@ -629,7 +624,6 @@ public class ClinicController extends Controller{
 	 */
 	public static Result removeClinicUser(final Long clinicUserId){
 		if(LoginController.getLoggedInUserRole().equals(Role.CLINIC_ADMIN.toString())){
-			Logger.info(""+clinicUserId);
 			final ClinicUser clinicUser = ClinicUser.find.byId(clinicUserId);
 			final Clinic clinic = clinicUser.clinic;
 			if(clinic.clinicUserList.contains(clinicUser)){
@@ -665,8 +659,6 @@ public class ClinicController extends Controller{
 
 		final String start = request().getQueryString("start");
 		final String end = request().getQueryString("end");
-		Logger.info("start: "+start);
-		Logger.info("end: "+end);
 		final SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
 		final List<Appointment> appointments = new ArrayList<Appointment>();
 		try{
@@ -687,8 +679,6 @@ public class ClinicController extends Controller{
 		catch(final Exception e){
 			Logger.error("somethings wrong with start/end date");
 		}
-		Logger.info("appointmentList size: "+appointments.size());
-
 		final List<HashMap<String,String>> result = new ArrayList<HashMap<String,String>>();
 		final Calendar cal = Calendar.getInstance();
 		for (final Appointment appointment : appointments) {
