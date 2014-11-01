@@ -41,14 +41,12 @@ public class UserActions extends Controller {
 			return ok(views.html.patient.fav_doctors.render(patient.patientDoctorInfoList));
 		}
 		if(appUser.role.equals(Role.CLINIC_ADMIN)){
-			Logger.info("appUserid="+appUser.id);
 			return ok(views.html.clinic.clinicProfile.render(appUser.getClinicUser().clinic));
 		}
 		if(appUser.role.equals(Role.CLINIC_USER)){
 			return ok(views.html.clinic.publicClinicProfile.render(appUser.getClinicUser().clinic));
 		}
 		if(appUser.role.equals(Role.BLOOD_BANK_ADMIN)){
-			//			Logger.info("bloodbankid="+appUser.getBloodBankAdmin().bloodBank.id);
 			return ok(views.html.bloodBank.bloodBankProfile.render(appUser.getBloodBankUser().bloodBank));
 		}
 

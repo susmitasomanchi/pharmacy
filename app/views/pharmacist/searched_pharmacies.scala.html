@@ -36,26 +36,24 @@
 
 </div>
 </div>
-<br><br>
-<style type="text/css">
-		.twitter-typeahead {
-     width: 100%;
 }
+<style type="text/css">
+	.twitter-typeahead {
+     width: 100%;
+	}
 
-.twitter-typeahead .tt-hint {
+	.twitter-typeahead .tt-hint {
     display: block !important;
-    height: 30px;
+    height: 34px;
     padding: 6px 12px;
-			</select>
     font-size: 12px;
     color: white;
     line-height: 1.428571429;
     border: 1px solid transparent;
     border-radius:4px;
-}
-.tt-query,
-.tt-hint {
-    height: 50px;
+	}
+	.tt-query,.tt-hint {
+    height: 30px;
     padding: 8px 12px;
     font-size: 24px;
     line-height: 30px;
@@ -64,14 +62,13 @@
     border: 2px solid #ccc;
     border-radius: 8px;
     outline: none;
-}
+	}
 
-.tt-query {
+	.tt-query {
     box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.075);
-}
-			</select>
+	}
 
-.tt-dropdown-menu {
+	.tt-dropdown-menu {
     width: 100%;
     margin-top: 12px;
     padding: 8px 0;
@@ -80,24 +77,27 @@
     border: 1px solid rgba(0, 0, 0, 0.2);
     border-radius: 8px;
     box-shadow: 0 5px 10px rgba(0,0,0,.2);
-}
+	}
 
-.tt-suggestion {
+	.tt-suggestion {
     padding: 3px 20px;
     font-size: 18px;
-    line-height: 24px;
-}
+    line-height: 24
+	}
 
-.tt-suggestion.tt-cursor { /* UPDATE: newer versions use .tt-suggestion.tt-cursor */
+	.tt-suggestion.tt-cursor { 
+	/* UPDATE: newer versions use .tt-suggestion.tt-cursor */
     color: #fff;
     background-color: #0097cf;
+	}
 
-}
-
-.tt-suggestion p {
+	.tt-suggestion p {
     margin: 0;
-}
-			</select>
+	}
+
+</style>
+	
+<style>
 	.badge{
 		color:#000000;
 		background-color:#cccccc;
@@ -135,7 +135,7 @@
 						<a class="btn btn-primary btn-xs pull-right" href="@routes.PublicController.addPharmacyToLoggedInUser(pharmacy.id)">Add to Fav</a>
 					</div>
 			     </div>
-				 <div class="row well" style="padding-left:15px">
+				 <div class="row well">
 					<div class="col-md-5" style="padding:0px">
 						<h5 ><b>@pharmacy.name</b></h5>
        						@if(pharmacy.address != null){  
@@ -155,7 +155,7 @@
          	 }
 		}
 	</table>
-	}
+
 
 <script>
 	$(".chzn").chosen({allow_single_deselect: true});

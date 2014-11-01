@@ -171,9 +171,11 @@ public class DiagnosticController extends Controller {
 
 		try{
 			final Map<String, String[]> requestMap = request().body().asFormUrlEncoded();
+			Logger.info("1");
 			final DiagnosticCentre diagnosticCentre = DiagnosticCentre.find.byId(Long.parseLong(requestMap.get("diagnosticId")[0]));
 			Logger.info("map size"+requestMap.toString());
 			if(diagnosticCentre.address == null){
+				Logger.info("2");
 				final Address address = new Address();
 				address.save();
 				diagnosticCentre.address = address;
@@ -209,7 +211,9 @@ public class DiagnosticController extends Controller {
 				diagnosticCentre.mobileNo = requestMap.get("contactNo")[0];
 			}
 			diagnosticCentre.address.update();
+			Logger.info("address id=="+diagnosticCentre.address.id);
 			diagnosticCentre.update();
+			Logger.info("3");
 
 		}
 		catch (final Exception e){
