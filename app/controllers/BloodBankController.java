@@ -64,16 +64,13 @@ public class BloodBankController extends Controller{
 		final Map<String, String[]> requestMap = request().body().asFormUrlEncoded();
 		final ExpressionList<Patient> patientQuery = Patient.find.where().eq("appUser.isBloodDonor", true);
 		if(((requestMap.get("primaryCity")[0])!= null) && !((requestMap.get("primaryCity")[0]).trim().equalsIgnoreCase("any"))){
-			patientQuery
-			.eq("primaryCity", PrimaryCity.find.byId(Long.parseLong(requestMap.get("primaryCity")[0].trim())));
+			patientQuery.eq("primaryCity", PrimaryCity.find.byId(Long.parseLong(requestMap.get("primaryCity")[0].trim())));
 		}
 		if(((requestMap.get("bloodGroup")[0])!= null) && !((requestMap.get("bloodGroup")[0]).trim().equalsIgnoreCase("any"))){
-			patientQuery
-			.eq("appUser.bloodGroup",requestMap.get("bloodGroup")[0].trim());
+			patientQuery.eq("appUser.bloodGroup",requestMap.get("bloodGroup")[0].trim());
 		}
 		if(((requestMap.get("sex")[0])!= null) && !((requestMap.get("sex")[0]).trim().equalsIgnoreCase("any"))){
-			patientQuery
-			.eq("appUser.sex",requestMap.get("appUser.sex")[0].trim());
+			patientQuery.eq("appUser.sex",requestMap.get("appUser.sex")[0].trim());
 		}
 		int slab = 0;
 		if((requestMap.get("age")[0])!= null && !((requestMap.get("age")[0]).trim().equalsIgnoreCase("0"))){
@@ -128,7 +125,6 @@ public class BloodBankController extends Controller{
 			}
 
 		}
-		//		Logger.info("size=="+patients.size());
 		return ok(views.html.bloodBank.bloodDonorsData.render(patientQuery.findList()));
 	}
 
@@ -215,9 +211,6 @@ public class BloodBankController extends Controller{
 		appUser.bloodDonationList.add(bloodDonation);
 		appUser.update();
 		appUser.lastBloodDonatedDate = BloodDonation.find.where().eq("app_user_id", appUser.id).orderBy().desc("dateDonated").findList().get(0).dateDonated;
-		for (final BloodDonation bloodDonations : BloodDonation.find.where().eq("app_user_id", appUser.id).orderBy().desc("dateDonated").findList()) {
-			Logger.info("my date...."+bloodDonations.dateDonated);
-		}
 		appUser.update();
 		flash().put("alert", new Alert("alert-success", "Successfully Stored Blood Donation Information of "+appUser.email).toString());
 		return redirect(routes.BloodBankController.receivedBloodDonorFrom());
@@ -285,13 +278,10 @@ public class BloodBankController extends Controller{
 	 */
 	public static Result removeBloodBankImage(final Long bloodBankId,final Long imageId){
 		final BloodBank bloodBank = BloodBank.find.byId(bloodBankId);
-		Logger.info("before list size="+bloodBank.profileImageList.size());
 		final FileEntity image = FileEntity.find.byId(imageId);
 		bloodBank.profileImageList.remove(image);
 		bloodBank.update();
-		//image.delete();
 		Logger.info("after list size="+bloodBank.profileImageList.size());
-		//		return ok(views.html.pharmacist.pharmacy_profile.render(pharmacy.inventoryList, pharmacy));
 		return redirect(routes.UserActions.dashboard());
 	}
 	/**
@@ -361,7 +351,6 @@ public class BloodBankController extends Controller{
 				Logger.warn("logged in DiagnosticRep: "+LoginController.getLoggedInUser().getBloodBankUser().bloodBank.id);
 				return redirect(routes.LoginController.processLogout());
 			}
-			Logger.info("map size"+requestMap.toString());
 			if(bloodBank.address == null){
 				final Address address = new Address();
 				address.save();
@@ -428,8 +417,6 @@ public class BloodBankController extends Controller{
 		//final BloodBank bloodBank = BloodBank.find.byId(Long.parseLong((requestMap.get("bloodBankId")[0]).trim()));
 
 		final BloodBank bloodBank = LoginController.getLoggedInUser().getBloodBankUser().bloodBank;
-
-		Logger.info("bloodbank user id=="+requestMap.toString());
 		final ExpressionList<BloodDonation> bloodDonationQuery = BloodDonation.find.where().eq("bloodBank", bloodBank);
 
 		try{

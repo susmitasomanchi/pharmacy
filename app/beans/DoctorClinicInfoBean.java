@@ -73,10 +73,8 @@ public class DoctorClinicInfoBean implements Serializable {
 	public ClinicUser clinicAdminstrator;
 
 	public DoctorClinicInfo toDoctorClinicInfo() {
-		Logger.info("hello entering");
 		DoctorClinicInfo doctorClinicInfo;
 		if (this.id != null) {
-			Logger.info(this.id+"idssssssssss");
 			doctorClinicInfo = DoctorClinicInfo.find.byId(this.id);
 		}
 		else{
@@ -85,7 +83,6 @@ public class DoctorClinicInfoBean implements Serializable {
 
 		Clinic clinic;
 		if(this.clinicId != null){
-			Logger.info("clinic idsssssssss"+this.clinicId);
 			clinic = Clinic.find.byId(this.clinicId);
 		}
 		else{
@@ -103,7 +100,6 @@ public class DoctorClinicInfoBean implements Serializable {
 		}
 		if(this.clinicUserId != null){
 			clinic.clinicAdminstrator = ClinicUser.find.byId(this.clinicUserId);
-			Logger.info(clinic.clinicAdminstrator.appUser.name);
 		}
 		if(this.doctorId != null){
 			doctorClinicInfo.doctor = Doctor.find.byId(this.doctorId);
@@ -207,7 +203,6 @@ public class DoctorClinicInfoBean implements Serializable {
 		else{
 			clinic.update();
 		}
-		Logger.info("hello exiting");
 		return doctorClinicInfo;
 	}
 }
