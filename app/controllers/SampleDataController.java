@@ -6,7 +6,6 @@ import java.security.SecureRandom;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Random;
 
@@ -32,10 +31,17 @@ import models.patient.Patient;
 import models.patient.PatientDoctorInfo;
 
 import org.apache.commons.codec.binary.Base64;
+import org.apache.http.NameValuePair;
+import org.apache.http.client.HttpClient;
+import org.apache.http.client.entity.UrlEncodedFormEntity;
+import org.apache.http.client.methods.HttpPost;
+import org.apache.http.impl.client.DefaultHttpClient;
+import org.apache.http.message.BasicNameValuePair;
 
 import play.Logger;
 import play.mvc.Controller;
 import play.mvc.Result;
+import utils.Constants;
 import utils.SMSService;
 
 public class SampleDataController extends Controller {
@@ -474,6 +480,64 @@ public class SampleDataController extends Controller {
 
 	public static Result joinUsClinic(){
 		return ok(views.html.clinic.joinus.render());
+	}
+
+
+	public static Result sendGrid(){
+
+		try{
+			final String url = "https://api.sendgrid.com/api/mail.send.json";
+
+			final HttpClient client = new DefaultHttpClient();
+			final HttpPost post = new HttpPost(url);
+
+			// add header
+			//post.setHeader("User-Agent", USER_AGENT);
+
+			final StringBuilder builder=new StringBuilder();
+			builder.append("<html><body>");
+			builder.append("<p>Dear Mr. Singh,<br><br>Thank you for signing up at MedNetwork. Please ");
+			builder.append("<a href=\"http://mednetwork.in/secure-user/confirmation/");
+			builder.append("X");
+			builder.append("/"+"Y"+"\">");
+			builder.append("<b>click here</b>");
+			builder.append("</a> to confirm your email address.<br><br>Best regards,<br>MedNetwork.in</p>");
+			builder.append("</body></html>");
+
+			final List<NameValuePair> urlParameters = new ArrayList<NameValuePair>();
+			urlParameters.add(new BasicNameValuePair("api_user", Constants.EMAIL_ID));
+			urlParameters.add(new BasicNameValuePair("api_key", Constants.EMAIL_PASSWORD));
+			urlParameters.add(new BasicNameValuePair("to", "butasingh@gmail.com"));
+			//urlParameters.add(new BasicNameValuePair("toname", ""));
+			urlParameters.add(new BasicNameValuePair("subject", "Mail From MedNetwork"));
+			//urlParameters.add(new BasicNameValuePair("text", builder.toString())); // This can be used for any plain text content of the mail
+			urlParameters.add(new BasicNameValuePair("html", builder.toString()));
+			urlParameters.add(new BasicNameValuePair("fromname", "MedNetwork"));
+			urlParameters.add(new BasicNameValuePair("from", "noreply@mednetwork.in"));
+			post.setEntity(new UrlEncodedFormEntity(urlParameters));
+			client.execute(post);
+			return ok();
+			/*
+			final HttpResponse response = client.execute(post);
+			System.out.println("\nSending 'POST' request to URL : " + url);
+			System.out.println("Post parameters : " + post.getEntity());
+			System.out.println("Response Code : " +response.getStatusLine().getStatusCode());
+
+			final BufferedReader rd = new BufferedReader(new InputStreamReader(response.getEntity().getContent()));
+
+			final StringBuffer result = new StringBuffer();
+			String line = "";
+			while ((line = rd.readLine()) != null) {
+				result.append(line);
+			}
+			System.out.println(result.toString());
+			return ok(result.toString());
+
+			 */
+		}
+		catch(final Exception e){
+			return ok("FAILED");
+		}
 	}
 
 }
