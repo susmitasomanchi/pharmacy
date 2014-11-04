@@ -5,6 +5,7 @@ import java.io.IOException;
 import java.math.BigInteger;
 import java.security.SecureRandom;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 
@@ -19,11 +20,14 @@ import models.doctor.Doctor;
 
 import org.apache.commons.mail.ByteArrayDataSource;
 import org.apache.commons.mail.DefaultAuthenticator;
-import org.apache.commons.mail.Email;
 import org.apache.commons.mail.EmailException;
-import org.apache.commons.mail.HtmlEmail;
 import org.apache.commons.mail.MultiPartEmail;
-import org.apache.commons.mail.SimpleEmail;
+import org.apache.http.NameValuePair;
+import org.apache.http.client.HttpClient;
+import org.apache.http.client.entity.UrlEncodedFormEntity;
+import org.apache.http.client.methods.HttpPost;
+import org.apache.http.impl.client.DefaultHttpClient;
+import org.apache.http.message.BasicNameValuePair;
 
 import play.Logger;
 
@@ -36,16 +40,24 @@ public class EmailService {
 	public static boolean sendSimpleEMail(final String receiverEmailId, final String subject, final String message) {
 		boolean result=true;
 		try{
-			final Email email = new SimpleEmail();
-			email.setHostName("smtp.gmail.com");
-			email.setSmtpPort(587);
-			email.setAuthenticator(new DefaultAuthenticator(Constants.EMAIL_ID, Constants.EMAIL_PASSWORD));
-			email.setSSLOnConnect(true);
-			email.setFrom(Constants.EMAIL_ID,"MedNetwork");
-			email.setSubject(subject);
-			email.setMsg(message);
-			email.addTo(receiverEmailId);
-			email.send();
+			final String url = "https://api.sendgrid.com/api/mail.send.json";
+
+			final HttpClient client = new DefaultHttpClient();
+			final HttpPost post = new HttpPost(url);
+
+			final List<NameValuePair> urlParameters = new ArrayList<NameValuePair>();
+			urlParameters.add(new BasicNameValuePair("api_user", Constants.EMAIL_ID));
+			urlParameters.add(new BasicNameValuePair("api_key", Constants.EMAIL_PASSWORD));
+			urlParameters.add(new BasicNameValuePair("to", receiverEmailId));
+			//urlParameters.add(new BasicNameValuePair("toname", ""));
+			urlParameters.add(new BasicNameValuePair("subject", "Subject"));
+			//urlParameters.add(new BasicNameValuePair("text", builder.toString())); // This can be used for any plain text content of the mail
+			urlParameters.add(new BasicNameValuePair("html", "Content Of Email"));
+			urlParameters.add(new BasicNameValuePair("fromname", "MedNetwork"));
+			urlParameters.add(new BasicNameValuePair("from", "noreply@mednetwork.in"));
+			post.setEntity(new UrlEncodedFormEntity(urlParameters));
+			client.execute(post);
+
 			System.out.println("Mail Sent Successfully!");
 		}
 		catch (final Exception e){
@@ -62,6 +74,11 @@ public class EmailService {
 	 * NO URL
 	 */
 	public static boolean sendConfirmationEmail(final AppUser appUser){
+		final String url = "https://api.sendgrid.com/api/mail.send.json";
+
+		final HttpClient client = new DefaultHttpClient();
+		final HttpPost post = new HttpPost(url);
+
 		final Random random = new SecureRandom();
 		final String randomString = new BigInteger(130,random).toString(32);
 		boolean result = true;
@@ -75,16 +92,18 @@ public class EmailService {
 			builder.append("<b>click here</b>");
 			builder.append("</a> to confirm your email address.<br><br>Best regards,<br>MedNetwork.in</p>");
 			builder.append("</body></html>");
-			final HtmlEmail email = new HtmlEmail();
-			email.setHostName("smtp.gmail.com");
-			email.setSmtpPort(587);
-			email.setAuthenticator(new DefaultAuthenticator(Constants.EMAIL_ID, Constants.EMAIL_PASSWORD));
-			email.setSSLOnConnect(true);
-			email.setFrom(Constants.EMAIL_ID,"MedNetwork");
-			email.setSubject("Confirm your account at MedNetwork");
-			email.setHtmlMsg(builder.toString());
-			email.addTo(appUser.email);
-			email.send();
+			final List<NameValuePair> urlParameters = new ArrayList<NameValuePair>();
+			urlParameters.add(new BasicNameValuePair("api_user", Constants.EMAIL_ID));
+			urlParameters.add(new BasicNameValuePair("api_key", Constants.EMAIL_PASSWORD));
+			urlParameters.add(new BasicNameValuePair("to", appUser.email));
+			//urlParameters.add(new BasicNameValuePair("toname", ""));
+			urlParameters.add(new BasicNameValuePair("subject", "Confirm your account at MedNetwork"));
+			//urlParameters.add(new BasicNameValuePair("text", builder.toString())); // This can be used for any plain text content of the mail
+			urlParameters.add(new BasicNameValuePair("html", builder.toString()));
+			urlParameters.add(new BasicNameValuePair("fromname", "MedNetwork"));
+			urlParameters.add(new BasicNameValuePair("from", "noreply@mednetwork.in"));
+			post.setEntity(new UrlEncodedFormEntity(urlParameters));
+			client.execute(post);
 			System.out.println("Mail Sent Successfully!");
 			appUser.emailConfirmationKey = randomString;
 			appUser.update();
@@ -98,7 +117,7 @@ public class EmailService {
 		return result;
 	}
 
-	@SuppressWarnings({ "deprecation", "deprecation" })
+	/*@SuppressWarnings({ "deprecation", "deprecation" })
 	public static void sendHTMLEmailWithAttachments(final String receiverEmailId, final String subject, final String htmlMessage, final List<FileEntity> files){
 
 
@@ -135,7 +154,7 @@ public class EmailService {
 
 		// send the email
 
-	}
+	}*/
 
 
 
@@ -144,6 +163,12 @@ public class EmailService {
 	 * NO URL
 	 */
 	public static void sendForgotPasswordEmail(final AppUser appUser){
+
+		final String url = "https://api.sendgrid.com/api/mail.send.json";
+
+		final HttpClient client = new DefaultHttpClient();
+		final HttpPost post = new HttpPost(url);
+
 		final Random random = new SecureRandom();
 		final String randomString = new BigInteger(130,random).toString(32);
 		boolean result = true;
@@ -158,20 +183,18 @@ public class EmailService {
 			builder.append("</a><br><br>In case you haven't raised any request for resetting your password, kindly ignore this mail. You can continue using your existing password.<br><br>Best regards,<br>MedNetwork.in</p>");
 			builder.append("</body></html>");
 
-			final HtmlEmail email = new HtmlEmail();
-			email.setHostName("smtp.gmail.com");
-			email.setSmtpPort(587);
-			email.setAuthenticator(new DefaultAuthenticator(Constants.EMAIL_ID, Constants.EMAIL_PASSWORD));
-			email.setSSLOnConnect(true);
-			email.setFrom(Constants.EMAIL_ID,"MedNetwork");
-			email.setSubject("Reset password at MedNetwork");
-			email.setHtmlMsg(builder.toString());
-			email.addTo(appUser.email);
-			email.send();
-
-
-
-
+			final List<NameValuePair> urlParameters = new ArrayList<NameValuePair>();
+			urlParameters.add(new BasicNameValuePair("api_user", Constants.EMAIL_ID));
+			urlParameters.add(new BasicNameValuePair("api_key", Constants.EMAIL_PASSWORD));
+			urlParameters.add(new BasicNameValuePair("to", appUser.email));
+			//urlParameters.add(new BasicNameValuePair("toname", ""));
+			urlParameters.add(new BasicNameValuePair("subject", "Reset Password  at MedNetwork"));
+			//urlParameters.add(new BasicNameValuePair("text", builder.toString())); // This can be used for any plain text content of the mail
+			urlParameters.add(new BasicNameValuePair("html", builder.toString()));
+			urlParameters.add(new BasicNameValuePair("fromname", "MedNetwork"));
+			urlParameters.add(new BasicNameValuePair("from", "noreply@mednetwork.in"));
+			post.setEntity(new UrlEncodedFormEntity(urlParameters));
+			client.execute(post);
 
 			System.out.println("Mail Sent Successfully!");
 			appUser.forgotPasswordConfirmationKey = randomString;
@@ -186,6 +209,12 @@ public class EmailService {
 	}
 
 	public static boolean sendVerificationConformMessage(final AppUser appUser) {
+
+		final String url = "https://api.sendgrid.com/api/mail.send.json";
+
+		final HttpClient client = new DefaultHttpClient();
+		final HttpPost post = new HttpPost(url);
+
 		boolean result = true;
 		try{
 			final StringBuilder builder=new StringBuilder();
@@ -193,16 +222,20 @@ public class EmailService {
 			builder.append("<p>Dear "+appUser.name+",<br><br>Thank you for verifying your email id.");
 			builder.append("<br><br>Best regards,<br>MedNetwork.in</p>");
 			builder.append("</body></html>");
-			final HtmlEmail email = new HtmlEmail();
-			email.setHostName("smtp.gmail.com");
-			email.setSmtpPort(587);
-			email.setAuthenticator(new DefaultAuthenticator(Constants.EMAIL_ID, Constants.EMAIL_PASSWORD));
-			email.setSSLOnConnect(true);
-			email.setFrom(Constants.EMAIL_ID,"MedNetwork");
-			email.setSubject("MedNetwork Account Verified");
-			email.setHtmlMsg(builder.toString());
-			email.addTo(appUser.email);
-			email.send();
+
+			final List<NameValuePair> urlParameters = new ArrayList<NameValuePair>();
+			urlParameters.add(new BasicNameValuePair("api_user", Constants.EMAIL_ID));
+			urlParameters.add(new BasicNameValuePair("api_key", Constants.EMAIL_PASSWORD));
+			urlParameters.add(new BasicNameValuePair("to", appUser.email));
+			//urlParameters.add(new BasicNameValuePair("toname", ""));
+			urlParameters.add(new BasicNameValuePair("subject", "MedNetwork Account Verified"));
+			//urlParameters.add(new BasicNameValuePair("text", builder.toString())); // This can be used for any plain text content of the mail
+			urlParameters.add(new BasicNameValuePair("html", builder.toString()));
+			urlParameters.add(new BasicNameValuePair("fromname", "MedNetwork"));
+			urlParameters.add(new BasicNameValuePair("from", "noreply@mednetwork.in"));
+			post.setEntity(new UrlEncodedFormEntity(urlParameters));
+			client.execute(post);
+
 			Logger.info("Mail Sent Successfully!");
 			Logger.info(builder.toString());
 		}
@@ -215,6 +248,10 @@ public class EmailService {
 	}
 
 	public static boolean sendAppointmentConformMail(final AppUser requestBy ,final AppUser requestTo,final Appointment appointment) {
+		final String url = "https://api.sendgrid.com/api/mail.send.json";
+
+		final HttpClient client = new DefaultHttpClient();
+		final HttpPost post = new HttpPost(url);
 
 		boolean result = true;
 		try{
@@ -225,19 +262,22 @@ public class EmailService {
 			builder.append("<br><br><b>Appointment Time:</b>"+ new SimpleDateFormat("hh:mm").format(appointment.appointmentTime));
 			builder.append("<br><br><b>Clinic          :</b>"+ appointment.doctorClinicInfo.clinic.name);
 			builder.append("<br><br><b>Doctor          :</b>"+ appointment.doctorClinicInfo.doctor.appUser.name);
-
 			builder.append("<br><br>Best regards,<br>MedNetwork.in</p>");
 			builder.append("</body></html>");
-			final HtmlEmail email = new HtmlEmail();
-			email.setHostName("smtp.gmail.com");
-			email.setSmtpPort(587);
-			email.setAuthenticator(new DefaultAuthenticator(Constants.EMAIL_ID, Constants.EMAIL_PASSWORD));
-			email.setSSLOnConnect(true);
-			email.setFrom(Constants.EMAIL_ID,"MedNetwork");
-			email.setSubject("An appointment has been booked at "+appointment.doctorClinicInfo.clinic.name+".");
-			email.setHtmlMsg(builder.toString());
-			email.addTo(requestBy.email);
-			email.send();
+
+			final List<NameValuePair> urlParameters = new ArrayList<NameValuePair>();
+			urlParameters.add(new BasicNameValuePair("api_user", Constants.EMAIL_ID));
+			urlParameters.add(new BasicNameValuePair("api_key", Constants.EMAIL_PASSWORD));
+			urlParameters.add(new BasicNameValuePair("to", requestBy.email));
+			//urlParameters.add(new BasicNameValuePair("toname", ""));
+			urlParameters.add(new BasicNameValuePair("subject", "An appointment has been booked at "+appointment.doctorClinicInfo.clinic.name+"."));
+			//urlParameters.add(new BasicNameValuePair("text", builder.toString())); // This can be used for any plain text content of the mail
+			urlParameters.add(new BasicNameValuePair("html", builder.toString()));
+			urlParameters.add(new BasicNameValuePair("fromname", "MedNetwork"));
+			urlParameters.add(new BasicNameValuePair("from", "noreply@mednetwork.in"));
+			post.setEntity(new UrlEncodedFormEntity(urlParameters));
+			client.execute(post);
+
 			Logger.info("Mail Sent Successfully!");
 			Logger.info(builder.toString());
 		}
@@ -257,16 +297,22 @@ public class EmailService {
 
 			builder.append("<br><br>Best regards,<br>MedNetwork.in</p>");
 			builder.append("</body></html>");
-			final HtmlEmail email = new HtmlEmail();
-			email.setHostName("smtp.gmail.com");
-			email.setSmtpPort(587);
-			email.setAuthenticator(new DefaultAuthenticator(Constants.EMAIL_ID, Constants.EMAIL_PASSWORD));
-			email.setSSLOnConnect(true);
-			email.setFrom(Constants.EMAIL_ID,"MedNetwork");
-			email.setSubject("An appointment has been booked at "+appointment.doctorClinicInfo.clinic.name+".");
-			email.setHtmlMsg(builder.toString());
-			email.addTo(requestTo.email);
-			email.send();
+
+
+
+			final List<NameValuePair> urlParameters = new ArrayList<NameValuePair>();
+			urlParameters.add(new BasicNameValuePair("api_user", Constants.EMAIL_ID));
+			urlParameters.add(new BasicNameValuePair("api_key", Constants.EMAIL_PASSWORD));
+			urlParameters.add(new BasicNameValuePair("to", requestTo.email));
+			//urlParameters.add(new BasicNameValuePair("toname", ""));
+			urlParameters.add(new BasicNameValuePair("subject", "An appointment has been booked at "+appointment.doctorClinicInfo.clinic.name+"."));
+			//urlParameters.add(new BasicNameValuePair("text", builder.toString())); // This can be used for any plain text content of the mail
+			urlParameters.add(new BasicNameValuePair("html", builder.toString()));
+			urlParameters.add(new BasicNameValuePair("fromname", "MedNetwork"));
+			urlParameters.add(new BasicNameValuePair("from", "noreply@mednetwork.in"));
+			post.setEntity(new UrlEncodedFormEntity(urlParameters));
+			client.execute(post);
+
 			Logger.info("Mail Sent Successfully!");
 			Logger.info(builder.toString());
 		}
@@ -280,6 +326,12 @@ public class EmailService {
 
 	public static boolean sendPrescriptionSaveMessage(final AppUser requestBy ,final AppUser requestTo) {
 
+		final String url = "https://api.sendgrid.com/api/mail.send.json";
+
+		final HttpClient client = new DefaultHttpClient();
+		final HttpPost post = new HttpPost(url);
+
+
 		boolean result = true;
 		try{
 			final StringBuilder builder=new StringBuilder();
@@ -288,16 +340,20 @@ public class EmailService {
 
 			builder.append("<br><br>Best regards,<br>MedNetwork.in</p>");
 			builder.append("</body></html>");
-			final HtmlEmail email = new HtmlEmail();
-			email.setHostName("smtp.gmail.com");
-			email.setSmtpPort(587);
-			email.setAuthenticator(new DefaultAuthenticator(Constants.EMAIL_ID, Constants.EMAIL_PASSWORD));
-			email.setSSLOnConnect(true);
-			email.setFrom(Constants.EMAIL_ID,"MedNetwork");
-			email.setSubject("Your Prescription has been saved at MedNetwork");
-			email.setHtmlMsg(builder.toString());
-			email.addTo(requestBy.email);
-			email.send();
+
+			final List<NameValuePair> urlParameters = new ArrayList<NameValuePair>();
+			urlParameters.add(new BasicNameValuePair("api_user", Constants.EMAIL_ID));
+			urlParameters.add(new BasicNameValuePair("api_key", Constants.EMAIL_PASSWORD));
+			urlParameters.add(new BasicNameValuePair("to", requestBy.email));
+			//urlParameters.add(new BasicNameValuePair("toname", ""));
+			urlParameters.add(new BasicNameValuePair("subject", "Your Prescription has been saved at MedNetwork."));
+			//urlParameters.add(new BasicNameValuePair("text", builder.toString())); // This can be used for any plain text content of the mail
+			urlParameters.add(new BasicNameValuePair("html", builder.toString()));
+			urlParameters.add(new BasicNameValuePair("fromname", "MedNetwork"));
+			urlParameters.add(new BasicNameValuePair("from", "noreply@mednetwork.in"));
+			post.setEntity(new UrlEncodedFormEntity(urlParameters));
+			client.execute(post);
+
 			Logger.info("Mail Sent Successfully!");
 			Logger.info(builder.toString());
 		}
@@ -313,16 +369,20 @@ public class EmailService {
 
 			builder.append("<br><br>Best regards,<br>MedNetwork.in</p>");
 			builder.append("</body></html>");
-			final HtmlEmail email = new HtmlEmail();
-			email.setHostName("smtp.gmail.com");
-			email.setSmtpPort(587);
-			email.setAuthenticator(new DefaultAuthenticator(Constants.EMAIL_ID, Constants.EMAIL_PASSWORD));
-			email.setSSLOnConnect(true);
-			email.setFrom(Constants.EMAIL_ID,"MedNetwork");
-			email.setSubject("Prescription saved at MedNetwork");
-			email.setHtmlMsg(builder.toString());
-			email.addTo(requestTo.email);
-			email.send();
+
+			final List<NameValuePair> urlParameters = new ArrayList<NameValuePair>();
+			urlParameters.add(new BasicNameValuePair("api_user", Constants.EMAIL_ID));
+			urlParameters.add(new BasicNameValuePair("api_key", Constants.EMAIL_PASSWORD));
+			urlParameters.add(new BasicNameValuePair("to", requestTo.email));
+			//urlParameters.add(new BasicNameValuePair("toname", ""));
+			urlParameters.add(new BasicNameValuePair("subject", "Mail Sent Successfully!"));
+			//urlParameters.add(new BasicNameValuePair("text", builder.toString())); // This can be used for any plain text content of the mail
+			urlParameters.add(new BasicNameValuePair("html", builder.toString()));
+			urlParameters.add(new BasicNameValuePair("fromname", "MedNetwork"));
+			urlParameters.add(new BasicNameValuePair("from", "noreply@mednetwork.in"));
+			post.setEntity(new UrlEncodedFormEntity(urlParameters));
+			client.execute(post);
+
 			Logger.info("Mail Sent Successfully!");
 			Logger.info(builder.toString());
 		}
@@ -335,18 +395,26 @@ public class EmailService {
 	}
 
 	public static boolean sendSimpleHtmlEMail(final String receiverEmailId, final String subject, final String message) {
+		final String url = "https://api.sendgrid.com/api/mail.send.json";
+
+		final HttpClient client = new DefaultHttpClient();
+		final HttpPost post = new HttpPost(url);
 		boolean result = true;
 		try{
-			final HtmlEmail email = new HtmlEmail();
-			email.setHostName("smtp.gmail.com");
-			email.setSmtpPort(587);
-			email.setAuthenticator(new DefaultAuthenticator(Constants.EMAIL_ID, Constants.EMAIL_PASSWORD));
-			email.setSSLOnConnect(true);
-			email.setFrom(Constants.EMAIL_ID,"MedNetwork");
-			email.setSubject(subject);
-			email.setHtmlMsg(message);
-			email.addTo(receiverEmailId);
-			email.send();
+			final List<NameValuePair> urlParameters = new ArrayList<NameValuePair>();
+			urlParameters.add(new BasicNameValuePair("api_user", Constants.EMAIL_ID));
+			urlParameters.add(new BasicNameValuePair("api_key", Constants.EMAIL_PASSWORD));
+			urlParameters.add(new BasicNameValuePair("to", receiverEmailId));
+			//urlParameters.add(new BasicNameValuePair("toname", ""));
+			urlParameters.add(new BasicNameValuePair("subject", "Subject"));
+			//urlParameters.add(new BasicNameValuePair("text", builder.toString())); // This can be used for any plain text content of the mail
+			urlParameters.add(new BasicNameValuePair("html", "Content Of Email"));
+			urlParameters.add(new BasicNameValuePair("fromname", "MedNetwork"));
+			urlParameters.add(new BasicNameValuePair("from", "noreply@mednetwork.in"));
+			post.setEntity(new UrlEncodedFormEntity(urlParameters));
+			client.execute(post);
+
+			System.out.println("Mail Sent Successfully!");
 			Logger.info("Mail Sent Successfully!");
 			Logger.info(message);
 		}
@@ -365,6 +433,12 @@ public class EmailService {
 	 * NO URL
 	 */
 	public static boolean sendClinicInvitationConfirmationEmail(final AppUser appUser,final Clinic clinic, final String verificationCode){
+
+		final String url = "https://api.sendgrid.com/api/mail.send.json";
+
+		final HttpClient client = new DefaultHttpClient();
+		final HttpPost post = new HttpPost(url);
+
 		boolean result = true;
 		try{
 			final StringBuilder builder=new StringBuilder();
@@ -374,16 +448,20 @@ public class EmailService {
 			builder.append("<b>click here</b>");
 			builder.append("</a> to accept the invitation and join "+clinic.name+".<br><br>Best regards,<br>MedNetwork.in</p>");
 			builder.append("</body></html>");
-			final HtmlEmail email = new HtmlEmail();
-			email.setHostName("smtp.gmail.com");
-			email.setSmtpPort(587);
-			email.setAuthenticator(new DefaultAuthenticator(Constants.EMAIL_ID, Constants.EMAIL_PASSWORD));
-			email.setSSLOnConnect(true);
-			email.setFrom(Constants.EMAIL_ID,"MedNetwork");
-			email.setSubject("Clinic Invitation");
-			email.setHtmlMsg(builder.toString());
-			email.addTo(appUser.email);
-			email.send();
+
+			final List<NameValuePair> urlParameters = new ArrayList<NameValuePair>();
+			urlParameters.add(new BasicNameValuePair("api_user", Constants.EMAIL_ID));
+			urlParameters.add(new BasicNameValuePair("api_key", Constants.EMAIL_PASSWORD));
+			urlParameters.add(new BasicNameValuePair("to", appUser.email));
+			//urlParameters.add(new BasicNameValuePair("toname", ""));
+			urlParameters.add(new BasicNameValuePair("subject", "Clinic Invitation"));
+			//urlParameters.add(new BasicNameValuePair("text", builder.toString())); // This can be used for any plain text content of the mail
+			urlParameters.add(new BasicNameValuePair("html", builder.toString()));
+			urlParameters.add(new BasicNameValuePair("fromname", "MedNetwork"));
+			urlParameters.add(new BasicNameValuePair("from", "noreply@mednetwork.in"));
+			post.setEntity(new UrlEncodedFormEntity(urlParameters));
+			client.execute(post);
+
 			System.out.println("Mail Sent Successfully!");
 			Logger.info(builder.toString());
 		}
@@ -399,6 +477,12 @@ public class EmailService {
 	 * Action to send successfully added  to the Clinic message to the Doctor
 	 */
 	public static boolean sendClinicInvitationSuccessEmail(final Doctor doctor,final Clinic clinic){
+
+		final String url = "https://api.sendgrid.com/api/mail.send.json";
+
+		final HttpClient client = new DefaultHttpClient();
+		final HttpPost post = new HttpPost(url);
+
 		boolean result = true;
 		try{
 			final StringBuilder builder=new StringBuilder();
@@ -406,16 +490,20 @@ public class EmailService {
 			builder.append("<p> Dr. "+doctor.appUser.name+",<br><br> You have been added to the Clinic "+clinic.name);
 			builder.append("<br><br>Best regards,<br>MedNetwork.in</p>");
 			builder.append("</body></html>");
-			final HtmlEmail email = new HtmlEmail();
-			email.setHostName("smtp.gmail.com");
-			email.setSmtpPort(587);
-			email.setAuthenticator(new DefaultAuthenticator(Constants.EMAIL_ID, Constants.EMAIL_PASSWORD));
-			email.setSSLOnConnect(true);
-			email.setFrom(Constants.EMAIL_ID,"MedNetwork");
-			email.setSubject("Clinic Invitation");
-			email.setHtmlMsg(builder.toString());
-			email.addTo(doctor.appUser.email);
-			email.send();
+
+			final List<NameValuePair> urlParameters = new ArrayList<NameValuePair>();
+			urlParameters.add(new BasicNameValuePair("api_user", Constants.EMAIL_ID));
+			urlParameters.add(new BasicNameValuePair("api_key", Constants.EMAIL_PASSWORD));
+			urlParameters.add(new BasicNameValuePair("to", doctor.appUser.email));
+			//urlParameters.add(new BasicNameValuePair("toname", ""));
+			urlParameters.add(new BasicNameValuePair("subject", "Clinic Invitation"));
+			//urlParameters.add(new BasicNameValuePair("text", builder.toString())); // This can be used for any plain text content of the mail
+			urlParameters.add(new BasicNameValuePair("html", builder.toString()));
+			urlParameters.add(new BasicNameValuePair("fromname", "MedNetwork"));
+			urlParameters.add(new BasicNameValuePair("from", "noreply@mednetwork.in"));
+			post.setEntity(new UrlEncodedFormEntity(urlParameters));
+			client.execute(post);
+
 			System.out.println("Mail Sent Successfully!");
 			Logger.info(builder.toString());
 		}
@@ -433,6 +521,12 @@ public class EmailService {
 	 * NO URL
 	 */
 	public static boolean sendClinicUserConfirmationMail(final ClinicUser clinicUser,final ClinicUser clinicAdmin){
+
+		final String url = "https://api.sendgrid.com/api/mail.send.json";
+
+		final HttpClient client = new DefaultHttpClient();
+		final HttpPost post = new HttpPost(url);
+
 		boolean result = true;
 		try{
 			final StringBuilder builder=new StringBuilder();
@@ -440,16 +534,20 @@ public class EmailService {
 			builder.append("<p> Dear "+clinicUser.appUser.name+",<br><br> You have been added as the Clinic User in "+clinicAdmin.clinic.name+"by "+clinicAdmin.appUser.name+" , <br>");
 			builder.append(" Your Email Id <b>"+clinicUser.appUser.email+"</b><br> Password <b>"+clinicUser.appUser.password+"</b><br><br>Best regards,<br>MedNetwork.in</p>");
 			builder.append("</body></html>");
-			final HtmlEmail email = new HtmlEmail();
-			email.setHostName("smtp.gmail.com");
-			email.setSmtpPort(587);
-			email.setAuthenticator(new DefaultAuthenticator(Constants.EMAIL_ID, Constants.EMAIL_PASSWORD));
-			email.setSSLOnConnect(true);
-			email.setFrom(Constants.EMAIL_ID,"MedNetwork");
-			email.setSubject("Clinic User Confirmation");
-			email.setHtmlMsg(builder.toString());
-			email.addTo(clinicUser.appUser.email);
-			email.send();
+
+			final List<NameValuePair> urlParameters = new ArrayList<NameValuePair>();
+			urlParameters.add(new BasicNameValuePair("api_user", Constants.EMAIL_ID));
+			urlParameters.add(new BasicNameValuePair("api_key", Constants.EMAIL_PASSWORD));
+			urlParameters.add(new BasicNameValuePair("to", clinicUser.appUser.email));
+			//urlParameters.add(new BasicNameValuePair("toname", ""));
+			urlParameters.add(new BasicNameValuePair("subject", "Clinic User Confirmation"));
+			//urlParameters.add(new BasicNameValuePair("text", builder.toString())); // This can be used for any plain text content of the mail
+			urlParameters.add(new BasicNameValuePair("html", builder.toString()));
+			urlParameters.add(new BasicNameValuePair("fromname", "MedNetwork"));
+			urlParameters.add(new BasicNameValuePair("from", "noreply@mednetwork.in"));
+			post.setEntity(new UrlEncodedFormEntity(urlParameters));
+			client.execute(post);
+
 			System.out.println("Mail Sent Successfully!");
 			Logger.info(builder.toString());
 		}

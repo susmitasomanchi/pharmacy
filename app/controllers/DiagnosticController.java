@@ -1316,7 +1316,7 @@ public class DiagnosticController extends Controller {
 		fileEntities.add(en);*/
 
 
-		EmailService.sendHTMLEmailWithAttachments("mitesh@greensoftware.in", "test attachment", "this is your attachment", fileEntities);
+		//	EmailService.sendHTMLEmailWithAttachments("mitesh@greensoftware.in", "test attachment", "this is your attachment", fileEntities);
 		return ok("send message");
 	}
 
