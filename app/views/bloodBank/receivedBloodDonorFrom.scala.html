@@ -38,7 +38,6 @@ var code;
 	var patId;
 	var email;
 function validateAndSubmit(){
-alert("1");
 $('#find').hide();
 	email = $('#email').val().trim();
 	var confirmEmailId = $('#confirmEmail').val().trim();
@@ -52,12 +51,11 @@ $('#find').hide();
     	    return false;
     	}
     	$.get('/secure-blood-bank/find-blood-donor/'+email, function(data) {
-    	alert("2");
     		if(data == 0){
     			alert(email+" already existed in db");
     			return false;
     		}else if(data == 1){
-    		$('#verify-code').append('<br><div class="col-md-2"><input type="checkbox" id="check" />Is Patient Agreed?</div><div class="col-md-5"><span style="cursor:pointer;color:#008bca" onclick="createNewPatient();">Click Here To Create An Account For Patient</span></div>');
+    		$('#verify-code').append('<br><div class="col-md-5"><span style="cursor:pointer;color:#008bca" onclick="createNewPatient();">Click Here To Create An Account For Patient</span></div>');
     		}else{
     		code = data[0];
     		patId = data[1];
@@ -69,9 +67,7 @@ $('#find').hide();
 
 
 		 function verifyCode(data){
-		 alert(data);
     	    	var code = $('#code').val().trim();
-    	    	alert(code);
     	    	if(code == data){
     	    		window.location.href = '/secure-blood-bank/get-blood-donor-info/'+patId;
     	    	}else{
@@ -81,14 +77,7 @@ $('#find').hide();
     	    }
     	    
     	    function createNewPatient(){
-		alert("hello");
-		alert(email);
-		 if($('#check').is(':checked')){
-			window.location.href='/secure-blood-bank/new-patient-form/'+email;
-			}else{
-			alert("patient Confirmation Is Compulsory To Create An Account");
-			return false; 
-			}
+					window.location.href='/secure-blood-bank/new-patient-form/'+email;
 			}
 
 

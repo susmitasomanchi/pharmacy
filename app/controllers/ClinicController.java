@@ -415,7 +415,13 @@ public class ClinicController extends Controller{
 				appUser.name = requestMap.get("name")[0];
 			}
 			if((requestMap.get("email") != null) && !(requestMap.get("email")[0].trim().isEmpty())){
-				appUser.email = requestMap.get("email")[0].toLowerCase().trim();
+				final int appUsers = AppUser.find.where().eq("email", requestMap.get("email")[0].trim()).findRowCount();
+				if(appUsers == 0){
+					appUser.email = requestMap.get("email")[0].trim().toLowerCase();
+				}else{
+					flash().put("alert", new Alert("alert-info", requestMap.get("email")[0].trim()+" is already existed in the system. Try with another Email Id.").toString());
+					return ok(views.html.clinic.addClinicUser.render());
+				}
 			}
 			if((requestMap.get("password") != null) && !(requestMap.get("password")[0].trim().isEmpty())){
 				password = requestMap.get("password")[0];
@@ -759,7 +765,14 @@ public class ClinicController extends Controller{
 			appUser.name = requestMap.get("name")[0];
 		}
 		if((requestMap.get("email")[0]!= null) && !(requestMap.get("email")[0].trim().isEmpty())){
-			appUser.email = requestMap.get("email")[0].trim().toLowerCase();
+			final int appUsers = AppUser.find.where().eq("email", requestMap.get("email")[0].trim()).findRowCount();
+			if(appUsers == 0){
+				appUser.email = requestMap.get("email")[0].trim().toLowerCase();
+			}else{
+				flash().put("alert", new Alert("alert-info", requestMap.get("email")[0].trim()+" is already existed in the system. Try with another Email Id.").toString());
+				return ok(views.html.clinic.addNewPatientFromClinic.render(null,DoctorClinicInfo.find.byId(docClinicId),requestMap.get("email")[0].trim()));
+			}
+
 		}
 		if((requestMap.get("contactNo")[0]!= null) && !(requestMap.get("contactNo")[0].trim().isEmpty())){
 			appUser.mobileNumber = Long.parseLong(requestMap.get("contactNo")[0]);

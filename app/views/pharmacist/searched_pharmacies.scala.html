@@ -20,7 +20,7 @@
 <div id="searchKey" class="col-md-3" style="width:50%">
 	<input id="searchInput" class="typeahead" style="width:100%;"
 	@if(session().get(utils.Constants.CITY_ID) != null){
-		placeholder="Diagnostic Centre's Name in @models.PrimaryCity.find.byId(Long.parseLong(session().get(utils.Constants.CITY_ID))).name"
+		placeholder="Pharmacy's Name in @models.PrimaryCity.find.byId(Long.parseLong(session().get(utils.Constants.CITY_ID))).name"
 	}else{
 		placeholder="Diagnostic Centre's Name"
 	}
@@ -36,7 +36,7 @@
 
 </div>
 </div>
-}
+
 <style type="text/css">
 	.twitter-typeahead {
      width: 100%;
@@ -139,10 +139,16 @@
 					<div class="col-md-5" style="padding:0px">
 						<h5 ><b>@pharmacy.name</b></h5>
        						@if(pharmacy.address != null){  
-        						<h5>@pharmacy.address.addressLine1<br>     
-        						@pharmacy.address.area<br>
-        						@pharmacy.address.city<br>
+        						<h5>@pharmacy.address.addressLine1<br>    
+        						@if(pharmacy.address.locality != null){ 
+        						@pharmacy.address.locality.name<br>
+        						}
+        						@if(pharmacy.address.primaryCity != null){
+        						@pharmacy.address.primaryCity.name<br>
+        						}
+        						@if(pharmacy.address.state != null){
         						@pharmacy.address.state.capitalize()</h5>
+        						}
         					}
         				<h5><i class="fa fa-phone-square"></i> @pharmacy.contactNumber</h5>
 					</div>
@@ -223,5 +229,5 @@
 
 	</script>
 
-
+}
 

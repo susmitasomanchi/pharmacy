@@ -190,7 +190,9 @@ public class DoctorController extends Controller {
 	 */
 	public static Result imagesUpdate() {
 		final MultipartFormData formData = request().body().asMultipartFormData();
+		Logger.info("formData  "+formData.asFormUrlEncoded());
 		final Doctor doctor = Doctor.find.byId(Long.parseLong(formData.asFormUrlEncoded().get("doctorId")[0]));
+		Logger.info("doctor..."+doctor.appUser.name);
 		// Server side validation
 		if (doctor.id.longValue() != LoginController.getLoggedInUser()
 				.getDoctor().id.longValue()) {
@@ -209,6 +211,7 @@ public class DoctorController extends Controller {
 				final File backgroundImageFile = formData.getFile("backgroundimage").getFile();
 				doctor.backgroundImage = Files.toByteArray(backgroundImageFile);
 			}
+			flash().put("alert",new Alert("alert-success", "uplaoded.").toString());
 			doctor.update();
 		} catch (final Exception e) {
 			Logger.error("ERROR WHILE UPDATING IMAGES OF DOCTOR");

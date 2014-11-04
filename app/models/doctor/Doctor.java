@@ -243,7 +243,7 @@ public class Doctor extends BaseEntity{
 			if(clinicInfo.clinic != null){
 				stringBuilder.append(clinicInfo.clinic.name.toLowerCase());
 			}
-			if(clinicInfo.clinic.address != null){
+			if(clinicInfo.clinic.address != null && clinicInfo.clinic.address.area != null){
 				stringBuilder.append(clinicInfo.clinic.address.area.toLowerCase());
 			}
 		}
@@ -270,7 +270,7 @@ public class Doctor extends BaseEntity{
 		for (final DoctorClinicInfo clinicInfo : this.doctorClinicInfoList) {
 			if(clinicInfo.clinic != null && clinicInfo.active){
 				stringBuilder.append(clinicInfo.clinic.name.toLowerCase());
-				if(clinicInfo.clinic.address != null){
+				if(clinicInfo.clinic.address != null && clinicInfo.clinic.address.area != null){
 					stringBuilder.append(clinicInfo.clinic.address.area.toLowerCase());
 				}
 			}

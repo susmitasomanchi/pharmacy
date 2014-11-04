@@ -2,7 +2,6 @@
  * 
  */
 window.onload=function(){
-	alert("inside application.js");
 	$(".chzn").chosen({allow_single_deselect: true});
 	
 	$(".chzn-no-deselect").chosen();
