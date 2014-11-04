@@ -157,6 +157,7 @@ public class EmailService {
 			builder.append("<b>click here.</b>");
 			builder.append("</a><br><br>In case you haven't raised any request for resetting your password, kindly ignore this mail. You can continue using your existing password.<br><br>Best regards,<br>MedNetwork.in</p>");
 			builder.append("</body></html>");
+
 			final HtmlEmail email = new HtmlEmail();
 			email.setHostName("smtp.gmail.com");
 			email.setSmtpPort(587);
@@ -167,6 +168,11 @@ public class EmailService {
 			email.setHtmlMsg(builder.toString());
 			email.addTo(appUser.email);
 			email.send();
+
+
+
+
+
 			System.out.println("Mail Sent Successfully!");
 			appUser.forgotPasswordConfirmationKey = randomString;
 			appUser.update();

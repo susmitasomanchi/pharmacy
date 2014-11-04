@@ -551,6 +551,7 @@ GET		/cron/start						controllers.CronController.startCron()
 #test
 GET		/secure-doctor/weekly-appointments				controllers.DoctorController.viewWeeklyAppointments()
 GET		/secure-doctor/calendar-appointments-json		controllers.DoctorController.getCalendarEventsJson()
+GET		/sendgrid										controllers.SampleDataController.sendGrid()
 
 ########################## MedNetwork Android App ###############################################
 
