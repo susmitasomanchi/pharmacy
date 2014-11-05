@@ -151,7 +151,7 @@
 	</select>
 </div>
 <div id="locDiv" class="col-md-2" style="width:18%">
-	<select class="form-control chosen-select" data-placeholder="Locality" name="location" id="location" style="width:100%;box-shadow: 1px 1px 1px 1px #aaaaaa; height:120%;">
+	<select class="form-control chzn" data-placeholder="Locality" name="location" id="location" style="width:100%;box-shadow: 1px 1px 1px 1px #aaaaaa; height:120%;">
 		<option></option>
 		@for(locality <- PublicController.getPrimaryCityLocations()){
 			<option value="@locality.id">@locality.name</option>
@@ -159,7 +159,7 @@
 	</select>
 </div>
 <div id="spezDiv" class="col-md-2" style="width:18%">
-	<select class="form-control chosenn-select"  data-placeholder="Specialization" name="spez" id="spez" style="width:100%;box-shadow: 1px 1px 1px 1px #aaaaaa; height:120%;">
+	<select class="form-control chzn"  data-placeholder="Specialization" name="spez" id="spez" style="width:100%;box-shadow: 1px 1px 1px 1px #aaaaaa; height:120%;">
 		<option></option>
 		@for(spez <- models.doctor.MasterSpecialization.getAll()){
 			<option value="@spez.name">@spez.name</option>
@@ -187,6 +187,7 @@
 
 
 <script>
+$(".chzn").chosen({allow_single_deselect: true});
    var setValue = $('#role').val();
 $('#role').on('change', function(){
 	var selectedText = $(this).find("option:selected").text();

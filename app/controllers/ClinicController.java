@@ -724,7 +724,6 @@ public class ClinicController extends Controller{
 	 */
 	@SuppressWarnings("unchecked")
 	public static Result sendVerificationToAppUser(final String emailId,final Long docClinicInfoId){
-		final DoctorClinicInfo doctorClinicInfo = DoctorClinicInfo.find.byId(docClinicInfoId);
 		final AppUser appUser = AppUser.find.where().eq("email", emailId.toLowerCase().trim()).findUnique();
 		if((appUser == null)){
 			return ok("1");

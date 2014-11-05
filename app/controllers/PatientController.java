@@ -3,11 +3,12 @@ package controllers;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import models.Alert;
 import models.AppUser;
-import models.Role;
 import models.bloodBank.BloodDonation;
 import models.diagnostic.DiagnosticCentre;
 import models.diagnostic.DiagnosticCentrePrescriptionInfo;
@@ -72,8 +73,12 @@ public class PatientController extends Controller {
 		// "mitesh@greensoftware.in").findList();
 
 
-		final List<DoctorClinicInfo> doctorClinicInfos = DoctorClinicInfo.find
+		final List<DoctorClinicInfo> doctorClinicInfo = DoctorClinicInfo.find
 				.where().like("doctor.searchIndex","%"+search+"%").findList();
+		final Map<Doctor,Clinic> doctorClinicInfos = new HashMap<Doctor,Clinic>();
+		for (final DoctorClinicInfo doctorCliInfo : doctorClinicInfo) {
+			doctorClinicInfos.put(doctorCliInfo.doctor, doctorCliInfo.clinic);
+		}
 
 		return ok(views.html.doctor.searchedDoctors.render(true, search,null,null, doctorClinicInfos));
 

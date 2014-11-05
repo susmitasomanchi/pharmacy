@@ -1,26 +1,21 @@
 package controllers;
 
 import java.text.ParseException;
-
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
-
-import org.json.JSONArray;
-
-import com.avaje.ebean.ExpressionList;
 
 import models.Alert;
 import models.AppUser;
 import models.Feedback;
 import models.FileEntity;
 import models.Locality;
-import models.MasterDiagnosticTest;
 import models.PrimaryCity;
 import models.Role;
 import models.bloodBank.BloodBank;
@@ -31,12 +26,13 @@ import models.doctor.Day;
 import models.doctor.DaySchedule;
 import models.doctor.Doctor;
 import models.doctor.DoctorClinicInfo;
-import models.doctor.DoctorDiagnosticTest;
 import models.doctor.MasterSpecialization;
 import models.patient.Patient;
-import models.patient.PatientClinicInfo;
 import models.patient.PatientDoctorInfo;
 import models.pharmacist.Pharmacy;
+
+import org.json.JSONArray;
+
 import play.Logger;
 import play.data.Form;
 import play.libs.F.Function0;
@@ -46,9 +42,10 @@ import play.mvc.Controller;
 import play.mvc.Result;
 import utils.Constants;
 import utils.EmailService;
-import views.html.mednetAdmin.specializationList;
 import actions.ConfirmAppUser;
 import beans.LoginBean;
+
+import com.avaje.ebean.ExpressionList;
 
 public class PublicController extends Controller{
 	public static final Form<LoginBean> loginForm = Form.form(LoginBean.class);
@@ -57,7 +54,7 @@ public class PublicController extends Controller{
 	 * GET /doctor/search
 	 */
 	public static Result searchDoctorsPage(){
-		return ok(views.html.doctor.searchedDoctors.render(false,"any",null,null, new ArrayList<DoctorClinicInfo>()));
+		return ok(views.html.doctor.searchedDoctors.render(false,"any",null,null, new HashMap<Doctor,Clinic>()));
 	}
 
 	/**
@@ -70,10 +67,10 @@ public class PublicController extends Controller{
 		Locality loc = null;
 		if(session(Constants.CITY_ID) != null){
 			final ExpressionList<DoctorClinicInfo> doctorClinicList = DoctorClinicInfo.find.where().eq("clinic.primaryCity", PrimaryCity.find.byId(Long.parseLong(session(Constants.CITY_ID))));
+			final Map<Doctor,Clinic> doctorClinicInfos = new HashMap<Doctor,Clinic>();
 			if(locality != null && !(locality.equalsIgnoreCase("0"))){
 				loc = Locality.find.byId(Long.parseLong(locality));
 				doctorClinicList.eq("clinic.address.locality", loc);
-
 			}
 			if((spez != null) && !(spez.equalsIgnoreCase("any")) && !(spez.trim().isEmpty())){
 				specialization = MasterSpecialization.find.where().ieq("name", spez).findUnique();
@@ -82,10 +79,13 @@ public class PublicController extends Controller{
 			if((key!= null)&& !(key.equalsIgnoreCase("any")) && !(key.trim().isEmpty())){
 				doctorClinicList.like("doctor.searchIndex","%"+key.trim().toLowerCase()+"%");
 			}
-			return ok(views.html.doctor.searchedDoctors.render(true,key,loc,specialization, doctorClinicList.findList()));
+			for (final DoctorClinicInfo doctorClinicInfo : doctorClinicList.findList()) {
+				doctorClinicInfos.put(doctorClinicInfo.doctor,doctorClinicInfo.clinic);
+			}
+			return ok(views.html.doctor.searchedDoctors.render(true,key,loc,specialization, doctorClinicInfos));
 		}else{
 			flash().put("alert", new Alert("alert-info","Please Select City.").toString());
-			return ok(views.html.doctor.searchedDoctors.render(false,key,loc,specialization, new ArrayList<DoctorClinicInfo>()));
+			return ok(views.html.doctor.searchedDoctors.render(false,key,loc,specialization, new HashMap<Doctor,Clinic>()));
 		}
 	}
 	/**
