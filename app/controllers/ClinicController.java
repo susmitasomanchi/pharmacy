@@ -415,7 +415,7 @@ public class ClinicController extends Controller{
 				appUser.name = requestMap.get("name")[0];
 			}
 			if((requestMap.get("email") != null) && !(requestMap.get("email")[0].trim().isEmpty())){
-				final int appUsers = AppUser.find.where().eq("email", requestMap.get("email")[0].trim()).findRowCount();
+				final int appUsers = AppUser.find.where().ieq("email", requestMap.get("email")[0].trim()).findRowCount();
 				if(appUsers == 0){
 					appUser.email = requestMap.get("email")[0].trim().toLowerCase();
 				}else{
@@ -530,12 +530,19 @@ public class ClinicController extends Controller{
 	public static Result updateClinicUser(){
 		if(LoginController.getLoggedInUserRole().equals(Role.CLINIC_ADMIN.toString())){
 			final Map<String, String[]> requestMap = request().body().asFormUrlEncoded();
-			final AppUser appUser = ClinicUser.find.byId(Long.parseLong(requestMap.get("clinicUserId")[0])).appUser;
+			final ClinicUser clinicUser = ClinicUser.find.byId(Long.parseLong(requestMap.get("clinicUserId")[0]));
 			if((requestMap.get("name") != null) && !(requestMap.get("name")[0].trim().isEmpty())){
-				appUser.name = requestMap.get("name")[0];
+				clinicUser.appUser.name = requestMap.get("name")[0];
 			}
 			if((requestMap.get("email") != null) && !(requestMap.get("email")[0].trim().isEmpty())){
-				appUser.email = requestMap.get("email")[0];
+				final int appUsers = AppUser.find.where().ieq("email", requestMap.get("email")[0].trim()).findRowCount();
+				if(appUsers == 0){
+					clinicUser.appUser.email = requestMap.get("email")[0];
+				}
+				else{
+					flash().put("alert", new Alert("alert-info", "Sorry. "+requestMap.get("email")[0].trim()+" Already existed in the System.").toString());
+					return redirect(routes.ClinicController.editClinicUser(clinicUser.id));
+				}
 			}
 			if((requestMap.get("password") != null) && !(requestMap.get("password")[0].trim().isEmpty())){
 				final String password = requestMap.get("password")[0];
@@ -551,8 +558,8 @@ public class ClinicController extends Controller{
 					final byte[] passBytes = passwordWithSalt.getBytes();
 					final String hashedPasswordWithSalt = Base64.encodeBase64String(sha256.digest(passBytes));
 
-					appUser.salt = randomSalt;
-					appUser.password = hashedPasswordWithSalt;
+					clinicUser.appUser.salt = randomSalt;
+					clinicUser.appUser.password = hashedPasswordWithSalt;
 
 				} catch (final Exception e) {
 					Logger.error("ERROR WHILE CREATING SHA2 HASH");
@@ -560,26 +567,26 @@ public class ClinicController extends Controller{
 				}
 			}
 			if((requestMap.get("mobileNumber") != null) && !(requestMap.get("mobileNumber")[0].trim().isEmpty())){
-				appUser.mobileNumber = Long.parseLong(requestMap.get("mobileNumber")[0]);
+				clinicUser.appUser.mobileNumber = Long.parseLong(requestMap.get("mobileNumber")[0]);
 			}
 			if((requestMap.get("role") != null) && !(requestMap.get("role")[0].trim().isEmpty())){
-				appUser.role = Enum.valueOf(Role.class,requestMap.get("role")[0]);
+				clinicUser.appUser.role = Enum.valueOf(Role.class,requestMap.get("role")[0]);
 			}
 			if((requestMap.get("sex") != null) && !(requestMap.get("sex")[0].trim().isEmpty())){
-				appUser.sex = Enum.valueOf(Sex.class,requestMap.get("sex")[0]);
+				clinicUser.appUser.sex = Enum.valueOf(Sex.class,requestMap.get("sex")[0]);
 			}
 			if(requestMap.get("dob")[0]!=null ){
 				try {
-					appUser.dob = new SimpleDateFormat("dd-MM-yyyy").parse(requestMap.get("dob")[0].trim());
+					clinicUser.appUser.dob = new SimpleDateFormat("dd-MM-yyyy").parse(requestMap.get("dob")[0].trim());
 					Logger.debug(new SimpleDateFormat("dd-MM-yyyy").parse(requestMap.get("dob")[0].trim()).toString());
-					Logger.debug(""+appUser.dob);
+					Logger.debug(""+clinicUser.appUser.dob);
 				} catch (final Exception e) {
 					// TODO Auto-generated catch block
 					e.printStackTrace();
 				}
 			}
-			appUser.update();
-			flash().put("alert", new Alert("alert-success",appUser.name+" Updated Successfully. ").toString());
+			clinicUser.appUser.update();
+			flash().put("alert", new Alert("alert-success",clinicUser.appUser.name+" Updated Successfully. ").toString());
 			return redirect(routes.ClinicController.listClinicUsers());
 		}else{
 			flash().put("alert", new Alert("alert-info", "Sorry. Clinic Admin only can access this.").toString());
@@ -724,7 +731,7 @@ public class ClinicController extends Controller{
 	 */
 	@SuppressWarnings("unchecked")
 	public static Result sendVerificationToAppUser(final String emailId,final Long docClinicInfoId){
-		final AppUser appUser = AppUser.find.where().eq("email", emailId.toLowerCase().trim()).findUnique();
+		final AppUser appUser = AppUser.find.where().ieq("email", emailId.toLowerCase().trim()).findUnique();
 		if((appUser == null)){
 			return ok("1");
 		}
@@ -764,7 +771,7 @@ public class ClinicController extends Controller{
 			appUser.name = requestMap.get("name")[0];
 		}
 		if((requestMap.get("email")[0]!= null) && !(requestMap.get("email")[0].trim().isEmpty())){
-			final int appUsers = AppUser.find.where().eq("email", requestMap.get("email")[0].trim()).findRowCount();
+			final int appUsers = AppUser.find.where().ieq("email", requestMap.get("email")[0].trim()).findRowCount();
 			if(appUsers == 0){
 				appUser.email = requestMap.get("email")[0].trim().toLowerCase();
 			}else{

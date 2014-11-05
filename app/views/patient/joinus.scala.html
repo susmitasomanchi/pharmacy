@@ -160,7 +160,7 @@
     
   <div class="form-group">
       <label for="inputDOB" class="col-lg-2 control-label">Birth Date*<br><span style="font-size:10px;"><b>(DD-MM-YYYY)</b></span></label>
-		<div class="input-append date myDatepicker col-lg-10" data-date="01-01-1990" data-date-format="dd-mm-yyyy">
+		<div class="input-append date myDatepicker col-lg-10" data-date="DD-MM-YYYY" data-date-format="dd-mm-yyyy">
 			<input id="dob-datepicker" class="span2" size="16" type="text" name="dob" >
 			<span class="add-on"><i class="icon-th"></i></span>
       </div>
@@ -203,6 +203,7 @@
 <script>
 
 function validateAndSubmit(){	
+
   if($("#inputPassword").val().trim().length < 6){
     alert("Password Should Be Atleast Six Characters Long.");
      return false;
@@ -211,6 +212,31 @@ function validateAndSubmit(){
     alert("Passwords Do Not Match!");
      return false;
       }
+     /* if($('#dob-datepicker').val() != "" && $('#dob-datepicker').val() > new Date() ){
+      alert("date should be ");
+      return false;
+      }*/
+      
+      	var todayDate = new Date();
+ 		//need to add one to get current month as it is start with 0
+ 		var todayMonth = todayDate.getMonth() + 1;
+	 	var todayDay = todayDate.getDate();
+ 		var todayYear = todayDate.getFullYear();
+ 		var todayDateText = todayDay + "-" + todayMonth + "-" + todayYear;
+ 		//
+
+		var mydate=$('#dob-datepicker').val();
+		alert(todayDateText);
+		alert(mydate)
+		var inputToDate = Date.parse(mydate);
+ 		var todayToDate = Date.parse(todayDateText);
+ 		alert(todayToDate);
+		alert(inputToDate)
+		if (inputToDate > todayToDate) {
+		alert("Date IS Invalid");
+		return false;
+		}
+
 }
 
 </script>    
