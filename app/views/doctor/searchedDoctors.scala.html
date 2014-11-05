@@ -1,4 +1,4 @@
-@(searched :Boolean,searchedKey :String,loc : models.Locality,spz : models.doctor.MasterSpecialization,doctorClinicList: Map[models.doctor.Doctor,models.doctor.Clinic])
+@(searched :Boolean,searchedKey :String,loc : models.Locality,spz : models.doctor.MasterSpecialization,doctorClinicSet: Set[models.doctor.Doctor])
 @import play.i18n._
 @import helper.twitterBootstrap._
 @import helper._
@@ -139,7 +139,7 @@ $('#myModal1').on('show.bs.modal', function (e) {
 	});
 </script>	
 @if(searched){
-@for((doctor,clinic) <- doctorClinicList){
+@for(doctor <- doctorClinicSet){
 	<div class="row" id="div1">
 				<div style="cursor:pointer;width:10%" onclick="window.location.href='@routes.PublicController.getDoctorWithSlug(doctor.slugUrl)';" class="col-md-3">
 				@if(doctor.profileImage != null){

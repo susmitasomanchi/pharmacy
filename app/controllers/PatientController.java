@@ -3,9 +3,9 @@ package controllers;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
-import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
-import java.util.Map;
+import java.util.Set;
 
 import models.Alert;
 import models.AppUser;
@@ -75,9 +75,9 @@ public class PatientController extends Controller {
 
 		final List<DoctorClinicInfo> doctorClinicInfo = DoctorClinicInfo.find
 				.where().like("doctor.searchIndex","%"+search+"%").findList();
-		final Map<Doctor,Clinic> doctorClinicInfos = new HashMap<Doctor,Clinic>();
+		final Set<Doctor> doctorClinicInfos = new HashSet<Doctor>();
 		for (final DoctorClinicInfo doctorCliInfo : doctorClinicInfo) {
-			doctorClinicInfos.put(doctorCliInfo.doctor, doctorCliInfo.clinic);
+			doctorClinicInfos.add(doctorCliInfo.doctor);
 		}
 
 		return ok(views.html.doctor.searchedDoctors.render(true, search,null,null, doctorClinicInfos));

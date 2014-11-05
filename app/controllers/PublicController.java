@@ -7,9 +7,11 @@ import java.util.Arrays;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 import models.Alert;
 import models.AppUser;
@@ -54,7 +56,7 @@ public class PublicController extends Controller{
 	 * GET /doctor/search
 	 */
 	public static Result searchDoctorsPage(){
-		return ok(views.html.doctor.searchedDoctors.render(false,"any",null,null, new HashMap<Doctor,Clinic>()));
+		return ok(views.html.doctor.searchedDoctors.render(false,"any",null,null, new HashSet<Doctor>()));
 	}
 
 	/**
@@ -67,7 +69,7 @@ public class PublicController extends Controller{
 		Locality loc = null;
 		if(session(Constants.CITY_ID) != null){
 			final ExpressionList<DoctorClinicInfo> doctorClinicList = DoctorClinicInfo.find.where().eq("clinic.primaryCity", PrimaryCity.find.byId(Long.parseLong(session(Constants.CITY_ID))));
-			final Map<Doctor,Clinic> doctorClinicInfos = new HashMap<Doctor,Clinic>();
+			final Set<Doctor> doctorClinicInfos = new HashSet<Doctor>();
 			if(locality != null && !(locality.equalsIgnoreCase("0"))){
 				loc = Locality.find.byId(Long.parseLong(locality));
 				doctorClinicList.eq("clinic.address.locality", loc);
@@ -80,12 +82,12 @@ public class PublicController extends Controller{
 				doctorClinicList.like("doctor.searchIndex","%"+key.trim().toLowerCase()+"%");
 			}
 			for (final DoctorClinicInfo doctorClinicInfo : doctorClinicList.findList()) {
-				doctorClinicInfos.put(doctorClinicInfo.doctor,doctorClinicInfo.clinic);
+				doctorClinicInfos.add(doctorClinicInfo.doctor);
 			}
 			return ok(views.html.doctor.searchedDoctors.render(true,key,loc,specialization, doctorClinicInfos));
 		}else{
 			flash().put("alert", new Alert("alert-info","Please Select City.").toString());
-			return ok(views.html.doctor.searchedDoctors.render(false,key,loc,specialization, new HashMap<Doctor,Clinic>()));
+			return ok(views.html.doctor.searchedDoctors.render(false,key,loc,specialization, new HashSet<Doctor>()));
 		}
 	}
 	/**
@@ -937,6 +939,7 @@ public class PublicController extends Controller{
 	@BodyParser.Of(BodyParser.Json.class)
 	public static Result getAllDoctorsInCity(final String locality,final String spez) {
 		String[] result = null;
+		final Set<Doctor> doctors = new HashSet<Doctor>();
 		if(session(Constants.CITY_ID) != null){
 			final ExpressionList<DoctorClinicInfo> doctorClinicList = DoctorClinicInfo.find.where().eq("clinic.primaryCity", PrimaryCity.find.byId(Long.parseLong(session(Constants.CITY_ID))));
 			if(locality != null && !(locality.equalsIgnoreCase("0"))){
@@ -950,7 +953,10 @@ public class PublicController extends Controller{
 			result = new String[arrayLength];
 			int i = 0;
 			for (final DoctorClinicInfo doctorClinicInfo : doctorClinicList.findList()) {
-				result[i] = doctorClinicInfo.doctor.appUser.name;
+				doctors.add(doctorClinicInfo.doctor);
+			}
+			for (final Doctor doctorClinicInfo : doctors) {
+				result[i] = doctorClinicInfo.appUser.name;
 				i++;
 			}
 		}else{
@@ -973,7 +979,7 @@ public class PublicController extends Controller{
 			if(locality != null && !(locality.equalsIgnoreCase("0"))){
 				pharmacyList.eq("address.locality", Locality.find.byId(Long.parseLong(locality)));
 			}
-			final int arrayLength = Doctor.find.findRowCount()+pharmacyList.findList().size();
+			final int arrayLength = Pharmacy.find.findRowCount()+pharmacyList.findList().size();
 			result = new String[arrayLength];
 			int i = 0;
 			for (final Pharmacy pharmacy : pharmacyList.findList()) {
@@ -1000,7 +1006,7 @@ public class PublicController extends Controller{
 				diagnosticList.eq("address.locality", Locality.find.byId(Long.parseLong(locality)));
 
 			}
-			final int arrayLength = Doctor.find.findRowCount()+diagnosticList.findList().size();
+			final int arrayLength = DiagnosticCentre.find.findRowCount()+diagnosticList.findList().size();
 			result = new String[arrayLength];
 			int i = 0;
 			for (final DiagnosticCentre diagnosticCentre : diagnosticList.findList()) {
