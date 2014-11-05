@@ -28,6 +28,7 @@ public enum Role {
 	MR,
 	@EnumValue("ADMIN_DIAGREP")
 	ADMIN_DIAGREP,
+
 	@EnumValue("DIAGREP")
 	DIAGREP,
 
@@ -44,6 +45,8 @@ public enum Role {
 	BLOOD_BANK_USER,
 
 	@EnumValue("BLOG_ADMIN")
+
+
 	BLOG_ADMIN;
 
 

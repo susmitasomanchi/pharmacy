@@ -2,8 +2,11 @@
 
 
 <label for="area">Location*</label>
-<select name="locality" id="locality" class="form-control chosen-select">
+<select name="locality" id="locality" class="form-control chzn">
 @for(locality <- localityList){
 <option value="@locality.id">@locality.name</option>
 }
 </select>
+<script>
+$(".chzn").chosen({allow_single_deselect: true});
+</script>

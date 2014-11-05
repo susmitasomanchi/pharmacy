@@ -150,7 +150,7 @@ public class BloodBankController extends Controller{
 			Logger.warn("logged in BllodBankUser: "+LoginController.getLoggedInUser().getBloodBankUser().id);
 			return redirect(routes.LoginController.processLogout());
 		}
-		final AppUser appUser = AppUser.find.where().eq("email", emailId.trim()).findUnique();
+		final AppUser appUser = AppUser.find.where().ieq("email", emailId.trim()).findUnique();
 		if((appUser.role.equals(Role.PATIENT))){
 			final Patient patient = appUser.getPatient();
 			return ok(views.html.bloodBank.receivedBloodDonorFrom.render(patient));
