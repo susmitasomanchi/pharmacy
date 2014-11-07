@@ -64,7 +64,7 @@
  			 
   			<div class="form-group">
     			<label for="phone">Phone Number*</label>
-    			<input type="text" id="phone"  class="form-control" value="@clinicForm("contactNo").value"  name="contactNo"  placeholder="Enter phone number" required>
+    			<input type="text" id="phone"  class="form-control" value="@clinicForm("contactNo").value"  name="contactNo"  placeholder="Enter phone number" pattern="\d{10}" required>
     		</div>
 		
 			<div class="form-group">
@@ -275,6 +275,10 @@ $(".chzn").chosen({allow_single_deselect: true});
 
 
 	$('#myForm').submit(function(event){
+	if($('#locality').val == "" ){
+	alert("select Locality");
+	return false;
+	}
 	    // cancels the form submission
 	   // event.preventDefault();
 	   var $myForm = $('#myForm');
@@ -286,6 +290,7 @@ $(".chzn").chosen({allow_single_deselect: true});
 	    		$('.modal').modal('show');
 	    		 $myForm.submit();	
 	    	}
+	    	
 	    // do whatever you want here
 	});
 		
@@ -369,7 +374,7 @@ $(".chzn").chosen({allow_single_deselect: true});
 						$("#map_canvas").html('');
 						var geocoder = new google.maps.Geocoder();
 						var streetname=$("#streetName").val();
-					var area = $("#locality").find("option:selected").text();
+						var area = $("#locality").find("option:selected").text();
 						geocoder.geocode({
 							//'address' : streetname+area+this.value
 							'address' : area+this.value
@@ -437,12 +442,12 @@ $('body').on('click', function (e) {
 
 
 
-<div class="modal fade" id="myFormModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+<div class="mymodal fade" id="myFormModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
   <div class="modal-dialog">
     <div class="modal-content">
     <div class="modal-header">
         <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
-        <h5 class="modal-title">Suggest Locality in @models.PrimaryCity.find.byId(Long.parseLong(session().get(utils.Constants.CITY_ID))).name</h5>
+        <h5 class="modal-title">Suggest Locality in @if((session().get(utils.Constants.CITY_ID)) != null){@models.PrimaryCity.find.byId(Long.parseLong(session().get(utils.Constants.CITY_ID))).name}</h5>
       </div>
        <div class="modal-body">
        <div class="row">
@@ -487,7 +492,14 @@ if(loc.trim() == ""){
 alert("Provide Locality.");
 return false;
 }
-window.location.href = '/secure-feedback/'+$('#loc').val()+'/'+$("#city1").find("option:selected").text();
+$.get('/secure-doc-feedback/'+$('#loc').val()+'/'+$("#city1").find("option:selected").text(), function(data){
+		if(data == 1){
+			alert("Thank You for Your Suggetion.")
+		}else{
+		alert("Something Went Wrong.")
+		}	
+});
+//window.location.href = '/secure-feedback/'+$('#loc').val()+'/'+$("#city1").find("option:selected").text();
 }
 </script>
 }
