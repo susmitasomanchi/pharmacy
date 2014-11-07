@@ -726,7 +726,7 @@ public class ClinicController extends Controller{
 	}
 	/**
 	 * @author lakshmi
-	 * Action to send verification code to the Patient
+	 * Action to send verification code to the s
 	 * GET/secure-clinic/verify-appUser/:emailId/:docClinicId
 	 */
 	@SuppressWarnings("unchecked")

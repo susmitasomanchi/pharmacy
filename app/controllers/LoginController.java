@@ -120,6 +120,10 @@ public class LoginController extends Controller {
 		//session().clear();
 		session().remove(Constants.LOGGED_IN_USER_ID);
 		session().remove(Constants.LOGGED_IN_USER_ROLE);
+		/*response().setHeader("Cache-Control",
+				"no-cache"); // HTTP 1.1
+		response().setHeader("Pragma", "no-cache"); // HTTP 1.0.
+		response().setHeader("EXPIRES", "0");*/
 		return redirect(routes.Application.index());
 	}
 

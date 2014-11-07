@@ -136,7 +136,7 @@
     <div class="form-group">
       <label for="inputPassword" class="col-lg-2 control-label">Password*</label>
       <div class="col-lg-10">
-        <input type="password" class="form-control" name="password" id="inputPassword" placeholder="Password" required>
+        <input type="password" class="form-control" name="password" id="inputPassword" placeholder="Password" pattern=".{6,}" title="6 characters minimum" required>
       </div>
     </div>
     
@@ -189,10 +189,11 @@
     <div class="form-group">
       <div class="col-lg-10 col-lg-offset-2">
         <input id="sub" type="submit" onclick="return validateAndSubmit();" class="btn btn-primary" value="Submit" >
+        <input id="clear" type="submit" onclick="reload();" class="btn btn-default" value="Clear" >
       </div>
     </div>
     
-    <br><br><br>
+    <br><br><br> 
   </fieldset>
 </form>
 </div>
@@ -201,7 +202,9 @@
     
     
 <script>
-
+function reload(){
+window.location.reload();
+}
 function validateAndSubmit(){	
 	/*	if($("#inputName").val().trim() == ""){
     			alert("Enter Name.");
@@ -227,8 +230,9 @@ function validateAndSubmit(){
   if($("#inputPassword").val().trim() != $("#inputConfirmPassword").val().trim()){
     alert("Passwords Do Not Match!");
      return false;
-      }*/
-           
+      }
+       */    
+     
       var rxDatePattern = /^(\d{1,2})(\/|-)(\d{1,2})(\/|-)(\d{4})$/;
 	  var dtArray = $('#dob-datepicker').val().match(rxDatePattern); // is format OK?
 	  if ($('#dob-datepicker').val().match(rxDatePattern) == null){
@@ -248,14 +252,15 @@ function validateAndSubmit(){
 		alert("Date Is Invalid");
 		return false;
 		}
+		
 }
 $(document).ready(function(){
-$('#inputPassword').blur(function(){
+/*$('#inputPassword').blur(function(){
 if($("#inputPassword").val().trim().length < 6){
     alert("Password Should Be Atleast Six Characters Long.");
     return false;
     }
-});
+});*/
 $('#inputConfirmPassword').blur(function(){
 if($("#inputPassword").val().trim() != $("#inputConfirmPassword").val().trim()){
     alert("Passwords Do Not Match!");
