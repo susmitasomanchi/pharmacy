@@ -32,12 +32,13 @@
 				<p>
 				Your Mobile Number <strong>@appUser.mobileNumber</strong> has not been confirmed yet.
 				<br>
+				<a href="@routes.UserController.sendMobVerificationCode()">Click here</a> to receive the code again.
+				<br>
 				Please enter the confirmation code sent to your mobile number.<br>
 				<form action="@routes.UserController.verifyMobileNumberConfirmationKey()" method="POST">
 				<input name="mobileNumber">&nbsp;<input type="submit" value="Confirm" class="btn btn-primary btn-sm"/>
 				</form>
-				<br>
-				<a href="@routes.UserController.sendMobVerificationCode()">Click here</a> to receive the code again.
+				
 				</p>
 				
 				<small>
