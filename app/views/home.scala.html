@@ -449,7 +449,7 @@ $("#searchKey").keyup(function (e) {
 		
 		var url = '/doctor/get-names-json/'+loc+'/'+spez;
 		
-		$('#location').chosen().change(function() {
+		$('#location').chosen({allow_single_deselect: true}).change(function() {
   			//on each reload destroy previous typeahed else it'll create new div every time
 			$('#searchDiv .typeahead').typeahead('destroy');
 				loc = $('#location').val();
@@ -473,7 +473,7 @@ $("#searchKey").keyup(function (e) {
 	
 		});
 
-		$('#spez').chosen().change(function() {
+		$('#spez').chosen({allow_single_deselect: true}).change(function() {
 		 			$('#searchDiv .typeahead').typeahead('destroy');
 					spez = $('#spez').val();
 					if(spez == null || spez == ""){
