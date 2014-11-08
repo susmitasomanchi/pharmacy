@@ -20,7 +20,7 @@
 <tr class="info">
 <td>@{index+1}</td>
 <td>@appUser.name&nbsp;(@appUser.getSexAndAge)</td>
-<td>@if(appUser.address != null){@appUser.address.area&nbsp;,@appUser.address.city }else{----}</td>
+<td>@if(appUser.address != null ){@if(appUser.address.locality != null){@appUser.address.locality.name}&nbsp;,@if(appUser.address.primaryCity != null ){@appUser.address.primaryCity.name }}else{----}</td>
 <td>@if(appUser.isMobileNumberShared == true){@appUser.mobileNumber}</td>
 <td>@if(appUser.lastBloodDonatedDate != null){@appUser.lastBloodDonatedDate.format("dd-MMM-YYYY")}</td>
 <td>@appUser.bloodGroup.capitalize()</td>

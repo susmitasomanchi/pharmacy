@@ -139,7 +139,7 @@ No Reports Received Yet.
 <select id="sharePharmacy" class="chzn" style="width:100%;">
 <option></option>
 @for(pharmacy <- prescription.patient.pharmacyList){
-	<option value="@pharmacy.id">@pharmacy.name @if(pharmacy.address != null){&#40;@pharmacy.address.area&#41;}</option>
+	<option value="@pharmacy.id">@pharmacy.name @if(pharmacy.address != null && pharmacy.address.locality != null ){&#40;@pharmacy.address.locality.name&#41;}</option>
 }
 </select>
 
@@ -151,7 +151,7 @@ No Reports Received Yet.
 <select id="shareDiagnostic" class="chzn" style="width:100%;">
 <option></option>
 @for(diagnostic <- prescription.patient.diagnosticCenterList){
-	<option value="@diagnostic.id">@diagnostic.name @if(diagnostic.address != null){&#40;@diagnostic.address.area&#41;}</option>
+	<option value="@diagnostic.id">@diagnostic.name @if(diagnostic.address != null && diagnostic.address.locality != null){&#40;@diagnostic.address.locality.name&#41;}</option>
 }
 </select>
 </div>

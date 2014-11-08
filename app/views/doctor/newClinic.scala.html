@@ -259,6 +259,10 @@ $(".chzn").chosen({allow_single_deselect: true});
 	$('#myForm').submit(function(event){
 	    // cancels the form submission
 	   // event.preventDefault();
+	   if($('#locality-of-city').val().trim() == ""){
+	   alert("Select Locality");
+	   return false;
+	   }
 	   var $myForm = $('#myForm');
 	    if (!$myForm[0].checkValidity()) {
 	    	  // If the form is invalid, submit it. The form won't actually submit;
@@ -477,7 +481,7 @@ $('#city').on('change', function(){
 					myLatLng = results[0].geometry.location;
 					lat = results[0].geometry.location.lat();
 					lng = results[0].geometry.location.lng();
-					geocoder.geocode({'latLng': myLatLng}, function(results, status){
+					geocoder.geocode({'latLng': myLatLng}, function(res$("#city").find("option:selected").text()ults, status){
 						if (status == google.maps.GeocoderStatus.OK) {
 							var address = results[0].address_components;
 							var zipcode = address[address.length - 1].long_name;
@@ -506,7 +510,9 @@ return false;
 	$.get('/secure-feedback/'+$('#loc').val()+'/'+$("#city1").find("option:selected").text(), function(data){
 		if(data==0){
 			$('#suggest-btn').html('Suggest');
+			
 			$('#myFormModal').modal('hide');
+			alert("Your Suggetion Sended Successfully.");
 		}
 	});
 

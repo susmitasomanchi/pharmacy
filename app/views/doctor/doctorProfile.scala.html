@@ -662,9 +662,14 @@ You profile is available at
 @if(clinicInfo.clinic.address != null){
 @clinicInfo.clinic.address.addressLine1
 <br>
-@clinicInfo.clinic.address.area
-<br>
-@clinicInfo.clinic.address.city
+@if(clinicInfo.clinic.address.locality != null){
+	@clinicInfo.clinic.address.locality.name
+	<br>
+	}
+	@if(clinicInfo.clinic.address.primaryCity != null){
+	@clinicInfo.clinic.address.primaryCity.name
+	<br>
+	}
 <br>
 @clinicInfo.clinic.contactNo
 </h5>
@@ -677,7 +682,7 @@ You profile is available at
 </b>
 <br><br>
 <div class="row" style="padding-left:20px">
-
+clinicInfo
 @if(clinicInfo.getScheduleMap().get("MONDAY") != null){
 	<span class="badge col-md-2" style="font-size:20px">Mon</span>
 }else{

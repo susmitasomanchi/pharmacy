@@ -72,7 +72,7 @@
 </div>
 <div class="col-md-5" style="padding-left:0px">
 <h5>Appointment Time: @appointment.appointmentTime.format("hh:mm dd-MMM-yyyy")</h5>
-<h5>Appointment At: @appointment.doctorClinicInfo.clinic.name, @appointment.doctorClinicInfo.clinic.address.area</h5>
+<h5>Appointment At: @appointment.doctorClinicInfo.clinic.name,@if(appointment.doctorClinicInfo.clinic.address.locality != null){ @appointment.doctorClinicInfo.clinic.address.locality.name}</h5>
 <h6>(Appointment Booked On: @appointment.bookedOn.format("dd-MMM-yyyy hh:mm"))</h6>
 </div>
 </div>

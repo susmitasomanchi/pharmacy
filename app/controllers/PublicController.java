@@ -830,23 +830,6 @@ public class PublicController extends Controller{
 		return ok("0");
 	}
 
-	/**
-	 * @author lakshmi
-	 * Action to save the feedback from the user
-	 * POST/feedback
-	 */
-	public static Result saveDocFeedBack(final String locality,final String city){
-		final Feedback feedback = new Feedback();
-		feedback.appUser = LoginController.getLoggedInUser();
-		feedback.remarks = "Suggested "+locality +"(Locality) at "+ city +"(city)";
-		feedback.date = new Date();
-		feedback.ipAddress = request().remoteAddress();
-		feedback.save();
-		return ok("1");
-
-	}
-
-
 
 	/**
 	 * @author Prathyusha

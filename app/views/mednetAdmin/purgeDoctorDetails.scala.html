@@ -78,8 +78,12 @@
 	<td>@doctorClinicInfo.getPrescriptionCount()</td>
 	<td>@doctorClinicInfo.getAppointmentsCount()</td>
 	<td>@if(doctorClinicInfo.clinic.address != null){
-	@doctorClinicInfo.clinic.address.area<br>
-	@doctorClinicInfo.clinic.address.city
+	@if(doctorClinicInfo.clinic.address.locality != null){
+	@doctorClinicInfo.clinic.address.locality.name<br>
+	}
+	@if(doctorClinicInfo.clinic.address.primaryCity != null){
+	@doctorClinicInfo.clinic.address.primaryCity.name
+	}
 	}
 	</td>
 	</tr>

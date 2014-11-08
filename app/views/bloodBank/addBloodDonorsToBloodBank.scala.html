@@ -36,7 +36,7 @@
 <hr>
 <div class="col-md-6">
 <h5><b>Name (Age/Sex)</b> :@patient.appUser.name&nbsp;(@patient.appUser.getSexAndAge)</h5>
-<h5><b>Address </b> :@if(patient.appUser.address != null){@patient.appUser.address.area&nbsp;,@patient.appUser.address.city }else{----}</h5>
+<h5><b>Address </b> :@if(patient.appUser.address != null ){@if(patient.appUser.address.locality != null){@patient.appUser.address.locality.name}&nbsp;,@if(patient.appUser.address.primaryCity != null){@patient.appUser.address.primaryCity.name }}else{----}</h5>
 <h5><b>Contact No </b>:@if(patient.appUser.isMobileNumberShared == true){@patient.appUser.mobileNumber}</h5>
 <h5><b>Last Blood Donated </b>:@if(patient.appUser.lastBloodDonatedDate != null){@patient.appUser.lastBloodDonatedDate.format("dd-MMM-YYYY")}</h5>
 <h5><b>Blood Group </b>:@patient.appUser.bloodGroup.capitalize()</h5>

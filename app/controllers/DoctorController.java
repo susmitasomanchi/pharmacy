@@ -1650,7 +1650,7 @@ public class DoctorController extends Controller {
 		final List<DoctorClinicInfo> docClinicInfoList = DoctorClinicInfo.find.where().eq("doctor", loggedIndoctor).findList();
 		int shortestSlot = 15;
 		for (final DoctorClinicInfo clinicInfo : docClinicInfoList) {
-			if(clinicInfo.slot < shortestSlot){
+			if(clinicInfo.slot != null && clinicInfo.slot < shortestSlot){
 				shortestSlot = clinicInfo.slot;
 			}
 		}
