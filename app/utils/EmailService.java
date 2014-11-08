@@ -41,7 +41,7 @@ public class EmailService {
 			urlParameters.add(new BasicNameValuePair("api_key", Constants.EMAIL_PASSWORD));
 			urlParameters.add(new BasicNameValuePair("to", receiverEmailId));
 			//urlParameters.add(new BasicNameValuePair("toname", ""));
-			urlParameters.add(new BasicNameValuePair("subject", "Subject"));
+			urlParameters.add(new BasicNameValuePair("subject", subject));
 			//urlParameters.add(new BasicNameValuePair("text", builder.toString())); // This can be used for any plain text content of the mail
 			urlParameters.add(new BasicNameValuePair("html", message));
 			urlParameters.add(new BasicNameValuePair("fromname", "MedNetwork"));
@@ -397,7 +397,7 @@ public class EmailService {
 			urlParameters.add(new BasicNameValuePair("api_key", Constants.EMAIL_PASSWORD));
 			urlParameters.add(new BasicNameValuePair("to", receiverEmailId));
 			//urlParameters.add(new BasicNameValuePair("toname", ""));
-			urlParameters.add(new BasicNameValuePair("subject", "Subject"));
+			urlParameters.add(new BasicNameValuePair("subject", subject));
 			//urlParameters.add(new BasicNameValuePair("text", builder.toString())); // This can be used for any plain text content of the mail
 			urlParameters.add(new BasicNameValuePair("html", message));
 			urlParameters.add(new BasicNameValuePair("fromname", "MedNetwork"));

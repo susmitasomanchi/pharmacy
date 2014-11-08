@@ -248,8 +248,8 @@ public class Doctor extends BaseEntity{
 			if(clinicInfo.clinic != null){
 				stringBuilder.append(clinicInfo.clinic.name.toLowerCase());
 			}
-			if(clinicInfo.clinic.address != null && clinicInfo.clinic.address.area != null){
-				stringBuilder.append(clinicInfo.clinic.address.area.toLowerCase());
+			if(clinicInfo.clinic.address != null && clinicInfo.clinic.address.locality != null){
+				stringBuilder.append(clinicInfo.clinic.address.locality.name.toLowerCase());
 			}
 		}
 		if(this.appUser.name != null){
@@ -275,8 +275,8 @@ public class Doctor extends BaseEntity{
 		for (final DoctorClinicInfo clinicInfo : this.doctorClinicInfoList) {
 			if(clinicInfo.clinic != null && clinicInfo.active){
 				stringBuilder.append(clinicInfo.clinic.name.toLowerCase());
-				if(clinicInfo.clinic.address != null && clinicInfo.clinic.address.area != null){
-					stringBuilder.append(clinicInfo.clinic.address.area.toLowerCase());
+				if(clinicInfo.clinic.address != null && clinicInfo.clinic.address.locality != null){
+					stringBuilder.append(clinicInfo.clinic.address.locality.name.toLowerCase());
 				}
 			}
 		}

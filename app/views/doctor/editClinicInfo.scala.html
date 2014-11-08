@@ -168,7 +168,7 @@
 						var cityName = $("#city").find("option:selected").text();
 						geocoder.geocode({
 							//'address' : area+this.value
-							'address' : streetname+area+cityName							
+							'address' : streetname+' '+area+' '+cityName							
 						}, function(results, status) {
 							if (status == google.maps.GeocoderStatus.OK) {
 								//  alert("location : " + results[0].geometry.location.lat() + " " +results[0].geometry.location.lng()); 
@@ -294,7 +294,7 @@ $('#city').on('change', function(){
 			var area = $("#locality-of-city").find("option:selected").text();
 			var cityName = $("#city").find("option:selected").text();
 			geocoder.geocode({
-				'address' : streetname+area+cityName							
+				'address' : streetname+' '+area+' '+cityName							
 			}, function(results, status) {
 				if (status == google.maps.GeocoderStatus.OK) {
 					myLatLng = results[0].geometry.location;
