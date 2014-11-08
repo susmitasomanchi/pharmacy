@@ -98,7 +98,7 @@
 					}
 				</select>
    			</div>
-  			<span style="cursor:pointer;color:#008bca" data-toggle="modal" data-target="#myFormModal">Locality Not Found?</span>
+  			<span style="cursor:pointer;color:#008bca" data-toggle="mymodal" data-target="#myFormModal">Locality Not Found?</span>
   			
   			
   			
@@ -234,13 +234,13 @@
 </div>
 <input type="hidden" name="id" value="@clinicForm("id").value">
 <button id="submit"type="submit" class="btn btn-primary btn-sm" data-toggle="popover" title="Data Incorrect" data-content="Check From and To values">Submit</button>
-<div class="modal fade bs-example-modal-sm" tabindex="-1" role="dialog" aria-labelledby="mySmallModalLabel" aria-hidden="true">
+<div class="modal fade bs-example-modal-sm" id="schedule-modal" tabindex="-1" role="dialog" aria-labelledby="mySmallModalLabel" aria-hidden="true">
   <div class="modal-dialog modal-sm">
     <div class="modal-content">
         <div class="modal-header alert-info">
         <h4 class="modal-title" id="myModalLabel"> Please wait while your schedule is creating</h4>
       </div><div class="modal-body">
-      	<div style="text-align: center;"><span   style="font-size:50px;"><i class="fa fa-spinner fa-spin"></i></span></div>
+      	<div style="text-align: center;"><span style="font-size:50px;"><i class="fa fa-spinner fa-spin"></i></span></div>
       </div>
     </div>
   </div>
@@ -318,11 +318,8 @@ $(".chzn").chosen({allow_single_deselect: true});
 			
  
     <script>
-    window.onload = function(){
-     $('#loc2').hide();
-    }
-    $( document ).ready(function() {
-   
+      $( document ).ready(function() {
+    $('#loc2').hide();
 					var lng, lat, marker,state;
 					var dbclk = false;
 					var map, myLatLng;
@@ -404,40 +401,28 @@ $(".chzn").chosen({allow_single_deselect: true});
 						// google.maps.event.addDomListener(window, 'load', initialize);
 						});
 					});
-				</script>
-<script>
-	$(".chosen-select").chosen();
-    </script>
-
-	<script type="text/javascript"> 
-            $('.outtime').timepicker({
-            	showMeridian:false,
-            	defaultTime:''
+				$('.outtime').timepicker({
+            		showMeridian:false,
+            		defaultTime:''
                  });
-            $('.intime').timepicker({
-            	showMeridian:false,
-            	defaultTime:''
+            	$('.intime').timepicker({
+            		showMeridian:false,
+            		defaultTime:''
                  });
+    		$('.modal').on('hidden.bs.modal', function () {
+				$('#submit').html('Please Wait <i class="fa fa-refresh fa-spin">');
+				$('#submit').prop('disabled', true);
+			});
 
-            
-    </script>
 
-
-<script type="text/javascript"> 
-$('.modal').on('hidden.bs.modal', function () {
-	$('#submit').html('Please Wait <i class="fa fa-refresh fa-spin">');
-	$('#submit').prop('disabled', true);
+			$("#submit").popover('disable');
+			$('body').on('click', function (e) {
+   				 $('[data-toggle="popover"]').each(function () {
+        				if (!$(this).is(e.target) && $(this).has(e.target).length === 0 && $('.popover').has(e.target).length === 0) {
+           				$(this).popover('hide');
+       			 }
+    	});
 	});
-
-
-$("#submit").popover('disable');
-$('body').on('click', function (e) {
-    $('[data-toggle="popover"]').each(function () {
-        if (!$(this).is(e.target) && $(this).has(e.target).length === 0 && $('.popover').has(e.target).length === 0) {
-            $(this).popover('hide');
-        }
-    });
-});
 </script>
 
 
@@ -456,20 +441,7 @@ $('body').on('click', function (e) {
        <label for="locality">Locality* </label>
         <input type="text" name="locality" id="loc" placeholder="Enter Locality">
         </div>
-         <div class="form-group">
-    			<label for="city">City*</label>
-    			<select data-placeholder="Select City" name="cityId" id="city1" class="form-control chzn" value="@clinicForm("cityId").value">
-    			@for((k,v) <- PrimaryCity.getAllPrimaryCities()){
-    			@if(k.equals((LoginController.getLoggedInUser().getDoctor().primaryCity.id).toString())){
-					<option value="@k" selected>@v</option>
-    			}else{
-    			 	<option value="@k">@v</option>
-    			 	}
-					}
-					
-				</select>
-        </div>
-        <button onclick="sendRequest()" class="btn btn-primary btn-xs">Send</button>
+         <button onclick="sendRequest()" class="btn btn-primary btn-xs"><span style="font-size:50px;"><i class="fa fa-spinner fa-spin"></i></span>Send</button>
         </div>
         </div>
         </div>
@@ -487,14 +459,14 @@ $('#city').on('change', function(){
 });
 function sendRequest(){
 var loc = $('#loc').val();
-var city = $("#city1").find("option:selected").text();
 if(loc.trim() == ""){
 alert("Provide Locality.");
 return false;
 }
-$.get('/secure-doc-feedback/'+$('#loc').val()+'/'+$("#city1").find("option:selected").text(), function(data){
+$.get('/secure-doc-feedback/'+$('#loc').val()+'/'+@clinicForm("cityId").value, function(data){
 		if(data == 1){
 			alert("Thank You for Your Suggetion.")
+			$('#myFormModal').modal('hide');
 		}else{
 		alert("Something Went Wrong.")
 		}	
