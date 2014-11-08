@@ -555,6 +555,9 @@ GET		/secure-doctor/weekly-appointments				controllers.DoctorController.viewWeek
 GET		/secure-doctor/calendar-appointments-json		controllers.DoctorController.getCalendarEventsJson()
 GET		/sendgrid										controllers.SampleDataController.sendGrid()
 
+# Zoho Verification
+GET		/zohoverify/verifyforzoho.html					controllers.Assets.at(path="/public", file="/verifyforzoho.html")
+
 ########################## MedNetwork Android App ###############################################
 
 #MR Module

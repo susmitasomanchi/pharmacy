@@ -124,6 +124,14 @@ public class Doctor extends BaseEntity{
 
 	public static Model.Finder<Long,Doctor> find = new Model.Finder<Long, Doctor>(Long.class, Doctor.class);
 
+	@OneToMany(cascade = CascadeType.ALL)
+	public List<SigCode> sigCodeList = new ArrayList<SigCode>();
+
+
+
+
+
+
 	public List<DoctorExperience> getExperienceListInOrder(){
 		return DoctorExperience.find.where().eq("doctor_id", this.id).orderBy("workedFrom DESC").findList();
 	}
@@ -232,8 +240,6 @@ public class Doctor extends BaseEntity{
 		return appointments;
 
 	}
-	@OneToMany(cascade = CascadeType.ALL)
-	public List<SigCode> sigCodeList = new ArrayList<SigCode>();
 
 	@Override
 	public void save(){

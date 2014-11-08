@@ -81,6 +81,9 @@ public class PublicController extends Controller{
 			if((key!= null)&& !(key.equalsIgnoreCase("any")) && !(key.trim().isEmpty())){
 				doctorClinicList.like("doctor.searchIndex","%"+key.trim().toLowerCase()+"%");
 			}
+
+			doctorClinicList.eq("doctor.appUser.isSearchable", true);
+
 			for (final DoctorClinicInfo doctorClinicInfo : doctorClinicList.findList()) {
 				doctorClinicInfos.add(doctorClinicInfo.doctor);
 			}
