@@ -28,7 +28,7 @@ public class Global extends GlobalSettings {
 
 	/**
 	 *	Rendering 500 error page on error
-
+	 */
 	@Override
 	public Promise<SimpleResult> onError(final RequestHeader request, final Throwable t) {
 		final StringBuilder sb = new StringBuilder("");
@@ -61,9 +61,9 @@ public class Global extends GlobalSettings {
 		Promise.promise(new Function0<Integer>() {
 			@Override
 			public Integer apply() {
-				//	if(!EmailService.sendSimpleHtmlEMail("admin@mednetwork.in", "Production Error 500: "+t.getMessage(), sb.toString())){
-				//		return 1;
-				//	}
+				if(!EmailService.sendSimpleHtmlEMail("admin@mednetwork.in", "Production Error 500: "+t.getMessage(), sb.toString())){
+					return 1;
+				}
 				return 0;
 			}
 		});
@@ -72,18 +72,17 @@ public class Global extends GlobalSettings {
 				views.html.page500.render()
 				));
 	}
-	 */
+
 
 	/**
 	 *	Rendering 404 page on not found
 	 */
-	/*@Override
+	@Override
 	public Promise<SimpleResult> onHandlerNotFound(final RequestHeader request) {
 		return Promise.<SimpleResult>pure(notFound(
 				views.html.page404.render()
 				));
 	}
-	 */
 
 	/**
 	 *	Rendering 500 on bad request too

@@ -528,20 +528,20 @@ GET    /view-products                              controllers.ProductController
 
 
 #sample data
-GET		/mr-sample									controllers.SampleDataController.mrSample()
-GET		/add-clinic									controllers.SampleDataController.joinUsClinic()
+#GET		/mr-sample									controllers.SampleDataController.mrSample()
+#GET		/add-clinic									controllers.SampleDataController.joinUsClinic()
 
 
 #Mednetwork-Admin
-GET		/admin						controllers.SampleDataController.mednetAdmin()
-GET		/add-primary-city						controllers.SampleDataController.addPrimaryCity()
-GET		/default-primarycity					controllers.SampleDataController.addDefaultPrimaryCity()
-GET 	/specz									controllers.SampleDataController.createDocSpez()
-GET 	/add_clinic									controllers.SampleDataController.patientTest()
+#GET		/admin						controllers.SampleDataController.mednetAdmin()
+#GET		/add-primary-city						controllers.SampleDataController.addPrimaryCity()
+#GET		/default-primarycity					controllers.SampleDataController.addDefaultPrimaryCity()
+#GET 	/specz									controllers.SampleDataController.createDocSpez()
+#GET 	/add_clinic									controllers.SampleDataController.patientTest()
 
 #GET    /appointment					controllers.SampleDataController.createAppointment()
-GET    /blood-bank					controllers.SampleDataController.addBloodBank()
-GET    /mr							controllers.SampleDataController.mrSampleData()
+#GET    /blood-bank					controllers.SampleDataController.addBloodBank()
+#GET    /mr							controllers.SampleDataController.mrSampleData()
 
 
 
@@ -552,7 +552,7 @@ GET		/cron/start						controllers.CronController.startCron()
 #test
 GET		/secure-doctor/weekly-appointments				controllers.DoctorController.viewWeeklyAppointments()
 GET		/secure-doctor/calendar-appointments-json		controllers.DoctorController.getCalendarEventsJson()
-GET		/sendgrid										controllers.SampleDataController.sendGrid()
+#GET		/sendgrid										controllers.SampleDataController.sendGrid()
 
 # Zoho Verification
 GET		/zohoverify/verifyforzoho.html					controllers.Assets.at(path="/public", file="/verifyforzoho.html")
