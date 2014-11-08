@@ -83,7 +83,7 @@ GET		/diagnostic/get-names-json/:loc											controllers.PublicController.getA
 
 GET    /feedback											controllers.PublicController.feedBack()
 POST    /secure-feedback									controllers.PublicController.saveFeedBack()
-GET    /secure-feedback/:loc/:city									controllers.PublicController.saveLocalityFeedBack(loc : String,city : String)
+GET    /secure-feedback/:loc/:city							controllers.PublicController.saveLocalityFeedBack(loc : String,city : String)
 GET    /help												controllers.PublicController.helpDocument()
 
 

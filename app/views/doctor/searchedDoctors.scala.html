@@ -83,7 +83,8 @@
 <div class="row">
 
 <div id="spezDiv" class="col-md-2" style="width:20%">
-	<select class="form-control chzn" data-placeholder="Specialization" name="spez" id="spez" style="width:100%;box-shadow: 1px 1px 1px 1px #aaaaaa; height:120%;">
+	<select class="form-control chzn-s" data-placeholder="Select Specialization" name="spez" id="spez" style="width:100%;box-shadow: 1px 1px 1px 1px #aaaaaa; height:120%;">
+	<option></option>
 	@if(spz != null){
 		<option value="@spz.name">@spz.name</option>
 		}
@@ -93,7 +94,8 @@
 	</select>
 </div>
 <div id="locDiv" class="col-md-2" style="width:20%">
-	<select class="form-control chzn" data-placeholder="Locality" name="location" id="location" style="width:200px;box-shadow: 1px 1px 1px 1px #aaaaaa; height:120%;">
+	<select class="form-control chzn-s" data-placeholder="Select Locality" name="location" id="location" style="width:200px;box-shadow: 1px 1px 1px 1px #aaaaaa; height:120%;">
+	<option></option>
 	@if(loc != null){
 		<option value="@loc.id">@loc.name</option>
 		}
@@ -311,7 +313,7 @@ margin-bottom:0px;
 }
 }
 <script>
-$(".chzn").chosen({allow_single_deselect: true});
+$(".chzn-s").chosen({allow_single_deselect: true});
 var loc = $('#location').val();
 var spez = $('#spez').val();
 $("#searchKey").keyup(function (e) {
@@ -319,7 +321,7 @@ $("#searchKey").keyup(function (e) {
     	if($('#searchInput').val() == ''){
     	       	return false;
         }
-    	 }
+	}
 });
 
 function submitSearch(){

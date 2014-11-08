@@ -1,12 +1,18 @@
-@(localityList: List[models.Locality])
+@(city: models.PrimaryCity, localityList: List[models.Locality])
 
 
-<label for="area">Location*</label>
-<select name="locality" id="locality" class="form-control chzn">
+<label for="area">Locality in @city.name*
+	<span style="cursor:pointer;color:#008bca; position: absolute;margin-left: 432px;margin-top: -16px;" data-toggle="modal" data-target="#myFormModal">Locality Not Found?</span>
+</label>
+<select name="locality" id="locality-of-city" class="form-control chzn" data-placeholder="Localities in @city.name">
+<option></option>
 @for(locality <- localityList){
 <option value="@locality.id">@locality.name</option>
 }
 </select>
+
+@*
 <script>
-$(".chzn").chosen({allow_single_deselect: true});
+//$(".chzn").chosen({allow_single_deselect: true});
 </script>
+*@
