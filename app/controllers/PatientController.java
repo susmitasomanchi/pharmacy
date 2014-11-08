@@ -302,7 +302,7 @@ public class PatientController extends Controller {
 		smsMessage.append("You have booked an appointment with Dr. "+appointment.doctorClinicInfo.doctor.appUser.name+" on ");
 		smsMessage.append( new SimpleDateFormat("dd-MMM-yyyy").format(appointment.appointmentTime));
 		smsMessage.append(" at "+ new SimpleDateFormat("HH:mm").format(appointment.appointmentTime));
-		smsMessage.append(" at "+appointment.doctorClinicInfo.clinic.name+", "+appointment.doctorClinicInfo.clinic.address.area);
+		smsMessage.append(" at "+appointment.doctorClinicInfo.clinic.name+", "+appointment.doctorClinicInfo.clinic.address.locality.name);
 		SMSService.sendSMS(appointment.requestedBy.mobileNumber.toString(), smsMessage.toString());
 
 		/*

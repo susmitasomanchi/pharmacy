@@ -136,7 +136,7 @@
     <div class="form-group">
       <label for="inputPassword" class="col-lg-2 control-label">Password*</label>
       <div class="col-lg-10">
-        <input type="password" class="form-control" name="password" id="inputPassword" placeholder="Password" required>
+        <input type="password" class="form-control" name="password" id="inputPassword" placeholder="Password" pattern=".{6,}" title="6 characters minimum" required>
       </div>
     </div>
     
@@ -161,7 +161,7 @@
   <div class="form-group">
       <label for="inputDOB" class="col-lg-2 control-label">Birth Date*<br><span style="font-size:10px;"><b>(DD-MM-YYYY)</b></span></label>
 		<div class="input-append date myDatepicker col-lg-10" data-date="DD-MM-YYYY" data-date-format="dd-mm-yyyy">
-			<input id="dob-datepicker" class="span2" size="16" type="text" name="dob" >
+			<input id="dob-datepicker" class="span2" size="16" placeholder="DD-MM-YYYY" type="text" name="dob" required >
 			<span class="add-on"><i class="icon-th"></i></span>
       </div>
     </div>
@@ -189,10 +189,11 @@
     <div class="form-group">
       <div class="col-lg-10 col-lg-offset-2">
         <input id="sub" type="submit" onclick="return validateAndSubmit();" class="btn btn-primary" value="Submit" >
+        <input id="clear" type="submit" onclick="reload();" class="btn btn-default" value="Clear" >
       </div>
     </div>
     
-    <br><br><br>
+    <br><br><br> 
   </fieldset>
 </form>
 </div>
@@ -201,10 +202,28 @@
     
     
 <script>
-
+function reload(){
+window.location.reload();
+}
 function validateAndSubmit(){	
-
-  if($("#inputPassword").val().trim().length < 6){
+	/*	if($("#inputName").val().trim() == ""){
+    			alert("Enter Name.");
+    		 return false;
+     	 }
+      if($("#inputEmail").val().trim() == ""){
+    		alert("Enter Email Address.");
+     		return false;userForm
+      }
+       if($("#inputPassword").val().trim() == ""){
+    		alert("Enter Password.");
+    		return false;
+      }
+      if($("#inputConfirmPassword").val().trim() == ""){
+    		alert("Enter Confirm Password.");
+    		return false;
+      }
+      
+ 	 if($("#inputConfirmPassword").val().trim().length < 6){
     alert("Password Should Be Atleast Six Characters Long.");
      return false;
       }
@@ -212,34 +231,53 @@ function validateAndSubmit(){
     alert("Passwords Do Not Match!");
      return false;
       }
-     /* if($('#dob-datepicker').val() != "" && $('#dob-datepicker').val() > new Date() ){
-      alert("date should be ");
-      return false;
-      }*/
-      
-      	var todayDate = new Date();
- 		//need to add one to get current month as it is start with 0
+       */    
+     
+      var rxDatePattern = /^(\d{1,2})(\/|-)(\d{1,2})(\/|-)(\d{4})$/;
+	  var dtArray = $('#dob-datepicker').val().match(rxDatePattern); // is format OK?
+	  if ($('#dob-datepicker').val().match(rxDatePattern) == null){
+	  alert("Date Pattern should be (DD-MM-YYYY)");
+    	 return false;
+    	 }
+    
+     	var todayDate = new Date();
  		var todayMonth = todayDate.getMonth() + 1;
 	 	var todayDay = todayDate.getDate();
  		var todayYear = todayDate.getFullYear();
  		var todayDateText = todayDay + "-" + todayMonth + "-" + todayYear;
- 		//
-
 		var mydate=$('#dob-datepicker').val();
-		alert(todayDateText);
-		alert(mydate)
 		var inputToDate = Date.parse(mydate);
  		var todayToDate = Date.parse(todayDateText);
- 		alert(todayToDate);
-		alert(inputToDate)
-		if (inputToDate > todayToDate) {
-		alert("Date IS Invalid");
+ 		if (inputToDate > todayToDate) {
+		alert("Date Is Invalid");
 		return false;
 		}
-
+		
 }
+$(document).ready(function(){
+/*$('#inputPassword').blur(function(){
+if($("#inputPassword").val().trim().length < 6){
+    alert("Password Should Be Atleast Six Characters Long.");
+    return false;
+    }
+});*/
+$('#inputConfirmPassword').blur(function(){
+if($("#inputPassword").val().trim() != $("#inputConfirmPassword").val().trim()){
+    alert("Passwords Do Not Match!");
+    return false;
+    }
+    
+  
+});
+});
 
-</script>    
+      </script>    
+<style>
+
+.signup_error {
+  border-color:"red"
+}
+</style>
 	    
 	<div class="row">
     <div class="col-md-12"><br>  

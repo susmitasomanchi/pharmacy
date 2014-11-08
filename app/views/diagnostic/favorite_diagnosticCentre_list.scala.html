@@ -71,9 +71,15 @@ margin-bottom:0px;
 <h5 ><b>@diagnosticCentre.name</b></h5>
         @if(diagnosticCentre.address != null){  
         @diagnosticCentre.address.addressLine1<br>     
-        @diagnosticCentre.address.area<br>
-        @diagnosticCentre.address.city<br>
-        @diagnosticCentre.address.state</h5>
+        @if(diagnosticCentre.address.locality != null){  
+        	@diagnosticCentre.address.locality.name<br>
+        }
+        @if(diagnosticCentre.address.primaryCity != null){
+        	@diagnosticCentre.address.primaryCity.name<br>
+        }
+        @if(diagnosticCentre.address.state != null){
+        	@diagnosticCentre.address.state.capitalize()</h5>
+        }
         }
         <h5><i class="fa fa-phone-square"></i> @diagnosticCentre.mobileNo</h5>
 </div>
