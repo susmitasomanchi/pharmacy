@@ -14,8 +14,12 @@
 	<td><h5>@clinic.name</h5></td>
 	<td>@if(clinic.address != null){
 	<h5>@clinic.address.addressLine1</h5>
-	<h5>@clinic.address.area</h5>
-	<h5>@clinic.address.city</h5>}else{
+	@if(clinic.address.locality != null){
+	<h5>@clinic.address.locality.name</h5>
+	}
+	@if(clinic.address.primaryCity != null){
+	<h5>@clinic.address.primaryCity.name</h5>
+	}}else{
 	<h5>Address not available.</h5>
 	}
 	</td>

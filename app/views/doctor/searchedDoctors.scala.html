@@ -83,7 +83,7 @@
 <div class="row">
 
 <div id="spezDiv" class="col-md-2" style="width:20%">
-	<select class="form-control chzn" data-placeholder="Specialization" name="spez" id="spez" style="width:100%;box-shadow: 1px 1px 1px 1px #aaaaaa; height:120%;">
+	<select class="form-control chzn-s" data-placeholder="Select Specialization" name="spez" id="spez" style="width:100%;box-shadow: 1px 1px 1px 1px #aaaaaa; height:120%;">
 	<option></option>
 	@if(spz != null){
 		<option value="@spz.name">@spz.name</option>
@@ -94,7 +94,7 @@
 	</select>
 </div>
 <div id="locDiv" class="col-md-2" style="width:20%">
-	<select class="form-control chzn" data-placeholder="Locality" name="location" id="location" style="width:200px;box-shadow: 1px 1px 1px 1px #aaaaaa; height:120%;">
+	<select class="form-control chzn-s" data-placeholder="Select Locality" name="location" id="location" style="width:200px;box-shadow: 1px 1px 1px 1px #aaaaaa; height:120%;">
 	<option></option>
 	@if(loc != null){
 		<option value="@loc.id">@loc.name</option>
@@ -201,8 +201,14 @@ margin-bottom:0px;
 									<h5 style="color:#006687">
 									<b><a href="#" >@docclinic.clinic.name</a></b><br>
 										<span style="font-size:12px;color:black">@docclinic.clinic.address.addressLine1
-										@docclinic.clinic.address.area<br>
-										@docclinic.clinic.address.city<br>
+									@if(docclinic.clinic.address.locality != null){
+									@docclinic.clinic.address.locality.name
+									<br>
+									}
+									@if(docclinic.clinic.address.primaryCity != null){
+									@docclinic.clinic.address.primaryCity.name
+									<br>
+									}
 										@docclinic.clinic.address.state<br>
 									<i class="fa fa-phone-square"></i> @docclinic.clinic.contactNo<br><br>
 									</div>
@@ -313,7 +319,7 @@ margin-bottom:0px;
 }
 }
 <script>
-$(".chzn").chosen({allow_single_deselect: true});
+$(".chzn-s").chosen({allow_single_deselect: true});
 var loc = $('#location').val();
 var spez = $('#spez').val();
 $("#searchKey").keyup(function (e) {
@@ -321,7 +327,7 @@ $("#searchKey").keyup(function (e) {
     	if($('#searchInput').val() == ''){
     	       	return false;
         }
-    	 }
+	}
 });
 
 function submitSearch(){

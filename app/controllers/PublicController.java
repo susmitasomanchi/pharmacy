@@ -817,29 +817,15 @@ public class PublicController extends Controller{
 			}
 		});
 		// End of async
-		flash().put("alert", new Alert("alert-success", "Thank you for your suggetion.").toString());
-		if(LoginController.isLoggedIn()){
-			return redirect(routes.UserActions.dashboard());
-		}
-		return redirect(routes.Application.index());
+
+		//flash().put("alert", new Alert("alert-success", "Thank you for your suggetion.").toString());
+		//if(LoginController.isLoggedIn()){
+		//	return redirect(routes.UserActions.dashboard());
+		//}
+		//return redirect(routes.Application.index());
+
+		return ok("0");
 	}
-
-	/**
-	 * @author lakshmi
-	 * Action to save the feedback from the user
-	 * POST/feedback
-	 */
-	public static Result saveDocFeedBack(final String locality,final String city){
-		final Feedback feedback = new Feedback();
-		feedback.appUser = LoginController.getLoggedInUser();
-		feedback.remarks = "Suggested "+locality +"(Locality) at "+ city +"(city)";
-		feedback.date = new Date();
-		feedback.ipAddress = request().remoteAddress();
-		feedback.save();
-		return ok("1");
-
-	}
-
 
 
 	/**
@@ -948,17 +934,16 @@ public class PublicController extends Controller{
 	 */
 	public static Result getPrimaryCityLocations(final String cityId){
 		List<Locality> localities = new ArrayList<Locality>();
+		PrimaryCity primaryCity = null;
 		if((cityId.isEmpty()) && (session(Constants.CITY_ID) != null)){
-			final PrimaryCity primaryCity = PrimaryCity.find.byId(Long.parseLong(session(Constants.CITY_ID)));
+			primaryCity = PrimaryCity.find.byId(Long.parseLong(session(Constants.CITY_ID)));
 			localities =  Locality.find.where().eq("primaryCity", primaryCity).findList();
-
 		}
 		else if(!(cityId.isEmpty())){
-			final PrimaryCity primaryCity = PrimaryCity.find.byId(Long.parseLong(cityId));
+			primaryCity = PrimaryCity.find.byId(Long.parseLong(cityId));
 			localities = Locality.find.where().eq("primaryCity", primaryCity).findList();
-
 		}
-		return ok(views.html.localities.render(localities));
+		return ok(views.html.localities.render(primaryCity, localities));
 	}
 	/**
 	 * @author lakshmi

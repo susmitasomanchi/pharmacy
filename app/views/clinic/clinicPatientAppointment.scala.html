@@ -34,14 +34,18 @@
 <div class="btn-group" data-toggle="buttons" style="padding-left:20px; font-size:12px;">
 
 	<label class="btn btn-primary btn-sm "onclick="window.location.href ='@routes.ClinicController.getClinicPatientAppointmentForm(doctorClinic.clinic.id,patient.id)'">
-   	 <input type="checkbox" > @doctorClinic.clinic.name<br>@doctorClinic.clinic.address.area
+   	 <input type="checkbox" > @doctorClinic.clinic.name<br>@if(doctorClinic.clinic.address != null && doctorClinic.clinic.address.locality != null){@doctorClinic.clinic.address.locality.name}
 	</label>	
 </div>
 
 <div style="padding-left:20px">
 <h5 style="line-height:20px;">@doctorClinic.clinic.address.addressLine1<br>
-@doctorClinic.clinic.address.area<br>
-@doctorClinic.clinic.address.city<br>
+@if(doctorClinic.clinic.address.locality != null){
+@doctorClinic.clinic.address.locality.name<br>
+}
+@if(doctorClinic.clinic.address.primaryCity != null){
+@doctorClinic.clinic.address.primaryCity.name<br>
+}
 @*doctorClinic.clinic.address.state.capitalize()<br>*@
 <i class="fa fa-phone-square"></i> @doctorClinic.clinic.contactNo</h5>
 </div>

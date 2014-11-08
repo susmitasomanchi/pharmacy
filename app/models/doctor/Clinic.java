@@ -77,11 +77,11 @@ public class Clinic extends BaseEntity{
 		if(!this.name.equals(((Clinic)arg0).name)){
 			return this.name.equals(((Clinic)arg0).name);
 		}
-		if(!this.contactPersonName.equals(((Clinic)arg0).contactPersonName)){
+		if((this.contactPersonName != null) && !(this.contactPersonName.equals(((Clinic)arg0).contactPersonName))){
 			return this.contactPersonName.equals(((Clinic)arg0).contactPersonName);
 		}
 
-		if(!this.contactNo.equals(((Clinic)arg0).contactNo)){
+		if((this.contactNo != null) && !(this.contactNo.equals(((Clinic)arg0).contactNo))){
 			return this.contactNo.equals(((Clinic)arg0).contactNo);
 		}
 

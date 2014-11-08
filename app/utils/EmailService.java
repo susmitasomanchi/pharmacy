@@ -43,7 +43,7 @@ public class EmailService {
 			//urlParameters.add(new BasicNameValuePair("toname", ""));
 			urlParameters.add(new BasicNameValuePair("subject", "Subject"));
 			//urlParameters.add(new BasicNameValuePair("text", builder.toString())); // This can be used for any plain text content of the mail
-			urlParameters.add(new BasicNameValuePair("html", "Content Of Email"));
+			urlParameters.add(new BasicNameValuePair("html", message));
 			urlParameters.add(new BasicNameValuePair("fromname", "MedNetwork"));
 			urlParameters.add(new BasicNameValuePair("from", "noreply@mednetwork.in"));
 			post.setEntity(new UrlEncodedFormEntity(urlParameters));
@@ -399,7 +399,7 @@ public class EmailService {
 			//urlParameters.add(new BasicNameValuePair("toname", ""));
 			urlParameters.add(new BasicNameValuePair("subject", "Subject"));
 			//urlParameters.add(new BasicNameValuePair("text", builder.toString())); // This can be used for any plain text content of the mail
-			urlParameters.add(new BasicNameValuePair("html", "Content Of Email"));
+			urlParameters.add(new BasicNameValuePair("html", message));
 			urlParameters.add(new BasicNameValuePair("fromname", "MedNetwork"));
 			urlParameters.add(new BasicNameValuePair("from", "noreply@mednetwork.in"));
 			post.setEntity(new UrlEncodedFormEntity(urlParameters));
