@@ -288,13 +288,13 @@ style="color:#006687; font-size:20px; position:relative; top:-20px; cursor:point
 <h5>@diagnosticCentre.contactPerson<span data-toggle="modal" data-target="#myaddrModal" style="cursor:pointer; position:relative; left: 20px; font-size:20px;"><i id="spinner2" class="fa fa-cog"></i></span></h5>
 <h5>@diagnosticCentre.address.addressLine1</h5>
 @if(diagnosticCentre.address.locality != null){
-@diagnosticCentre.address.locality.name<br>
+<h5>@diagnosticCentre.address.locality.name</h5>
 }
 @if(diagnosticCentre.address.primaryCity != null){
-@diagnosticCentre.address.primaryCity.name<br>
+<h5>@diagnosticCentre.address.primaryCity.name</h5>
 }
 @if(diagnosticCentre.address.state != null){
-<h5>@models.State.options().get(diagnosticCentre.address.state.toString())</h5>	
+<h5>@models.State.options().get(diagnosticCentre.address.state.toString())</h5>
 }
 <h5>@diagnosticCentre.address.pinCode</h5>
 <h5>Phones: @diagnosticCentre.mobileNo </h5>
@@ -305,7 +305,7 @@ Edit Contact Details
 </h4>
 }
 </div>
-city
+
 <div class="col-md-7">
 	<div id="profile_map_canvas" style="width:600px;height:400px">
 	@if(diagnosticCentre.address == null || diagnosticCentre.address.latitude== null || diagnosticCentre.address.longitude == null || diagnosticCentre.address.latitude.trim().compareToIgnoreCase("") == 0 || diagnosticCentre.address.longitude.trim().compareToIgnoreCase("") == 0){
@@ -399,27 +399,25 @@ function initialize(mapdiv) {
 }
 
 
-$( document ).ready(function() {
-		$("#city").blur(function() {
-				$("#map_canvas").html('');
-				var geocoder = new google.maps.Geocoder();
-				//var streetname=$("#streetName").val();
-				var area = $("#locality").find("option:selected").text();
-				geocoder.geocode({
-		'			address' : area+this.value
-				}, function(results, status) {
-						if (status == google.maps.GeocoderStatus.OK) {
-						//alert("location : " + results[0].geometry.location.lat() + " " +results[0].geometry.location.lng()); 
-						myLatLng = results[0].geometry.location;
-						lat = results[0].geometry.location.lat();
-						lng = results[0].geometry.location.lng();
-						initialize('map_canvas');
-						} else {
-							alert("Something got wrong " + status);
-								}
-					});
-					// google.maps.event.addDomListener(window, 'load', initialize);
-		});
+$('#locality-of-city').on('change', function(){
+	$("#map_canvas").html('');
+	var geocoder = new google.maps.Geocoder();
+	var streetname=$("#streetName").val();
+	var area = $("#locality-of-city").find("option:selected").text();
+	var city = $("#city").find("option:selected").text();
+	geocoder.geocode({
+		'address' : streetname+' '+area+' '+city
+	}, function(results, status) {
+		if (status == google.maps.GeocoderStatus.OK) {
+			//alert("location : " + results[0].geometry.location.lat() + " " +results[0].geometry.location.lng()); 
+			myLatLng = results[0].geometry.location;
+			lat = results[0].geometry.location.lat();
+			lng = results[0].geometry.location.lng();
+			initialize('map_canvas');
+		} else {
+		}
+	});
+	// google.maps.event.addDomListener(window, 'load', initialize);
 });
 
 </script>
@@ -485,7 +483,7 @@ $( document ).ready(function() {
   			</div>
   			<div class="form-group" id= "loc1">
     			<label for="area">Location*</label>
-    			 <select data-placeholder="Select Locality" id="locality" name="locality" class="form-control chosen-select" required>
+    			 <select data-placeholder="Select Locality" id="locality-of-city" name="locality" class="form-control chosen-select" required>
   				  	@for(locality <- PublicController.getPrimaryCityLocations()){
   				  		@if((diagnosticCentre.address!=null) && (diagnosticCentre.address.locality != null) && (diagnosticCentre.address.locality == locality)){
   				  	  		<option value="@locality.id" selected>@locality.name</option>
@@ -577,7 +575,7 @@ $( document ).ready(function() {
 						}
 						</select>
         		</div>
-        		<button onclick="sendRequest()" class="btn btn-primary btn-sm">Send</button>
+        		 <button onclick="sendRequest()" id="suggest-btn" class="btn btn-primary btn-xs">Suggest</button>
         	</div>
         </div>
      </div>
@@ -586,20 +584,56 @@ $( document ).ready(function() {
 </div>
 <script>
 	$('#city').on('change', function(){
-		$("#loc1").hide();
-		$.get('/doctor/get-localities/'+$('#city').val(), function(data){
-			$("#loc2").html(data).show();	
+	$("#loc1").hide();
+	$.get('/doctor/get-localities/'+$('#city').val(), function(data){
+		$("#loc2").html(data).show();	
+		$('#locality-of-city').on('change', function(){
+		$("#map_canvas").html('');
+		var geocoder = new google.maps.Geocoder();
+			var streetname=$("#streetName").val();
+			var area = $("#locality-of-city").find("option:selected").text();
+			var city = $("#city").find("option:selected").text();
+			geocoder.geocode({
+		'address' : streetname+' '+area+' '+city
+	}, function(results, status) {
+		if (status == google.maps.GeocoderStatus.OK) {
+			//alert("location : " + results[0].geometry.location.lat() + " " +results[0].geometry.location.lng()); 
+			myLatLng = results[0].geometry.location;
+			lat = results[0].geometry.location.lat();
+			lng = results[0].geometry.location.lng();
+			initialize('map_canvas');
+		} else {
+		}
+			});			
 		});
 	});
+});
+function sendRequest(){
+var loc = $('#loc').val();
+var city = $("#city1").find("option:selected").text();
+if(loc.trim() == ""){
+alert("Please Provide Locality Name.");
+return false;
+}
 
-	function sendRequest(){
-		var loc = $('#loc').val();
-		var city = $("#city1").find("option:selected").text();
-		if(loc.trim() == ""){
-			alert("Provide Locality.");
-		return false;
+	$('#suggest-btn').html('<i class="fa fa-cog fa-spin"></i>');
+	$.get('/secure-feedback/'+$('#loc').val()+'/'+$("#city1").find("option:selected").text(), function(data){
+		if(data==0){
+			$('#suggest-btn').html('Suggest');
+			
+			$('#myFormModal').modal('hide');
+			alert("Your Suggetion Sended Successfully.");
+		}
+	});
+
+
 }
-window.location.href = '/secure-feedback/'+$('#loc').val()+'/'+$("#city1").find("option:selected").text();
-}
+
+
+
+$('#myFormModal').on('show.bs.modal', function (e) {
+	$('#suggest-city').html('in '+$("#city").find("option:selected").text());
+	$('#city1').val($("#city").find("option:selected").val());
+})
 </script>
 }
