@@ -463,6 +463,7 @@ $('body').on('click', function (e) {
 <script>
 
 $('#city').on('change', function(){
+	alert('localities');
 	$("#loc1").hide();
 	$.get('/doctor/get-localities/'+$('#city').val(), function(data){
 		$("#loc2").html(data).show();	
@@ -481,7 +482,7 @@ $('#city').on('change', function(){
 					myLatLng = results[0].geometry.location;
 					lat = results[0].geometry.location.lat();
 					lng = results[0].geometry.location.lng();
-					geocoder.geocode({'latLng': myLatLng}, function(res$("#city").find("option:selected").text()ults, status){
+					geocoder.geocode({'latLng': myLatLng}, function(results, status){
 						if (status == google.maps.GeocoderStatus.OK) {
 							var address = results[0].address_components;
 							var zipcode = address[address.length - 1].long_name;
