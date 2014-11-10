@@ -98,10 +98,10 @@ public class LoginController extends Controller {
 					final String url = session(Constants.URL_AFTER_LOGIN);
 					Logger.info("url: "+url);
 					session(Constants.URL_AFTER_LOGIN, "");
-					return redirect(session(url));
+					return redirect(url);
 				}
 				else{
-					Logger.info("url null");
+					Logger.info("No RedirectTo URL in Session - Taking User to Dashboard");
 					return redirect(routes.UserActions.dashboard());
 				}
 			}
