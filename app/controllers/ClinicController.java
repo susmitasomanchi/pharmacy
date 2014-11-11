@@ -105,6 +105,9 @@ public class ClinicController extends Controller{
 				final byte[] array = new byte[32];
 				random.nextBytes(array);
 				final String verificationCode = Base64.encodeBase64String(array);
+				if(verificationCode.contains("/")){
+					verificationCode.replaceAll("/", "-");
+				}
 
 				final ClinicInvite invite = new ClinicInvite();
 				invite.doctor = doctor;
