@@ -511,7 +511,7 @@ public class EmailService {
 	 * Action to send email and password to the Clinic User.
 	 * NO URL
 	 */
-	public static boolean sendClinicUserConfirmationMail(final ClinicUser clinicUser,final ClinicUser clinicAdmin){
+	public static boolean sendClinicUserConfirmationMail(final ClinicUser clinicUser,final ClinicUser clinicAdmin,final String password){
 
 		final String url = Constants.EMAIL_URL;
 
@@ -523,7 +523,7 @@ public class EmailService {
 			final StringBuilder builder=new StringBuilder();
 			builder.append("<html><body>");
 			builder.append("<p> Dear "+clinicUser.appUser.name+",<br><br> You have been added as the Clinic User in "+clinicAdmin.clinic.name+"by "+clinicAdmin.appUser.name+" , <br>");
-			builder.append(" Your Email Id <b>"+clinicUser.appUser.email+"</b><br> Password <b>"+clinicUser.appUser.password+"</b><br><br>Best regards,<br>MedNetwork.in</p>");
+			builder.append(" Your Email Id <b>"+clinicUser.appUser.email+"</b><br> Password <b>"+password+"</b><br><br>Best regards,<br>MedNetwork.in</p>");
 			builder.append("</body></html>");
 
 			final List<NameValuePair> urlParameters = new ArrayList<NameValuePair>();

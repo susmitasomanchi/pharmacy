@@ -473,7 +473,7 @@ public class ClinicController extends Controller{
 				@Override
 				public Integer apply() {
 					int result = 0;
-					if(!EmailService.sendClinicUserConfirmationMail(clinicUser, LoginController.getLoggedInUser().getClinicUser())){
+					if(!EmailService.sendClinicUserConfirmationMail(clinicUser, LoginController.getLoggedInUser().getClinicUser(),requestMap.get("password")[0])){
 						result=1;
 					}
 
@@ -535,14 +535,7 @@ public class ClinicController extends Controller{
 				clinicUser.appUser.name = requestMap.get("name")[0];
 			}
 			if((requestMap.get("email") != null) && !(requestMap.get("email")[0].trim().isEmpty())){
-				final int appUsers = AppUser.find.where().ieq("email", requestMap.get("email")[0].trim()).findRowCount();
-				if(appUsers == 0){
-					clinicUser.appUser.email = requestMap.get("email")[0];
-				}
-				else{
-					flash().put("alert", new Alert("alert-info", "Sorry. "+requestMap.get("email")[0].trim()+" Already existed in the System.").toString());
-					return redirect(routes.ClinicController.editClinicUser(clinicUser.id));
-				}
+				clinicUser.appUser.email = requestMap.get("email")[0];
 			}
 			if((requestMap.get("password") != null) && !(requestMap.get("password")[0].trim().isEmpty())){
 				final String password = requestMap.get("password")[0];
