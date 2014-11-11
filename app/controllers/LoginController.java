@@ -96,7 +96,7 @@ public class LoginController extends Controller {
 
 				if(session(Constants.URL_AFTER_LOGIN) != null && !session(Constants.URL_AFTER_LOGIN).trim().isEmpty()){
 					final String url = session(Constants.URL_AFTER_LOGIN);
-					Logger.info("url: "+url);
+					Logger.info("Redirecting to URL in Session after Login: "+url);
 					session(Constants.URL_AFTER_LOGIN, "");
 					return redirect(url);
 				}
