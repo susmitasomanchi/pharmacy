@@ -2,13 +2,7 @@
 <!DOCTYPE html>
 <html>
     <head>
-    <script type="text/javascript">    
-             window.history.forward();
-             function noBack() { 
-                  window.history.forward(); 
-             }
-        </script>
-	@if(title != null && title != ""){
+  	@if(title != null && title != ""){
 		<title>@title</title>
 		<meta property="og:title" content="@title" />
   	}else{
