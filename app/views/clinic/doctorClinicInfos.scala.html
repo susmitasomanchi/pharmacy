@@ -2,8 +2,7 @@
 <div class="row">
 <form action="@routes.ClinicController.assaignDoctorsToClinicUser(clinicUser.id)" method="POST">
 <div class="col-md-4">
-<select name="doctors" multiple>
-<option></option>
+<select name="doctors" id="select-doc" multiple>
 @for(doctorClinicInfo <- doctorClinicInfos){
 	@if(clinicUser.doctorsList.contains(doctorClinicInfo.doctor)){
 		<option value="@doctorClinicInfo.doctor.id" selected>@doctorClinicInfo.doctor.appUser.name</option>
@@ -14,8 +13,10 @@
 </select>
 </div>
 <div class="col-md-2">
-<input type="submit" class="btn btn-primary btn-sm" value="Assign">
+<input type="submit" class="btn btn-primary btn-xs" onclick="return verify();" value="Assign">
 </div>
 </form>
 </div>
+<script>
 
+</script>

@@ -612,14 +612,18 @@ public class ClinicController extends Controller{
 		if(LoginController.getLoggedInUserRole().equals(Role.CLINIC_ADMIN.toString())){
 			final ClinicUser clinicUser = ClinicUser.find.byId(clinicUserId);
 			final String[] docIds = request().body().asFormUrlEncoded().get("doctors");
-			for (final String docId : docIds) {
-				final Doctor doctor = Doctor.find.byId(Long.parseLong(docId));
-				if(!(clinicUser.doctorsList.contains(doctor))){
-					clinicUser.doctorsList.add(doctor);
+			if(docIds != null && docIds.length > 0){
+				for (final String docId : docIds) {
+					final Doctor doctor = Doctor.find.byId(Long.parseLong(docId));
+					if(!(clinicUser.doctorsList.contains(doctor))){
+						clinicUser.doctorsList.add(doctor);
+					}
 				}
-			}
 
-			clinicUser.update();
+				clinicUser.update();
+			}else{
+				flash().put("alert", new Alert("alert-info", "Select Doctors to assign.").toString());
+			}
 			return redirect(routes.ClinicController.listClinicUsers());
 		}else{
 			flash().put("alert", new Alert("alert-info", "Sorry. Clinic Admin only can access this.").toString());

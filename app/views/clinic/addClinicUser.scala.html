@@ -7,41 +7,40 @@
   	<div class="col-md-4">
   	
   	<div class="form-group">
-	<label for="Email Id">Name</label>
-	<input type="text"  class="form-control" name="name">
+	<label for="Email Id">Name *</label>
+	<input type="text"  class="form-control" name="name" required>
 	</div>
 
 	<div class="form-group">
-	<label for="Email Id">Email Id</label>
-	<input type="text"  class="form-control" name="email">
+	<label for="Email Id">Email Id *</label>
+	<input type="text"  class="form-control" name="email" required>
 	</div>
 
 	<div class="form-group">
-	<label for="Password">Password</label>
-	<input type="password"  id="password" class="form-control" name="password" >
+	<label for="Password">Password *</label>
+	<input type="password"  id="password" class="form-control" name="password" required>
 	</div>
 	
 	<div class="form-group">
-	<label for="Password">Cofirm Password</label>
-	<input type="password" id="confirmPassword" class="form-control" name="confirmPassword" >
+	<label for="Password">Cofirm Password *</label>
+	<input type="password" id="confirmPassword" class="form-control" name="confirmPassword" required>
 	</div>
 
 	<div class="form-group">
-	<label for="Contact No">Contact No</label>
-	<input type="text"  class="form-control" name="mobileNumber">
+	<label for="Contact No">Contact No *</label>
+	<input type="text"  class="form-control" name="mobileNumber" id="contact" required>
 	</div>
 
 	<div class="form-group">
-	<label for="Sex">Sex</label>
+	<label for="Sex">Sex *</label>
 	<select id="sex" name="sex">
-	<option></option>
-			@for((k,v) <- Sex.options()){
+		@for((k,v) <- Sex.options()){
 				<option value="@k">@v</option>
 			}
         </select>
 	</div>
 	<div class="form-group">
-      <label for="inputDOB">Birth Date<br><span style="font-size:10px;"><b>(DD-MM-YYYY)</b></span></label>
+      <label for="inputDOB">Birth Date <br><span style="font-size:10px;"><b>(DD-MM-YYYY)</b></span></label>
 		<div class="input-append date myDatepicker" data-date="01-01-1990" data-date-format="dd-mm-yyyy">
 			<input id="dob-datepicker" class="span2" size="16" type="text" name="dob">
 			<span class="add-on"><i class="icon-th"></i></span>
@@ -56,12 +55,7 @@
 </div>
 <script>
 function validateSubmit(){
-var password = $("#password").val();
-var confirmPassword = $("#confirmPassword").val();
-if(password != confirmPassword){
-alert("passwords do not match");
-return false;
-}
+
 }
 </script>
 
@@ -75,6 +69,25 @@ var checkin =$('#dob-datepicker').datepicker({
 		    return date.valueOf() > now.valueOf() ? 'disabled' : '';
 	  },
 })
+});
+$(document).ready(function(){
+$('#confirmPassword').blur(function(){
+if($("#password").val().trim() != $("#confirmPassword").val().trim()){
+    alert("Passwords Do Not Match!");
+    return false;
+    }
+    
+  
+});
+$('#contact').blur(function(){
+var pattern = /^\d{10}$/;
+if(!(pattern.test($("#contact").val().trim()))){
+    alert("Enter Valid Contact Number");
+    return false;
+    }
+    
+  
+});
 });
 </script>
 
