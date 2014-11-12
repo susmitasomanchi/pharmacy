@@ -217,6 +217,8 @@ public class ClinicController extends Controller{
 				Logger.warn("logged in AppUser: "+LoginController.getLoggedInUser().id);
 				Logger.warn("logged in ClinicUser: "+LoginController.getLoggedInUser().getClinicUser().clinic);
 				return redirect(routes.LoginController.processLogout());
+			}else{
+				flash().put("alert", new Alert("alert-info", "Choose an Image to upload.").toString());
 			}
 			//final String pattern="([^\\s]+(\\.(?i)(JPEG|jpg|png|gif|bmp))$)";
 			if (request().body().asMultipartFormData().getFile("backgroundImage") != null) {
@@ -245,6 +247,7 @@ public class ClinicController extends Controller{
 				}
 			} else {
 				Logger.info("BG IMAGE NULL");
+				flash().put("alert", new Alert("alert-info", "Choose an Image to upload.").toString());
 			}
 		}catch(final Exception e){
 			e.printStackTrace();
