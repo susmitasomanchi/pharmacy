@@ -1,0 +1,85 @@
+@()
+@main("Add Patient"){
+	<div class="container">
+	<form id="form" class="form-horizontal" action="@routes.DoctorController.addNewPatient()" method="POST" data-toggle="validator">
+  	<div class="col-md-4">
+  	
+  	<div class="form-group">
+	<label for="name">Name *</label>
+	<input type="text"  class="form-control" name="name" required>
+	</div>
+	
+  	<div class="form-group">
+	<label for="Email Id">Email Id *</label>
+	<input type="text"  id="email" class="form-control" name="email" required>
+	</div>
+	
+	<div id="not-available">
+	<div class="form-group">
+	<label for="Contact Number">Contact Number *</label>
+	<input type="text"  class="form-control" name="contactNo" required>
+	</div>
+	      
+	<div class="form-group">
+      <label for="inputSex" class="col-lg-2 control-label">Sex*</label>
+      <div class="col-lg-10">
+        <select id="inputSex" name="sex">
+			@for((k,v) <- Sex.options()){
+				<option value="@k">@v</option>
+			}
+        </select>
+      </div>
+    </div>
+	
+	<div class="form-group">
+      <label for="inputDOB">Birth Date<br><span style="font-size:10px;"><b>(DD-MM-YYYY)</b></span></label>
+		<div class="input-append date myDatepicker" data-date="01-01-1990" data-date-format="dd-mm-yyyy">
+			<input id="dob-datepicker" class="span2" size="16" type="text" name="dob">
+			<span class="add-on"><i class="icon-th"></i></span>
+      </div>
+    </div>
+    </div>
+	<input type="submit" class="btn btn-primary btn-sm">Add</button>
+	</div>
+	</form>
+	</div>
+
+<script>
+$('.myDatepicker').each(function() {
+var nowTemp = new Date();
+var now = new Date(nowTemp.getFullYear(), nowTemp.getMonth(), nowTemp.getDate(), 0, 0, 0, 0);
+var checkin =$('#dob-datepicker').datepicker({
+	  format: 'dd-mm-yyyy',
+	  onRender: function(date) {
+		    return date.valueOf() > now.valueOf() ? 'disabled' : '';
+	  },
+})
+});
+</script>
+ <script>
+     $(document).ready(function(){
+     	alert("hi");
+    $("#email").blur(function(){
+     var email = $("#email").val().trim();
+     if(email == ""){
+     alert("Enter Email ID");
+     return false;
+     }
+     $.get('/secure-doctor/search-patient-process/'+email, function(data){
+	if(data != 0){
+	$("#not-available").hide();
+	window.location.href = '/secure-doctor/add-patient/'+data.trim();
+	}
+	if(data == 0){
+	alert(email+" already existed in mednetwork");
+	return false;
+	}
+	
+	});
+   
+  });
+  });
+  
+  
+</script>
+}

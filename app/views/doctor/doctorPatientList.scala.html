@@ -1,0 +1,86 @@
+@(list: List[models.doctor.QuestionAndAnswer])
+@*******************************
+
+THIS IS AN AUTO GENERATED CODE
+PLEASE DO NOT MODIFY IT BY HAND
+
+********************************@
+@import play.i18n._
+
+@main("Q & A") {
+<style>
+.panel-group .panel+.panel {
+margin-top: 0px;
+}	
+.panel{
+margin-bottom:5px;
+}
+.panel-group {
+margin-bottom: 5px;
+}
+</style>
+<div class="panel-group" id="accordion">
+
+@for(qa <- list){
+<div class="panel panel-default">
+    <div class="panel-heading">
+      <h4 class="panel-title">
+        <a data-toggle="collapse" data-parent="#accordion" href='#collapseOne'>
+          <p>  @qa.question - @qa.questionBy.name    </p>
+        </a>
+      </h4>
+    </div>
+      
+    <div id="collapseOne" class="panel-collapse collapse in">
+      <div class="panel-body">
+       <div class="row">
+      <div class="col-md-11">
+      		@if(qa.answer == null || qa.answer.isEmpty()){
+      			@if(qa.answerBy.id == LoginController.getLoggedInUser().id){	
+      				@helper.form(action=routes.DoctorController.answerQuestion(qa.id),'_method->"post"){
+					<textarea name="answer" rows="4" id="openquesbox" style="left:0px; width:700px;" placeholder="Answer 's Question..."></textarea>
+					<br>
+					<button class="btn btn-primary btn-xs pull-right subbtn" id="addcombtn" >Answer</button><br>
+					}
+			} else {
+				<hr>
+				<p style="margin-left:100px;">
+				<span class="pull-right"><small><i>@qa.answerBy.name has not answered the question yet.</i></small></span>
+				</p>
+			}
+			
+			
+		} else {
+			<hr>
+			<div class="row">
+			<div class="col-md-1">
+				<span style="font-size:24px; color:#aea79f;"><i class="fa fa-quote-left"></i></span>
+			</div>
+      		<div class="col-md-11">
+			<p>
+			<i>@qa.answer</i>
+			<br>
+			<small style="color:#aea79f;">@qa.answerDate.format("dd-MMM-yyyy (hh:mm)")</small><span class="pull-right">@qa.answerBy.name</span>
+			</p>
+			</div>
+      		</div>			
+		}	
+		
+		</div>
+		
+		</div>
+		</div>
+	</div>
+	</div>
+	
+}
+</div>
+
+<script>
+$(".subbtn").click(function(e){
+	$(this).html('<i class="fa fa-cog fa-spin"></i>');
+});
+</script>
+
+
+}

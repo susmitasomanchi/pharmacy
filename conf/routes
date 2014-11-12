@@ -157,6 +157,14 @@ GET		/secure-doctor/diagnostic-tests/get-json					controllers.DoctorController.g
 GET		/secure-doctor/follow-up-appointment/:clinicId/:patientId					controllers.DoctorController.getPatientFollowUPAppointment(clinicId : Long,patientId: Long)
 POST		/secure-doctor/follow-up-appointment/:appointmentId/:patientId					controllers.DoctorController.processPatientFollowUPAppointment(appointmentId : Long,patientId: Long)
 GET		/secure-doctor/get-doctors-list/:clinicId											controllers.DoctorController.getDoctorClinicInfoList(clinicId : Long)
+GET		/secure-doctor/search-patient														controllers.DoctorController.searchPatient()
+GET		/secure-doctor/search-patient-process/:email								controllers.DoctorController.searchPatientProcess(email : String)
+GET		/secure-doctor/add-patient/:patientId												controllers.DoctorController.addPatientToList(patientId : String)
+POST		/secure-doctor/add-new-patient											controllers.DoctorController.addNewPatient()
+
+
+
+
 
 
 

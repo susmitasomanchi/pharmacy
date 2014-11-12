@@ -6,13 +6,13 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Calendar;
 import java.util.Date;
-import java.util.HashMap;
 import java.util.HashSet;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
+import models.Address;
 import models.Alert;
 import models.AppUser;
 import models.Feedback;
@@ -930,6 +930,22 @@ public class PublicController extends Controller{
 			return new ArrayList<Locality>();
 		}
 	}
+	public static List<Locality> getPrimaryCityLocations(final Long id){
+		final Address address = Address.find.byId(id);
+		if(address.primaryCity != null){
+			return  Locality.find.where().eq("primaryCity", address.primaryCity ).findList();
+		}
+		else{
+			if((session(Constants.CITY_ID) != null)){
+				final PrimaryCity primaryCity = PrimaryCity.find.byId(Long.parseLong(session(Constants.CITY_ID)));
+				return  Locality.find.where().eq("primaryCity", primaryCity).findList();
+
+			}
+			else{
+				return new ArrayList<Locality>();
+			}
+		}
+	}
 	/**
 	 * @author lakshmi
 	 * Action to get All Localities of primaryCity.
@@ -1037,5 +1053,7 @@ public class PublicController extends Controller{
 		final JSONArray jsonArray = new JSONArray(Arrays.asList(result));
 		return ok(jsonArray.toString());
 	}
+
+
 
 }
