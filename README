@@ -1,5 +1,3 @@
-This is the pharmacy based application through which doctor ,patient ,diagnostic center,all would be attached.
+MedNetwork
 =============================================================================================================
-
-
-this application is build by using java technology with playframework and postgres database.
+App to connect 6x6 matrix of doctors, patients, pharmacy, diagnostic centers, blood banks and pharma companies for data exchange with utility software.
