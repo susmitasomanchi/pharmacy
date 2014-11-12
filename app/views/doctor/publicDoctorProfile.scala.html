@@ -498,12 +498,13 @@ $(document).ready(function(){
 @clinicInfo.clinic.contactPersonName
 <br>
 @if(clinicInfo.clinic.address != null){
-@clinicInfo.clinic.address.addressLine1
-<br>
-@clinicInfo.clinic.address.area
-<br>
-@clinicInfo.clinic.address.city
-<br>
+@clinicInfo.clinic.address.addressLine1<br>
+	@if(clinicInfo.clinic.address.locality != null){
+	@clinicInfo.clinic.address.locality.name<br>
+		}
+	@if(clinicInfo.clinic.address.primaryCity != null){
+	@clinicInfo.clinic.address.primaryCity.name<br>
+	}
 @clinicInfo.clinic.contactNo
 <br><br>
 <a class="btn btn-primary" href="@routes.PublicController.scheduleAppointment(clinicInfo.id)">Book Appointment</a>

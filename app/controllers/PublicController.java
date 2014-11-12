@@ -81,6 +81,9 @@ public class PublicController extends Controller{
 			if((key!= null)&& !(key.equalsIgnoreCase("any")) && !(key.trim().isEmpty())){
 				doctorClinicList.like("doctor.searchIndex","%"+key.trim().toLowerCase()+"%");
 			}
+
+			doctorClinicList.eq("doctor.appUser.isSearchable", true);
+
 			for (final DoctorClinicInfo doctorClinicInfo : doctorClinicList.findList()) {
 				doctorClinicInfos.add(doctorClinicInfo.doctor);
 			}
@@ -817,14 +820,15 @@ public class PublicController extends Controller{
 			}
 		});
 		// End of async
-		flash().put("alert", new Alert("alert-success", "Thank you for your suggetion.").toString());
-		if(LoginController.isLoggedIn()){
-			return redirect(routes.UserActions.dashboard());
-		}
-		return redirect(routes.Application.index());
+
+		//flash().put("alert", new Alert("alert-success", "Thank you for your suggetion.").toString());
+		//if(LoginController.isLoggedIn()){
+		//	return redirect(routes.UserActions.dashboard());
+		//}
+		//return redirect(routes.Application.index());
+
+		return ok("0");
 	}
-
-
 
 
 	/**
@@ -875,16 +879,30 @@ public class PublicController extends Controller{
 	 *  GET /clinic/search
 	 */
 	public static Result searchClinics() {
-		return ok(views.html.clinic.searchClinics.render("",new ArrayList<Clinic>(),false));
+		return ok(views.html.clinic.searchClinics.render("",null,false));
 	}
 	/**
 	 * @author lakshmi
 	 * Action to perform search operation for finding Diagnostic based on the searchKey
 	 * GET	/clinic/search/:searchKey
 	 */
-	public static Result searchFavoriteClinics(final String searchKey) {
-		final String searchStr = searchKey.toLowerCase().trim();
-		if(searchStr.length() < 4){
+	public static Result searchFavoriteClinics(final String key,final String locality) {
+		Locality loc = null;
+		if(session(Constants.CITY_ID) != null){
+			final ExpressionList<Clinic> clinicList = Clinic.find.where().eq("primaryCity", PrimaryCity.find.byId(Long.parseLong(session(Constants.CITY_ID))));
+			if(locality != null && !(locality.equalsIgnoreCase("0"))){
+				loc = Locality.find.byId(Long.parseLong(locality));
+				clinicList.eq("address.locality", loc);
+			}
+			if((key!= null)&& !(key.equalsIgnoreCase("any")) && !(key.trim().isEmpty())){
+				clinicList.like("searchIndex","%"+key.trim().toLowerCase()+"%");
+			}
+			return ok(views.html.doctor.clinicList.render(clinicList.findList()));
+		}else{
+			flash().put("alert", new Alert("alert-info","Please Select City.").toString());
+			return ok(views.html.clinic.searchClinics.render(key,loc,true));
+		}
+		/*if(searchStr.length() < 4){
 			flash().put("alert", new Alert("alert-danger", "The searck key should contain atleast four charecters").toString());
 			return ok(views.html.clinic.searchClinics.render(searchKey,new ArrayList<Clinic>(),false));
 		}
@@ -895,7 +913,7 @@ public class PublicController extends Controller{
 					.like("searchIndex","%"+searchStr+"%")
 					.findList();
 			return ok(views.html.clinic.searchClinics.render(searchKey,clinicList,true));
-		}
+		}*/
 	}
 	/**
 	 * @author lakshmi
@@ -919,17 +937,16 @@ public class PublicController extends Controller{
 	 */
 	public static Result getPrimaryCityLocations(final String cityId){
 		List<Locality> localities = new ArrayList<Locality>();
+		PrimaryCity primaryCity = null;
 		if((cityId.isEmpty()) && (session(Constants.CITY_ID) != null)){
-			final PrimaryCity primaryCity = PrimaryCity.find.byId(Long.parseLong(session(Constants.CITY_ID)));
+			primaryCity = PrimaryCity.find.byId(Long.parseLong(session(Constants.CITY_ID)));
 			localities =  Locality.find.where().eq("primaryCity", primaryCity).findList();
-
 		}
 		else if(!(cityId.isEmpty())){
-			final PrimaryCity primaryCity = PrimaryCity.find.byId(Long.parseLong(cityId));
+			primaryCity = PrimaryCity.find.byId(Long.parseLong(cityId));
 			localities = Locality.find.where().eq("primaryCity", primaryCity).findList();
-
 		}
-		return ok(views.html.localities.render(localities));
+		return ok(views.html.localities.render(primaryCity, localities));
 	}
 	/**
 	 * @author lakshmi

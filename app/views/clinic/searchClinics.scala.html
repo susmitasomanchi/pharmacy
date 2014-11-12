@@ -1,4 +1,4 @@
-@(searchKey: String,clinics : List[models.doctor.Clinic],flag : Boolean)
+@(searchKey: String,loc : models.Locality,flag : Boolean)
 
 @import play.i18n._
 @import helper.twitterBootstrap._
@@ -7,73 +7,71 @@
 @main("Search Clinics"){
 <div class="well">
 <div class="row">
-
-<input id="searchInput" value="@searchKey" style="width:40%;"
-
-	@if(session().get(utils.Constants.CITY_ID) != null){
-		placeholder="Clinic Name or Locality in @models.PrimaryCity.find.byId(Long.parseLong(session().get(utils.Constants.CITY_ID))).name"
-	}else{
-		placeholder="Clinic Name or Locality"
+<div id="locDiv" class="col-md-2" style="width:20%">
+	<select class="form-control chzn" data-placeholder="Select Locality" name="location" id="location" style="width:100%;box-shadow: 1px 1px 1px 1px #aaaaaa; height:120%;">
+	<option></option>
+		@if(loc != null){
+		<option value="@loc.id">@loc.name</option>
+		}
+		@for(locality <- PublicController.getPrimaryCityLocations()){
+			<option value="@locality.id">@locality.name</option>
+		}
+	</select>
+</div>
+	<div id="searchKey" class="col-md-5" style="width:70%">
+		<input id="searchInput" value="@searchKey" style="width:80%;"
+			@if(searchKey != ""){
+			value="@searchKey"
+			}else{
+			@if(session().get(utils.Constants.CITY_ID) != null){
+			placeholder="Clinic Name in @models.PrimaryCity.find.byId(Long.parseLong(session().get(utils.Constants.CITY_ID))).name"
+			}else{
+		placeholder="Clinic Name"
+	}
 	}
 
 />
-
-<a onclick="validateSubmit();" class="btn btn-xs btn-primary">Search</a>
+</div>
+<button onclick="validateSubmit();" class="btn btn-xs btn-primary">Search</button>
 
 </div>
+</div>
+<div id="my-clinic">
 </div>
 <script>
+window.onload = function(){
+$(".chzn").chosen({allow_single_deselect: true});
+}
+
+
 $("#searchInput").keyup(function (e) {
     if (e.keyCode == 13) {
     	if($('#searchInput').val().trim() == ''){
         	return false;
         }
-    	window.location.href='/clinic/search/'+$('#searchInput').val().trim();
+    	//window.location.href='/clinic/search/'+$('#searchInput').val().trim();
     }
 });
+
+
 function validateSubmit(){
 var searchKey = $('#searchInput').val().trim();
+var loc = $('#location').val();
 if(searchKey == ''){
-alert("Enter Clinic Name Or Locality.");
-return false;
+searchKey = "any";
 }
-window.location.href='/clinic/search/'+$('#searchInput').val().trim();
+if(loc == null || loc == ''){
+loc = "0";
+}
+$.get('/clinic/search/'+searchKey+'/'+loc, function(data){
+	$('#my-clinic').html(data);
+});
+
+//window.location.href='/clinic/search/'+searchKey+'/'+loc;
 }
 </script>
 
 <br><br>
-@if(flag){
-<div class="row" style="padding:15px;">
-@if(clinics.size() > 0){
-<table class="table table-hover">
-	<tr class="active">
-		<th>S.No</th>
-		<th>Clinic Name</th>
-		<th>Address</th>
-		<th>Action</th>
-	</tr>
-	@for((clinic,index) <- clinics.zipWithIndex){
-	<tr class="info">
-	<td>@{index+1}</td>
-	<td><h5>@clinic.name</h5></td>
-	<td>@if(clinic.address != null){
-	<h5>@clinic.address.addressLine1</h5>
-	<h5>@clinic.address.area</h5>
-	<h5>@clinic.address.city</h5>}else{
-	<h5>Address not available.</h5>
-	}
-	</td>
-	<td><a href="@routes.PatientController.addClinicToLoggedInUser(clinic.id)" class="btn btn-success btn-sm"><i class="fa fa-plus"></i>&nbsp;Fav</a></td>
-</tr>
-}
-</table>
-}else{
-	<h5> No Clinics Found with @searchKey</h5>
-}
-}
-</div>
 
 
 }
-
-

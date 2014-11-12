@@ -159,8 +159,12 @@ $('body').on('click', function (e) {
 @if(bloodBank.address != null){
 <h5>@bloodBank.contactPersonName<span data-toggle="modal" data-target="#myaddrModal" style="cursor:pointer; position:relative; left: 20px; font-size:20px;"><i id="spinner2" class="fa fa-cog"></i></span></h5>
 <h5>@bloodBank.address.addressLine1</h5>
-<h5>@bloodBank.address.area</h5>
-<h5>@bloodBank.address.city</h5>
+@if(bloodBank.address.locality != null){
+<h5>@bloodBank.address.locality.name</h5>
+}
+@if(bloodBank.address.primaryCity != null){
+<h5>@bloodBank.address.primaryCity.name</h5>
+}
 <h5>@bloodBank.address.pinCode</h5>
 @if(bloodBank.address.state != null){
 <h5>@bloodBank.address.state.capitalize()</h5>	

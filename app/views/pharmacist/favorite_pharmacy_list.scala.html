@@ -71,9 +71,15 @@ margin-bottom:0px;
 <h5><b>@pharmacy.name</b></h5>
         @if(pharmacy.address != null){  
         <h5>@pharmacy.address.addressLine1<br>     
-        @pharmacy.address.area<br>
-        @pharmacy.address.city<br>
-        @pharmacy.address.state.capitalize()</h5>
+      	 @if(pharmacy.address.locality != null){ 
+        		@pharmacy.address.locality.name<br>
+        	}
+        @if(pharmacy.address.primaryCity != null){
+        		@pharmacy.address.primaryCity.name<br>
+        	}
+        @if(pharmacy.address.state != null){
+        		@pharmacy.address.state.capitalize()</h5>
+        	}
         }
         <h5><i class="fa fa-phone-square"></i>@pharmacy.contactNumber</h5>
 </div>

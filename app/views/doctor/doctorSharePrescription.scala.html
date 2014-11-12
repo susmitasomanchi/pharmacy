@@ -186,7 +186,7 @@ $('#click').append();
 <select id="sharePharmacy" class="chzn" style="width:100%;">
 <option></option>
 @for(pharmacy <- prescription.doctor.pharmacyList){
-	<option value="@pharmacy.id">@pharmacy.name @if(pharmacy.address != null){&#40;@pharmacy.address.area&#41;}</option>
+	<option value="@pharmacy.id">@pharmacy.name @if(pharmacy.address != null && pharmacy.address.locality != null){&#40;@pharmacy.address.locality.name&#41;}</option>
 }
 </select>
 
@@ -200,7 +200,7 @@ $('#click').append();
 <select id="shareDiagnostic" class="chzn" style="width:100%;">
 <option></option>
 @for(diagnostic <- prescription.doctor.diagnosticCentreList){
-	<option value="@diagnostic.id">@diagnostic.name @if(diagnostic.address != null){&#40;@diagnostic.address.area&#41;}</option>
+	<option value="@diagnostic.id">@diagnostic.name @if(diagnostic.address != null && diagnostic.address.locality != null){&#40;@diagnostic.address.locality.name&#41;}</option>
 }
 </select>
 </div>
@@ -244,6 +244,10 @@ function sharePrescription(){
 	if ($('#patient-consent-check').is(':checked')) {
 		var pharId = $('#sharePharmacy').val();
 		var diagId = $('#shareDiagnostic').val();
+		if(pharId == "" && diagId == ""){
+		alert("Select Pharmacy or Diagnostic Centre to share.");
+		return false;
+		}
 		window.location.href='/secure-doctor/share-prescription?prId=@prescription.id&pharmacyId='+pharId+'&diagnosticId='+diagId+'&consent=true';
 	}
 	else{

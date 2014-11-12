@@ -131,8 +131,8 @@ public class DiagnosticCentre extends BaseEntity {
 			if(this.address.addressLine1 != null){
 				stringBuilder.append(this.address.addressLine1.trim().toLowerCase());
 			}
-			if(this.address.area != null){
-				stringBuilder.append(this.address.area.trim().toLowerCase());
+			if(this.address.locality != null){
+				stringBuilder.append(this.address.locality.name.trim().toLowerCase());
 			}
 			if(this.address.city != null){
 				stringBuilder.append(this.address.city.trim().toLowerCase());
@@ -158,8 +158,8 @@ public class DiagnosticCentre extends BaseEntity {
 			if(this.address.addressLine1 != null){
 				stringBuilder.append(this.address.addressLine1.trim().toLowerCase());
 			}
-			if(this.address.area != null){
-				stringBuilder.append(this.address.area.trim().toLowerCase());
+			if(this.address.locality != null){
+				stringBuilder.append(this.address.locality.name.trim().toLowerCase());
 			}
 			if(this.address.city != null){
 				stringBuilder.append(this.address.city.trim().toLowerCase());

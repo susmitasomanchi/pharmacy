@@ -129,7 +129,7 @@
     <div class="form-group">
       <label for="inputPassword" class="col-lg-2 control-label">Password*</label>
       <div class="col-lg-10">
-        <input type="password" class="form-control" name="password" id="inputPassword" placeholder="Password" required>
+        <input type="password" class="form-control" name="password" id="inputPassword" placeholder="Password" pattern=".{6,}" title="6 characters minimum" required>
       </div>
     </div>
     
@@ -193,15 +193,31 @@
 <script>
 
 function validateAndSubmit(){
-	  if($('#inputPassword').val().trim().length < 6){
+ /*if($('#inputPassword').val().trim().length < 6){
     alert("Password Should Be Atleast Six Characters Long.");
     return false;
       }
   if($('#inputPassword').val().trim() != $('#inputConfirmPassword').val().trim()){
     alert("Passwords Do Not Match!");
      return false;
-      }     
+      }  */
+      if($("#inputLocation").val().trim() == ""){
+    alert("Fill The Manadatory(*) Fields.");
+    return false;
+    }
+   
 }
+
+
+$(document).ready(function(){
+$('#inputConfirmPassword').blur(function(){
+if($("#inputPassword").val().trim() != $("#inputConfirmPassword").val().trim()){
+    alert("Passwords Do Not Match!");
+    return false;
+    }
+    });
+    
+    });
 
 </script>    
 	    

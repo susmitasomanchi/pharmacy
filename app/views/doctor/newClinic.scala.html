@@ -72,7 +72,22 @@
     			<input type="text" class="form-control" id="streetName" name="street" value="@clinicForm("street").value"  placeholder="Enter name of the street">
   			</div>
   			
- 			 <div class="form-group">
+   			
+   			<div class="form-group" id="loc2">
+  			</div>
+  			<div class="form-group" id= "loc1">
+    			<label for="area">Locality@if(LoginController.getLoggedInUser().getDoctor().primaryCity != null){ in @LoginController.getLoggedInUser().getDoctor().primaryCity.name}*
+    					<span style="cursor:pointer;color:#008bca; position: absolute;margin-left: 432px;margin-top: -16px;" data-toggle="modal" data-target="#myFormModal">Locality Not Found?</span>
+    			</label>
+    			 <select id="locality-of-city" data-placeholder="Localities@if(LoginController.getLoggedInUser().getDoctor().primaryCity != null){ in @LoginController.getLoggedInUser().getDoctor().primaryCity.name}" name="localityId" value="@clinicForm("localityId").value" class="form-control chzn">
+  				 	<option></option>
+  				 	@for(locality <- PublicController.getPrimaryCityLocations()){
+  				 	<option value="@locality.id">@locality.name</option>
+					}
+				</select>
+   			</div>
+  			
+  			<div class="form-group">
     			<label for="city">City*</label>
     			<select data-placeholder="Select City" id="city" name="cityId" class="form-control chosen-select" value="@clinicForm("cityId").value">
     			@for((k,v) <- PrimaryCity.getAllPrimaryCities()){
@@ -85,22 +100,6 @@
 					
 				</select>
    			</div>
-   			
-   			
-   			<div class="form-group" id="loc2">
-  			</div>
-  			<div class="form-group" id= "loc1">
-    			<label for="area">Location*</label>
-    			 <select data-placeholder="Select Locality" name="localityId" value="@clinicForm("localityId").value" class="form-control chzn">
-  				 	<option></option>
-  				 	@for(locality <- PublicController.getPrimaryCityLocations()){
-  				 	<option value="@locality.id">@locality.name</option>
-					}
-				</select>
-   			</div>
-  			<span style="cursor:pointer;color:#008bca" data-toggle="modal" data-target="#myFormModal">Locality Not Found?</span>
-  			
-  			
   			
 		
 			<div class="form-group">
@@ -110,7 +109,7 @@
  		     
 			<div class="form-group">
    				 <label for="state">State</label>
-    			 <select data-placeholder="Select State" name="state" class="form-control chosen-select">
+    			 <select id="sel-state" data-placeholder="Select State" name="state" class="form-control chosen-select">
   				 	<option></option>
   				 	@for((k,v) <-State.options()){
   				 	<option value="@k">@v</option>
@@ -123,7 +122,7 @@
 				<div id="map_canvas" style="width:520px;height:400px">
 <img src="/assets/images/googlemap1.png" width="520" height="400" style="position:relative"/>
 <div class="maptext">
-<p>Please provide area and city to generate map</span></p>
+<p>Please provide locality and city to generate map</span></p>
 </div>
 
 				</div>
@@ -178,12 +177,12 @@
 			<tr>		
 				<th>Day</th>
 				<th>From time</th>
-				<th>To  time</th>
+				<th>To time</th>
 			</tr>
 			</head>
 			<tbody>
 			@for((day,index) <- models.doctor.Day.getList().zipWithIndex){
-					
+
 				<tr>
 					<td><input class="checkday" id="m-@day" type="checkbox" name="daysOfWeekMr[]" value="@day.toString()" >@day</input></td>
 					<td> 
@@ -199,31 +198,11 @@
       					</div>
 					</td>
 					</tr>
-					
+
 			}
 			</tbody>
-			</table>	
-			
-			@*<table>
-			<tr>
-			<th>day</th>
-			<th>from time</th>
-			<th>to time</th>
-			</tr>
-			
-			@for((k,v) <- clinicForm.toDoctorClinicInfo.getScheduleMap()){
-			@if(v == null){
-			<tr>
-			<td>@k</td>
-			<td>@v.fromTime</td>
-			<td>@v.toTime</td>
-			<td></td>
-			</tr>
-			}
-			}
-			
-			</table>*@
-			
+			</table>
+
 
 			<div class="form-group">
    				 <label for="slotmr" class="col-md-12 " style="padding-left:10px"><br>Slot Timings(in minutes)</label>
@@ -233,18 +212,21 @@
 	</div>
 </div>
 <input type="hidden" name="id" value="@clinicForm("id").value">
-<button id="submit"type="submit" class="btn btn-primary btn-sm" data-toggle="popover" title="Data Incorrect" data-content="Check From and To values">Submit</button>
-<div class="modal fade bs-example-modal-sm" tabindex="-1" role="dialog" aria-labelledby="mySmallModalLabel" aria-hidden="true">
+
+<button id="submit" type="submit" class="btn btn-primary btn-sm" data-toggle="popover" title="Data Incorrect" data-content="Check From and To values">Submit</button>
+
+<div id="submit-modal" class="modal fade bs-example-modal-sm" tabindex="-1" role="dialog" aria-labelledby="mySmallModalLabel" aria-hidden="true">
   <div class="modal-dialog modal-sm">
     <div class="modal-content">
         <div class="modal-header alert-info">
-        <h4 class="modal-title" id="myModalLabel"> Please wait while your schedule is creating</h4>
+        <h4 class="modal-title" id="myModalLabel">Please wait while we your create your schedule</h4>
       </div><div class="modal-body">
-      	<div style="text-align: center;"><span   style="font-size:50px;"><i class="fa fa-spinner fa-spin"></i></span></div>
+      	<div style="text-align: center;"><span style="font-size:50px;"><i class="fa fa-spinner fa-spin"></i></span></div>
       </div>
     </div>
   </div>
 </div>
+
 </form>
 
 <script>
@@ -277,13 +259,17 @@ $(".chzn").chosen({allow_single_deselect: true});
 	$('#myForm').submit(function(event){
 	    // cancels the form submission
 	   // event.preventDefault();
+	   if($('#locality-of-city').val().trim() == ""){
+	   alert("Select Locality");
+	   return false;
+	   }
 	   var $myForm = $('#myForm');
 	    if (!$myForm[0].checkValidity()) {
 	    	  // If the form is invalid, submit it. The form won't actually submit;
 	    	  // this will just cause the browser to display the native HTML5 error messages.
 	    	  $myForm.submit();
 	    	}else{
-	    		$('.modal').modal('show');
+	    		$('#submit-modal').modal('show');
 	    		 $myForm.submit();	
 	    	}
 	    // do whatever you want here
@@ -316,7 +302,8 @@ $(".chzn").chosen({allow_single_deselect: true});
     window.onload = function(){
      $('#loc2').hide();
     }
-    $( document ).ready(function() {
+
+    //   $( document ).ready(function() {
    
 					var lng, lat, marker,state;
 					var dbclk = false;
@@ -365,14 +352,18 @@ $(".chzn").chosen({allow_single_deselect: true});
 
 					}
 
-					$("#city").blur(function() {
+				//	$("#city").blur(function() 
+				
+				$('#locality-of-city').on('change', function(){
 						$("#map_canvas").html('');
 						var geocoder = new google.maps.Geocoder();
 						var streetname=$("#streetName").val();
-					var area = $("#locality").find("option:selected").text();
+						//var area = $("#locality").find("option:selected").text();
+						var area = $("#locality-of-city").find("option:selected").text();
+						var cityName = $("#city").find("option:selected").text();
 						geocoder.geocode({
-							//'address' : streetname+area+this.value
-							'address' : area+this.value
+							//'address' : area+this.value
+							'address' : streetname+' '+area+' '+cityName							
 						}, function(results, status) {
 							if (status == google.maps.GeocoderStatus.OK) {
 								//  alert("location : " + results[0].geometry.location.lat() + " " +results[0].geometry.location.lng()); 
@@ -386,8 +377,8 @@ $(".chzn").chosen({allow_single_deselect: true});
 										var zipcode = address[address.length - 1].long_name;
 										 state=address[address.length - 3].long_name;
 											$("#fetchPin").val(zipcode);
-								            $( "select" ).val(state.toUpperCase().replace(/\s+/g, '_'));
-								          $('select').trigger("chosen:updated");
+								            $("#sel-state").val(state.toUpperCase().replace(/\s+/g, '_'));
+								          $('#sel-state').trigger("chosen:updated");
 										 }
 									});
 								initialize();
@@ -398,7 +389,9 @@ $(".chzn").chosen({allow_single_deselect: true});
 
 						// google.maps.event.addDomListener(window, 'load', initialize);
 						});
-					});
+
+
+				//});
 				</script>
 <script>
 	$(".chosen-select").chosen();
@@ -419,7 +412,7 @@ $(".chzn").chosen({allow_single_deselect: true});
 
 
 <script type="text/javascript"> 
-$('.modal').on('hidden.bs.modal', function () {
+$('#submit-modal').on('hidden.bs.modal', function () {
 	$('#submit').html('Please Wait <i class="fa fa-refresh fa-spin">');
 	$('#submit').prop('disabled', true);
 	});
@@ -442,7 +435,7 @@ $('body').on('click', function (e) {
     <div class="modal-content">
     <div class="modal-header">
         <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
-        <h5 class="modal-title">Suggest Locality in @models.PrimaryCity.find.byId(Long.parseLong(session().get(utils.Constants.CITY_ID))).name</h5>
+        <h5 class="modal-title">Suggest Locality <span id="suggest-city"></span></h5>
       </div>
        <div class="modal-body">
        <div class="row">
@@ -455,16 +448,11 @@ $('body').on('click', function (e) {
     			<label for="city">City*</label>
     			<select data-placeholder="Select City" name="cityId" id="city1" class="form-control chzn" value="@clinicForm("cityId").value">
     			@for((k,v) <- PrimaryCity.getAllPrimaryCities()){
-    			@if(k.equals((LoginController.getLoggedInUser().getDoctor().primaryCity.id).toString())){
-					<option value="@k" selected>@v</option>
-    			}else{
     			 	<option value="@k">@v</option>
-    			 	}
-					}
-					
+				}
 				</select>
         </div>
-        <button onclick="sendRequest()" class="btn btn-primary btn-xs">Send</button>
+        <button onclick="sendRequest()" id="suggest-btn" class="btn btn-primary btn-xs">Suggest</button>
         </div>
         </div>
         </div>
@@ -478,16 +466,73 @@ $('#city').on('change', function(){
 	$("#loc1").hide();
 	$.get('/doctor/get-localities/'+$('#city').val(), function(data){
 		$("#loc2").html(data).show();	
-});
+		$('#locality-of-city').chosen();
+
+		$('#locality-of-city').on('change', function(){
+			$("#map_canvas").html('');
+			var geocoder = new google.maps.Geocoder();
+			var streetname=$("#streetName").val();
+			var area = $("#locality-of-city").find("option:selected").text();
+			var cityName = $("#city").find("option:selected").text();
+			geocoder.geocode({
+				'address' : streetname+' '+area+' '+cityName							
+			}, function(results, status) {
+				if (status == google.maps.GeocoderStatus.OK) {
+					myLatLng = results[0].geometry.location;
+					lat = results[0].geometry.location.lat();
+					lng = results[0].geometry.location.lng();
+					geocoder.geocode({'latLng': myLatLng}, function(results, status){
+						if (status == google.maps.GeocoderStatus.OK) {
+							var address = results[0].address_components;
+							var zipcode = address[address.length - 1].long_name;
+							 state=address[address.length - 3].long_name;
+								$("#fetchPin").val(zipcode);
+					            $("#sel-state").val(state.toUpperCase().replace(/\s+/g, '_'));
+					          $('#sel-state').trigger("chosen:updated");
+							 }
+						});
+					initialize();
+				} else {
+				}
+			});
+			});
+	});
 });
 function sendRequest(){
 var loc = $('#loc').val();
 var city = $("#city1").find("option:selected").text();
 if(loc.trim() == ""){
-alert("Provide Locality.");
+alert("Please Provide Locality Name.");
 return false;
 }
-window.location.href = '/secure-feedback/'+$('#loc').val()+'/'+$("#city1").find("option:selected").text();
+
+	$('#suggest-btn').html('<i class="fa fa-cog fa-spin"></i>');
+	$.get('/secure-feedback/'+$('#loc').val()+'/'+$("#city1").find("option:selected").text(), function(data){
+		if(data==0){
+			$('#suggest-btn').html('Suggest');
+			
+			$('#myFormModal').modal('hide');
+			alert("Your Suggetion Sended Successfully.");
+		}
+	});
+
+
 }
+
+
+
+$('#myFormModal').on('show.bs.modal', function (e) {
+	$('#suggest-city').html('in '+$("#city").find("option:selected").text());
+	$('#city1').val($("#city").find("option:selected").val());
+})
+
+
 </script>
 }
+
+
+
+
+
+
+

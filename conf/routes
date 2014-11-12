@@ -71,7 +71,7 @@ GET		/pharmacy/search/:searchString/:loc                  controllers.PublicCont
 GET		/pharmacy/search									controllers.PublicController.searchPharmaciesPage()
 GET   	/diagnostic/search/:searchString/:loc                  				controllers.PublicController.processSearchDiagnosticCentres(searchString: String,loc : String)
 GET    /diagnostic/search												controllers.PublicController.searchDiagnosticPage()
-GET   	/clinic/search/:searchString                  				controllers.PublicController.searchFavoriteClinics(searchString: String)
+GET   	/clinic/search/:searchString/:loc                  				controllers.PublicController.searchFavoriteClinics(searchString: String,loc : String)
 GET    /clinic/search												controllers.PublicController.searchClinics()
 GET		/doctor/get-localities/:cityId									controllers.PublicController.getPrimaryCityLocations(cityId : String)
 GET		/doctor/get-names-json/:loc/:spez										controllers.PublicController.getAllDoctorsInCity(loc : String,spez : String)
@@ -84,6 +84,7 @@ GET		/diagnostic/get-names-json/:loc											controllers.PublicController.getA
 GET    /feedback											controllers.PublicController.feedBack()
 POST    /secure-feedback									controllers.PublicController.saveFeedBack()
 GET    /secure-feedback/:loc/:city									controllers.PublicController.saveLocalityFeedBack(loc : String,city : String)
+
 GET    /help												controllers.PublicController.helpDocument()
 
 
@@ -552,6 +553,9 @@ GET		/cron/start						controllers.CronController.startCron()
 GET		/secure-doctor/weekly-appointments				controllers.DoctorController.viewWeeklyAppointments()
 GET		/secure-doctor/calendar-appointments-json		controllers.DoctorController.getCalendarEventsJson()
 GET		/sendgrid										controllers.SampleDataController.sendGrid()
+
+# Zoho Verification
+GET		/zohoverify/verifyforzoho.html					controllers.Assets.at(path="/public", file="/verifyforzoho.html")
 
 ########################## MedNetwork Android App ###############################################
 

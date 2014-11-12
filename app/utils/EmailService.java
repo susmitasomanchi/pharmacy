@@ -1,7 +1,5 @@
 package utils;
 
-import java.io.ByteArrayInputStream;
-import java.io.IOException;
 import java.math.BigInteger;
 import java.security.SecureRandom;
 import java.text.SimpleDateFormat;
@@ -9,19 +7,12 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 
-import javax.activation.DataSource;
-
 import models.AppUser;
-import models.FileEntity;
 import models.clinic.ClinicUser;
 import models.doctor.Appointment;
 import models.doctor.Clinic;
 import models.doctor.Doctor;
 
-import org.apache.commons.mail.ByteArrayDataSource;
-import org.apache.commons.mail.DefaultAuthenticator;
-import org.apache.commons.mail.EmailException;
-import org.apache.commons.mail.MultiPartEmail;
 import org.apache.http.NameValuePair;
 import org.apache.http.client.HttpClient;
 import org.apache.http.client.entity.UrlEncodedFormEntity;
@@ -40,7 +31,7 @@ public class EmailService {
 	public static boolean sendSimpleEMail(final String receiverEmailId, final String subject, final String message) {
 		boolean result=true;
 		try{
-			final String url = "https://api.sendgrid.com/api/mail.send.json";
+			final String url = Constants.EMAIL_URL;
 
 			final HttpClient client = new DefaultHttpClient();
 			final HttpPost post = new HttpPost(url);
@@ -50,9 +41,9 @@ public class EmailService {
 			urlParameters.add(new BasicNameValuePair("api_key", Constants.EMAIL_PASSWORD));
 			urlParameters.add(new BasicNameValuePair("to", receiverEmailId));
 			//urlParameters.add(new BasicNameValuePair("toname", ""));
-			urlParameters.add(new BasicNameValuePair("subject", "Subject"));
+			urlParameters.add(new BasicNameValuePair("subject", subject));
 			//urlParameters.add(new BasicNameValuePair("text", builder.toString())); // This can be used for any plain text content of the mail
-			urlParameters.add(new BasicNameValuePair("html", "Content Of Email"));
+			urlParameters.add(new BasicNameValuePair("html", message));
 			urlParameters.add(new BasicNameValuePair("fromname", "MedNetwork"));
 			urlParameters.add(new BasicNameValuePair("from", "noreply@mednetwork.in"));
 			post.setEntity(new UrlEncodedFormEntity(urlParameters));
@@ -74,7 +65,7 @@ public class EmailService {
 	 * NO URL
 	 */
 	public static boolean sendConfirmationEmail(final AppUser appUser){
-		final String url = "https://api.sendgrid.com/api/mail.send.json";
+		final String url = Constants.EMAIL_URL;
 
 		final HttpClient client = new DefaultHttpClient();
 		final HttpPost post = new HttpPost(url);
@@ -164,7 +155,7 @@ public class EmailService {
 	 */
 	public static void sendForgotPasswordEmail(final AppUser appUser){
 
-		final String url = "https://api.sendgrid.com/api/mail.send.json";
+		final String url = Constants.EMAIL_URL;
 
 		final HttpClient client = new DefaultHttpClient();
 		final HttpPost post = new HttpPost(url);
@@ -210,7 +201,7 @@ public class EmailService {
 
 	public static boolean sendVerificationConformMessage(final AppUser appUser) {
 
-		final String url = "https://api.sendgrid.com/api/mail.send.json";
+		final String url = Constants.EMAIL_URL;
 
 		final HttpClient client = new DefaultHttpClient();
 		final HttpPost post = new HttpPost(url);
@@ -248,7 +239,7 @@ public class EmailService {
 	}
 
 	public static boolean sendAppointmentConformMail(final AppUser requestBy ,final AppUser requestTo,final Appointment appointment) {
-		final String url = "https://api.sendgrid.com/api/mail.send.json";
+		final String url = Constants.EMAIL_URL;
 
 		final HttpClient client = new DefaultHttpClient();
 		final HttpPost post = new HttpPost(url);
@@ -326,7 +317,7 @@ public class EmailService {
 
 	public static boolean sendPrescriptionSaveMessage(final AppUser requestBy ,final AppUser requestTo) {
 
-		final String url = "https://api.sendgrid.com/api/mail.send.json";
+		final String url = Constants.EMAIL_URL;
 
 		final HttpClient client = new DefaultHttpClient();
 		final HttpPost post = new HttpPost(url);
@@ -395,7 +386,7 @@ public class EmailService {
 	}
 
 	public static boolean sendSimpleHtmlEMail(final String receiverEmailId, final String subject, final String message) {
-		final String url = "https://api.sendgrid.com/api/mail.send.json";
+		final String url = Constants.EMAIL_URL;
 
 		final HttpClient client = new DefaultHttpClient();
 		final HttpPost post = new HttpPost(url);
@@ -406,9 +397,9 @@ public class EmailService {
 			urlParameters.add(new BasicNameValuePair("api_key", Constants.EMAIL_PASSWORD));
 			urlParameters.add(new BasicNameValuePair("to", receiverEmailId));
 			//urlParameters.add(new BasicNameValuePair("toname", ""));
-			urlParameters.add(new BasicNameValuePair("subject", "Subject"));
+			urlParameters.add(new BasicNameValuePair("subject", subject));
 			//urlParameters.add(new BasicNameValuePair("text", builder.toString())); // This can be used for any plain text content of the mail
-			urlParameters.add(new BasicNameValuePair("html", "Content Of Email"));
+			urlParameters.add(new BasicNameValuePair("html", message));
 			urlParameters.add(new BasicNameValuePair("fromname", "MedNetwork"));
 			urlParameters.add(new BasicNameValuePair("from", "noreply@mednetwork.in"));
 			post.setEntity(new UrlEncodedFormEntity(urlParameters));
@@ -434,7 +425,7 @@ public class EmailService {
 	 */
 	public static boolean sendClinicInvitationConfirmationEmail(final AppUser appUser,final Clinic clinic, final String verificationCode){
 
-		final String url = "https://api.sendgrid.com/api/mail.send.json";
+		final String url = Constants.EMAIL_URL;
 
 		final HttpClient client = new DefaultHttpClient();
 		final HttpPost post = new HttpPost(url);
@@ -478,7 +469,7 @@ public class EmailService {
 	 */
 	public static boolean sendClinicInvitationSuccessEmail(final Doctor doctor,final Clinic clinic){
 
-		final String url = "https://api.sendgrid.com/api/mail.send.json";
+		final String url = Constants.EMAIL_URL;
 
 		final HttpClient client = new DefaultHttpClient();
 		final HttpPost post = new HttpPost(url);
@@ -520,9 +511,9 @@ public class EmailService {
 	 * Action to send email and password to the Clinic User.
 	 * NO URL
 	 */
-	public static boolean sendClinicUserConfirmationMail(final ClinicUser clinicUser,final ClinicUser clinicAdmin){
+	public static boolean sendClinicUserConfirmationMail(final ClinicUser clinicUser,final ClinicUser clinicAdmin,final String password){
 
-		final String url = "https://api.sendgrid.com/api/mail.send.json";
+		final String url = Constants.EMAIL_URL;
 
 		final HttpClient client = new DefaultHttpClient();
 		final HttpPost post = new HttpPost(url);
@@ -532,7 +523,7 @@ public class EmailService {
 			final StringBuilder builder=new StringBuilder();
 			builder.append("<html><body>");
 			builder.append("<p> Dear "+clinicUser.appUser.name+",<br><br> You have been added as the Clinic User in "+clinicAdmin.clinic.name+"by "+clinicAdmin.appUser.name+" , <br>");
-			builder.append(" Your Email Id <b>"+clinicUser.appUser.email+"</b><br> Password <b>"+clinicUser.appUser.password+"</b><br><br>Best regards,<br>MedNetwork.in</p>");
+			builder.append(" Your Email Id <b>"+clinicUser.appUser.email+"</b><br> Password <b>"+password+"</b><br><br>Best regards,<br>MedNetwork.in</p>");
 			builder.append("</body></html>");
 
 			final List<NameValuePair> urlParameters = new ArrayList<NameValuePair>();

@@ -190,7 +190,7 @@ You profile is available at
 </div>
 <div class="col-md-6">
 
-<h2><span style="text-shadow:1px 1px 20px white, 3px 3px 20px white;"><b> Dr. @doctor.appUser.name </b></span><span data-toggle="popover" title="Edit Name" data-html="true" data-content="<input id=&quot;new-fullname&quot; style=&quot;color:#292929; font-weight:bold;&quot; type=&quot;text&quot; value=&quot;@doctor.appUser.name&quot;><br><a class=&quot;pull-right btn btn-xs btn-primary&quot; onclick=&quot;submitbasicform('fullname');&quot; >save</a> " style="cursor:pointer; position:relative; font-size:15px; top:-15px; text-shadow:1px 1px 20px white, 3px 3px 20px white;"><i id="spinner-fullname" class="fa fa-cog"></i></span></h2>
+<h2><span style="text-shadow:1px 1px 20px white, 3px 3px 20px white;"><b> Dr. @doctor.appUser.name </b></span><span data-toggle="popover" title="Edit Name" data-html="true" data-content="<input id=&quot;new-fullname&quot; style=&quot;color:#292929; font-weight:bold;&quot; type=&quot;text&quot; value=&quot;@doctor.appUser.name&quot;><br><a class=&quot;pull-right btn btn-xs btn-primary&quot; onclick=&quot;submitbasicform('fullname');&quot; >Update</a> " style="cursor:pointer; position:relative; font-size:15px; top:-15px; text-shadow:1px 1px 20px white, 3px 3px 20px white;"><i id="spinner-fullname" class="fa fa-cog"></i></span></h2>
 
 
 
@@ -253,13 +253,27 @@ You profile is available at
 
 <script>
 	function submitworkexform(expid){
-		if(expid == 0){
+	var pattern = /d(4);
+	 
+    	  if ($('#workexfrom').val().match(pattern) == null){
+	 	 alert("Enter valid To year");
+    	 return false;
+    	 }
+	if(expid == 0){
+			if ($('#workexfrom').val().match(pattern) == null){
+	  			alert("Enter valid From year");
+    	 		return false;
+    	 	}
 			if(($('#workexname').val().trim() != '') && ($('#workexfrom').val().trim() != '')){
 				$("[data-toggle=popover]").popover('hide');
 				$('#addworkex').html('&nbsp;<i class="fa fa-cog fa-spin"></i>&nbsp;');
 			}
 		}
 		else{
+			if ($('#workexfromedit').val().match(pattern) == null){
+	  			alert("Enter valid From year");
+    	 		return false;
+    	 	}
 			if(($('#workexnameedit').val().trim() != '') && ($('#workexfromedit').val().trim() != '')){
 				$("[data-toggle=popover]").popover('hide');
 				$('#editworkex-'+expid).html('&nbsp;<i class="fa fa-cog fa-spin"></i>&nbsp;');
@@ -367,12 +381,12 @@ You profile is available at
 		<input id=&quot;workexnameedit&quot; style=&quot;width:100%; color:#292929;&quot; placeholder=&quot;Institution Name*&quot; type=&quot;text&quot; name=&quot;name&quot; value=&quot;@exp.institutionName&quot; required>
 		<input style=&quot;width:100%; color:#292929;&quot; placeholder=&quot;Position&quot; type=&quot;text&quot; name=&quot;position&quot; value=&quot;@exp.position&quot;>
 		<input id=&quot;workexfromedit&quot; style=&quot;width:100%; color:#292929;&quot; placeholder=&quot;From (Year)*&quot; type=&quot;text&quot; name=&quot;from&quot; value=&quot;@exp.workedFrom&quot; required>
-		<input style=&quot;width:100%; color:#292929;&quot; placeholder=&quot;To (Year)&quot; type=&quot;text&quot; name=&quot;to&quot; value=&quot;@exp.workedTo&quot;>
+		<input  style=&quot;width:100%; color:#292929;&quot; placeholder=&quot;To (Year)&quot; type=&quot;text&quot; name=&quot;to&quot; value=&quot;@exp.workedTo&quot;>
 		<textarea placeholder=&quot;Description, Roles, Responsibilities etc.&quot; rows=&quot;12&quot; name=&quot;description&quot; style=&quot;color:#292929; width:100%; font-weight:bold;&quot;>@exp.description</textarea>
 		<input type=&quot;hidden&quot; name=&quot;doctorId&quot; value=&quot;@doctor.id&quot;>
 		<input type=&quot;hidden&quot; name=&quot;doctorExperienceId&quot; value=&quot;@exp.id&quot;>
 		<br>
-		<input class=&quot;pull-right btn btn-xs btn-primary&quot; type=&quot;submit&quot; onclick=&quot;submitworkexform(@exp.id);&quot; value=&quot;save&quot;>
+		<input class=&quot;pull-right btn btn-xs btn-primary&quot; type=&quot;submit&quot; onclick=&quot;submitworkexform(@exp.id);&quot; value=&quot;Update&quot;>
 		</form>
 		
 
@@ -648,9 +662,14 @@ You profile is available at
 @if(clinicInfo.clinic.address != null){
 @clinicInfo.clinic.address.addressLine1
 <br>
-@clinicInfo.clinic.address.area
-<br>
-@clinicInfo.clinic.address.city
+@if(clinicInfo.clinic.address.locality != null){
+	@clinicInfo.clinic.address.locality.name
+	<br>
+	}
+	@if(clinicInfo.clinic.address.primaryCity != null){
+	@clinicInfo.clinic.address.primaryCity.name
+	<br>
+	}
 <br>
 @clinicInfo.clinic.contactNo
 </h5>
@@ -663,7 +682,7 @@ You profile is available at
 </b>
 <br><br>
 <div class="row" style="padding-left:20px">
-
+clinicInfo
 @if(clinicInfo.getScheduleMap().get("MONDAY") != null){
 	<span class="badge col-md-2" style="font-size:20px">Mon</span>
 }else{

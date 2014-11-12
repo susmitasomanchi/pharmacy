@@ -163,8 +163,12 @@ $('body').on('click', function (e) {
 @pharmacy.contactPerson<br>
 @if(pharmacy.address != null){
 @pharmacy.address.addressLine1<br>
-@pharmacy.address.area<br>
-@pharmacy.address.city<br>
+@if(pharmacy.address.locality != null){
+@pharmacy.address.locality.name<br>
+}
+@if(pharmacy.address.primaryCity != null){
+@pharmacy.address.primaryCity.name<br>
+}
 @pharmacy.address.pinCode<br>
 @if(pharmacy.address.state != null){
 @pharmacy.address.state.capitalize()<br>	

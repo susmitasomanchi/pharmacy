@@ -20,8 +20,12 @@
 	<td><h5>@patientClinicInfo.clinic.name</h5></td>
 	<td>@if(patientClinicInfo.clinic.address != null){
 	<h5>@patientClinicInfo.clinic.address.addressLine1</h5>
-	<h5>@patientClinicInfo.clinic.address.area</h5>
-	<h5>@patientClinicInfo.clinic.address.city</h5>}else{
+	@if(patientClinicInfo.clinic.address.locality != null){
+	<h5>@patientClinicInfo.clinic.address.locality.name</h5>	
+	}
+	@if(patientClinicInfo.clinic.address.primaryCity != null){
+	<h5>@patientClinicInfo.clinic.address.primaryCity.name</h5>	
+	}}else{
 	<h5>Address not available.</h5>
 	}
 	</td>

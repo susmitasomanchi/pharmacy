@@ -96,12 +96,12 @@ public class LoginController extends Controller {
 
 				if(session(Constants.URL_AFTER_LOGIN) != null && !session(Constants.URL_AFTER_LOGIN).trim().isEmpty()){
 					final String url = session(Constants.URL_AFTER_LOGIN);
-					Logger.info("url: "+url);
+					Logger.info("Redirecting to URL in Session after Login: "+url);
 					session(Constants.URL_AFTER_LOGIN, "");
-					return redirect(session(url));
+					return redirect(url);
 				}
 				else{
-					Logger.info("url null");
+					Logger.info("No RedirectTo URL in Session - Taking User to Dashboard");
 					return redirect(routes.UserActions.dashboard());
 				}
 			}
@@ -120,6 +120,10 @@ public class LoginController extends Controller {
 		//session().clear();
 		session().remove(Constants.LOGGED_IN_USER_ID);
 		session().remove(Constants.LOGGED_IN_USER_ROLE);
+		/*response().setHeader("Cache-Control",
+				"no-cache"); // HTTP 1.1
+		response().setHeader("Pragma", "no-cache"); // HTTP 1.0.
+		response().setHeader("EXPIRES", "0");*/
 		return redirect(routes.Application.index());
 	}
 

@@ -102,8 +102,12 @@ margin-bottom:0px;
 									<h5 style="color:#006687">
 									<b><a href="#" >@docclinic.clinic.name</a></b><br>
 										<span style="font-size:12px;color:black">@docclinic.clinic.address.addressLine1
-										@docclinic.clinic.address.area<br>
-										@docclinic.clinic.address.city<br>
+										@if(docclinic.clinic.address.locality != null){
+										@docclinic.clinic.address.locality.name<br>
+										}
+										@if(docclinic.clinic.address.primaryCity != null){
+										@docclinic.clinic.address.primaryCity.name<br>
+										}
 										@docclinic.clinic.address.state<br>
 									<i class="fa fa-phone-square"></i> @docclinic.clinic.contactNo<br><br>
 									</div>

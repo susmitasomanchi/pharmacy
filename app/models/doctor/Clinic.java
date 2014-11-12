@@ -77,11 +77,11 @@ public class Clinic extends BaseEntity{
 		if(!this.name.equals(((Clinic)arg0).name)){
 			return this.name.equals(((Clinic)arg0).name);
 		}
-		if(!this.contactPersonName.equals(((Clinic)arg0).contactPersonName)){
+		if((this.contactPersonName != null) && !(this.contactPersonName.equals(((Clinic)arg0).contactPersonName))){
 			return this.contactPersonName.equals(((Clinic)arg0).contactPersonName);
 		}
 
-		if(!this.contactNo.equals(((Clinic)arg0).contactNo)){
+		if((this.contactNo != null) && !(this.contactNo.equals(((Clinic)arg0).contactNo))){
 			return this.contactNo.equals(((Clinic)arg0).contactNo);
 		}
 
@@ -95,8 +95,8 @@ public class Clinic extends BaseEntity{
 			if(this.address.addressLine1 != null){
 				stringBuilder.append(this.address.addressLine1.trim().toLowerCase());
 			}
-			if(this.address.area != null){
-				stringBuilder.append(this.address.area.trim().toLowerCase());
+			if(this.address.locality != null){
+				stringBuilder.append(this.address.locality.name.trim().toLowerCase());
 			}
 			if(this.address.city != null){
 				stringBuilder.append(this.address.city.trim().toLowerCase());
@@ -129,8 +129,8 @@ public class Clinic extends BaseEntity{
 			if(this.address.addressLine1 != null){
 				stringBuilder.append(this.address.addressLine1.trim().toLowerCase());
 			}
-			if(this.address.area != null){
-				stringBuilder.append(this.address.area.trim().toLowerCase());
+			if(this.address.locality != null){
+				stringBuilder.append(this.address.locality.name.trim().toLowerCase());
 			}
 			if(this.address.city != null){
 				stringBuilder.append(this.address.city.trim().toLowerCase());

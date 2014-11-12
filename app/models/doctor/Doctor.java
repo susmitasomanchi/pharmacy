@@ -124,6 +124,14 @@ public class Doctor extends BaseEntity{
 
 	public static Model.Finder<Long,Doctor> find = new Model.Finder<Long, Doctor>(Long.class, Doctor.class);
 
+	@OneToMany(cascade = CascadeType.ALL)
+	public List<SigCode> sigCodeList = new ArrayList<SigCode>();
+
+
+
+
+
+
 	public List<DoctorExperience> getExperienceListInOrder(){
 		return DoctorExperience.find.where().eq("doctor_id", this.id).orderBy("workedFrom DESC").findList();
 	}
@@ -232,8 +240,6 @@ public class Doctor extends BaseEntity{
 		return appointments;
 
 	}
-	@OneToMany(cascade = CascadeType.ALL)
-	public List<SigCode> sigCodeList = new ArrayList<SigCode>();
 
 	@Override
 	public void save(){
@@ -242,8 +248,8 @@ public class Doctor extends BaseEntity{
 			if(clinicInfo.clinic != null){
 				stringBuilder.append(clinicInfo.clinic.name.toLowerCase());
 			}
-			if(clinicInfo.clinic.address != null && clinicInfo.clinic.address.area != null){
-				stringBuilder.append(clinicInfo.clinic.address.area.toLowerCase());
+			if(clinicInfo.clinic.address != null && clinicInfo.clinic.address.locality != null){
+				stringBuilder.append(clinicInfo.clinic.address.locality.name.toLowerCase());
 			}
 		}
 		if(this.appUser.name != null){
@@ -269,8 +275,8 @@ public class Doctor extends BaseEntity{
 		for (final DoctorClinicInfo clinicInfo : this.doctorClinicInfoList) {
 			if(clinicInfo.clinic != null && clinicInfo.active){
 				stringBuilder.append(clinicInfo.clinic.name.toLowerCase());
-				if(clinicInfo.clinic.address != null && clinicInfo.clinic.address.area != null){
-					stringBuilder.append(clinicInfo.clinic.address.area.toLowerCase());
+				if(clinicInfo.clinic.address != null && clinicInfo.clinic.address.locality != null){
+					stringBuilder.append(clinicInfo.clinic.address.locality.name.toLowerCase());
 				}
 			}
 		}
