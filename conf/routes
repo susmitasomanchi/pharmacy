@@ -557,10 +557,10 @@ GET		/sendgrid										controllers.SampleDataController.sendGrid()
 
 #MR Module
 
-GET    /m/android/mr/login		                                       controllers.AndroidController.login(email: String ?= "email" , password: String ?= "password")
-#GET    /m/android/mr/logout                                            controllers.WebServices.logout()
-#GET    /m/android/mr/doctor-list                                       controllers.WebServices.myDoctor()
-#GET   /m/android/mr/product-list                                      controllers.WebServices.myProduct()
+POST    /m/android/mr/login		                                       controllers.AndroidController.login()
+POST    /m/android/mr/submit-dcr			                           controllers.AndroidController.submitDCR()
+GET		/m/android/mr/get-doctors/:mrId								   controllers.AndroidController.getDoctors(mrId: Long)
+GET		/m/android/mr/get-products/:mrId							   controllers.AndroidController.getProducts(mrId: Long)
 
 
 

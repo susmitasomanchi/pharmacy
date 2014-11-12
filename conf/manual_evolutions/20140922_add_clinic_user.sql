@@ -1,12 +1,12 @@
---- Author: Lakshmi
+﻿--- Author: Lakshmi
 --- Script to create ClinicUser
 --- entities is added to models.clinic package.
 
 
 ---ClinicUser
-ALTER TABLE clinic drop clinic_administrator_id;
-DROP TABLE clinic_administrator;
-DROP SEQUENCE clinic_administrator_seq;
+ALTER TABLE clinic drop if exists clinic_administrator_id;
+DROP TABLE if exists clinic_administrator;
+DROP SEQUENCE if exists clinic_administrator_seq;
 
 create table clinic_user (
   id                        bigint not null,
