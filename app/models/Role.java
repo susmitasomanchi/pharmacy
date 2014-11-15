@@ -14,18 +14,25 @@ public enum Role {
 
 	@EnumValue("DOCTOR")
 	DOCTOR,
+
 	@EnumValue("DOCTOR_SECRETARY")
 	DOCTOR_SECRETARY,
+
 	@EnumValue("PATIENT")
 	PATIENT,
+
 	@EnumValue("ADMIN_PHARMACIST")
 	ADMIN_PHARMACIST,
+
 	@EnumValue("PHARMACIST")
 	PHARMACIST,
+
 	@EnumValue("ADMIN_MR")
 	ADMIN_MR,
+
 	@EnumValue("MR")
 	MR,
+
 	@EnumValue("ADMIN_DIAGREP")
 	ADMIN_DIAGREP,
 
@@ -45,8 +52,6 @@ public enum Role {
 	BLOOD_BANK_USER,
 
 	@EnumValue("BLOG_ADMIN")
-
-
 	BLOG_ADMIN;
 
 

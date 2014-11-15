@@ -49,6 +49,9 @@ public class UserActions extends Controller {
 		if(appUser.role.equals(Role.BLOOD_BANK_ADMIN)){
 			return ok(views.html.bloodBank.bloodBankProfile.render(appUser.getBloodBankUser().bloodBank));
 		}
+		if(appUser.role.equals(Role.ADMIN_MR)){
+			return ok(views.html.mr.dashboard.render());
+		}
 
 
 		if(appUser.role.equals(Role.MEDNETWORK_ADMIN)){

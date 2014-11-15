@@ -5,174 +5,152 @@ import java.util.HashMap;
 import java.util.List;
 
 import models.AppUser;
+import models.doctor.Doctor;
+import models.doctor.MasterSpecialization;
+import models.mr.MedicalRepresentative;
+import models.mr.PharmaceuticalProduct;
 
+import org.json.JSONArray;
 import org.json.JSONObject;
 
 import play.Logger;
+import play.data.Form;
 import play.mvc.BodyParser;
 import play.mvc.Controller;
 import play.mvc.Result;
+import beans.android.LoginBean;
+import beans.android.DCRBean;
+import beans.android.DCRLineItemBean;
 
 public class AndroidController extends Controller{
 
+	public static Form<LoginBean> loginBeanform = Form.form(LoginBean.class);
+	public static Form<DCRBean> dcrBeanform = Form.form(DCRBean.class);
+	public static Form<DCRLineItemBean> dcrLineItemBeanForm = Form.form(DCRLineItemBean.class);
+
 
 	@BodyParser.Of(BodyParser.Json.class)
-	public static Result login(final String email , final String password) {
+	public static Result login() {
+		final LoginBean bean = loginBeanform.bindFromRequest().get();
+		final String email = bean.email;
+		final String password = bean.password;
 		Logger.info("Android Login attempted with email: "+email);
 		final List<AppUser> appUsers = AppUser.find.where().eq("email", email.trim().toLowerCase()).findList();
 		if(appUsers.size() < 1) {
 			Logger.error("NO APPUSER FOUND WITH EMAIL: "+email);
 			final HashMap<String,String> map = new HashMap<String,String>();
-			map.put("status", "FALSE");
+			map.put("STATUS", "FALSE");
 			final org.json.JSONObject json = new JSONObject(map);
 			return ok(json.toString());
 		}
-
 		if(appUsers.size() == 1) {
 			if(!(appUsers.get(0).matchPassword(password))){
 				Logger.error("APPUSER FOUND BUT PASSWORD INCORRECT");
 				final HashMap<String,String> map = new HashMap<String,String>();
-				map.put("status", "FALSE");
+				map.put("STATUS", "FALSE");
 				final org.json.JSONObject json = new JSONObject(map);
 				return ok(json.toString());
 			}
 			else{
 				final AppUser appUser = appUsers.get(0);
-				if(appUser.getMedicalRepresentative() != null){
-					Logger.info("AppUser Authenticated: "+email);
+				final MedicalRepresentative mr = appUser.getMedicalRepresentative();
+				if(mr != null){
+					Logger.info("Android Login Successful. AppUser Authenticated: "+email);
 					final HashMap<String,String> map = new HashMap<String,String>();
-					map.put("status", "TRUE");
-					map.put("name", appUser.name);
+					map.put("STATUS", "TRUE");
+					map.put("NAME", appUser.name);
 					map.put("APPUSER_ID", appUser.id+"");
+					map.put("MR_ID", mr.id+"");
 					final org.json.JSONObject json = new JSONObject(map);
 					return ok(json.toString());
 				}
 				else{
-					Logger.error("APPUSER FOUND & PASSWORD CORRECT BUT APPUSER IS NOT AN MR");
+					Logger.error("APPUSER FOUND & PASSWORD CORRECT BUT APPUSER IS NOT AN MR. APPUSER IS: "+appUser.role);
 					final HashMap<String,String> map = new HashMap<String,String>();
-					map.put("status", "FALSE");
+					map.put("STATUS", "FALSE");
 					final org.json.JSONObject json = new JSONObject(map);
 					return ok(json.toString());
 				}
 			}
 		}
-
 		if(appUsers.size() > 1) {
 			Logger.error(appUsers.size()+" APPUSERS FOUND WITH EMAIL: "+email);
 			final HashMap<String,String> map = new HashMap<String,String>();
-			map.put("status", "FALSE");
+			map.put("STATUS", "FALSE");
 			final org.json.JSONObject json = new JSONObject(map);
 			return ok(json.toString());
 		}
-
 		final HashMap<String,String> map = new HashMap<String,String>();
-		map.put("status", "FALSE");
+		map.put("STATUS", "FALSE");
 		final org.json.JSONObject json = new JSONObject(map);
 		return ok(json.toString());
 
 	}
 
 
-
-
-	/*
-	public static Result login(final String email , final String password) {
-
-		//session().clear(); Cannot clear session() as its used to store Primary City Id
-		session().remove(Constants.LOGGED_IN_USER_ID);
-		session().remove(Constants.LOGGED_IN_USER_ROLE);
-
-		final List<AppUser> appUsers = AppUser.find.where().eq("email",email.trim().toLowerCase()).findList();
-		Logger.info("found appUsers: " + appUsers.size());
-		Logger.info("email :  :"+email);
-		Logger.info("password :"+password);
-		if(appUsers.size() == 1) {
-			if(appUsers.get(0).matchPassword(password.trim())){
-				session(Constants.LOGGED_IN_USER_ID, appUsers.get(0).id + "");
-				session(Constants.LOGGED_IN_USER_ROLE, appUsers.get(0).role+ "");
-				final String token = email+":"+password;
-				final JSONObject obj = new JSONObject();
-				obj.put("email", email);
-				obj.put("password", password);
-				obj.put("status","TRUE");
-				Logger.info(""+obj);
-				return ok("{status:TRUE}");
-				//return ok("{\"status\":\"TRUE\"}");
-			}else{
-				Logger.error("Invalid password.");
-				return ok("{\"status\":\"FALSE\"}");
+	@BodyParser.Of(BodyParser.Json.class)
+	public static Result getDoctors(final Long mrId){
+		final MedicalRepresentative mr = MedicalRepresentative.find.byId(mrId);
+		final List<Doctor> mrDoctors = mr.doctorList;
+		final List<HashMap<String,String>> docMapList = new ArrayList<HashMap<String, String>>();
+		for (final Doctor doctor : mrDoctors) {
+			final HashMap<String, String> map = new HashMap<String, String>();
+			map.put("DOCTOR_ID", doctor.id+"");
+			map.put("NAME", doctor.appUser.name);
+			map.put("DEGR", doctor.degree);
+			final List<MasterSpecialization> spezList = doctor.specializationList;
+			final StringBuilder sb = new StringBuilder();
+			for (final MasterSpecialization spez : spezList) {
+				sb.append(spez.name);
+				sb.append(", ");
 			}
-
-		}else{
-			// return invalid login/password
-			Logger.error("Invalid username.");
-			flash().put("alert", new Alert("alert-danger", "Sorry! Invalid Username/Password.").toString());
-			return ok("{\"status\":\"FALSE\"}");
+			final String specString = sb.toString();
+			if(specString.length() == 0){
+				map.put("SPEC", "");
+			}
+			else{
+				map.put("SPEC", specString.substring(0, (specString.length()-2)));
+			}
+			docMapList.add(map);
 		}
+		final JSONArray jsonArray = new JSONArray(docMapList);
+		return ok(jsonArray.toString());
 	}
 
-	public static Result logout() {
-		//session().clear();
-		session().remove(Constants.LOGGED_IN_USER_ID);
-		Logger.info("logout successful");
-		return ok("{\"status\":\"TRUE\"}");
-	}
 
-	public static Result myDoctor(){
-		Logger.info(session(Constants.LOGGED_IN_USER_ID));
-		//final AppUser loggedInAppUser=LoginController.getLoggedInUser();
-		final MedicalRepresentative loggedInMr = LoginController
-				.getLoggedInUser().getMedicalRepresentative();
-		Logger.info("server side method executed");
-		final List<String> docList = new ArrayList<String>();
-		for (final Doctor doctor : loggedInMr.doctorList) {
-			docList.add(doctor.appUser.name);
+	@BodyParser.Of(BodyParser.Json.class)
+	public static Result getProducts(final Long mrId){
+		final MedicalRepresentative mr = MedicalRepresentative.find.byId(mrId);
+		final List<PharmaceuticalProduct> mrProducts = mr.pharmaceuticalCompany.pharmaceuticalProductList;
+		final List<HashMap<String,String>> productMapList = new ArrayList<HashMap<String, String>>();
+		for (final PharmaceuticalProduct product : mrProducts) {
+			final HashMap<String, String> map = new HashMap<String, String>();
+			map.put("PRODUCT_ID", product.id+"");
+			map.put("NAME", product.fullName);
+			productMapList.add(map);
 		}
-		session().remove(Constants.LOGGED_IN_USER_ID);
-		 Logger.info("Server side code executed");
-		 return ok("{\"status\":\"TRUE\"}");
-
-		 //return ok(Json.toJson(docList));
-
-		 if(request.format.equals("json"))
-			return ok(Json.toJson(loggedInMr.doctorList));
-		else
-			return ok(loggedInMr.doctorList);
-		  //return ok(Json.toJson(loggedInMr.doctorList));
-
-	}
-	public static Result myProduct(){
-		final MedicalRepresentative loggedInMr = LoginController
-				.getLoggedInUser().getMedicalRepresentative();
-		Logger.info("server side method executed");
-		return ok(Json.toJson(loggedInMr.pharmaceuticalCompany.pharmaceuticalProductList));
-	}
-	public static Result dcrLineItem(final String date,final String doctor,final List<String> sampleList, final List<String> promotion,final String pob){
-		final MedicalRepresentative loggedInMr = LoginController
-				.getLoggedInUser().getMedicalRepresentative();
-		final DCRLineItem dcrLineItem = new DCRLineItem();
-		//dcrLineItem.doctor = ;
-		final Sample sample = new Sample();
-		for (final String smpl : sampleList) {
-		}
-		for(final String promo: promotion){
-
-		}
-		dcrLineItem.pob = Integer.parseInt(pob);
-		final DailyCallReport dcr = new DailyCallReport();
-		final SimpleDateFormat sdf = new SimpleDateFormat();
-
-		try {
-			dcr.forDate = sdf.parse(date);
-		} catch (final ParseException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		};
-		dcr.dcrLineItemList.add(dcrLineItem);
-		loggedInMr.dcrList.add(dcr);
-		return ok("{\"status\":\"TRUE\"}");
+		final JSONArray jsonArray = new JSONArray(productMapList);
+		return ok(jsonArray.toString());
 	}
 
 
-	 */
+
+	@BodyParser.Of(BodyParser.Json.class)
+	public static Result submitDCR(){
+		final DCRBean bean = dcrBeanform.bindFromRequest().get();
+
+
+		Logger.info(bean.submitterAppUserId+"");
+		Logger.info(bean.forDate+"");
+
+
+		return ok();
+	}
+
+
+
+
+
+
+
 }

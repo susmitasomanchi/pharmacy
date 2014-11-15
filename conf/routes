@@ -104,8 +104,9 @@ GET    /secure-diagnostic/join                              		controllers.UserCo
 GET    /secure-user/join											controllers.UserController.joinUsPatient()
 GET    /secure-clinic/join											controllers.UserController.joinUsClinic()
 GET    /secure-blood-bank/join										controllers.UserController.joinUsBloodBank()
+GET    /secure-pharma/join											controllers.UserController.joinUsPharmaCompany()
 
-POST   /secure-join		                              			controllers.UserController.processJoinUs()
+POST   /secure-join		                              				controllers.UserController.processJoinUs()
 
 # Dashboard of LoggedInUser
 GET		/secure-dashboard                                  controllers.UserActions.dashboard()
@@ -571,10 +572,10 @@ GET		/zohoverify/verifyforzoho.html					controllers.Assets.at(path="/public", fi
 
 #MR Module
 
-GET    /m/android/mr/login		                                       controllers.AndroidController.login(email: String ?= "email" , password: String ?= "password")
-#GET    /m/android/mr/logout                                            controllers.WebServices.logout()
-#GET    /m/android/mr/doctor-list                                       controllers.WebServices.myDoctor()
-#GET   /m/android/mr/product-list                                      controllers.WebServices.myProduct()
+POST    /m/android/mr/login		                                       controllers.AndroidController.login()
+POST    /m/android/mr/submit-dcr			                           controllers.AndroidController.submitDCR()
+GET		/m/android/mr/get-doctors/:mrId								   controllers.AndroidController.getDoctors(mrId: Long)
+GET		/m/android/mr/get-products/:mrId							   controllers.AndroidController.getProducts(mrId: Long)
 
 
 
