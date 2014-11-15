@@ -161,6 +161,8 @@ GET		/secure-doctor/search-patient														controllers.DoctorController.sea
 GET		/secure-doctor/search-patient-process/:email								controllers.DoctorController.searchPatientProcess(email : String)
 GET		/secure-doctor/add-patient/:patientId												controllers.DoctorController.addPatientToList(patientId : String)
 POST		/secure-doctor/add-new-patient											controllers.DoctorController.addNewPatient()
+GET		/secure-doctor/patient-history												controllers.DoctorController.viewAllPatients()
+
 
 
 

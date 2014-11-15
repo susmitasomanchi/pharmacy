@@ -127,6 +127,7 @@ public class PublicController extends Controller{
 				final Doctor doctor = Doctor.find.byId(docId);
 				patientInfo.patient=patient;
 				patientInfo.doctor=doctor;
+				patientInfo.createdBy = LoginController.getLoggedInUser();
 				if(PatientDoctorInfo.find.where().eq("doctor", doctor).eq("patient",patient).findList().size()==0){
 					patient.patientDoctorInfoList.add(patientInfo);
 					patient.update();

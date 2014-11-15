@@ -1743,9 +1743,12 @@ public class DoctorController extends Controller {
 
 		if(appUser != null && appUser.role.equals(Role.PATIENT)){
 			final Long id = appUser.id;
-			return ok(id+" ");
-		} else {
+			return ok("1");
+		} else if(appUser == null) {
 			return ok("0");
+		}
+		else{
+			return ok("2");
 		}
 
 		/*		final ExpressionList<Patient> patientExpressionList = Patient.find.where();
@@ -1758,8 +1761,8 @@ public class DoctorController extends Controller {
 
 	}
 
-	public static Result addPatientToList(final String patientId){
-		final Patient patient = Patient.find.byId(Long.parseLong(patientId));
+	public static Result addPatientToList(final String emailId){
+		final Patient patient = Patient.find.where().ieq("appUser.email", emailId.toLowerCase()).findUnique();
 		final Doctor doctor = LoginController.getLoggedInUser().getDoctor();
 		final int count = PatientDoctorInfo.find.where().eq("doctor", doctor).eq("patient", patient).eq("createdBy", doctor.appUser).findRowCount();
 		if(count > 0){
@@ -1768,6 +1771,7 @@ public class DoctorController extends Controller {
 			final PatientDoctorInfo patientDoctorInfo = new PatientDoctorInfo();
 			patientDoctorInfo.doctor = doctor;
 			patientDoctorInfo.patient = patient;
+			patientDoctorInfo.createdBy = LoginController.getLoggedInUser();
 			patientDoctorInfo.save();
 			flash().put("alert", new Alert("alert-success", patient.appUser.name+" Added in patient's list.").toString());
 		}
@@ -1778,29 +1782,30 @@ public class DoctorController extends Controller {
 		final Doctor doctor = LoginController.getLoggedInUser().getDoctor();
 		final Map<String, String[]> requestMap = request().body().asFormUrlEncoded();
 		final Patient patient = new Patient();
+		final AppUser appUser = new AppUser();
 		if (requestMap.get("name") != null && !(requestMap.get("name")[0].trim().isEmpty())) {
-			patient.appUser.name = requestMap.get("name")[0].trim();
+			appUser.name = requestMap.get("name")[0].trim();
 		}
 		if (requestMap.get("email") != null && !(requestMap.get("email")[0].trim().isEmpty())) {
-			patient.appUser.email = requestMap.get("email")[0].trim();
+			appUser.email = requestMap.get("email")[0].trim();
 		}
 		if (requestMap.get("contactNo") != null && !(requestMap.get("contactNo")[0].trim().isEmpty())) {
-			patient.appUser.mobileNumber = Long.parseLong(requestMap.get("contactNo")[0].trim());
+			appUser.mobileNumber = Long.parseLong(requestMap.get("contactNo")[0].trim());
 		}
 		if (requestMap.get("sex") != null && !(requestMap.get("sex")[0].trim().isEmpty())) {
-			patient.appUser.sex = Enum.valueOf(Sex.class, requestMap.get("sex")[0].trim());
+			appUser.sex = Enum.valueOf(Sex.class, requestMap.get("sex")[0].trim());
 		}
 		if(requestMap.get("dob") != null && !(requestMap.get("dob")[0].trim().isEmpty())){
 			final String dobStr = requestMap.get("dob")[0].replaceAll(" ","").trim();
 			final SimpleDateFormat sdf = new SimpleDateFormat("dd-MM-yyyy");
 			try {
-				patient.appUser.dob =  sdf.parse(dobStr);
+				appUser.dob =  sdf.parse(dobStr);
 			} catch (final ParseException e) {
 				Logger.error("ERROR WHILE PARSING DOB");
 				e.printStackTrace();
 			}
 		}
-		final String password =  RandomStringUtils.randomAlphanumeric(5).toLowerCase();
+		final String password =  RandomStringUtils.randomNumeric(5).toLowerCase();
 		try {
 
 			final Random random = new SecureRandom();
@@ -1812,25 +1817,52 @@ public class DoctorController extends Controller {
 			final MessageDigest sha256 = MessageDigest.getInstance("SHA-256");
 			final byte[] passBytes = passwordWithSalt.getBytes();
 			final String hashedPasswordWithSalt = Base64.encodeBase64String(sha256.digest(passBytes));
-
-
-			patient.appUser.salt = randomSalt;
-			patient.appUser.password = hashedPasswordWithSalt;
+			appUser.salt = randomSalt;
+			appUser.password = hashedPasswordWithSalt;
 		} catch (final Exception e) {
 			Logger.error("ERROR WHILE CREATING SHA2 HASH");
 			e.printStackTrace();
 		}
-
+		patient.appUser = appUser;
 		patient.save();
-		EmailService.sendPatientConfirmationMail(patient, doctor, password);
-		SMSService.sendSMS(Long.toString(patient.appUser.mobileNumber), " An Account Has Been Created at mednetwork.in By Dr."+doctor.appUser.name+". Your Login Email ID Is "+patient.appUser.email+" ,Password Is "+password);
+		// Async Execution
+		Promise.promise(new Function0<Integer>() {
+			//@Override
+			@Override
+			public Integer apply() {
+				int result = 0;
+				if(!EmailService.sendPatientConfirmationMail(patient, doctor, password)){
+					result=1;
+				}
 
-		return ok();
+				return result;
+			}
+		});
+		// End of async
+
+
+		SMSService.sendSMS(Long.toString(patient.appUser.mobileNumber), " An Account Has Been Created at mednetwork.in By Dr."+doctor.appUser.name+". Your Login Email ID Is "+patient.appUser.email+" ,Password Is "+password);
+		final PatientDoctorInfo patientDoctorInfo = new PatientDoctorInfo();
+		patientDoctorInfo.doctor = doctor;
+		patientDoctorInfo.patient = patient;
+		patientDoctorInfo.createdBy = LoginController.getLoggedInUser();
+		patientDoctorInfo.save();
+		flash().put("alert", new Alert("alert-success", patient.appUser.name+" Added in patient's list.").toString());
+		return redirect(routes.DoctorController.searchPatient());
+
+
 	}
 	public static Result viewAllPatients(){
 		final Doctor doctor = LoginController.getLoggedInUser().getDoctor();
 		final List<PatientDoctorInfo> patientList = PatientDoctorInfo.find.where().eq("doctor", doctor).eq("createdBy", doctor.appUser).findList();
-		return ok();
+		return ok(views.html.doctor.patientList.render(patientList));
+	}
+	public static Result removePatientFromDoctorsList(final Long patientDoctorInfoId){
+		final PatientDoctorInfo patientDoctorInfo = PatientDoctorInfo.find.byId(patientDoctorInfoId);
+		patientDoctorInfo.delete();
+		flash().put("alert", new Alert("alert-danger", patientDoctorInfo.patient.appUser.name+" Removed Successfully.").toString());
+		final Doctor doctor = LoginController.getLoggedInUser().getDoctor();
+		return redirect(routes.DoctorController.viewAllPatients());
 	}
 
 }

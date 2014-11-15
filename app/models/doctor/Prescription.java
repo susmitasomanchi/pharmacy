@@ -66,7 +66,9 @@ public class Prescription extends BaseEntity{
 	public List<DiagnosticCentrePrescriptionInfo> getDiagnoticInfoList(){
 		return DiagnosticCentrePrescriptionInfo.find.where().eq("prescription", this).findList();
 	}
-
+	public static List<Prescription> getAllPrescriptions(final Doctor doctor,final Patient patient){
+		return Prescription.find.where().eq("doctor", doctor).eq("patient", patient).findList();
+	}
 
 	/**
 	 * Not required in this format. Gotta come up with a better way to

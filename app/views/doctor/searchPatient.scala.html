@@ -13,8 +13,6 @@
 	<label for="Email Id">Email Id *</label>
 	<input type="text"  id="email" class="form-control" name="email" required>
 	</div>
-	
-	<div id="not-available">
 	<div class="form-group">
 	<label for="Contact Number">Contact Number *</label>
 	<input type="text"  class="form-control" name="contactNo" required>
@@ -38,8 +36,8 @@
 			<span class="add-on"><i class="icon-th"></i></span>
       </div>
     </div>
-    </div>
-	<input type="submit" class="btn btn-primary btn-sm">Add</button>
+    
+	<input type="submit" class="btn btn-primary btn-sm" value="Add">
 	</div>
 	</form>
 	</div>
@@ -58,7 +56,6 @@ var checkin =$('#dob-datepicker').datepicker({
 </script>
  <script>
      $(document).ready(function(){
-     	alert("hi");
     $("#email").blur(function(){
      var email = $("#email").val().trim();
      if(email == ""){
@@ -66,13 +63,16 @@ var checkin =$('#dob-datepicker').datepicker({
      return false;
      }
      $.get('/secure-doctor/search-patient-process/'+email, function(data){
-	if(data != 0){
-	$("#not-available").hide();
-	window.location.href = '/secure-doctor/add-patient/'+data.trim();
-	}
-	if(data == 0){
-	alert(email+" already existed in mednetwork");
+	if(data.trim() == 0){
+	alert(email+" Not Existed in MednetWork");
 	return false;
+	}
+	if(data.trim() == 2){
+	alert(email+" Already existed in MednetWork but not as Patient. Try with another Email Id");
+	return false;
+	}	
+	if(data.trim() == 1){
+	$('#myModal').modal('show');
 	}
 	
 	});
@@ -80,6 +80,26 @@ var checkin =$('#dob-datepicker').datepicker({
   });
   });
   
+  function addPatient(){
+  var email = $("#email").val().trim();
+  alert(email);
+  window.location.href = '/secure-doctor/add-patient/'+email.trim();
+  }
   
 </script>
+
 }
+
+<div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="basicModal" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+              <div class="modal-body">
+                Patient already existed in Mednetwork. Do You Like to add?
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default btn-sm" data-dismiss="modal">Close</button>
+                <a onclick="addPatient();" class="btn btn-sm btn-success" class="btn btn-primary">Add</button>
+        </div>
+    </div>
+  </div>
+</div>
