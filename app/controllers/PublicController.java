@@ -313,8 +313,13 @@ public class PublicController extends Controller{
 	 */
 	@ConfirmAppUser
 	public static Result scheduleAppointment(final Long docclinicid) {
-		final DoctorClinicInfo clinicInfo=DoctorClinicInfo.find.byId(docclinicid);
-		return ok(views.html.patient.patientNewAppointment.render(clinicInfo));
+		if(LoginController.getLoggedInUser().role.equals(Role.PATIENT)){
+			final DoctorClinicInfo clinicInfo=DoctorClinicInfo.find.byId(docclinicid);
+			return ok(views.html.patient.patientNewAppointment.render(clinicInfo));
+		}else{
+			flash().put("alert", new Alert("alert-info","Login as Patient to book an appointment.").toString());
+			return redirect(routes.Application.index());
+		}
 	}
 
 	/**

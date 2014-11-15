@@ -110,11 +110,12 @@ public class DoctorController extends Controller {
 				oldSpezList.addAll(doctor.specializationList);
 				doctor.specializationList.removeAll(oldSpezList);// .clear() if (requestMap.get("fullname") != null && !(requestMap.get("fullname")[0].trim().isEmpty())) {
 				doctor.appUser.name = requestMap.get("fullname")[0].trim();
+				for (final String specializationId : requestMap.get("specialization")) {
+					final MasterSpecialization spez = MasterSpecialization.find.byId(Long.parseLong(specializationId));
+					doctor.specializationList.add(spez);
+				}
 			}
-			for (final String specializationId : requestMap.get("specialization")) {
-				final MasterSpecialization spez = MasterSpecialization.find.byId(Long.parseLong(specializationId));
-				doctor.specializationList.add(spez);
-			}
+
 
 
 			if (requestMap.get("degree") != null && !(requestMap.get("degree")[0].trim().isEmpty())) {
