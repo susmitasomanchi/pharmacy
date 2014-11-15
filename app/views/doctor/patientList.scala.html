@@ -1,0 +1,81 @@
+@(patientDoctorInfos: List[models.patient.PatientDoctorInfo])
+@main("Add Patient"){
+@if(patientDoctorInfos.size() > 0){
+<table class="table table-hover">
+	<tr class="active">
+		<th>S.No</th>
+		<th>Patient Name</th>
+		<th>Past Prescriptions</th>
+		<th>Action</th>
+	</tr>
+	@for((patientDoctorInfo,index) <- patientDoctorInfos.zipWithIndex){
+	<tr class="info">
+	<td>@{index+1}</td>
+	<td><h5>@patientDoctorInfo.patient.appUser.name</h5></td>
+	<td>
+	@for((prescription,index) <- models.doctor.Prescription.getAllPrescriptions(patientDoctorInfo.doctor,patientDoctorInfo.patient).zipWithIndex){
+	<li style="cursor:pointer;color:#008bca" onclick="showpastpres('@prescription.id')">Prescription on @prescription.prescriptionDate.format("dd-MM-yyyy HH:mm")
+	</li>
+	}
+	</td>
+	<td><button onclick="removePatient('@patientDoctorInfo.id')" class="btn btn-danger btn-sm">Delete</button></td>
+</tr>
+}
+</table>
+}else{
+	<h5> No Clinics Found</h5>
+}
+
+<div class="modal fade" id="past-pres" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+     <div class="modal-header alert-info">
+        <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+        <h4 class="modal-title"></h4>
+      </div>
+      	<div class="modal-body" id="modal-content">
+      	</div>
+     	<div class="modal-footer">
+        <a class="btn btn-default" data-dismiss="modal">Close</a>
+       </div>
+    </div>
+  </div>
+</div>
+
+<div class="modal fade" id="remove-patient" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+     <div class="modal-header alert-info">
+        <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+        <h4 class="modal-title"></h4>
+      </div>
+      	<div class="modal-body" id="modal-content">
+      	Do You want to continue?
+      	</div>
+     	<div class="modal-footer">
+     	<button class="btn btn-danger btn-sm" onclick="removePatientDoctorInfo();">remove</a>
+        <button class="btn btn-default btn-sm" data-dismiss="modal">Close</a>
+       </div>
+    </div>
+  </div>
+</div>
+<script>
+var id;
+	function showpastpres(pastpresid){
+		$('#past-pres').modal('show');
+			$.get('/secure-doctor/view-prescription/'+pastpresid, function(htmldata) {
+				$('#modal-content').html(htmldata);
+			});
+	}	
+	
+	function removePatient(patientDoctorInfoid){
+	id = patientDoctorInfoid;
+		$('#remove-patient').modal('show');
+			$.get('/secure-doctor/view-prescription/'+pastpresid, function(htmldata) {
+				$('#modal-content').html(htmldata);
+			});
+	}	
+	function removePatientDoctorInfo(){
+	}
+</script>
+}
