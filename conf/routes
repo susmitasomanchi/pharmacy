@@ -104,8 +104,9 @@ GET    /secure-diagnostic/join                              		controllers.UserCo
 GET    /secure-user/join											controllers.UserController.joinUsPatient()
 GET    /secure-clinic/join											controllers.UserController.joinUsClinic()
 GET    /secure-blood-bank/join										controllers.UserController.joinUsBloodBank()
+GET    /secure-pharma/join											controllers.UserController.joinUsPharmaCompany()
 
-POST   /secure-join		                              			controllers.UserController.processJoinUs()
+POST   /secure-join		                              				controllers.UserController.processJoinUs()
 
 # Dashboard of LoggedInUser
 GET		/secure-dashboard                                  controllers.UserActions.dashboard()
@@ -157,6 +158,16 @@ GET		/secure-doctor/diagnostic-tests/get-json					controllers.DoctorController.g
 GET		/secure-doctor/follow-up-appointment/:clinicId/:patientId					controllers.DoctorController.getPatientFollowUPAppointment(clinicId : Long,patientId: Long)
 POST		/secure-doctor/follow-up-appointment/:appointmentId/:patientId					controllers.DoctorController.processPatientFollowUPAppointment(appointmentId : Long,patientId: Long)
 GET		/secure-doctor/get-doctors-list/:clinicId											controllers.DoctorController.getDoctorClinicInfoList(clinicId : Long)
+GET		/secure-doctor/search-patient														controllers.DoctorController.searchPatient()
+GET		/secure-doctor/search-patient-process/:email								controllers.DoctorController.searchPatientProcess(email : String)
+GET		/secure-doctor/add-patient/:patientId												controllers.DoctorController.addPatientToList(patientId : String)
+POST		/secure-doctor/add-new-patient											controllers.DoctorController.addNewPatient()
+GET		/secure-doctor/patient-history												controllers.DoctorController.viewAllPatients()
+
+
+
+
+
 
 
 

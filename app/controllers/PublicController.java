@@ -12,6 +12,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
+import models.Address;
 import models.Alert;
 import models.AppUser;
 import models.Feedback;
@@ -126,6 +127,7 @@ public class PublicController extends Controller{
 				final Doctor doctor = Doctor.find.byId(docId);
 				patientInfo.patient=patient;
 				patientInfo.doctor=doctor;
+				patientInfo.createdBy = LoginController.getLoggedInUser();
 				if(PatientDoctorInfo.find.where().eq("doctor", doctor).eq("patient",patient).findList().size()==0){
 					patient.patientDoctorInfoList.add(patientInfo);
 					patient.update();
@@ -311,8 +313,13 @@ public class PublicController extends Controller{
 	 */
 	@ConfirmAppUser
 	public static Result scheduleAppointment(final Long docclinicid) {
-		final DoctorClinicInfo clinicInfo=DoctorClinicInfo.find.byId(docclinicid);
-		return ok(views.html.patient.patientNewAppointment.render(clinicInfo));
+		if(LoginController.getLoggedInUser().role.equals(Role.PATIENT)){
+			final DoctorClinicInfo clinicInfo=DoctorClinicInfo.find.byId(docclinicid);
+			return ok(views.html.patient.patientNewAppointment.render(clinicInfo));
+		}else{
+			flash().put("alert", new Alert("alert-info","Login as Patient to book an appointment.").toString());
+			return redirect(routes.Application.index());
+		}
 	}
 
 	/**
@@ -929,6 +936,22 @@ public class PublicController extends Controller{
 			return new ArrayList<Locality>();
 		}
 	}
+	public static List<Locality> getPrimaryCityLocations(final Long id){
+		final Address address = Address.find.byId(id);
+		if(address.primaryCity != null){
+			return  Locality.find.where().eq("primaryCity", address.primaryCity ).findList();
+		}
+		else{
+			if((session(Constants.CITY_ID) != null)){
+				final PrimaryCity primaryCity = PrimaryCity.find.byId(Long.parseLong(session(Constants.CITY_ID)));
+				return  Locality.find.where().eq("primaryCity", primaryCity).findList();
+
+			}
+			else{
+				return new ArrayList<Locality>();
+			}
+		}
+	}
 	/**
 	 * @author lakshmi
 	 * Action to get All Localities of primaryCity.
@@ -1036,5 +1059,7 @@ public class PublicController extends Controller{
 		final JSONArray jsonArray = new JSONArray(Arrays.asList(result));
 		return ok(jsonArray.toString());
 	}
+
+
 
 }

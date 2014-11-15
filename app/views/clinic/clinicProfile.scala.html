@@ -387,7 +387,7 @@ function initialize(mapdiv) {
 
 }
 
-
+$( document ).ready(function() {
 $('#locality-of-city').on('change', function(){
 	$("#map_canvas").html('');
 	var geocoder = new google.maps.Geocoder();
@@ -407,6 +407,7 @@ $('#locality-of-city').on('change', function(){
 		}
 	});
 	// google.maps.event.addDomListener(window, 'load', initialize);
+});
 });
 
 

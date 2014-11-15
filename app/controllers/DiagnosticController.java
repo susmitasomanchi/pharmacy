@@ -211,9 +211,7 @@ public class DiagnosticController extends Controller {
 				diagnosticCentre.mobileNo = requestMap.get("contactNo")[0];
 			}
 			diagnosticCentre.address.update();
-			Logger.info("address id=="+diagnosticCentre.address.id);
 			diagnosticCentre.update();
-			Logger.info("3");
 
 		}
 		catch (final Exception e){

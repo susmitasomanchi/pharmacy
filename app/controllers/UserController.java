@@ -23,6 +23,7 @@ import models.diagnostic.DiagnosticRepresentative;
 import models.doctor.Clinic;
 import models.doctor.Doctor;
 import models.mr.MedicalRepresentative;
+import models.mr.PharmaceuticalCompany;
 import models.patient.Patient;
 import models.pharmacist.Pharmacist;
 import models.pharmacist.Pharmacy;
@@ -89,7 +90,9 @@ public class UserController extends Controller {
 	public static Result joinUsBloodBank(){
 		return ok(views.html.bloodBank.joinus.render());
 	}
-
+	public static Result joinUsPharmaCompany(){
+		return ok(views.html.mr.joinus.render());
+	}
 
 
 	/**
@@ -121,6 +124,9 @@ public class UserController extends Controller {
 			}
 			if(appUser.role == Role.BLOOD_BANK_ADMIN){
 				return redirect(routes.UserController.joinUsBloodBank());
+			}
+			if(appUser.role == Role.ADMIN_MR){
+				return redirect(routes.UserController.joinUsPharmaCompany());
 			}
 		}
 
@@ -234,6 +240,21 @@ public class UserController extends Controller {
 			bloodBank.save();
 			bloodBankUser.bloodBank = bloodBank;
 			bloodBankUser.update();
+		}
+
+		if(appUser.role.equals(Role.ADMIN_MR)){
+			final MedicalRepresentative adminMR = new MedicalRepresentative();
+			adminMR.appUser = appUser;
+			adminMR.save();
+
+			final PharmaceuticalCompany company = new PharmaceuticalCompany();
+			company.name = request().body().asFormUrlEncoded().get("pharmaCompanyName")[0];
+			company.adminMR = adminMR;
+			//company.slugUrl = Util.simpleSlugify(company.name)+company.id;
+			//company.primaryCity = city;
+			company.save();
+			adminMR.pharmaceuticalCompany = company;
+			adminMR.update();
 		}
 
 		if(appUser.role.equals(Role.PATIENT)){

@@ -1,10 +1,12 @@
 package models.mr;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.ManyToOne;
 
 import models.BaseEntity;
 
@@ -16,15 +18,13 @@ public class Designation extends BaseEntity{
 	@Id
 	public Long id;
 
+	@ManyToOne(cascade = CascadeType.ALL)
+	public PharmaceuticalCompany pharmaceuticalCompany;
+
 	public String name;
 
 	@Column(columnDefinition="TEXT")
 	public String description;
-
-	/*@OneToOne
-	public MedicalRepresentative mr;*/
-
-	//public String test;
 
 	public static Finder<Long, Designation> find = new Finder<Long, Designation>(Long.class, Designation.class);
 
