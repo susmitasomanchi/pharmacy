@@ -562,7 +562,7 @@ GET		/zohoverify/verifyforzoho.html					controllers.Assets.at(path="/public", fi
 #MR Module
 
 POST    /m/android/mr/login		                                       controllers.AndroidController.login()
-POST    /m/android/mr/submit-dcr			                           controllers.AndroidController.submitDCR()
+POST    /m/android/mr/submit-dcr-line-item		                       controllers.AndroidController.submitDCRLineItem()
 GET		/m/android/mr/get-doctors/:mrId								   controllers.AndroidController.getDoctors(mrId: Long)
 GET		/m/android/mr/get-products/:mrId							   controllers.AndroidController.getProducts(mrId: Long)
 

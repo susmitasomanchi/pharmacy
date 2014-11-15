@@ -3,6 +3,8 @@ package controllers;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+import java.util.Set;
 
 import models.AppUser;
 import models.doctor.Doctor;
@@ -13,8 +15,11 @@ import models.mr.PharmaceuticalProduct;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
+import com.fasterxml.jackson.databind.JsonNode;
+
 import play.Logger;
 import play.data.Form;
+import play.data.validation.ValidationError;
 import play.mvc.BodyParser;
 import play.mvc.Controller;
 import play.mvc.Result;
@@ -136,12 +141,30 @@ public class AndroidController extends Controller{
 
 
 	@BodyParser.Of(BodyParser.Json.class)
-	public static Result submitDCR(){
-		final DCRBean bean = dcrBeanform.bindFromRequest().get();
+	public static Result submitDCRLineItem(){
+		Logger.info("Request: "+request().body().asJson());
+		final JSONObject json = new JSONObject(request().body().asJson().toString());
+
+		Logger.info(json.getString("FOR_DATE"));
+		Logger.info(json.getString("DOCTOR_ID"));
+		Logger.info(json.getString("IN_TIME"));
+		Logger.info(json.getString("OUT_TIME"));
+		Logger.info(json.getString("POB"));
+		Logger.info(json.getString("REMARKS"));
+
+		final JSONObject samples = json.getJSONObject("SAMPLES");
+		final Set<String> sampleKeys = samples.keySet();
+		for (final String key : sampleKeys) {
+			Logger.info(key+"----"+samples.get(key));
+		}
+
+		final JSONArray promotions = json.getJSONArray("PROMOTIONS");
+		final int l = promotions.length();
+		for(int i=0; i<l; i++){
+			Logger.info(promotions.getString(i));
+		}
 
 
-		Logger.info(bean.submitterAppUserId+"");
-		Logger.info(bean.forDate+"");
 
 
 		return ok();
