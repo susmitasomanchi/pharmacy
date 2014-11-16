@@ -1,6 +1,9 @@
 package controllers;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -9,6 +12,9 @@ import java.util.Set;
 import models.AppUser;
 import models.doctor.Doctor;
 import models.doctor.MasterSpecialization;
+import models.mr.DCRLineItem;
+import models.mr.DCRStatus;
+import models.mr.DailyCallReport;
 import models.mr.MedicalRepresentative;
 import models.mr.PharmaceuticalProduct;
 
@@ -16,6 +22,7 @@ import org.json.JSONArray;
 import org.json.JSONObject;
 
 import com.fasterxml.jackson.databind.JsonNode;
+import com.fasterxml.jackson.databind.module.SimpleAbstractTypeResolver;
 
 import play.Logger;
 import play.data.Form;
@@ -145,6 +152,8 @@ public class AndroidController extends Controller{
 		Logger.info("Request: "+request().body().asJson());
 		final JSONObject json = new JSONObject(request().body().asJson().toString());
 
+
+		Logger.info(json.getString("MR_ID"));
 		Logger.info(json.getString("FOR_DATE"));
 		Logger.info(json.getString("DOCTOR_ID"));
 		Logger.info(json.getString("IN_TIME"));
@@ -165,9 +174,61 @@ public class AndroidController extends Controller{
 		}
 
 
+		final String forDateStr =  json.getString("FOR_DATE").trim();
+		final SimpleDateFormat sdf = new SimpleDateFormat("");
+		final Date forDate = null;
+		try{
+			forDate = sdf.parse(forDateStr);
+		}
+		catch (final ParseException e){
+			Logger.error("COULDN'T PARSE FOR-DATE WITH FOR-DATE STRING: "+forDateStr);
+			Logger.error("RETURNING WITH ERROR CODE -1");
+			final HashMap<String,String> map = new HashMap<String,String>();
+			map.put("STATUS", "FALSE");
+			map.put("ERROR", "-1");
+			return ok(new JSONObject(map).toString());
+		}
+
+		//@TODO add other field validations -- mandatory fields are: ForDate, MR_ID, AppUserID, Doctor_Id, Verification_Code(Security)
+		final String mrIdStr = json.getString("MR_ID");
+		final String docIdStr = json.getString("DOCTOR_ID");
+		final String pobStr = json.getString("POB");
+		final String remarks = json.getString("REMARKS");
 
 
-		return ok();
+		final MedicalRepresentative mr = MedicalRepresentative.find.byId(Long.parseLong(mrIdStr));
+		DailyCallReport dcr = DailyCallReport.find.where().eq("submitter",mr).eq("forDate",forDate).findUnique();
+
+		// DCR Validation -- If MR's DCR with forDate exists, response will be served only if that DCR is in DRAFT, REJECTED or REOPENED state
+		if(dcr != null){
+			if(dcr.dcrStatus.equals(DCRStatus.SUBMITTED) || dcr.dcrStatus.equals(DCRStatus.APPROVED)){
+				Logger.error("DCR FOR MR ID "+mrIdStr+" FOR DATE "+forDateStr+" IS IN "+dcr.dcrStatus+" STATE.");
+				Logger.error("RETURNING WITH ERROR CODE "+dcr.dcrStatus);
+				final HashMap<String,String> map = new HashMap<String,String>();
+				map.put("STATUS", "FALSE");
+				map.put("ERROR", dcr.dcrStatus.toString());
+				return ok(new JSONObject(map).toString());
+			}
+		}
+		else{
+			dcr = new DailyCallReport();
+			dcr.forDate = forDate;
+			dcr.submitter = mr;
+			dcr.save();
+		}
+
+		final DCRLineItem dcrLineItem = new DCRLineItem();
+		dcrLineItem.doctor = Doctor.find.byId(Long.parseLong(docIdStr));
+		// @TODO convert POB from Integer to FLOAT
+		dcrLineItem.pob = Integer.parseInt(pobStr);
+		dcrLineItem.remarks = remarks;
+
+		dcr.dcrLineItemList.add(dcrLineItem);
+		dcr.update();
+
+		final HashMap<String,String> map = new HashMap<String,String>();
+		map.put("STATUS", "TRUE");
+		return ok(new JSONObject(map).toString());
 	}
 
 
