@@ -1,0 +1,15 @@
+@(patientList: List[models.patient.Patient])
+
+
+@for(patient <- patientList){
+<div class="col-md-5">
+<h5>@patient.appUser.name</h5>
+<h5>@patient.appUser.email</h5>
+<h5>@patient.appUser.mobileNumber</h5>
+</div>
+<div class="col-md-2">
+<a href="#" class="btn btn-primary btn-xs">Add</a>
+</div>
+
+}
+

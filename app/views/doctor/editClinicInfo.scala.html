@@ -55,14 +55,20 @@
   			<div class="form-group" id="loc2">
   			</div>
   			<div class="form-group" id= "loc1">
-    			<label for="area">Locality@if(LoginController.getLoggedInUser().getDoctor().primaryCity != null){ in @LoginController.getLoggedInUser().getDoctor().primaryCity.name}*
+    			<label for="area">Locality @if(LoginController.getLoggedInUser().getDoctor().primaryCity != null){ in @models.PrimaryCity.find.byId(Long.parseLong(clinicForm("cityId").value)).name}*
     					<span style="cursor:pointer;color:#008bca; position: absolute;margin-left: 432px;margin-top: -16px;" data-toggle="modal" data-target="#myFormModal">Locality Not Found?</span>
     			</label>
-    			 <select id="locality-of-city" data-placeholder="Localities@if(LoginController.getLoggedInUser().getDoctor().primaryCity != null){ in @LoginController.getLoggedInUser().getDoctor().primaryCity.name}" name="localityId" value="@clinicForm("localityId").value" class="form-control chzn">
-  				 	<option></option>
+    			 <select id="locality-of-city" data-placeholder="Localities@if(LoginController.getLoggedInUser().getDoctor().primaryCity != null){ in @models.PrimaryCity.find.byId(Long.parseLong(clinicForm("cityId").value)).name}" name="localityId" value="@clinicForm("cityId").value" class="form-control chzn">
+  				
   				 	@for(locality <- PublicController.getPrimaryCityLocations()){
-  				 	<option value="@locality.id">@locality.name</option>
-					}
+  				 	@if(locality == models.Locality.find.byId(Long.parseLong(clinicForm("localityId").value))){
+  				 	<option value="@locality.id" selected>@locality.name</option>
+  				 	}else{
+  				 	<option></option>
+  				 	}
+  				 	 	<option value="@locality.id">@locality.name</option>
+  				 	}
+					
 				</select>
    			</div>
   			
@@ -70,7 +76,7 @@
     			<label for="city">City*</label>
     			<select data-placeholder="Select City" id="city" name="cityId" class="form-control chosen-select" value="@clinicForm("cityId").value">
     			@for((k,v) <- PrimaryCity.getAllPrimaryCities()){
-    			@if(k.equals((LoginController.getLoggedInUser().getDoctor().primaryCity.id).toString())){
+    			@if(k.equals(clinicForm("cityId").value)){
 					<option value="@k" selected>@v</option>
     			}else{
     			 	<option value="@k">@v</option>

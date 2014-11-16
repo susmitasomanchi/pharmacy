@@ -12,6 +12,7 @@ import models.clinic.ClinicUser;
 import models.doctor.Appointment;
 import models.doctor.Clinic;
 import models.doctor.Doctor;
+import models.patient.Patient;
 
 import org.apache.http.NameValuePair;
 import org.apache.http.client.HttpClient;
@@ -182,7 +183,7 @@ public class EmailService {
 			urlParameters.add(new BasicNameValuePair("subject", "Reset Password  at MedNetwork"));
 			//urlParameters.add(new BasicNameValuePair("text", builder.toString())); // This can be used for any plain text content of the mail
 			urlParameters.add(new BasicNameValuePair("html", builder.toString()));
-			urlParameters.add(new BasicNameValuePair("fromname", "MedNetwork"));
+			urlParameters.add(new BasicNameValuePair("fromname", "MedNetwosendConfirmationEmailrk"));
 			urlParameters.add(new BasicNameValuePair("from", "noreply@mednetwork.in"));
 			post.setEntity(new UrlEncodedFormEntity(urlParameters));
 			client.execute(post);
@@ -530,6 +531,44 @@ public class EmailService {
 			urlParameters.add(new BasicNameValuePair("api_user", Constants.EMAIL_ID));
 			urlParameters.add(new BasicNameValuePair("api_key", Constants.EMAIL_PASSWORD));
 			urlParameters.add(new BasicNameValuePair("to", clinicUser.appUser.email));
+			//urlParameters.add(new BasicNameValuePair("toname", ""));
+			urlParameters.add(new BasicNameValuePair("subject", "Clinic User Confirmation"));
+			//urlParameters.add(new BasicNameValuePair("text", builder.toString())); // This can be used for any plain text content of the mail
+			urlParameters.add(new BasicNameValuePair("html", builder.toString()));
+			urlParameters.add(new BasicNameValuePair("fromname", "MedNetwork"));
+			urlParameters.add(new BasicNameValuePair("from", "noreply@mednetwork.in"));
+			post.setEntity(new UrlEncodedFormEntity(urlParameters));
+			client.execute(post);
+
+			System.out.println("Mail Sent Successfully!");
+			Logger.info(builder.toString());
+		}
+		catch (final Exception e){
+			System.out.println("ERROR While Sending Email");
+			e.printStackTrace();
+			result=false;
+		}
+		return result;
+	}
+	public static boolean sendPatientConfirmationMail(final Patient patient,final Doctor doctor,final String password){
+
+		final String url = Constants.EMAIL_URL;
+
+		final HttpClient client = new DefaultHttpClient();
+		final HttpPost post = new HttpPost(url);
+
+		boolean result = true;
+		try{
+			final StringBuilder builder=new StringBuilder();
+			builder.append("<html><body>");
+			builder.append("<p> Dear "+patient.appUser.name+",<br><br> An account has been created for you By Dr."+doctor.appUser.name+"at Ednetwork.in , <br>");
+			builder.append(" Your Email Id <b>"+patient.appUser.email+"</b><br> Password <b>"+password+"</b><br><br>Best regards,<br>MedNetwork.in</p>");
+			builder.append("</body></html>");
+
+			final List<NameValuePair> urlParameters = new ArrayList<NameValuePair>();
+			urlParameters.add(new BasicNameValuePair("api_user", Constants.EMAIL_ID));
+			urlParameters.add(new BasicNameValuePair("api_key", Constants.EMAIL_PASSWORD));
+			urlParameters.add(new BasicNameValuePair("to", patient.appUser.email));
 			//urlParameters.add(new BasicNameValuePair("toname", ""));
 			urlParameters.add(new BasicNameValuePair("subject", "Clinic User Confirmation"));
 			//urlParameters.add(new BasicNameValuePair("text", builder.toString())); // This can be used for any plain text content of the mail

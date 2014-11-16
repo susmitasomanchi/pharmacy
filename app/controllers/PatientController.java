@@ -259,7 +259,7 @@ public class PatientController extends Controller {
 	 */
 	@ConfirmAppUser
 	public static Result viewMyAppointments(){
-		final AppUser patient=LoginController.getLoggedInUser();
+		final AppUser patient = LoginController.getLoggedInUser();
 		final List<Appointment> patientApppointments=Appointment.find.where().eq("requestedBy", patient).orderBy().desc("appointmentTime").findList();
 		return ok(views.html.patient.patientViewAppointments.render(patientApppointments));
 	}
@@ -302,7 +302,10 @@ public class PatientController extends Controller {
 		smsMessage.append("You have booked an appointment with Dr. "+appointment.doctorClinicInfo.doctor.appUser.name+" on ");
 		smsMessage.append( new SimpleDateFormat("dd-MMM-yyyy").format(appointment.appointmentTime));
 		smsMessage.append(" at "+ new SimpleDateFormat("HH:mm").format(appointment.appointmentTime));
-		smsMessage.append(" at "+appointment.doctorClinicInfo.clinic.name+", "+appointment.doctorClinicInfo.clinic.address.locality.name);
+		smsMessage.append(" at "+appointment.doctorClinicInfo.clinic.name);
+		if(appointment.doctorClinicInfo.clinic.address != null && appointment.doctorClinicInfo.clinic.address.locality != null){
+			smsMessage.append(", "+appointment.doctorClinicInfo.clinic.address.locality.name);
+		}
 		SMSService.sendSMS(appointment.requestedBy.mobileNumber.toString(), smsMessage.toString());
 
 		/*
@@ -314,7 +317,7 @@ public class PatientController extends Controller {
 		smsMessage2.append("by patient "+appointment.requestedBy.name+".");
 		SMSService.sendSMS(appointment.doctorClinicInfo.doctor.appUser.mobileNumber.toString(), smsMessage2.toString());
 		 */
-
+		flash().put("alert",new Alert("alert-success", "Appointment with Dr. "+appointment.doctorClinicInfo.doctor.appUser.name+" Created Successfully.").toString());
 		return redirect(routes.PatientController. viewMyAppointments());
 	}
 
