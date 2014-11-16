@@ -27,11 +27,9 @@ public class MedicalRepresentativeBean implements Serializable {
 	public AppUser toAppUser() {
 		if(this.appid==null){
 			final AppUser appUser = new AppUser();
-			//appUser.id=this.appid;
 			appUser.name = this.name;
 			appUser.email = this.email;
 			appUser.role = Role.MR;
-			// appUser.sex = Sex.valueOf(this.sex);
 			appUser.username = this.username;
 			return appUser;
 		}
@@ -40,7 +38,6 @@ public class MedicalRepresentativeBean implements Serializable {
 			appUser.name = this.name;
 			appUser.email = this.email;
 			appUser.role = Role.MR;
-			// appUser.sex = Sex.valueOf(this.sex);
 			appUser.username = this.username;
 			return appUser;
 		}
@@ -48,23 +45,20 @@ public class MedicalRepresentativeBean implements Serializable {
 
 
 	public MedicalRepresentative toMedicalRepresentative(){
-		final MedicalRepresentative mr =new MedicalRepresentative();
+
+		MedicalRepresentative mr = new MedicalRepresentative();
 
 		if(this.id != null){
-			mr.id=this.id;
+			mr = MedicalRepresentative.find.byId(this.id);
 		}
 
 		if(this.designationId != null) {
-			mr.designation= Designation.find.byId(this.designationId);
-		}else{
+			mr.designation = Designation.find.byId(this.designationId);
+		}
+		else{
 			mr.designation = new Designation();
 		}
-		/*if(this.age != 0) {
-			mr.age= this.age;
-		}
-		if(this.sex != null) {
-			mr.sex= this.sex;
-		}*/
+
 		if(this.regionAlloted != null) {
 			mr.regionAlloted= this.regionAlloted;
 		}
@@ -73,14 +67,6 @@ public class MedicalRepresentativeBean implements Serializable {
 		if(this.status != null) {
 			mr.status= this.status;
 		}
-
-
-		/*if(this.manager != null) {
-			mr.manager= this.manager;
-		}*/
-		/*if(this.mrAdminId != null) {
-			mr.mrAdminId= this.mrAdminId;
-		}*/
 
 		return mr;
 

@@ -66,143 +66,93 @@ public class MRController extends Controller {
 			.form(DesignationBean.class);
 
 	/**
-	 * 
 	 * @author Dibesh
-	 * 
-	 *         This method redirects to add medical representative page
-	 * 
-	 *         GET /mr/add-mr controllers.MRController.addMR()
+	 * This method redirects to add medical representative page
+	 * GET /mr/add-mr controllers.MRController.addMR()
 	 */
 
 	public static Result addMR() {
-		final MedicalRepresentative adminMr = LoginController.getLoggedInUser()
-				.getMedicalRepresentative();
-		List<MedicalRepresentative> mrList = MedicalRepresentative.find
-				.where()
-				.eq("pharmaceutical_company_id",
-						LoginController.getLoggedInUser()
-						.getMedicalRepresentative().pharmaceuticalCompany.id).ne("app_user_id", adminMr.appUser.id)
-						.findList();
-		/*final List<MedicalRepresentative> mrList = MedicalRepresentative.find
-				.where().eq("appUser.role", "MR").findList();*/
-		return ok(views.html.mr.medicalRepresentative.render(mrForm, adminMr,
-				mrList));
+		final MedicalRepresentative adminMr = LoginController.getLoggedInUser().getMedicalRepresentative();
+		final List<MedicalRepresentative> mrList = MedicalRepresentative.find.where().eq("pharmaceutical_company_id",adminMr.pharmaceuticalCompany.id).ne("app_user_id", adminMr.appUser.id).findList();
+		return ok(views.html.mr.medicalRepresentative.render(mrForm, adminMr, mrList));
 	}
 
 	/**
-	 * 
 	 * @author Dibesh
-	 * 
 	 *         This method persists the medical representative data as well as
 	 *         update mr
-	 * 
 	 *         POST /mr/add
 	 *         controllers.MRController.medicalRepresentativeProccess()
 	 */
 
 	public static Result medicalRepresentativeProccess() {
-		final MedicalRepresentative adminMr = LoginController.getLoggedInUser()
-				.getMedicalRepresentative();
-		final Form<MedicalRepresentativeBean> filledForm = mrForm
-				.bindFromRequest();
+		final MedicalRepresentative adminMr = LoginController.getLoggedInUser().getMedicalRepresentative();
+		final Form<MedicalRepresentativeBean> filledForm = mrForm.bindFromRequest();
 		if (filledForm.hasErrors()) {
-			Logger.info("*** user bad request");
-			final List<MedicalRepresentative> mrList = MedicalRepresentative.find
-					.where().eq("appUser.role", "MR").findList();
-			return ok(views.html.mr.medicalRepresentative.render(mrForm,
-					adminMr, mrList));
+			Logger.error(filledForm.errors().toString());
+			final List<MedicalRepresentative> mrList = MedicalRepresentative.find.where().eq("pharmaceuticalCompany", adminMr.pharmaceuticalCompany).eq("appUser.role", "MR").findList();
+			return ok(views.html.mr.medicalRepresentative.render(mrForm,adminMr, mrList));
 		}
 
 		else {
-
-			final MedicalRepresentativeBean medicalRepresentativeBean = filledForm
-					.get();
-
-			final MedicalRepresentative mr = medicalRepresentativeBean
-					.toMedicalRepresentative();
+			final MedicalRepresentativeBean medicalRepresentativeBean = filledForm.get();
+			final MedicalRepresentative mr = medicalRepresentativeBean.toMedicalRepresentative();
 			final AppUser appUser = medicalRepresentativeBean.toAppUser();
-
-			final PharmaceuticalCompany company = LoginController
-					.getLoggedInUser().getMedicalRepresentative().pharmaceuticalCompany;
-
+			final PharmaceuticalCompany company = LoginController.getLoggedInUser().getMedicalRepresentative().pharmaceuticalCompany;
 			String generatedPassword = "";
 			if (mr.id == null) {
-
-				if (AppUser.find.where().eq("email", appUser.email)
-						.findRowCount() > 0) {
-					flash().put(
-							"alert",
-							new Alert("alert-danger",
-									"Sorry! User with email id "
-											+ appUser.email.trim()
-											+ " already exists!").toString());
-					if (appUser.role == Role.MR) {
-						return ok("User already exist");
-					}
+				if (AppUser.find.where().eq("email", appUser.email).findRowCount() > 0) {
+					flash().put("alert",new Alert("alert-danger", "Sorry! User with email id "+ appUser.email.trim()+ " already exists!").toString());
+					return redirect(routes.MRController.addMR());
 				}
 				if(medicalRepresentativeBean.designationId == null){
-					flash().put(
-							"alert",
-							new Alert("alert-danger",
-									"Please Add the Designation First, Thank You !").toString());
-					return ok("Please Add the Designation First, Thank You !");
+					flash().put("alert", new Alert("alert-danger", "Please Add Designation").toString());
+					return redirect(routes.MRController.addMR());
 				}
 				try {
-
 					final Random random = new SecureRandom();
 					final byte[] saltArray = new byte[32];
 					random.nextBytes(saltArray);
-					final String randomSalt = Base64
-							.encodeBase64String(saltArray);
+					final String randomSalt = Base64.encodeBase64String(saltArray);
 					generatedPassword = GenerateRandomString.generatePassword();
-					final String passwordWithSalt = generatedPassword
-							+ randomSalt;
-					final MessageDigest sha256 = MessageDigest
-							.getInstance("SHA-256");
+					final String passwordWithSalt = generatedPassword + randomSalt;
+					final MessageDigest sha256 = MessageDigest.getInstance("SHA-256");
 					final byte[] passBytes = passwordWithSalt.getBytes();
-					final String hashedPasswordWithSalt = Base64
-							.encodeBase64String(sha256.digest(passBytes));
-
+					final String hashedPasswordWithSalt = Base64.encodeBase64String(sha256.digest(passBytes));
 					appUser.salt = randomSalt;
 					appUser.password = hashedPasswordWithSalt;
-
-				} catch (final Exception e) {
+				}
+				catch (final Exception e) {
 					Logger.error("ERROR WHILE CREATING SHA2 HASH");
 					e.printStackTrace();
 				}
 
 				appUser.save();
-				StringBuilder message = new StringBuilder();
+				final StringBuilder message = new StringBuilder();
 				message.append(" Dear "
 						+ appUser.name
 						+ ",<br> Your account has been created at <a href='https://mednetwork.in'>MedNetwork.in</a> Please use the following credentials to login:<br><br> UserName :"
 						+ appUser.email + "<br> Password :" + generatedPassword
 						+ "<br><br> Thank you <br> MedNetwork");
 
-				EmailService.sendSimpleHtmlEMail(appUser.email,
-						"\n Account created on MedNetwork", message.toString());
-				Logger.info("email : " + appUser.email
-						+ " & Generated password is : " + generatedPassword);
+				EmailService.sendSimpleHtmlEMail(appUser.email,"\n Account created on MedNetwork", message.toString());
 				mr.pharmaceuticalCompany = company;
 				mr.appUser = appUser;
 				if (medicalRepresentativeBean.manager != null) {
-					mr.manager = MedicalRepresentative.find
-							.byId(medicalRepresentativeBean.manager);
+					mr.manager = MedicalRepresentative.find.byId(medicalRepresentativeBean.manager);
 				}
-				mr.designation = Designation.find
-						.byId(medicalRepresentativeBean.designationId);
-
+				mr.designation = Designation.find.byId(medicalRepresentativeBean.designationId);
 				mr.save();
 				adminMr.pharmaceuticalCompany.mrList.add(mr);
 				adminMr.pharmaceuticalCompany.update();
-
-			} else {
+				Logger.info("Created MR "+appUser.name+" with credentials: "+appUser.email+" | "+generatedPassword);
+			}
+			else {
 				Logger.info("not null");
-
 			}
 
 		}
-		//return ok("mr is created");
+		flash().put("alert", new Alert("alert-success", "MR added successfully").toString());
 		return redirect(routes.MRController.mrList());
 	}
 
@@ -224,7 +174,7 @@ public class MRController extends Controller {
 		// final List<MedicalRepresentative> mrList =
 		// MedicalRepresentative.find.where().eq("companyName",
 		// loggedInMR.companyName).findList();
-		List<MedicalRepresentative> mrList = MedicalRepresentative.find
+		final List<MedicalRepresentative> mrList = MedicalRepresentative.find
 				.where()
 				.eq("pharmaceutical_company_id",
 						LoginController.getLoggedInUser()
@@ -290,12 +240,12 @@ public class MRController extends Controller {
 	public static Result editMRProccess(){
 		final MedicalRepresentative adminMr = LoginController.getLoggedInUser()
 				.getMedicalRepresentative();
-		DynamicForm editableForm = DynamicForm.form().bindFromRequest();
-		String id = editableForm.get("id");
-		String appid = editableForm.get("appid");
+		final DynamicForm editableForm = DynamicForm.form().bindFromRequest();
+		final String id = editableForm.get("id");
+		final String appid = editableForm.get("appid");
 
-		MedicalRepresentative mr = MedicalRepresentative.find.byId(Long.parseLong(id));
-		AppUser appUser = AppUser.find.byId(Long.parseLong(appid));
+		final MedicalRepresentative mr = MedicalRepresentative.find.byId(Long.parseLong(id));
+		final AppUser appUser = AppUser.find.byId(Long.parseLong(appid));
 
 		String generatedPassword = "";
 
@@ -675,8 +625,8 @@ public class MRController extends Controller {
 	public static Result deleteDCR(final Long dcrid) {
 		final MedicalRepresentative loggedInMr = LoginController
 				.getLoggedInUser().getMedicalRepresentative();
-		List<DCRLineItem> dcrLineItemList = DCRLineItem.find.where().eq("daily_call_report_id", dcrid).findList();
-		for (DCRLineItem dcrLineItem : dcrLineItemList) {
+		final List<DCRLineItem> dcrLineItemList = DCRLineItem.find.where().eq("daily_call_report_id", dcrid).findList();
+		for (final DCRLineItem dcrLineItem : dcrLineItemList) {
 			dcrLineItem.delete();
 		}
 		final DailyCallReport dcr = DailyCallReport.find.byId(dcrid);
@@ -1026,7 +976,7 @@ public class MRController extends Controller {
 	}
 
 	public static Result hierarchy() {
-		Map<MedicalRepresentative, List<MedicalRepresentative>> mrTree = new HashMap<MedicalRepresentative, List<MedicalRepresentative>>();
+		final Map<MedicalRepresentative, List<MedicalRepresentative>> mrTree = new HashMap<MedicalRepresentative, List<MedicalRepresentative>>();
 		return ok();
 	}
 
@@ -1336,11 +1286,11 @@ public class MRController extends Controller {
 
 	public static Result addDesignationProccess() {
 
-		MedicalRepresentative loggedInMr = LoginController.getLoggedInUser()
+		final MedicalRepresentative loggedInMr = LoginController.getLoggedInUser()
 				.getMedicalRepresentative();
 		final Form<DesignationBean> filledform = designationBeanForm
 				.bindFromRequest();
-		Designation designation = filledform.get().toDesignation();
+		final Designation designation = filledform.get().toDesignation();
 		Logger.info("name : " + designation.name);
 		loggedInMr.pharmaceuticalCompany.designationList.add(designation);
 		loggedInMr.update();
