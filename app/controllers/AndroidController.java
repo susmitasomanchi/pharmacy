@@ -17,6 +17,7 @@ import models.mr.DCRStatus;
 import models.mr.DailyCallReport;
 import models.mr.MedicalRepresentative;
 import models.mr.PharmaceuticalProduct;
+import models.mr.Sample;
 
 import org.json.JSONArray;
 import org.json.JSONObject;
@@ -161,6 +162,7 @@ public class AndroidController extends Controller{
 		Logger.info(json.getString("POB"));
 		Logger.info(json.getString("REMARKS"));
 
+		/*
 		final JSONObject samples = json.getJSONObject("SAMPLES");
 		final Set<String> sampleKeys = samples.keySet();
 		for (final String key : sampleKeys) {
@@ -172,7 +174,7 @@ public class AndroidController extends Controller{
 		for(int i=0; i<l; i++){
 			Logger.info(promotions.getString(i));
 		}
-
+		 */
 
 		final String forDateStr =  json.getString("FOR_DATE").trim();
 		final SimpleDateFormat sdf = new SimpleDateFormat("");
@@ -190,16 +192,16 @@ public class AndroidController extends Controller{
 		}
 
 		//@TODO add other field validations -- mandatory fields are: ForDate, MR_ID, AppUserID, Doctor_Id, Verification_Code(Security)
-		final String mrIdStr = json.getString("MR_ID");
-		final String docIdStr = json.getString("DOCTOR_ID");
-		final String pobStr = json.getString("POB");
-		final String remarks = json.getString("REMARKS");
+		final String mrIdStr = json.getString("MR_ID").trim();
+		final String docIdStr = json.getString("DOCTOR_ID").trim();
+		final String pobStr = json.getString("POB").trim();
+		final String remarks = json.getString("REMARKS").trim();
 
 
 		final MedicalRepresentative mr = MedicalRepresentative.find.byId(Long.parseLong(mrIdStr));
 		DailyCallReport dcr = DailyCallReport.find.where().eq("submitter",mr).eq("forDate",forDate).findUnique();
 
-		// DCR Validation -- If MR's DCR with forDate exists, response will be served only if that DCR is in DRAFT, REJECTED or REOPENED state
+		// DCR Validation -- If MR's DCR with forDate exists, lineItem will be saved only if that DCR is in DRAFT, REJECTED or REOPENED state
 		if(dcr != null){
 			if(dcr.dcrStatus.equals(DCRStatus.SUBMITTED) || dcr.dcrStatus.equals(DCRStatus.APPROVED)){
 				Logger.error("DCR FOR MR ID "+mrIdStr+" FOR DATE "+forDateStr+" IS IN "+dcr.dcrStatus+" STATE.");
@@ -209,6 +211,11 @@ public class AndroidController extends Controller{
 				map.put("ERROR", dcr.dcrStatus.toString());
 				return ok(new JSONObject(map).toString());
 			}
+
+			//@TODO: Add validation incase a lineItem for given Doc_ID already exists in the DCR
+			// either replace the existing line item or
+			// ask the android user (submitter-mr) what to do.
+
 		}
 		else{
 			dcr = new DailyCallReport();
@@ -221,7 +228,33 @@ public class AndroidController extends Controller{
 		dcrLineItem.doctor = Doctor.find.byId(Long.parseLong(docIdStr));
 		// @TODO convert POB from Integer to FLOAT
 		dcrLineItem.pob = Integer.parseInt(pobStr);
-		dcrLineItem.remarks = remarks;
+		dcrLineItem.remarks = remarks.trim();
+
+
+		final JSONObject samples = json.getJSONObject("SAMPLES");
+		final Set<String> sampleKeys = samples.keySet();
+		for (final String key : sampleKeys) {
+			//Logger.info(key+"----"+samples.get(key));
+			if(		samples.get(key) != null &&
+					(!samples.get(key).toString().isEmpty()) &&
+					(samples.get(key).toString().trim().compareTo("0") != 0)
+					){
+				final Sample sample = new Sample();
+				sample.pharmaceuticalProduct = PharmaceuticalProduct.find.byId(Long.parseLong(key));
+				sample.quantity = Integer.parseInt(samples.get(key).toString().trim());
+				dcrLineItem.sampleList.add(sample);
+			}
+		}
+
+		final JSONArray promotions = json.getJSONArray("PROMOTIONS");
+		final int l = promotions.length();
+		for(int i=0; i<l; i++){
+			//Logger.info(promotions.getString(i));
+			final Long phProdId = Long.parseLong(promotions.getString(i).trim());
+			dcrLineItem.promotionList.add(PharmaceuticalProduct.find.byId(phProdId));
+		}
+
+
 
 		dcr.dcrLineItemList.add(dcrLineItem);
 		dcr.update();
