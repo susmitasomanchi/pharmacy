@@ -176,7 +176,7 @@ public class AndroidController extends Controller{
 
 		final String forDateStr =  json.getString("FOR_DATE").trim();
 		final SimpleDateFormat sdf = new SimpleDateFormat("");
-		final Date forDate = null;
+		Date forDate = null;
 		try{
 			forDate = sdf.parse(forDateStr);
 		}
