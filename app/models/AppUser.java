@@ -161,7 +161,10 @@ public class AppUser extends BaseEntity {
 	}
 
 	public String getSexAndAge(){
-		return this.sex.toString().substring(0,1)+"/"+this.getAge();
+		if(this.sex != null && this.getAge() != 0){
+			return this.sex.toString().substring(0,1)+"/"+this.getAge();
+		}
+		return "";
 	}
 
 

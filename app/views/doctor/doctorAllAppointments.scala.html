@@ -30,7 +30,7 @@
 				Patient&nbsp;(Sex/Age)
 				</div></th>
 				<th><div class="col-md-4 column">
-				Appointmentjava.lang.NullPointerException:
+				Appointment
 				</div></th>
 			</div>
 			</tr>
@@ -46,7 +46,7 @@
 				<td>@appointment.appointmentTime.format("dd-MMM-yy HH:mm")</td>
 				</div>
 				<div class="col-md-3 column">
-			<td>@appointment.requestedBy.name &nbsp;(@appointment.requestedBy.getSexAndAge())</td>
+			<td>@if(appointment.requestedBy){@appointment.requestedBy.name &nbsp;(@appointment.requestedBy.getSexAndAge())}</td>
 				</div>
 				<div class="col-md-3 column">
 				<td>
@@ -97,7 +97,7 @@
 				<td>@appointment.appointmentTime.format("dd-MMM-yy HH:mm")</td>
 				</div>
 				<div class="col-md-3 column">
-				<td>@if(appointment.requestedBy != null){@appointment.requestedBy.name&nbsp;(@appointment.requestedBy.getSexAndAge())}</td>
+				<td>@appointment.requestedBy.name&nbsp;(@appointment.requestedBy.getSexAndAge())</td>
 				</div>
 				<div class="col-md-3 column">
 				<td>
