@@ -74,13 +74,13 @@ public class LoginController extends Controller {
 			final List<AppUser> appUsers = AppUser.find.where().eq("email", loginBean.email.trim().toLowerCase()).findList();
 			if(appUsers.size() < 1) {
 				// return invalid login/password
-				Logger.error("Invalid username/password");
+				Logger.error("AppUser does not exist with email: "+loginBean.email);
 				flash().put("alert", new Alert("alert-danger", "Sorry! Invalid Username/Password.").toString());
 				return redirect(routes.Application.index());
 			}
 			if(appUsers.size() == 1) {
 				if(!(appUsers.get(0).matchPassword(loginBean.password.trim()))){
-					Logger.error("Invalid username/password");
+					Logger.error("AppUser found with email: "+loginBean.email+" but password is incorrect.");
 					flash().put("alert", new Alert("alert-danger", "Sorry! Invalid Username/Password.").toString());
 					return redirect(routes.Application.index());
 				}

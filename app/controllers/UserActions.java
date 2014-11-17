@@ -11,7 +11,6 @@ import models.diagnostic.DiagnosticCentre;
 import models.doctor.Doctor;
 import models.patient.Patient;
 import models.pharmacist.Pharmacy;
-import play.Logger;
 import play.mvc.Controller;
 import play.mvc.Result;
 import actions.BasicAuth;
@@ -50,6 +49,9 @@ public class UserActions extends Controller {
 			return ok(views.html.bloodBank.bloodBankProfile.render(appUser.getBloodBankUser().bloodBank));
 		}
 		if(appUser.role.equals(Role.ADMIN_MR)){
+			return ok(views.html.mr.dashboard.render());
+		}
+		if(appUser.role.equals(Role.MR)){
 			return ok(views.html.mr.dashboard.render());
 		}
 

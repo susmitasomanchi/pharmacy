@@ -1,7 +1,7 @@
 @(dataForm: play.data.Form[beans.MedicalRepresentativeBean],adminMr: models.mr.MedicalRepresentative,mrList: List[models.mr.MedicalRepresentative])
 @import helper._
 @import helper.twitterBootstrap._
-@main("MedicalRepresentative form") {
+@main("Add an MR") {
 
 	@if(dataForm("id").value() != null){
 		@helper.form(action=routes.MRController.editMRProccess()) {
@@ -17,12 +17,11 @@
       }
     } 
     </select>	<br>
-	@helper.inputText(dataForm("username"),'_label->"User Name")
+	
+	
 	@helper.inputText(dataForm("email"),'_label->"Email")
-	Male<input type="radio" name="sex" value="Male">
-	Female<input type="radio" name="sex" value="Female">
-	@helper.inputText(dataForm("age"),'_label->"Age")
-	@helper.inputText(dataForm("regionAlloted"),'_label->"Region")
+
+	
 	Select Manager
 	<select class = "assignedManager chzn" name="manager" placeholder="Manager Assigned">  
     @for(mr <- mrList){
@@ -62,12 +61,18 @@
       }
     } 
     </select>	<br>
-	@helper.inputText(dataForm("username"),'_label->"User Name")
+	
+	
 	@helper.inputText(dataForm("email"),'_label->"Email")
+	
+	@*
 	Male<input type="radio" name="sex" value="Male">
 	Female<input type="radio" name="sex" value="Female">
 	@helper.inputText(dataForm("age"),'_label->"Age")
 	@helper.inputText(dataForm("regionAlloted"),'_label->"Region")
+	*@
+	
+	
 	Select Manager
 	<select class = "assignedManager chzn" name="manager" placeholder="Manager Assigned">  
     @for(mr <- mrList){
