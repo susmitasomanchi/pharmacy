@@ -600,6 +600,7 @@ public class ClinicController extends Controller{
 	public static Result getDoctorClinicInfos(final Long clinicUserId){
 		if(LoginController.getLoggedInUserRole().equals(Role.CLINIC_ADMIN.toString())){
 			final ClinicUser clinicUser = ClinicUser.find.byId(clinicUserId);
+			Logger.info(DoctorClinicInfo.find.where().eq("clinic", clinicUser.clinic).findList().size()+"size now");
 			return ok(views.html.clinic.doctorClinicInfos.render(DoctorClinicInfo.find.where().eq("clinic", clinicUser.clinic).findList(),clinicUser));
 		}else{
 			flash().put("alert", new Alert("alert-info", "Sorry. Clinic Admin only can access this.").toString());
@@ -622,7 +623,6 @@ public class ClinicController extends Controller{
 						clinicUser.doctorsList.add(doctor);
 					}
 				}
-
 				clinicUser.update();
 			}else{
 				flash().put("alert", new Alert("alert-info", "Select Doctors to assign.").toString());
