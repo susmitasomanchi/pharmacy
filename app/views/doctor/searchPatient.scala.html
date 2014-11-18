@@ -30,14 +30,14 @@
     </div>
 	
 	<div class="form-group">
-      <label for="inputDOB">Birth Date<br><span style="font-size:10px;"><b>(DD-MM-YYYY)</b></span></label>
+      <label for="inputDOB">Birth Date *<br><span style="font-size:10px;"><b>(DD-MM-YYYY)</b></span></label>
 		<div class="input-append date myDatepicker" data-date="01-01-1990" data-date-format="dd-mm-yyyy">
 			<input id="dob-datepicker" class="span2" size="16" type="text" name="dob">
 			<span class="add-on"><i class="icon-th"></i></span>
       </div>
     </div>
     
-	<input type="submit" class="btn btn-primary btn-sm" value="Add">
+	<input type="submit" onclick="return validate();" class="btn btn-primary btn-sm" value="Add">
 	</div>
 	</form>
 	</div>
@@ -64,7 +64,6 @@ var checkin =$('#dob-datepicker').datepicker({
      }
      $.get('/secure-doctor/search-patient-process/'+email, function(data){
 	if(data.trim() == 0){
-	alert(email+" Not Existed in MednetWork");
 	return false;
 	}
 	if(data.trim() == 2){
@@ -84,6 +83,13 @@ var checkin =$('#dob-datepicker').datepicker({
   var email = $("#email").val().trim();
   alert(email);
   window.location.href = '/secure-doctor/add-patient/'+email.trim();
+  }
+  function validate(){
+  if($('#inputSex').val() == "" || $('#dob-datepicker').val() == ""){
+  alert("(*) fields are Mandatory");
+  return false;
+  }
+  
   }
   
 </script>

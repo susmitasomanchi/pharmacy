@@ -1784,6 +1784,7 @@ public class DoctorController extends Controller {
 		final Map<String, String[]> requestMap = request().body().asFormUrlEncoded();
 		final Patient patient = new Patient();
 		final AppUser appUser = new AppUser();
+
 		if (requestMap.get("name") != null && !(requestMap.get("name")[0].trim().isEmpty())) {
 			appUser.name = requestMap.get("name")[0].trim();
 		}
@@ -1824,6 +1825,7 @@ public class DoctorController extends Controller {
 			Logger.error("ERROR WHILE CREATING SHA2 HASH");
 			e.printStackTrace();
 		}
+		appUser.save();
 		patient.appUser = appUser;
 		patient.save();
 		// Async Execution
@@ -1858,8 +1860,8 @@ public class DoctorController extends Controller {
 		final List<PatientDoctorInfo> patientList = PatientDoctorInfo.find.where().eq("doctor", doctor).eq("createdBy", doctor.appUser).findList();
 		return ok(views.html.doctor.patientList.render(patientList));
 	}
-	public static Result removePatientFromDoctorsList(final Long patientDoctorInfoId){
-		final PatientDoctorInfo patientDoctorInfo = PatientDoctorInfo.find.byId(patientDoctorInfoId);
+	public static Result removePatientFromDoctorsList(final String patientDoctorInfoId){
+		final PatientDoctorInfo patientDoctorInfo = PatientDoctorInfo.find.byId(Long.parseLong(patientDoctorInfoId));
 		patientDoctorInfo.delete();
 		flash().put("alert", new Alert("alert-danger", patientDoctorInfo.patient.appUser.name+" Removed Successfully.").toString());
 		final Doctor doctor = LoginController.getLoggedInUser().getDoctor();
